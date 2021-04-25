@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "cosmere:iron_ring_metalmind",
+    "cosmere:steel_ring_metalmind",
+    "cosmere:tin_ring_metalmind",
+    "cosmere:pewter_ring_metalmind",
+    "cosmere:zinc_ring_metalmind",
+    "cosmere:brass_ring_metalmind",
+    "cosmere:copper_ring_metalmind",
+    "cosmere:bronze_ring_metalmind",
+    "cosmere:aluminum_ring_metalmind",
+    "cosmere:duralumin_ring_metalmind",
+    "cosmere:chromium_ring_metalmind",
+    "cosmere:nicrosil_ring_metalmind",
+    "cosmere:cadmium_ring_metalmind",
+    "cosmere:bendalloy_ring_metalmind",
+    "cosmere:gold_ring_metalmind",
+    "cosmere:electrum_ring_metalmind",
+    "cosmere:atium_ring_metalmind"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "cosmere:block/gem_block"
+    }
+  }
+}

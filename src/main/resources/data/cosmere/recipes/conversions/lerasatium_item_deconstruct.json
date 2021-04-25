@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/lerasatium"
+    }
+  ],
+  "result": {
+    "item": "cosmere:lerasatium_nugget",
+    "count": 9
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "test_sound": {
+    "subtitle": "subtitle.cosmere.test_sound",
+    "sounds": [
+      "cosmere:cosmere/test_sound"
+    ]
+  }
+}

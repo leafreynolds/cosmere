@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "cosmere:iron_spike"
+  },
+  "result": "cosmere:guide",
+  "experience": 1.0,
+  "cookingtime": 200
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "spike",
+  "pattern": [
+    " X ",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots/nicrosil"
+    }
+  },
+  "result": {
+    "item": "cosmere:nicrosil_spike"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "cosmere:block/ore_block"
+    }
+  }
+}

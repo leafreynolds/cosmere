@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bracelet",
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots/duralumin"
+    }
+  },
+  "result": {
+    "item": "cosmere:duralumin_bracelet_metalmind"
+  }
+}

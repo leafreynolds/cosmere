@@ -1,0 +1,34 @@
+modLoader="javafml" #mandatory
+loaderVersion="[34,)" #mandatory
+license="https://en.wikipedia.org/wiki/MIT_License"
+[[mods]] #mandatory
+modId="cosmere" #mandatory
+version="${version}" #mandatory
+displayName="The Cosmere" #mandatory
+logoFile="cosmere_icon.png"
+credits="Special thanks to 50ap5ud5, Suff, Spectre0987, Vazkii, the Chisels and Bits team and so many more. \nThey all either helped me (directly or indirectly via their open source repos) understand working with the minecraft and the forge API better <3\nSeriously. Thank you!" #optional
+authors="Leafworthy" #optional
+description='''
+Bringing The Cosmere to Minecraft!
+'''
+
+[[dependencies.cosmere]]
+  modId="forge"
+  mandatory=true
+  versionRange="[36.0.42,)"
+  ordering="NONE"
+  side="BOTH"
+
+[[dependencies.cosmere]]
+  modId="minecraft"
+  mandatory=true
+  versionRange="[1.16.4, 1.16.5]"
+  ordering="NONE"
+  side="BOTH"
+
+[[dependencies.cosmere]]
+  modId="curios"
+  mandatory=true
+  versionRange="[1.16.5-4.0.5.1,)"
+  ordering="NONE"
+  side="BOTH"

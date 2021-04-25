@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/atium"
+    }
+  ],
+  "result": {
+    "item": "cosmere:atium_ingot",
+    "count": 9
+  }
+}

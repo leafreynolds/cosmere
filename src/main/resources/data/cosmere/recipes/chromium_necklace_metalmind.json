@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "necklace",
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots/chromium"
+    }
+  },
+  "result": {
+    "item": "cosmere:chromium_necklace_metalmind"
+  }
+}

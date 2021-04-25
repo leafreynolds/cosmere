@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/lerasatium"
+    }
+  },
+  "result": {
+    "item": "cosmere:lerasatium_block"
+  }
+}

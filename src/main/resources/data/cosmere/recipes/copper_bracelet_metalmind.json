@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bracelet",
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "result": {
+    "item": "cosmere:copper_bracelet_metalmind"
+  }
+}

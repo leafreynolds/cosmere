@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:nuggets/tin"
+    },
+    {
+      "tag": "forge:nuggets/tin"
+    },
+    {
+      "tag": "forge:nuggets/tin"
+    },
+    {
+      "tag": "forge:nuggets/tin"
+    },
+    {
+      "tag": "forge:nuggets/lead"
+    }
+  ],
+  "result": {
+    "item": "cosmere:pewter_ingot",
+    "count": 5
+  }
+}

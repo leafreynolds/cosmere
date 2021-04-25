@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "net.cosmere.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "cosmere.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}

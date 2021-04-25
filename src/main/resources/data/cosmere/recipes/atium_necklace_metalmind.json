@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "necklace",
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots/atium"
+    }
+  },
+  "result": {
+    "item": "cosmere:atium_necklace_metalmind"
+  }
+}

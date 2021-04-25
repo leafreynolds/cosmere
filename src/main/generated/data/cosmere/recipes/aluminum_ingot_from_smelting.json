@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "cosmere:aluminum_ore"
+  },
+  "result": "cosmere:aluminum_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}
