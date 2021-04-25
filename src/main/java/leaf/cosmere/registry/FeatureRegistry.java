@@ -57,7 +57,7 @@ public class FeatureRegistry
                                                         Placement.RANGE.configure(new TopSolidRangeConfig(6, 0, 64))
                                                                 .chance(5))//Config.COMMON_SPEC.oreSpawnChance.get(metalType).get()))
                                                 .square()
-                                                .func_242731_b(5)
+                                                .count(5)
                         ));
     }
 

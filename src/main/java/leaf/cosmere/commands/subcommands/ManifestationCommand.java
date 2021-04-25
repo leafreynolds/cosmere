@@ -47,12 +47,12 @@ public class ManifestationCommand extends ModCommand
             //figure out which manifestations a player has
             for (AManifestation manifestation : spiritweb.getAvailableManifestations())
             {
-                powersFound.append(leftBracketTextComponent);
-                powersFound.append(TextHelper.createTextWithTooltip(
+                powersFound.appendSibling(leftBracketTextComponent);
+                powersFound.appendSibling(TextHelper.createTextWithTooltip(
                         manifestation.translation(),
                         manifestation.description()));
-                powersFound.append(rightBracketTextComponent);
-                powersFound.append(space);
+                powersFound.appendSibling(rightBracketTextComponent);
+                powersFound.appendSibling(space);
             }
             source.sendFeedback(powersFound, true);
         });
