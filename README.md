@@ -47,7 +47,7 @@ There are currently several powers from Scadrial, the planet from the Mistborn s
 * **(Required!) CuriosAPI**  - because there's always another secret™
 * **JEI**  - because recipes are forever plentiful and who wants to have to google them all the time.
 * **HWYLA**  - For in game wiki/guidance (still empty, as of yet, but I will get to it!)
-* **Patchouli**  - because I love well done in-game wiki/guidance (still empty, as of yet, but I will get to it!)
+* **Patchouli**  - because I love well done in-game wiki/guidance (which mine is not well done... or at all existing, yet. I will get to it!)
 
 ## Documentation
 
