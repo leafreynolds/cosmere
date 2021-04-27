@@ -4,7 +4,7 @@
 
 package leaf.cosmere.manifestation.feruchemy;
 
-import leaf.cosmere.charge.ChargeItemHandler;
+import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.helpers.EffectsHelper;
 import leaf.cosmere.manifestation.ManifestationBase;
@@ -18,7 +18,7 @@ import net.minecraft.potion.EffectInstance;
 
 public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 {
-    private final Metals.MetalType metalType;
+    protected final Metals.MetalType metalType;
 
     public FeruchemyBase(Metals.MetalType metalType)
     {
@@ -37,16 +37,6 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
     public Metals.MetalType getMetalType()
     {
         return this.metalType;
-    }
-
-    public Effect getTappingEffect()
-    {
-        return metalType.getTappingEffect();
-    }
-
-    public Effect getStoringEffect()
-    {
-        return metalType.getStoringEffect();
     }
 
     @Override
@@ -107,7 +97,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
             return;
         }
 
-        if (ChargeItemHandler.spendMetalmindChargeExact((PlayerEntity) livingEntity, metalType, -cost, true, true))
+        if (ItemChargeHelper.adjustMetalmindChargeExact((PlayerEntity) livingEntity, metalType, -cost, true, true))
         {
             EffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 
@@ -121,7 +111,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 
     }
 
-    private Effect getEffect(int mode)
+    protected Effect getEffect(int mode)
     {
         if (mode == 0)
         {
@@ -129,11 +119,11 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
         }
         else if (mode < 0)
         {
-            return getTappingEffect();
+            return metalType.getTappingEffect();
         }
         else
         {
-            return getStoringEffect();
+            return metalType.getStoringEffect();
         }
 
     }

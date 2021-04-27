@@ -7,7 +7,7 @@ package leaf.cosmere.handlers;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.charge.ChargeItemHandler;
+import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
@@ -149,7 +149,7 @@ public class EntityEventHandler
         {
             event.getItem().getItem().shrink(1);
 
-            ChargeItemHandler.dispatchCharge(event.getPlayer(), 1000, true);
+            ItemChargeHelper.dispatchCharge(event.getPlayer(), 1000, true);
         }
     }
 

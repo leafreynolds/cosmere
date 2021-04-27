@@ -13,6 +13,7 @@ import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.manifestation.allomancy.*;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyCopper;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
@@ -45,7 +46,7 @@ public class ManifestationRegistry
                             metalType ->
                                     MANIFESTATIONS.register(
                                             metalType.getMistingName(),
-                                            () -> makeAllomancyManifestation(metalType))
+                                            () -> makeAllomancyManifestation(metalType))//get the specific instance of the manifestation for allomancy
                     ));
 
     // Feruchemy powers
@@ -57,7 +58,7 @@ public class ManifestationRegistry
                             metalType ->
                                     MANIFESTATIONS.register(
                                             metalType.getFerringName(),
-                                            () -> new FeruchemyBase(metalType))
+                                            () -> makeFeruchemyManifestation(metalType))//feruchemy can be base manifestation type because it mostly functions through effects
                     ));
 
     // AonDor
@@ -111,7 +112,7 @@ public class ManifestationRegistry
                 return new AllomancyTin(metalType);
             case PEWTER://done?
                 return new AllomancyPewter(metalType);
-            case ZINC://todo enflame
+            case ZINC://done?
                 return new AllomancyZinc(metalType);
             case BRASS://done?
                 return new AllomancyBrass(metalType);
@@ -139,6 +140,17 @@ public class ManifestationRegistry
 
         //others aren't valid allomancy manifestations... for now.
         return new AllomancyBase(metalType);
+    }
+
+
+    private static FeruchemyBase makeFeruchemyManifestation(Metals.MetalType metalType)
+    {
+        if (metalType == Metals.MetalType.COPPER)
+        {
+            return new FeruchemyCopper(metalType);
+        }
+
+        return new FeruchemyBase(metalType);
     }
 
     public static Map<ResourceLocation, String> getManifestations()

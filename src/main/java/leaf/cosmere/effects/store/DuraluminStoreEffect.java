@@ -26,7 +26,6 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
         return true;
     }
 
-    // The real meat and potatoes of the effect.
     public void onLivingVisibilityEvent(LivingEvent.LivingVisibilityEvent event)
     {
         EffectInstance effectInstance = event.getEntityLiving().getActivePotionEffect(this);

@@ -35,13 +35,12 @@ public class CadmiumStoreEffect extends FeruchemyEffectBase
     @Override
     public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        //ensure the user has fire resistence at least as strong as their store effect
-
         if (entityLivingBaseIn.world.isRemote || entityLivingBaseIn.ticksExisted % 20 != 0)
         {
             return;
         }
 
-        entityLivingBaseIn.setAir(entityLivingBaseIn.getAir() - 1);
+        //todo actually test this
+        entityLivingBaseIn.setAir(entityLivingBaseIn.getAir() - amplifier);
     }
 }

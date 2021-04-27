@@ -55,7 +55,7 @@ public class FeatureRegistry
                                                 BlocksRegistry.METAL_ORE.get(metalType).get().getDefaultState(), 5)) //vein size of 5
                                                 .withPlacement(
                                                         Placement.RANGE.configure(new TopSolidRangeConfig(6, 0, 64))
-                                                                .chance(5))//Config.COMMON_SPEC.oreSpawnChance.get(metalType).get()))
+                                                                .chance(5))//Config.COMMON_SPEC.oreSpawnChance.get(metalType).get()))//todo config vein size based on ore type
                                                 .square()
                                                 .count(5)
                         ));

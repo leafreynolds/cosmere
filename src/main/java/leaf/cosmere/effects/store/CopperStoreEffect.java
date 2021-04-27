@@ -6,6 +6,7 @@ package leaf.cosmere.effects.store;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.FeruchemyEffectBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectType;
 
 //experience
@@ -14,5 +15,11 @@ public class CopperStoreEffect extends FeruchemyEffectBase
     public CopperStoreEffect(Metals.MetalType type, EffectType effectType)
     {
         super(type, effectType);
+    }
+
+    @Override
+    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    {
+
     }
 }

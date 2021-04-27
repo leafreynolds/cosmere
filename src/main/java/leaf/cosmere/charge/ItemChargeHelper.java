@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ChargeItemHandler
+public class ItemChargeHelper
 {
 
     public static List<ItemStack> getChargeItems(PlayerEntity player)
@@ -120,13 +120,13 @@ public class ChargeItemHandler
     }
 
 
-    public static boolean spendChargeExact(PlayerEntity player, int chargeToGet, boolean remove)
+    public static boolean adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove)
     {
-        return spendChargeExact(player, chargeToGet, remove, false);
+        return adjustChargeExact(player, chargeToGet, remove, false);
     }
 
 
-    public static boolean spendMetalmindChargeExact(PlayerEntity player, Metals.MetalType metalType, int chargeToGet, boolean remove, boolean checkPlayer)
+    public static boolean adjustMetalmindChargeExact(PlayerEntity player, Metals.MetalType metalType, int chargeToGet, boolean remove, boolean checkPlayer)
     {
         List<ItemStack> items = getChargeItems(player);
         List<ItemStack> acc = getChargeCurios(player);
@@ -149,18 +149,18 @@ public class ChargeItemHandler
                 }
         );
 
-        return spendChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
+        return adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
     }
 
-    public static boolean spendChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer)
+    public static boolean adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer)
     {
         List<ItemStack> items = getChargeItems(player);
         List<ItemStack> acc = getChargeCurios(player);
 
-        return spendChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
+        return adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
     }
 
-    public static boolean spendChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
+    public static boolean adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
     {
         for (ItemStack stackInSlot : Iterables.concat(items, acc))
         {
