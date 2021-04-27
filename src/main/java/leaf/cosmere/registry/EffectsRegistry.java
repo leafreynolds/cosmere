@@ -65,8 +65,6 @@ public class EffectsRegistry
                 return new TinStoreEffect(metalType, EffectType.BENEFICIAL);
             case PEWTER:
                 return new PewterStoreEffect(metalType, EffectType.BENEFICIAL);
-            case ZINC:
-                return new ZincStoreEffect(metalType, EffectType.BENEFICIAL);
             case BRASS:
                 return new BrassStoreEffect(metalType, EffectType.BENEFICIAL);
             case COPPER:
@@ -90,9 +88,10 @@ public class EffectsRegistry
             case BENDALLOY:
                 return new BendalloyStoreEffect(metalType, EffectType.BENEFICIAL);
                 //todo atium
+            case ZINC://handled as part of the manifestation, which only checks the effect exists on the player
+            default:
+                return new FeruchemyEffectBase(metalType, EffectType.BENEFICIAL);
         }
-
-        return new FeruchemyEffectBase(metalType, EffectType.BENEFICIAL);
     }
 
     private static Effect makeTappingEffect(Metals.MetalType metalType)
@@ -107,8 +106,6 @@ public class EffectsRegistry
                 return new TinTapEffect(metalType, EffectType.BENEFICIAL);
             case PEWTER:
                 return new PewterTapEffect(metalType, EffectType.BENEFICIAL);
-            case ZINC:
-                return new ZincTapEffect(metalType, EffectType.BENEFICIAL);
             case BRASS:
                 return new BrassTapEffect(metalType, EffectType.BENEFICIAL);
             case COPPER:
@@ -132,8 +129,9 @@ public class EffectsRegistry
             case BENDALLOY:
                 return new BendalloyTapEffect(metalType, EffectType.BENEFICIAL);
                 //todo atium
+            case ZINC://handled as part of the manifestation, which only checks the effect exists on the player
+            default:
+                return new FeruchemyEffectBase(metalType, EffectType.BENEFICIAL);
         }
-
-        return new FeruchemyEffectBase(metalType, EffectType.BENEFICIAL);
     }
 }

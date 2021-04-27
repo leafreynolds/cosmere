@@ -14,6 +14,7 @@ import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.manifestation.allomancy.*;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyCopper;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyZinc;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
@@ -146,11 +147,11 @@ public class ManifestationRegistry
     private static FeruchemyBase makeFeruchemyManifestation(Metals.MetalType metalType)
     {
         if (metalType == Metals.MetalType.COPPER)
-        {
             return new FeruchemyCopper(metalType);
-        }
-
-        return new FeruchemyBase(metalType);
+        else if (metalType == Metals.MetalType.ZINC)
+            return new FeruchemyZinc(metalType);
+        else
+            return new FeruchemyBase(metalType);
     }
 
     public static Map<ResourceLocation, String> getManifestations()
