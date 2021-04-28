@@ -63,9 +63,9 @@ public class AllomancyBendalloy extends AllomancyBase
 
                 //todo tick living entities?
 
-                List<LivingEntity> entitiesToCheckForAllomancy = getEntitiesInRange(data.getLiving(), range, true);
+                List<LivingEntity> entitiesToCheck = getEntitiesInRange(data.getLiving(), range, true);
 
-                for (LivingEntity e : entitiesToCheckForAllomancy)
+                for (LivingEntity e : entitiesToCheck)
                 {
                     e.livingTick();
                 }

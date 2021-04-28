@@ -6,6 +6,7 @@ package leaf.cosmere.effects.tap;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.FeruchemyEffectBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.potion.EffectType;
@@ -16,10 +17,33 @@ public class GoldTapEffect extends FeruchemyEffectBase
     public GoldTapEffect(Metals.MetalType type, EffectType effectType)
     {
         super(type, effectType);
-        addAttributesModifier(
+/*        addAttributesModifier(
                 Attributes.MAX_HEALTH,
                 "17a9094f-d300-46c4-8607-83f64a98bb42",
                 4.0D,
-                AttributeModifier.Operation.ADDITION);
+                AttributeModifier.Operation.ADDITION);*/
+    }
+
+    @Override
+    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    {
+        if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
+        {
+            entityLivingBaseIn.heal(amplifier + 1);
+        }
+    }
+
+    @Override
+    public boolean isReady(int duration, int amplifier)
+    {
+        int k = 40 >> amplifier;
+        if (k > 0)
+        {
+            return duration % k == 0;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

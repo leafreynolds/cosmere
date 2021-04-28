@@ -6,10 +6,13 @@ package leaf.cosmere.effects.store;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.FeruchemyEffectBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
+import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.eventbus.api.Event;
 
 //connection aka ability for people to notice you
 public class DuraluminStoreEffect extends FeruchemyEffectBase
@@ -18,6 +21,7 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
     {
         super(type, effectType);
         MinecraftForge.EVENT_BUS.addListener(this::onLivingVisibilityEvent);
+        MinecraftForge.EVENT_BUS.addListener(this::onRenderNameplateEvent);
     }
 
     @Override
@@ -31,9 +35,29 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
         EffectInstance effectInstance = event.getEntityLiving().getActivePotionEffect(this);
         if (effectInstance != null && effectInstance.getDuration() > 0)
         {
-            //wearing no armor, you could stand a block or two away from a creeper and it wont see you.
+            //at max strength and wearing no armor, you could stand a block or two away from a creeper and it wont see you.
             //walk right into it though, and it will blow up.
-            event.modifyVisibility(0.1);
+            event.modifyVisibility(1f / (effectInstance.getAmplifier() + 2));
+        }
+    }
+
+    public void onRenderNameplateEvent(RenderNameplateEvent event)
+    {
+        if (!(event.getEntity() instanceof LivingEntity))
+        {
+            return;
+        }
+
+        LivingEntity livingEntity = (LivingEntity) event.getEntity();
+
+        EffectInstance effectInstance = livingEntity.getActivePotionEffect(this);
+        if (effectInstance != null && effectInstance.getDuration() > 0)
+        {
+            if (effectInstance.getAmplifier() > 2)
+            {
+                event.setResult(Event.Result.DENY);
+            }
+
         }
     }
 }
