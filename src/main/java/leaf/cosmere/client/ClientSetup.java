@@ -41,7 +41,7 @@ public class ClientSetup
         {
         });
 
-        //special thank you to @Random who told me that you have to tell the block it has transparency
+        //special thank you to @Random on the forge discord who told me that you have to tell the block it has transparency
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
             if (!metalType.hasOre())
@@ -53,8 +53,6 @@ public class ClientSetup
 
         LogHelper.info("Client setup complete!");
     }
-
-
 
     //special thank you to the chisels and bits team who have an example of how to to register other sprites
     @SubscribeEvent

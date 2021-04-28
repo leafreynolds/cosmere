@@ -29,6 +29,6 @@ public class TinTapEffect extends FeruchemyEffectBase
 
         //todo change FOV?
 
-        entityLivingBaseIn.addPotionEffect(EffectsHelper.getNewEffect(Effects.NIGHT_VISION, amplifier));
+        //entityLivingBaseIn.addPotionEffect(EffectsHelper.getNewEffect(Effects.NIGHT_VISION, amplifier));
     }
 }

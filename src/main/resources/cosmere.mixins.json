@@ -1,11 +1,15 @@
 {
   "required": true,
-  "package": "net.cosmere.mixin",
+  "minVersion": "0.8",
+  "package": "leaf.cosmere.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "cosmere.refmap.json",
   "mixins": [
   ],
   "client": [
+    "GameRendererMixin"
   ],
-  "minVersion": "0.8"
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

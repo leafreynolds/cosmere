@@ -26,6 +26,6 @@ public class TinStoreEffect extends FeruchemyEffectBase
         {
             return;
         }
-        entityLivingBaseIn.addPotionEffect(EffectsHelper.getNewEffect(Effects.BLINDNESS, amplifier));
+        //entityLivingBaseIn.addPotionEffect(EffectsHelper.getNewEffect(Effects.BLINDNESS, amplifier));
     }
 }
