@@ -8,6 +8,8 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.FeruchemyEffectBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 
 // air
 public class CadmiumStoreEffect extends FeruchemyEffectBase
@@ -18,29 +20,18 @@ public class CadmiumStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier)
-    {
-        //assume we can apply the effect regardless
-        boolean result = true;
-
-        int k = 50 >> amplifier;
-        if (k > 0)
-        {
-            result = duration % k == 0;
-        }
-
-        return result;
-    }
-
-    @Override
     public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (entityLivingBaseIn.world.isRemote || entityLivingBaseIn.ticksExisted % 20 != 0)
+        if (entityLivingBaseIn.world.isRemote)
         {
             return;
         }
 
-        //todo actually test this
-        entityLivingBaseIn.setAir(entityLivingBaseIn.getAir() - amplifier);
+        entityLivingBaseIn.setAir(MathHelper.clamp(entityLivingBaseIn.getAir() - 4 - (amplifier), -20, entityLivingBaseIn.getMaxAir()));
+
+        if (entityLivingBaseIn.getAir() < -10 && entityLivingBaseIn.ticksExisted % 50 == 0)
+        {
+            entityLivingBaseIn.attackEntityFrom(DamageSource.DROWN, 2.0F);
+        }
     }
 }

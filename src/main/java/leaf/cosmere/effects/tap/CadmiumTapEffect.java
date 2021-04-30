@@ -8,6 +8,7 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.FeruchemyEffectBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectType;
+import net.minecraft.util.math.MathHelper;
 
 
 public class CadmiumTapEffect extends FeruchemyEffectBase
@@ -18,30 +19,14 @@ public class CadmiumTapEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier)
-    {
-        //assume we can apply the effect regardless
-        boolean result = true;
-
-        int k = 50 >> amplifier;
-        if (k > 0)
-        {
-            result = duration % k == 0;
-        }
-
-        return result;
-    }
-
-    @Override
     public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        //ensure the user has fire resistence at least as strong as their store effect
-
-        if (entityLivingBaseIn.world.isRemote || entityLivingBaseIn.ticksExisted % 20 != 0)
+        if (entityLivingBaseIn.world.isRemote)
         {
             return;
         }
 
-        entityLivingBaseIn.setAir(entityLivingBaseIn.getAir() + 1);
+        entityLivingBaseIn.setAir(MathHelper.clamp(entityLivingBaseIn.getAir() + 3 + (amplifier), entityLivingBaseIn.getAir(), entityLivingBaseIn.getMaxAir()));
+
     }
 }
