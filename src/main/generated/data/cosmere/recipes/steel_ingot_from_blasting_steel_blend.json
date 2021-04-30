@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "cosmere:steel_blend"
+  },
+  "result": "cosmere:steel_ingot",
+  "experience": 1.0,
+  "cookingtime": 100
+}

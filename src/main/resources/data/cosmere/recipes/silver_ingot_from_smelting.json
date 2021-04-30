@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "cosmere:silver_ore"
-  },
-  "result": "cosmere:silver_ingot",
-  "experience": 1.0,
-  "cookingtime": 200
-}

@@ -71,8 +71,6 @@ public class EffectsRegistry
                 return new CopperStoreEffect(metalType, EffectType.BENEFICIAL);
             case BRONZE:
                 return new BronzeStoreEffect(metalType, EffectType.BENEFICIAL);
-            case ALUMINUM:
-                return new AluminumStoreEffect(metalType, EffectType.BENEFICIAL);
             case DURALUMIN:
                 return new DuraluminStoreEffect(metalType, EffectType.BENEFICIAL);
             case CHROMIUM:
@@ -88,7 +86,9 @@ public class EffectsRegistry
             case BENDALLOY:
                 return new BendalloyStoreEffect(metalType, EffectType.BENEFICIAL);
                 //todo atium
-            case ZINC://handled as part of the manifestation, which only checks the effect exists on the player
+            // handled as part of the manifestation
+            case ALUMINUM:
+            case ZINC:
             default:
                 return new FeruchemyEffectBase(metalType, EffectType.BENEFICIAL);
         }
@@ -112,8 +112,6 @@ public class EffectsRegistry
                 return new CopperTapEffect(metalType, EffectType.BENEFICIAL);
             case BRONZE:
                 return new BronzeTapEffect(metalType, EffectType.BENEFICIAL);
-            case ALUMINUM:
-                return new AluminumTapEffect(metalType, EffectType.BENEFICIAL);
             case DURALUMIN:
                 return new DuraluminTapEffect(metalType, EffectType.BENEFICIAL);
             case CHROMIUM:
@@ -129,7 +127,9 @@ public class EffectsRegistry
             case BENDALLOY:
                 return new BendalloyTapEffect(metalType, EffectType.BENEFICIAL);
                 //todo atium
-            case ZINC://handled as part of the manifestation, which only checks the effect exists on the player
+            // handled as part of the manifestation
+            case ALUMINUM:
+            case ZINC:
             default:
                 return new FeruchemyEffectBase(metalType, EffectType.BENEFICIAL);
         }

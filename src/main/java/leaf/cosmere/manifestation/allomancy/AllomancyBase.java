@@ -6,6 +6,7 @@ package leaf.cosmere.manifestation.allomancy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.ItemChargeHelper;
+import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
@@ -108,7 +109,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
             //feruchemy power exists and is active
             if (feruchemyMode != 0 && isActiveTick)
             {
-                if (ItemChargeHelper.adjustMetalmindChargeExact((PlayerEntity) livingEntity, metalType, (-5) * (mode), true, true))
+                if (MetalmindChargeHelper.adjustMetalmindChargeExact((PlayerEntity) livingEntity, metalType, (-5) * (mode), true, true))
                 {
                     //compound successful
                 }

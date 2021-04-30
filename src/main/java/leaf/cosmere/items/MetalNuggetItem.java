@@ -33,7 +33,7 @@ public class MetalNuggetItem extends MetalItem
 
             //add to metal stored
             Integer metalIngested = spiritweb.METALS_INGESTED.get(getMetalType());
-            spiritweb.METALS_INGESTED.put(getMetalType(),metalIngested + 9);
+            spiritweb.METALS_INGESTED.put(getMetalType(),metalIngested + 9); // todo decide what value should be used for ingestion
 
             itemstack.shrink(1);
 

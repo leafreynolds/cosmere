@@ -48,6 +48,12 @@ public final class ColorHandler
                 //blocks in world
                 blockColors.register(metalBlockColorHandler, metalType.getOreBlock());
                 itemColors.register(blockItemColorHandler, metalType.getOreBlock());
+                itemColors.register(metalColorHandler, metalType.getRawMetalItem());
+            }
+
+            if (metalType.isAlloy())
+            {
+                itemColors.register(metalColorHandler, metalType.getRawMetalItem());
             }
 
             if (metalType.hasMaterialItem())

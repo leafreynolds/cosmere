@@ -53,6 +53,18 @@ public class TagsRegistry
         public static ITag.INamedTag<Item> CURIO_RING = makeItem("curios", "ring");
 
 
+        public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_RAW_TAGS =
+                Arrays.stream(Metals.MetalType.values())
+                        .collect(Collectors.toMap(
+                                Function.identity(),
+                                type -> forgeItemTag("raw/" + type.name().toLowerCase())));
+
+        public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_DUST_TAGS =
+                Arrays.stream(Metals.MetalType.values())
+                        .collect(Collectors.toMap(
+                                Function.identity(),
+                                type -> forgeItemTag("dust/" + type.name().toLowerCase())));
+
         public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_NUGGET_TAGS =
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(

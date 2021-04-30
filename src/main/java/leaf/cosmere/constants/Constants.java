@@ -43,7 +43,9 @@ public class Constants
     public static class RegNameStubs
     {
         public static final String BLOCK = "_block";
+        public static final String RAW = "raw_";
         public static final String ORE = "_ore";
+        public static final String BLEND = "_blend";
 
         public static final String METALMIND = "_metalmind";
 

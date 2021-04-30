@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "cosmere:raw/aluminum"
+    },
+    {
+      "tag": "cosmere:raw/aluminum"
+    },
+    {
+      "tag": "cosmere:raw/aluminum"
+    },
+    {
+      "tag": "cosmere:raw/aluminum"
+    },
+    {
+      "tag": "cosmere:raw/copper"
+    }
+  ],
+  "result": {
+    "item": "cosmere:duralumin_blend",
+    "count": 5
+  }
+}

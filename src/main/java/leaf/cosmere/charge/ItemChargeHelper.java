@@ -125,33 +125,6 @@ public class ItemChargeHelper
         return adjustChargeExact(player, chargeToGet, remove, false);
     }
 
-
-    public static boolean adjustMetalmindChargeExact(PlayerEntity player, Metals.MetalType metalType, int chargeToGet, boolean remove, boolean checkPlayer)
-    {
-        List<ItemStack> items = getChargeItems(player);
-        List<ItemStack> acc = getChargeCurios(player);
-
-        //remove items that don't match the metal type we are looking for
-        items.removeIf(obj ->
-                {
-                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof Metalmind);
-                    boolean metalMindIsNotCorrectType = ((Metalmind) obj.getItem()).getMetalType() != metalType;
-
-                    return (objectIsNotMetalmind || metalMindIsNotCorrectType);
-                }
-        );
-        acc.removeIf(obj ->
-                {
-                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof Metalmind);
-                    boolean metalMindIsNotCorrectType = ((Metalmind) obj.getItem()).getMetalType() != metalType;
-
-                    return (objectIsNotMetalmind || metalMindIsNotCorrectType);
-                }
-        );
-
-        return adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
-    }
-
     public static boolean adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer)
     {
         List<ItemStack> items = getChargeItems(player);

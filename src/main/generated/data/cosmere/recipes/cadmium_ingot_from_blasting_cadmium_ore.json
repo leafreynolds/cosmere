@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "cosmere:cadmium_ore"
+  },
+  "result": "cosmere:cadmium_ingot",
+  "experience": 1.0,
+  "cookingtime": 100
+}

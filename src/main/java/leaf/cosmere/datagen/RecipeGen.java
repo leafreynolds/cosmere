@@ -18,6 +18,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
 import javax.annotation.Nullable;
@@ -67,14 +68,22 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
             if (metalType.hasOre())
             {
                 addOreSmeltingRecipes(consumer, metalType.getOreBlock(),  metalType.getIngotItem(), 1.0f, 200);
+                addOreSmeltingRecipes(consumer, metalType.getRawMetalItem(),  metalType.getIngotItem(), 1.0f, 200);
             }
 
             if (metalType.isAlloy())
             {
-                Item output = ItemsRegistry.METAL_INGOTS.get(metalType).get();
-                addAlloyRecipes(consumer, metalType, output, TagsRegistry.Items.METAL_NUGGET_TAGS,"nugget");
-                addAlloyRecipes(consumer, metalType, output, TagsRegistry.Items.METAL_INGOT_TAGS,"ingot");
-                addAlloyRecipes(consumer, metalType, output, TagsRegistry.Items.METAL_BLOCK_ITEM_TAGS,"block");
+/*                Item outputNugget = ItemsRegistry.METAL_NUGGETS.get(metalType).get();
+                Item outputIngot = ItemsRegistry.METAL_INGOTS.get(metalType).get();
+                Item outputBlock = BlocksRegistry.METAL_BLOCKS.get(metalType).get();
+                addAlloyRecipes(consumer, metalType, outputNugget, TagsRegistry.Items.METAL_NUGGET_TAGS,"nugget");
+                addAlloyRecipes(consumer, metalType, outputIngot, TagsRegistry.Items.METAL_INGOT_TAGS,"ingot");
+                addAlloyRecipes(consumer, metalType, outputBlock, TagsRegistry.Items.METAL_BLOCK_ITEM_TAGS,"block");*/
+
+                Item outputBlend = metalType.getRawMetalItem();
+                addAlloyRecipes(consumer, metalType, outputBlend, TagsRegistry.Items.METAL_RAW_TAGS, "blend");
+
+                addOreSmeltingRecipes(consumer, outputBlend,  metalType.getIngotItem(), 1.0f, 200);
             }
 
         }
@@ -90,9 +99,9 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
             case STEEL:
                 ShapelessRecipeBuilder.shapelessRecipe(output, 4)
                         .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.IRON))
-                        .addIngredient(materialTag.get(Metals.MetalType.IRON))
-                        .addIngredient(materialTag.get(Metals.MetalType.IRON))
+                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON))
+                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON))
+                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON))
                         .addIngredient(Ingredient.fromItems(Items.COAL, Items.CHARCOAL))
                         .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
@@ -158,7 +167,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
             case ELECTRUM:
                 ShapelessRecipeBuilder.shapelessRecipe(output, 2)
                         .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.GOLD))
+                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_GOLD))
                         .addIngredient(materialTag.get(Metals.MetalType.SILVER))
                         .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
@@ -223,8 +232,9 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
     protected static void addOreSmeltingRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider ore, Item result, float experience, int time)
     {
         String name = result.getRegistryName().getPath();
-        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(ore), result, experience, time).addCriterion("has_ore", hasItem(ore)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting"));
-        CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(ore), result, experience, time / 2).addCriterion("has_ore", hasItem(ore)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_blasting"));
+        String path = ore.asItem().getRegistryName().getPath();
+        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(ore), result, experience, time).addCriterion("has_ore", hasItem(ore)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting_" + path));
+        CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(ore), result, experience, time / 2).addCriterion("has_ore", hasItem(ore)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_blasting_" + path));
     }
 
     protected static void addCookingRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider inputItem, Item result, float experience, int time)

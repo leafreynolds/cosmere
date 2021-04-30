@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "cosmere:raw_aluminum_ore"
+  },
+  "result": "cosmere:aluminum_ingot",
+  "experience": 1.0,
+  "cookingtime": 100
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "cosmere:electrum_blend"
+  },
+  "result": "cosmere:electrum_ingot",
+  "experience": 1.0,
+  "cookingtime": 100
+}

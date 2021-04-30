@@ -7,6 +7,7 @@ package leaf.cosmere.datagen;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalIngotItem;
+import leaf.cosmere.items.MetalRawOreItem;
 import leaf.cosmere.items.ShardbladeItem;
 import leaf.cosmere.items.curio.BraceletMetalmind;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
@@ -80,6 +81,16 @@ public class ItemModelsGen extends ItemModelProvider
             else if (item instanceof ShardbladeItem)
             {
                 //simpleItem(path, "metal_spike");
+                continue;
+            }
+            else if (item instanceof MetalRawOreItem)
+            {
+                //todo split between raw ore and alloy blend
+                //MetalRawOreItem rawItem = (MetalRawOreItem)item;
+                //if (rawItem.getMetalType().isAlloy())
+                //    simpleItem(path, "metal_blend");
+                //else
+                    simpleItem(path, "metal_raw");
                 continue;
             }
 

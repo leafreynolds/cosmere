@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "cosmere:lead_ore"
-  },
-  "result": "cosmere:lead_ingot",
-  "experience": 1.0,
-  "cookingtime": 100
-}

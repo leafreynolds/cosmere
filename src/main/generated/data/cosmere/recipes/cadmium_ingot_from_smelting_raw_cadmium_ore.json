@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "cosmere:raw_cadmium_ore"
+  },
+  "result": "cosmere:cadmium_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

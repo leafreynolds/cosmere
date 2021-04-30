@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "cosmere:pewter_blend"
+  },
+  "result": "cosmere:pewter_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

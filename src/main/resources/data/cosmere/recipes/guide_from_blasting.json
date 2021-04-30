@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "cosmere:iron_spike"
-  },
-  "result": "cosmere:guide",
-  "experience": 1.0,
-  "cookingtime": 100
-}

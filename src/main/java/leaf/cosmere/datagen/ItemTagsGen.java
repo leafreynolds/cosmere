@@ -12,6 +12,7 @@ import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -29,6 +30,8 @@ public class ItemTagsGen extends ItemTagsProvider
     @Override
     protected void registerTags()
     {
+
+
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
 
@@ -71,6 +74,11 @@ public class ItemTagsGen extends ItemTagsProvider
 
                 //not sure why this is needed, but botania had it ^_^;;
                 this.copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
+            }
+
+            if (metalType.isAlloy() || metalType.hasOre())
+            {
+                add(metalType.getMetalRawTag(), metalType.getRawMetalItem());
             }
         }
     }

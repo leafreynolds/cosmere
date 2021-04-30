@@ -8,6 +8,8 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.blocks.MetalOreBlock;
+import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Constants.RegNameStubs;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
@@ -54,6 +56,27 @@ public class ItemsRegistry
 
 
     //Mass items gen
+
+
+    public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_RAW_ORE =
+            Arrays.stream(Metals.MetalType.values())
+                    .filter(Metals.MetalType::hasOre)
+                    .collect(Collectors.toMap(
+                            Function.identity(),
+                            type -> ITEMS.register(
+                                    RegNameStubs.RAW + type.name().toLowerCase() + RegNameStubs.ORE,
+                                    () -> createItem(new MetalRawOreItem(type))
+                            )));
+
+    public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_RAW_BLEND =
+            Arrays.stream(Metals.MetalType.values())
+                    .filter(Metals.MetalType::isAlloy)
+                    .collect(Collectors.toMap(
+                            Function.identity(),
+                            type -> ITEMS.register(
+                                    type.name().toLowerCase() + RegNameStubs.BLEND,
+                                    () -> createItem(new MetalRawOreItem(type))
+                            )));
 
     public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_NUGGETS =
             Arrays.stream(Metals.MetalType.values())

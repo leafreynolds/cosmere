@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "cosmere:raw/chromium"
+    },
+    {
+      "tag": "cosmere:raw/nickel"
+    },
+    {
+      "tag": "cosmere:raw/nickel"
+    },
+    {
+      "tag": "cosmere:raw/nickel"
+    }
+  ],
+  "result": {
+    "item": "cosmere:nicrosil_blend",
+    "count": 4
+  }
+}

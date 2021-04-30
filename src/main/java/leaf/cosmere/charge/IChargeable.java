@@ -9,11 +9,15 @@
 
 package leaf.cosmere.charge;
 
+import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.NBTHelper;
 import leaf.cosmere.helpers.PlayerHelper;
 import leaf.cosmere.constants.Constants;
+import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.UUID;
@@ -85,9 +89,12 @@ public interface IChargeable
 
     default boolean getPlayerIsAttuned(ItemStack itemStack, PlayerEntity entity)
     {
-        UUID uuid = getAttunedPlayer(itemStack);
+        EffectInstance storingIdentityEffect = entity.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
+        boolean noIdentityPlayer = storingIdentityEffect != null && storingIdentityEffect.getDuration() > 0;
+
+        UUID itemAttunedPlayerUUID = getAttunedPlayer(itemStack);
         //null means not attuned at all, so can assume player is attuned with it
-        return uuid == null || uuid == entity.getUniqueID();
+        return noIdentityPlayer || itemAttunedPlayerUUID == null || itemAttunedPlayerUUID == entity.getUniqueID();
     }
 
 

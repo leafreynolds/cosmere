@@ -6,6 +6,7 @@ package leaf.cosmere.manifestation.feruchemy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.ItemChargeHelper;
+import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.EffectsHelper;
 import leaf.cosmere.helpers.XPHelper;
@@ -85,7 +86,7 @@ public class FeruchemyCopper extends FeruchemyBase
         int cost = getCost(mode);
         int experiencePoints = playerEntity.isCreative() ? 10 : cost;
 
-        if (playerEntity.experienceTotal > cost && ItemChargeHelper.adjustMetalmindChargeExact(playerEntity, metalType, -experiencePoints, true, true))
+        if (playerEntity.experienceTotal > cost && MetalmindChargeHelper.adjustMetalmindChargeExact(playerEntity, metalType, -experiencePoints, true, true))
         {
             //successfully added xp to metalmind
 

@@ -5,6 +5,7 @@
 package leaf.cosmere.manifestation.feruchemy;
 
 import leaf.cosmere.charge.ItemChargeHelper;
+import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.helpers.EffectsHelper;
 import leaf.cosmere.manifestation.ManifestationBase;
@@ -97,7 +98,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
             return;
         }
 
-        if (ItemChargeHelper.adjustMetalmindChargeExact((PlayerEntity) livingEntity, metalType, -cost, true, true))
+        if (MetalmindChargeHelper.adjustMetalmindChargeExact((PlayerEntity) livingEntity, metalType, -cost, true, true))
         {
             EffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 

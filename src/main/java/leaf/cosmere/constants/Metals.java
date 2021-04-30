@@ -7,6 +7,7 @@ package leaf.cosmere.constants;
 import leaf.cosmere.blocks.MetalBlock;
 import leaf.cosmere.items.MetalIngotItem;
 import leaf.cosmere.items.MetalNuggetItem;
+import leaf.cosmere.items.MetalRawOreItem;
 import leaf.cosmere.items.curio.BraceletMetalmind;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.items.curio.NecklaceMetalmind;
@@ -173,6 +174,7 @@ public class Metals
             switch (this)
             {
                 case ALUMINUM:
+                case CADMIUM:
                 case CHROMIUM:
                     //case IRON:
                 case NICKEL:
@@ -259,6 +261,19 @@ public class Metals
         {
             return (HemalurgicSpikeItem) ItemsRegistry.METAL_SPIKE.get(this).get();
         }
+        public MetalRawOreItem getRawMetalItem()
+        {
+            if (this.isAlloy())
+            {
+                return (MetalRawOreItem) ItemsRegistry.METAL_RAW_BLEND.get(this).get();
+            }
+            // if (this.hasOre())
+            else
+            {
+                return (MetalRawOreItem) ItemsRegistry.METAL_RAW_ORE.get(this).get();
+            }
+
+        }
 
         public MetalBlock getBlock()
         {
@@ -268,6 +283,11 @@ public class Metals
         public OreBlock getOreBlock()
         {
             return BlocksRegistry.METAL_ORE.get(this).get();
+        }
+
+        public ITag.INamedTag<Item> getMetalRawTag()
+        {
+            return TagsRegistry.Items.METAL_RAW_TAGS.get(this);
         }
 
         public ITag.INamedTag<Item> getMetalIngotTag()

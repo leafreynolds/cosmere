@@ -1,0 +1,19 @@
+{
+  "name": "Day One - Strange things",
+  "category": "tutorial",
+  "icon": "cosmere:iron_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "in an ideal world, this text will show."
+    },
+    {
+      "type": "text",
+      "text": "Xion crystals."
+    },
+    {
+      "type": "text",
+      "text": "Cinnabar"
+    }
+  ]
+}

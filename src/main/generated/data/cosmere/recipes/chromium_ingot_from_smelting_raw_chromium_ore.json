@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "cosmere:raw_chromium_ore"
+  },
+  "result": "cosmere:chromium_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

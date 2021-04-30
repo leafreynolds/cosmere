@@ -6,7 +6,6 @@ package leaf.cosmere.helpers;
 
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.MathHelper;
 
 public class EffectsHelper
 {
@@ -19,8 +18,9 @@ public class EffectsHelper
                 21,
                 Math.max(0, amplifier),
                 false, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
-                false); // definitely don't want particles.
-        effectInstance.setPotionDurationMax(true);
+                false, // definitely don't want particles.
+                true); // show icon though
+
         return effectInstance;
     }
 }

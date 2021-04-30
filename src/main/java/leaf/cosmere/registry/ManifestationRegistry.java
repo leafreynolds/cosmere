@@ -12,9 +12,7 @@ import leaf.cosmere.effects.store.*;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.manifestation.allomancy.*;
-import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
-import leaf.cosmere.manifestation.feruchemy.FeruchemyCopper;
-import leaf.cosmere.manifestation.feruchemy.FeruchemyZinc;
+import leaf.cosmere.manifestation.feruchemy.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
@@ -150,6 +148,10 @@ public class ManifestationRegistry
             return new FeruchemyCopper(metalType);
         else if (metalType == Metals.MetalType.ZINC)
             return new FeruchemyZinc(metalType);
+        else if (metalType == Metals.MetalType.ALUMINUM)
+            return new FeruchemyAluminum(metalType);
+        else if (metalType == Metals.MetalType.NICROSIL)
+            return new FeruchemyNicrosil(metalType);
         else
             return new FeruchemyBase(metalType);
     }

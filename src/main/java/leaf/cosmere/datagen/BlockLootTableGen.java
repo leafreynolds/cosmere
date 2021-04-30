@@ -4,9 +4,13 @@
 
 package leaf.cosmere.datagen;
 
+import leaf.cosmere.blocks.MetalOreBlock;
 import leaf.cosmere.registry.BlocksRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.OreBlock;
 import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.item.Items;
 import net.minecraftforge.fml.RegistryObject;
 
 public class BlockLootTableGen extends BlockLootTables
@@ -20,7 +24,18 @@ public class BlockLootTableGen extends BlockLootTables
 
         for (RegistryObject<Block> itemRegistryObject : BlocksRegistry.BLOCKS.getEntries())
         {
-            this.registerDropSelfLootTable(itemRegistryObject.get());
+            if ((itemRegistryObject.get() instanceof MetalOreBlock))
+            {
+                MetalOreBlock oreBlock = (MetalOreBlock) itemRegistryObject.get();
+
+                this.registerLootTable(oreBlock, (ore) -> {
+                    return droppingItemWithFortune(ore, oreBlock.getMetalType().getRawMetalItem());
+                });
+            }
+            else
+            {
+                this.registerDropSelfLootTable(itemRegistryObject.get());
+            }
         }
     }
 

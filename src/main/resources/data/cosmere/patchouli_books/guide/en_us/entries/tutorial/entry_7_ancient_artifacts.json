@@ -1,0 +1,20 @@
+{
+  "name": "Day Thirty - Artifacts",
+  "category": "tutorial",
+  "icon": "cosmere:guide",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "text",
+      "text": "in an ideal world, this text will show."
+    },
+    {
+      "type": "text",
+      "text": "Xion crystals."
+    },
+    {
+      "type": "text",
+      "text": "Cinnabar"
+    }
+  ]
+}
