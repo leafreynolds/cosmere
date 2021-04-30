@@ -48,7 +48,7 @@ The art of combining color, Biochromatic Breath and an awakening command in orde
 
 **JEI**  - because recipes are forever plentiful and who wants to have to google them all the time.
 
-**HWYLA**  - For in game wiki/guidance (still empty, as of yet, but I will get to it!)
+**HWYLA**  - Going to be including ways to get more info out of what you're looking at!
 
 **Patchouli**  - because I love well done in-game wiki/guidance (which mine is not well done... or at all existing, yet. I will get to it!)
 
