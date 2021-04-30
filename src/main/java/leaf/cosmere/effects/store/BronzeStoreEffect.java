@@ -22,7 +22,7 @@ public class BronzeStoreEffect extends FeruchemyEffectBase
     public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
     {
         //sleep
-        if (!(entityLivingBaseIn instanceof PlayerEntity))
+        if (!(entityLivingBaseIn instanceof PlayerEntity) || entityLivingBaseIn.ticksExisted % (200 / (amplifier + 1)) != 0)
         {
             return;
         }
@@ -31,7 +31,7 @@ public class BronzeStoreEffect extends FeruchemyEffectBase
 
         player.trySleep(player.getPosition()).ifLeft((result) ->
         {
-            if (result != null)
+            if (result != null && result.getMessage() != null)
             {
                 player.sendStatusMessage(result.getMessage(), true);
             }

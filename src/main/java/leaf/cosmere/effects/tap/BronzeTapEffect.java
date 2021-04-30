@@ -15,4 +15,9 @@ public class BronzeTapEffect extends FeruchemyEffectBase
     {
         super(type, effectType);
     }
+
+    // So greedy!
+    // You can already stay awake forever in minecraft if you want to.
+    // What do you expect you can do with more?
+
 }
