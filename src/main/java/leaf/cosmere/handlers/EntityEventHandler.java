@@ -15,11 +15,15 @@ import leaf.cosmere.helpers.MathHelper;
 import leaf.cosmere.helpers.TextHelper;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombieVillagerEntity;
+import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.horse.LlamaEntity;
@@ -27,7 +31,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -39,16 +43,30 @@ public class EntityEventHandler
 {
 
     @SubscribeEvent
+    public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
+    {
+        for (Metals.MetalType metalType : Metals.MetalType.values())
+        {
+            if (metalType.hasAssociatedManifestation())
+            {
+                event.add(EntityType.PLAYER, AttributesRegistry.ALLOMANTIC_STRENGTH_ATTRIBUTES.get(metalType).get());
+                event.add(EntityType.PLAYER, AttributesRegistry.FERUCHEMICAL_STRENGTH_ATTRIBUTES.get(metalType).get());
+            }
+        }
+
+    }
+
+    @SubscribeEvent
     public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
     {
         if (event.getObject() instanceof PlayerEntity
                 || event.getObject() instanceof AnimalEntity
                 || event.getObject() instanceof VillagerEntity
-                || event.getObject() instanceof MonsterEntity
-                || event.getObject() instanceof PlayerEntity)
+                || event.getObject() instanceof MonsterEntity)
         {
             SpiritwebCapability spiritwebCapability = new SpiritwebCapability((LivingEntity) event.getObject());
 
+            //if player or villager
             if (event.getObject() instanceof PlayerEntity)
             {
                 //from random powertype
@@ -57,7 +75,9 @@ public class EntityEventHandler
                     giveRandomManifestation(event.getObject(), spiritwebCapability);
                 }
             }
-            else if (event.getObject() instanceof VillagerEntity)
+            else if (event.getObject() instanceof VillagerEntity
+                    || event.getObject() instanceof ZombieVillagerEntity
+                    || event.getObject() instanceof PiglinEntity)
             {
                 //random 1/16
                 // only 1 in 16 villagers will have the gene
@@ -74,16 +94,25 @@ public class EntityEventHandler
 
     private static void giveRandomManifestation(Entity entity, SpiritwebCapability spiritwebCapability)
     {
-        //give random power
+        boolean isPlayerEntity = entity instanceof PlayerEntity;
+        //low chance of having full powers of one type
+        boolean isFullPowersFromOneType = MathHelper.randomInt(0, 16) % 16 == 0;
+
+        //50/50 chance of of being twin born, but only if not having full powers above
+        //players are guaranteed having at least two powers.
+        boolean isTwinborn = MathHelper.randomBool() || isPlayerEntity;
+
+        //randomise the given powers from allomancy and feruchemy
+        int allomancyPower = MathHelper.randomInt(0, 15);
+        int feruchemyPower = MathHelper.randomInt(0, 15);
+
+        //if not twinborn, pick one power
         boolean isAllomancy = MathHelper.randomBool();
-
-        // and only 1 in 16 of those will have the full powers
         Manifestations.ManifestationTypes powerType = isAllomancy
-                                              ? Manifestations.ManifestationTypes.ALLOMANCY
-                                              : Manifestations.ManifestationTypes.FERUCHEMY;
+                                                      ? Manifestations.ManifestationTypes.ALLOMANCY
+                                                      : Manifestations.ManifestationTypes.FERUCHEMY;
 
-        //if 17, then give them all the powers from either allomancy or feruchemy
-        if (MathHelper.randomInt(0, 16) % 16 == 0)
+        if (isFullPowersFromOneType)
         {
             //ooh full powers
             for (int i = 0; i < 16; i++)
@@ -91,25 +120,34 @@ public class EntityEventHandler
                 spiritwebCapability.giveManifestation(powerType, i);
             }
 
-            if (!(entity instanceof PlayerEntity))
+            if (!isPlayerEntity)
             {
+                //todo translations
+                //todo grant random name
                 entity.setCustomName(TextHelper.createTranslatedText(isAllomancy
                                                                      ? "Mistborn"
                                                                      : "Feruchemist"));
             }
         }
+        else if (isTwinborn)
+        {
+            spiritwebCapability.giveManifestation(Manifestations.ManifestationTypes.ALLOMANCY, allomancyPower);
+            spiritwebCapability.giveManifestation(Manifestations.ManifestationTypes.FERUCHEMY, feruchemyPower);
+
+            if (!isPlayerEntity)
+            {
+                //todo translations
+                //todo grant random name
+                entity.setCustomName(TextHelper.createTranslatedText("Twinborn"));
+            }
+        }
         else
         {
-            int powerID = MathHelper.randomInt(1, 16);
+            int powerID = isAllomancy ? allomancyPower : feruchemyPower;
             spiritwebCapability.giveManifestation(powerType, powerID);
-
-            String post = isAllomancy
-                          ? " Misting"
-                          : " Ferring";
-            if (!(entity instanceof PlayerEntity))
-            {
-                entity.setCustomName(powerType.getManifestation(powerID).translation());
-            }
+            //todo translations
+            //todo grant random name
+            entity.setCustomName(powerType.getManifestation(powerID).translation());
         }
     }
 
