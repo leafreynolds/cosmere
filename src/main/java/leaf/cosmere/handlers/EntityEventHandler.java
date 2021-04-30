@@ -120,27 +120,6 @@ public class EntityEventHandler
     }
 
     @SubscribeEvent
-    public static void onEntityDeath(LivingDeathEvent event)
-    {
-        if (event.getSource().getTrueSource() instanceof PlayerEntity)
-        {
-            PlayerEntity playerEntity = (PlayerEntity) event.getSource().getTrueSource();
-            SpiritwebCapability.get(playerEntity).ifPresent(iSpiritweb ->
-            {
-                ItemStack itemstack = playerEntity.getHeldItemMainhand();
-                if (itemstack.getItem() instanceof HemalurgicSpikeItem)
-                {
-                    //entity was killed by a spike
-                    HemalurgicSpikeItem spikeItem = (HemalurgicSpikeItem) itemstack.getItem();
-                    //pass in killed entity for the item to figure out what to do
-                    spikeItem.killedEntity(itemstack, event.getEntityLiving());
-                }
-
-            });
-        }
-    }
-
-    @SubscribeEvent
     public static void onEntityItemPickUp(EntityItemPickupEvent event)
     {
         //seriously, get item three times is stupid, I know it.

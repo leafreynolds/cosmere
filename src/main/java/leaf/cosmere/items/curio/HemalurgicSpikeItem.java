@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.render.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
@@ -39,7 +40,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -49,6 +53,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.UUID;
 
+@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
 {
     private final float attackDamage;
@@ -181,6 +186,27 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         //etc?
 
         //don't need to do the attributes, since thats covered by curio
+    }
+
+    @SubscribeEvent
+    public static void onEntityDeath(LivingDeathEvent event)
+    {
+        if (event.getSource().getTrueSource() instanceof PlayerEntity)
+        {
+            PlayerEntity playerEntity = (PlayerEntity) event.getSource().getTrueSource();
+            SpiritwebCapability.get(playerEntity).ifPresent(iSpiritweb ->
+            {
+                ItemStack itemstack = playerEntity.getHeldItemMainhand();
+                if (itemstack.getItem() instanceof HemalurgicSpikeItem)
+                {
+                    //entity was killed by a spike
+                    HemalurgicSpikeItem spikeItem = (HemalurgicSpikeItem) itemstack.getItem();
+                    //pass in killed entity for the item to figure out what to do
+                    spikeItem.killedEntity(itemstack, event.getEntityLiving());
+                }
+
+            });
+        }
     }
 
     public void killedEntity(ItemStack stack, LivingEntity entityKilled)
