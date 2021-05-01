@@ -61,8 +61,6 @@ public class EffectsRegistry
                 return new IronStoreEffect(metalType, EffectType.BENEFICIAL);
             case STEEL:
                 return (new SteelStoreEffect(metalType, EffectType.BENEFICIAL));
-            case TIN:
-                return new TinStoreEffect(metalType, EffectType.BENEFICIAL);
             case PEWTER:
                 return new PewterStoreEffect(metalType, EffectType.BENEFICIAL);
             case BRASS:
@@ -79,14 +77,14 @@ public class EffectsRegistry
                 return new NicrosilStoreEffect(metalType, EffectType.BENEFICIAL);
             case GOLD:
                 return new GoldStoreEffect(metalType, EffectType.BENEFICIAL);
-            case ELECTRUM:
-                return new ElectrumStoreEffect(metalType, EffectType.BENEFICIAL);
             case CADMIUM:
                 return new CadmiumStoreEffect(metalType, EffectType.BENEFICIAL);
             case BENDALLOY:
                 return new BendalloyStoreEffect(metalType, EffectType.BENEFICIAL);
                 //todo atium
             // handled as part of the manifestation
+            case ELECTRUM:
+            case TIN:
             case ALUMINUM:
             case ZINC:
             default:
@@ -102,8 +100,6 @@ public class EffectsRegistry
                 return new IronTapEffect(metalType, EffectType.BENEFICIAL);
             case STEEL:
                 return new SteelTapEffect(metalType, EffectType.BENEFICIAL);
-            case TIN:
-                return new TinTapEffect(metalType, EffectType.BENEFICIAL);
             case PEWTER:
                 return new PewterTapEffect(metalType, EffectType.BENEFICIAL);
             case BRASS:
@@ -120,14 +116,14 @@ public class EffectsRegistry
                 return new NicrosilTapEffect(metalType, EffectType.BENEFICIAL);
             case GOLD:
                 return new GoldTapEffect(metalType, EffectType.BENEFICIAL);
-            case ELECTRUM:
-                return new ElectrumTapEffect(metalType, EffectType.BENEFICIAL);
             case CADMIUM:
                 return new CadmiumTapEffect(metalType, EffectType.BENEFICIAL);
             case BENDALLOY:
                 return new BendalloyTapEffect(metalType, EffectType.BENEFICIAL);
                 //todo atium
             // handled as part of the manifestation
+            case ELECTRUM:
+            case TIN:
             case ALUMINUM:
             case ZINC:
             default:

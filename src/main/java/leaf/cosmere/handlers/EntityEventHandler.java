@@ -84,7 +84,7 @@ public class EntityEventHandler
                     || event.getObject() instanceof PiglinEntity)
             {
                 //random 1/16
-                // only 1 in 16 villagers will have the gene
+                // only 1 in 16 will have the gene
                 if (MathHelper.randomInt(1, 16) % 16 == 0)
                 {
                     giveRandomManifestation(event.getObject(), spiritwebCapability);

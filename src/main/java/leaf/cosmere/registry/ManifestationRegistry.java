@@ -152,6 +152,8 @@ public class ManifestationRegistry
             return new FeruchemyAluminum(metalType);
         else if (metalType == Metals.MetalType.NICROSIL)
             return new FeruchemyNicrosil(metalType);
+        else if (metalType == Metals.MetalType.ELECTRUM)
+            return new FeruchemyElectrum(metalType);
         else
             return new FeruchemyBase(metalType);
     }

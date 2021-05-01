@@ -21,7 +21,7 @@ public class WindrunnerRadiant extends SurgebindingBase
     }
 
     @SubscribeEvent
-    public void onEntityAttacked(LivingHurtEvent event)
+    public void onLivingHurtEvent(LivingHurtEvent event)
     {
         if (event.getSource().getTrueSource() instanceof PlayerEntity)
         {

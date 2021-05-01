@@ -40,7 +40,6 @@ public class SteelTapEffect extends FeruchemyEffectBase
 
     }
 
-    @SubscribeEvent
     public void onFOVUpdate(FOVUpdateEvent event)
     {
         //todo remember to make this better? clamp isn't necessarily the best way to stop it going over the top
