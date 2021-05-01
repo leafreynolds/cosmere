@@ -21,7 +21,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.ZombieVillagerEntity;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -77,6 +79,8 @@ public class EntityEventHandler
             }
             else if (event.getObject() instanceof VillagerEntity
                     || event.getObject() instanceof ZombieVillagerEntity
+                    || event.getObject() instanceof AbstractIllagerEntity
+                    || event.getObject() instanceof WitchEntity
                     || event.getObject() instanceof PiglinEntity)
             {
                 //random 1/16
