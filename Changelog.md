@@ -1,5 +1,10 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B14
+
+Adding illagers and witches to possible powered individuals.
+
+
 B13
 
 All feruchemy basically done except for nicrosil and electrum.
