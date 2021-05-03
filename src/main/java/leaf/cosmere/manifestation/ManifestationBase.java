@@ -77,7 +77,8 @@ public class ManifestationBase extends AManifestation
     }
 
     //todo clean this up
-    final ItemStack activeStack = new ItemStack(Blocks.REDSTONE_TORCH);
+    final ItemStack positiveActiveStack = new ItemStack(Blocks.SOUL_TORCH);
+    final ItemStack negativeActiveStack = new ItemStack(Blocks.REDSTONE_TORCH);
     final ItemStack inactiveStack = new ItemStack(Items.STICK);
 
     @OnlyIn(Dist.CLIENT)
@@ -86,11 +87,28 @@ public class ManifestationBase extends AManifestation
     {
         Minecraft mc = Minecraft.getInstance();
         MainWindow mainWindow = mc.getMainWindow();
-        int x = /*mainWindow.getScaledWidth() / 2 +*/ 10;
+        int x = 10;
         int y = mainWindow.getScaledHeight() / 5;
 
-        mc.getItemRenderer().renderItemAndEffectIntoGUI(cap.selectedManifestationActive() ? activeStack : inactiveStack, x, y);
-        mc.fontRenderer.drawStringWithShadow(ms, I18n.format(this.translation().getString()), x + 18, y + 6, 0xFF4444);
+        //todo translations
+        String stringToDraw = "Selected Power: " + I18n.format(this.translation().getString());
+        mc.fontRenderer.drawStringWithShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
 
+
+        int mode = cap.getMode(manifestationType, this.getPowerID());
+        String stringToDraw2 = "Mode: " + mode;
+        mc.fontRenderer.drawStringWithShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
+
+
+        ItemStack stack;
+
+        if (mode > 0)
+            stack = positiveActiveStack;
+        else if (mode < 0)
+            stack = negativeActiveStack;
+        else
+            stack = inactiveStack;
+
+        mc.getItemRenderer().renderItemAndEffectIntoGUI(stack, x, y);
     }
 }

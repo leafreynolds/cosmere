@@ -51,9 +51,9 @@ public class ChangeManifestationModeMessage
 
             cap.manifestation(message.powerType, message.powerID).onModeChange(cap);
 
-            manifestationText = TextHelper.createTranslatedText(Constants.Strings.POWER_MODE_SET, TextHelper.createText(newMode));
+            //manifestationText = TextHelper.createTranslatedText(Constants.Strings.POWER_MODE_SET, TextHelper.createText(newMode));
+            //sender.sendMessage(manifestationText, Util.DUMMY_UUID);
 
-            sender.sendMessage(manifestationText, Util.DUMMY_UUID);
             cap.syncToClients(null);
         }));
         context.setPacketHandled(true);
