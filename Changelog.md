@@ -1,5 +1,10 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B14
+
+Adding electrum feruchemy. Not sure how happy I am with it. Reduces/increases damage taken a small amount. Any suggestions on what storing/tapping determination could do would be appreciated.
+Have also removed annoying mode change message and updated the debug text so it says selected power and what mode the selected power is in.
+
 B13
 
 All feruchemy basically done except for nicrosil and electrum.
