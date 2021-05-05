@@ -11,6 +11,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.UUID;
+
 public class Constants
 {
     public static class Resources
@@ -37,6 +39,9 @@ public class Constants
 
         public static final String ATTUNED_PLAYER = "attuned_player";
         public static final String ATTUNED_PLAYER_NAME = "attuned_player_name";
+
+
+        public static final UUID UNSEALED_UUID = UUID.fromString("422fc419-1e39-4eac-ac01-6fc98512c122");
     }
 
     //todo rename this when I remember the word

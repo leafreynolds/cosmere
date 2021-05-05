@@ -5,13 +5,13 @@
 package leaf.cosmere.compat.hwyla;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.constants.Manifestations;
+import leaf.cosmere.constants.Metals;
+import leaf.cosmere.helpers.TextHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import mcp.mobius.waila.api.IEntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;
 import mcp.mobius.waila.api.IPluginConfig;
-import leaf.cosmere.constants.Manifestations;
-import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.TextHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.text.ITextComponent;
 
@@ -36,8 +36,9 @@ public class SpiritWebTooltip implements IEntityComponentProvider
         SpiritwebCapability.get((LivingEntity) accessor.getEntity()).ifPresent(iSpiritweb ->
         {
 
-            boolean mistborn = iSpiritweb.isMistborn();
-            boolean fullFeruchemist = iSpiritweb.isFullFeruchemist();
+            //todo check mistborn/feruchemist status
+            boolean mistborn = false;//iSpiritweb.isMistborn();
+            boolean fullFeruchemist = false;//iSpiritweb.isFullFeruchemist();
             if (mistborn)
             {
                 tooltip.add(TextHelper.createTranslatedText(Metals.MetalType.LERASIUM.getMistingName()));

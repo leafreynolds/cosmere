@@ -5,6 +5,7 @@ B14
 Adding illagers and witches to possible powered individuals.
 Adding electrum feruchemy. Not sure how happy I am with it. Reduces/increases damage taken a small amount. Any suggestions on what storing/tapping determination could do would be appreciated.
 Have also removed annoying mode change message and updated the debug text so it says selected power and what mode the selected power is in.
+Big refactor to convert to using attributes instead of capability to track what powers you currently have access to.
 
 B13
 

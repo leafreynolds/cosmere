@@ -4,15 +4,15 @@
 
 package leaf.cosmere.items.curio;
 
-import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.CompoundNBTHelper;
 import leaf.cosmere.helpers.NBTHelper;
 import leaf.cosmere.helpers.TextHelper;
+import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -209,10 +209,8 @@ public interface IHemalurgicInfo
         return false;
     }
 
-    default Multimap<Attribute, AttributeModifier> getHemalurgicAttributes(ItemStack stack, Metals.MetalType metalType)
+    default Multimap<Attribute, AttributeModifier> getHemalurgicAttributes(Multimap<Attribute, AttributeModifier> attributeModifiers, ItemStack stack, Metals.MetalType metalType)
     {
-        Multimap<Attribute, AttributeModifier> attributeModifiers = LinkedHashMultimap.create();
-
         CompoundNBT hemalurgyInfo = getHemalurgicInfo(stack);
 
         switch (metalType)
@@ -253,6 +251,24 @@ public interface IHemalurgicInfo
                 break;
         }
 
+
+        for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
+        {
+            String path = manifestation.getRegistryName().getPath();
+
+            if (CompoundNBTHelper.getBoolean(hemalurgyInfo, path, false))
+            {
+                attributeModifiers.put(
+                        AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path).get(),
+                        new AttributeModifier(
+                                getHemalurgicIdentity(stack),
+                                String.format("Hemalurgic-%s: %s", path, getHemalurgicIdentity(stack).toString()),
+                                6,
+                                AttributeModifier.Operation.ADDITION));
+            }
+        }
+
+
         return attributeModifiers;
     }
 
@@ -266,13 +282,13 @@ public interface IHemalurgicInfo
 
         tooltip.add(TextHelper.createTranslatedText(CONTAINED_POWERS_FOUND));
         IForgeRegistry<AManifestation> manifestations = ManifestationRegistry.MANIFESTATION_REGISTRY.get();
-        for (AManifestation data : manifestations)
+        for (AManifestation manifestation : manifestations)
         {
             // if this spike has that power
-            if (hasHemalurgicPower(stack, data))
+            if (hasHemalurgicPower(stack, manifestation))
             {
                 //then grant it
-                tooltip.add(data.translation());
+                tooltip.add(manifestation.translation());
             }
         }
     }

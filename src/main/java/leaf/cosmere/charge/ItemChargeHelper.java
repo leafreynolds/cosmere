@@ -11,12 +11,14 @@ package leaf.cosmere.charge;
 
 import com.google.common.collect.Iterables;
 import leaf.cosmere.compat.curios.CuriosCompat;
+import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.CapWrapper;
-import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -120,12 +122,12 @@ public class ItemChargeHelper
     }
 
 
-    public static boolean adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove)
+    public static ItemStack adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove)
     {
         return adjustChargeExact(player, chargeToGet, remove, false);
     }
 
-    public static boolean adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer)
+    public static ItemStack adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer)
     {
         List<ItemStack> items = getChargeItems(player);
         List<ItemStack> acc = getChargeCurios(player);
@@ -133,13 +135,20 @@ public class ItemChargeHelper
         return adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
     }
 
-    public static boolean adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
+    public static ItemStack adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
     {
+        EffectInstance storingIdentity = player.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
+        boolean isStoringIdentity =  (storingIdentity != null && storingIdentity.getDuration() > 0);
+
+
         for (ItemStack stackInSlot : Iterables.concat(items, acc))
         {
             IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
 
-            if (checkPlayer && !chargeItemSlot.trySetAttunedPlayer(stackInSlot, player))
+            boolean playerUnableToAccess = !chargeItemSlot.trySetAttunedPlayer(stackInSlot, player);
+            if (checkPlayer && playerUnableToAccess //if we need to make sure the player has access and they do not
+                    || //or if the player is trying to store in an unsealed metalmind but have identity
+                    chargeToGet < 0 && !isStoringIdentity && chargeItemSlot.getAttunedPlayer(stackInSlot).compareTo(Constants.NBT.UNSEALED_UUID) == 0)
             {
                 continue;
             }
@@ -151,11 +160,11 @@ public class ItemChargeHelper
                     chargeItemSlot.adjustCharge(stackInSlot, -chargeToGet);
                 }
 
-                return true;
+                return stackInSlot;
             }
         }
 
-        return false;
+        return null;
     }
 
 

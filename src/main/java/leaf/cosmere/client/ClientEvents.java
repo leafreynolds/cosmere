@@ -4,16 +4,21 @@
 
 package leaf.cosmere.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.network.Network;
-import leaf.cosmere.network.packets.*;
+import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
+import leaf.cosmere.network.packets.ChangeSelectedManifestationMessage;
+import leaf.cosmere.network.packets.DeactivateCurrentManifestationsMessage;
 import leaf.cosmere.registry.KeybindingRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
+import net.minecraft.profiler.IProfiler;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -85,25 +90,11 @@ public class ClientEvents
             //check keybinds with modifiers first?
             else if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_PREVIOUS))
             {
-                if (spiritweb.hasSingleManifestation())
-                {
-                    Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), -1));
-                }
-                else
-                {
-                    Network.sendToServer(new ChangeSelectedManifestationMessage(-1));
-                }
+                Network.sendToServer(new ChangeSelectedManifestationMessage(-1));
             }
             else if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_NEXT))
             {
-                if (spiritweb.hasSingleManifestation())
-                {
-                    Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), 1));
-                }
-                else
-                {
-                    Network.sendToServer(new ChangeSelectedManifestationMessage(1));
-                }
+                Network.sendToServer(new ChangeSelectedManifestationMessage(1));
             }
         });
     }
@@ -116,16 +107,57 @@ public class ClientEvents
     @SubscribeEvent
     public static void onRenderGUI(final RenderGameOverlayEvent.Post event)
     {
+        renderCosmereHUD(event);
+        renderSpiritwebHUD(event);
+    }
+
+    public static void renderCosmereHUD(final RenderGameOverlayEvent.Post event)
+    {
+        Minecraft mc = Minecraft.getInstance();
+        IProfiler profiler = mc.getProfiler();
+        ClientPlayerEntity playerEntity = mc.player;
+        MatrixStack ms = event.getMatrixStack();
+
+        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
+        {
+            profiler.startSection("cosmere-hud");
+
+            if (Minecraft.getInstance().playerController.shouldDrawHUD())
+            {
+                SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
+                {
+                    profiler.startSection(spiritweb.manifestation().getRegistryName().getNamespace());
+                    //spiritweb.renderHUD(ms, playerEntity, spiritweb);
+                    spiritweb.manifestation().renderHUD(ms, playerEntity, spiritweb);
+                    profiler.endSection();
+
+                });
+            }
+            profiler.endSection();
+
+            RenderSystem.color4f(1F, 1F, 1F, 1F);
+        }
+
+    }
+
+    public static void renderSpiritwebHUD(final RenderGameOverlayEvent.Post event)
+    {
+        final RenderGameOverlayEvent.ElementType type = event.getType();
+        if (type != RenderGameOverlayEvent.ElementType.ALL)
+        {
+            return;
+        }
+
         SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(cap ->
         {
             SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
 
-            final RenderGameOverlayEvent.ElementType type = event.getType();
-            if (type == RenderGameOverlayEvent.ElementType.ALL && spiritweb.getNumPowers() > 0)
+            if (spiritweb.hasAnyPowers())
             {
-                SpiritwebMenu.instance.onPostRender(event, spiritweb);
+                SpiritwebMenu.instance.render(event, spiritweb);
             }
         });
+
     }
 
 }

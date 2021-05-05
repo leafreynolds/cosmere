@@ -5,16 +5,15 @@
 package leaf.cosmere.manifestation.feruchemy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
-import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.EffectsHelper;
-import leaf.cosmere.helpers.XPHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 
+
+//storing all the available powers on the user individually
 public class FeruchemyNicrosil extends FeruchemyBase
 {
     public FeruchemyNicrosil(Metals.MetalType metalType)
@@ -75,15 +74,9 @@ public class FeruchemyNicrosil extends FeruchemyBase
             return;
         }
 
-        if (MetalmindChargeHelper.adjustMetalmindChargeExact((PlayerEntity) livingEntity, metalType, -cost, true, true))
+        if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true))
         {
             EffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
-
-            if (effect == null)
-            {
-                return;
-            }
-
             livingEntity.addPotionEffect(currentEffect);
         }
 

@@ -9,11 +9,10 @@
 
 package leaf.cosmere.charge;
 
-import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.NBTHelper;
 import leaf.cosmere.helpers.PlayerHelper;
-import leaf.cosmere.constants.Constants;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -48,11 +47,29 @@ public interface IChargeable
     default boolean trySetAttunedPlayer(ItemStack itemStack, PlayerEntity entity)
     {
         UUID attunedPlayerID = getAttunedPlayer(itemStack);
+        UUID playerID = entity.getUniqueID();
 
         boolean noAttunedPlayer = attunedPlayerID == null;
 
-        UUID playerID = entity.getUniqueID();
-        if (noAttunedPlayer || attunedPlayerID.compareTo(playerID) == 0)
+        if (noAttunedPlayer)
+        {
+            //No attuned player! Check to see whether they are storing identity
+            EffectInstance storingIdentity = entity.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
+            //if they are
+            if (storingIdentity != null && storingIdentity.getDuration() > 0)
+            {
+                //then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
+                NBTHelper.setUuid(itemStack,Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNSEALED_UUID);
+                NBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unsealed"); // todo translation
+                return true;
+
+            }
+        }
+
+        //if theres no attuned player on the metalmind
+        //or if the player is attuned to the metalmind
+        //or if the metalmind is unsealed (anyone can access)
+        if (noAttunedPlayer || attunedPlayerID.compareTo(playerID) == 0 || attunedPlayerID.compareTo(Constants.NBT.UNSEALED_UUID) == 0)
         {
             if (noAttunedPlayer)
             {

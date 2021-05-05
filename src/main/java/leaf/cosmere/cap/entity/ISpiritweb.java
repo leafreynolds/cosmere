@@ -41,15 +41,9 @@ public interface ISpiritweb extends INBTSerializable<CompoundNBT>
 
     void removeManifestation(Manifestations.ManifestationTypes type, int powerID);
 
-    void giveTemporaryManifestation(Manifestations.ManifestationTypes type, int powerID);
-
-    void removeTemporaryManifestation(Manifestations.ManifestationTypes type, int powerID);
-
-
     AManifestation manifestation();
 
     AManifestation manifestation(Manifestations.ManifestationTypes powerType, int powerID);
-
 
     boolean manifestationActive(Manifestations.ManifestationTypes powerType, int powerID);
 
@@ -75,13 +69,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundNBT>
 
     List<AManifestation> getAvailableManifestations(boolean ignoreTemporaryPower);
 
-    boolean hasSingleManifestation();
-
     String changeManifestation(int dir);
-
-    boolean isMistborn();
-
-    boolean isFullFeruchemist();
 
     void renderHUD(MatrixStack ms, ClientPlayerEntity playerEntity, ISpiritweb spiritweb);
 

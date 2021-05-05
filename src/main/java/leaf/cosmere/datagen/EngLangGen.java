@@ -4,10 +4,10 @@
 
 package leaf.cosmere.datagen;
 
-import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
+import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.data.DataGenerator;
@@ -69,10 +69,8 @@ public class EngLangGen extends LanguageProvider
 
         //innate
 
-        for (RegistryObject<AManifestation> type : ManifestationRegistry.MANIFESTATIONS.getEntries())
+        for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
         {
-            AManifestation manifestation = type.get();
-
             //power type
             String key = manifestation.translation().getKey();
             String path = manifestation.getRegistryName().getPath();
@@ -84,13 +82,13 @@ public class EngLangGen extends LanguageProvider
             //can't auto generate the descriptions ya dingleberry
             String description;
 
-            switch (type.get().getManifestationType())
+            switch (manifestation.getManifestationType())
             {
                 case ALLOMANCY:
-                    description = "Users can burn " + Metals.MetalType.valueOf(type.get().getPowerID()).get().toString();
+                    description = "Users can burn " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString();
                     break;
                 case FERUCHEMY:
-                    description = "Users can tap " + Metals.MetalType.valueOf(type.get().getPowerID()).get().toString();
+                    description = "Users can tap " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString();
                     break;
                 case RADIANT:
                 case ELANTRIAN:

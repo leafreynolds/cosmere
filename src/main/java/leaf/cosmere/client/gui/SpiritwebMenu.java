@@ -16,6 +16,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientHelper;
+import leaf.cosmere.helpers.MathHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
@@ -38,8 +39,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
-import leaf.cosmere.helpers.MathHelper;
 
 import static leaf.cosmere.registry.KeybindingRegistry.MANIFESTATION_MENU;
 
@@ -112,7 +111,7 @@ public class SpiritwebMenu extends Screen
     }
 
 
-    public void onPostRender(RenderGameOverlayEvent.Post event, SpiritwebCapability spiritweb)
+    public void render(RenderGameOverlayEvent.Post event, SpiritwebCapability spiritweb)
     {
         this.spiritweb = spiritweb;
         final boolean wasVisible = isVisible();

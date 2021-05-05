@@ -4,16 +4,14 @@
 
 package leaf.cosmere.manifestation.feruchemy;
 
-import leaf.cosmere.charge.ItemChargeHelper;
+import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Manifestations;
-import leaf.cosmere.helpers.EffectsHelper;
-import leaf.cosmere.manifestation.ManifestationBase;
-import leaf.cosmere.items.IHasMetalType;
-import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.items.IHasMetalType;
+import leaf.cosmere.manifestation.ManifestationBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 
@@ -98,7 +96,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
             return;
         }
 
-        if (MetalmindChargeHelper.adjustMetalmindChargeExact((PlayerEntity) livingEntity, metalType, -cost, true, true))
+        if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true))
         {
             EffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 

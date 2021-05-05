@@ -13,8 +13,8 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.render.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.CompoundNBTHelper;
-import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -42,9 +42,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
@@ -118,9 +116,9 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                 bound.addEnchantment(Enchantments.BINDING_CURSE, 1);
                 setHemalurgicIdentity(bound, UUID.randomUUID());
                 CompoundNBT hemalurgicInfo = getHemalurgicInfo(bound);
-                for (RegistryObject<AManifestation> manifestation : ManifestationRegistry.MANIFESTATIONS.getEntries())
+                for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
                 {
-                    CompoundNBTHelper.setBoolean(hemalurgicInfo, manifestation.get().getRegistryName().getPath(), true);
+                    CompoundNBTHelper.setBoolean(hemalurgicInfo, manifestation.getRegistryName().getPath(), true);
                 }
                 CompoundNBTHelper.setBoolean(hemalurgicInfo, "hasHemalurgicPower", true);
 
@@ -135,6 +133,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         stack.addEnchantment(Enchantments.BINDING_CURSE, 1);
     }
 
+    //todo hemalurgic decay
     //https://wob.coppermind.net/events/332/#e9534
     private void addDecay(ItemStack stack)
     {
@@ -229,18 +228,6 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         return super.hasEffect(stack) || hemalurgicIdentityExists(stack);
     }
 
-
-    /**
-     * generate new map of attributes for when used as a curio item.
-     */
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
-    {
-        UUID hemalurgicIdentity = getHemalurgicIdentity(stack);
-        return hemalurgicIdentity == null ? super.getAttributeModifiers(slotContext, uuid, stack)
-                                          : getHemalurgicAttributes(stack, getMetalType());
-    }
-
     /**
      * Gets a map of item attribute modifiers, used by damage when used as melee weapon.
      */
@@ -266,48 +253,15 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     }
 
     @Override
-    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
+    protected void onEquipStatusChanged(SlotContext slotContext, ItemStack stack, boolean isEquipping)
     {
-        onEquipStatusChanged(slotContext, stack, true);
-    }
+        //first do normal equip status changed, in case this spike metalmind has nicrosil powers stored
+        super.onEquipStatusChanged(slotContext,stack,isEquipping);
 
-    @Override
-    public void onUnequip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
-    {
-        onEquipStatusChanged(slotContext, stack, false);
-    }
-
-    private void onEquipStatusChanged(SlotContext slotContext, ItemStack stack, boolean isEquipping)
-    {
+        //then do hemalurgy spike logic
         //hurt the user
+        //spiritweb attributes are handled in metalmind
         slotContext.getWearer().attackEntityFrom(SPIKED, 4);
-
-        //then check if we need to change anything about wearers spiritweb
-        if (!hemalurgicIdentityExists(stack))
-        {
-            return;
-        }
-
-        SpiritwebCapability.get(slotContext.getWearer()).ifPresent(cap ->
-        {
-            IForgeRegistry<AManifestation> manifestations = ManifestationRegistry.MANIFESTATION_REGISTRY.get();
-            for (AManifestation data : manifestations)
-            {
-                // if this spike has that power
-                if (hasHemalurgicPower(stack, data))
-                {
-                    //then grant it
-                    if (isEquipping)
-                    {
-                        cap.giveTemporaryManifestation(data.getManifestationType(), data.getPowerID());
-                    }
-                    else
-                    {
-                        cap.removeTemporaryManifestation(data.getManifestationType(), data.getPowerID());
-                    }
-                }
-            }
-        });
     }
 
     @Override

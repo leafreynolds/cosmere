@@ -15,10 +15,8 @@ import leaf.cosmere.helpers.MathHelper;
 import leaf.cosmere.helpers.TextHelper;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
-import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
@@ -33,7 +31,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -45,66 +43,82 @@ public class EntityEventHandler
 {
 
     @SubscribeEvent
-    public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
+    public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event)
     {
-        for (Metals.MetalType metalType : Metals.MetalType.values())
+        Entity eventEntity = event.getEntity();
+
+        if (eventEntity.world.isRemote || !(eventEntity instanceof LivingEntity))
         {
-            if (metalType.hasAssociatedManifestation())
-            {
-                event.add(EntityType.PLAYER, AttributesRegistry.ALLOMANTIC_STRENGTH_ATTRIBUTES.get(metalType).get());
-                event.add(EntityType.PLAYER, AttributesRegistry.FERUCHEMICAL_STRENGTH_ATTRIBUTES.get(metalType).get());
-            }
+            return;
         }
+
+        LivingEntity livingEntity = (LivingEntity) eventEntity;
+        SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
+        {
+            SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
+
+            //find out if any innate powers exist on the entity first
+            //if they do
+            if (spiritweb.hasAnyPowers())
+            {
+                //then skip
+                //no need to give them extras just for rejoining the world.
+                return;
+            }
+
+            //if player or villager
+            if (eventEntity instanceof PlayerEntity)
+            {
+                //from random powertype
+                {
+                    //give random power
+                    giveRandomManifestation(livingEntity, spiritweb);
+                }
+            }
+            else if (eventEntity instanceof VillagerEntity
+                    || eventEntity instanceof ZombieVillagerEntity
+                    || eventEntity instanceof AbstractIllagerEntity
+                    || eventEntity instanceof WitchEntity
+                    || eventEntity instanceof PiglinEntity)
+            {
+                //random 1/16
+                // only 1 in 16 will have the gene
+                if (MathHelper.randomInt(1, 16) % 16 == 0)
+                {
+                    giveRandomManifestation(livingEntity, spiritweb);
+                }
+
+            }
+        });
 
     }
 
     @SubscribeEvent
     public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
     {
-        if (event.getObject() instanceof PlayerEntity
-                || event.getObject() instanceof AnimalEntity
-                || event.getObject() instanceof VillagerEntity
-                || event.getObject() instanceof MonsterEntity)
+        Entity eventEntity = event.getObject();
+
+        if (eventEntity instanceof PlayerEntity
+                || eventEntity instanceof AnimalEntity
+                || eventEntity instanceof VillagerEntity
+                || eventEntity instanceof MonsterEntity)
         {
-            SpiritwebCapability spiritwebCapability = new SpiritwebCapability((LivingEntity) event.getObject());
-
-            //if player or villager
-            if (event.getObject() instanceof PlayerEntity)
-            {
-                //from random powertype
-                {
-                    //give random power
-                    giveRandomManifestation(event.getObject(), spiritwebCapability);
-                }
-            }
-            else if (event.getObject() instanceof VillagerEntity
-                    || event.getObject() instanceof ZombieVillagerEntity
-                    || event.getObject() instanceof AbstractIllagerEntity
-                    || event.getObject() instanceof WitchEntity
-                    || event.getObject() instanceof PiglinEntity)
-            {
-                //random 1/16
-                // only 1 in 16 will have the gene
-                if (MathHelper.randomInt(1, 16) % 16 == 0)
-                {
-                    giveRandomManifestation(event.getObject(), spiritwebCapability);
-                }
-
-            }
+            LivingEntity livingEntity = (LivingEntity) eventEntity;
+            SpiritwebCapability spiritwebCapability = new SpiritwebCapability(livingEntity);
 
             event.addCapability(Constants.Resources.SPIRITWEB_CAP, new ISpiritweb.Provider(spiritwebCapability));
         }
     }
 
-    private static void giveRandomManifestation(Entity entity, SpiritwebCapability spiritwebCapability)
+    private static void giveRandomManifestation(LivingEntity entity, SpiritwebCapability spiritwebCapability)
     {
         boolean isPlayerEntity = entity instanceof PlayerEntity;
         //low chance of having full powers of one type
         boolean isFullPowersFromOneType = MathHelper.randomInt(0, 16) % 16 == 0;
 
-        //50/50 chance of of being twin born, but only if not having full powers above
-        //players are guaranteed having at least two powers.
-        boolean isTwinborn = MathHelper.randomBool() || isPlayerEntity;
+        //small chance of being twin born, but only if not having full powers above
+        //except for players who are guaranteed having at least two powers.
+        boolean isTwinborn = isPlayerEntity || MathHelper.randomInt(0, 16) < 3;
 
         //randomise the given powers from allomancy and feruchemy
         int allomancyPower = MathHelper.randomInt(0, 15);
@@ -213,6 +227,7 @@ public class EntityEventHandler
                             //https://www.theoryland.com/intvmain.php?i=977#43
                             if (target instanceof LlamaEntity && !target.hasCustomName())
                             {
+                                //todo translations
                                 target.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
                             }
 
@@ -249,6 +264,8 @@ public class EntityEventHandler
 
                 boolean spikeApplied = false;
 
+                //todo catquisitor
+                /*
                 switch (spike.getMetalType())
                 {
                     case STEEL:
@@ -272,7 +289,7 @@ public class EntityEventHandler
                     case LERASIUM:
                         //Steals all powers
                         break;
-                }
+                }*/
 
                 if (spikeApplied && !event.getPlayer().isCreative())
                 {

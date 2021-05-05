@@ -14,6 +14,7 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.SyncPlayerSpiritwebMessage;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MainWindow;
@@ -21,21 +22,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -56,7 +62,6 @@ public class SpiritwebCapability implements ISpiritweb
     //endregion
 
 
-
     //Injection
     @CapabilityInject(ISpiritweb.class)
     public static final Capability<ISpiritweb> CAPABILITY = null;
@@ -64,24 +69,7 @@ public class SpiritwebCapability implements ISpiritweb
     //detect if capability has been set up yet
     private boolean didSetup = false;
 
-    private static final BitSet checker = new BitSet();
-
     private final LivingEntity livingEntity;
-
-    public final Map<ManifestationTypes, BitSet> UNLOCKED_MANIFESTATIONS =
-            Arrays.stream(ManifestationTypes.values())
-                    .collect(Collectors.toMap(
-                            Function.identity(),
-                            type -> new BitSet()));
-
-    //todo figure out how to do what I originally set out to do 🙃
-    //Hemalurgic powers are never saved back to the capability for serialisation
-    //instead, the relevant curio will re-apply them each time the player logs in
-    public final Map<ManifestationTypes, BitSet> TEMPORARY_MANIFESTATIONS =
-            Arrays.stream(ManifestationTypes.values())
-                    .collect(Collectors.toMap(
-                            Function.identity(),
-                            type -> new BitSet()));
 
     public final Map<ManifestationTypes, int[]> MANIFESTATIONS_MODE =
             Arrays.stream(ManifestationTypes.values())
@@ -93,17 +81,16 @@ public class SpiritwebCapability implements ISpiritweb
 
     //biochromatic breaths stored.
     //todo, figure out how the passive buff works
-    private int biochromaticBreathStored = 0 ;
+    private int biochromaticBreathStored = 0;
 
     //stormlight stored
 
-    private int stormlightStored = 0 ;
+    private int stormlightStored = 0;
 
     //metals ingested
     public final Map<Metals.MetalType, Integer> METALS_INGESTED =
             Arrays.stream(Metals.MetalType.values())
-                    .collect(Collectors.toMap(Function.identity(),type -> 0));
-
+                    .collect(Collectors.toMap(Function.identity(), type -> 0));
 
 
     public SpiritwebCapability(LivingEntity ent)
@@ -115,7 +102,8 @@ public class SpiritwebCapability implements ISpiritweb
     @Nonnull
     public static LazyOptional<ISpiritweb> get(LivingEntity entity)
     {
-        return entity instanceof LivingEntity ? entity.getCapability(SpiritwebCapability.CAPABILITY, null) : LazyOptional.empty();
+        return entity instanceof LivingEntity ? entity.getCapability(SpiritwebCapability.CAPABILITY, null)
+                                              : LazyOptional.empty();
     }
 
     @Override
@@ -126,9 +114,6 @@ public class SpiritwebCapability implements ISpiritweb
         for (ManifestationTypes manifestationType : ManifestationTypes.values())
         {
             String manifestationTypeName = manifestationType.name().toLowerCase();
-
-            nbt.putByteArray(manifestationTypeName + "_temp", TEMPORARY_MANIFESTATIONS.get(manifestationType).toByteArray());
-            nbt.putByteArray(manifestationTypeName + "_unlocked", UNLOCKED_MANIFESTATIONS.get(manifestationType).toByteArray());
             nbt.putIntArray(manifestationTypeName + "_mode", MANIFESTATIONS_MODE.get(manifestationType));
 
         }
@@ -152,9 +137,6 @@ public class SpiritwebCapability implements ISpiritweb
         for (ManifestationTypes manifestationType : ManifestationTypes.values())
         {
             String manifestationTypeName = manifestationType.name().toLowerCase();
-
-            TEMPORARY_MANIFESTATIONS.put(manifestationType, BitSet.valueOf(nbt.getByteArray(manifestationTypeName + "_temp")));
-            UNLOCKED_MANIFESTATIONS.put(manifestationType, BitSet.valueOf(nbt.getByteArray(manifestationTypeName + "_unlocked")));
             MANIFESTATIONS_MODE.put(manifestationType, nbt.getIntArray(manifestationTypeName + "_mode"));
         }
         selectedManifestation = ManifestationRegistry.fromID(nbt.getString("selected_power"));
@@ -163,7 +145,7 @@ public class SpiritwebCapability implements ISpiritweb
         stormlightStored = nbt.getInt("stored_stormlight");
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-            METALS_INGESTED.put(metalType,nbt.getInt(metalType.name().toLowerCase() + "_ingested"));
+            METALS_INGESTED.put(metalType, nbt.getInt(metalType.name().toLowerCase() + "_ingested"));
         }
     }
 
@@ -178,14 +160,6 @@ public class SpiritwebCapability implements ISpiritweb
                 syncToClients(null);
                 didSetup = true;
             }
-
-            //skip checking all the other powers if we know there's only one on this entity
-            if (hasSingleManifestation() && manifestationActive(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID()))
-            {
-                selectedManifestation.tick(this);
-                return;
-            }
-
 
             //Tick
             for (int i = 0; i < 16; i++)
@@ -237,25 +211,6 @@ public class SpiritwebCapability implements ISpiritweb
         return livingEntity;
     }
 
-
-    @Override
-    public boolean isMistborn()
-    {
-        checker.clear();
-        checker.or(UNLOCKED_MANIFESTATIONS.get(ManifestationTypes.ALLOMANCY));
-        checker.or(TEMPORARY_MANIFESTATIONS.get(ManifestationTypes.ALLOMANCY));
-        return checker.cardinality() >= 16;
-    }
-
-    @Override
-    public boolean isFullFeruchemist()
-    {
-        checker.clear();
-        checker.or(UNLOCKED_MANIFESTATIONS.get(ManifestationTypes.FERUCHEMY));
-        checker.or(TEMPORARY_MANIFESTATIONS.get(ManifestationTypes.FERUCHEMY));
-        return checker.cardinality() >= 16;
-    }
-
     @Override
     public int getIngestedMetal(Metals.MetalType metalType)
     {
@@ -271,7 +226,9 @@ public class SpiritwebCapability implements ISpiritweb
         if (ingestedMetal >= val)
         {
             if (doAdjust)
+            {
                 METALS_INGESTED.put(metalType, ingestedMetal + val);
+            }
 
             return true;
         }
@@ -333,26 +290,33 @@ public class SpiritwebCapability implements ISpiritweb
         selectedManifestation = manifestation;
     }
 
-    public int getNumPowers()
+    public boolean hasAnyPowers()
     {
-        return getNumPowers(false);
-    }
-
-    private int getNumPowers(boolean ignoreTemp)
-    {
-        int powers = 0;
-        checker.clear();
-
-        for (ManifestationTypes manifestationTypes : ManifestationTypes.values())
+        for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
         {
-            checker.or(UNLOCKED_MANIFESTATIONS.get(manifestationTypes));
-            if (!ignoreTemp)
+            String path = manifestation.getRegistryName().getPath();
+            RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
+            if (attributeRegistryObject == null)
             {
-                checker.or(TEMPORARY_MANIFESTATIONS.get(manifestationTypes));
+                continue;
             }
-            powers += checker.cardinality();
+
+            Attribute attribute = attributeRegistryObject.get();
+
+            ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+            if (manifestationAttribute == null)
+            {
+                continue;
+            }
+
+            if (manifestationAttribute.getValue() > 5)
+            {
+                return true;
+            }
         }
-        return powers;
+
+
+        return false;
     }
 
     @Override
@@ -364,41 +328,61 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public boolean hasManifestation(ManifestationTypes manifestationTypeID, int powerID, boolean ignoreTemporaryPower)
     {
-        boolean hasPower = UNLOCKED_MANIFESTATIONS.get(manifestationTypeID).get(powerID);
-
-        if (!hasPower && !ignoreTemporaryPower)
+        AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
+        if (manifestation == ManifestationRegistry.NONE.get())
         {
-            hasPower = TEMPORARY_MANIFESTATIONS.get(manifestationTypeID).get(powerID);
+            return false;
         }
 
-        return hasPower;
+        String manifestationName = manifestation.getRegistryName().getPath();
+        Attribute attribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName).get();
+        ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+        if (manifestationAttribute != null)
+        {
+            double manifestationStrength =
+                    ignoreTemporaryPower ? manifestationAttribute.getBaseValue() : manifestationAttribute.getValue();
+
+            return manifestationStrength > 5;
+        }
+        return false;
     }
 
 
     @Override
     public void giveManifestation(ManifestationTypes manifestationTypeID, int powerID)
     {
-        UNLOCKED_MANIFESTATIONS.get(manifestationTypeID).set(powerID, true);
-    }
+        AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
 
-    @Override
-    public void giveTemporaryManifestation(ManifestationTypes manifestationTypeID, int powerID)
-    {
-        TEMPORARY_MANIFESTATIONS.get(manifestationTypeID).set(powerID, true);
-        //update single power var
-    }
+        if (manifestation == ManifestationRegistry.NONE.get())
+        {
+            return;
+        }
 
+        String manifestationName = manifestation.getRegistryName().getPath();
+        Attribute attribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName).get();
+        ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+
+        if (manifestationAttribute != null)
+        {
+            manifestationAttribute.setBaseValue(10);
+
+                /*AttributeModifier attributeModifier = AttributeHelper.makeAttribute(manifestationName, "inherent ", 10, AttributeModifier.Operation.ADDITION);
+                manifestationAttribute.removeModifier(attributeModifier);
+                manifestationAttribute.applyNonPersistentModifier(attributeModifier);*/
+
+        }
+    }
 
     @Override
     public void removeManifestation(ManifestationTypes manifestationTypeID, int powerID)
     {
-        UNLOCKED_MANIFESTATIONS.get(manifestationTypeID).clear(powerID);
-    }
 
-    @Override
-    public void removeTemporaryManifestation(ManifestationTypes manifestationTypeID, int powerID)
-    {
-        TEMPORARY_MANIFESTATIONS.get(manifestationTypeID).clear(powerID);
+        AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
+        ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestation.getRegistryName().getPath()).get());
+        if (manifestationAttribute != null)
+        {
+            manifestationAttribute.setBaseValue(0);
+        }
     }
 
     @Override
@@ -407,7 +391,9 @@ public class SpiritwebCapability implements ISpiritweb
         int[] manifestationPowersModes = MANIFESTATIONS_MODE.get(manifestationType);
 
         if (manifestationType == ManifestationTypes.NONE || manifestationPowersModes.length == 0)
+        {
             return false;
+        }
 
         return manifestationPowersModes[powerID] != 0;
     }
@@ -442,9 +428,10 @@ public class SpiritwebCapability implements ISpiritweb
     public void clearManifestations()
     {
         deactivateManifestations();
-        for (ManifestationTypes manifestationTypes : ManifestationTypes.values())
+
+        for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
         {
-            UNLOCKED_MANIFESTATIONS.get(manifestationTypes).clear();
+            removeManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
         }
     }
 
@@ -484,12 +471,6 @@ public class SpiritwebCapability implements ISpiritweb
     public AManifestation manifestation(ManifestationTypes manifestationType, int powerID)
     {
         return manifestationType.getManifestation(powerID);
-    }
-
-    @Override
-    public boolean hasSingleManifestation()
-    {
-        return getNumPowers() == 1;
     }
 
     @Override
