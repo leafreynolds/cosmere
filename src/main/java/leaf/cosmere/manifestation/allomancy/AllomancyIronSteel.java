@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -38,74 +39,6 @@ public class AllomancyIronSteel extends AllomancyBase
     {
         super(metalType);
         this.isPush = metalType == Metals.MetalType.STEEL;
-    }
-
-    public int getRange(ISpiritweb cap)
-    {
-        if (!cap.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()))
-            return 0;
-
-        //get allomantic strength in steel
-        RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(Metals.MetalType.STEEL.getMistingName());
-
-        return MathHelper.floor(cap.getLiving().getAttribute(mistingAttribute.get()).getValue() * cap.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()));
-
-    }
-
-
-    @OnlyIn(Dist.CLIENT)
-    public static List<Vector3d> getDrawLines(int range)
-    {
-        Minecraft mc = Minecraft.getInstance();
-        ClientPlayerEntity playerEntity = mc.player;
-
-        List<Vector3d> found = new ArrayList<>();
-
-        //find all the things that we want to draw a line to from the player
-
-
-        //metal blocks
-        BlockPos.getProximitySortedBoxPositions(playerEntity.getPosition(), range, range, range)
-                .filter(blockPos ->
-                {
-                    Block block = playerEntity.world.getBlockState(blockPos).getBlock();
-
-                    if (block instanceof IHasMetalType)
-                    {
-                        return true;
-                    }
-
-                    return false;
-                })
-                .forEach(blockPos -> found.add(new Vector3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5)));
-
-
-        //entities with metal armor/tools
-
-        getEntitiesInRange(playerEntity, range, false).forEach(entity ->
-        {
-            if (entity instanceof LivingEntity)
-            {
-                //check for metal items
-
-            }
-            else if (entity instanceof ItemEntity)
-            {
-                ItemStack stack = ((ItemEntity) entity).getItem();
-                Item item = stack.getItem();
-
-                if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof IHasMetalType)
-                {
-                    found.add(entity.getPositionVec());
-                }
-                else if (item instanceof IHasMetalType)
-                {
-                    found.add(entity.getPositionVec());
-                }
-            }
-        });
-
-        return found;
     }
 
     @Override
@@ -137,6 +70,74 @@ public class AllomancyIronSteel extends AllomancyBase
         }
 
 
+    }
+
+    public int getRange(ISpiritweb cap)
+    {
+        if (!cap.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()))
+            return 0;
+
+        //get allomantic strength
+        double allomanticStrength = getAllomanticStrength(cap);
+        return MathHelper.floor(allomanticStrength * cap.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()));
+
+    }
+
+
+    @OnlyIn(Dist.CLIENT)
+    public static List<Vector3d> getDrawLines(int range)
+    {
+        Minecraft mc = Minecraft.getInstance();
+        ClientPlayerEntity playerEntity = mc.player;
+
+        List<Vector3d> found = new ArrayList<>();
+
+        //find all the things that we want to draw a line to from the player
+
+        //todo stop aluminum showing up, check IHasMetalType.getMetalType != aluminum
+
+        //metal blocks
+        BlockPos.getProximitySortedBoxPositions(playerEntity.getPosition(), range, range, range)
+                .filter(blockPos ->
+                {
+                    Block block = playerEntity.world.getBlockState(blockPos).getBlock();
+
+                    if (block instanceof IHasMetalType)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                })
+                .forEach(blockPos -> found.add(new Vector3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5)));
+
+
+        //entities with metal armor/tools
+
+        getEntitiesInRange(playerEntity, range, false).forEach(entity ->
+        {
+            if (entity instanceof LivingEntity)
+            {
+                //check for metal items on the entity
+
+            }
+            else if (entity instanceof ItemEntity)
+            {
+                ItemStack stack = ((ItemEntity) entity).getItem();
+                Item item = stack.getItem();
+
+                if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof IHasMetalType)
+                {
+                    found.add(entity.getPositionVec());
+                }
+                else if (item instanceof IHasMetalType)
+                {
+                    found.add(entity.getPositionVec());
+                }
+            }
+        });
+
+        return found;
     }
 
 

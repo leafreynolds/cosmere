@@ -5,7 +5,6 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.config.Config;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import net.minecraft.util.ResourceLocation;

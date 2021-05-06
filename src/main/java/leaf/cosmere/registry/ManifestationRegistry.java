@@ -100,7 +100,6 @@ public class ManifestationRegistry
         switch (metalType)
         {
             case IRON://todo pull and iron sight
-                return new AllomancyIronSteel(metalType);
             case STEEL://todo push and steel sight
                 return new AllomancyIronSteel(metalType);
             case TIN://todo more than just night vision?

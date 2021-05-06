@@ -7,12 +7,9 @@ package leaf.cosmere.handlers;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.commands.CosmereCommand;
-import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.LogHelper;
 import leaf.cosmere.registry.FeatureRegistry;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -20,13 +17,11 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonEvents

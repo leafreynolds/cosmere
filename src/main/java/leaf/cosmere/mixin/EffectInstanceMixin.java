@@ -4,12 +4,7 @@
 
 package leaf.cosmere.mixin;
 
-import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.FeruchemyEffectBase;
-import leaf.cosmere.registry.EffectsRegistry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import org.spongepowered.asm.mixin.Mixin;

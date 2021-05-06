@@ -8,8 +8,6 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.blocks.MetalOreBlock;
-import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Constants.RegNameStubs;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;

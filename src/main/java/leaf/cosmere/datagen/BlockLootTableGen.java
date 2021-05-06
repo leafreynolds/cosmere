@@ -7,10 +7,7 @@ package leaf.cosmere.datagen;
 import leaf.cosmere.blocks.MetalOreBlock;
 import leaf.cosmere.registry.BlocksRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.OreBlock;
 import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.item.Items;
 import net.minecraftforge.fml.RegistryObject;
 
 public class BlockLootTableGen extends BlockLootTables

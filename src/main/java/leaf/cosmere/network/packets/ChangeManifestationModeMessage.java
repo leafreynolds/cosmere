@@ -6,12 +6,9 @@ package leaf.cosmere.network.packets;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
-import leaf.cosmere.helpers.TextHelper;
-import leaf.cosmere.constants.Constants;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Util;
 import net.minecraft.util.text.TextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 

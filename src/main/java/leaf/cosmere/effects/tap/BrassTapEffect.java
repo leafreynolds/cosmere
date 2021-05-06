@@ -5,18 +5,13 @@
 package leaf.cosmere.effects.tap;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.FeruchemyEffectBase;
-import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

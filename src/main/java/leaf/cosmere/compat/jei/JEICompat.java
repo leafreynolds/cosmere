@@ -4,6 +4,8 @@
 
 package leaf.cosmere.compat.jei;
 
+import leaf.cosmere.constants.Constants;
+import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.ItemsRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -11,8 +13,6 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import leaf.cosmere.constants.Constants;
-import leaf.cosmere.constants.Metals;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

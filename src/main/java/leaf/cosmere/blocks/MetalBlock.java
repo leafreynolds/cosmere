@@ -4,9 +4,9 @@
 
 package leaf.cosmere.blocks;
 
-import leaf.cosmere.properties.PropTypes;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
+import leaf.cosmere.properties.PropTypes;
 import net.minecraft.block.SoundType;
 
 public class MetalBlock extends BaseBlock implements IHasMetalType

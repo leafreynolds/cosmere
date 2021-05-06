@@ -5,14 +5,7 @@
 package leaf.cosmere.manifestation.feruchemy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
-import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.EffectsHelper;
-import leaf.cosmere.helpers.XPHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 
 public class FeruchemyAluminum extends FeruchemyBase
 {

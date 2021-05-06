@@ -5,14 +5,9 @@
 
 package leaf.cosmere.helpers;
 
-import com.google.gson.JsonObject;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTDynamicOps;
 
 import javax.annotation.Nullable;
 import java.util.UUID;

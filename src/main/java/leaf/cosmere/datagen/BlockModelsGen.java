@@ -5,9 +5,9 @@
 package leaf.cosmere.datagen;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.blocks.MetalBlock;
 import leaf.cosmere.helpers.ResourceLocationHelper;
 import leaf.cosmere.registry.BlocksRegistry;
-import leaf.cosmere.blocks.MetalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.OreBlock;
 import net.minecraft.data.DataGenerator;

@@ -5,8 +5,8 @@
 package leaf.cosmere.datagen;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalIngotItem;
+import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalRawOreItem;
 import leaf.cosmere.items.ShardbladeItem;
 import leaf.cosmere.items.curio.BraceletMetalmind;

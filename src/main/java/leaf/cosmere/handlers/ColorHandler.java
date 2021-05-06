@@ -6,8 +6,6 @@
 
 package leaf.cosmere.handlers;
 
-import leaf.cosmere.blocks.MetalBlock;
-import leaf.cosmere.blocks.MetalOreBlock;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
 import net.minecraft.client.Minecraft;

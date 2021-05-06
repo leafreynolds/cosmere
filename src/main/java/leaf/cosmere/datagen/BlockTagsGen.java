@@ -5,10 +5,10 @@
 package leaf.cosmere.datagen;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.registry.BlocksRegistry;
-import leaf.cosmere.registry.TagsRegistry;
 import leaf.cosmere.blocks.MetalBlock;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.registry.BlocksRegistry;
+import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;

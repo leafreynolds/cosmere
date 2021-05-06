@@ -4,9 +4,9 @@
 
 package leaf.cosmere.items;
 
+import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.properties.PropTypes;
-import leaf.cosmere.constants.Metals;
 
 public class ChargeableMetalItem extends ChargeableItemBase implements IHasMetalType
 {

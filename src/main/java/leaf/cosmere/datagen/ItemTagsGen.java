@@ -5,14 +5,13 @@
 package leaf.cosmere.datagen;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.registry.TagsRegistry;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.MetalIngotItem;
+import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;

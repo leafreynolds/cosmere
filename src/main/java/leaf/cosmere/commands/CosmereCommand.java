@@ -10,8 +10,8 @@ package leaf.cosmere.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.commands.subcommands.TestCommand;
 import leaf.cosmere.commands.subcommands.ManifestationCommand;
+import leaf.cosmere.commands.subcommands.TestCommand;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 

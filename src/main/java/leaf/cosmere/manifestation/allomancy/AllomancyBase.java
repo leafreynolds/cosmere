@@ -10,9 +10,13 @@ import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.manifestation.ManifestationBase;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.KeybindingRegistry;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraftforge.fml.RegistryObject;
 
 public class AllomancyBase extends ManifestationBase implements IHasMetalType
 {
@@ -132,5 +136,12 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         }
 
         return null;
+    }
+
+    protected double getAllomanticStrength(ISpiritweb cap)
+    {
+        RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(Metals.MetalType.STEEL.getMistingName());
+        ModifiableAttributeInstance attribute = cap.getLiving().getAttribute(mistingAttribute.get());
+        return attribute != null ? attribute.getValue() : 0;
     }
 }

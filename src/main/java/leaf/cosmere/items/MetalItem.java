@@ -4,9 +4,9 @@
 
 package leaf.cosmere.items;
 
+import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.properties.PropTypes;
-import leaf.cosmere.constants.Metals;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

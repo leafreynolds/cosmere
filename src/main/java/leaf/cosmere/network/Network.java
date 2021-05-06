@@ -8,8 +8,8 @@
 
 package leaf.cosmere.network;
 
-import leaf.cosmere.network.packets.*;
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.network.packets.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;

@@ -6,7 +6,6 @@ package leaf.cosmere.manifestation.feruchemy;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.EffectsRegistry;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;

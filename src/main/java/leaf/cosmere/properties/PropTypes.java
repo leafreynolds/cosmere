@@ -8,7 +8,6 @@ import leaf.cosmere.itemgroups.CosmereItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ToolType;
 
 import java.util.function.Supplier;

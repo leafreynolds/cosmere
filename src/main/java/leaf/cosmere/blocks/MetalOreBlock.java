@@ -8,7 +8,6 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.properties.PropTypes;
 import net.minecraft.block.OreBlock;
-import net.minecraft.block.SoundType;
 
 public class MetalOreBlock extends OreBlock implements IHasMetalType
 {
