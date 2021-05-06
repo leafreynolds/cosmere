@@ -4,12 +4,13 @@
 
 package leaf.cosmere.manifestation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Manifestations;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
@@ -41,6 +42,7 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
         return new TranslationTextComponent("manifestation." + regName.getNamespace() + "." + regName.getPath() + ".description");
     }
 
-    public abstract void renderHUD(MatrixStack ms, ClientPlayerEntity playerEntity, ISpiritweb cap);
+    @OnlyIn(Dist.CLIENT)
+    public void renderWorldEffects(RenderWorldLastEvent event, ISpiritweb cap){}
 
 }

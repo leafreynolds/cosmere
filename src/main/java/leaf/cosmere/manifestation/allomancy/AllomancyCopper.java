@@ -13,7 +13,7 @@ import net.minecraft.potion.EffectInstance;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getEntitiesInRange;
+import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyCopper extends AllomancyBase
 {
@@ -38,7 +38,7 @@ public class AllomancyCopper extends AllomancyBase
 
             //data.getLiving().addPotionEffect(newEffect);
 
-            List<LivingEntity> entitiesToApplyEffect = getEntitiesInRange(livingEntity, 5, true);
+            List<LivingEntity> entitiesToApplyEffect = getLivingEntitiesInRange(livingEntity, 5, true);
 
             for (LivingEntity e : entitiesToApplyEffect)
             {

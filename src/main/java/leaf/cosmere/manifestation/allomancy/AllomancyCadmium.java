@@ -8,12 +8,11 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.EffectsHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.potion.Effects;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getEntitiesInRange;
+import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyCadmium extends AllomancyBase
 {
@@ -42,7 +41,7 @@ public class AllomancyCadmium extends AllomancyBase
 
             int range = 5 * mode;
 
-            List<LivingEntity> entitiesToAffect = getEntitiesInRange(data.getLiving(), range, true);
+            List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
 
             for (LivingEntity e : entitiesToAffect)
             {

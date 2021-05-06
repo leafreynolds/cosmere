@@ -4,7 +4,6 @@
 
 package leaf.cosmere.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
@@ -26,6 +25,7 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -107,18 +107,20 @@ public class ClientEvents
     @SubscribeEvent
     public static void onRenderGUI(final RenderGameOverlayEvent.Post event)
     {
-        renderCosmereHUD(event);
         renderSpiritwebHUD(event);
     }
 
-    public static void renderCosmereHUD(final RenderGameOverlayEvent.Post event)
+    @SubscribeEvent
+    public static void onRenderWorldLastEvent(final RenderWorldLastEvent event)
+    {
+        renderManifestationsHUD(event);
+    }
+
+    public static void renderManifestationsHUD(final RenderWorldLastEvent event)
     {
         Minecraft mc = Minecraft.getInstance();
         IProfiler profiler = mc.getProfiler();
         ClientPlayerEntity playerEntity = mc.player;
-        MatrixStack ms = event.getMatrixStack();
-
-        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
         {
             profiler.startSection("cosmere-hud");
 
@@ -127,8 +129,7 @@ public class ClientEvents
                 SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
                 {
                     profiler.startSection(spiritweb.manifestation().getRegistryName().getNamespace());
-                    //spiritweb.renderHUD(ms, playerEntity, spiritweb);
-                    spiritweb.manifestation().renderHUD(ms, playerEntity, spiritweb);
+                    spiritweb.renderWorldEffects(event);
                     profiler.endSection();
 
                 });
@@ -151,10 +152,11 @@ public class ClientEvents
         SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(cap ->
         {
             SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
+            spiritweb.renderSelectedHUD(event.getMatrixStack());
 
             if (spiritweb.hasAnyPowers())
             {
-                SpiritwebMenu.instance.render(event, spiritweb);
+                SpiritwebMenu.instance.postRender(event, spiritweb);
             }
         });
 

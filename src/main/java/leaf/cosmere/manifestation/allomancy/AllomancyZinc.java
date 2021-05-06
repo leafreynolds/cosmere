@@ -12,7 +12,7 @@ import net.minecraft.entity.MobEntity;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getEntitiesInRange;
+import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyZinc extends AllomancyBase
 {
@@ -38,7 +38,7 @@ public class AllomancyZinc extends AllomancyBase
             int range = 5 * mode;
 
             //include self in the list, mostly for setting self as a possible target to attack.
-            List<LivingEntity> entitiesToAffect = getEntitiesInRange(data.getLiving(), range, true);
+            List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
 
             for (LivingEntity entityInRange : entitiesToAffect)
             {

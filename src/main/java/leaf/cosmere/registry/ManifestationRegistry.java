@@ -7,14 +7,10 @@ package leaf.cosmere.registry;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.effects.FeruchemyEffectBase;
-import leaf.cosmere.effects.store.*;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.manifestation.allomancy.*;
 import leaf.cosmere.manifestation.feruchemy.*;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -104,9 +100,9 @@ public class ManifestationRegistry
         switch (metalType)
         {
             case IRON://todo pull and iron sight
-                return new AllomancyIron(metalType);
+                return new AllomancyIronSteel(metalType);
             case STEEL://todo push and steel sight
-                return new AllomancySteel(metalType);
+                return new AllomancyIronSteel(metalType);
             case TIN://todo more than just night vision?
                 return new AllomancyTin(metalType);
             case PEWTER://done?

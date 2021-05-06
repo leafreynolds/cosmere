@@ -51,11 +51,8 @@ public class ModBusEvents
                 continue;
             }
 
-            String mistingNamePath = metalType.getMistingName();
-            String ferringNamePath = metalType.getFerringName();
-
-            RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(mistingNamePath);
-            RegistryObject<Attribute> ferringAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(ferringNamePath);
+            RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(metalType.getMistingName());
+            RegistryObject<Attribute> ferringAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(metalType.getFerringName());
 
             for (EntityType entityType : entityTypes)
             {

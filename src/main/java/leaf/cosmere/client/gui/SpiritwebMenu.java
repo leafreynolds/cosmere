@@ -111,7 +111,7 @@ public class SpiritwebMenu extends Screen
     }
 
 
-    public void render(RenderGameOverlayEvent.Post event, SpiritwebCapability spiritweb)
+    public void postRender(RenderGameOverlayEvent.Post event, SpiritwebCapability spiritweb)
     {
         this.spiritweb = spiritweb;
         final boolean wasVisible = isVisible();

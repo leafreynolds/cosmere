@@ -25,6 +25,7 @@ public class AllomancyTin extends AllomancyBase
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
         //passive active ability, if any
+        if (isActiveTick)
         {
             //give night vision
             livingEntity.addPotionEffect(EffectsHelper.getNewEffect(Effects.NIGHT_VISION, 0));

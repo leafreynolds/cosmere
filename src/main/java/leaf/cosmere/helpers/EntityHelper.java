@@ -4,6 +4,7 @@
 
 package leaf.cosmere.helpers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -11,18 +12,33 @@ import java.util.List;
 
 public class EntityHelper
 {
-    public static List<LivingEntity> getEntitiesInRange(LivingEntity livingEntity, int range, boolean includeSelf)
+    public static List<LivingEntity> getLivingEntitiesInRange(LivingEntity livingEntity, int range, boolean includeSelf)
     {
         AxisAlignedBB areaOfEffect = new AxisAlignedBB(livingEntity.getPosition());
-        areaOfEffect = areaOfEffect.expand(range,range,range);
+        areaOfEffect = areaOfEffect.expand(range, range, range);
 
-        List<LivingEntity> entitiesToApplyEffect = livingEntity.world.getEntitiesWithinAABB(LivingEntity.class, areaOfEffect);
+        List<LivingEntity> entitiesFound = livingEntity.world.getEntitiesWithinAABB(LivingEntity.class, areaOfEffect);
 
-        if (!includeSelf && entitiesToApplyEffect.contains(livingEntity))
+        if (!includeSelf && entitiesFound.contains(livingEntity))
         {
-            entitiesToApplyEffect.remove(livingEntity);
+            entitiesFound.remove(livingEntity);
         }
 
-        return entitiesToApplyEffect;
+        return entitiesFound;
+    }
+
+    public static List<Entity> getEntitiesInRange(Entity entity, int range, boolean includeSelf)
+    {
+        AxisAlignedBB areaOfEffect = new AxisAlignedBB(entity.getPosition());
+        areaOfEffect = areaOfEffect.expand(range, range, range);
+
+        List<Entity> entitiesFound = entity.world.getEntitiesWithinAABB(Entity.class, areaOfEffect);
+
+        if (!includeSelf && entitiesFound.contains(entity))
+        {
+            entitiesFound.remove(entity);
+        }
+
+        return entitiesFound;
     }
 }

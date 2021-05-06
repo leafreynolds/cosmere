@@ -8,17 +8,16 @@
 
 package leaf.cosmere.cap.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import leaf.cosmere.cap.Capabilities;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -71,7 +70,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundNBT>
 
     String changeManifestation(int dir);
 
-    void renderHUD(MatrixStack ms, ClientPlayerEntity playerEntity, ISpiritweb spiritweb);
+    void renderWorldEffects(RenderWorldLastEvent event);
 
     void setSelectedManifestation(AManifestation manifestation);
 

@@ -11,7 +11,7 @@ import net.minecraft.entity.MobEntity;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getEntitiesInRange;
+import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyBrass extends AllomancyBase
 {
@@ -34,7 +34,7 @@ public class AllomancyBrass extends AllomancyBase
 
             int range = 5 * mode;
 
-            List<LivingEntity> entitiesToAffect = getEntitiesInRange(data.getLiving(), range, true);
+            List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
 
             for (LivingEntity e : entitiesToAffect)
             {

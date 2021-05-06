@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getEntitiesInRange;
+import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyBronze extends AllomancyBase
 {
@@ -40,7 +40,7 @@ public class AllomancyBronze extends AllomancyBase
             int mode = data.getMode(manifestationType, getMetalType().getID());
 
             int distance = 5 * mode;
-            List<LivingEntity> entitiesToCheckForAllomancy = getEntitiesInRange(livingEntity, distance, false);
+            List<LivingEntity> entitiesToCheckForAllomancy = getLivingEntitiesInRange(livingEntity, distance, false);
 
             for (LivingEntity e : entitiesToCheckForAllomancy)
             {

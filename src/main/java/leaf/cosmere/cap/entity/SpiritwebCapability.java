@@ -8,10 +8,14 @@
 
 package leaf.cosmere.cap.entity;
 
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import leaf.cosmere.client.gui.DrawUtils;
 import leaf.cosmere.constants.Manifestations.ManifestationTypes;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.allomancy.AllomancyIronSteel;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.registry.AttributesRegistry;
@@ -19,7 +23,6 @@ import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -28,9 +31,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.LazyOptional;
@@ -38,6 +43,7 @@ import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,9 +62,9 @@ public class SpiritwebCapability implements ISpiritweb
 
 
     //region Render stuff.
-    final ItemStack activeStore = new ItemStack(Blocks.TORCH);
-    final ItemStack activeTap = new ItemStack(Blocks.SOUL_TORCH);
-    final ItemStack inactive = new ItemStack(Items.STICK);
+    final ItemStack positiveActiveStack = new ItemStack(Blocks.SOUL_TORCH);
+    final ItemStack negativeActiveStack = new ItemStack(Blocks.REDSTONE_TORCH);
+    final ItemStack inactiveStack = new ItemStack(Items.STICK);
     //endregion
 
 
@@ -162,15 +168,14 @@ public class SpiritwebCapability implements ISpiritweb
             }
 
             //Tick
-            for (int i = 0; i < 16; i++)
+            for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
             {
-                for (ManifestationTypes manifestationType : ManifestationTypes.values())
+                //don't tick powers that the user doesn't have
+                //don't tick powers that are not active
+                if (hasManifestation(manifestation.getManifestationType(), manifestation.getPowerID())
+                        && manifestationActive(manifestation.getManifestationType(), manifestation.getPowerID()))
                 {
-                    //don't tick powers that the user doesn't have or are not active
-                    if (hasManifestation(manifestationType, i) && manifestationActive(manifestationType, i))
-                    {
-                        manifestationType.getManifestation(i).tick(this);
-                    }
+                    manifestation.tick(this);
                 }
             }
 
@@ -237,51 +242,81 @@ public class SpiritwebCapability implements ISpiritweb
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderHUD(MatrixStack ms, ClientPlayerEntity playerEntity, ISpiritweb spiritweb)
+    public void renderWorldEffects(RenderWorldLastEvent event)
+    {
+        /*for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
+        {
+            //don't tick powers that the user doesn't have
+            //don't tick powers that are not active
+            if (hasManifestation(manifestation.getManifestationType(), manifestation.getPowerID())
+                    && manifestationActive(manifestation.getManifestationType(), manifestation.getPowerID()))
+            {
+                manifestation.renderWorldEffects(event, this);
+            }
+        }*/
+
+        Multimap<Color, List<Vector3d>> linesToDrawByColor = LinkedHashMultimap.create();
+
+        //if user has iron or steel manifestation
+        if (hasManifestation(ManifestationTypes.ALLOMANCY, Metals.MetalType.IRON.getID())
+                || hasManifestation(ManifestationTypes.ALLOMANCY, Metals.MetalType.STEEL.getID()))
+        {
+            AllomancyIronSteel iron = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
+            AllomancyIronSteel steel = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
+
+            //is zero if the manifestation is not active.
+            int range = Math.max(iron.getRange(this), steel.getRange(this));
+
+            if (range > 0)
+            {
+                linesToDrawByColor.put(Color.BLUE, AllomancyIronSteel.getDrawLines(range));
+            }
+        }
+        if (linesToDrawByColor.size() > 0)
+        {
+            Vector3d originPoint = getLiving().getPositionVec().add(0, 1, 0);
+            for (Map.Entry<Color, List<Vector3d>> entry : linesToDrawByColor.entries())
+            {
+                //For all found things, draw the line
+                DrawUtils.drawLinesFromPoint(event, originPoint, entry.getValue(), entry.getKey());
+            }
+        }
+    }
+
+
+    public void renderSelectedHUD(MatrixStack ms)
     {
         Minecraft mc = Minecraft.getInstance();
         MainWindow mainWindow = mc.getMainWindow();
-
         int x = 10;
         int y = mainWindow.getScaledHeight() / 5;
 
-        ItemStack stackToRender = inactive;
+        //todo translations
+        String stringToDraw = "Selected Power: " + I18n.format(selectedManifestation.translation().getString());
+        mc.fontRenderer.drawStringWithShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
 
-        List<AManifestation> availableManifestations = getAvailableManifestations();
+        int mode = getMode(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID());
+        String stringToDraw2 = "Mode: " + mode;
+        mc.fontRenderer.drawStringWithShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
 
-        for (AManifestation manifestation : availableManifestations)
+
+        ItemStack stack;
+
+        if (mode > 0)
         {
-            switch (manifestation.getManifestationType())
-            {
-                case ALLOMANCY:
-                    break;
-                case FERUCHEMY:
-
-                    boolean active = manifestationActive(manifestation.getManifestationType(), manifestation.getPowerID());
-
-                    int mode = getMode(manifestation.getManifestationType(), manifestation.getPowerID());
-                    if (active && mode > 0)
-                    {
-                        stackToRender = activeTap;
-                    }
-                    else if (active && mode < 0)
-                    {
-                        stackToRender = activeStore;
-                    }
-                    break;
-                case RADIANT:
-                    break;
-                case ELANTRIAN:
-                    break;
-                case AWAKENER:
-                    break;
-            }
-
-            mc.getItemRenderer().renderItemAndEffectIntoGUI(stackToRender, x, y);
-
-            mc.fontRenderer.drawStringWithShadow(ms, I18n.format(manifestation.translation().getString()), x + 18, y + 6, 0xFF4444);
-            y += 10;
+            stack = positiveActiveStack;
         }
+        else if (mode < 0)
+        {
+            stack = negativeActiveStack;
+        }
+        else
+        {
+            stack = inactiveStack;
+        }
+
+        mc.getItemRenderer().renderItemAndEffectIntoGUI(stack, x, y);
+
     }
 
     @Override
