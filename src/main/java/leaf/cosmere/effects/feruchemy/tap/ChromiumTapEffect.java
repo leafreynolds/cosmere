@@ -2,10 +2,10 @@
  * File created ~ 24 - 4 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.effects.store;
+package leaf.cosmere.effects.feruchemy.tap;
 
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.effects.FeruchemyEffectBase;
+import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
@@ -15,17 +15,17 @@ import net.minecraft.potion.EffectType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
-//luck
-public class ChromiumStoreEffect extends FeruchemyEffectBase
+
+public class ChromiumTapEffect extends FeruchemyEffectBase
 {
-    public ChromiumStoreEffect(Metals.MetalType type, EffectType effectType)
+    public ChromiumTapEffect(Metals.MetalType type, EffectType effectType)
     {
         super(type, effectType);
 
         addAttributesModifier(
                 Attributes.LUCK,
-                "97c8b98f-fb33-4218-bd32-1ace62d75019",
-                -1.0D,
+                "7faaa8a8-fee1-422c-8f85-6794042e8f09",
+                1.0D,
                 AttributeModifier.Operation.ADDITION);
 
         MinecraftForge.EVENT_BUS.addListener(this::onLootingLevelEvent);
@@ -44,9 +44,10 @@ public class ChromiumStoreEffect extends FeruchemyEffectBase
         EffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getTrueSource()).getActivePotionEffect(this);
         if (effectInstance != null && effectInstance.getDuration() > 0)
         {
-            event.setLootingLevel(event.getLootingLevel() - effectInstance.getAmplifier());
+            event.setLootingLevel(event.getLootingLevel() + effectInstance.getAmplifier());
         }
     }
+
 
 
     @Override

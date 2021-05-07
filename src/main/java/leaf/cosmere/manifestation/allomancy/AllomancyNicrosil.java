@@ -14,6 +14,25 @@ public class AllomancyNicrosil extends AllomancyBase
         super(metalType);
     }
 
+    //active or not active
+    @Override
+    public int modeMax(ISpiritweb data)
+    {
+        return 1;
+    }
+
+    @Override
+    public int modeMin(ISpiritweb data)
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean modeWraps(ISpiritweb data)
+    {
+        return false;
+    }
+
     //Enhances Allomantic Burn of Target
     @Override
     protected void performEffect(ISpiritweb data)

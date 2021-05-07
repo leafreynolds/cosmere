@@ -6,10 +6,10 @@ package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.effects.AllomancyEffectBase;
-import leaf.cosmere.effects.FeruchemyEffectBase;
-import leaf.cosmere.effects.store.*;
-import leaf.cosmere.effects.tap.*;
+import leaf.cosmere.effects.allomancy.*;
+import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
+import leaf.cosmere.effects.feruchemy.store.*;
+import leaf.cosmere.effects.feruchemy.tap.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.fml.RegistryObject;
@@ -29,6 +29,10 @@ public class EffectsRegistry
     public static final RegistryObject<Effect> ALLOMANTIC_COPPER = EFFECTS.register(
             "burning_" + Metals.MetalType.COPPER.name().toLowerCase(),
             () -> new AllomancyEffectBase(Metals.MetalType.COPPER, EffectType.BENEFICIAL));
+
+    public static final RegistryObject<Effect> ALLOMANCY_BOOST = EFFECTS.register(
+            "allomancy_boost" ,
+            () -> new AllomancyBoostEffect(Metals.MetalType.DURALUMIN, EffectType.BENEFICIAL));
 
     public static final Map<Metals.MetalType, RegistryObject<Effect>> TAPPING_EFFECTS =
             Arrays.stream(Metals.MetalType.values())

@@ -2,7 +2,7 @@
  * File created ~ 24 - 4 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.effects;
+package leaf.cosmere.effects.allomancy;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
@@ -10,12 +10,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 
-public class FeruchemyEffectBase extends Effect implements IHasMetalType
+public class AllomancyEffectBase extends Effect implements IHasMetalType
 {
     protected final Metals.MetalType metalType;
-    final double bonusPerLevel = 1;
 
-    public FeruchemyEffectBase(Metals.MetalType type, EffectType effectType)
+    public AllomancyEffectBase(Metals.MetalType type, EffectType effectType)
     {
         super(effectType, type.getColorValue());
         metalType = type;

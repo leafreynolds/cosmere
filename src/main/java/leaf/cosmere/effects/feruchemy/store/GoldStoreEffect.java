@@ -2,32 +2,32 @@
  * File created ~ 24 - 4 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.effects.tap;
+package leaf.cosmere.effects.feruchemy.store;
 
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.effects.FeruchemyEffectBase;
+import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectType;
 
-
-public class GoldTapEffect extends FeruchemyEffectBase
+//health
+public class GoldStoreEffect extends FeruchemyEffectBase
 {
-    public GoldTapEffect(Metals.MetalType type, EffectType effectType)
+    public GoldStoreEffect(Metals.MetalType type, EffectType effectType)
     {
         super(type, effectType);
 /*        addAttributesModifier(
                 Attributes.MAX_HEALTH,
-                "17a9094f-d300-46c4-8607-83f64a98bb42",
-                4.0D,
+                "2ee9153f-372f-4bd2-b21a-ccf08fecb8fa",
+                -4.0D,
                 AttributeModifier.Operation.ADDITION);*/
     }
 
     @Override
     public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
+        if (entityLivingBaseIn.getHealth() > (entityLivingBaseIn.getMaxHealth() / amplifier + 2))
         {
-            entityLivingBaseIn.heal(amplifier + 1);
+            entityLivingBaseIn.setHealth(entityLivingBaseIn.getHealth() - 1);
         }
     }
 

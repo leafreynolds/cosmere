@@ -16,6 +16,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.util.math.*;
 import net.minecraftforge.fml.RegistryObject;
 
 public class AllomancyBase extends ManifestationBase implements IHasMetalType
@@ -143,5 +144,17 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(Metals.MetalType.STEEL.getMistingName());
         ModifiableAttributeInstance attribute = cap.getLiving().getAttribute(mistingAttribute.get());
         return attribute != null ? attribute.getValue() : 0;
+    }
+
+
+    public int getRange(ISpiritweb cap)
+    {
+        if (!cap.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()))
+            return 0;
+
+        //get allomantic strength
+        double allomanticStrength = getAllomanticStrength(cap);
+        return MathHelper.floor(allomanticStrength * cap.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()));
+
     }
 }

@@ -72,17 +72,6 @@ public class AllomancyIronSteel extends AllomancyBase
 
     }
 
-    public int getRange(ISpiritweb cap)
-    {
-        if (!cap.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()))
-            return 0;
-
-        //get allomantic strength
-        double allomanticStrength = getAllomanticStrength(cap);
-        return MathHelper.floor(allomanticStrength * cap.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()));
-
-    }
-
 
     @OnlyIn(Dist.CLIENT)
     public static List<Vector3d> getDrawLines(int range)

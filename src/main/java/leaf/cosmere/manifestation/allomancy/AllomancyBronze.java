@@ -37,9 +37,7 @@ public class AllomancyBronze extends AllomancyBase
         //passive active ability, if any
         if (isActiveTick)
         {
-            int mode = data.getMode(manifestationType, getMetalType().getID());
-
-            int distance = 5 * mode;
+            int distance = getRange(data);
             List<LivingEntity> entitiesToCheckForAllomancy = getLivingEntitiesInRange(livingEntity, distance, false);
 
             for (LivingEntity e : entitiesToCheckForAllomancy)

@@ -2,11 +2,11 @@
  * File created ~ 24 - 4 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.effects.tap;
+package leaf.cosmere.effects.feruchemy.tap;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.effects.FeruchemyEffectBase;
+import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
