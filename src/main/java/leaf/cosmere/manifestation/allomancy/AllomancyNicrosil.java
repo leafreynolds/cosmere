@@ -4,14 +4,31 @@
 
 package leaf.cosmere.manifestation.allomancy;
 
+import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
+import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.registry.EffectsRegistry;
+import leaf.cosmere.registry.ManifestationRegistry;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 public class AllomancyNicrosil extends AllomancyBase
 {
     public AllomancyNicrosil(Metals.MetalType metalType)
     {
         super(metalType);
+        MinecraftForge.EVENT_BUS.addListener(this::onLivingHurtEvent);
     }
 
     //active or not active
@@ -34,18 +51,33 @@ public class AllomancyNicrosil extends AllomancyBase
     }
 
     //Enhances Allomantic Burn of Target
-    @Override
-    protected void performEffect(ISpiritweb data)
+    @SubscribeEvent
+    public void onLivingHurtEvent(LivingHurtEvent event)
     {
-
-        if (getKeyBinding().isPressed())
+        Entity trueSource = event.getSource().getTrueSource();
+        if (trueSource instanceof PlayerEntity)
         {
-            //todo
+            SpiritwebCapability.get((LivingEntity) trueSource).ifPresent(iSpiritweb ->
+            {
+                ItemStack itemInHand = iSpiritweb.getLiving().getHeldItemMainhand();
 
+                if (itemInHand.isEmpty())
+                {
+                    //if manifestation is active and has nicrosil metal to burn
+                    if (iSpiritweb.hasManifestation(Manifestations.ManifestationTypes.ALLOMANCY, Metals.MetalType.NICROSIL.getID())
+                            && iSpiritweb.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, Metals.MetalType.NICROSIL.getID()))
+                    {
+                        //valid set up found.
+                        EffectInstance newEffect = EffectsHelper.getNewEffect(
+                                EffectsRegistry.ALLOMANCY_BOOST.get(),
+                                MathHelper.floor(getAllomanticStrength(iSpiritweb))
+                        );
+
+                        //apply to the hit entity
+                        event.getEntityLiving().addPotionEffect(newEffect);
+                    }
+                }
+            });
         }
-
-
     }
-
-
 }
