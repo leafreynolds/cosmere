@@ -31,6 +31,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -59,12 +60,10 @@ import java.util.stream.Collectors;
 
 public class SpiritwebCapability implements ISpiritweb
 {
-
-
     //region Render stuff.
-    final ItemStack positiveActiveStack = new ItemStack(Blocks.SOUL_TORCH);
-    final ItemStack negativeActiveStack = new ItemStack(Blocks.REDSTONE_TORCH);
-    final ItemStack inactiveStack = new ItemStack(Items.STICK);
+    final static ItemStack positiveActiveStack = new ItemStack(Blocks.SOUL_TORCH);
+    final static ItemStack negativeActiveStack = new ItemStack(Blocks.REDSTONE_TORCH);
+    final static ItemStack inactiveStack = new ItemStack(Items.STICK);
     //endregion
 
 
@@ -98,6 +97,12 @@ public class SpiritwebCapability implements ISpiritweb
             Arrays.stream(Metals.MetalType.values())
                     .collect(Collectors.toMap(Function.identity(), type -> 0));
 
+    public List<BlockPos> pushBlocks = new ArrayList<>(4);
+    public List<Integer> pushEntities = new ArrayList<>(4);
+
+    public List<BlockPos> pullBlocks = new ArrayList<>(4);
+    public List<Integer> pullEntities = new ArrayList<>(4);
+
 
     public SpiritwebCapability(LivingEntity ent)
     {
@@ -117,17 +122,15 @@ public class SpiritwebCapability implements ISpiritweb
     {
         CompoundNBT nbt = new CompoundNBT();
 
+        nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
+        nbt.putInt("stored_breaths", biochromaticBreathStored);
+        nbt.putInt("stored_stormlight", stormlightStored);
+
         for (ManifestationTypes manifestationType : ManifestationTypes.values())
         {
             String manifestationTypeName = manifestationType.name().toLowerCase();
             nbt.putIntArray(manifestationTypeName + "_mode", MANIFESTATIONS_MODE.get(manifestationType));
-
         }
-        nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
-
-
-        nbt.putInt("stored_breaths", biochromaticBreathStored);
-        nbt.putInt("stored_stormlight", stormlightStored);
 
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
@@ -149,6 +152,7 @@ public class SpiritwebCapability implements ISpiritweb
 
         biochromaticBreathStored = nbt.getInt("stored_breaths");
         stormlightStored = nbt.getInt("stored_stormlight");
+
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
             METALS_INGESTED.put(metalType, nbt.getInt(metalType.name().toLowerCase() + "_ingested"));
@@ -172,8 +176,7 @@ public class SpiritwebCapability implements ISpiritweb
             {
                 //don't tick powers that the user doesn't have
                 //don't tick powers that are not active
-                if (hasManifestation(manifestation.getManifestationType(), manifestation.getPowerID())
-                        && manifestationActive(manifestation.getManifestationType(), manifestation.getPowerID()))
+                if (manifestationActive(manifestation.getManifestationType(), manifestation.getPowerID()))
                 {
                     manifestation.tick(this);
                 }
@@ -207,6 +210,21 @@ public class SpiritwebCapability implements ISpiritweb
                 stormlightStored--;
             }
 
+        }
+        else
+        {
+            AManifestation iron = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
+
+            if (manifestationActive(iron.getManifestationType(), iron.getPowerID()))
+            {
+                ((AllomancyIronSteel) iron).performEffect(this);
+            }
+
+            AManifestation steel = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
+            if (manifestationActive(steel.getManifestationType(), steel.getPowerID()))
+            {
+                ((AllomancyIronSteel) steel).performEffect(this);
+            }
         }
     }
 
@@ -423,6 +441,11 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public boolean manifestationActive(ManifestationTypes manifestationType, int powerID)
     {
+        if (!hasManifestation(manifestationType, powerID))
+        {
+            return false;
+        }
+
         int[] manifestationPowersModes = MANIFESTATIONS_MODE.get(manifestationType);
 
         if (manifestationType == ManifestationTypes.NONE || manifestationPowersModes.length == 0)

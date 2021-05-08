@@ -212,6 +212,10 @@ public interface IHemalurgicInfo
     default Multimap<Attribute, AttributeModifier> getHemalurgicAttributes(Multimap<Attribute, AttributeModifier> attributeModifiers, ItemStack stack, Metals.MetalType metalType)
     {
         CompoundNBT hemalurgyInfo = getHemalurgicInfo(stack);
+        UUID hemalurgicIdentity = getHemalurgicIdentity(stack);
+
+        if (hemalurgicIdentity == null)
+            return attributeModifiers;
 
         switch (metalType)
         {
@@ -220,7 +224,7 @@ public interface IHemalurgicInfo
                 attributeModifiers.put(
                         Attributes.ATTACK_DAMAGE,
                         new AttributeModifier(
-                                getHemalurgicIdentity(stack),
+                                hemalurgicIdentity,
                                 "Hemalurgic " + metalType.name(),
                                 (double) CompoundNBTHelper.getDouble(
                                         hemalurgyInfo,
@@ -261,8 +265,8 @@ public interface IHemalurgicInfo
                 attributeModifiers.put(
                         AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path).get(),
                         new AttributeModifier(
-                                getHemalurgicIdentity(stack),
-                                String.format("Hemalurgic-%s: %s", path, getHemalurgicIdentity(stack).toString()),
+                                hemalurgicIdentity,
+                                String.format("Hemalurgic-%s: %s", path, hemalurgicIdentity.toString()),
                                 6,
                                 AttributeModifier.Operation.ADDITION));
             }

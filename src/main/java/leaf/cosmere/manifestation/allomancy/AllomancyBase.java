@@ -101,24 +101,19 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         }
 
         //if we get to this point, we are in an active burn state.
-
-
         //check for compound.
-        {
-            int feruchemyMode = data.hasManifestation(Manifestations.ManifestationTypes.FERUCHEMY, getPowerID())
-                                ? data.getMode(Manifestations.ManifestationTypes.FERUCHEMY, metalType.getID())
-                                : 0;
+        int feruchemyMode = data.hasManifestation(Manifestations.ManifestationTypes.FERUCHEMY, getPowerID())
+                            ? data.getMode(Manifestations.ManifestationTypes.FERUCHEMY, metalType.getID())
+                            : 0;
 
-            //feruchemy power exists and is active
-            if (feruchemyMode != 0 && isActiveTick)
+        //feruchemy power exists and is active
+        if (feruchemyMode != 0 && isActiveTick)
+        {
+            if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (-5) * (mode), true, true))
             {
-                if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (-5) * (mode), true, true))
-                {
-                    //compound successful
-                }
+                //compound successful
             }
         }
-
 
         performEffect(data);
     }

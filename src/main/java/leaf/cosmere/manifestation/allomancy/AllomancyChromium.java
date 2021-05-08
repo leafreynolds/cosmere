@@ -53,8 +53,6 @@ public class AllomancyChromium extends AllomancyBase
 
                 for (Entity e : entitiesInRange)
                 {
-
-
                     SpiritwebCapability.get((LivingEntity) e).ifPresent(iSpiritweb ->
                     {
                         Entity entity = null;

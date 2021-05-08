@@ -5,26 +5,33 @@
 package leaf.cosmere.manifestation.allomancy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
+import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.helpers.CodecHelper;
+import leaf.cosmere.helpers.LogHelper;
+import leaf.cosmere.helpers.VectorHelper;
 import leaf.cosmere.items.IHasMetalType;
-import leaf.cosmere.registry.AttributesRegistry;
+import leaf.cosmere.network.Network;
+import leaf.cosmere.network.packets.SyncPushPullMessage;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,34 +49,128 @@ public class AllomancyIronSteel extends AllomancyBase
     }
 
     @Override
-    protected void performEffect(ISpiritweb data)
+    public void performEffect(ISpiritweb data)
     {
-        //passive active ability, if any
+        if (data.getLiving().world.isRemote)
         {
-            //see metal. Probably wait for the render tick?
-            //todo
+            performEffectClient(data);
         }
+        else
+        {
+            performEffectServer(data);
+        }
+    }
+
+    private List<BlockPos> blocks;
+    private List<Integer> entities;
+
+    @OnlyIn(Dist.CLIENT)
+    private void performEffectClient(ISpiritweb cap)
+    {
+        boolean hasChanged = false;
+        SpiritwebCapability data = (SpiritwebCapability) cap;
+        blocks = isPush ? data.pushBlocks : data.pullBlocks;
+        entities = isPush ? data.pushEntities : data.pullEntities;
 
         //Pushes on Nearby Metals
-        if (getKeyBinding().isPressed())
+        if (getKeyBinding().isKeyDown())
         {
+            Minecraft mc = Minecraft.getInstance();
+            RayTraceResult ray = mc.objectMouseOver;
 
+            if (ray.getType() == RayTraceResult.Type.BLOCK && !blocks.contains(((BlockRayTraceResult) ray).getPos()))
+            {
+                BlockPos pos = ((BlockRayTraceResult) ray).getPos();
+                //todo check block is of ihasmetal type
+                BlockState state = mc.world.getBlockState(pos);
+                if (state.getBlock() instanceof IHasMetalType)
+                {
+                    blocks.add(pos.toImmutable());
 
-            //get list of blocks that the user is pushing against
+                    if (blocks.size() > 5)
+                    {
+                        blocks.remove(0);
+                    }
+                    hasChanged = true;
+                }
+            }
+            else if (ray.getType() == RayTraceResult.Type.ENTITY && !entities.contains(((EntityRayTraceResult) ray).getEntity().getEntityId()))
+            {
+                //todo check for metal
+                entities.add(((EntityRayTraceResult) ray).getEntity().getEntityId());
 
-            //add any metal blocks that the user is looking at
+                if (entities.size() > 5)
+                {
+                    entities.remove(0);
+                }
+                hasChanged = true;
+            }
+        }
+        else
+        {
+            //clear list
+            if (blocks.size() > 0)
+            {
+                blocks.clear();
+                hasChanged = true;
+            }
+            if (entities.size() > 0)
+            {
+                entities.clear();
+                hasChanged = true;
+            }
 
-            //push user away from it
-
-
-            //get list of entities that the user is pushing against
-
-            //add any other valid entities that the user is looking at
-
-            //push user and entities towards each other
         }
 
+        //sync the move things.
+        //we don't let the spirit web sync from client back to server, so this is needed.
+        if (hasChanged)
+        {
+            CompoundNBT nbt = new CompoundNBT();
 
+            final String pushBlocks = "pushBlocks";
+            final String pullBlocks = "pullBlocks";
+            String target = isPush ? pushBlocks : pullBlocks;
+
+            CodecHelper.BlockPosListCodec.encodeStart(NBTDynamicOps.INSTANCE, blocks)
+                    .resultOrPartial(LogHelper.LOGGER::error)
+                    .ifPresent(inbt1 -> nbt.put(target, inbt1));
+
+            Network.sendToServer(new SyncPushPullMessage(nbt));
+        }
+    }
+
+    private void performEffectServer(ISpiritweb cap)
+    {
+        //perform the entity move thing.
+        SpiritwebCapability data = (SpiritwebCapability) cap;
+        blocks = isPush ? data.pushBlocks : data.pullBlocks;
+        entities = isPush ? data.pushEntities : data.pullEntities;
+
+        if (blocks.size() == 0)
+        {
+            return;
+        }
+
+        LivingEntity living = data.getLiving();
+        Vector3d direction = new Vector3d(0, 0, 0);
+        float renderPartialTicks = Minecraft.getInstance().getRenderPartialTicks();
+
+        double strength = getAllomanticStrength(cap);
+
+        for (BlockPos blockPos : blocks)
+        {
+            //if the entity is in range of being able to push
+            if (blockPos.withinDistance(living.getPositionVec(), (strength * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getMetalType().getID())) * 0.1f))
+            {
+                direction = VectorHelper.getDirection(
+                        new Vector3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()),
+                        living.getPositionVec(),
+                        (isPush ? -1f : 1f) * renderPartialTicks);
+                living.setMotion(living.getMotion().add(direction.normalize()));
+            }
+        }
+        living.velocityChanged = true;
     }
 
 
