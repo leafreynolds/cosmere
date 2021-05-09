@@ -7,6 +7,7 @@ package leaf.cosmere.handlers;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.manifestation.AManifestation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -26,10 +27,18 @@ public class PlayerEventHandler
     {
         Capability.IStorage<ISpiritweb> storage = SpiritwebCapability.CAPABILITY.getStorage();
         event.getOriginal().revive();
-        SpiritwebCapability.get(event.getOriginal()).ifPresent((old) -> SpiritwebCapability.get(event.getPlayer()).ifPresent((data) ->
+        SpiritwebCapability.get(event.getOriginal()).ifPresent((oldSpiritWeb) -> SpiritwebCapability.get(event.getPlayer()).ifPresent((newSpiritWeb) ->
         {
-            CompoundNBT nbt = (CompoundNBT) storage.writeNBT(SpiritwebCapability.CAPABILITY, old, null);
-            storage.readNBT(SpiritwebCapability.CAPABILITY, data, null, nbt);
+            //clear out the attributes that were placed on the newly cloned player at creation
+            // and make sure that they then match what the old player entity had.
+            newSpiritWeb.clearManifestations();
+            for (AManifestation manifestation : oldSpiritWeb.getAvailableManifestations(true))
+            {
+                newSpiritWeb.giveManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
+            }
+
+            CompoundNBT nbt = (CompoundNBT) storage.writeNBT(SpiritwebCapability.CAPABILITY, oldSpiritWeb, null);
+            storage.readNBT(SpiritwebCapability.CAPABILITY, newSpiritWeb, null, nbt);
         }));
     }
 

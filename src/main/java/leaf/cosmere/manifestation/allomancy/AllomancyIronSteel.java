@@ -153,7 +153,7 @@ public class AllomancyIronSteel extends AllomancyBase
         }
 
         LivingEntity living = data.getLiving();
-        Vector3d direction = new Vector3d(0, 0, 0);
+        Vector3d direction;
         float renderPartialTicks = Minecraft.getInstance().getRenderPartialTicks();
 
         double strength = getAllomanticStrength(cap);
