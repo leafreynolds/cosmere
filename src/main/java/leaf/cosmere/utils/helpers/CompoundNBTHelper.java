@@ -3,7 +3,7 @@
  * Thank you botania! Pretty much directly copied from botania as this is so much easier to work with!
  */
 
-package leaf.cosmere.helpers;
+package leaf.cosmere.utils.helpers;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;

@@ -7,7 +7,7 @@ package leaf.cosmere.items;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.CompoundNBTHelper;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.items.curio.IHemalurgicInfo;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.AttributesRegistry;

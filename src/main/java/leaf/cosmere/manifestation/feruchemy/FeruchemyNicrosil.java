@@ -7,7 +7,7 @@ package leaf.cosmere.manifestation.feruchemy;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;

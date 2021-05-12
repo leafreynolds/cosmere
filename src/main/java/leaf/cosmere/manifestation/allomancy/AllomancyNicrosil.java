@@ -4,14 +4,12 @@
 
 package leaf.cosmere.manifestation.allomancy;
 
-import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import leaf.cosmere.registry.EffectsRegistry;
-import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +19,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 public class AllomancyNicrosil extends AllomancyBase
 {

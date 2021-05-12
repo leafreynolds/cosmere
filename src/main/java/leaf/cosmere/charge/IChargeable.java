@@ -11,8 +11,8 @@ package leaf.cosmere.charge;
 
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.StackNBTHelper;
-import leaf.cosmere.helpers.PlayerHelper;
+import leaf.cosmere.utils.helpers.StackNBTHelper;
+import leaf.cosmere.utils.helpers.PlayerHelper;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

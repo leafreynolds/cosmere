@@ -15,7 +15,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
+import static leaf.cosmere.utils.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyBendalloy extends AllomancyBase
 {

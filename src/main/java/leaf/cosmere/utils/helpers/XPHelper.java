@@ -14,7 +14,7 @@
  *
  */
 
-package leaf.cosmere.helpers;
+package leaf.cosmere.utils.helpers;
 
 /**
  *

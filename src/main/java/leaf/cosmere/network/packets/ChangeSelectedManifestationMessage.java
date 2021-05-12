@@ -6,7 +6,7 @@ package leaf.cosmere.network.packets;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Constants;
-import leaf.cosmere.helpers.TextHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;

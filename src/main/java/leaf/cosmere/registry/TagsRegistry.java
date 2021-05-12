@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static leaf.cosmere.helpers.ResourceLocationHelper.prefix;
+import static leaf.cosmere.utils.helpers.ResourceLocationHelper.prefix;
 
 public class TagsRegistry
 {

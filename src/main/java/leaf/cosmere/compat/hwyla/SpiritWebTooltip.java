@@ -7,7 +7,7 @@ package leaf.cosmere.compat.hwyla;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.TextHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import mcp.mobius.waila.api.IEntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;

@@ -5,8 +5,8 @@
 package leaf.cosmere.network.packets;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.helpers.CodecHelper;
-import leaf.cosmere.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.CodecHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;

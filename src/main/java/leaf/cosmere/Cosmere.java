@@ -9,7 +9,7 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientSetup;
 import leaf.cosmere.compat.curios.CuriosCompat;
 import leaf.cosmere.handlers.ColorHandler;
-import leaf.cosmere.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.registry.*;
 import net.minecraftforge.api.distmarker.Dist;

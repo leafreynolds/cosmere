@@ -6,7 +6,7 @@ package leaf.cosmere.effects.feruchemy.store;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
-import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectType;
 import net.minecraft.potion.Effects;

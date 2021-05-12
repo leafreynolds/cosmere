@@ -12,7 +12,7 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.render.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.CompoundNBTHelper;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.items.Metalmind;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;

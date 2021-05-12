@@ -6,13 +6,13 @@ package leaf.cosmere.manifestation.allomancy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effects;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
+import static leaf.cosmere.utils.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyCadmium extends AllomancyBase
 {

@@ -6,7 +6,7 @@ package leaf.cosmere.effects;
 
 import com.google.gson.JsonObject;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;

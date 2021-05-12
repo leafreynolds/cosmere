@@ -2,7 +2,7 @@
  * File created ~ 25 - 4 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.helpers;
+package leaf.cosmere.utils.helpers;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

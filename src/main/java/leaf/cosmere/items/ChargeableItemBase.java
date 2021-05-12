@@ -5,7 +5,7 @@
 package leaf.cosmere.items;
 
 import leaf.cosmere.charge.IChargeable;
-import leaf.cosmere.helpers.TextHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;

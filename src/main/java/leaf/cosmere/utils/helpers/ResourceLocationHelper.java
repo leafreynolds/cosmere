@@ -10,7 +10,7 @@
  * Cosmere is Open Source and distributed under the
  * Cosmere License: http://Cosmeremod.net/license.php
  */
-package leaf.cosmere.helpers;
+package leaf.cosmere.utils.helpers;
 
 import leaf.cosmere.Cosmere;
 import net.minecraft.util.ResourceLocation;

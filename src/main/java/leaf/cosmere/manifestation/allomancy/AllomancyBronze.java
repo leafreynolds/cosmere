@@ -8,7 +8,7 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.VectorHelper;
+import leaf.cosmere.utils.helpers.VectorHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
+import static leaf.cosmere.utils.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyBronze extends AllomancyBase
 {

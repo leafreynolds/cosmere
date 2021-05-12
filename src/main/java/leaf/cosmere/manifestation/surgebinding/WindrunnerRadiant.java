@@ -5,7 +5,7 @@
 package leaf.cosmere.manifestation.surgebinding;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;

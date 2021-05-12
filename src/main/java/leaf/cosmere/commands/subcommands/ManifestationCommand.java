@@ -12,7 +12,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.commands.arguments.ManifestationsArgumentType;
 import leaf.cosmere.constants.Constants;
-import leaf.cosmere.helpers.TextHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;

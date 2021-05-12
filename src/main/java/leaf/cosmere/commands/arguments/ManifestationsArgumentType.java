@@ -12,7 +12,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import leaf.cosmere.constants.Constants;
-import leaf.cosmere.helpers.CommandHelper;
+import leaf.cosmere.utils.helpers.CommandHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.command.ISuggestionProvider;

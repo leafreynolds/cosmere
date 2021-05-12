@@ -8,9 +8,9 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.CodecHelper;
-import leaf.cosmere.helpers.LogHelper;
-import leaf.cosmere.helpers.VectorHelper;
+import leaf.cosmere.utils.helpers.CodecHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.VectorHelper;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.SyncPushPullMessage;
@@ -36,7 +36,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getEntitiesInRange;
+import static leaf.cosmere.utils.helpers.EntityHelper.getEntitiesInRange;
 
 public class AllomancyIronSteel extends AllomancyBase
 {

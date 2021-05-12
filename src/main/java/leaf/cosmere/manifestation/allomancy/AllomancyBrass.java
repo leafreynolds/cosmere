@@ -11,7 +11,7 @@ import net.minecraft.entity.MobEntity;
 
 import java.util.List;
 
-import static leaf.cosmere.helpers.EntityHelper.getLivingEntitiesInRange;
+import static leaf.cosmere.utils.helpers.EntityHelper.getLivingEntitiesInRange;
 
 public class AllomancyBrass extends AllomancyBase
 {

@@ -8,7 +8,7 @@ package leaf.cosmere.handlers;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.commands.CosmereCommand;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.registry.FeatureRegistry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;

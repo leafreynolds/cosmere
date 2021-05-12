@@ -6,7 +6,7 @@ package leaf.cosmere.effects.feruchemy.tap;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
-import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;

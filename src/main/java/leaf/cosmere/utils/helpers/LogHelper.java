@@ -2,7 +2,7 @@
  * File created ~ 24 - 4 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.helpers;
+package leaf.cosmere.utils.helpers;
 
 import leaf.cosmere.Cosmere;
 import org.apache.logging.log4j.Level;

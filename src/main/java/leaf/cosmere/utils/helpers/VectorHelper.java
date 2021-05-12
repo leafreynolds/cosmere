@@ -2,9 +2,10 @@
  * File created ~ 25 - 4 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.helpers;
+package leaf.cosmere.utils.helpers;
 
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 
@@ -77,5 +78,6 @@ public class VectorHelper
                 toVector_y * multiplicationFactor,
                 toVector_z * multiplicationFactor);
     }
+
 
 }

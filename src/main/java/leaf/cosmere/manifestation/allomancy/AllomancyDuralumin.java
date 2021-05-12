@@ -6,7 +6,7 @@ package leaf.cosmere.manifestation.allomancy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;

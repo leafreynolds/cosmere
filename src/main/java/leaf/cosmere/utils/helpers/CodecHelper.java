@@ -2,7 +2,7 @@
  * File created ~ 8 - 5 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.helpers;
+package leaf.cosmere.utils.helpers;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.math.BlockPos;

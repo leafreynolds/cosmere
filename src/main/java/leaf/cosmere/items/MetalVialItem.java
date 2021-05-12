@@ -6,15 +6,13 @@ package leaf.cosmere.items;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.CompoundNBTHelper;
-import leaf.cosmere.helpers.TextHelper;
-import leaf.cosmere.network.packets.SyncPlayerSpiritwebMessage;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;

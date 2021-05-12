@@ -5,33 +5,22 @@
 package leaf.cosmere.recipes;
 
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.ResourceLocationHelper;
-import leaf.cosmere.helpers.TextHelper;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalVialItem;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.RecipeRegistry;
-import leaf.cosmere.registry.TagsRegistry;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.UUID;
 
 //not to be confused with the vile mixing recipe,
 // where you just make gross things

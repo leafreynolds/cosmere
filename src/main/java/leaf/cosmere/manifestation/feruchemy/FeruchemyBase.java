@@ -8,7 +8,7 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.EffectsHelper;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.manifestation.ManifestationBase;
 import net.minecraft.entity.LivingEntity;
