@@ -38,6 +38,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static leaf.cosmere.registry.KeybindingRegistry.MANIFESTATION_MENU;
@@ -540,6 +541,22 @@ public class SpiritwebMenu extends Screen
             }
         }
 
+        //do extra text info stuff
+        {
+            int x = 10;
+            final int[] y = {(int) middle_y / 2};
+
+            spiritweb.METALS_INGESTED.forEach((key, value) ->
+            {
+                if (value > 0)
+                {
+                    //todo localisation check
+                    final String text = key.name().toLowerCase(Locale.ROOT) + ": " + value;
+                    font.drawStringWithShadow(matrixStack, text, x, (int) y[0], 0xffffffff);
+                    y[0] += 10;
+                }
+            });
+        }
         //draw sided button strings
         for (final SidedMenuButton sideButton : sidedMenuButtons)
         {
