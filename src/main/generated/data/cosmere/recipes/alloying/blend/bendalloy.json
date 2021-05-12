@@ -2,31 +2,31 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "cosmere:raw/cadmium"
+      "tag": "forge:raw/cadmium"
     },
     {
-      "tag": "cosmere:raw/lead"
+      "tag": "forge:raw/lead"
     },
     {
-      "tag": "cosmere:raw/lead"
+      "tag": "forge:raw/lead"
     },
     {
-      "tag": "cosmere:raw/lead"
+      "tag": "forge:raw/lead"
     },
     {
-      "tag": "cosmere:raw/lead"
+      "tag": "forge:raw/lead"
     },
     {
-      "tag": "cosmere:raw/lead"
+      "tag": "forge:raw/lead"
     },
     {
-      "tag": "cosmere:raw/lead"
+      "tag": "forge:raw/lead"
     },
     {
-      "tag": "cosmere:raw/tin"
+      "tag": "forge:raw/tin"
     },
     {
-      "tag": "cosmere:raw/tin"
+      "tag": "forge:raw/tin"
     }
   ],
   "result": {

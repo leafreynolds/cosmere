@@ -6,7 +6,7 @@ package leaf.cosmere.items;
 
 import leaf.cosmere.properties.PropTypes;
 
-public class MetalFileItem extends ChargeableItemBase
+public class MetalFileItem extends BaseItem
 {
     public MetalFileItem()
     {

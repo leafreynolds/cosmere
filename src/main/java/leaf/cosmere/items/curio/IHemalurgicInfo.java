@@ -9,7 +9,7 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.CompoundNBTHelper;
-import leaf.cosmere.helpers.NBTHelper;
+import leaf.cosmere.helpers.StackNBTHelper;
 import leaf.cosmere.helpers.TextHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.AttributesRegistry;
@@ -40,23 +40,23 @@ public interface IHemalurgicInfo
             return true;
         }
 
-        return NBTHelper.getUuid(stack, stolen_identity_tag).compareTo(uniqueID) == 0;
+        return StackNBTHelper.getUuid(stack, stolen_identity_tag).compareTo(uniqueID) == 0;
     }
 
     default boolean hemalurgicIdentityExists(ItemStack stack)
     {
-        return NBTHelper.verifyExistance(stack, stolen_identity_tag);
+        return StackNBTHelper.verifyExistance(stack, stolen_identity_tag);
     }
 
     default void setHemalurgicIdentity(ItemStack stack, UUID uniqueID)
     {
-        NBTHelper.setUuid(stack, stolen_identity_tag, uniqueID);
+        StackNBTHelper.setUuid(stack, stolen_identity_tag, uniqueID);
 
     }
 
     default UUID getHemalurgicIdentity(ItemStack stack)
     {
-        return NBTHelper.getUuid(stack, stolen_identity_tag);
+        return StackNBTHelper.getUuid(stack, stolen_identity_tag);
     }
 
     default CompoundNBT getHemalurgicInfo(ItemStack stack)

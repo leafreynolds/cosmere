@@ -53,6 +53,9 @@ public class TagsRegistry
         public static ITag.INamedTag<Item> CURIO_RING = makeItem("curios", "ring");
 
 
+        public static ITag.INamedTag<Item> NUGGET = forgeItemTag("nugget");
+
+
         public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_RAW_TAGS =
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(

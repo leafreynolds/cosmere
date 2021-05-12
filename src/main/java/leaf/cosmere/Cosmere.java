@@ -51,6 +51,7 @@ public class Cosmere
         AttributesRegistry.ATTRIBUTES.register(modBus);
 
         FeatureRegistry.FEATURES.register(modBus);
+        RecipeRegistry.SPECIAL_RECIPES.register(modBus);
 
         AdvancementTriggerRegistry.init();
 

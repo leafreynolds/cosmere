@@ -10,6 +10,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public final class CompoundNBTHelper
@@ -44,6 +45,10 @@ public final class CompoundNBTHelper
     }
 
     public static void setIntArray(CompoundNBT compoundTag, String tag, int[] val)
+    {
+        compoundTag.putIntArray(tag, val);
+    }
+    public static void setIntArray(CompoundNBT compoundTag, String tag, List<Integer> val)
     {
         compoundTag.putIntArray(tag, val);
     }

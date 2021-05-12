@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTDynamicOps;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public final class NBTHelper
+public final class StackNBTHelper
 {
 
     private static final int[] EMPTY_INT_ARRAY = new int[0];

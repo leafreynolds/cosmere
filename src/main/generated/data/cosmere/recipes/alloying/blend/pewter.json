@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "cosmere:raw/tin"
+      "tag": "forge:raw/tin"
     },
     {
-      "tag": "cosmere:raw/tin"
+      "tag": "forge:raw/tin"
     },
     {
-      "tag": "cosmere:raw/tin"
+      "tag": "forge:raw/tin"
     },
     {
-      "tag": "cosmere:raw/tin"
+      "tag": "forge:raw/tin"
     },
     {
-      "tag": "cosmere:raw/lead"
+      "tag": "forge:raw/lead"
     }
   ],
   "result": {

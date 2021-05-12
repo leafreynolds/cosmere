@@ -412,7 +412,14 @@ public class SpiritwebCapability implements ISpiritweb
         }
 
         String manifestationName = manifestation.getRegistryName().getPath();
-        Attribute attribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName).get();
+        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName);
+
+        if (!attributeRegistryObject.isPresent())
+        {
+            return;
+        }
+
+        Attribute attribute = attributeRegistryObject.get();
         ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
 
         if (manifestationAttribute != null)
@@ -431,7 +438,16 @@ public class SpiritwebCapability implements ISpiritweb
     {
 
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
-        ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestation.getRegistryName().getPath()).get());
+        String path = manifestation.getRegistryName().getPath();
+        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
+
+        if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
+        {
+            return;
+        }
+
+        Attribute attribute = attributeRegistryObject.get();
+        ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
         if (manifestationAttribute != null)
         {
             manifestationAttribute.setBaseValue(0);

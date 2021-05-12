@@ -11,7 +11,7 @@ package leaf.cosmere.charge;
 
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.helpers.NBTHelper;
+import leaf.cosmere.helpers.StackNBTHelper;
 import leaf.cosmere.helpers.PlayerHelper;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,12 +36,12 @@ public interface IChargeable
 
     default int getCharge(ItemStack itemStack)
     {
-        return NBTHelper.getInt(itemStack, Constants.NBT.CHARGE_LEVEL, 0);
+        return StackNBTHelper.getInt(itemStack, Constants.NBT.CHARGE_LEVEL, 0);
     }
 
     default void setCharge(ItemStack itemStack, int chargeLevel)
     {
-        NBTHelper.setInt(itemStack, Constants.NBT.CHARGE_LEVEL, MathHelper.clamp(chargeLevel, 0, this.getMaxCharge(itemStack)));
+        StackNBTHelper.setInt(itemStack, Constants.NBT.CHARGE_LEVEL, MathHelper.clamp(chargeLevel, 0, this.getMaxCharge(itemStack)));
     }
 
     default boolean trySetAttunedPlayer(ItemStack itemStack, PlayerEntity entity)
@@ -59,8 +59,8 @@ public interface IChargeable
             if (storingIdentity != null && storingIdentity.getDuration() > 0)
             {
                 //then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
-                NBTHelper.setUuid(itemStack,Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNSEALED_UUID);
-                NBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unsealed"); // todo translation
+                StackNBTHelper.setUuid(itemStack,Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNSEALED_UUID);
+                StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unsealed"); // todo translation
                 return true;
 
             }
@@ -85,23 +85,23 @@ public interface IChargeable
 
     default void setAttunedPlayer(ItemStack itemStack, PlayerEntity entity)
     {
-        NBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, entity.getUniqueID());
+        StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, entity.getUniqueID());
     }
 
     default UUID getAttunedPlayer(ItemStack itemStack)
     {
-        return NBTHelper.getUuid(itemStack, Constants.NBT.ATTUNED_PLAYER);
+        return StackNBTHelper.getUuid(itemStack, Constants.NBT.ATTUNED_PLAYER);
     }
 
     default void setAttunedPlayerName(ItemStack itemStack, PlayerEntity entity)
     {
         String playerName = PlayerHelper.getPlayerName(entity.getUniqueID(), entity.getServer());
-        NBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, playerName);
+        StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, playerName);
     }
 
     default String getAttunedPlayerName(ItemStack itemStack)
     {
-        return NBTHelper.getString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "");
+        return StackNBTHelper.getString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "");
     }
 
     default boolean getPlayerIsAttuned(ItemStack itemStack, PlayerEntity entity)

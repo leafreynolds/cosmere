@@ -9,6 +9,7 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.helpers.ResourceLocationHelper;
 import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
+import leaf.cosmere.registry.RecipeRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
@@ -48,6 +49,9 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
         //addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_BLOCK.get(), ItemsRegistry.GUIDE.get(), 1.0f, 200);
         addOreSmeltingRecipes(consumer, ItemsRegistry.METAL_SPIKE.get(Metals.MetalType.IRON).get(), ItemsRegistry.GUIDE.get(), 1.0f, 200);
 
+
+        CustomRecipeBuilder.customRecipe(RecipeRegistry.VIAL_RECIPE_SERIALIZER.get()).build(consumer, ResourceLocationHelper.prefix("vial_mixing").toString());
+
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
             addBasicMetalmindRecipes(consumer, metalType);
@@ -67,8 +71,8 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 
             if (metalType.hasOre())
             {
-                addOreSmeltingRecipes(consumer, metalType.getOreBlock(),  metalType.getIngotItem(), 1.0f, 200);
-                addOreSmeltingRecipes(consumer, metalType.getRawMetalItem(),  metalType.getIngotItem(), 1.0f, 200);
+                addOreSmeltingRecipes(consumer, metalType.getOreBlock(), metalType.getIngotItem(), 1.0f, 200);
+                addOreSmeltingRecipes(consumer, metalType.getRawMetalItem(), metalType.getIngotItem(), 1.0f, 200);
             }
 
             if (metalType.isAlloy())
@@ -83,7 +87,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                 Item outputBlend = metalType.getRawMetalItem();
                 addAlloyRecipes(consumer, metalType, outputBlend, TagsRegistry.Items.METAL_RAW_TAGS, "blend");
 
-                addOreSmeltingRecipes(consumer, outputBlend,  metalType.getIngotItem(), 1.0f, 200);
+                addOreSmeltingRecipes(consumer, outputBlend, metalType.getIngotItem(), 1.0f, 200);
             }
 
         }

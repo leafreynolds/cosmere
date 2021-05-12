@@ -47,7 +47,7 @@ public class ItemsRegistry
     public static final RegistryObject<net.minecraft.item.Item> GOLD_BOXING = ITEMS.register("gold_boxing", () -> createItem(new MetalNuggetItem(Metals.MetalType.GOLD)));
 
     public static final RegistryObject<net.minecraft.item.Item> METAL_FILE = ITEMS.register("metal_file", () -> createItem(new MetalFileItem()));
-
+    public static final RegistryObject<net.minecraft.item.Item> METAL_VIAL = ITEMS.register("metal_vial", () -> createItem(new MetalVialItem()));
 
     public static final RegistryObject<net.minecraft.item.Item> JAR_EMPTY = ITEMS.register("jar_empty", () -> createItem(new BaseItem(PropTypes.Items.SIXTEEN.get().group(CosmereItemGroups.ITEMS))));
     public static final RegistryObject<net.minecraft.item.Item> JAR_OF_BLOOD = ITEMS.register("jar_of_blood", () -> createItem(new BaseItem(PropTypes.Items.ONE.get().group(CosmereItemGroups.ITEMS))));
@@ -78,7 +78,7 @@ public class ItemsRegistry
 
     public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_NUGGETS =
             Arrays.stream(Metals.MetalType.values())
-                    .filter(Metals.MetalType::hasMaterialItem)
+                    //.filter(Metals.MetalType::hasMaterialItem)
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
