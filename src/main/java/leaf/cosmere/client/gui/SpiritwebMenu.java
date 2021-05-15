@@ -16,12 +16,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientHelper;
-import leaf.cosmere.helpers.MathHelper;
+import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.network.packets.DeactivateCurrentManifestationsMessage;
 import leaf.cosmere.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.utils.math.Vector2;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -331,17 +332,14 @@ public class SpiritwebMenu extends Screen
 
         final double mouseVecX = mouseX - width / 2f;
         final double mouseVecY = (mouseY - height / 2f);
-        double radians = Math.atan2(mouseVecY, mouseVecX);
 
-        final double ring_inner_edge = 20;
-        final double ring_outer_edge = 50;
+
+        final float ring_center = 0;
+        final float ring_inner_edge = 20;
+        final float ring_outer_edge = 50;
+
         final double text_distance = 65;
-        final double quarterCircle = Math.PI / 2.0;
 
-        if (radians < -quarterCircle)
-        {
-            radians = radians + Math.PI * 2;
-        }
 
 
         final double middle_x = width / 2f;
@@ -358,31 +356,39 @@ public class SpiritwebMenu extends Screen
         if (!radialButtonRegions.isEmpty())
         {
             // todo test if I can get down to one button only
-            final int totalButtons = Math.max(3, radialButtonRegions.size());
-            int currentRegion = 0;
-            final double fragment = Math.PI * 0.005;
-            final double fragment2 = Math.PI * 0.0025;
-            final double perObject = 2.0 * Math.PI / totalButtons;
+            final int totalButtons = radialButtonRegions.size();
+
+            Vector2 center = new Vector2(0, ring_center);
+            Vector2 innerEdge = new Vector2(0, ring_inner_edge);
+            Vector2 outerEdge = new Vector2(0, ring_outer_edge);
+
 
             for (final RadialButtonRegion region : radialButtonRegions)
             {
-                final double begin_rad = currentRegion * perObject - quarterCircle;
-                final double end_rad = (currentRegion + 1) * perObject - quarterCircle;
+                //left side inner point
+                final double x1m1 = innerEdge.x;
+                final double y1m1 = innerEdge.y;
+                //left side outer point
+                final double x2m1 = outerEdge.x;
+                final double y2m1 = outerEdge.y;
 
-                region.x1 = Math.cos(begin_rad);
-                region.x2 = Math.cos(end_rad);
-                region.y1 = Math.sin(begin_rad);
-                region.y2 = Math.sin(end_rad);
+                //rotate vectors around the point
+                innerEdge.Rotate(-(360f / totalButtons));
+                outerEdge.Rotate(-(360f / totalButtons));
 
-                final double x1m1 = Math.cos(begin_rad + fragment) * ring_inner_edge;
-                final double x2m1 = Math.cos(end_rad - fragment) * ring_inner_edge;
-                final double y1m1 = Math.sin(begin_rad + fragment) * ring_inner_edge;
-                final double y2m1 = Math.sin(end_rad - fragment) * ring_inner_edge;
+                //right side inner point
+                final double x1m2 = innerEdge.x;
+                final double y1m2 = innerEdge.y;
+                //right side outer point
+                final double x2m2 = outerEdge.x;
+                final double y2m2 = outerEdge.y;
 
-                final double x1m2 = Math.cos(begin_rad + fragment2) * ring_outer_edge;
-                final double x2m2 = Math.cos(end_rad - fragment2) * ring_outer_edge;
-                final double y1m2 = Math.sin(begin_rad + fragment2) * ring_outer_edge;
-                final double y2m2 = Math.sin(end_rad - fragment2) * ring_outer_edge;
+                region.x1 = x1m1;
+                region.y1 = y1m1;
+
+                region.x2 = x2m2;
+                region.y2 = y2m2;
+
 
                 final float a = 0.5f;
                 float f = 0f;
@@ -400,7 +406,8 @@ public class SpiritwebMenu extends Screen
                                 mouseVecX, mouseVecY);
 
                 //if mouse is within the region, as defined by the two triangles
-                if (begin_rad <= radians && radians <= end_rad && showHighlight)
+                //if (begin_rad <= mouseAngle && mouseAngle <= end_rad && showHighlight)
+                if (showHighlight)
                 {
                     f = 1;
                     region.highlighted = true;
@@ -414,7 +421,6 @@ public class SpiritwebMenu extends Screen
                 buffer.pos(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
                 buffer.pos(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
 
-                currentRegion++;
             }
         }
 
