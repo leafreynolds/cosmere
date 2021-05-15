@@ -16,12 +16,12 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientHelper;
-import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.network.packets.DeactivateCurrentManifestationsMessage;
 import leaf.cosmere.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.math.Vector2;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -100,7 +100,7 @@ public class SpiritwebMenu extends Screen
         return visibility > 0.001;
     }
 
-    public void setScaledResolution( final int scaledWidth, final int scaledHeight)
+    public void setScaledResolution(final int scaledWidth, final int scaledHeight)
     {
         width = scaledWidth;
         height = scaledHeight;
@@ -220,6 +220,7 @@ public class SpiritwebMenu extends Screen
         }
         return true;
     }
+
     private static class SidedMenuButton
     {
 
@@ -276,8 +277,8 @@ public class SpiritwebMenu extends Screen
     {
 
         public final AManifestation manifestation;
-        public double x1, x2;
-        public double y1, y2;
+        public double centerX;
+        public double centerY;
         public boolean highlighted;
 
         public RadialButtonRegion(final AManifestation manifestation)
@@ -305,6 +306,7 @@ public class SpiritwebMenu extends Screen
             radialButtonRegions.add(new RadialButtonRegion(manifestation));
         }
     }
+
     @Override
     public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks)
     {
@@ -334,12 +336,10 @@ public class SpiritwebMenu extends Screen
         final double mouseVecY = (mouseY - height / 2f);
 
 
-        final float ring_center = 0;
-        final float ring_inner_edge = 20;
-        final float ring_outer_edge = 50;
+        final float ring_inner_edge = -10;
+        final float ring_outer_edge = -50;
 
         final double text_distance = 65;
-
 
 
         final double middle_x = width / 2f;
@@ -358,36 +358,81 @@ public class SpiritwebMenu extends Screen
             // todo test if I can get down to one button only
             final int totalButtons = radialButtonRegions.size();
 
-            Vector2 center = new Vector2(0, ring_center);
-            Vector2 innerEdge = new Vector2(0, ring_inner_edge);
-            Vector2 outerEdge = new Vector2(0, ring_outer_edge);
+            Vector2 innerEdge;
+            Vector2 outerEdge;
+
+            boolean smallMode = radialButtonRegions.size() == 2;
+
+            innerEdge = new Vector2(0, ring_inner_edge);
+            outerEdge = new Vector2(0, ring_outer_edge);
 
 
             for (final RadialButtonRegion region : radialButtonRegions)
             {
                 //left side inner point
-                final double x1m1 = innerEdge.x;
-                final double y1m1 = innerEdge.y;
-                //left side outer point
-                final double x2m1 = outerEdge.x;
-                final double y2m1 = outerEdge.y;
+                double x1m1;
+                double y1m1;
 
-                //rotate vectors around the point
-                innerEdge.Rotate(-(360f / totalButtons));
-                outerEdge.Rotate(-(360f / totalButtons));
+                //left side outer point
+                double x2m1;
+                double y2m1;
 
                 //right side inner point
-                final double x1m2 = innerEdge.x;
-                final double y1m2 = innerEdge.y;
+                double x1m2;
+                double y1m2;
                 //right side outer point
-                final double x2m2 = outerEdge.x;
-                final double y2m2 = outerEdge.y;
+                double x2m2;
+                double y2m2;
 
-                region.x1 = x1m1;
-                region.y1 = y1m1;
+                if (smallMode)
+                {
+                    //1
+                    x1m1 = outerEdge.x;
+                    y1m1 = outerEdge.y;
+                    outerEdge.Rotate(60);
 
-                region.x2 = x2m2;
-                region.y2 = y2m2;
+                    //2
+                    x2m1 = outerEdge.x;
+                    y2m1 = outerEdge.y;
+                    outerEdge.Rotate(60);
+
+                    //3
+                    x1m2 = outerEdge.x;
+                    y1m2 = outerEdge.y;
+                    outerEdge.Rotate(60);
+
+                    //4
+                    x2m2 = outerEdge.x;
+                    y2m2 = outerEdge.y;
+                }
+                else
+                {
+
+                    //left side inner point
+                    x1m1 = innerEdge.x;
+                    y1m1 = innerEdge.y;
+
+                    //left side outer point
+                    x2m1 = outerEdge.x;
+                    y2m1 = outerEdge.y;
+
+                    //rotate vectors around the point
+                    innerEdge.Rotate(-(360f / totalButtons));
+                    outerEdge.Rotate(-(360f / totalButtons));
+
+                    //right side inner point
+                    x1m2 = innerEdge.x;
+                    y1m2 = innerEdge.y;
+                    //right side outer point
+                    x2m2 = outerEdge.x;
+                    y2m2 = outerEdge.y;
+
+                }
+
+                //the center of a regular polygon can be found by adding up
+                // all corner positions and divide by the total count
+                region.centerX = (x1m1 + x2m1 + x1m2 + x2m2) / 4;
+                region.centerY = (y1m1 + y2m1 + y1m2 + y2m2) / 4;
 
 
                 final float a = 0.5f;
@@ -399,7 +444,7 @@ public class SpiritwebMenu extends Screen
                                 x2m2, y2m2,
                                 x2m1, y2m1,
                                 mouseVecX, mouseVecY)
-                        || MathHelper.inTriangle(
+                                || MathHelper.inTriangle(
                                 x1m1, y1m1,
                                 x1m2, y1m2,
                                 x2m2, y2m2,
@@ -414,12 +459,23 @@ public class SpiritwebMenu extends Screen
                     switchToPower = region.manifestation;
                 }
 
-                //draw first triangle
-                buffer.pos(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
-                buffer.pos(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
-                //draw second triangle
-                buffer.pos(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
-                buffer.pos(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
+
+
+                if (smallMode)
+                {
+                    buffer.pos(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
+                    buffer.pos(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
+                    buffer.pos(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
+                    buffer.pos(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
+                }
+                else
+                {
+                    //set the square pos
+                    buffer.pos(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
+                    buffer.pos(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
+                    buffer.pos(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
+                    buffer.pos(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
+                }
 
             }
         }
@@ -461,8 +517,8 @@ public class SpiritwebMenu extends Screen
         //put the icons on the region buttons
         for (final RadialButtonRegion mnuRgn : radialButtonRegions)
         {
-            final double x = (mnuRgn.x1 + mnuRgn.x2) * 0.5 * (ring_outer_edge * 0.6 + 0.4 * ring_inner_edge);
-            final double y = (mnuRgn.y1 + mnuRgn.y2) * 0.5 * (ring_outer_edge * 0.6 + 0.4 * ring_inner_edge);
+            final double x = mnuRgn.centerX;
+            final double y = mnuRgn.centerY;
 
             final SpriteIconPositioning sip = ClientHelper.instance.getIconForManifestation(mnuRgn.manifestation);
 
@@ -525,8 +581,8 @@ public class SpiritwebMenu extends Screen
             //but only if that button is highlighted
             if (button.highlighted)
             {
-                final double x = (button.x1 + button.x2) * 0.5;
-                final double y = (button.y1 + button.y2) * 0.5;
+                final double x = button.centerX;
+                final double y = button.centerY;
 
                 int fixed_x = (int) (x * text_distance);
                 final int fixed_y = (int) (y * text_distance);
@@ -592,7 +648,6 @@ public class SpiritwebMenu extends Screen
 
         matrixStack.pop();
     }
-
 
 
 }
