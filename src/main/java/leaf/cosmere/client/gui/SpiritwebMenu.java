@@ -336,9 +336,6 @@ public class SpiritwebMenu extends Screen
         final double mouseVecY = (mouseY - height / 2f);
 
 
-        final float ring_inner_edge = -10;
-        final float ring_outer_edge = -50;
-
         final double text_distance = 65;
 
 
@@ -353,8 +350,217 @@ public class SpiritwebMenu extends Screen
         switchToPower = null;
         doAction = null;
 
+        setupRadialButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
+
+        setupSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
+
+        //draw out what we've asked for
+        tessellator.draw();
+
+        //then we switch to icons
+        RenderSystem.shadeModel(GL11.GL_FLAT);
+
+        RenderSystem.enableTexture();
+        RenderSystem.color4f(1, 1, 1, 1.0f);
+        RenderSystem.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE).getGlTextureId());
+
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+        //put the icons on the region buttons
+        setupRadialButtonIcons(buffer, middle_x, middle_y);
+
+        //put the icons on the sided buttons
+        setupSidedButtonIcons(buffer, middle_x, middle_y);
+
+        tessellator.draw();
+
+        // draw radial button strings
+        setupRadialButtonStrings(matrixStack, text_distance, (int) middle_x, (int) middle_y);
+
+        //draw sided button strings
+        setupSidedButtonStrings(matrixStack, middle_x, middle_y);
+
+        //do extra text info stuff
+        setupAnyExtraInfoTexts(matrixStack, (int) middle_y);
+
+        matrixStack.pop();
+    }
+
+    private void setupAnyExtraInfoTexts(MatrixStack matrixStack, int middle_y)
+    {
+        int x = 10;
+        final int[] y = {middle_y / 2};
+
+        spiritweb.METALS_INGESTED.forEach((key, value) ->
+        {
+            if (value > 0)
+            {
+                //todo localisation check
+                final String text = key.name().toLowerCase(Locale.ROOT) + ": " + value;
+                font.drawStringWithShadow(matrixStack, text, x, (int) y[0], 0xffffffff);
+                y[0] += 10;
+            }
+        });
+    }
+
+    private void setupSidedButtonStrings(MatrixStack matrixStack, double middle_x, double middle_y)
+    {
+        for (final SidedMenuButton sideButton : sidedMenuButtons)
+        {
+            //but only if that sided button is highlighted
+            if (sideButton.highlighted)
+            {
+                final String text = I18n.format(sideButton.name);
+
+                switch (sideButton.textSide)
+                {
+                    case WEST:
+                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + sideButton.x1 - 8) - font.getStringWidth(text), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
+                        break;
+                    case EAST:
+                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + sideButton.x2 + 8), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
+                        break;
+                    case UP:
+                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.getStringWidth(text) * 0.5), (int) (middle_y + sideButton.y1 - 14), 0xffffffff);
+                        break;
+                    case DOWN:
+                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.getStringWidth(text) * 0.5), (int) (middle_y + sideButton.y1 + 24), 0xffffffff);
+                        break;
+                }
+
+            }
+        }
+    }
+
+    private void setupRadialButtonStrings(MatrixStack matrixStack, double text_distance, int middle_x, int middle_y)
+    {
+        for (final RadialButtonRegion button : radialButtonRegions)
+        {
+            //but only if that button is highlighted
+            if (button.highlighted)
+            {
+                final double x = button.centerX;
+                final double y = button.centerY;
+
+                int fixed_x = (int) (x + text_distance);
+                final int fixed_y = (int) (y + text_distance);
+
+                //todo localisation check
+                final String text = I18n.format(button.manifestation.translation().getKey());
+
+                if (x <= -0.2)
+                {
+                    fixed_x -= font.getStringWidth(text);
+                }
+                else if (-0.2 <= x && x <= 0.2)
+                {
+                    fixed_x -= font.getStringWidth(text) / 2;
+                }
+
+                font.drawStringWithShadow(matrixStack, text, middle_x + fixed_x, middle_y + fixed_y, 0xffffffff);
+
+                //no need to keep searching, we only keep one highlighted at a time.
+                break;
+            }
+        }
+    }
+
+    private void setupSidedButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
+    {
+        for (final SidedMenuButton button : sidedMenuButtons)
+        {
+            final float f = switchToPower == null ? 1.0f : 0.5f;
+            final float a = 1.0f;
+
+            final double u1 = 0;
+            final double u2 = 16;
+            final double v1 = 0;
+            final double v2 = 16;
+
+            final TextureAtlasSprite sprite = button.icon == null ? ClientHelper.blank : button.icon;
+
+            final double btnx1 = button.x1 + 1;
+            final double btnx2 = button.x2 - 1;
+            final double btny1 = button.y1 + 1;
+            final double btny2 = button.y2 - 1;
+
+            final float red = f * ((button.color >> 16 & 0xff) / 255.0f);
+            final float green = f * ((button.color >> 8 & 0xff) / 255.0f);
+            final float blue = f * ((button.color & 0xff) / 255.0f);
+
+            buffer.pos(middle_x + btnx1, middle_y + btny1, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1)).color(red, green, blue, a).endVertex();
+            buffer.pos(middle_x + btnx1, middle_y + btny2, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v2)).color(red, green, blue, a).endVertex();
+            buffer.pos(middle_x + btnx2, middle_y + btny2, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v2)).color(red, green, blue, a).endVertex();
+            buffer.pos(middle_x + btnx2, middle_y + btny1, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v1)).color(red, green, blue, a).endVertex();
+        }
+    }
+
+    private void setupRadialButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
+    {
+        for (final RadialButtonRegion mnuRgn : radialButtonRegions)
+        {
+            final double x = mnuRgn.centerX;
+            final double y = mnuRgn.centerY;
+
+            final SpriteIconPositioning sip = ClientHelper.instance.getIconForManifestation(mnuRgn.manifestation);
+
+            final double scalex = 15 * sip.width * 0.5;
+            final double scaley = 15 * sip.height * 0.5;
+            final double x1 = x - scalex;
+            final double x2 = x + scalex;
+            final double y1 = y - scaley;
+            final double y2 = y + scaley;
+
+            final TextureAtlasSprite sprite = sip.sprite;
+
+            final float f = 1.0f;
+            final float a = 1.0f;
+
+            final double u1 = sip.left * 16.0;
+            final double u2 = (sip.left + sip.width) * 16.0;
+            final double v1 = sip.top * 16.0;
+            final double v2 = (sip.top + sip.height) * 16.0;
+
+            buffer.pos(middle_x + x1, middle_y + y1, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1)).color(f, f, f, a).endVertex();
+            buffer.pos(middle_x + x1, middle_y + y2, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v2)).color(f, f, f, a).endVertex();
+            buffer.pos(middle_x + x2, middle_y + y2, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v2)).color(f, f, f, a).endVertex();
+            buffer.pos(middle_x + x2, middle_y + y1, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v1)).color(f, f, f, a).endVertex();
+        }
+    }
+
+    private void setupSidedButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
+    {
+        for (final SidedMenuButton button : sidedMenuButtons)
+        {
+            final float a = 0.5f;
+            float f = 0f;
+
+            if (button.x1 <= mouseVecX && button.x2 >= mouseVecX && button.y1 <= mouseVecY && button.y2 >= mouseVecY)
+            {
+                f = 1;
+                button.highlighted = true;
+                doAction = button.action;
+            }
+
+            //set first triangle
+            buffer.pos(middle_x + button.x1, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
+            buffer.pos(middle_x + button.x1, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
+            //set second triangle
+            buffer.pos(middle_x + button.x2, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
+            buffer.pos(middle_x + button.x2, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
+        }
+    }
+
+    private void setupRadialButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
+    {
         if (!radialButtonRegions.isEmpty())
         {
+
+            final float ring_inner_edge = -10;
+            final float ring_outer_edge = -50;
+
             // todo test if I can get down to one button only
             final int totalButtons = radialButtonRegions.size();
 
@@ -479,174 +685,6 @@ public class SpiritwebMenu extends Screen
 
             }
         }
-
-        for (final SidedMenuButton button : sidedMenuButtons)
-        {
-            final float a = 0.5f;
-            float f = 0f;
-
-            if (button.x1 <= mouseVecX && button.x2 >= mouseVecX && button.y1 <= mouseVecY && button.y2 >= mouseVecY)
-            {
-                f = 1;
-                button.highlighted = true;
-                doAction = button.action;
-            }
-
-            //set first triangle
-            buffer.pos(middle_x + button.x1, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + button.x1, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
-            //set second triangle
-            buffer.pos(middle_x + button.x2, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + button.x2, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
-        }
-
-        //draw out what we've asked for
-        tessellator.draw();
-
-        //then we switch to icons
-        RenderSystem.shadeModel(GL11.GL_FLAT);
-
-        RenderSystem.enableTexture();
-        RenderSystem.color4f(1, 1, 1, 1.0f);
-        RenderSystem.disableBlend();
-        RenderSystem.enableAlphaTest();
-        RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE).getGlTextureId());
-
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-
-        //put the icons on the region buttons
-        for (final RadialButtonRegion mnuRgn : radialButtonRegions)
-        {
-            final double x = mnuRgn.centerX;
-            final double y = mnuRgn.centerY;
-
-            final SpriteIconPositioning sip = ClientHelper.instance.getIconForManifestation(mnuRgn.manifestation);
-
-            final double scalex = 15 * sip.width * 0.5;
-            final double scaley = 15 * sip.height * 0.5;
-            final double x1 = x - scalex;
-            final double x2 = x + scalex;
-            final double y1 = y - scaley;
-            final double y2 = y + scaley;
-
-            final TextureAtlasSprite sprite = sip.sprite;
-
-            final float f = 1.0f;
-            final float a = 1.0f;
-
-            final double u1 = sip.left * 16.0;
-            final double u2 = (sip.left + sip.width) * 16.0;
-            final double v1 = sip.top * 16.0;
-            final double v2 = (sip.top + sip.height) * 16.0;
-
-            buffer.pos(middle_x + x1, middle_y + y1, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1)).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + x1, middle_y + y2, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v2)).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + x2, middle_y + y2, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v2)).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + x2, middle_y + y1, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v1)).color(f, f, f, a).endVertex();
-        }
-
-        //put the icons on the sided buttons
-        for (final SidedMenuButton button : sidedMenuButtons)
-        {
-            final float f = switchToPower == null ? 1.0f : 0.5f;
-            final float a = 1.0f;
-
-            final double u1 = 0;
-            final double u2 = 16;
-            final double v1 = 0;
-            final double v2 = 16;
-
-            final TextureAtlasSprite sprite = button.icon == null ? ClientHelper.blank : button.icon;
-
-            final double btnx1 = button.x1 + 1;
-            final double btnx2 = button.x2 - 1;
-            final double btny1 = button.y1 + 1;
-            final double btny2 = button.y2 - 1;
-
-            final float red = f * ((button.color >> 16 & 0xff) / 255.0f);
-            final float green = f * ((button.color >> 8 & 0xff) / 255.0f);
-            final float blue = f * ((button.color & 0xff) / 255.0f);
-
-            buffer.pos(middle_x + btnx1, middle_y + btny1, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1)).color(red, green, blue, a).endVertex();
-            buffer.pos(middle_x + btnx1, middle_y + btny2, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v2)).color(red, green, blue, a).endVertex();
-            buffer.pos(middle_x + btnx2, middle_y + btny2, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v2)).color(red, green, blue, a).endVertex();
-            buffer.pos(middle_x + btnx2, middle_y + btny1, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v1)).color(red, green, blue, a).endVertex();
-        }
-
-        tessellator.draw();
-
-        // draw radial button strings
-        for (final RadialButtonRegion button : radialButtonRegions)
-        {
-            //but only if that button is highlighted
-            if (button.highlighted)
-            {
-                final double x = button.centerX;
-                final double y = button.centerY;
-
-                int fixed_x = (int) (x * text_distance);
-                final int fixed_y = (int) (y * text_distance);
-
-                //todo localisation check
-                final String text = I18n.format(button.manifestation.translation().getKey());
-
-                if (x <= -0.2)
-                {
-                    fixed_x -= font.getStringWidth(text);
-                }
-                else if (-0.2 <= x && x <= 0.2)
-                {
-                    fixed_x -= font.getStringWidth(text) / 2;
-                }
-
-                font.drawStringWithShadow(matrixStack, text, (int) middle_x + fixed_x, (int) middle_y + fixed_y, 0xffffffff);
-            }
-        }
-
-        //do extra text info stuff
-        {
-            int x = 10;
-            final int[] y = {(int) middle_y / 2};
-
-            spiritweb.METALS_INGESTED.forEach((key, value) ->
-            {
-                if (value > 0)
-                {
-                    //todo localisation check
-                    final String text = key.name().toLowerCase(Locale.ROOT) + ": " + value;
-                    font.drawStringWithShadow(matrixStack, text, x, (int) y[0], 0xffffffff);
-                    y[0] += 10;
-                }
-            });
-        }
-        //draw sided button strings
-        for (final SidedMenuButton sideButton : sidedMenuButtons)
-        {
-            //but only if that sided button is highlighted
-            if (sideButton.highlighted)
-            {
-                final String text = I18n.format(sideButton.name);
-
-                switch (sideButton.textSide)
-                {
-                    case WEST:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + sideButton.x1 - 8) - font.getStringWidth(text), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
-                        break;
-                    case EAST:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + sideButton.x2 + 8), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
-                        break;
-                    case UP:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.getStringWidth(text) * 0.5), (int) (middle_y + sideButton.y1 - 14), 0xffffffff);
-                        break;
-                    case DOWN:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.getStringWidth(text) * 0.5), (int) (middle_y + sideButton.y1 + 24), 0xffffffff);
-                        break;
-                }
-
-            }
-        }
-
-        matrixStack.pop();
     }
 
 
