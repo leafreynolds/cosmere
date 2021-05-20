@@ -48,6 +48,8 @@ public class SpiritwebMenu extends Screen
 {
 
     private final float TIME_SCALE = 0.01f;
+    final double TEXT_DISTANCE = 30;
+
     public static final SpiritwebMenu instance = new SpiritwebMenu();
     private SpiritwebCapability spiritweb = null;
 
@@ -288,17 +290,17 @@ public class SpiritwebMenu extends Screen
 
     }
 
-    protected void SetupButtons(double text_distance)
+    protected void SetupButtons()
     {
 
         //todo buttons
         //todo button icons
         sidedMenuButtons.add(spiritweb.selectedManifestationActive()
-                             ? new SidedMenuButton("gui.cosmere.other.inactive", ButtonAction.INACTIVE, -text_distance - 20, -50, ClientHelper.off, Direction.WEST)
-                             : new SidedMenuButton("gui.cosmere.other.active", ButtonAction.ACTIVE, -text_distance - 20, -30, ClientHelper.on, Direction.WEST));
+                             ? new SidedMenuButton("gui.cosmere.other.inactive", ButtonAction.INACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.off, Direction.WEST)
+                             : new SidedMenuButton("gui.cosmere.other.active", ButtonAction.ACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.on, Direction.WEST));
 
-        sidedMenuButtons.add(new SidedMenuButton("gui.cosmere.mode.increase", ButtonAction.MODE_INCREASE, text_distance, -10, ClientHelper.arrowUp, Direction.EAST));
-        sidedMenuButtons.add(new SidedMenuButton("gui.cosmere.mode.decrease", ButtonAction.MODE_DECREASE, text_distance, 10, ClientHelper.arrowDown, Direction.EAST));
+        sidedMenuButtons.add(new SidedMenuButton("gui.cosmere.mode.increase", ButtonAction.MODE_INCREASE, TEXT_DISTANCE * 2, -10, ClientHelper.arrowUp, Direction.EAST));
+        sidedMenuButtons.add(new SidedMenuButton("gui.cosmere.mode.decrease", ButtonAction.MODE_DECREASE, TEXT_DISTANCE * 2, 10, ClientHelper.arrowDown, Direction.EAST));
 
 
         for (AManifestation manifestation : spiritweb.getAvailableManifestations())
@@ -335,17 +337,13 @@ public class SpiritwebMenu extends Screen
         final double mouseVecX = mouseX - width / 2f;
         final double mouseVecY = (mouseY - height / 2f);
 
-
-        final double text_distance = 65;
-
-
         final double middle_x = width / 2f;
         final double middle_y = height / 2f;
 
         radialButtonRegions.clear();
         sidedMenuButtons.clear();
 
-        SetupButtons(text_distance);
+        SetupButtons();
 
         switchToPower = null;
         doAction = null;
@@ -377,7 +375,7 @@ public class SpiritwebMenu extends Screen
         tessellator.draw();
 
         // draw radial button strings
-        setupRadialButtonStrings(matrixStack, text_distance, (int) middle_x, (int) middle_y);
+        setupRadialButtonStrings(matrixStack, (int) middle_x, (int) middle_y);
 
         //draw sided button strings
         setupSidedButtonStrings(matrixStack, middle_x, middle_y);
@@ -434,7 +432,7 @@ public class SpiritwebMenu extends Screen
         }
     }
 
-    private void setupRadialButtonStrings(MatrixStack matrixStack, double text_distance, int middle_x, int middle_y)
+    private void setupRadialButtonStrings(MatrixStack matrixStack, int middle_x, int middle_y)
     {
         for (final RadialButtonRegion button : radialButtonRegions)
         {
@@ -444,20 +442,15 @@ public class SpiritwebMenu extends Screen
                 final double x = button.centerX;
                 final double y = button.centerY;
 
-                int fixed_x = (int) (x + text_distance);
-                final int fixed_y = (int) (y + text_distance);
+                int fixed_x = (int) x;//(x + TEXT_DISTANCE);
+                final int fixed_y = (int) y;//(y + TEXT_DISTANCE);
 
                 //todo localisation check
                 final String text = I18n.format(button.manifestation.translation().getKey());
 
-                if (x <= -0.2)
-                {
-                    fixed_x -= font.getStringWidth(text);
-                }
-                else if (-0.2 <= x && x <= 0.2)
-                {
-                    fixed_x -= font.getStringWidth(text) / 2;
-                }
+                fixed_x = (int) (x < 0
+                                 ? fixed_x - (font.getStringWidth(text) + TEXT_DISTANCE)
+                                 : fixed_x + TEXT_DISTANCE);
 
                 font.drawStringWithShadow(matrixStack, text, middle_x + fixed_x, middle_y + fixed_y, 0xffffffff);
 
@@ -664,7 +657,6 @@ public class SpiritwebMenu extends Screen
                     region.highlighted = true;
                     switchToPower = region.manifestation;
                 }
-
 
 
                 if (smallMode)
