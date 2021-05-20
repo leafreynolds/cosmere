@@ -1,5 +1,14 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B15
+
+Adding nuggets to bottles/vials that can then be consumed.
+Iron/steel sight. Steel pushing set up. Iron pushing not yet implemented.
+Starting to use allomantic/feruchemical strength that the user either starts with or steals with feruchemy.
+Duralumin/Nicrosil initial framework set up, though untested.
+Fixed a bug where player powers were not persisting across death.
+Big spiritweb menu refactor, now I actually understand what's going on there.
+
 B14
 
 Adding illagers and witches to possible powered individuals.
