@@ -5,6 +5,7 @@ B16
 Auto select a power if none are selected. Only really relevant for first time joining world.
 Fixed crash from mousing over creative debug hemalurgy spike that gives all powers in inventory.
 Spikes now show up in more varied locations based on curio slot.
+Remove key bind check on most allomancy
 
 B15
 
@@ -25,7 +26,7 @@ Big refactor to convert to using attributes instead of capability to track what 
 B13
 
 All feruchemy basically done except for nicrosil and electrum.
-Players have are twinborn at a minimum, or they are granted either full allomancy or full feruchemy.
+Players are twinborn at a minimum, or they are granted either full allomancy or full feruchemy.
 Fine tuned feruchemical bronze storing, so it doesn’t spam chat with sleep messages.
 Fine tuned brass feruchemy, so that tapping brass actually does something. Sets others on fire if tapping enough when attacking. Sets self on fire if tapping too much.
 
