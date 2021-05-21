@@ -4,6 +4,7 @@ B16
 
 Auto select a power if none are selected. Only really relevant for first time joining world.
 Fixed crash from mousing over creative debug hemalurgy spike that gives all powers in inventory.
+Spikes now show up in more varied locations based on curio slot.
 
 B15
 

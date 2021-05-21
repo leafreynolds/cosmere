@@ -12,12 +12,13 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.render.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.items.Metalmind;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -44,11 +45,13 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -256,7 +259,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     protected void onEquipStatusChanged(SlotContext slotContext, ItemStack stack, boolean isEquipping)
     {
         //first do normal equip status changed, in case this spike metalmind has nicrosil powers stored
-        super.onEquipStatusChanged(slotContext,stack,isEquipping);
+        super.onEquipStatusChanged(slotContext, stack, isEquipping);
 
         //then do hemalurgy spike logic
         //hurt the user
@@ -271,20 +274,74 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     }
 
     @Override
-    public void render(String identifier, int index, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, LivingEntity livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, ItemStack stack)
+    public void render(String identifier, int index, MatrixStack matrixStack,
+                       IRenderTypeBuffer renderTypeBuffer, int light, LivingEntity livingEntity,
+                       float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+                       float netHeadYaw, float headPitch, ItemStack stack)
     {
+        //todo check if needed
+        // ICurio.RenderHelper.translateIfSneaking(matrixStack, livingEntity);
+        // ICurio.RenderHelper.rotateIfSneaking(matrixStack, livingEntity);
+
         if (!(this.model instanceof SpikeModel))
         {
-            this.model = new SpikeModel();
+            //todo set spike position?
+            this.model = new SpikeModel<>();
         }
+
+        SpikeModel spike = (SpikeModel<?>) this.model;
+
 
         //todo change render based on spike placement
 
-        SpikeModel<?> spike = (SpikeModel) this.model;
-        ICurio.RenderHelper.followHeadRotations(livingEntity, spike.spike);
+
+        Optional<SlotTypePreset> slotTypePreset = SlotTypePreset.findPreset(identifier);
+        if (!slotTypePreset.isPresent())
+        {
+            return;
+        }
+
+        spike.renderMode = identifier;
+        spike.renderIndex = index;
+
+        switch (slotTypePreset.get())
+        {
+
+            case HEAD:
+                //then set up the custom/non biped model stuff
+                //this could have been biped I guess, but was a good reference
+                ICurio.RenderHelper.followHeadRotations(livingEntity, spike.leftEyeSpike);
+                ICurio.RenderHelper.followHeadRotations(livingEntity, spike.rightEyeSpike);
+                break;
+            case BODY:
+            case NECKLACE:
+                ICurio.RenderHelper.followHeadRotations(livingEntity, spike.neckSpike);
+            case BACK:
+            case BRACELET:
+            case HANDS:
+            case RING:
+            case BELT:
+            case CHARM:
+            case CURIO:
+                //setup biped model stuff
+                spike.setLivingAnimations(livingEntity, limbSwing, limbSwingAmount, partialTicks);
+                spike.setRotationAngles(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+                //and have it follow body rotations
+                ICurio.RenderHelper.followBodyRotations(livingEntity, (BipedModel<LivingEntity>) spike);
+                break;
+        }
+
+
         IVertexBuilder vertexBuilder = ItemRenderer.getBuffer(renderTypeBuffer, spike.getRenderType(SPIKE_TEXTURE), false, false);
 
         Color col = getMetalType().getColor();
-        spike.render(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, col.getRed() / 255f, col.getGreen() / 255f, col.getBlue() / 255f, 1.0F);
+        spike.render(matrixStack,
+                vertexBuilder,
+                light,
+                OverlayTexture.NO_OVERLAY,
+                col.getRed() / 255f,
+                col.getGreen() / 255f,
+                col.getBlue() / 255f,
+                1.0F);
     }
 }
