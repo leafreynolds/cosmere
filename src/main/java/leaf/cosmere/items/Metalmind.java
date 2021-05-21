@@ -53,10 +53,14 @@ public class Metalmind extends ChargeableMetalItem implements ICurioItem
             for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
             {
                 String manifestationName = manifestation.getRegistryName().getPath();
+                if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(manifestationName))
+                {
+                    continue;
+                }
+
                 if (nbt.getBoolean(manifestationName))
                 {
                     UUID someUUID = UUID.nameUUIDFromBytes((manifestationName + uuid.toString()).getBytes());
-
                     attributeModifiers.put(
                             AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName).get(),
                             new AttributeModifier(

@@ -8,12 +8,12 @@ import com.google.common.collect.Multimap;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.utils.helpers.CompoundNBTHelper;
-import leaf.cosmere.utils.helpers.StackNBTHelper;
-import leaf.cosmere.utils.helpers.TextHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
+import leaf.cosmere.utils.helpers.StackNBTHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -215,7 +215,9 @@ public interface IHemalurgicInfo
         UUID hemalurgicIdentity = getHemalurgicIdentity(stack);
 
         if (hemalurgicIdentity == null)
+        {
             return attributeModifiers;
+        }
 
         switch (metalType)
         {
@@ -262,6 +264,11 @@ public interface IHemalurgicInfo
 
             if (CompoundNBTHelper.getBoolean(hemalurgyInfo, path, false))
             {
+                if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(path))
+                {
+                    continue;
+                }
+
                 attributeModifiers.put(
                         AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path).get(),
                         new AttributeModifier(

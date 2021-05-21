@@ -78,7 +78,7 @@ public class SpiritwebCapability implements ISpiritweb
             Arrays.stream(ManifestationTypes.values())
                     .collect(Collectors.toMap(
                             Function.identity(),
-                            type -> new int[16]));
+                            type -> new int[Metals.MetalType.values().length]));//todo come back here eventually because not all power types will be the same as num metals. and some metals don't have powers >:(
 
     private AManifestation selectedManifestation = ManifestationRegistry.NONE.get();
 
@@ -144,7 +144,15 @@ public class SpiritwebCapability implements ISpiritweb
         for (ManifestationTypes manifestationType : ManifestationTypes.values())
         {
             String manifestationTypeName = manifestationType.name().toLowerCase();
-            MANIFESTATIONS_MODE.put(manifestationType, nbt.getIntArray(manifestationTypeName + "_mode"));
+
+            int[] storedIntArray = nbt.getIntArray(manifestationTypeName + "_mode");
+            int length = storedIntArray.length;
+
+            for (int i = 0; i < length; i++)
+            {
+                //doing it this way for backwards compatibility in cases where we add new powers.
+                MANIFESTATIONS_MODE.get(manifestationType)[i] = storedIntArray[i];
+            }
         }
         selectedManifestation = ManifestationRegistry.fromID(nbt.getString("selected_power"));
 
@@ -346,12 +354,13 @@ public class SpiritwebCapability implements ISpiritweb
         for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
         {
             String path = manifestation.getRegistryName().getPath();
-            RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
-            if (attributeRegistryObject == null)
+
+            if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(path))
             {
                 continue;
             }
 
+            RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
             Attribute attribute = attributeRegistryObject.get();
 
             ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
@@ -380,14 +389,15 @@ public class SpiritwebCapability implements ISpiritweb
     public boolean hasManifestation(ManifestationTypes manifestationTypeID, int powerID, boolean ignoreTemporaryPower)
     {
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
-        if (manifestation == ManifestationRegistry.NONE.get())
+        String manifestationName = manifestation.getRegistryName().getPath();
+        if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(manifestationName))
         {
             return false;
         }
 
-        String manifestationName = manifestation.getRegistryName().getPath();
         Attribute attribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName).get();
         ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+
         if (manifestationAttribute != null)
         {
             double manifestationStrength =
@@ -404,18 +414,12 @@ public class SpiritwebCapability implements ISpiritweb
     {
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
 
-        if (manifestation == ManifestationRegistry.NONE.get())
-        {
-            return;
-        }
-
         String manifestationName = manifestation.getRegistryName().getPath();
-        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName);
-
-        if (!attributeRegistryObject.isPresent())
+        if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(manifestationName))
         {
             return;
         }
+        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName);
 
         Attribute attribute = attributeRegistryObject.get();
         ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
@@ -434,15 +438,15 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public void removeManifestation(ManifestationTypes manifestationTypeID, int powerID)
     {
-
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
         String path = manifestation.getRegistryName().getPath();
-        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
 
-        if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
+        if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(path))
         {
             return;
         }
+
+        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
 
         Attribute attribute = attributeRegistryObject.get();
         ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
@@ -642,7 +646,6 @@ public class SpiritwebCapability implements ISpiritweb
             Optional<AManifestation> first = getAvailableManifestations().stream().findFirst();
             first.ifPresent(this::setSelectedManifestation);
         }
-
 
         CompoundNBT nbt = serializeNBT();
 
