@@ -291,10 +291,6 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
 
         SpikeModel spike = (SpikeModel<?>) this.model;
 
-
-        //todo change render based on spike placement
-
-
         Optional<SlotTypePreset> slotTypePreset = SlotTypePreset.findPreset(identifier);
         if (!slotTypePreset.isPresent())
         {

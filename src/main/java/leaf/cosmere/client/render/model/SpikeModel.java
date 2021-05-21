@@ -55,27 +55,27 @@ public class SpikeModel<T extends LivingEntity> extends BipedModel<T>
         this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.bipedBody.addBox(-1F, 2.0F, 0.0F, 2.0F, 2.0F, 3.0F, 0.0F);
 
-        //right arm
-        this.bipedRightArm = new ModelRenderer(this, 0, 0);
-        this.bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
-        this.bipedRightArm.addBox(-3.0F, 4.0F, -0.5F, 5, 1, 1, 0.4F);
-
         //left arm
         this.bipedLeftArm = new ModelRenderer(this, 0, 0);
         this.bipedLeftArm.mirror = true;
         this.bipedLeftArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
         this.bipedLeftArm.addBox(-2.0F, 4.0F, -0.5F, 5, 1, 1, 0.4F);
 
-        //right leg
-        this.bipedRightLeg = new ModelRenderer(this, 0, 0);
-        this.bipedRightLeg.setRotationPoint(-5.0F, 2.0F, 0.0F);
-        this.bipedRightLeg.addBox(-3.0F, 4.0F, -0.5F, 1, 1, 5, 0.4F);
+        //right arm
+        this.bipedRightArm = new ModelRenderer(this, 0, 0);
+        this.bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
+        this.bipedRightArm.addBox(-3.0F, 4.0F, -0.5F, 5, 1, 1, 0.4F);
 
         //left leg
         this.bipedLeftLeg = new ModelRenderer(this, 0, 0);
         this.bipedLeftLeg.mirror = true;
         this.bipedLeftLeg.setRotationPoint(-5.0F, 2.0F, 0.0F);
-        this.bipedLeftLeg.addBox(-2.0F, 4.0F, -0.5F, 1, 1, 5, 0.4F);
+        this.bipedLeftLeg.addBox(0.0F, 4.0F, -0.5F, 1, 1, 5, 0.4F);
+
+        //right leg
+        this.bipedRightLeg = new ModelRenderer(this, 0, 0);
+        this.bipedRightLeg.setRotationPoint(-5.0F, 2.0F, 0.0F);
+        this.bipedRightLeg.addBox(-1.0F, 4.0F, -0.5F, 1, 1, 5, 0.4F);
 
 
     }
