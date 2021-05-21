@@ -313,9 +313,10 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                 ICurio.RenderHelper.followHeadRotations(livingEntity, spike.leftEyeSpike);
                 ICurio.RenderHelper.followHeadRotations(livingEntity, spike.rightEyeSpike);
                 break;
-            case BODY:
             case NECKLACE:
                 ICurio.RenderHelper.followHeadRotations(livingEntity, spike.neckSpike);
+                break;
+            case BODY:
             case BACK:
             case BRACELET:
             case HANDS:
