@@ -45,10 +45,8 @@ import net.minecraftforge.fml.RegistryObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -637,6 +635,14 @@ public class SpiritwebCapability implements ISpiritweb
         {
             throw new IllegalStateException("Don't sync client -> server");
         }
+
+        if (manifestation() == ManifestationRegistry.NONE.get())
+        {
+            //find first power
+            Optional<AManifestation> first = getAvailableManifestations().stream().findFirst();
+            first.ifPresent(this::setSelectedManifestation);
+        }
+
 
         CompoundNBT nbt = serializeNBT();
 
