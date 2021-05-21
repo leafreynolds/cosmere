@@ -22,9 +22,8 @@ public class AllomancyPewter extends AllomancyBase
     {
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
-        //Increases Physical Abilities
 
-        //passive active ability, if any
+        //Increases Physical Abilities
         if (isActiveTick)
         {
             int mode = data.getMode(manifestationType, getMetalType().getID());
@@ -40,14 +39,5 @@ public class AllomancyPewter extends AllomancyBase
                     break;
             }
         }
-
-        if (getKeyBinding().isPressed())
-        {
-
-        }
-
-
     }
-
-
 }

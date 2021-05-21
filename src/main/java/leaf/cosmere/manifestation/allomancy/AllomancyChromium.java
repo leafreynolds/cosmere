@@ -26,7 +26,6 @@ public class AllomancyChromium extends AllomancyBase
     protected void performEffect(ISpiritweb data)
     {
         //Wipes Allomantic Reserves of Target
-        if (getKeyBinding().isPressed())
         {
             int range = data.getMode(manifestationType, getMetalType().getID());
 

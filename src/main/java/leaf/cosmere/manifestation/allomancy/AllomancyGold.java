@@ -14,15 +14,14 @@ public class AllomancyGold extends AllomancyBase
         super(metalType);
     }
 
-    //Reveals Your Past Self
     @Override
     protected void performEffect(ISpiritweb data)
     {
-        //passive active ability, if any
+        //Reveals Your Past Self
         {
             //todo
         }
     }
-
+    //add client side stuff
 
 }

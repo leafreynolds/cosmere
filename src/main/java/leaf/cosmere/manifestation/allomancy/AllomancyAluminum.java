@@ -34,12 +34,6 @@ public class AllomancyAluminum extends AllomancyBase
             }
 
         }
-
-        if (getKeyBinding().isPressed())
-        {
-            //no other active effect?
-        }
-
     }
 
 

@@ -17,12 +17,11 @@ public class AllomancyElectrum extends AllomancyBase
     @Override
     protected void performEffect(ISpiritweb data)
     {
-        //passive active ability, if any
+        //Reveals Your Future
         {
-            //Reveals Your Future
             //todo
         }
     }
-
+    //add client side stuff
 
 }

@@ -19,7 +19,6 @@ public class AllomancyDuralumin extends AllomancyBase
         super(metalType);
     }
 
-
     //Enhances Current Metals Burned
     @Override
     public void performEffect(ISpiritweb data)
@@ -36,8 +35,5 @@ public class AllomancyDuralumin extends AllomancyBase
             );
             data.getLiving().addPotionEffect(newEffect);
         }
-
     }
-
-
 }

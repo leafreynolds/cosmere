@@ -21,23 +21,13 @@ public class AllomancyTin extends AllomancyBase
     protected void performEffect(ISpiritweb data)
     {
         //Increases Physical Senses
-
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
-        //passive active ability, if any
+
+        //give night vision
         if (isActiveTick)
         {
-            //give night vision
             livingEntity.addPotionEffect(EffectsHelper.getNewEffect(Effects.NIGHT_VISION, 0));
         }
-
-        if (getKeyBinding().isPressed())
-        {
-
-        }
-
-
     }
-
-
 }

@@ -26,13 +26,11 @@ public class AllomancyZinc extends AllomancyBase
     @Override
     protected void performEffect(ISpiritweb data)
     {
-
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
 
-        if (isActiveTick && getKeyBinding().isPressed())
+        if (isActiveTick)
         {
-
             int mode = data.getMode(manifestationType, getMetalType().getID());
 
             int range = 5 * mode;
@@ -54,11 +52,6 @@ public class AllomancyZinc extends AllomancyBase
                     }
                 }
             }
-
         }
-
-
     }
-
-
 }

@@ -27,9 +27,8 @@ public class AllomancyBrass extends AllomancyBase
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
 
-        if (isActiveTick && getKeyBinding().isPressed())
+        if (isActiveTick)
         {
-
             int mode = data.getMode(manifestationType, getMetalType().getID());
 
             int range = 5 * mode;
@@ -48,11 +47,6 @@ public class AllomancyBrass extends AllomancyBase
                     mob.setAttackTarget(null);
                 }
             }
-
         }
-
-
     }
-
-
 }

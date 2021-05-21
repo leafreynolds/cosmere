@@ -21,22 +21,15 @@ public class AllomancyCadmium extends AllomancyBase
         super(metalType);
     }
 
-    //Slows Down Time
     @Override
     protected void performEffect(ISpiritweb data)
     {
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
 
-        //passive active ability, if any
+        //Slows Down Time
+        if (isActiveTick)
         {
-            //todo
-
-        }
-
-        if (isActiveTick && getKeyBinding().isPressed())
-        {
-
             int mode = data.getMode(manifestationType, getMetalType().getID());
 
             int range = 5 * mode;
@@ -49,12 +42,6 @@ public class AllomancyCadmium extends AllomancyBase
             }
 
             //todo slow tile entities? not sure how to do that. bendalloy just calls tick more often.
-
         }
-
-
-
     }
-
-
 }

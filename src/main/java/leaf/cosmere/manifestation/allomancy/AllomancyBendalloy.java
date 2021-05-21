@@ -27,17 +27,9 @@ public class AllomancyBendalloy extends AllomancyBase
     @Override
     protected void performEffect(ISpiritweb data)
     {
-        //passive active ability, if any
-        {
-
-        }
-
         //Speeds Up Time
-        if (getKeyBinding().isPressed())
         {
             //tick entities around user
-
-
             if (data.getLiving().ticksExisted % 6 == 0)
             {
                 int range = 3 * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID());

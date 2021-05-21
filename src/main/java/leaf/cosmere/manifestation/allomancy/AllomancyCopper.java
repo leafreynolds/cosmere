@@ -27,16 +27,12 @@ public class AllomancyCopper extends AllomancyBase
     {
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
-        //Hides Allomantic Pulses
 
-        //passive active ability, if any
+        //Hides Allomantic Pulses
         if (isActiveTick)
         {
             int mode = data.getMode(manifestationType, getMetalType().getID());
             EffectInstance newEffect = EffectsHelper.getNewEffect(EffectsRegistry.ALLOMANTIC_COPPER.get(), mode - 1);
-
-
-            //data.getLiving().addPotionEffect(newEffect);
 
             List<LivingEntity> entitiesToApplyEffect = getLivingEntitiesInRange(livingEntity, 5, true);
 
@@ -45,14 +41,5 @@ public class AllomancyCopper extends AllomancyBase
                 e.addPotionEffect(newEffect);
             }
         }
-
-        if (getKeyBinding().isPressed())
-        {
-
-        }
-
-
     }
-
-
 }

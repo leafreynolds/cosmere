@@ -85,17 +85,7 @@ public class AllomancyBronze extends AllomancyBase
                         }
                     }
                 });
-
             }
         }
-
-        if (getKeyBinding().isPressed())
-        {
-
-        }
-
-
     }
-
-
 }
