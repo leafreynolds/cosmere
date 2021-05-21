@@ -127,8 +127,14 @@ public class SpikeModel<T extends LivingEntity> extends BipedModel<T>
             case BELT:
                 break;
             case CHARM:
-                break;
-            case CURIO:
+                if (renderIndex == 0)
+                {
+                    this.bipedLeftLeg.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
+                }
+                else
+                {
+                    this.bipedRightLeg.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
+                }
                 break;
         }
     }
