@@ -12,8 +12,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.commands.arguments.ManifestationsArgumentType;
 import leaf.cosmere.constants.Constants;
-import leaf.cosmere.utils.helpers.TextHelper;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.EntityHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -66,6 +68,23 @@ public class ManifestationCommand extends ModCommand
         {
             CommandSource source = context.getSource();
             iSpiritweb.clearManifestations();
+            iSpiritweb.syncToClients(null);
+            TextComponent playerTextObject = TextHelper.getPlayerTextObject(context.getSource().getWorld(), player.getUniqueID());
+            source.sendFeedback(new TranslationTextComponent(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
+        });
+
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int reroll(CommandContext<CommandSource> context, ServerPlayerEntity player)
+    {
+        SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
+        {
+            CommandSource source = context.getSource();
+            iSpiritweb.clearManifestations();
+            EntityHelper.giveEntityStartingManifestation(player, (SpiritwebCapability) iSpiritweb);
+            //set to none so that it auto updates to the new available ones on sync
+            iSpiritweb.setSelectedManifestation(ManifestationRegistry.NONE.get());
             iSpiritweb.syncToClients(null);
             TextComponent playerTextObject = TextHelper.getPlayerTextObject(context.getSource().getWorld(), player.getUniqueID());
             source.sendFeedback(new TranslationTextComponent(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
@@ -150,18 +169,21 @@ public class ManifestationCommand extends ModCommand
                 .requires(context -> context.hasPermissionLevel(2))
                 .then(Commands.literal("check")
                         .executes(context -> check(context, context.getSource().asPlayer())))
-                .then(Commands.literal("clear")
+/*                .then(Commands.literal("clear")
                         .executes(context -> clear(context, context.getSource().asPlayer())))
+                  .then(Commands.literal("set")
+                        .then(Commands.argument("manifestation", ManifestationsArgumentType.createArgument())
+                                .executes(context -> set(context, context.getSource().asPlayer())))
+                )*/
+                .then(Commands.literal("reroll")
+                        .executes(context -> reroll(context, context.getSource().asPlayer())))
                 .then(Commands.literal("give")
                         .then(Commands.argument("manifestation", ManifestationsArgumentType.createArgument())
                                 .executes(context -> give(context, context.getSource().asPlayer()))))
                 .then(Commands.literal("remove")
                         .then(Commands.argument("manifestation", ManifestationsArgumentType.createArgument())
                                 .executes(context -> remove(context, context.getSource().asPlayer()))))
-                .then(Commands.literal("set")
-                        .then(Commands.argument("manifestation", ManifestationsArgumentType.createArgument())
-                                .executes(context -> set(context, context.getSource().asPlayer()))
-                        )); // end add
+                ; // end add
     }
 
 }
