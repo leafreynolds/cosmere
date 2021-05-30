@@ -44,7 +44,7 @@ public class AllomancyChromium extends AllomancyBase
 
                 List<Entity> entitiesInRange = world.getEntitiesWithinAABBExcludingEntity(living,
                         living.getBoundingBox()
-                                .expand(
+                                .grow(
                                         lookVec.x * range,
                                         lookVec.y * range,
                                         lookVec.z * range)

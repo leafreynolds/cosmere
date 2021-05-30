@@ -6,6 +6,8 @@ Auto select a power if none are selected. Only really relevant for first time jo
 Fixed crash from mousing over creative debug hemalurgy spike that gives all powers in inventory.
 Spikes now show up in more varied locations based on curio slot.
 Remove key bind check on most allomancy
+added a creative mode only shard blade to test a model that was created using blockbench. 
+fixing some bugs related to soothing and rioting. May have to look into updating the entity goals, since it doesn't seem to affect passive mobs
 
 B15
 

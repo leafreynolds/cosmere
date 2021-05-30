@@ -26,32 +26,45 @@ public class AllomancyZinc extends AllomancyBase
     @Override
     protected void performEffect(ISpiritweb data)
     {
-        LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        int mode = data.getMode(manifestationType, getMetalType().getID());
 
-        if (isActiveTick)
+        //todo, replace x * mode with config based value
+        double allomanticStrength = getAllomanticStrength(data);
+
+        int range = (int) (allomanticStrength * mode);
+
+        List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
+
+        for (LivingEntity e : entitiesToAffect)
         {
-            int mode = data.getMode(manifestationType, getMetalType().getID());
-
-            int range = 5 * mode;
-
-            //include self in the list, mostly for setting self as a possible target to attack.
-            List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
-
-            for (LivingEntity entityInRange : entitiesToAffect)
+            if (e instanceof MobEntity)
             {
-                if (entityInRange instanceof MobEntity)
+                MobEntity mob = (MobEntity) e;
+
+                //mob.targetSelector.enableFlag(Goal.Flag.TARGET);
+                mob.setNoAI(false);
+
+                switch (mode)
                 {
-                    MobEntity mob = (MobEntity) livingEntity;
-                    mob.setAggroed(true);
-                    if (mob.getAttackTarget() == null)
-                    {
-                        LivingEntity attackTarget = entitiesToAffect.get(MathHelper.randomInt(0, entitiesToAffect.size()));
-                        entityInRange.setRevengeTarget(attackTarget);
-                        mob.setAttackTarget(attackTarget);
-                    }
+                    case 3:
+                        if (mob.getAttackTarget() == null)
+                        {
+                            LivingEntity attackTarget = entitiesToAffect.get(MathHelper.randomInt(0, entitiesToAffect.size() - 1));
+                            mob.setAttackTarget(attackTarget);
+                        }
+                    case 2:
+                        if (mob.getRevengeTarget() == null)
+                        {
+                            mob.setRevengeTarget(mob.getAttackTarget() != null ? mob.getAttackTarget()
+                                                                               : entitiesToAffect.get(MathHelper.randomInt(0, entitiesToAffect.size() - 1)));
+                        }
+
+                    case 1:
+                    default:
+                        mob.setAggroed(true);
                 }
             }
         }
+
     }
 }

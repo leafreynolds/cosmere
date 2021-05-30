@@ -15,16 +15,18 @@ import java.util.List;
 
 public class EntityHelper
 {
-    public static List<LivingEntity> getLivingEntitiesInRange(LivingEntity livingEntity, int range, boolean includeSelf)
+    public static List<LivingEntity> getLivingEntitiesInRange(LivingEntity selfEntity, int range, boolean includeSelf)
     {
-        AxisAlignedBB areaOfEffect = new AxisAlignedBB(livingEntity.getPosition());
-        areaOfEffect = areaOfEffect.expand(range, range, range);
+        AxisAlignedBB areaOfEffect = new AxisAlignedBB(selfEntity.getPosition());
+        areaOfEffect = areaOfEffect.grow(range, range, range);
 
-        List<LivingEntity> entitiesFound = livingEntity.world.getEntitiesWithinAABB(LivingEntity.class, areaOfEffect);
+        List<LivingEntity> entitiesFound = selfEntity.world.getEntitiesWithinAABB(LivingEntity.class, areaOfEffect);
 
-        if (!includeSelf && entitiesFound.contains(livingEntity))
+        if (!includeSelf)
         {
-            entitiesFound.remove(livingEntity);
+            //removes self entity if it exists in the list
+            //otherwise list unchanged
+            entitiesFound.remove(selfEntity);
         }
 
         return entitiesFound;

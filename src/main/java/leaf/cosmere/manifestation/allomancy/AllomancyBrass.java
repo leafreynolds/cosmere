@@ -24,27 +24,33 @@ public class AllomancyBrass extends AllomancyBase
     @Override
     protected void performEffect(ISpiritweb data)
     {
-        LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        int mode = data.getMode(manifestationType, getMetalType().getID());
 
-        if (isActiveTick)
+        //todo, replace x * mode with config based value
+        double allomanticStrength = getAllomanticStrength(data);
+
+        int range = (int) (allomanticStrength * mode);
+
+        List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
+
+        for (LivingEntity e : entitiesToAffect)
         {
-            int mode = data.getMode(manifestationType, getMetalType().getID());
-
-            int range = 5 * mode;
-
-            List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
-
-            for (LivingEntity e : entitiesToAffect)
+            if (e instanceof MobEntity)
             {
-                //stop angry targets from attacking things
-                e.setRevengeTarget(null);
+                MobEntity mob = (MobEntity) e;
+                mob.setNoAI(mode == 3 && allomanticStrength > 15);
 
-                if (livingEntity instanceof MobEntity)
+                switch (mode)
                 {
-                    MobEntity mob = (MobEntity) livingEntity;
-                    mob.setAggroed(false);
-                    mob.setAttackTarget(null);
+                    case 3:
+                        mob.setAttackTarget(null);
+                    case 2:
+                        mob.setAggroed(false);
+                    case 1:
+                    default:
+                        //stop angry targets from attacking things
+                        e.setRevengeTarget(null);
+
                 }
             }
         }
