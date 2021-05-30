@@ -42,6 +42,7 @@ public class ItemsRegistry
     public static final RegistryObject<net.minecraft.item.Item> MIST_CLOAK = ITEMS.register("mist_cloak", () -> createItem(new ElytraItem(PropTypes.Items.ONE.get())));
     public static final RegistryObject<net.minecraft.item.Item> OBSIDIAN_DAGGER = ITEMS.register("obsidian_dagger", () -> createItem(new SwordItem(ItemTier.DIAMOND, 2, -1.4F, PropTypes.Items.ONE.get().rarity(Rarity.UNCOMMON))));
     public static final RegistryObject<net.minecraft.item.Item> NIGHT_BLOOD = ITEMS.register("night_blood", () -> createItem(new ShardbladeItem(ItemTier.NETHERITE, 10, -1.4F, PropTypes.Items.ONE.get().setNoRepair().rarity(Rarity.EPIC))));
+    public static final RegistryObject<net.minecraft.item.Item> TEST_BLADE = ITEMS.register("test_blade", () -> createItem(new ShardbladeItem(ItemTier.NETHERITE, 10, -1.4F, PropTypes.Items.ONE.get().setNoRepair().rarity(Rarity.EPIC))));
 
     public static final RegistryObject<net.minecraft.item.Item> COPPER_CLIP = ITEMS.register("copper_clip", () -> createItem(new MetalNuggetItem(Metals.MetalType.COPPER)));
     public static final RegistryObject<net.minecraft.item.Item> GOLD_BOXING = ITEMS.register("gold_boxing", () -> createItem(new MetalNuggetItem(Metals.MetalType.GOLD)));

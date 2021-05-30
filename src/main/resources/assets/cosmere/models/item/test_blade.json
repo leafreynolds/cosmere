@@ -1,0 +1,98 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "forge:item/default",
+	"textures": {
+		"0": "cosmere:item/models/shardblade_model/shard_test",
+		"particle": "cosmere:item/models/shardblade_model/shard_test"
+	},
+	"elements": [
+		{
+			"name": "blade",
+			"from": [7.5, 10, 7],
+			"to": [8.5, 29, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -0.125, 8.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 1, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 1, 3], "texture": "#0"},
+				"down": {"uv": [0, 0, 1, 3], "texture": "#0"}
+			}
+		},
+		{
+			"name": "pommel",
+			"from": [6.5, 0, 7],
+			"to": [9.5, 2, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -0.125, 8.5]},
+			"faces": {
+				"north": {"uv": [13, 14, 16, 16], "texture": "#0"},
+				"east": {"uv": [13, 14, 16, 16], "texture": "#0"},
+				"south": {"uv": [13, 14, 16, 16], "texture": "#0"},
+				"west": {"uv": [13, 14, 16, 16], "texture": "#0"},
+				"up": {"uv": [13, 11, 16, 14], "texture": "#0"},
+				"down": {"uv": [13, 11, 16, 14], "texture": "#0"}
+			}
+		},
+		{
+			"name": "handguard",
+			"from": [6.5, 9, 7],
+			"to": [9.5, 10, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -0.125, 8.5]},
+			"faces": {
+				"north": {"uv": [13, 0, 16, 1], "texture": "#0"},
+				"east": {"uv": [13, 0, 16, 1], "texture": "#0"},
+				"south": {"uv": [13, 0, 16, 1], "texture": "#0"},
+				"west": {"uv": [13, 0, 16, 1], "texture": "#0"},
+				"up": {"uv": [13, 0, 16, 3], "texture": "#0"},
+				"down": {"uv": [13, 0, 16, 3], "texture": "#0"}
+			}
+		},
+		{
+			"name": "handle",
+			"from": [7.5, 2, 8],
+			"to": [8.5, 9, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -0.125, 8.5]},
+			"faces": {
+				"north": {"uv": [5, 8, 6, 15], "texture": "#0"},
+				"east": {"uv": [5, 8, 6, 15], "texture": "#0"},
+				"south": {"uv": [5, 8, 6, 15], "texture": "#0"},
+				"west": {"uv": [5, 8, 6, 15], "texture": "#0"},
+				"up": {"uv": [5, 8, 6, 9], "texture": "#0"},
+				"down": {"uv": [5, 9, 6, 10], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [-0.5, 0.75, 0]
+		},
+		"thirdperson_lefthand": {
+			"translation": [-0.5, 0.75, 0]
+		},
+		"ground": {
+			"translation": [0, 4, 0]
+		},
+		"gui": {
+			"rotation": [-70, 53, 60],
+			"translation": [1, -3, 0],
+			"scale": [0.65234, 0.65234, 0.65234]
+		},
+		"head": {
+			"rotation": [50, 0, 0],
+			"translation": [0, 2.75, 0]
+		},
+		"fixed": {
+			"rotation": [-54, 53, 60],
+			"translation": [1, -3, -2],
+			"scale": [0.78, 0.78, 0.78]
+		}
+	},
+	"groups": [
+		{
+			"name": "blade",
+			"origin": [8, 8, 8],
+			"children": [0, 1, 2, 3]
+		}
+	]
+}
