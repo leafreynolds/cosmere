@@ -161,7 +161,8 @@ public class AllomancyIronSteel extends AllomancyBase
         for (BlockPos blockPos : blocks)
         {
             //if the entity is in range of being able to push
-            if (blockPos.withinDistance(living.getPositionVec(), (strength * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getMetalType().getID())) * 0.1f))
+            double distance = (strength * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getMetalType().getID()));// * 0.1f;
+            if (blockPos.withinDistance(living.getPositionVec(), distance))
             {
                 direction = VectorHelper.getDirection(
                         new Vector3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()),
