@@ -8,10 +8,12 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.registry.*;
 import leaf.cosmere.utils.helpers.VectorHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.*;
 import net.minecraft.state.properties.NoteBlockInstrument;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -42,6 +44,13 @@ public class AllomancyBronze extends AllomancyBase
 
             for (LivingEntity e : entitiesToCheckForAllomancy)
             {
+                EffectInstance copperEffect = e.getActivePotionEffect(EffectsRegistry.ALLOMANTIC_COPPER.get());
+                if (copperEffect != null && copperEffect.getDuration() > 0)
+                {
+                    //skip clouded entities.
+                    continue;
+                }
+
                 SpiritwebCapability.get(e).ifPresent(iSpiritweb ->
                 {
                     //check if any allomantic powers are active
