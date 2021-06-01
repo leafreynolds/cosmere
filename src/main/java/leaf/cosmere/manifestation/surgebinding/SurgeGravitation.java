@@ -13,12 +13,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class WindrunnerRadiant extends SurgebindingBase
+public class SurgeGravitation extends SurgebindingBase
 {
-    public WindrunnerRadiant(int color)
+    public SurgeGravitation(int color)
     {
         super(color);
     }
+
+    //gravitational attraction
+
 
     @SubscribeEvent
     public void onLivingHurtEvent(LivingHurtEvent event)
