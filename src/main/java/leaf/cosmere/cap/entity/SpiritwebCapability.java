@@ -268,17 +268,6 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public void renderWorldEffects(RenderWorldLastEvent event)
     {
-        /*for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
-        {
-            //don't tick powers that the user doesn't have
-            //don't tick powers that are not active
-            if (hasManifestation(manifestation.getManifestationType(), manifestation.getPowerID())
-                    && manifestationActive(manifestation.getManifestationType(), manifestation.getPowerID()))
-            {
-                manifestation.renderWorldEffects(event, this);
-            }
-        }*/
-
         Multimap<Color, List<Vector3d>> linesToDrawByColor = LinkedHashMultimap.create();
 
         //if user has iron or steel manifestation
@@ -298,7 +287,7 @@ public class SpiritwebCapability implements ISpiritweb
         }
         if (linesToDrawByColor.size() > 0)
         {
-            Vector3d originPoint = getLiving().getPositionVec().add(0, 1, 0);
+            Vector3d originPoint = getLiving().getClientEyePosition(Minecraft.getInstance().getRenderPartialTicks()).add(0, -1, 0);
             for (Map.Entry<Color, List<Vector3d>> entry : linesToDrawByColor.entries())
             {
                 //For all found things, draw the line
