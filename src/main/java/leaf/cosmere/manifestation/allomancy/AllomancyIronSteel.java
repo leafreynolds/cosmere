@@ -76,7 +76,7 @@ public class AllomancyIronSteel extends AllomancyBase
         if (getKeyBinding().isKeyDown())
         {
             Minecraft mc = Minecraft.getInstance();
-            RayTraceResult ray = mc.objectMouseOver;
+            RayTraceResult ray = cap.getLiving().pick(getRange(cap),0, false);
 
             if (ray.getType() == RayTraceResult.Type.BLOCK && !blocks.contains(((BlockRayTraceResult) ray).getPos()))
             {
@@ -174,14 +174,20 @@ public class AllomancyIronSteel extends AllomancyBase
         living.velocityChanged = true;
     }
 
+    private static List<Vector3d> found = new ArrayList<>();
 
     @OnlyIn(Dist.CLIENT)
     public static List<Vector3d> getDrawLines(int range)
     {
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity playerEntity = mc.player;
+        //only update box list every so often
+        if (playerEntity.ticksExisted % 5 != 0 && found.size() > 0)
+        {
+            return found;
+        }
 
-        List<Vector3d> found = new ArrayList<>();
+        found.clear();
 
         //find all the things that we want to draw a line to from the player
 
