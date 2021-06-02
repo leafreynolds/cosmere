@@ -7,7 +7,7 @@ package leaf.cosmere.properties;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraftforge.common.ToolType;
 
 import java.util.function.Supplier;
@@ -23,6 +23,15 @@ public class PropTypes
 
     public static class Items
     {
+
+        public static final Supplier<Item.Properties> SHARDBLADE = () -> new Item.Properties()
+                .group(CosmereItemGroups.ITEMS)
+                .maxStackSize(1)
+                .defaultMaxDamage(0)
+                .maxDamage(0)
+                .setNoRepair()
+                .rarity(Rarity.EPIC);
+
 
         public static final Supplier<Item.Properties> ONE = () -> new Item.Properties().group(CosmereItemGroups.ITEMS).maxStackSize(1);
 

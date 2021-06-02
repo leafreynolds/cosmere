@@ -13,4 +13,10 @@ public class ShardbladeItem extends SwordItem
     {
         super(tier, attackDamageIn, attackSpeedIn, builderIn);
     }
+
+    @Override
+    public boolean isImmuneToFire()
+    {
+        return true;
+    }
 }
