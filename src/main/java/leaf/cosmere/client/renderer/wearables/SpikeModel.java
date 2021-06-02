@@ -9,7 +9,7 @@
  *
  */
 
-package leaf.cosmere.client.render.model;
+package leaf.cosmere.client.renderer.wearables;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

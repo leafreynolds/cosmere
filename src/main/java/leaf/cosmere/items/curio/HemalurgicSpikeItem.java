@@ -10,7 +10,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.client.render.model.SpikeModel;
+import leaf.cosmere.client.renderer.wearables.SpikeModel;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.Metalmind;
 import leaf.cosmere.manifestation.AManifestation;

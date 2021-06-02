@@ -6,11 +6,12 @@ package leaf.cosmere.client;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.client.gui.SpriteIconPositioning;
+import leaf.cosmere.client.renderer.entity.*;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.registry.*;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -22,6 +23,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -50,6 +52,8 @@ public class ClientSetup
             RenderType cutoutMipped = RenderType.getCutoutMipped();
             RenderTypeLookup.setRenderLayer(metalType.getOreBlock(), cutoutMipped);
         }
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.SPREN_FIRE.get(), SprenFlameRenderer::new);
 
         LogHelper.info("Client setup complete!");
     }

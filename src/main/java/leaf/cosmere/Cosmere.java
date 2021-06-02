@@ -49,6 +49,7 @@ public class Cosmere
         LootModifierRegistry.LOOT_MODIFIERS.register(modBus);
         ManifestationRegistry.MANIFESTATIONS.register(modBus);
         AttributesRegistry.ATTRIBUTES.register(modBus);
+        EntityRegistry.ENTITIES.register(modBus);
 
         FeatureRegistry.FEATURES.register(modBus);
         RecipeRegistry.SPECIAL_RECIPES.register(modBus);
@@ -66,6 +67,7 @@ public class Cosmere
         event.enqueueWork(() ->
         {
             FeatureRegistry.registerConfiguredFeatures();
+            EntityRegistry.PrepareEntityAttributes();
         });
 
         //Entity Caps
