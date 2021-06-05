@@ -33,6 +33,9 @@ public class ChromiumStoreEffect extends FeruchemyEffectBase
 
     public void onLootingLevelEvent(LootingLevelEvent event)
     {
+        if (event.getDamageSource() == null)
+            return;
+    
         boolean isRemote = event.getEntityLiving().world.isRemote;
         boolean entityNotLiving = !(event.getDamageSource().getTrueSource() instanceof LivingEntity);
 
