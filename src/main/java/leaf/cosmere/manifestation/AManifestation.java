@@ -22,6 +22,8 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
 
     public abstract void onModeChange(ISpiritweb data);
 
+    public abstract int getMode(ISpiritweb data);
+
     public abstract int modeMax(ISpiritweb data);
 
     public abstract int modeMin(ISpiritweb data);
@@ -29,6 +31,8 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
     public abstract boolean modeWraps(ISpiritweb data);
 
     public abstract void tick(ISpiritweb data);
+
+    public abstract boolean isActive(ISpiritweb data);
 
     public TranslationTextComponent translation()
     {

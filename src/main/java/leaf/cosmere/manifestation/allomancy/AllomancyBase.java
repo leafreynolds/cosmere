@@ -61,29 +61,17 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         return 0;
     }
 
-
     @Override
-    public void tick(ISpiritweb data)
+    public boolean isActive(ISpiritweb data)
     {
         int mode = data.getMode(manifestationType, metalType.getID());
-
-        //don't check every tick.
-        LivingEntity livingEntity = data.getLiving();
-
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
-
-
-        if (mode <= 0)
-        {
-            return;
-        }
 
         //make sure the user can afford the cost of burning this metal
         while (mode > 0)
         {
             //if not then try reduce the amount that they are burning
 
-            if (!data.adjustIngestedMetal(metalType, -mode, isActiveTick))
+            if (!data.adjustIngestedMetal(metalType, -mode, false))
             {
                 mode--;
                 //set that mode back to the capability.
@@ -91,14 +79,32 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
                 //if it hits zero then return out
                 if (mode == 0)
                 {
-                    return;
+                    break;
                 }
 
                 //try again at a lower burn rate.
                 continue;
             }
-            break;
+            return super.isActive(data) && data.adjustIngestedMetal(metalType, -mode, false);
         }
+
+        return false;
+    }
+
+    @Override
+    public void tick(ISpiritweb data)
+    {
+        int mode = data.getMode(manifestationType, metalType.getID());
+
+        if (!isActive(data))
+        {
+            return;
+        }
+
+        //don't check every tick.
+        LivingEntity livingEntity = data.getLiving();
+        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        data.adjustIngestedMetal(metalType, -mode, isActiveTick);
 
         //if we get to this point, we are in an active burn state.
         //check for compound.
@@ -144,7 +150,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 
     public int getRange(ISpiritweb cap)
     {
-        if (!cap.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()))
+        if (!isActive(cap))
             return 0;
 
         //get allomantic strength

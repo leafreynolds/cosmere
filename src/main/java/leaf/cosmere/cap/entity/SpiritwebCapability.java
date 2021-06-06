@@ -168,6 +168,7 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public void tick()
     {
+        //if server
         if (!livingEntity.world.isRemote)
         {
             //Login setup
@@ -182,7 +183,7 @@ public class SpiritwebCapability implements ISpiritweb
             {
                 //don't tick powers that the user doesn't have
                 //don't tick powers that are not active
-                if (manifestationActive(manifestation.getManifestationType(), manifestation.getPowerID()))
+                if (manifestation.isActive(this))
                 {
                     manifestation.tick(this);
                 }
@@ -217,17 +218,16 @@ public class SpiritwebCapability implements ISpiritweb
             }
 
         }
-        else
+        else//if client
         {
             AManifestation iron = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
-
-            if (manifestationActive(iron.getManifestationType(), iron.getPowerID()))
+            if (iron.isActive(this))
             {
                 ((AllomancyIronSteel) iron).performEffect(this);
             }
 
             AManifestation steel = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
-            if (manifestationActive(steel.getManifestationType(), steel.getPowerID()))
+            if (steel.isActive(this))
             {
                 ((AllomancyIronSteel) steel).performEffect(this);
             }
@@ -511,6 +511,7 @@ public class SpiritwebCapability implements ISpiritweb
     {
         List<AManifestation> list = new ArrayList<AManifestation>();
 
+        //todo intelligently handle multiple powers
         for (int i = 0; i < 16; i++)
         {
             for (ManifestationTypes manifestationTypes : ManifestationTypes.values())

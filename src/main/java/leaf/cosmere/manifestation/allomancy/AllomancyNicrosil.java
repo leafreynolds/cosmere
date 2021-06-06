@@ -61,7 +61,7 @@ public class AllomancyNicrosil extends AllomancyBase
                 if (itemInHand.isEmpty())
                 {
                     //if manifestation is active and has nicrosil metal to burn
-                    if (iSpiritweb.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, Metals.MetalType.NICROSIL.getID()))
+                    if (isActive(iSpiritweb))
                     {
                         //valid set up found.
                         EffectInstance newEffect = EffectsHelper.getNewEffect(

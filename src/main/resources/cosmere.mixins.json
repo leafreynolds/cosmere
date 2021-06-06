@@ -8,7 +8,8 @@
   ],
   "client": [
     "GameRendererMixin",
-    "EffectInstanceMixin"
+    "EffectInstanceMixin",
+    "EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

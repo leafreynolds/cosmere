@@ -43,6 +43,12 @@ public class ManifestationBase extends AManifestation
     }
 
     @Override
+    public int getMode(ISpiritweb data)
+    {
+        return data.getMode(manifestationType, getPowerID());
+    }
+
+    @Override
     public int modeMax(ISpiritweb data)
     {
         return 0;
@@ -64,5 +70,11 @@ public class ManifestationBase extends AManifestation
     public void tick(ISpiritweb data)
     {
 
+    }
+
+    @Override
+    public boolean isActive(ISpiritweb data)
+    {
+        return getMode(data) != 0;
     }
 }
