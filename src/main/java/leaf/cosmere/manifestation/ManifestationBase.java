@@ -75,6 +75,6 @@ public class ManifestationBase extends AManifestation
     @Override
     public boolean isActive(ISpiritweb data)
     {
-        return getMode(data) != 0;
+        return data.canTickManifestation(this.manifestationType, this.getPowerID());
     }
 }

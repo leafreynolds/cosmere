@@ -11,13 +11,11 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.*;
 import leaf.cosmere.utils.helpers.VectorHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.*;
 import net.minecraft.state.properties.NoteBlockInstrument;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
@@ -68,7 +66,7 @@ public class AllomancyBronze extends AllomancyBase
                         int metalTypeID = metalType.getID();
                         //todo decide what to do about this part
                         //since this is running on the server specifically.
-                        if (targetSpiritweb.manifestationActive(Manifestations.ManifestationTypes.ALLOMANCY, metalTypeID))
+                        if (targetSpiritweb.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY, metalTypeID))
                         {
                             //found one
 

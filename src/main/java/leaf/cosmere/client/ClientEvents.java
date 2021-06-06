@@ -77,7 +77,7 @@ public class ClientEvents
             if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_TOGGLE))
             {
                 //if crouching, only turn off.
-                if (player.isCrouching() && spiritweb.selectedManifestationActive())
+                if (player.isCrouching() && spiritweb.canTickSelectedManifestation())
                 {
                     Network.sendToServer(new DeactivateCurrentManifestationsMessage());
                 }

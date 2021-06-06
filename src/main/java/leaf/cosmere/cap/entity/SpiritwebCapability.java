@@ -446,7 +446,7 @@ public class SpiritwebCapability implements ISpiritweb
     }
 
     @Override
-    public boolean manifestationActive(ManifestationTypes manifestationType, int powerID)
+    public boolean canTickManifestation(ManifestationTypes manifestationType, int powerID)
     {
         if (!hasManifestation(manifestationType, powerID))
         {
@@ -464,14 +464,14 @@ public class SpiritwebCapability implements ISpiritweb
     }
 
     @Override
-    public boolean selectedManifestationActive()
+    public boolean canTickSelectedManifestation()
     {
         if (selectedManifestation == null)
         {
             return false;
         }
 
-        return manifestationActive(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID());
+        return canTickManifestation(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID());
     }
 
     @Override

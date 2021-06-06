@@ -46,9 +46,9 @@ public interface ISpiritweb extends INBTSerializable<CompoundNBT>
 
     AManifestation manifestation(Manifestations.ManifestationTypes powerType, int powerID);
 
-    boolean manifestationActive(Manifestations.ManifestationTypes powerType, int powerID);
+    boolean canTickManifestation(Manifestations.ManifestationTypes powerType, int powerID);
 
-    boolean selectedManifestationActive();
+    boolean canTickSelectedManifestation();
 
     int nextMode(Manifestations.ManifestationTypes powerType, int powerID);
 

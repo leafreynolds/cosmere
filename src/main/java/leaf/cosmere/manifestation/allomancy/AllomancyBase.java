@@ -64,6 +64,11 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
     @Override
     public boolean isActive(ISpiritweb data)
     {
+        return super.isActive(data) && isMetalBurning(data);
+    }
+
+    public boolean isMetalBurning(ISpiritweb data)
+    {
         int mode = data.getMode(manifestationType, metalType.getID());
 
         //make sure the user can afford the cost of burning this metal
@@ -71,7 +76,11 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         {
             //if not then try reduce the amount that they are burning
 
-            if (!data.adjustIngestedMetal(metalType, -mode, false))
+            if (data.adjustIngestedMetal(metalType, -mode, false))
+            {
+                return true;
+            }
+            else
             {
                 mode--;
                 //set that mode back to the capability.
@@ -83,11 +92,8 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
                 }
 
                 //try again at a lower burn rate.
-                continue;
             }
-            return super.isActive(data) && data.adjustIngestedMetal(metalType, -mode, false);
         }
-
         return false;
     }
 

@@ -153,14 +153,14 @@ public class SpiritwebMenu extends Screen
 
                         case INACTIVE:
                             //deactivate current
-                            if (spiritweb.selectedManifestationActive())
+                            if (spiritweb.canTickSelectedManifestation())
                             {
                                 Network.sendToServer(new DeactivateCurrentManifestationsMessage());
                             }
                             break;
                         case ACTIVE:
                             //activate current
-                            if (!spiritweb.selectedManifestationActive())
+                            if (!spiritweb.canTickSelectedManifestation())
                             {
                                 //Network.sendToServer(new ToggleManifestationMessage());
                             }
@@ -295,7 +295,7 @@ public class SpiritwebMenu extends Screen
 
         //todo buttons
         //todo button icons
-        sidedMenuButtons.add(spiritweb.selectedManifestationActive()
+        sidedMenuButtons.add(spiritweb.canTickSelectedManifestation()
                              ? new SidedMenuButton("gui.cosmere.other.inactive", ButtonAction.INACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.off, Direction.WEST)
                              : new SidedMenuButton("gui.cosmere.other.active", ButtonAction.ACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.on, Direction.WEST));
 
