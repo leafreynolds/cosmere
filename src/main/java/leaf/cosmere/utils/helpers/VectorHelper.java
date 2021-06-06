@@ -5,7 +5,6 @@
 package leaf.cosmere.utils.helpers;
 
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 
@@ -79,5 +78,31 @@ public class VectorHelper
                 toVector_z * multiplicationFactor);
     }
 
+
+    // Returns a copy of /vector/ with its magnitude clamped to /maxLength/.
+    public static Vector3d ClampMagnitude(Vector3d vector, float maxLength)
+    {
+        double sqrMag = SqrMagnitude(vector);
+        if (sqrMag > maxLength * maxLength)
+        {
+            float mag = (float) Math.sqrt(sqrMag);
+            //these intermediate variables force the intermediate result to be
+            //of float precision. without this, the intermediate result can be of higher
+            //precision, which changes behavior.
+            double normalized_x = vector.x / mag;
+            double normalized_y = vector.y / mag;
+            double normalized_z = vector.z / mag;
+            return new Vector3d(normalized_x * maxLength,
+                    normalized_y * maxLength,
+                    normalized_z * maxLength);
+        }
+        return vector;
+    }
+
+
+    public static double SqrMagnitude(Vector3d vector)
+    {
+        return vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
+    }
 
 }

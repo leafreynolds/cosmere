@@ -72,10 +72,6 @@ public class SyncPushPullMessage
                             spiritweb.pullBlocks.addAll(messageBlocks);
                         }
                     });
-
-
-            LogHelper.info("pullBlocks updated");
-
         }));
         cont.get().setPacketHandled(true);
     }

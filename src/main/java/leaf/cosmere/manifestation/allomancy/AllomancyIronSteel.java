@@ -8,12 +8,12 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.utils.helpers.CodecHelper;
-import leaf.cosmere.utils.helpers.LogHelper;
-import leaf.cosmere.utils.helpers.VectorHelper;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.SyncPushPullMessage;
+import leaf.cosmere.utils.helpers.CodecHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.VectorHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -76,7 +76,7 @@ public class AllomancyIronSteel extends AllomancyBase
         if (getKeyBinding().isKeyDown())
         {
             Minecraft mc = Minecraft.getInstance();
-            RayTraceResult ray = cap.getLiving().pick(getRange(cap),0, false);
+            RayTraceResult ray = cap.getLiving().pick(getRange(cap), 0, false);
 
             if (ray.getType() == RayTraceResult.Type.BLOCK && !blocks.contains(((BlockRayTraceResult) ray).getPos()))
             {
@@ -142,12 +142,19 @@ public class AllomancyIronSteel extends AllomancyBase
 
     private void performEffectServer(ISpiritweb cap)
     {
+        if (cap.getLiving().ticksExisted % 3 == 0)
+        {
+            return;
+        }
+
         //perform the entity move thing.
         SpiritwebCapability data = (SpiritwebCapability) cap;
         blocks = isPush ? data.pushBlocks : data.pullBlocks;
         entities = isPush ? data.pushEntities : data.pullEntities;
 
-        if (blocks.size() == 0)
+        int blockListCount = blocks.size();
+
+        if (blockListCount == 0)
         {
             return;
         }
@@ -158,17 +165,48 @@ public class AllomancyIronSteel extends AllomancyBase
 
         double strength = getAllomanticStrength(cap);
 
-        for (BlockPos blockPos : blocks)
+        for (int i = blockListCount - 1; i >= 0; i--)
         {
-            //if the entity is in range of being able to push
-            double distance = (strength * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getMetalType().getID()));// * 0.1f;
-            if (blockPos.withinDistance(living.getPositionVec(), distance))
+            BlockPos blockPos = blocks.get(i);
+            if (!isPush && blockPos.manhattanDistance(living.getPosition()) < 2)
             {
+                //stop shoving the user into the block
+                continue;
+            }
+
+
+            //if the entity is in range of being able to push or pull from
+            double maxDistance = (strength * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getMetalType().getID()));// * 0.1f;
+            if (blockPos.withinDistance(living.getPositionVec(), maxDistance))
+            {
+                Vector3d blockCenter = Vector3d.copyCentered(blockPos);
+
                 direction = VectorHelper.getDirection(
-                        new Vector3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()),
+                        blockCenter,
                         living.getPositionVec(),
                         (isPush ? -1f : 1f) * renderPartialTicks);
-                living.setMotion(living.getMotion().add(direction.normalize()));
+
+                //todo, clean up all the unnecessary calculations once we find what feels good at run time
+                Vector3d normalize = direction.normalize();
+
+                double shortenFactor = 0.2;
+                Vector3d add = living.getMotion().add(normalize.mul(shortenFactor, shortenFactor, shortenFactor));
+
+                //don't let the motion go crazy large
+                living.setMotion(VectorHelper.ClampMagnitude(add, 1));
+
+                //let people get damaged but not too much?
+                //todo check what a good max fall distance would be
+                //todo add to config
+                if (living.fallDistance > 3)
+                {
+                    living.fallDistance = Math.min(living.fallDistance, 3);
+                }
+            }
+            else
+            {
+                //remove blocks that are out of distance
+                blocks.remove(i);
             }
         }
         living.velocityChanged = true;
