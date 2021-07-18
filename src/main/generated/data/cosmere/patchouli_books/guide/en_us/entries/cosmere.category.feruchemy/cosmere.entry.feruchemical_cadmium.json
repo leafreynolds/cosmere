@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.feruchemical_cadmium",
+  "category": "cosmere.category.feruchemy",
+  "icon": "cosmere:cadmium_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.gasper.description"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 12
+}

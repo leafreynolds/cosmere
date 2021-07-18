@@ -30,14 +30,14 @@ import java.util.Collection;
 import java.util.Optional;
 
 /*
-*   All hope abandon ye who enter here.
-*            ,,
-*          W ()
-*          |-><  v
-*          | )(\/
-*   You've found the monolith metal script!
-*   It ain't pretty, but I also don't really care :D
-*/
+ *   All hope abandon ye who enter here.
+ *            ,,
+ *          W ()
+ *          |-><  v
+ *          | )(\/
+ *   You've found the monolith metal script!
+ *   It ain't pretty, but I also don't really care :D -Leaf
+ */
 
 public class Metals
 {
@@ -144,8 +144,8 @@ public class Metals
                 case LERASATIUM:
                 case HARMONIUM:
                 case NICKEL:
-                case SILVER:
                 case LEAD:
+                case SILVER:
                     return false;
                 default:
                     return true;
@@ -176,13 +176,13 @@ public class Metals
                 case ALUMINUM:
                 case CADMIUM:
                 case CHROMIUM:
-                    //case IRON:
+                    //case IRON: // covered by minecraft
                 case NICKEL:
                 case COPPER:
                 case ZINC:
                 case SILVER:
                 case TIN:
-                    //case GOLD:
+                    //case GOLD: // covered by minecraft
                 case LEAD:
                     return true;
                 default:
@@ -261,6 +261,7 @@ public class Metals
         {
             return (HemalurgicSpikeItem) ItemsRegistry.METAL_SPIKE.get(this).get();
         }
+
         public MetalRawOreItem getRawMetalItem()
         {
             if (this.isAlloy())
@@ -277,7 +278,7 @@ public class Metals
 
         public MetalBlock getBlock()
         {
-            return (MetalBlock) BlocksRegistry.METAL_BLOCKS.get(this).get();
+            return BlocksRegistry.METAL_BLOCKS.get(this).get();
         }
 
         public OreBlock getOreBlock()
@@ -303,86 +304,58 @@ public class Metals
 
         public Color getColor()
         {
-            Color color;
-
             switch (this)
             {
                 default:
                 case IRON:
-                    color = MetalColor.IRON;
-                    break;
+                    return MetalColor.IRON;
                 case STEEL:
-                    color = MetalColor.STEEL;
-                    break;
+                    return MetalColor.STEEL;
                 case TIN:
-                    color = MetalColor.TIN;
-                    break;
+                    return MetalColor.TIN;
                 case PEWTER:
-                    color = MetalColor.PEWTER;
-                    break;
+                    return MetalColor.PEWTER;
                 case ALUMINUM:
-                    color = MetalColor.ALUMINUM;
-                    break;
+                    return MetalColor.ALUMINUM;
                 case DURALUMIN:
-                    color = MetalColor.DURALUMIN;
-                    break;
+                    return MetalColor.DURALUMIN;
                 case CHROMIUM:
-                    color = MetalColor.CHROMIUM;
-                    break;
+                    return MetalColor.CHROMIUM;
                 case NICROSIL:
-                    color = MetalColor.NICROSIL;
-                    break;
+                    return MetalColor.NICROSIL;
                 case ZINC:
-                    color = MetalColor.ZINC;
-                    break;
+                    return MetalColor.ZINC;
                 case BRASS:
-                    color = MetalColor.BRASS;
-                    break;
+                    return MetalColor.BRASS;
                 case COPPER:
-                    color = MetalColor.COPPER;
-                    break;
+                    return MetalColor.COPPER;
                 case BRONZE:
-                    color = MetalColor.BRONZE;
-                    break;
+                    return MetalColor.BRONZE;
                 case GOLD:
-                    color = MetalColor.GOLD;
-                    break;
+                    return MetalColor.GOLD;
                 case ELECTRUM:
-                    color = MetalColor.ELECTRUM;
-                    break;
+                    return MetalColor.ELECTRUM;
                 case CADMIUM:
-                    color = MetalColor.CADMIUM;
-                    break;
+                    return MetalColor.CADMIUM;
                 case BENDALLOY:
-                    color = MetalColor.BENDALLOY;
-                    break;
+                    return MetalColor.BENDALLOY;
                 case LERASIUM:
-                    color = MetalColor.LERASIUM;
-                    break;
+                    return MetalColor.LERASIUM;
                 case ATIUM:
-                    color = MetalColor.ATIUM;
-                    break;
+                    return MetalColor.ATIUM;
                 case MALATIUM:
-                    color = MetalColor.MALATIUM;
-                    break;
+                    return MetalColor.MALATIUM;
                 case LERASATIUM:
-                    color = MetalColor.LERASATIUM;
-                    break;
+                    return MetalColor.LERASATIUM;
                 case HARMONIUM:
-                    color = MetalColor.HARMONIUM;
-                    break;
+                    return MetalColor.HARMONIUM;
                 case NICKEL:
-                    color = MetalColor.NICKEL;
-                    break;
+                    return MetalColor.NICKEL;
                 case LEAD:
-                    color = MetalColor.LEAD;
-                    break;
+                    return MetalColor.LEAD;
                 case SILVER:
-                    color = MetalColor.SILVER;
-                    break;
+                    return MetalColor.SILVER;
             }
-
-            return color;
         }
 
         public int getColorValue()
@@ -392,73 +365,49 @@ public class Metals
 
         public String getFerringName()
         {
-            String name;
-
             switch (this)
             {
                 case IRON:
-                    name = FerringNames.IRON;
-                    break;
+                    return FerringNames.IRON;
                 case STEEL:
-                    name = FerringNames.STEEL;
-                    break;
+                    return FerringNames.STEEL;
                 case TIN:
-                    name = FerringNames.TIN;
-                    break;
+                    return FerringNames.TIN;
                 case PEWTER:
-                    name = FerringNames.PEWTER;
-                    break;
+                    return FerringNames.PEWTER;
                 case ALUMINUM:
-                    name = FerringNames.ALUMINUM;
-                    break;
+                    return FerringNames.ALUMINUM;
                 case DURALUMIN:
-                    name = FerringNames.DURALUMIN;
-                    break;
+                    return FerringNames.DURALUMIN;
                 case CHROMIUM:
-                    name = FerringNames.CHROMIUM;
-                    break;
+                    return FerringNames.CHROMIUM;
                 case NICROSIL:
-                    name = FerringNames.NICROSIL;
-                    break;
+                    return FerringNames.NICROSIL;
                 case ZINC:
-                    name = FerringNames.ZINC;
-                    break;
+                    return FerringNames.ZINC;
                 case BRASS:
-                    name = FerringNames.BRASS;
-                    break;
+                    return FerringNames.BRASS;
                 case COPPER:
-                    name = FerringNames.COPPER;
-                    break;
+                    return FerringNames.COPPER;
                 case BRONZE:
-                    name = FerringNames.BRONZE;
-                    break;
+                    return FerringNames.BRONZE;
                 case GOLD:
-                    name = FerringNames.GOLD;
-                    break;
+                    return FerringNames.GOLD;
                 case ELECTRUM:
-                    name = FerringNames.ELECTRUM;
-                    break;
+                    return FerringNames.ELECTRUM;
                 case CADMIUM:
-                    name = FerringNames.CADMIUM;
-                    break;
+                    return FerringNames.CADMIUM;
                 case BENDALLOY:
-                    name = FerringNames.BENDALLOY;
-                    break;
+                    return FerringNames.BENDALLOY;
                 case ATIUM:
-                    name = FerringNames.ATIUM;
-                    break;
+                    return FerringNames.ATIUM;
                 case LERASATIUM:
-                    name = FerringNames.ALL;
-                    break;
+                    return FerringNames.ALL;
                 default:
                 case LERASIUM:
                 case MALATIUM:
-                    name = "ferring_" + this.name().toLowerCase();
-                    break;
+                    return "ferring_" + this.name().toLowerCase();
             }
-
-
-            return name;
         }
 
         public boolean isPushMetal()
@@ -499,72 +448,68 @@ public class Metals
 
         public String getMistingName()
         {
-            String name;
-
             switch (this)
             {
                 case IRON:
-                    name = MistingNames.IRON;
-                    break;
+                    return MistingNames.IRON;
+
                 case STEEL:
-                    name = MistingNames.STEEL;
-                    break;
+                    return MistingNames.STEEL;
+
                 case TIN:
-                    name = MistingNames.TIN;
-                    break;
+                    return MistingNames.TIN;
+
                 case PEWTER:
-                    name = MistingNames.PEWTER;
-                    break;
+                    return MistingNames.PEWTER;
+
                 case ALUMINUM:
-                    name = MistingNames.ALUMINUM;
-                    break;
+                    return MistingNames.ALUMINUM;
+
                 case DURALUMIN:
-                    name = MistingNames.DURALUMIN;
-                    break;
+                    return MistingNames.DURALUMIN;
+
                 case CHROMIUM:
-                    name = MistingNames.CHROMIUM;
-                    break;
+                    return MistingNames.CHROMIUM;
+
                 case NICROSIL:
-                    name = MistingNames.NICROSIL;
-                    break;
+                    return MistingNames.NICROSIL;
+
                 case ZINC:
-                    name = MistingNames.ZINC;
-                    break;
+                    return MistingNames.ZINC;
+
                 case BRASS:
-                    name = MistingNames.BRASS;
-                    break;
+                    return MistingNames.BRASS;
+
                 case COPPER:
-                    name = MistingNames.COPPER;
-                    break;
+                    return MistingNames.COPPER;
+
                 case BRONZE:
-                    name = MistingNames.BRONZE;
-                    break;
+                    return MistingNames.BRONZE;
+
                 case GOLD:
-                    name = MistingNames.GOLD;
-                    break;
+                    return MistingNames.GOLD;
+
                 case ELECTRUM:
-                    name = MistingNames.ELECTRUM;
-                    break;
+                    return MistingNames.ELECTRUM;
+
                 case CADMIUM:
-                    name = MistingNames.CADMIUM;
-                    break;
+                    return MistingNames.CADMIUM;
+
                 case BENDALLOY:
-                    name = MistingNames.BENDALLOY;
-                    break;
+                    return MistingNames.BENDALLOY;
+
                 case ATIUM:
-                    name = MistingNames.ATIUM;
-                    break;
+                    return MistingNames.ATIUM;
+
                 case LERASIUM:
-                    name = MistingNames.ALL;
-                    break;
+                    return MistingNames.ALL;
+
                 default:
                 case MALATIUM:
                 case LERASATIUM:
-                    name = "misting_" + this.name().toLowerCase();
-                    break;
-            }
+                    return "misting_" + this.name().toLowerCase();
 
-            return name;
+            }
         }
 
         public Collection<MetalType> getHemalurgyStealWhitelist()
@@ -626,6 +571,124 @@ public class Metals
             return null;
         }
 
+        public String getHemalurgicUseString()
+        {
+            switch (this)
+            {
+                case IRON:
+                    return "Steals physical strength.";
+                case STEEL:
+                    return "Steals a physical allomantic power.";
+                //Iron//Steel//Tin//Pewter
+                case TIN:
+                    return "Steals senses.";
+                case PEWTER:
+                    return "Steals a physical feruchemical power.";
+                //Iron//Steel//Tin//Pewter
+                case ZINC:
+                    return "Steals emotional fortitude.";
+                case BRASS:
+                    return "Steals a cognitive feruchemical power.";
+                //Zinc//Brass//Copper//Bronze
+                case COPPER:
+                    return "Steals mental fortitude, memory, and intelligence.";
+                case BRONZE:
+                    return "Steals a Mental Allomantic power.";
+                //Zinc//Brass//Copper//Bronze
+                case ALUMINUM:
+                    return "Removes all powers.";
+                case DURALUMIN:
+                    return "Steals Connection/Identity.";
+                case CHROMIUM:
+                    return "Might steal destiny...";
+                case NICROSIL:
+                    return "Steals Investiture.";
+                case CADMIUM:
+                    return "Steals a Temporal Allomantic power.";
+                //Cadmium//Bendalloy//Gold//Electrum
+                case GOLD:
+                    return "Steals a Hybrid Feruchemical power.";
+                //Cadmium//Bendalloy//Gold//Electrum
+                case BENDALLOY:
+                    return "Steals a Spiritual Feruchemical power.";
+                //Chromium//Nicrosil//Aluminum//Duralumin
+                case ELECTRUM:
+                    return "Steals an Enhancement Allomantic power.";
+                //Chromium//Nicrosil//Aluminum//Duralumin
+                case ATIUM:
+                    return "Steals an Allomantic or Feruchemical power. Must be refined.";
+                case LERASIUM:
+                    return "Steals all powers...";
+            }
+
+            return "Unknown...";
+        }
+
+        public String GetAllomancyDescription()
+        {
+            switch (this)
+            {
+                case IRON:
+                    return "Iron is an Allomantic metal that, when burned, allows the user to Pull on various metal objects around them, pulling any of these objects towards them. " +
+                            "The burning of Iron is affected by normal laws of physics, so when the user pulls upon something with more weight, it will take more iron to move this, and if the user pulls upon something with more weight than themselves, they will be pulled through the air towards the aforementioned object. " +
+                            "The burning of Iron is used to fly, manipulate various objects, pull someone towards you (assuming that they have metal on their person), disarm somebody with a metal weapon, change the flight path of flying coins, and for a multitude of other things.";
+
+
+                case STEEL:
+                    return "Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to telekinetically push against a metal object." +
+                            "Conservation of momentum still applies here, so if you trying to push against blocks, expect to be thrown back in the opposite direction.\n" +
+                            "Clever allomancers use steel to allow themselves to fly through the air.";
+
+                case TIN:
+                    return "In allomancy, tin heightens the senses to super human levels. In this world, burning tin allows the allomancer to see clearly in the dark and detect where sounds are coming from.";
+
+                case PEWTER:
+                    return "Pewter is an allomatic metal that, when burnt, gives the user extreme strength, resistance and durability. Its uses include combat, moving quickly, surviving attacks and healing oneself." +
+                            "\n\nThe major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()";
+
+                case ZINC:
+                    return "In allomancy, zinc gives the ability to intensify the emotions of others, an ability called \"rioting\"";
+
+                case BRASS:
+                    return "In allomancy, brass gives the ability to \"soothe\" the emotions of others.";
+
+                case COPPER:
+                    return "Copper is an elemental Allomantic metal that allows one to hide Allomancy. A misting or mistborn burning copper generates a 'coppercloud' which hides Allomancy from being detected by Bronze. " +
+                            "The Allomancer also becomes immune to emotional Allomancy, though this effect is not felt by those around them.\n" + "\n" +
+                            "Copperclouds are generally not piercible but those with exceptional strength in Bronze may do so.";
+
+                case BRONZE:
+                    return "When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them.\n" + "\n" +
+                            "Copper neutralises the ability for a Seeker to track allomancy by hiding it in a copper cloud, but extremely powerful Seekers or Mistborn, may still be able to pierce said shields.";
+
+                case ALUMINUM:
+                    return "Aluminum is an internal enhancement metal that, when burned, clears out all the metals inside the allomancer, including itself.";
+
+                case DURALUMIN:
+                    return "An allomancer that burns duralumin causes an amazing burst of power from all currently burning metals, draining all of them rapidly.";
+
+                case CHROMIUM:
+                    return "Chromium allows the burner to, with physical contact, deplete the metals in another with an effect similar to that of $(l:cosmere.entry.allomantic_aluminum).";
+
+                case NICROSIL:
+                    return "It allows the burner to, with physical contact with another allomancer, have an effect on them as if they were burning $(l:cosmere.entry.allomantic_duralumin) themselves.";
+
+                case CADMIUM:
+                    return "Cadmium allows the burner to pull on time in a bubble around them, making time pass slowly within the bubble.";
+
+                case BENDALLOY:
+                    return "Bendalloy allows the burner to push on time in a bubble around them, making time pass quickly within the bubble. Expect to see your furnaces finish more quickly or crops grow faster!";
+
+                case GOLD:
+                    return "$(#f00)(NYI)$()";
+
+                case ELECTRUM:
+                    return "$(#f00)(NYI)$()";
+
+            }
+            return "";
+        }
+
         //todo implement item tiers
 
         @Override
@@ -661,7 +724,7 @@ public class Metals
         @Override
         public Ingredient getRepairMaterial()
         {
-            return null;
+            return Ingredient.fromTag(getMetalIngotTag());
         }
 
     }
@@ -716,7 +779,7 @@ public class Metals
         public static final String ALL = "feruchemist";
         public static final String IRON = "skimmer";
         public static final String STEEL = "steelrunner";
-        public static final String TIN = "windwhisper";
+        public static final String TIN = "windwhisperer";
         public static final String PEWTER = "brute";
         public static final String ALUMINUM = "trueself";
         public static final String DURALUMIN = "connector";

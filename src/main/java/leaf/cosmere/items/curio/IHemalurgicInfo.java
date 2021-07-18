@@ -74,6 +74,7 @@ public interface IHemalurgicInfo
         CompoundNBT hemalurgyInfo = getHemalurgicInfo(stack);
 
 
+        //Steals non-manifestation based abilities. traits inherent to an entity?
         switch (spikeMetalType)
         {
             case IRON:
@@ -138,12 +139,14 @@ public interface IHemalurgicInfo
 
             switch (spikeMetalType)
             {
+                //steals allomantic abilities
                 case STEEL:
                 case BRONZE:
                 case CADMIUM:
                 case ELECTRUM:
                     saveIdentity = tryStealScadrialManifestation(hemalurgyInfo, manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
                     break;
+                //steals feruchemical abilities
                 case PEWTER:
                 case BRASS:
                 case BENDALLOY:

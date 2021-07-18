@@ -55,7 +55,6 @@ public class BlocksRegistry
                                     Rarity.COMMON)));
 
 
-
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, Rarity itemRarity)
     {
         RegistryObject<T> registryObject = BLOCKS.register(id, blockSupplier);

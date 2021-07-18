@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.hemalurgic_tin",
+  "category": "cosmere.category.hemalurgy",
+  "icon": "cosmere:tin_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Steals senses."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 2
+}

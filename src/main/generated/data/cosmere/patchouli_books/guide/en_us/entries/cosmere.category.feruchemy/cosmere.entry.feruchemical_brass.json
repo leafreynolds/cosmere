@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.feruchemical_brass",
+  "category": "cosmere.category.feruchemy",
+  "icon": "cosmere:brass_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.firesoul.description"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 5
+}

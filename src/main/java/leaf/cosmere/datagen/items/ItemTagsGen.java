@@ -1,12 +1,13 @@
 /*
- * File created ~ 24 - 4 - 2021 ~ Leaf
+ * File created ~ 13 - 7 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.datagen;
+package leaf.cosmere.datagen.items;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.MetalIngotItem;
+import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -44,7 +45,10 @@ public class ItemTagsGen extends ItemTagsProvider
 
             if (metalType.hasHemalurgicEffect())
             {
-                add(TagsRegistry.Items.CURIO_ANY, metalType.getSpikeItem());
+                HemalurgicSpikeItem spikeItem = metalType.getSpikeItem();
+
+                add(TagsRegistry.Items.CURIO_ANY, spikeItem);
+                add(TagsRegistry.Items.METAL_SPIKE, spikeItem);
             }
             // tell the ingots that our ingots are related
 

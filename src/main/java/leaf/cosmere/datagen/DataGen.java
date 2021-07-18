@@ -10,6 +10,14 @@ package leaf.cosmere.datagen;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.datagen.advancements.AdvancementGen;
+import leaf.cosmere.datagen.blocks.BlockModelsGen;
+import leaf.cosmere.datagen.blocks.BlockTagsGen;
+import leaf.cosmere.datagen.items.ItemModelsGen;
+import leaf.cosmere.datagen.items.ItemTagsGen;
+import leaf.cosmere.datagen.language.EngLangGen;
+import leaf.cosmere.datagen.loottables.LootTableGen;
+import leaf.cosmere.datagen.patchouli.PatchouliGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -45,9 +53,10 @@ public class DataGen
         generator.addProvider(new LootTableGen(generator));
         generator.addProvider(new RecipeGen(generator));
 
-		/* todo: more automated json generation
 		generator.addProvider(new AdvancementGen(generator));
-		*/
+
+		generator.addProvider(new PatchouliGen(generator));
+
     }
 
 }

@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "cosmere:guide"
+    },
+    "title": {
+      "translate": "advancements.cosmere.hemalurgy.title"
+    },
+    "description": {
+      "translate": "advancements.cosmere.hemalurgy.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "spike": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "cosmere:spike"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "spike"
+    ]
+  ]
+}

@@ -1,8 +1,8 @@
 /*
- * File created ~ 24 - 4 - 2021 ~ Leaf
+ * File created ~ 13 - 7 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.datagen;
+package leaf.cosmere.datagen.loottables;
 
 import leaf.cosmere.blocks.MetalOreBlock;
 import leaf.cosmere.registry.BlocksRegistry;

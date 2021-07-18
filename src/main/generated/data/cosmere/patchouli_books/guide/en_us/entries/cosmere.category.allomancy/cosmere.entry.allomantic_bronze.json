@@ -1,0 +1,19 @@
+{
+  "name": "cosmere.entry.allomantic_bronze",
+  "category": "cosmere.category.allomancy",
+  "icon": "bronze_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns bronze is known as a \"Seeker\"."
+    },
+    {
+      "type": "text",
+      "text": "When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them.\n\nCopper neutralises the ability for a Seeker to track allomancy by hiding it in a copper cloud, but extremely powerful Seekers or Mistborn, may still be able to pierce said shields."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 7
+}

@@ -52,6 +52,8 @@ public class TagsRegistry
         public static ITag.INamedTag<Item> CURIO_NECKLACE = makeItem("curios", "necklace");
         public static ITag.INamedTag<Item> CURIO_RING = makeItem("curios", "ring");
 
+        public static ITag.INamedTag<Item> METAL_SPIKE = makeItem("cosmere", "spike");
+
 
         public static ITag.INamedTag<Item> NUGGET = forgeItemTag("nugget");
 

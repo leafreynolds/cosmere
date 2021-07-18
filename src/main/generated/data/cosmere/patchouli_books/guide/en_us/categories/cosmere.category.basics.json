@@ -1,0 +1,7 @@
+{
+  "name": "cosmere.category.basics",
+  "description": "Everything you\u0027ve learnt so far",
+  "icon": "cosmere:guide",
+  "sortnum": 0,
+  "secret": false
+}

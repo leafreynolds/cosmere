@@ -1,15 +1,17 @@
 /*
- * File created ~ 24 - 4 - 2021 ~ Leaf
+ * File created ~ 13 - 7 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.datagen;
+package leaf.cosmere.datagen.language;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.datagen.patchouli.PatchouliGen;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.StringHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -22,6 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static leaf.cosmere.constants.Constants.Strings.*;
@@ -45,12 +48,13 @@ public class EngLangGen extends LanguageProvider
         {
             if (item.getRegistryName().getNamespace().contentEquals(Cosmere.MODID))
             {
-                String localisedString = fixCapitalisation(item.getRegistryName().getPath());
+                String localisedString = StringHelper.fixCapitalisation(item.getRegistryName().getPath());
 
+                //string overrides
                 switch (localisedString)
                 {
                     case "Guide":
-                        localisedString = "Ars Arcanum";
+                        localisedString = "Ars Arcanum";//after the book that is written by Khriss
                         break;
                 }
 
@@ -63,7 +67,7 @@ public class EngLangGen extends LanguageProvider
         {
             if (type.getRegistryName().getNamespace().equals(Cosmere.MODID))
             {
-                add(type.getTranslationKey(), fixCapitalisation(type.getRegistryName().getPath()));
+                add(type.getTranslationKey(), StringHelper.fixCapitalisation(type.getRegistryName().getPath()));
             }
         }
 
@@ -76,7 +80,7 @@ public class EngLangGen extends LanguageProvider
             String path = manifestation.getRegistryName().getPath();
 
             //Name
-            add(key, fixCapitalisation(path));
+            add(key, StringHelper.fixCapitalisation(path));
 
             //description
             //can't auto generate the descriptions ya dingleberry
@@ -85,10 +89,10 @@ public class EngLangGen extends LanguageProvider
             switch (manifestation.getManifestationType())
             {
                 case ALLOMANCY:
-                    description = "Users can burn " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString();
+                    description = "Users can burn " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString().toLowerCase(Locale.ROOT);
                     break;
                 case FERUCHEMY:
-                    description = "Users can tap " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString();
+                    description = "Users can tap " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString().toLowerCase(Locale.ROOT);
                     break;
                 case RADIANT:
                 case ELANTRIAN:
@@ -99,9 +103,32 @@ public class EngLangGen extends LanguageProvider
                     break;
             }
 
-
             add(manifestation.description().getKey(), description);
         }
+
+        //guidebook
+        for (Metals.MetalType metalType : Metals.MetalType.values())
+        {
+            String metalName = metalType.name().toLowerCase(Locale.ROOT);
+
+            String a = "allomantic_" + metalName;
+            String f = "feruchemical_" + metalName;
+            String h = "hemalurgic_" + metalName;
+
+
+            String allomancyGuide = "cosmere.entry." + a;
+            String feruchemyGuide = "cosmere.entry." + f;
+            String hemalurgyGuide = "cosmere.entry." + h;
+
+            add(allomancyGuide, StringHelper.fixCapitalisation(a));
+            add(feruchemyGuide, StringHelper.fixCapitalisation(f));
+            add(hemalurgyGuide, StringHelper.fixCapitalisation(h));
+        }
+
+        add("cosmere.category.basics", "Basics");
+        add("cosmere.category.allomancy", "Allomancy");
+        add("cosmere.category.feruchemy", "Feruchemy");
+        add("cosmere.category.hemalurgy", "Hemalurgy");
 
         //ItemGroups/Tabs
         add("itemGroup." + CosmereItemGroups.ITEMS.getPath(), "Cosmere Items");
@@ -115,7 +142,7 @@ public class EngLangGen extends LanguageProvider
         //effects
         for (RegistryObject<Effect> effect : EffectsRegistry.EFFECTS.getEntries())
         {
-            add(effect.get().getName(), fixCapitalisation(effect.get().getRegistryName().getPath()));
+            add(effect.get().getName(), StringHelper.fixCapitalisation(effect.get().getRegistryName().getPath()));
 
         }
 
@@ -177,13 +204,6 @@ public class EngLangGen extends LanguageProvider
     public Path getSoundPath(Path path, String modid)
     {
         return path.resolve("data/" + modid + "/sounds/" + "sounds.json");
-    }
-
-    public String fixCapitalisation(String text)
-    {
-        String original = text.trim().replace("    ", "").replace("_", " ").replace("/", ".");
-        String output = Arrays.stream(original.split("\\s+")).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1)).collect(Collectors.joining(" "));
-        return output;
     }
 
     public String getTranslationKey(SoundEvent sound)

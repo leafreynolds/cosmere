@@ -1,0 +1,19 @@
+{
+  "name": "cosmere.entry.allomantic_cadmium",
+  "category": "cosmere.category.allomancy",
+  "icon": "cadmium_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns cadmium is known as a \"Pulser\"."
+    },
+    {
+      "type": "text",
+      "text": "Cadmium allows the burner to pull on time in a bubble around them, making time pass slowly within the bubble."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 12
+}

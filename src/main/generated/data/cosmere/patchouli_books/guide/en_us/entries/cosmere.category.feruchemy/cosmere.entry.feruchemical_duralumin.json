@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.feruchemical_duralumin",
+  "category": "cosmere.category.feruchemy",
+  "icon": "cosmere:duralumin_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.connector.description"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 9
+}

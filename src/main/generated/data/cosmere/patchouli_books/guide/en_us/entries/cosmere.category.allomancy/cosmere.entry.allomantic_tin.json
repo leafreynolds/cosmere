@@ -1,0 +1,19 @@
+{
+  "name": "cosmere.entry.allomantic_tin",
+  "category": "cosmere.category.allomancy",
+  "icon": "tin_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns tin is known as a \"Tineye\"."
+    },
+    {
+      "type": "text",
+      "text": "In allomancy, tin heightens the senses to super human levels. In this world, burning tin allows the allomancer to see clearly in the dark and detect where sounds are coming from."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 2
+}

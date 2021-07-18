@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "cosmere:guide"
+    },
+    "title": {
+      "translate": "advancements.cosmere.allomancy.title"
+    },
+    "description": {
+      "translate": "advancements.cosmere.allomancy.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "tick"
+    ]
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.hemalurgic_steel",
+  "category": "cosmere.category.hemalurgy",
+  "icon": "cosmere:steel_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Steals a physical allomantic power."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 1
+}

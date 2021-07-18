@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.hemalurgic_electrum",
+  "category": "cosmere.category.hemalurgy",
+  "icon": "cosmere:electrum_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Steals an Enhancement Allomantic power."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 15
+}

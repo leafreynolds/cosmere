@@ -1,0 +1,19 @@
+{
+  "name": "cosmere.entry.allomantic_pewter",
+  "category": "cosmere.category.allomancy",
+  "icon": "pewter_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns pewter is known as a \"Thug\"."
+    },
+    {
+      "type": "text",
+      "text": "Pewter is an allomatic metal that, when burnt, gives the user extreme strength, resistance and durability. Its uses include combat, moving quickly, surviving attacks and healing oneself.\n\nThe major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 3
+}

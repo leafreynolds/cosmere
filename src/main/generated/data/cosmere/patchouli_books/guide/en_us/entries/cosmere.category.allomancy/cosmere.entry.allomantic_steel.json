@@ -1,0 +1,19 @@
+{
+  "name": "cosmere.entry.allomantic_steel",
+  "category": "cosmere.category.allomancy",
+  "icon": "steel_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns steel is known as a \"Coinshot\"."
+    },
+    {
+      "type": "text",
+      "text": "Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to telekinetically push against a metal object.Conservation of momentum still applies here, so if you trying to push against blocks, expect to be thrown back in the opposite direction.\nClever allomancers use steel to allow themselves to fly through the air."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 1
+}

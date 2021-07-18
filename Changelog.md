@@ -1,13 +1,20 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B17
+
+Added a creative mode only shard blade to test a model that was created using blockbench. 
+Fixing some bugs related to soothing and rioting. May have to look into updating the entity goals, since it doesn't seem to affect passive mobs
+Initial framework for patchouli datagen provider. Wont have to make a couple hundred json completely by hand anymore
+Initial framework for advancement datagen provider. 
+Visual updates to ring/bracelet png.
+
 B16
 
 Auto select a power if none are selected. Only really relevant for first time joining world.
 Fixed crash from mousing over creative debug hemalurgy spike that gives all powers in inventory.
 Spikes now show up in more varied locations based on curio slot.
 Remove key bind check on most allomancy
-added a creative mode only shard blade to test a model that was created using blockbench. 
-fixing some bugs related to soothing and rioting. May have to look into updating the entity goals, since it doesn't seem to affect passive mobs
+
 
 B15
 

@@ -16,6 +16,8 @@
   "advancements_tab": "cosmere:main/root",
   "advancement_namespaces": ["cosmere"],
 
+  "i18n": true,
+
   "macros": {
     "$(item)": "$(1)",
     "$(thing)": "$(4)"

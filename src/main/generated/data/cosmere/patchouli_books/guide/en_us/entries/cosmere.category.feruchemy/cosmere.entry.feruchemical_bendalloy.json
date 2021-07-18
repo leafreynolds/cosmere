@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.feruchemical_bendalloy",
+  "category": "cosmere.category.feruchemy",
+  "icon": "cosmere:bendalloy_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.subsumer.description"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 13
+}

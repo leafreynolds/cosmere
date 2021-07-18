@@ -1,0 +1,15 @@
+{
+  "name": "cosmere.entry.feruchemical_zinc",
+  "category": "cosmere.category.feruchemy",
+  "icon": "cosmere:zinc_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.sparker.description"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 4
+}
