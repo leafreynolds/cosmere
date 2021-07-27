@@ -138,7 +138,7 @@ public class ItemChargeHelper
     public static ItemStack adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
     {
         EffectInstance storingIdentity = player.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
-        boolean isStoringIdentity =  (storingIdentity != null && storingIdentity.getDuration() > 0);
+        boolean isStoringIdentity = (storingIdentity != null && storingIdentity.getDuration() > 0);
 
 
         for (ItemStack stackInSlot : Iterables.concat(items, acc))
@@ -153,7 +153,14 @@ public class ItemChargeHelper
                 continue;
             }
 
-            if (chargeItemSlot.getCharge(stackInSlot) > chargeToGet)
+            boolean storing = chargeToGet < 0;
+
+            int slotCharge = chargeItemSlot.getCharge(stackInSlot);
+            int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
+
+
+            if ((storing && slotCharge + (-chargeToGet) > slotMaxCharge)//storing and can fit in this item
+                    || !storing && slotCharge > chargeToGet)
             {
                 if (remove)
                 {
@@ -207,7 +214,10 @@ public class ItemChargeHelper
     {
         List<ItemStack> items = getChargeItems(player);
         List<ItemStack> acc = getChargeCurios(player);
-        for (ItemStack stackInSlot : Iterables.concat(items, acc))
+
+        Iterable<ItemStack> itemStacksIterable = Iterables.concat(items, acc);
+
+        for (ItemStack stackInSlot : itemStacksIterable)
         {
             IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
 

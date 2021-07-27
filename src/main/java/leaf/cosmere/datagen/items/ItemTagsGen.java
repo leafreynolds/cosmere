@@ -30,11 +30,8 @@ public class ItemTagsGen extends ItemTagsProvider
     @Override
     protected void registerTags()
     {
-
-
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-
             if (metalType.hasFeruchemicalEffect())
             {
                 //curio stuff
