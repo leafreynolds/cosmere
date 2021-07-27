@@ -159,7 +159,7 @@ public class ItemChargeHelper
             int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
 
 
-            if ((storing && slotCharge + (-chargeToGet) > slotMaxCharge)//storing and can fit in this item
+            if ((storing && (slotCharge + (-chargeToGet)) < slotMaxCharge)//storing and can fit in this item
                     || !storing && slotCharge > chargeToGet)
             {
                 if (doAdjust)

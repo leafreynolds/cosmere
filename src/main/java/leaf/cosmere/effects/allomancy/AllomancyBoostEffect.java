@@ -61,9 +61,9 @@ public class AllomancyBoostEffect extends Effect
 
                                 if (ingestedMetalAmount > 0)
                                 {
-                                    if (ingestedMetalAmount >= 27)
+                                    if (ingestedMetalAmount > 27)
                                     {
-                                        data.adjustIngestedMetal(metalType, ingestedMetalAmount - 27, true);
+                                        data.adjustIngestedMetal(metalType, 27, true);
                                     }
                                     else
                                     {

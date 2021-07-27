@@ -256,7 +256,7 @@ public class SpiritwebCapability implements ISpiritweb
         {
             if (doAdjust)
             {
-                METALS_INGESTED.put(metalType, ingestedMetal + amountToAdjust);
+                METALS_INGESTED.put(metalType, ingestedMetal - amountToAdjust);
             }
 
             return true;

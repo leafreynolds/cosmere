@@ -76,7 +76,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         {
             //if not then try reduce the amount that they are burning
 
-            if (data.adjustIngestedMetal(metalType, -mode, false))
+            if (data.adjustIngestedMetal(metalType, mode, false))
             {
                 return true;
             }
@@ -105,7 +105,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         //don't check every tick.
         LivingEntity livingEntity = data.getLiving();
         boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
-        data.adjustIngestedMetal(metalType, -mode, isActiveTick);
+        data.adjustIngestedMetal(metalType, mode, isActiveTick);
 
         //if we get to this point, we are in an active burn state.
         //check for compound.
