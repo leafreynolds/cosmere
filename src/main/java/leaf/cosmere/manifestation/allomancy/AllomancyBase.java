@@ -86,11 +86,6 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
                 //set that mode back to the capability.
                 data.setMode(manifestationType, metalType.getID(), mode);
                 //if it hits zero then return out
-                if (mode == 0)
-                {
-                    break;
-                }
-
                 //try again at a lower burn rate.
             }
         }

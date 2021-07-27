@@ -247,20 +247,21 @@ public class SpiritwebCapability implements ISpiritweb
     }
 
     @Override
-    public boolean adjustIngestedMetal(Metals.MetalType metalType, int val, boolean doAdjust)
+    public boolean adjustIngestedMetal(Metals.MetalType metalType, int amountToAdjust, boolean doAdjust)
     {
         int ingestedMetal = getIngestedMetal(metalType);
-        val = Math.min(ingestedMetal, val);
+        boolean addingToInternalMetals = amountToAdjust < 0;
 
-        if (ingestedMetal >= val)
+        if (addingToInternalMetals || ingestedMetal > amountToAdjust)
         {
             if (doAdjust)
             {
-                METALS_INGESTED.put(metalType, ingestedMetal + val);
+                METALS_INGESTED.put(metalType, ingestedMetal + amountToAdjust);
             }
 
             return true;
         }
+
         return false;
     }
 

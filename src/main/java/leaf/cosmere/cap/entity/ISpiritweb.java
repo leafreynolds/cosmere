@@ -78,7 +78,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundNBT>
 
     int getIngestedMetal(Metals.MetalType metalType);
 
-    boolean adjustIngestedMetal(Metals.MetalType metalType, int i, boolean doAdjust);
+    boolean adjustIngestedMetal(Metals.MetalType metalType, int amountToAdjust, boolean doAdjust);
 
     class Storage implements Capability.IStorage<ISpiritweb>
     {

@@ -135,7 +135,7 @@ public class ItemChargeHelper
         return adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
     }
 
-    public static ItemStack adjustChargeExact(PlayerEntity player, int chargeToGet, boolean remove, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
+    public static ItemStack adjustChargeExact(PlayerEntity player, int chargeToGet, boolean doAdjust, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
     {
         EffectInstance storingIdentity = player.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
         boolean isStoringIdentity = (storingIdentity != null && storingIdentity.getDuration() > 0);
@@ -162,7 +162,7 @@ public class ItemChargeHelper
             if ((storing && slotCharge + (-chargeToGet) > slotMaxCharge)//storing and can fit in this item
                     || !storing && slotCharge > chargeToGet)
             {
-                if (remove)
+                if (doAdjust)
                 {
                     chargeItemSlot.adjustCharge(stackInSlot, -chargeToGet);
                 }
