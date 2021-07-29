@@ -3,9 +3,12 @@ The Cosmere Project - For 1.16 Minecraft
 B18
 
 Changed Gold feruchemy to have lower hearts when storing and then regen-like effect when tapping.
+Prep for cosmere related loot to start showing up in chests
+Making allomancy last longer than a few seconds per bead. now lasts between 60-180 seconds. Easier for testing till we adjust burn rates by metal.
 Fixed a bug in logic for hemalurgy spikes being used as metalminds when equipped. No more constant damage every time the item nbt updates!
 Fixed a bug where allomancy users would gain more metals when burning instead of less. oops.
-fixed a bug in feruchemy where the game would stop trying to store attributes in more metalminds when the first one was full.
+fixed a bug in feruchemy where the game would stop trying to store attributes in the next metalmind when the first one was full.
+
 
 B17
 
