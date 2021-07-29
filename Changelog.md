@@ -1,5 +1,12 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B18
+
+Changed Gold feruchemy to have lower hearts when storing and then regen-like effect when tapping.
+Fixed a bug in logic for hemalurgy spikes being used as metalminds when equipped. No more constant damage every time the item nbt updates!
+Fixed a bug where allomancy users would gain more metals when burning instead of less. oops.
+fixed a bug in feruchemy where the game would stop trying to store attributes in more metalminds when the first one was full.
+
 B17
 
 Added a creative mode only shard blade to test a model that was created using blockbench. 

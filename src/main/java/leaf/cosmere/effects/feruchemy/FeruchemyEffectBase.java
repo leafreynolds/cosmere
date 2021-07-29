@@ -41,17 +41,6 @@ public class FeruchemyEffectBase extends Effect implements IHasMetalType
     public boolean isReady(int duration, int amplifier)
     {
         //assume we can apply the effect regardless
-        boolean result = true;
-/*
-        //but if we are a specific effect
-        if (metalType == Metals.MetalType.BENDALLOY)
-        {
-            int k = 50 >> amplifier;
-            if (k > 0)
-            {
-                result = duration % k == 0;
-            }
-        }*/
-        return result;
+        return true;
     }
 }

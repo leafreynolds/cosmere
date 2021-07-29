@@ -261,10 +261,13 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         //first do normal equip status changed, in case this spike metalmind has nicrosil powers stored
         super.onEquipStatusChanged(slotContext, stack, isEquipping);
 
-        //then do hemalurgy spike logic
-        //hurt the user
-        //spiritweb attributes are handled in metalmind
-        slotContext.getWearer().attackEntityFrom(SPIKED, 4);
+        if (isEquipping)
+        {
+            //then do hemalurgy spike logic
+            //hurt the user
+            //spiritweb attributes are handled in metalmind
+            slotContext.getWearer().attackEntityFrom(SPIKED, 4);
+        }
     }
 
     @Override
