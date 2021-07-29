@@ -82,7 +82,9 @@ public class Metalmind extends ChargeableMetalItem implements ICurioItem
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
     {
-        onEquipStatusChanged(slotContext, stack, true);
+        //todo better logic.
+        boolean isEquipping = prevStack == null || stack.getItem() != prevStack.getItem();
+        onEquipStatusChanged(slotContext, stack, isEquipping);
     }
 
     @Override
