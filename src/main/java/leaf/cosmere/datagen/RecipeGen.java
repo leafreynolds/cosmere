@@ -17,6 +17,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -49,6 +50,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
         //addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_BLOCK.get(), ItemsRegistry.GUIDE.get(), 1.0f, 200);
         addOreSmeltingRecipes(consumer, ItemsRegistry.METAL_SPIKE.get(Metals.MetalType.IRON).get(), ItemsRegistry.GUIDE.get(), 1.0f, 200);
 
+        ShapedRecipeBuilder.shapedRecipe(ItemsRegistry.METAL_VIAL.get()).key('X', Items.IRON_NUGGET).key('Y', Items.GLASS).patternLine("X").patternLine("Y").addCriterion("has_material", hasItem(Items.GLASS)).build(consumer);
 
         CustomRecipeBuilder.customRecipe(RecipeRegistry.VIAL_RECIPE_SERIALIZER.get()).build(consumer, ResourceLocationHelper.prefix("vial_mixing").toString());
 
