@@ -8,7 +8,8 @@ Prep for cosmere related loot to start showing up in chests
 Making allomancy last longer than a few seconds per bead. now lasts between 60-180 seconds. Easier for testing till we adjust burn rates by metal.
 Fixed a bug in logic for hemalurgy spikes being used as metalminds when equipped. No more constant damage every time the item nbt updates!
 Fixed a bug where allomancy users would gain more metals when burning instead of less. oops.
-fixed a bug in feruchemy where the game would stop trying to store attributes in the next metalmind when the first one was full.
+Fixed a bug in feruchemy where the game would stop trying to store attributes in the next metalmind when the first one was full.
+Fixing a bug with chromium allomancy causing a full crash of the game oops.
 
 
 B17
