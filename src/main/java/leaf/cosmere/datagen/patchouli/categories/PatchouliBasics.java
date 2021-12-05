@@ -12,14 +12,14 @@ public class PatchouliBasics
 {
     public static void collect(List<BookStuff.Category> categories, List<BookStuff.Entry> entries)
     {
-        BookStuff.Category basics = new BookStuff.Category(
-                "basics",
-                "Everything you've learnt so far",
-                "cosmere:guide");
-
-        basics.sortnum = 0;
-
-
-        categories.add(basics);
+        //BookStuff.Category basics = new BookStuff.Category(
+        //        "basics",
+        //        "Everything you've learnt so far",
+        //        "cosmere:guide");
+//
+        //basics.sortnum = 0;
+//
+//
+        //categories.add(basics);
     }
 }
