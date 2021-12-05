@@ -80,7 +80,7 @@ public class ItemsRegistry
 
     public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_NUGGETS =
             Arrays.stream(Metals.MetalType.values())
-                    //.filter(Metals.MetalType::hasMaterialItem)
+                    .filter(Metals.MetalType::hasMaterialItem)
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
