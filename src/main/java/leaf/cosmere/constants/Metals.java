@@ -629,22 +629,21 @@ public class Metals
             switch (this)
             {
                 case IRON:
-                    return "Iron is an Allomantic metal that, when burned, allows the user to Pull on various metal objects around them, pulling any of these objects towards them. " +
-                            "The burning of Iron is affected by normal laws of physics, so when the user pulls upon something with more weight, it will take more iron to move this, and if the user pulls upon something with more weight than themselves, they will be pulled through the air towards the aforementioned object. " +
-                            "The burning of Iron is used to fly, manipulate various objects, pull someone towards you (assuming that they have metal on their person), disarm somebody with a metal weapon, change the flight path of flying coins, and for a multitude of other things.";
-
+                    return "Iron is an Allomantic metal that, when burned, allows the user to Pull on various metal objects around them, pulling any of these objects towards them." ;//+
+                            //"The burning of Iron is affected by normal laws of physics, so when the user pulls upon something with more weight, it will take more iron to move this, and if the user pulls upon something with more weight than themselves, they will be pulled through the air towards the aforementioned object. " +
+                            //"The burning of Iron is used to fly, manipulate various objects, pull someone towards you (assuming that they have metal on their person), disarm somebody with a metal weapon, change the flight path of flying coins, and for a multitude of other things.";
 
                 case STEEL:
-                    return "Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to telekinetically push against a metal object." +
-                            "Conservation of momentum still applies here, so if you trying to push against blocks, expect to be thrown back in the opposite direction.\n" +
-                            "Clever allomancers use steel to allow themselves to fly through the air.";
+                    return "Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to telekinetically push against a metal object." ;//+
+                            //"Conservation of momentum still applies here, so if you trying to push against blocks, expect to be thrown back in the opposite direction." +
+                            //"Clever Allomancers use steel to allow themselves to fly through the air.";
 
                 case TIN:
                     return "In allomancy, tin heightens the senses to super human levels. In this world, burning tin allows the allomancer to see clearly in the dark and detect where sounds are coming from.";
 
                 case PEWTER:
-                    return "Pewter is an allomatic metal that, when burnt, gives the user extreme strength, resistance and durability. Its uses include combat, moving quickly, surviving attacks and healing oneself." +
-                            "\n\nThe major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()";
+                    return "Pewter is an allomantic metal that, when burnt, gives the user extreme strength, resistance and durability. Its uses include combat, moving quickly, surviving attacks and healing oneself." ;//+
+                            //"The major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()";
 
                 case ZINC:
                     return "In allomancy, zinc gives the ability to intensify the emotions of others, an ability called \"rioting\"";
@@ -653,13 +652,12 @@ public class Metals
                     return "In allomancy, brass gives the ability to \"soothe\" the emotions of others.";
 
                 case COPPER:
-                    return "Copper is an elemental Allomantic metal that allows one to hide Allomancy. A misting or mistborn burning copper generates a 'coppercloud' which hides Allomancy from being detected by Bronze. " +
-                            "The Allomancer also becomes immune to emotional Allomancy, though this effect is not felt by those around them.\n" + "\n" +
-                            "Copperclouds are generally not piercible but those with exceptional strength in Bronze may do so.";
+                    return "Copper is an elemental Allomantic metal that allows one to hide Allomancy. A misting or mistborn burning copper generates a 'coppercloud' which hides Allomancy from being detected by Bronze. " ;//+
+                            //"Copperclouds are generally not piercible but those with exceptional strength in Bronze may do so.";
 
                 case BRONZE:
-                    return "When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them.\n" + "\n" +
-                            "Copper neutralises the ability for a Seeker to track allomancy by hiding it in a copper cloud, but extremely powerful Seekers or Mistborn, may still be able to pierce said shields.";
+                    return "When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them.";//+
+                            //"Copper neutralises the ability for a Seeker to track allomancy by hiding it in a copper cloud, but extremely powerful Seekers or Mistborn, may still be able to pierce said shields.";
 
                 case ALUMINUM:
                     return "Aluminum is an internal enhancement metal that, when burned, clears out all the metals inside the allomancer, including itself.";

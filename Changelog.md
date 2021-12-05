@@ -2,9 +2,12 @@ The Cosmere Project - For 1.16 Minecraft
 
 B19
 
-Creative mode now has a more comprehensive list of hemalurgic spikes with the abilities that they can steal
+The creative mode menu now has a more comprehensive list of hemalurgic spikes with the abilities that they can steal
 Remove our own Gold/Iron Nuggets from being created.
-Added metalmind descriptions to JEI/NEI 
+Added metalmind descriptions to JEI/NEI
+Stop the game crashing when patchouli isn't installed, oops
+Shortened allomancy guide book listings, as it doesn't create extra pages for you if you throw too much at it.
+use pewter nugget for allomancy icon in guide book for now. Was metal vial which has no icon yet.
 
 B18
 
