@@ -144,6 +144,9 @@ public class EngLangGen extends LanguageProvider
             add(hemalurgyGuide, StringHelper.fixCapitalisation(h));
         }
 
+
+        add("tooltip.cosmere.metals.contained", "Contained Metals:");
+
         add("cosmere.category.basics", "Basics");
         add("cosmere.category.allomancy", "Allomancy");
         add("cosmere.category.feruchemy", "Feruchemy");
