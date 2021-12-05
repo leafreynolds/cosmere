@@ -8,6 +8,7 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientSetup;
 import leaf.cosmere.compat.curios.CuriosCompat;
+import leaf.cosmere.compat.curios.PatchouliCompat;
 import leaf.cosmere.handlers.ColorHandler;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.network.Network;
@@ -60,6 +61,7 @@ public class Cosmere
 
         // init cross mod compatibility stuff, if relevant
         CuriosCompat.init();
+        PatchouliCompat.init();
     }
 
     private void commonSetup(FMLCommonSetupEvent event)

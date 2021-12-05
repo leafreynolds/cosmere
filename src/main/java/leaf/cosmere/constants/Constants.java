@@ -98,6 +98,9 @@ public class Constants
 
 
         public static final String CONTAINED_METALS = "tooltip.cosmere.metals.contained";
+
+
+        public static final String PATCHOULI_NOT_INSTALLED = "tooltip.cosmere.patchouli.not_installed";
     }
 
     public static class Translations

@@ -4,8 +4,10 @@
 
 package leaf.cosmere.items;
 
+import leaf.cosmere.compat.curios.PatchouliCompat;
 import leaf.cosmere.properties.PropTypes;
 import leaf.cosmere.registry.ItemsRegistry;
+import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -18,6 +20,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,6 +29,8 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import static leaf.cosmere.constants.Constants.Strings.PATCHOULI_NOT_INSTALLED;
 
 public class GuideItem extends Item
 {
@@ -40,10 +45,6 @@ public class GuideItem extends Item
         return ItemsRegistry.GUIDE.getId().equals(PatchouliAPI.get().getOpenBookGui());
     }
 
-    public static ITextComponent getEdition()
-    {
-        return PatchouliAPI.get().getSubtitle(ItemsRegistry.GUIDE.getId());
-    }
 
     public static ITextComponent getTitle(ItemStack stack)
     {
@@ -78,6 +79,14 @@ public class GuideItem extends Item
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
         tooltip.add(getEdition().deepCopy().mergeStyle(TextFormatting.GRAY));
+    }
+
+    public static ITextComponent getEdition()
+    {
+        if (PatchouliCompat.PatchouliIsPresent())
+            return PatchouliAPI.get().getSubtitle(ItemsRegistry.GUIDE.getId());
+        else
+            return TextHelper.createTranslatedText(PATCHOULI_NOT_INSTALLED);
     }
 
     @Nonnull
