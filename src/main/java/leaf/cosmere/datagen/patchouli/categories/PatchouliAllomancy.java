@@ -24,7 +24,7 @@ public class PatchouliAllomancy
         BookStuff.Category allomancy = new BookStuff.Category(
                 "allomancy",
                 "This is the art of consuming a piece of metal related to your power, and then \"burning\" it for an effect.",
-                "cosmere:metal_vial");
+                "cosmere:pewter_nugget");
         allomancy.sortnum = 1;
 
 
@@ -35,12 +35,13 @@ public class PatchouliAllomancy
         allomancyBasics.pages = new BookStuff.Page[]
                 {
                         new BookStuff.TextPage("If you entered this world with an allomantic ability, you're called a $(6)misting$().", allomancy.icon),
-                        new BookStuff.SpotlightPage("Metal vial", allomancy.icon),
-                        new BookStuff.CraftingPage("Metal vial", allomancy.icon),
+                        new BookStuff.SpotlightPage("Metal vial", "cosmere:metal_vial"),
+                        new BookStuff.CraftingPage("Metal vial", "cosmere:metal_vial"),
                 };
         allomancyBasics.priority = true;
         List<BookStuff.Page> pages = new ArrayList<>();
 
+        entries.add(allomancyBasics);
 
         //allomancy
         for (RegistryObject<AManifestation> manifestation : ALLOMANCY_POWERS.values())

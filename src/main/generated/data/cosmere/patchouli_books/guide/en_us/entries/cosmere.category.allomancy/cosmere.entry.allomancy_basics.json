@@ -1,0 +1,28 @@
+{
+  "name": "cosmere.entry.allomancy_basics",
+  "category": "cosmere.category.allomancy",
+  "icon": "cosmere:pewter_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "If you entered this world with an allomantic ability, you\u0027re called a $(6)misting$().",
+      "title": "cosmere:pewter_nugget"
+    },
+    {
+      "type": "spotlight",
+      "text": "Metal vial",
+      "item": "cosmere:metal_vial",
+      "link_recipe": false
+    },
+    {
+      "type": "crafting",
+      "text": "Metal vial",
+      "recipe": "cosmere:metal_vial",
+      "recipe2": ""
+    }
+  ],
+  "priority": true,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 0
+}
