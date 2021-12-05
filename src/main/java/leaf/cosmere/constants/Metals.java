@@ -689,6 +689,50 @@ public class Metals
             return "";
         }
 
+
+        public String getFeruchemyMetalmindUse()
+        {
+            switch (this)
+            {
+                case IRON:
+                    return "Stores Weight. Less weight slows descent. A Skimmer Ferring using this will decrease the pull of gravity on them in exchange for increasing it later.";
+                case STEEL:
+                    return "Stores Physical Speed. A Steelrunner Ferring using this will be physically slower now in exchange for being faster later.";
+                case TIN:
+                    return "Stores Eyesight senses. Tapping will zoom in.";
+                case PEWTER:
+                    return "Stores Strength. A Brute Ferring using this will lessen the size of his muscles to increase them later.";
+                case ZINC:
+                    return "Stores Mental Speed. A Sparker Ferring storing zinc will gain experience very slowly in exchange for gaining experience faster later.";
+                case BRASS:
+                    return "Stores Warmth. Firesoul Ferrings using this will cool themselves in exchange for being able to warm themselves later by tapping the metalmind.";
+                case COPPER:
+                    return "Stores Experience. An Archivist Ferring using this will be able to store experience inside copper, then withdraw it later from the metal.";
+                case BRONZE:
+                    return "Stores Wakefulness. A Sentry Ferring using this will sleep or be drowsier now in exchange for staying awake longer later.";
+                case ALUMINUM:
+                    return "Stores Identity. Trueself Ferrings can store their spiritual sense of self within an aluminum metalmind.";
+                case DURALUMIN:
+                    return "Stores Connection. A Connector Ferring can store spiritual connection inside a metalmind, reducing outside awareness during active storage. Tapping not yet implemented.";//todo change when tapping works
+                case CHROMIUM:
+                    return "Stores Fortune. A Spinner Ferring will become unlucky during active storage in exchange for increased fortune later.";
+                case NICROSIL:
+                    return "Stores Investiture. Little is known about Soulbearer Ferrings. (Not yet implemented)";
+                case CADMIUM:
+                    return "Stores Breath. A Gasper Ferring may hyperventilate while storing breath in exchange for eliminating or reducing the need to breathe later on.";
+                case GOLD:
+                    return "Stores Health. A Bloodmaker Ferring using this will feel sick now in exchange for increased regeneration and healing later.";
+                case ELECTRUM:
+                    return "Stores Determination. A Pinnacle Ferring using this will take more damage in exchange for taking less damage later.";
+                case BENDALLOY:
+                    return "Stores Energy. A Subsumer Ferring using this can consume large quantities of food and store the calories in the metalmind, in exchange for the ability to forgo eating later.";
+                case ATIUM:
+                    return "Not yet implemented.";
+            }
+
+            return "Unknown...";
+        }
+
         //todo implement item tiers
 
         @Override

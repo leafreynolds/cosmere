@@ -67,7 +67,7 @@ public class EngLangGen extends LanguageProvider
                 }
                 else if (item instanceof Metalmind)
                 {
-                    String use = ((Metalmind) item).getMetalType().getHemalurgicUseString();
+                    String use = ((Metalmind) item).getMetalType().getFeruchemyMetalmindUse();
                     add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
                 }
 

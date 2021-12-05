@@ -30,7 +30,7 @@ edaa7877000a497242bfd5901b6773cfa26fc309 assets/cosmere/blockstates/tin_block.js
 b118f65ac1078511bdff353013a20ebe62732b22 assets/cosmere/blockstates/tin_ore.json
 edaa7877000a497242bfd5901b6773cfa26fc309 assets/cosmere/blockstates/zinc_block.json
 b118f65ac1078511bdff353013a20ebe62732b22 assets/cosmere/blockstates/zinc_ore.json
-930ebf76d1a9a554dc84c7162215547010a82af1 assets/cosmere/lang/en_us.json
+b3a821225f91f8ecb2be1ebc5fc6dcde6e6804b4 assets/cosmere/lang/en_us.json
 e9fe228cb639a8823d11fe37d1d1b079e9bd4cb7 assets/cosmere/models/block/gem_block.json
 b66394816822b5feda05810c580e11ddb986f4a0 assets/cosmere/models/block/metal_block.json
 645553d67807b60210c1bfae147ccd31ec88eaf0 assets/cosmere/models/block/ore_block.json
@@ -118,7 +118,6 @@ e34436395cae4a9d60a64e0c5c69d9dc45687c63 assets/cosmere/models/item/electrum_spi
 9380f4ba003c9edcd932e027c4abe4900ac23b20 assets/cosmere/models/item/gold_boxing.json
 c47bd16e2bcdc40ae090cc10098ea3ce36528e8c assets/cosmere/models/item/gold_bracelet_metalmind.json
 10f9380cf2778b89c363a92139e9af0b91012529 assets/cosmere/models/item/gold_necklace_metalmind.json
-9380f4ba003c9edcd932e027c4abe4900ac23b20 assets/cosmere/models/item/gold_nugget.json
 b4b59a71160a8130d6ed2b18ebb204cbf0eb4ef1 assets/cosmere/models/item/gold_ring_metalmind.json
 e34436395cae4a9d60a64e0c5c69d9dc45687c63 assets/cosmere/models/item/gold_spike.json
 f9c2f8e60d6f55d0b91bf2558b3d7f6a84f3b9b5 assets/cosmere/models/item/guide.json
@@ -128,7 +127,6 @@ a503e66f7bf5e2931eab954d102be9f32aa7191b assets/cosmere/models/item/harmonium_bl
 f11e9a45aa354d4df9e7636e8c902c2f681766a0 assets/cosmere/models/item/investiture.json
 c47bd16e2bcdc40ae090cc10098ea3ce36528e8c assets/cosmere/models/item/iron_bracelet_metalmind.json
 10f9380cf2778b89c363a92139e9af0b91012529 assets/cosmere/models/item/iron_necklace_metalmind.json
-9380f4ba003c9edcd932e027c4abe4900ac23b20 assets/cosmere/models/item/iron_nugget.json
 b4b59a71160a8130d6ed2b18ebb204cbf0eb4ef1 assets/cosmere/models/item/iron_ring_metalmind.json
 e34436395cae4a9d60a64e0c5c69d9dc45687c63 assets/cosmere/models/item/iron_spike.json
 9e352e2717f6edf732b4bbf3d212914a7b51285d assets/cosmere/models/item/jar_empty.json

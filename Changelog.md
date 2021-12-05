@@ -4,6 +4,7 @@ B19
 
 Creative mode now has a more comprehensive list of hemalurgic spikes with the abilities that they can steal
 Remove our own Gold/Iron Nuggets from being created.
+Added metalmind descriptions to JEI/NEI 
 
 B18
 
