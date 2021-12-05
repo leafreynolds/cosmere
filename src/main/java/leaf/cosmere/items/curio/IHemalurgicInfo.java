@@ -277,7 +277,7 @@ public interface IHemalurgicInfo
                         new AttributeModifier(
                                 hemalurgicIdentity,
                                 String.format("Hemalurgic-%s: %s", path, hemalurgicIdentity.toString()),
-                                6,
+                                6,//todo get this value from the item?
                                 AttributeModifier.Operation.ADDITION));
             }
         }

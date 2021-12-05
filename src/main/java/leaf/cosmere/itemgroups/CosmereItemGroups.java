@@ -31,6 +31,15 @@ public class CosmereItemGroups
         }
     };
 
+    public static ItemGroup HEMALURGIC_SPIKES = new ItemGroup(Cosmere.MODID + ".spikes")
+    {
+        @Override
+        public ItemStack createIcon()
+        {
+            return new ItemStack(ItemsRegistry.METAL_SPIKE.entrySet().stream().findAny().get().getValue().get());
+        }
+    };
+
     public static ItemGroup BLOCKS = new ItemGroup(Cosmere.MODID + ".blocks")
     {
         @Override

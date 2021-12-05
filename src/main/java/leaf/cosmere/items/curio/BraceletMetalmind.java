@@ -8,6 +8,7 @@ import com.mojang.blaze3d.matrix.*;
 import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.client.renderer.wearables.*;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.Metalmind;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.model.*;
@@ -25,7 +26,7 @@ public class BraceletMetalmind extends Metalmind
 {
     public BraceletMetalmind(Metals.MetalType metalType)
     {
-        super(metalType);
+        super(metalType, CosmereItemGroups.METALMINDS);
     }
     private static final ResourceLocation METAL_TEXTURE = new ResourceLocation("cosmere", "textures/block/metal_block.png");
     private Object model;

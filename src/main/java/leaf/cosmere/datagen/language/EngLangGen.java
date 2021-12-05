@@ -8,6 +8,8 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.datagen.patchouli.PatchouliGen;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
+import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
@@ -57,6 +59,18 @@ public class EngLangGen extends LanguageProvider
                         localisedString = "Ars Arcanum";//after the book that is written by Khriss
                         break;
                 }
+
+                if (item instanceof HemalurgicSpikeItem)
+                {
+                    String use = ((HemalurgicSpikeItem) item).getMetalType().getHemalurgicUseString();
+                    add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
+                }
+                else if (item instanceof Metalmind)
+                {
+                    String use = ((Metalmind) item).getMetalType().getHemalurgicUseString();
+                    add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
+                }
+
 
                 add(item.getTranslationKey(), localisedString);
             }
@@ -111,14 +125,19 @@ public class EngLangGen extends LanguageProvider
         {
             String metalName = metalType.name().toLowerCase(Locale.ROOT);
 
-            String a = "allomantic_" + metalName;
-            String f = "feruchemical_" + metalName;
-            String h = "hemalurgic_" + metalName;
+            String a = metalName + " - " + metalType.getMistingName();
+            String f = metalName + " - " + metalType.getFerringName();
+            String h = metalName;
 
 
-            String allomancyGuide = "cosmere.entry." + a;
-            String feruchemyGuide = "cosmere.entry." + f;
-            String hemalurgyGuide = "cosmere.entry." + h;
+            String aKey = "allomantic_" + metalName;
+            String fKey = "feruchemical_" + metalName;
+            String hKey = "hemalurgic_" + metalName;
+
+
+            String allomancyGuide = "cosmere.entry." + aKey;
+            String feruchemyGuide = "cosmere.entry." + fKey;
+            String hemalurgyGuide = "cosmere.entry." + hKey;
 
             add(allomancyGuide, StringHelper.fixCapitalisation(a));
             add(feruchemyGuide, StringHelper.fixCapitalisation(f));

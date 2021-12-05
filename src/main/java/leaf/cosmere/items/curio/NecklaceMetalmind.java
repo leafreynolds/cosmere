@@ -5,13 +5,14 @@
 package leaf.cosmere.items.curio;
 
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.Metalmind;
 
 public class NecklaceMetalmind extends Metalmind
 {
     public NecklaceMetalmind(Metals.MetalType metalType)
     {
-        super(metalType);
+        super(metalType, CosmereItemGroups.METALMINDS);
     }
 
     @Override

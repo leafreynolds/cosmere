@@ -7,6 +7,7 @@ package leaf.cosmere.items;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.items.curio.IHemalurgicInfo;
 import leaf.cosmere.manifestation.AManifestation;
@@ -14,6 +15,7 @@ import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import top.theillusivec4.curios.api.SlotContext;
@@ -23,9 +25,9 @@ import java.util.UUID;
 
 public class Metalmind extends ChargeableMetalItem implements ICurioItem
 {
-    public Metalmind(Metals.MetalType metalType)
+    public Metalmind(Metals.MetalType metalType, ItemGroup group)
     {
-        super(metalType);
+        super(metalType, group);
     }
 
 

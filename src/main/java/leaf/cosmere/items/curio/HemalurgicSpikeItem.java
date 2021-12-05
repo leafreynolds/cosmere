@@ -11,11 +11,14 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.renderer.wearables.SpikeModel;
+import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.Metalmind;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
+import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -50,9 +53,8 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
@@ -72,8 +74,9 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
 
     public HemalurgicSpikeItem(Metals.MetalType metalType)
     {
-        super(metalType);
+        super(metalType, CosmereItemGroups.HEMALURGIC_SPIKES);
 
+        //todo decide on damage
         this.attackDamage = 2f + 1f;//tier.getAttackDamage();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) this.attackDamage, AttributeModifier.Operation.ADDITION));
@@ -111,6 +114,53 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                 fullPower.addEnchantment(Enchantments.BINDING_CURSE, 1);
                 setCharge(fullPower, getMaxCharge(fullPower));
                 stacks.add(fullPower);
+
+                //what powers can this metal type contain
+
+                Collection<Metals.MetalType> hemalurgyStealWhitelist = getMetalType().getHemalurgyStealWhitelist();
+                if (hemalurgyStealWhitelist != null)
+                {
+                    for (Metals.MetalType stealType : hemalurgyStealWhitelist)
+                    {
+                        if (!stealType.hasAssociatedManifestation())
+                        {
+                            continue;
+                        }
+                        try
+                        {
+                            ItemStack allomancySpike = new ItemStack(this);
+                            allomancySpike.addEnchantment(Enchantments.BINDING_CURSE, 1);
+
+                            ItemStack feruchemySpike = new ItemStack(this);
+                            feruchemySpike.addEnchantment(Enchantments.BINDING_CURSE, 1);
+
+                            CompoundNBT allomancySpikeInfo = getHemalurgicInfo(allomancySpike);
+                            CompoundNBT feruchemySpikeInfo = getHemalurgicInfo(feruchemySpike);
+
+                            AManifestation allomancyMani = ManifestationRegistry.ALLOMANCY_POWERS.get(stealType).get();
+                            AManifestation feruchemyMani = ManifestationRegistry.FERUCHEMY_POWERS.get(stealType).get();
+
+                            //then we've found something to steal!
+                            CompoundNBTHelper.setBoolean(allomancySpikeInfo, allomancyMani.getRegistryName().getPath(), true);
+                            CompoundNBTHelper.setBoolean(allomancySpikeInfo, "hasHemalurgicPower", true);
+                            CompoundNBTHelper.setDouble(allomancySpikeInfo, getMetalType().name(), 10);
+                            setHemalurgicIdentity(allomancySpike, UUID.randomUUID());
+
+                            CompoundNBTHelper.setBoolean(feruchemySpikeInfo, feruchemyMani.getRegistryName().getPath(), true);
+                            CompoundNBTHelper.setBoolean(feruchemySpikeInfo, "hasHemalurgicPower", true);
+                            CompoundNBTHelper.setDouble(feruchemySpikeInfo, getMetalType().name(), 10);
+                            setHemalurgicIdentity(feruchemySpike, UUID.randomUUID());
+
+                            stacks.add(allomancySpike);
+                            stacks.add(feruchemySpike);
+
+                        }
+                        catch (Exception e)
+                        {
+                            LogHelper.info(String.format("remove %s from whitelist for %s spikes", stealType.toString(), getMetalType()));
+                        }
+                    }
+                }
             }
 
             if (this.getMetalType() == Metals.MetalType.LERASIUM)

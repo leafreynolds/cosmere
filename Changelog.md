@@ -1,5 +1,10 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B19
+
+Creative mode now has a more comprehensive list of hemalurgic spikes with the abilities that they can steal
+Remove our own Gold/Iron Nuggets from being created.
+
 B18
 
 Bumped forge version to 36.2.0
