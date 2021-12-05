@@ -184,12 +184,12 @@ public class AllomancyIronSteel extends AllomancyBase
                 direction = VectorHelper.getDirection(
                         blockCenter,
                         living.getPositionVec(),
-                        (isPush ? -1f : 1f) * renderPartialTicks);
+                        (isPush ? -1f : 2f) * renderPartialTicks);
 
                 //todo, clean up all the unnecessary calculations once we find what feels good at run time
                 Vector3d normalize = direction.normalize();
 
-                double shortenFactor = 0.2;
+                double shortenFactor = isPush ? 0.2 : 0.4;
                 Vector3d add = living.getMotion().add(normalize.mul(shortenFactor, shortenFactor, shortenFactor));
 
                 //don't let the motion go crazy large

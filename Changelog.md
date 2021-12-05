@@ -7,7 +7,8 @@ Remove our own Gold/Iron Nuggets from being created.
 Added metalmind descriptions to JEI/NEI
 Stop the game crashing when patchouli isn't installed, oops
 Shortened allomancy guide book listings, as it doesn't create extra pages for you if you throw too much at it.
-use pewter nugget for allomancy icon in guide book for now. Was metal vial which has no icon yet.
+Use pewter nugget for allomancy icon in guide book for now. Was metal vial which has no icon yet.
+Made iron pulling quite a bit stronger (0.064, was 0.008)
 
 B18
 
