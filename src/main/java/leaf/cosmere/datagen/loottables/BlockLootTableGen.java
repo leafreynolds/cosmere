@@ -25,13 +25,13 @@ public class BlockLootTableGen extends BlockLootTables
             {
                 MetalOreBlock oreBlock = (MetalOreBlock) itemRegistryObject.get();
 
-                this.registerLootTable(oreBlock, (ore) -> {
-                    return droppingItemWithFortune(ore, oreBlock.getMetalType().getRawMetalItem());
+                this.add(oreBlock, (ore) -> {
+                    return createOreDrop(ore, oreBlock.getMetalType().getRawMetalItem());
                 });
             }
             else
             {
-                this.registerDropSelfLootTable(itemRegistryObject.get());
+                this.dropSelf(itemRegistryObject.get());
             }
         }
     }

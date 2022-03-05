@@ -47,14 +47,14 @@ public interface IChargeable
     default boolean trySetAttunedPlayer(ItemStack itemStack, PlayerEntity entity)
     {
         UUID attunedPlayerID = getAttunedPlayer(itemStack);
-        UUID playerID = entity.getUniqueID();
+        UUID playerID = entity.getUUID();
 
         boolean noAttunedPlayer = attunedPlayerID == null;
 
         if (noAttunedPlayer)
         {
             //No attuned player! Check to see whether they are storing identity
-            EffectInstance storingIdentity = entity.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
+            EffectInstance storingIdentity = entity.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
             //if they are
             if (storingIdentity != null && storingIdentity.getDuration() > 0)
             {
@@ -85,7 +85,7 @@ public interface IChargeable
 
     default void setAttunedPlayer(ItemStack itemStack, PlayerEntity entity)
     {
-        StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, entity.getUniqueID());
+        StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, entity.getUUID());
     }
 
     default UUID getAttunedPlayer(ItemStack itemStack)
@@ -95,7 +95,7 @@ public interface IChargeable
 
     default void setAttunedPlayerName(ItemStack itemStack, PlayerEntity entity)
     {
-        String playerName = PlayerHelper.getPlayerName(entity.getUniqueID(), entity.getServer());
+        String playerName = PlayerHelper.getPlayerName(entity.getUUID(), entity.getServer());
         StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, playerName);
     }
 
@@ -106,12 +106,12 @@ public interface IChargeable
 
     default boolean getPlayerIsAttuned(ItemStack itemStack, PlayerEntity entity)
     {
-        EffectInstance storingIdentityEffect = entity.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
+        EffectInstance storingIdentityEffect = entity.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
         boolean noIdentityPlayer = storingIdentityEffect != null && storingIdentityEffect.getDuration() > 0;
 
         UUID itemAttunedPlayerUUID = getAttunedPlayer(itemStack);
         //null means not attuned at all, so can assume player is attuned with it
-        return noIdentityPlayer || itemAttunedPlayerUUID == null || itemAttunedPlayerUUID == entity.getUniqueID();
+        return noIdentityPlayer || itemAttunedPlayerUUID == null || itemAttunedPlayerUUID == entity.getUUID();
     }
 
 

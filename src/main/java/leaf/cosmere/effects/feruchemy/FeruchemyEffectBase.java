@@ -29,16 +29,16 @@ public class FeruchemyEffectBase extends Effect implements IHasMetalType
 
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (entityLivingBaseIn.world.isRemote)
+        if (entityLivingBaseIn.level.isClientSide)
         {
             //client side only?
         }
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier)
+    public boolean isDurationEffectTick(int duration, int amplifier)
     {
         //assume we can apply the effect regardless
         return true;

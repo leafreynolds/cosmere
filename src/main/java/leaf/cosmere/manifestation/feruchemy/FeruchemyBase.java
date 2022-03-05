@@ -62,7 +62,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
         //don't check every tick.
         LivingEntity livingEntity = data.getLiving();
 
-        if (livingEntity.ticksExisted % 20 != 0)
+        if (livingEntity.tickCount % 20 != 0)
         {
             return;
         }
@@ -105,7 +105,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
                 return;
             }
 
-            livingEntity.addPotionEffect(currentEffect);
+            livingEntity.addEffect(currentEffect);
         }
 
     }

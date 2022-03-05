@@ -37,7 +37,7 @@ public class ClientEvents
     public static void handleScroll(MouseScrollEvent event)
     {
         final ClientPlayerEntity player = Minecraft.getInstance().player;
-        final ItemStack held = player.getHeldItem(Hand.MAIN_HAND);
+        final ItemStack held = player.getItemInHand(Hand.MAIN_HAND);
 
         SpiritwebCapability.get(player).ifPresent(spiritweb ->
         {
@@ -57,7 +57,7 @@ public class ClientEvents
     @SubscribeEvent
     public static void input(InputUpdateEvent event)
     {
-        if (event.getMovementInput().jump)
+        if (event.getMovementInput().jumping)
         {
         }
     }
@@ -101,7 +101,7 @@ public class ClientEvents
 
     private static boolean isKeyPressed(InputEvent.KeyInputEvent event, KeyBinding keyBinding)
     {
-        return event.getKey() == keyBinding.getKey().getKeyCode() && keyBinding.isPressed();
+        return event.getKey() == keyBinding.getKey().getValue() && keyBinding.consumeClick();
     }
 
     @SubscribeEvent
@@ -122,19 +122,19 @@ public class ClientEvents
         IProfiler profiler = mc.getProfiler();
         ClientPlayerEntity playerEntity = mc.player;
         {
-            profiler.startSection("cosmere-hud");
+            profiler.push("cosmere-hud");
 
-            if (Minecraft.getInstance().playerController.shouldDrawHUD())
+            if (Minecraft.getInstance().gameMode.canHurtPlayer())
             {
                 SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
                 {
-                    profiler.startSection(spiritweb.manifestation().getRegistryName().getNamespace());
+                    profiler.push(spiritweb.manifestation().getRegistryName().getNamespace());
                     spiritweb.renderWorldEffects(event);
-                    profiler.endSection();
+                    profiler.pop();
 
                 });
             }
-            profiler.endSection();
+            profiler.pop();
 
             RenderSystem.color4f(1F, 1F, 1F, 1F);
         }

@@ -26,7 +26,7 @@ public class DataSerializersRegistry
         }
 
         @Override
-        public ResourceLocation copyValue(ResourceLocation value)
+        public ResourceLocation copy(ResourceLocation value)
         {
             return value;
         }

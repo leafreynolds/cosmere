@@ -28,7 +28,7 @@ public class ItemTagsGen extends ItemTagsProvider
     }
 
     @Override
-    protected void registerTags()
+    protected void addTags()
     {
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
@@ -57,10 +57,10 @@ public class ItemTagsGen extends ItemTagsProvider
                 add(metalType.getMetalIngotTag(), ingotItem);
 
                 //tell the ingots that our ingot tags are part of them
-                this.getOrCreateBuilder(Tags.Items.INGOTS).addTag(metalType.getMetalIngotTag());
+                this.tag(Tags.Items.INGOTS).addTag(metalType.getMetalIngotTag());
 
                 //tell the nuggets that our nugget tags are part of them
-                this.getOrCreateBuilder(Tags.Items.NUGGETS).addTag(metalType.getMetalNuggetTag());
+                this.tag(Tags.Items.NUGGETS).addTag(metalType.getMetalNuggetTag());
 
                 // tell the Nugget that our Nuggets are related
                 Item item = metalType.getNuggetItem();
@@ -85,12 +85,12 @@ public class ItemTagsGen extends ItemTagsProvider
 
     public void add(ITag.INamedTag<Item> branch, Item item)
     {
-        this.getOrCreateBuilder(branch).add(item);
+        this.tag(branch).add(item);
     }
 
     public void add(ITag.INamedTag<Item> branch, Item... item)
     {
-        this.getOrCreateBuilder(branch).add(item);
+        this.tag(branch).add(item);
     }
 
 

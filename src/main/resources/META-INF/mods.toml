@@ -7,7 +7,7 @@ version="${version}" #mandatory
 displayName="The Cosmere" #mandatory
 logoFile="cosmere_icon.png"
 credits="Special thanks to 50ap5ud5, Suff, Spectre0987, Vazkii, the Chisels and Bits team and so many more. \nThey all either helped me (directly or indirectly via their open source repos) understand working with the minecraft and the forge API better <3\nSeriously. Thank you!" #optional
-authors="Leafworthy" #optional
+authors="Leaf Reynolds" #optional
 description='''
 Bringing The Cosmere to Minecraft!
 '''

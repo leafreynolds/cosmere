@@ -39,7 +39,7 @@ public class FeruchemyCopper extends FeruchemyBase
         //don't check every tick.
         LivingEntity livingEntity = data.getLiving();
 
-        if (!(livingEntity instanceof PlayerEntity) || livingEntity.ticksExisted % 20 != 0)
+        if (!(livingEntity instanceof PlayerEntity) || livingEntity.tickCount % 20 != 0)
         {
             return;
         }
@@ -85,7 +85,7 @@ public class FeruchemyCopper extends FeruchemyBase
         int cost = getCost(mode);
         int experiencePoints = playerEntity.isCreative() ? 10 : cost;
 
-        if (playerEntity.experienceTotal > cost && MetalmindChargeHelper.adjustMetalmindChargeExact(playerEntity, metalType, -experiencePoints, true, true) != null)
+        if (playerEntity.totalExperience > cost && MetalmindChargeHelper.adjustMetalmindChargeExact(playerEntity, metalType, -experiencePoints, true, true) != null)
         {
             //successfully added xp to metalmind
 
@@ -110,7 +110,7 @@ public class FeruchemyCopper extends FeruchemyBase
             EffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 
             //potion effect doesn't do anything other than tell the player they are storing.
-            playerEntity.addPotionEffect(currentEffect);
+            playerEntity.addEffect(currentEffect);
         }
     }
 
@@ -121,10 +121,10 @@ public class FeruchemyCopper extends FeruchemyBase
     //https://github.com/P3pp3rF1y/Reliquary/blob/1.16.x/src/main/java/xreliquary/items/HeroMedallionItem.java
     private void decreasePlayerExperience(PlayerEntity player, int pointsToRemove)
     {
-        player.experienceTotal -= pointsToRemove;
-        int newLevel = XPHelper.getLevelForExperience(player.experienceTotal);
+        player.totalExperience -= pointsToRemove;
+        int newLevel = XPHelper.getLevelForExperience(player.totalExperience);
         player.experienceLevel = newLevel;
-        player.experience = (float) (player.experienceTotal - XPHelper.getExperienceForLevel(newLevel)) / player.xpBarCap();
+        player.experienceProgress = (float) (player.totalExperience - XPHelper.getExperienceForLevel(newLevel)) / player.getXpNeededForNextLevel();
     }
 
 }

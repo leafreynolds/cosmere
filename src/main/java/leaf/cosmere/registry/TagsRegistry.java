@@ -91,18 +91,18 @@ public class TagsRegistry
 
         private static ITag.INamedTag<Item> itemTag(String name)
         {
-            return ItemTags.makeWrapperTag(prefix(name).toString());
+            return ItemTags.bind(prefix(name).toString());
         }
 
         private static ITag.INamedTag<Item> forgeItemTag(String name)
         {
-            return getOrRegister(ItemTags.getAllTags(), loc -> ItemTags.makeWrapperTag(loc.toString()), new ResourceLocation("forge", name));
+            return getOrRegister(ItemTags.getWrappers(), loc -> ItemTags.bind(loc.toString()), new ResourceLocation("forge", name));
         }
 
 
         public static ITag.INamedTag<Item> makeItem(String domain, String path)
         {
-            return ItemTags.makeWrapperTag(new ResourceLocation(domain, path).toString());
+            return ItemTags.bind(new ResourceLocation(domain, path).toString());
         }
     }
 
@@ -112,7 +112,7 @@ public class TagsRegistry
 
         public static ITag.INamedTag<Block> makeBlock(String domain, String path)
         {
-            return BlockTags.makeWrapperTag(new ResourceLocation(domain, path).toString());
+            return BlockTags.bind(new ResourceLocation(domain, path).toString());
         }
 
         public static ITag.INamedTag<Block> DRAGON_PROOF = makeBlock("minecraft", "dragon_immune");
@@ -126,7 +126,7 @@ public class TagsRegistry
 
         private static ITag.INamedTag<Block> forgeTag(String name)
         {
-            return getOrRegister(BlockTags.getAllTags(), loc -> BlockTags.makeWrapperTag(loc.toString()), new ResourceLocation("forge", name));
+            return getOrRegister(BlockTags.getWrappers(), loc -> BlockTags.bind(loc.toString()), new ResourceLocation("forge", name));
         }
 
     }

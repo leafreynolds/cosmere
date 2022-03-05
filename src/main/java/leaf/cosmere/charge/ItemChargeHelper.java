@@ -60,11 +60,11 @@ public class ItemChargeHelper
 
     private static List<ItemStack> getChargeableItemStacks(IInventory acc)
     {
-        List<ItemStack> toReturn = new ArrayList<>(acc.getSizeInventory());
+        List<ItemStack> toReturn = new ArrayList<>(acc.getContainerSize());
 
-        for (int slot = 0; slot < acc.getSizeInventory(); slot++)
+        for (int slot = 0; slot < acc.getContainerSize(); slot++)
         {
-            ItemStack stackInSlot = acc.getStackInSlot(slot);
+            ItemStack stackInSlot = acc.getItem(slot);
 
             if (!stackInSlot.isEmpty() && stackInSlot.getItem() instanceof IChargeable)
             {
@@ -137,7 +137,7 @@ public class ItemChargeHelper
 
     public static ItemStack adjustChargeExact(PlayerEntity player, int chargeToGet, boolean doAdjust, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
     {
-        EffectInstance storingIdentity = player.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
+        EffectInstance storingIdentity = player.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
         boolean isStoringIdentity = (storingIdentity != null && storingIdentity.getDuration() > 0);
 
 

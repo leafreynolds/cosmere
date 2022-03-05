@@ -71,7 +71,7 @@ public class Network
 
     public static SUpdateTileEntityPacket createTEUpdatePacket(TileEntity tile)
     {
-        return new SUpdateTileEntityPacket(tile.getPos(), -1, tile.getUpdateTag());
+        return new SUpdateTileEntityPacket(tile.getBlockPos(), -1, tile.getUpdateTag());
     }
 
     public static void sendToAllAround(Object mes, RegistryKey<World> dim, BlockPos pos, int radius)
@@ -81,14 +81,14 @@ public class Network
 
     public static void sendToAllInWorld(Object mes, ServerWorld world)
     {
-        NETWORK_CHANNEL.send(PacketDistributor.DIMENSION.with(world::getDimensionKey), mes);
+        NETWORK_CHANNEL.send(PacketDistributor.DIMENSION.with(world::dimension), mes);
     }
 
     public static void sendToTrackingTE(Object mes, TileEntity te)
     {
-        if (te != null && !te.getWorld().isRemote)
+        if (te != null && !te.getLevel().isClientSide)
         {
-            NETWORK_CHANNEL.send(PacketDistributor.TRACKING_CHUNK.with(() -> te.getWorld().getChunkAt(te.getPos())), mes);
+            NETWORK_CHANNEL.send(PacketDistributor.TRACKING_CHUNK.with(() -> te.getLevel().getChunkAt(te.getBlockPos())), mes);
         }
     }
 }

@@ -17,10 +17,10 @@ public class EntityHelper
 {
     public static List<LivingEntity> getLivingEntitiesInRange(LivingEntity selfEntity, int range, boolean includeSelf)
     {
-        AxisAlignedBB areaOfEffect = new AxisAlignedBB(selfEntity.getPosition());
-        areaOfEffect = areaOfEffect.grow(range, range, range);
+        AxisAlignedBB areaOfEffect = new AxisAlignedBB(selfEntity.blockPosition());
+        areaOfEffect = areaOfEffect.inflate(range, range, range);
 
-        List<LivingEntity> entitiesFound = selfEntity.world.getEntitiesWithinAABB(LivingEntity.class, areaOfEffect);
+        List<LivingEntity> entitiesFound = selfEntity.level.getEntitiesOfClass(LivingEntity.class, areaOfEffect);
 
         if (!includeSelf)
         {
@@ -34,10 +34,10 @@ public class EntityHelper
 
     public static List<Entity> getEntitiesInRange(Entity entity, int range, boolean includeSelf)
     {
-        AxisAlignedBB areaOfEffect = new AxisAlignedBB(entity.getPosition());
-        areaOfEffect = areaOfEffect.expand(range, range, range);
+        AxisAlignedBB areaOfEffect = new AxisAlignedBB(entity.blockPosition());
+        areaOfEffect = areaOfEffect.expandTowards(range, range, range);
 
-        List<Entity> entitiesFound = entity.world.getEntitiesWithinAABB(Entity.class, areaOfEffect);
+        List<Entity> entitiesFound = entity.level.getEntitiesOfClass(Entity.class, areaOfEffect);
 
         if (!includeSelf && entitiesFound.contains(entity))
         {

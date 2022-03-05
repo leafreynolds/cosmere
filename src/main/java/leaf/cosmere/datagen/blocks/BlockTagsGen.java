@@ -25,7 +25,7 @@ public class BlockTagsGen extends BlockTagsProvider
     }
 
     @Override
-    protected void registerTags()
+    protected void addTags()
     {
         add(TagsRegistry.Blocks.DRAGON_PROOF, BlocksRegistry.GEM_BLOCK.get());
         add(TagsRegistry.Blocks.WITHER_PROOF, BlocksRegistry.GEM_BLOCK.get());
@@ -49,11 +49,11 @@ public class BlockTagsGen extends BlockTagsProvider
 
     public void add(ITag.INamedTag<Block> branch, Block block)
     {
-        this.getOrCreateBuilder(branch).add(block);
+        this.tag(branch).add(block);
     }
 
     public void add(ITag.INamedTag<Block> branch, Block... block)
     {
-        this.getOrCreateBuilder(branch).add(block);
+        this.tag(branch).add(block);
     }
 }

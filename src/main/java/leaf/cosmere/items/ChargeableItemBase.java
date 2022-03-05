@@ -29,9 +29,9 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
     }
 
     @Override
-    public void fillItemGroup(@Nonnull ItemGroup tab, @Nonnull NonNullList<ItemStack> stacks)
+    public void fillItemCategory(@Nonnull ItemGroup tab, @Nonnull NonNullList<ItemStack> stacks)
     {
-        if (isInGroup(tab))
+        if (allowdedIn(tab))
         {
             stacks.add(new ItemStack(this));
 
@@ -60,7 +60,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
         String attunedPlayerName = getAttunedPlayerName(stack);
         UUID attunedPlayer = getAttunedPlayer(stack);
@@ -68,7 +68,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
         {
             tooltip.add(TextHelper.createText(attunedPlayerName));
         }
-        tooltip.add(TextHelper.createText(String.format("%s/%s", getCharge(stack), getMaxCharge(stack))).mergeStyle(TextFormatting.GRAY));
+        tooltip.add(TextHelper.createText(String.format("%s/%s", getCharge(stack), getMaxCharge(stack))).withStyle(TextFormatting.GRAY));
     }
 
     @Override
@@ -88,7 +88,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack)
+    public boolean isFoil(ItemStack stack)
     {
         if (stack.getItem() instanceof IChargeable)
         {

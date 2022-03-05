@@ -23,7 +23,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
         if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
         {
@@ -32,7 +32,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier)
+    public boolean isDurationEffectTick(int duration, int amplifier)
     {
         int k = 40 >> amplifier;
         if (k > 0)

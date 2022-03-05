@@ -42,26 +42,26 @@ public class AllomancyZinc extends AllomancyBase
                 MobEntity mob = (MobEntity) e;
 
                 //mob.targetSelector.enableFlag(Goal.Flag.TARGET);
-                mob.setNoAI(false);
+                mob.setNoAi(false);
 
                 switch (mode)
                 {
                     case 3:
-                        if (mob.getAttackTarget() == null)
+                        if (mob.getTarget() == null)
                         {
                             LivingEntity attackTarget = entitiesToAffect.get(MathHelper.randomInt(0, entitiesToAffect.size() - 1));
-                            mob.setAttackTarget(attackTarget);
+                            mob.setTarget(attackTarget);
                         }
                     case 2:
-                        if (mob.getRevengeTarget() == null)
+                        if (mob.getLastHurtByMob() == null)
                         {
-                            mob.setRevengeTarget(mob.getAttackTarget() != null ? mob.getAttackTarget()
+                            mob.setLastHurtByMob(mob.getTarget() != null ? mob.getTarget()
                                                                                : entitiesToAffect.get(MathHelper.randomInt(0, entitiesToAffect.size() - 1)));
                         }
 
                     case 1:
                     default:
-                        mob.setAggroed(true);
+                        mob.setAggressive(true);
                 }
             }
         }

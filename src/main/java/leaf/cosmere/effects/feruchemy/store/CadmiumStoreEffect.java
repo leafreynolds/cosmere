@@ -20,18 +20,18 @@ public class CadmiumStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (entityLivingBaseIn.world.isRemote)
+        if (entityLivingBaseIn.level.isClientSide)
         {
             return;
         }
 
-        entityLivingBaseIn.setAir(MathHelper.clamp(entityLivingBaseIn.getAir() - 4 - (amplifier), -20, entityLivingBaseIn.getMaxAir()));
+        entityLivingBaseIn.setAirSupply(MathHelper.clamp(entityLivingBaseIn.getAirSupply() - 4 - (amplifier), -20, entityLivingBaseIn.getMaxAirSupply()));
 
-        if (entityLivingBaseIn.getAir() < -10 && entityLivingBaseIn.ticksExisted % 50 == 0)
+        if (entityLivingBaseIn.getAirSupply() < -10 && entityLivingBaseIn.tickCount % 50 == 0)
         {
-            entityLivingBaseIn.attackEntityFrom(DamageSource.DROWN, 2.0F);
+            entityLivingBaseIn.hurt(DamageSource.DROWN, 2.0F);
         }
     }
 }

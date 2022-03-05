@@ -18,7 +18,7 @@ public class TestCurio implements ICurio
     public void curioTick(String identifier, int index, LivingEntity livingEntity)
     {
         //don't check every tick.
-        if (livingEntity.ticksExisted % 20 == 0)
+        if (livingEntity.tickCount % 20 == 0)
         {
 
         }

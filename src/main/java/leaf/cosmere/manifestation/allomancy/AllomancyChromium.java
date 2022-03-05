@@ -30,25 +30,25 @@ public class AllomancyChromium extends AllomancyBase
             int range = data.getMode(manifestationType, getMetalType().getID());
 
             LivingEntity living = data.getLiving();
-            World world = living.world;
-            boolean isActiveTick = living.world.getGameTime() % 20 == 0;
-            if (!world.isRemote && isActiveTick)
+            World world = living.level;
+            boolean isActiveTick = living.level.getGameTime() % 20 == 0;
+            if (!world.isClientSide && isActiveTick)
             {
                 //thank you to CyclopsMC and their repo EverlastingAbilities for their section on detecting enemies you are looking at
                 //https://github.com/CyclopsMC/EverlastingAbilities/blob/master-1.16/src/main/java/org/cyclops/everlastingabilities/ability/AbilityTypePowerStare.java
 
                 double eyeHeight = living.getEyeHeight();
-                Vector3d lookVec = living.getLookVec();
-                Vector3d origin = new Vector3d(living.getPosX(), living.getPosY() + eyeHeight, living.getPosZ());
+                Vector3d lookVec = living.getLookAngle();
+                Vector3d origin = new Vector3d(living.getX(), living.getY() + eyeHeight, living.getZ());
                 Vector3d direction = origin.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
 
-                List<Entity> entitiesInRange = world.getEntitiesWithinAABBExcludingEntity(living,
+                List<Entity> entitiesInRange = world.getEntities(living,
                         living.getBoundingBox()
-                                .grow(
+                                .inflate(
                                         lookVec.x * range,
                                         lookVec.y * range,
                                         lookVec.z * range)
-                                .grow(range));
+                                .inflate(range));
 
                 for (Entity e : entitiesInRange)
                 {
@@ -60,9 +60,9 @@ public class AllomancyChromium extends AllomancyBase
                     {
                         Entity entity = null;
 
-                        float f10 = e.getCollisionBorderSize();
-                        AxisAlignedBB axisalignedbb = e.getBoundingBox().expand((double) f10, (double) f10, (double) f10);
-                        Vector3d hitVec = axisalignedbb.rayTrace(origin, direction).orElse(null);
+                        float f10 = e.getPickRadius();
+                        AxisAlignedBB axisalignedbb = e.getBoundingBox().expandTowards((double) f10, (double) f10, (double) f10);
+                        Vector3d hitVec = axisalignedbb.clip(origin, direction).orElse(null);
 
                         if (axisalignedbb.contains(origin))
                         {
@@ -73,7 +73,7 @@ public class AllomancyChromium extends AllomancyBase
                             double distance = origin.distanceTo(hitVec);
                             if (distance < range || range == 0.0D)
                             {
-                                if (e == living.getRidingEntity() && !living.canRiderInteract())
+                                if (e == living.getVehicle() && !living.canRiderInteract())
                                 {
                                     if (range == 0.0D)
                                     {

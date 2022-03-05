@@ -49,7 +49,7 @@ public class ClientSetup
             if (!metalType.hasOre())
                 continue;
 
-            RenderType cutoutMipped = RenderType.getCutoutMipped();
+            RenderType cutoutMipped = RenderType.cutoutMipped();
             RenderTypeLookup.setRenderLayer(metalType.getOreBlock(), cutoutMipped);
         }
 
@@ -63,7 +63,7 @@ public class ClientSetup
     public static void registerIconTextures(TextureStitchEvent.Pre event)
     {
         final AtlasTexture map = event.getMap();
-        if (!map.getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE))
+        if (!map.location().equals(PlayerContainer.BLOCK_ATLAS))
         {
             return;
         }
@@ -90,7 +90,7 @@ public class ClientSetup
     public static void retrieveRegisteredIconSprites(final TextureStitchEvent.Post event)
     {
         final AtlasTexture map = event.getMap();
-        if (!map.getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE))
+        if (!map.location().equals(PlayerContainer.BLOCK_ATLAS))
         {
             return;
         }

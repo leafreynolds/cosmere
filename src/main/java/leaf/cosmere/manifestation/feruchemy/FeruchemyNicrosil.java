@@ -40,7 +40,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
         //don't check every tick.
         LivingEntity livingEntity = data.getLiving();
 
-        if (livingEntity.ticksExisted % 20 != 0)
+        if (livingEntity.tickCount % 20 != 0)
         {
             return;
         }
@@ -77,7 +77,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
         if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true))
         {
             EffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
-            livingEntity.addPotionEffect(currentEffect);
+            livingEntity.addEffect(currentEffect);
         }
 
     }

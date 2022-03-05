@@ -30,12 +30,12 @@ public class SyncPushPullMessage
 
     public static void encode(SyncPushPullMessage mes, PacketBuffer buf)
     {
-        buf.writeCompoundTag(mes.data);
+        buf.writeNbt(mes.data);
     }
 
     public static SyncPushPullMessage decode(PacketBuffer buf)
     {
-        return new SyncPushPullMessage(buf.readCompoundTag());
+        return new SyncPushPullMessage(buf.readNbt());
     }
 
     public static void handle(SyncPushPullMessage mes, Supplier<NetworkEvent.Context> cont)
@@ -44,7 +44,7 @@ public class SyncPushPullMessage
         NetworkEvent.Context context = cont.get();
         ServerPlayerEntity sender = context.getSender();
         MinecraftServer server = sender.getServer();
-        server.deferTask(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+        server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
         {
             SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
 

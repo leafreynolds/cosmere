@@ -25,14 +25,14 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier)
+    public boolean isDurationEffectTick(int duration, int amplifier)
     {
         return true;
     }
 
     public void onLivingVisibilityEvent(LivingEvent.LivingVisibilityEvent event)
     {
-        EffectInstance effectInstance = event.getEntityLiving().getActivePotionEffect(this);
+        EffectInstance effectInstance = event.getEntityLiving().getEffect(this);
         if (effectInstance != null && effectInstance.getDuration() > 0)
         {
             //at max strength and wearing no armor, you could stand a block or two away from a creeper and it wont see you.
@@ -50,7 +50,7 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 
         LivingEntity livingEntity = (LivingEntity) event.getEntity();
 
-        EffectInstance effectInstance = livingEntity.getActivePotionEffect(this);
+        EffectInstance effectInstance = livingEntity.getEffect(this);
         if (effectInstance != null && effectInstance.getDuration() > 0)
         {
             if (effectInstance.getAmplifier() > 2)

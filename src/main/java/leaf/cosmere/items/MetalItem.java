@@ -19,7 +19,7 @@ public class MetalItem extends BaseItem implements IHasMetalType
 
     public MetalItem(Metals.MetalType metalType)
     {
-        super(PropTypes.Items.SIXTY_FOUR.get().group(CosmereItemGroups.ITEMS).rarity(metalType.getRarity()));
+        super(PropTypes.Items.SIXTY_FOUR.get().tab(CosmereItemGroups.ITEMS).rarity(metalType.getRarity()));
 
         this.metalType = metalType;
     }
@@ -28,7 +28,7 @@ public class MetalItem extends BaseItem implements IHasMetalType
     /**
      * Returns true if the item can be used on the given entity, e.g. shears on sheep.
      */
-    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand)
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand)
     {
         return ActionResultType.PASS;
     }

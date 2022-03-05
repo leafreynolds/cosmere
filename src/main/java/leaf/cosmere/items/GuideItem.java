@@ -48,12 +48,12 @@ public class GuideItem extends Item
 
     public static ITextComponent getTitle(ItemStack stack)
     {
-        ITextComponent title = stack.getDisplayName();
+        ITextComponent title = stack.getHoverName();
 
         String akashicTomeNBT = "akashictome:displayName";
         if (stack.hasTag() && stack.getTag().contains(akashicTomeNBT))
         {
-            title = ITextComponent.Serializer.getComponentFromJson(stack.getTag().getString(akashicTomeNBT));
+            title = ITextComponent.Serializer.fromJson(stack.getTag().getString(akashicTomeNBT));
         }
 
         return title;
@@ -62,7 +62,7 @@ public class GuideItem extends Item
     // Random item to expose this as public
     public static BlockRayTraceResult doRayTrace(World world, PlayerEntity player, RayTraceContext.FluidMode fluidMode)
     {
-        return Item.rayTrace(world, player, fluidMode);
+        return Item.getPlayerPOVHitResult(world, player, fluidMode);
     }
 
     /*
@@ -76,9 +76,9 @@ public class GuideItem extends Item
     */
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
-        tooltip.add(getEdition().deepCopy().mergeStyle(TextFormatting.GRAY));
+        tooltip.add(getEdition().copy().withStyle(TextFormatting.GRAY));
     }
 
     public static ITextComponent getEdition()
@@ -91,9 +91,9 @@ public class GuideItem extends Item
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
-        ItemStack stack = playerIn.getHeldItem(handIn);
+        ItemStack stack = playerIn.getItemInHand(handIn);
 
         if (playerIn instanceof ServerPlayerEntity)
         {

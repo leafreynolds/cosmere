@@ -37,7 +37,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
     }
 
     @Override
-    protected void registerRecipes(Consumer<IFinishedRecipe> consumer)
+    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer)
     {
 
         //example recipes obtained from following website on 3rd April '21. Thank you ChampionAsh5357!
@@ -50,9 +50,9 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
         //addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_BLOCK.get(), ItemsRegistry.GUIDE.get(), 1.0f, 200);
         addOreSmeltingRecipes(consumer, ItemsRegistry.METAL_SPIKE.get(Metals.MetalType.IRON).get(), ItemsRegistry.GUIDE.get(), 1.0f, 200);
 
-        ShapedRecipeBuilder.shapedRecipe(ItemsRegistry.METAL_VIAL.get()).key('X', Items.IRON_NUGGET).key('Y', Items.GLASS).patternLine("X").patternLine("Y").addCriterion("has_material", hasItem(Items.GLASS)).build(consumer);
+        ShapedRecipeBuilder.shaped(ItemsRegistry.METAL_VIAL.get()).define('X', Items.IRON_NUGGET).define('Y', Items.GLASS).pattern("X").pattern("Y").unlockedBy("has_material", has(Items.GLASS)).save(consumer);
 
-        CustomRecipeBuilder.customRecipe(RecipeRegistry.VIAL_RECIPE_SERIALIZER.get()).build(consumer, ResourceLocationHelper.prefix("vial_mixing").toString());
+        CustomRecipeBuilder.special(RecipeRegistry.VIAL_RECIPE_SERIALIZER.get()).save(consumer, ResourceLocationHelper.prefix("vial_mixing").toString());
 
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
@@ -65,10 +65,10 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                 continue;
             }
 
-            compressRecipe(BlocksRegistry.METAL_BLOCKS.get(metalType).get(), TagsRegistry.Items.METAL_INGOT_TAGS.get(metalType)).build(consumer);
+            compressRecipe(BlocksRegistry.METAL_BLOCKS.get(metalType).get(), TagsRegistry.Items.METAL_INGOT_TAGS.get(metalType)).save(consumer);
             decompressRecipe(consumer, ItemsRegistry.METAL_INGOTS.get(metalType).get(), TagsRegistry.Items.METAL_BLOCK_ITEM_TAGS.get(metalType), metalType.name().toLowerCase() + "_block_deconstruct");
 
-            compressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), TagsRegistry.Items.METAL_NUGGET_TAGS.get(metalType)).build(consumer);
+            compressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), TagsRegistry.Items.METAL_NUGGET_TAGS.get(metalType)).save(consumer);
             decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), TagsRegistry.Items.METAL_INGOT_TAGS.get(metalType), metalType.name().toLowerCase() + "_item_deconstruct");
 
             if (metalType.hasOre())
@@ -103,79 +103,79 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
         switch (metalType)
         {
             case STEEL:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 4)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON))
-                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON))
-                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_IRON))
-                        .addIngredient(Ingredient.fromItems(Items.COAL, Items.CHARCOAL))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 4)
+                        .unlockedBy("has_item", has(output))
+                        .requires(Ingredient.of(Tags.Items.INGOTS_IRON))
+                        .requires(Ingredient.of(Tags.Items.INGOTS_IRON))
+                        .requires(Ingredient.of(Tags.Items.INGOTS_IRON))
+                        .requires(Ingredient.of(Items.COAL, Items.CHARCOAL))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
             case PEWTER:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 5)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.TIN))
-                        .addIngredient(materialTag.get(Metals.MetalType.TIN))
-                        .addIngredient(materialTag.get(Metals.MetalType.TIN))
-                        .addIngredient(materialTag.get(Metals.MetalType.TIN))
-                        .addIngredient(materialTag.get(Metals.MetalType.LEAD))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 5)
+                        .unlockedBy("has_item", has(output))
+                        .requires(materialTag.get(Metals.MetalType.TIN))
+                        .requires(materialTag.get(Metals.MetalType.TIN))
+                        .requires(materialTag.get(Metals.MetalType.TIN))
+                        .requires(materialTag.get(Metals.MetalType.TIN))
+                        .requires(materialTag.get(Metals.MetalType.LEAD))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
             case BRASS:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 2)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.ZINC))
-                        .addIngredient(materialTag.get(Metals.MetalType.COPPER))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 2)
+                        .unlockedBy("has_item", has(output))
+                        .requires(materialTag.get(Metals.MetalType.ZINC))
+                        .requires(materialTag.get(Metals.MetalType.COPPER))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
             case BRONZE:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 4)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.COPPER))
-                        .addIngredient(materialTag.get(Metals.MetalType.COPPER))
-                        .addIngredient(materialTag.get(Metals.MetalType.COPPER))
-                        .addIngredient(materialTag.get(Metals.MetalType.TIN))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 4)
+                        .unlockedBy("has_item", has(output))
+                        .requires(materialTag.get(Metals.MetalType.COPPER))
+                        .requires(materialTag.get(Metals.MetalType.COPPER))
+                        .requires(materialTag.get(Metals.MetalType.COPPER))
+                        .requires(materialTag.get(Metals.MetalType.TIN))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
             case DURALUMIN:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 5)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.ALUMINUM))
-                        .addIngredient(materialTag.get(Metals.MetalType.ALUMINUM))
-                        .addIngredient(materialTag.get(Metals.MetalType.ALUMINUM))
-                        .addIngredient(materialTag.get(Metals.MetalType.ALUMINUM))
-                        .addIngredient(materialTag.get(Metals.MetalType.COPPER))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 5)
+                        .unlockedBy("has_item", has(output))
+                        .requires(materialTag.get(Metals.MetalType.ALUMINUM))
+                        .requires(materialTag.get(Metals.MetalType.ALUMINUM))
+                        .requires(materialTag.get(Metals.MetalType.ALUMINUM))
+                        .requires(materialTag.get(Metals.MetalType.ALUMINUM))
+                        .requires(materialTag.get(Metals.MetalType.COPPER))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
             case NICROSIL:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 4)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.CHROMIUM))
-                        .addIngredient(materialTag.get(Metals.MetalType.NICKEL))
-                        .addIngredient(materialTag.get(Metals.MetalType.NICKEL))
-                        .addIngredient(materialTag.get(Metals.MetalType.NICKEL))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 4)
+                        .unlockedBy("has_item", has(output))
+                        .requires(materialTag.get(Metals.MetalType.CHROMIUM))
+                        .requires(materialTag.get(Metals.MetalType.NICKEL))
+                        .requires(materialTag.get(Metals.MetalType.NICKEL))
+                        .requires(materialTag.get(Metals.MetalType.NICKEL))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
             case BENDALLOY:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 9)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(materialTag.get(Metals.MetalType.CADMIUM))
-                        .addIngredient(materialTag.get(Metals.MetalType.LEAD))
-                        .addIngredient(materialTag.get(Metals.MetalType.LEAD))
-                        .addIngredient(materialTag.get(Metals.MetalType.LEAD))
-                        .addIngredient(materialTag.get(Metals.MetalType.LEAD))
-                        .addIngredient(materialTag.get(Metals.MetalType.LEAD))
-                        .addIngredient(materialTag.get(Metals.MetalType.LEAD))
-                        .addIngredient(materialTag.get(Metals.MetalType.TIN))
-                        .addIngredient(materialTag.get(Metals.MetalType.TIN))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 9)
+                        .unlockedBy("has_item", has(output))
+                        .requires(materialTag.get(Metals.MetalType.CADMIUM))
+                        .requires(materialTag.get(Metals.MetalType.LEAD))
+                        .requires(materialTag.get(Metals.MetalType.LEAD))
+                        .requires(materialTag.get(Metals.MetalType.LEAD))
+                        .requires(materialTag.get(Metals.MetalType.LEAD))
+                        .requires(materialTag.get(Metals.MetalType.LEAD))
+                        .requires(materialTag.get(Metals.MetalType.LEAD))
+                        .requires(materialTag.get(Metals.MetalType.TIN))
+                        .requires(materialTag.get(Metals.MetalType.TIN))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
             case ELECTRUM:
-                ShapelessRecipeBuilder.shapelessRecipe(output, 2)
-                        .addCriterion("has_item", hasItem(output))
-                        .addIngredient(Ingredient.fromTag(Tags.Items.INGOTS_GOLD))
-                        .addIngredient(materialTag.get(Metals.MetalType.SILVER))
-                        .build(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                ShapelessRecipeBuilder.shapeless(output, 2)
+                        .unlockedBy("has_item", has(output))
+                        .requires(Ingredient.of(Tags.Items.INGOTS_GOLD))
+                        .requires(materialTag.get(Metals.MetalType.SILVER))
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
                 break;
         }
     }
@@ -185,19 +185,19 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
     {
         if (head != null)
         {
-            ShapedRecipeBuilder.shapedRecipe(head).key('X', inputMaterial).patternLine("XXX").patternLine("X X").setGroup("helmets").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
+            ShapedRecipeBuilder.shaped(head).define('X', inputMaterial).pattern("XXX").pattern("X X").group("helmets").unlockedBy("has_material", has(inputMaterial)).save(consumer);
         }
         if (chest != null)
         {
-            ShapedRecipeBuilder.shapedRecipe(chest).key('X', inputMaterial).patternLine("X X").patternLine("XXX").patternLine("XXX").setGroup("chestplates").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
+            ShapedRecipeBuilder.shaped(chest).define('X', inputMaterial).pattern("X X").pattern("XXX").pattern("XXX").group("chestplates").unlockedBy("has_material", has(inputMaterial)).save(consumer);
         }
         if (legs != null)
         {
-            ShapedRecipeBuilder.shapedRecipe(legs).key('X', inputMaterial).patternLine("XXX").patternLine("X X").patternLine("X X").setGroup("leggings").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
+            ShapedRecipeBuilder.shaped(legs).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern("X X").group("leggings").unlockedBy("has_material", has(inputMaterial)).save(consumer);
         }
         if (feet != null)
         {
-            ShapedRecipeBuilder.shapedRecipe(feet).key('X', inputMaterial).patternLine("X X").patternLine("X X").setGroup("boots").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
+            ShapedRecipeBuilder.shaped(feet).define('X', inputMaterial).pattern("X X").pattern("X X").group("boots").unlockedBy("has_material", has(inputMaterial)).save(consumer);
         }
     }
 
@@ -207,47 +207,47 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 
         if (metalType.hasFeruchemicalEffect())
         {
-            ShapedRecipeBuilder.shapedRecipe(metalType.getNecklaceItem()).key('X', inputMaterial).patternLine("XXX").patternLine("X X").patternLine(" X ").setGroup("necklace").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
-            ShapedRecipeBuilder.shapedRecipe(metalType.getRingItem()).key('X', inputMaterial).patternLine(" X ").patternLine("X X").patternLine(" X ").setGroup("ring").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
-            ShapedRecipeBuilder.shapedRecipe(metalType.getBraceletItem()).key('X', inputMaterial).patternLine(" X ").patternLine("X X").patternLine("X X").setGroup("bracelet").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
+            ShapedRecipeBuilder.shaped(metalType.getNecklaceItem()).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern(" X ").group("necklace").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+            ShapedRecipeBuilder.shaped(metalType.getRingItem()).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern(" X ").group("ring").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+            ShapedRecipeBuilder.shaped(metalType.getBraceletItem()).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern("X X").group("bracelet").unlockedBy("has_material", has(inputMaterial)).save(consumer);
         }
         if (metalType.hasHemalurgicEffect())
         {
-            ShapedRecipeBuilder.shapedRecipe(metalType.getSpikeItem()).key('X', inputMaterial).patternLine(" X ").patternLine(" X ").setGroup("spike").addCriterion("has_material", hasItem(inputMaterial)).build(consumer);
+            ShapedRecipeBuilder.shaped(metalType.getSpikeItem()).define('X', inputMaterial).pattern(" X ").pattern(" X ").group("spike").unlockedBy("has_material", has(inputMaterial)).save(consumer);
         }
     }
 
     private void decompressRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider output, ITag<Item> input, String name)
     {
-        ShapelessRecipeBuilder.shapelessRecipe(output, 9)
-                .addCriterion("has_item", hasItem(output))
-                .addIngredient(input)
-                .build(consumer, ResourceLocationHelper.prefix("conversions/" + name));
+        ShapelessRecipeBuilder.shapeless(output, 9)
+                .unlockedBy("has_item", has(output))
+                .requires(input)
+                .save(consumer, ResourceLocationHelper.prefix("conversions/" + name));
     }
 
     private ShapedRecipeBuilder compressRecipe(IItemProvider output, ITag<Item> input)
     {
-        return ShapedRecipeBuilder.shapedRecipe(output)
-                .key('I', input)
-                .patternLine("III")
-                .patternLine("III")
-                .patternLine("III")
-                .addCriterion("has_item", hasItem(input));
+        return ShapedRecipeBuilder.shaped(output)
+                .define('I', input)
+                .pattern("III")
+                .pattern("III")
+                .pattern("III")
+                .unlockedBy("has_item", has(input));
     }
 
     protected static void addOreSmeltingRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider ore, Item result, float experience, int time)
     {
         String name = result.getRegistryName().getPath();
         String path = ore.asItem().getRegistryName().getPath();
-        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(ore), result, experience, time).addCriterion("has_ore", hasItem(ore)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting_" + path));
-        CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(ore), result, experience, time / 2).addCriterion("has_ore", hasItem(ore)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_blasting_" + path));
+        CookingRecipeBuilder.smelting(Ingredient.of(ore), result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting_" + path));
+        CookingRecipeBuilder.blasting(Ingredient.of(ore), result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_blasting_" + path));
     }
 
     protected static void addCookingRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider inputItem, Item result, float experience, int time)
     {
         String name = result.getRegistryName().getPath();
-        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(inputItem), result, experience, time).addCriterion("has_item", hasItem(inputItem)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting"));
-        CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(inputItem), result, experience, time / 2, IRecipeSerializer.SMOKING).addCriterion("has_item", hasItem(inputItem)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smoking"));
-        CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(inputItem), result, experience, time, IRecipeSerializer.CAMPFIRE_COOKING).addCriterion("has_item", hasItem(inputItem)).build(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_campfire"));
+        CookingRecipeBuilder.smelting(Ingredient.of(inputItem), result, experience, time).unlockedBy("has_item", has(inputItem)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting"));
+        CookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time / 2, IRecipeSerializer.SMOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smoking"));
+        CookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time, IRecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_campfire"));
     }
 }

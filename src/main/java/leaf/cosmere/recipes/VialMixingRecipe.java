@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 // where you just make gross things
 public class VialMixingRecipe extends SpecialRecipe
 {
-    private static final Ingredient INGREDIENT_BOTTLE = Ingredient.fromItems(Items.GLASS_BOTTLE, ItemsRegistry.METAL_VIAL.get());
+    private static final Ingredient INGREDIENT_BOTTLE = Ingredient.of(Items.GLASS_BOTTLE, ItemsRegistry.METAL_VIAL.get());
 /*    private static final Ingredient INGREDIENT_NUGGET = Ingredient.fromItems(
             ItemsRegistry.METAL_NUGGETS
                     .values()
@@ -46,11 +46,11 @@ public class VialMixingRecipe extends SpecialRecipe
     {
         boolean hasNugget = false;
         ItemStack bottle = null;
-        final Ingredient INGREDIENT_NUGGETS = Ingredient.fromTag(Tags.Items.NUGGETS);
+        final Ingredient INGREDIENT_NUGGETS = Ingredient.of(Tags.Items.NUGGETS);
 
-        for (int i = 0; i < inv.getSizeInventory(); i++)
+        for (int i = 0; i < inv.getContainerSize(); i++)
         {
-            ItemStack stack = inv.getStackInSlot(i);
+            ItemStack stack = inv.getItem(i);
             if (stack.isEmpty())
             {
                 continue;
@@ -93,15 +93,15 @@ public class VialMixingRecipe extends SpecialRecipe
 
     @Override
     @Nonnull
-    public ItemStack getCraftingResult(CraftingInventory inv)
+    public ItemStack assemble(CraftingInventory inv)
     {
         MetalVialItem metalVial = (MetalVialItem) ItemsRegistry.METAL_VIAL.get();
-        final Ingredient INGREDIENT_NUGGETS = Ingredient.fromTag(Tags.Items.NUGGETS);
+        final Ingredient INGREDIENT_NUGGETS = Ingredient.of(Tags.Items.NUGGETS);
         ItemStack itemstack = new ItemStack(metalVial);
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i)
+        for (int i = 0; i < inv.getContainerSize(); ++i)
         {
-            ItemStack stackInSlot = inv.getStackInSlot(i);
+            ItemStack stackInSlot = inv.getItem(i);
             if (stackInSlot.isEmpty())
             {
                 continue;
@@ -129,7 +129,7 @@ public class VialMixingRecipe extends SpecialRecipe
     }
 
     @Override
-    public boolean canFit(int width, int height)
+    public boolean canCraftInDimensions(int width, int height)
     {
         //if you can fit 2 items, the bottle and a metal, you can combine
         return width * height > 1;

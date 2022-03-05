@@ -38,18 +38,18 @@ public class AllomancyBrass extends AllomancyBase
             if (e instanceof MobEntity)
             {
                 MobEntity mob = (MobEntity) e;
-                mob.setNoAI(mode == 3 && allomanticStrength > 15);
+                mob.setNoAi(mode == 3 && allomanticStrength > 15);
 
                 switch (mode)
                 {
                     case 3:
-                        mob.setAttackTarget(null);
+                        mob.setTarget(null);
                     case 2:
-                        mob.setAggroed(false);
+                        mob.setAggressive(false);
                     case 1:
                     default:
                         //stop angry targets from attacking things
-                        e.setRevengeTarget(null);
+                        e.setLastHurtByMob(null);
 
                 }
             }

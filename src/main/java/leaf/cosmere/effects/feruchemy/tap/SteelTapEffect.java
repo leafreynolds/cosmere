@@ -23,13 +23,13 @@ public class SteelTapEffect extends FeruchemyEffectBase
     {
         super(type, effectType);
 
-        this.addAttributesModifier(
+        this.addAttributeModifier(
                 Attributes.ATTACK_SPEED,
                 "0191c754-d7a2-4c78-9e14-896ecc7ed0e2",
                 (double) 0.1F,
                 AttributeModifier.Operation.MULTIPLY_TOTAL);
 
-        this.addAttributesModifier(
+        this.addAttributeModifier(
                 Attributes.MOVEMENT_SPEED,
                 "ede32ebb-1e66-4d26-b414-c14467885e7a",
                 (double) 0.2F,
@@ -46,7 +46,7 @@ public class SteelTapEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier)
+    public boolean isDurationEffectTick(int duration, int amplifier)
     {
         return amplifier > 2;
     }
@@ -54,15 +54,15 @@ public class SteelTapEffect extends FeruchemyEffectBase
     final Vector3d vec = new Vector3d(1.02d, 0d, 1.02d);
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
         //code for checking block under player
         //https://stackoverflow.com/a/62026168
-        if (entityLivingBaseIn.world.getBlockState(entityLivingBaseIn.getPosition().down()).getMaterial() == Material.WATER)
+        if (entityLivingBaseIn.level.getBlockState(entityLivingBaseIn.blockPosition().below()).getMaterial() == Material.WATER)
         {
 
-            Vector3d motion = entityLivingBaseIn.getMotion().mul(vec);
-            entityLivingBaseIn.setMotion(motion);
+            Vector3d motion = entityLivingBaseIn.getDeltaMovement().multiply(vec);
+            entityLivingBaseIn.setDeltaMovement(motion);
         }
     }
 }

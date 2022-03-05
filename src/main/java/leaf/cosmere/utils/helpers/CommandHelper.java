@@ -22,7 +22,7 @@ public class CommandHelper
         {
             map.entrySet().forEach(entry ->
             {
-                builder.suggest(entry.getKey().toString(), new TranslationTextComponent(entry.getValue()).modifyStyle((style) -> style.setFormatting(TextFormatting.GREEN)));
+                builder.suggest(entry.getKey().toString(), new TranslationTextComponent(entry.getValue()).withStyle((style) -> style.withColor(TextFormatting.GREEN)));
             });
         }
         builder.buildFuture();

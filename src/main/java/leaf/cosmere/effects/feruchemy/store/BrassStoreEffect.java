@@ -20,14 +20,14 @@ public class BrassStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
         //ensure the user has fire resistence at least as strong as their store effect
 
-        if (entityLivingBaseIn.world.isRemote || entityLivingBaseIn.ticksExisted % 20 != 0)
+        if (entityLivingBaseIn.level.isClientSide || entityLivingBaseIn.tickCount % 20 != 0)
         {
             return;
         }
-        entityLivingBaseIn.addPotionEffect(EffectsHelper.getNewEffect(Effects.FIRE_RESISTANCE, amplifier));
+        entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(Effects.FIRE_RESISTANCE, amplifier));
     }
 }

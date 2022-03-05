@@ -32,10 +32,10 @@ public class TextHelper
     {
         //Always surround tool tip items with brackets
         TextComponent textComponent = new StringTextComponent("[" + text + "]");
-        textComponent.modifyStyle(style ->
+        textComponent.withStyle(style ->
         {
-            return style.setFormatting(TextFormatting.GREEN)//color tool tip items green
-                    .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent(tooltipText))).setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tooltipText));
+            return style.withColor(TextFormatting.GREEN)//color tool tip items green
+                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent(tooltipText))).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tooltipText));
         });
         return textComponent;
     }
@@ -43,10 +43,10 @@ public class TextHelper
     public static TextComponent createTextWithTooltip(TranslationTextComponent translation, TranslationTextComponent description)
     {
         //Always surround tool tip items with brackets
-        translation.modifyStyle(style ->
+        translation.withStyle(style ->
         {
-            return style.setFormatting(TextFormatting.GREEN)//color tool tip items green
-                    .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description)).setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, translation.getKey()));
+            return style.withColor(TextFormatting.GREEN)//color tool tip items green
+                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description)).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, translation.getKey()));
         });
         return translation;
     }

@@ -83,7 +83,7 @@ public final class CompoundNBTHelper
 
     public static void setUuid(CompoundNBT compoundTag, String tag, UUID value)
     {
-        compoundTag.putUniqueId(tag, value);
+        compoundTag.putUUID(tag, value);
     }
 
     public static void setList(CompoundNBT compoundTag, String tag, ListNBT list)
@@ -168,7 +168,7 @@ public final class CompoundNBTHelper
     public static UUID getUuid(CompoundNBT compoundTag, String tag)
     {
         return verifyExistance(compoundTag, tag + "Most") && verifyExistance(compoundTag, tag + "Least")
-               ? compoundTag.getUniqueId(tag) : null;
+               ? compoundTag.getUUID(tag) : null;
     }
 
     public static ListNBT getList(CompoundNBT compoundTag, String tag, int objtype, boolean nullifyOnFail)
@@ -205,7 +205,7 @@ public final class CompoundNBTHelper
             return false;
         }
 
-        for (String key : template.keySet())
+        for (String key : template.getAllKeys())
         {
             if (!matchTag(template.get(key), target.get(key)))
             {

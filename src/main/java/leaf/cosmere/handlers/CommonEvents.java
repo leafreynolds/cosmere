@@ -7,6 +7,7 @@ package leaf.cosmere.handlers;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.commands.CosmereCommand;
+import leaf.cosmere.commands.permissions.PermissionManager;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.registry.FeatureRegistry;
@@ -17,6 +18,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,13 @@ public class CommonEvents
     public static void registerCommands(RegisterCommandsEvent event)
     {
         CosmereCommand.register(event.getDispatcher());
+    }
+
+
+    @SubscribeEvent
+    public static void onServerStarting(FMLServerStartingEvent event)
+    {
+        PermissionManager.init();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -52,7 +61,7 @@ public class CommonEvents
             {
                 if (metalType.hasOre())
                 {
-                    event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, FeatureRegistry.ConfiguredFeatures.ORE_FEATURES.get(metalType));
+                    event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, FeatureRegistry.ConfiguredFeatures.ORE_FEATURES.get(metalType));
                     LogHelper.debug(String.format("Added %s to: %s", metalType.name().toLowerCase(Locale.ROOT), event.getName()));
                 }
             }

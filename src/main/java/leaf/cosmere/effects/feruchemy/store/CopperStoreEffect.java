@@ -18,7 +18,7 @@ public class CopperStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
 
     }

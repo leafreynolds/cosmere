@@ -22,7 +22,7 @@ public class ChromiumStoreEffect extends FeruchemyEffectBase
     {
         super(type, effectType);
 
-        addAttributesModifier(
+        addAttributeModifier(
                 Attributes.LUCK,
                 "97c8b98f-fb33-4218-bd32-1ace62d75019",
                 -1.0D,
@@ -36,15 +36,15 @@ public class ChromiumStoreEffect extends FeruchemyEffectBase
         if (event.getDamageSource() == null)
             return;
     
-        boolean isRemote = event.getEntityLiving().world.isRemote;
-        boolean entityNotLiving = !(event.getDamageSource().getTrueSource() instanceof LivingEntity);
+        boolean isRemote = event.getEntityLiving().level.isClientSide;
+        boolean entityNotLiving = !(event.getDamageSource().getEntity() instanceof LivingEntity);
 
         if (isRemote || entityNotLiving)
         {
             return;
         }
 
-        EffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getTrueSource()).getActivePotionEffect(this);
+        EffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getEntity()).getEffect(this);
         if (effectInstance != null && effectInstance.getDuration() > 0)
         {
             event.setLootingLevel(event.getLootingLevel() - effectInstance.getAmplifier());
@@ -53,8 +53,8 @@ public class ChromiumStoreEffect extends FeruchemyEffectBase
 
 
     @Override
-    public void applyAttributesModifiersToEntity(LivingEntity entityLivingBaseIn, AttributeModifierManager attributeMapIn, int amplifier)
+    public void addAttributeModifiers(LivingEntity entityLivingBaseIn, AttributeModifierManager attributeMapIn, int amplifier)
     {
-        super.applyAttributesModifiersToEntity(entityLivingBaseIn, attributeMapIn, amplifier);
+        super.addAttributeModifiers(entityLivingBaseIn, attributeMapIn, amplifier);
     }
 }

@@ -44,7 +44,7 @@ public class AttributesRegistry
                             Cosmere.MODID + "." + mistingNamePath.toLowerCase(),
                             0,
                             0,
-                            1000)).setShouldWatch(true)
+                            1000)).setSyncable(true)
             );
 
             RegistryObject<Attribute> ferringAttribute = ATTRIBUTES.register(
@@ -53,7 +53,7 @@ public class AttributesRegistry
                             Cosmere.MODID + "." + ferringNamePath.toLowerCase(),
                             0,
                             0,
-                            1000)).setShouldWatch(true)
+                            1000)).setSyncable(true)
             );
 
             attributeModifiers.put(mistingNamePath, mistingAttribute);

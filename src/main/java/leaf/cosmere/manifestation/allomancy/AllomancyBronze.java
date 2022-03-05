@@ -33,7 +33,7 @@ public class AllomancyBronze extends AllomancyBase
     protected void performEffect(ISpiritweb data)
     {
         LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
         //Detects Allomantic Pulses
 
         //passive active ability, if any
@@ -46,7 +46,7 @@ public class AllomancyBronze extends AllomancyBase
 
             for (LivingEntity targetEntity : entitiesToCheckForAllomancy)
             {
-                EffectInstance copperEffect = targetEntity.getActivePotionEffect(EffectsRegistry.ALLOMANTIC_COPPER.get());
+                EffectInstance copperEffect = targetEntity.getEffect(EffectsRegistry.ALLOMANTIC_COPPER.get());
                 if (copperEffect != null && copperEffect.getDuration() > 0)
                 {
                     //skip clouded entities.
@@ -74,20 +74,20 @@ public class AllomancyBronze extends AllomancyBase
                             //get the position between the user and the entity we found
 
                             //end point minus start point, then normalize
-                            BlockPos destinationPosition = targetEntity.getPosition();
-                            BlockPos startingPosition = livingEntity.getPosition();
+                            BlockPos destinationPosition = targetEntity.blockPosition();
+                            BlockPos startingPosition = livingEntity.blockPosition();
 
                             BlockPos direction = new BlockPos(VectorHelper.Normalize(destinationPosition.subtract(startingPosition)));
 
-                            playerEntity.playSound(
-                                    NoteBlockInstrument.BASEDRUM.getSound(),
+                            playerEntity.playNotifySound(
+                                    NoteBlockInstrument.BASEDRUM.getSoundEvent(),
                                     SoundCategory.PLAYERS, //todo check this category
                                     3.0F, //volume
                                     1.0F); //pitch
 
                             //todo visual cue?
                             //todo make this stuff only happen for the user
-                            targetEntity.world.addParticle(
+                            targetEntity.level.addParticle(
                                     ParticleTypes.NOTE,
                                     (double) direction.getX() + 0.5D,
                                     (double) direction.getY() + 1.2D,

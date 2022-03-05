@@ -33,8 +33,8 @@ public class AllomancyAdvancements implements Consumer<Consumer<Advancement>>
     public void accept(Consumer<Advancement> advancementConsumer)
     {
         String categoryName = "allomancy";
-        Advancement root = Advancement.Builder.builder()
-                .withDisplay(ItemsRegistry.GUIDE.get(),
+        Advancement root = Advancement.Builder.advancement()
+                .display(ItemsRegistry.GUIDE.get(),
                         new TranslationTextComponent("advancements.cosmere." + categoryName + ".title"),
                         new TranslationTextComponent("advancements.cosmere." + categoryName + ".description"),
                         new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
@@ -42,9 +42,9 @@ public class AllomancyAdvancements implements Consumer<Consumer<Advancement>>
                         false,
                         false,
                         false)
-                .withCriterion("tick", new TickTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND))
+                .addCriterion("tick", new TickTrigger.Instance(EntityPredicate.AndPredicate.ANY))
                 //.withRewards(new AdvancementRewards(0, new ResourceLocation[]{new ResourceLocation("cosmere:guide")}, new ResourceLocation[0], FunctionObject.CacheableFunction.EMPTY))
-                .register(advancementConsumer, categoryName + "/root");
+                .save(advancementConsumer, categoryName + "/root");
 
         for (RegistryObject<AManifestation> manifestation : ManifestationRegistry.ALLOMANCY_POWERS.values())
         {
@@ -53,9 +53,9 @@ public class AllomancyAdvancements implements Consumer<Consumer<Advancement>>
             Metals.MetalType metalType = allomancyBase.getMetalType();
             String metalName = metalType.name().toLowerCase(Locale.ROOT);
 
-            Advancement manifestationObtainedAdvancement = Advancement.Builder.builder()
-                    .withParent(root)
-                    .withDisplay(
+            Advancement manifestationObtainedAdvancement = Advancement.Builder.advancement()
+                    .parent(root)
+                    .display(
                             Items.WOODEN_PICKAXE,
                             new TranslationTextComponent("advancements.cosmere." + categoryName + ".title"),
                             new TranslationTextComponent("advancements.cosmere." + categoryName + ".description"),
@@ -64,10 +64,10 @@ public class AllomancyAdvancements implements Consumer<Consumer<Advancement>>
                             true,
                             true,
                             false)
-                    .withCriterion(
+                    .addCriterion(
                             "get_stone",
-                            InventoryChangeTrigger.Instance.forItems(ItemPredicate.Builder.create().tag(ItemTags.STONE_TOOL_MATERIALS).build()))
-                    .register(advancementConsumer, categoryName + "/" + metalName);
+                            InventoryChangeTrigger.Instance.hasItems(ItemPredicate.Builder.item().of(ItemTags.STONE_TOOL_MATERIALS).build()))
+                    .save(advancementConsumer, categoryName + "/" + metalName);
         }
 
 

@@ -51,12 +51,12 @@ public class AllomancyNicrosil extends AllomancyBase
     @SubscribeEvent
     public void onLivingHurtEvent(LivingHurtEvent event)
     {
-        Entity trueSource = event.getSource().getTrueSource();
+        Entity trueSource = event.getSource().getEntity();
         if (trueSource instanceof PlayerEntity)
         {
             SpiritwebCapability.get((LivingEntity) trueSource).ifPresent(iSpiritweb ->
             {
-                ItemStack itemInHand = iSpiritweb.getLiving().getHeldItemMainhand();
+                ItemStack itemInHand = iSpiritweb.getLiving().getMainHandItem();
 
                 if (itemInHand.isEmpty())
                 {
@@ -70,7 +70,7 @@ public class AllomancyNicrosil extends AllomancyBase
                         );
 
                         //apply to the hit entity
-                        event.getEntityLiving().addPotionEffect(newEffect);
+                        event.getEntityLiving().addEffect(newEffect);
                     }
                 }
             });

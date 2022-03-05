@@ -19,13 +19,13 @@ public class TestCommand extends ModCommand
 
     private static int testSub(CommandContext<CommandSource> context, ServerPlayerEntity player)
     {
-        return testSub(context, player.getServerWorld());
+        return testSub(context, player.getLevel());
     }
 
     private static int testSub(CommandContext<CommandSource> context, ServerWorld world)
     {
         CommandSource source = context.getSource();
-        source.sendFeedback(new TranslationTextComponent("command.cosmere.test.sub"), true);
+        source.sendSuccess(new TranslationTextComponent("command.cosmere.test.sub"), true);
 
         return SINGLE_SUCCESS;
     }
@@ -33,7 +33,7 @@ public class TestCommand extends ModCommand
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher)
     {
         return Commands.literal("test")
-                .requires(context -> context.hasPermissionLevel(2)).then(Commands.literal("sub").executes(context -> testSub(context, context.getSource().asPlayer()))); // end add
+                .requires(context -> context.hasPermission(2)).then(Commands.literal("sub").executes(context -> testSub(context, context.getSource().getPlayerOrException()))); // end add
     }
 
     @Override

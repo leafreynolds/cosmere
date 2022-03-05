@@ -49,7 +49,7 @@ public class Metalmind extends ChargeableMetalItem implements ICurioItem
         //todo better nicrosil tracking.
         if (metalType == Metals.MetalType.NICROSIL)
         {
-            CompoundNBT nbt = stack.getOrCreateChildTag("StoredInvestiture");
+            CompoundNBT nbt = stack.getOrCreateTagElement("StoredInvestiture");
             //for each power the user has access to
 
             for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())

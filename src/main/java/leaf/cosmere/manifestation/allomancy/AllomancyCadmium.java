@@ -25,7 +25,7 @@ public class AllomancyCadmium extends AllomancyBase
     protected void performEffect(ISpiritweb data)
     {
         LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
         //Slows Down Time
         if (isActiveTick)
@@ -38,7 +38,7 @@ public class AllomancyCadmium extends AllomancyBase
 
             for (LivingEntity e : entitiesToAffect)
             {
-                e.addPotionEffect(EffectsHelper.getNewEffect(Effects.SLOWNESS,mode));
+                e.addEffect(EffectsHelper.getNewEffect(Effects.MOVEMENT_SLOWDOWN,mode));
             }
 
             //todo slow tile entities? not sure how to do that. bendalloy just calls tick more often.

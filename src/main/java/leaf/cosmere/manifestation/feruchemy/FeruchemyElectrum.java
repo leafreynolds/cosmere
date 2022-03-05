@@ -20,8 +20,8 @@ public class FeruchemyElectrum extends FeruchemyBase
 
     public void onLivingHurtEvent(LivingHurtEvent event)
     {
-        EffectInstance tapEffect = event.getEntityLiving().getActivePotionEffect(EffectsRegistry.TAPPING_EFFECTS.get(getMetalType()).get());
-        EffectInstance storeEffect = event.getEntityLiving().getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(getMetalType()).get());
+        EffectInstance tapEffect = event.getEntityLiving().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(getMetalType()).get());
+        EffectInstance storeEffect = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(getMetalType()).get());
 
         if (tapEffect != null && tapEffect.getDuration() > 0)
         {

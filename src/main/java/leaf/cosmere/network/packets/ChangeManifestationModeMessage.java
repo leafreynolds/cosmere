@@ -32,7 +32,7 @@ public class ChangeManifestationModeMessage
         NetworkEvent.Context context = ctx.get();
         ServerPlayerEntity sender = context.getSender();
         MinecraftServer server = sender.getServer();
-        server.deferTask(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+        server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
         {
             TextComponent manifestationText;
             int newMode;

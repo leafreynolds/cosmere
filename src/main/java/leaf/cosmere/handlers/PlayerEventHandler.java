@@ -57,17 +57,17 @@ public class PlayerEventHandler
         PlayerEntity player = event.player;
 
         //charge gemstones in inventory if the player is outside during a thunderstorm
-        if (player.world.isRainingAt(player.getPosition()) && player.world.isThundering())
+        if (player.level.isRainingAt(player.blockPosition()) && player.level.isThundering())
         {
             IInventory mainInv = player.inventory;
-            int size = mainInv.getSizeInventory();
+            int size = mainInv.getContainerSize();
 
             for (int i = 0; i < size; i++)
             {
                 IInventory inv = mainInv;
                 int slot = i;
 
-                ItemStack stackInSlot = inv.getStackInSlot(slot);
+                ItemStack stackInSlot = inv.getItem(slot);
                 //todo finish :D
                 //if (stackInSlot != null && stackInSlot.getItem() instanceof ItemGemstone)
                 {
@@ -79,7 +79,7 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void onItemTossEvent(ItemTossEvent event)
     {
-        if (!event.getPlayer().world.isRemote)
+        if (!event.getPlayer().level.isClientSide)
         {
             //if (event.getEntityItem().getItem().getItem() instanceof ItemShardBlade)
             {

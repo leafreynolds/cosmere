@@ -47,8 +47,8 @@ public final class LootHandler
 
     public static LootPool getInjectPool(String entryName)
     {
-        return LootPool.builder()
-                .addEntry(getInjectEntry(entryName, 1))
+        return LootPool.lootPool()
+                .add(getInjectEntry(entryName, 1))
                 .bonusRolls(0, 1)
                 .name("cosmere_inject")
                 .build();
@@ -57,8 +57,8 @@ public final class LootHandler
     private static LootEntry.Builder<?> getInjectEntry(String name, int weight)
     {
         ResourceLocation table = prefix("inject/" + name);
-        return TableLootEntry.builder(table)
-                .weight(weight);
+        return TableLootEntry.lootTableReference(table)
+                .setWeight(weight);
     }
 
 }

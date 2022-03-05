@@ -169,7 +169,7 @@ public class SpiritwebCapability implements ISpiritweb
     public void tick()
     {
         //if server
-        if (!livingEntity.world.isRemote)
+        if (!livingEntity.level.isClientSide)
         {
             //Login setup
             if (!didSetup)
@@ -190,7 +190,7 @@ public class SpiritwebCapability implements ISpiritweb
             }
 
             //tick metals
-            if (livingEntity.ticksExisted % 1200 == 0)
+            if (livingEntity.tickCount % 1200 == 0)
             {
                 //metals can't stay in your system forever, y'know?
                 for (Metals.MetalType metalType : Metals.MetalType.values())
@@ -210,7 +210,7 @@ public class SpiritwebCapability implements ISpiritweb
             }
 
             //tick stormlight
-            if (stormlightStored > 0 && livingEntity.ticksExisted % 100 == 0)
+            if (stormlightStored > 0 && livingEntity.tickCount % 100 == 0)
             {
                 //todo decide what's appropriate for reducing stormlight
                 //maybe reducing cost based on how many ideals they have sworn?
@@ -288,7 +288,7 @@ public class SpiritwebCapability implements ISpiritweb
         }
         if (linesToDrawByColor.size() > 0)
         {
-            Vector3d originPoint = getLiving().getClientEyePosition(Minecraft.getInstance().getRenderPartialTicks()).add(0, -1, 0);
+            Vector3d originPoint = getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
             for (Map.Entry<Color, List<Vector3d>> entry : linesToDrawByColor.entries())
             {
                 //For all found things, draw the line
@@ -301,17 +301,17 @@ public class SpiritwebCapability implements ISpiritweb
     public void renderSelectedHUD(MatrixStack ms)
     {
         Minecraft mc = Minecraft.getInstance();
-        MainWindow mainWindow = mc.getMainWindow();
+        MainWindow mainWindow = mc.getWindow();
         int x = 10;
-        int y = mainWindow.getScaledHeight() / 5;
+        int y = mainWindow.getGuiScaledHeight() / 5;
 
         //todo translations
-        String stringToDraw = "Selected Power: " + I18n.format(selectedManifestation.translation().getString());
-        mc.fontRenderer.drawStringWithShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
+        String stringToDraw = "Selected Power: " + I18n.get(selectedManifestation.translation().getString());
+        mc.font.drawShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
 
         int mode = getMode(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID());
         String stringToDraw2 = "Mode: " + mode;
-        mc.fontRenderer.drawStringWithShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
+        mc.font.drawShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
 
 
         ItemStack stack;
@@ -329,7 +329,7 @@ public class SpiritwebCapability implements ISpiritweb
             stack = inactiveStack;
         }
 
-        mc.getItemRenderer().renderItemAndEffectIntoGUI(stack, x, y);
+        mc.getItemRenderer().renderAndDecorateItem(stack, x, y);
 
     }
 
@@ -626,7 +626,7 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public void syncToClients(@Nullable ServerPlayerEntity serverPlayerEntity)
     {
-        if (livingEntity != null && livingEntity.world.isRemote)
+        if (livingEntity != null && livingEntity.level.isClientSide)
         {
             throw new IllegalStateException("Don't sync client -> server");
         }
@@ -642,11 +642,11 @@ public class SpiritwebCapability implements ISpiritweb
 
         if (serverPlayerEntity == null)
         {
-            Network.sendToAllInWorld(new SyncPlayerSpiritwebMessage(this.livingEntity.getEntityId(), nbt), (ServerWorld) livingEntity.world);
+            Network.sendToAllInWorld(new SyncPlayerSpiritwebMessage(this.livingEntity.getId(), nbt), (ServerWorld) livingEntity.level);
         }
         else
         {
-            Network.sendTo(new SyncPlayerSpiritwebMessage(this.livingEntity.getEntityId(), nbt), serverPlayerEntity);
+            Network.sendTo(new SyncPlayerSpiritwebMessage(this.livingEntity.getId(), nbt), serverPlayerEntity);
         }
     }
 }

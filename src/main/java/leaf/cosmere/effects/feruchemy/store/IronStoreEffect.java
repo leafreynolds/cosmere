@@ -19,7 +19,7 @@ public class IronStoreEffect extends FeruchemyEffectBase
     public IronStoreEffect(Metals.MetalType type, EffectType effectType)
     {
         super(type, effectType);
-        addAttributesModifier(
+        addAttributeModifier(
                 Attributes.KNOCKBACK_RESISTANCE,
                 "a8fade1f-573d-405d-9885-39da3906d5f6",
                 -0.1D,
@@ -27,15 +27,15 @@ public class IronStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
         //ensure the user has correct buffs at least as strong as their store effect
 
-        if (entityLivingBaseIn.world.isRemote || entityLivingBaseIn.ticksExisted % 20 != 0)
+        if (entityLivingBaseIn.level.isClientSide || entityLivingBaseIn.tickCount % 20 != 0)
         {
             return;
         }
-        entityLivingBaseIn.addPotionEffect(EffectsHelper.getNewEffect(Effects.SLOW_FALLING, amplifier));
-        entityLivingBaseIn.addPotionEffect(EffectsHelper.getNewEffect(Effects.JUMP_BOOST, amplifier));
+        entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(Effects.SLOW_FALLING, amplifier));
+        entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(Effects.JUMP, amplifier));
     }
 }

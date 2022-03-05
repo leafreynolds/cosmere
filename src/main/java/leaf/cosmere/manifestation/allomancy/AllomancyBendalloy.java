@@ -30,25 +30,25 @@ public class AllomancyBendalloy extends AllomancyBase
         //Speeds Up Time
         {
             //tick entities around user
-            if (data.getLiving().ticksExisted % 6 == 0)
+            if (data.getLiving().tickCount % 6 == 0)
             {
                 int range = 3 * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID());
-                int x = (int) (data.getLiving().getPosX() + (data.getLiving().getPosXRandom(range * 2 + 1) - range));
-                int z = (int) (data.getLiving().getPosZ() + (data.getLiving().getPosZRandom(range * 2 + 1) - range));
+                int x = (int) (data.getLiving().getX() + (data.getLiving().getRandomX(range * 2 + 1) - range));
+                int z = (int) (data.getLiving().getZ() + (data.getLiving().getRandomZ(range * 2 + 1) - range));
 
                 for (int i = 4; i > -2; i--)
                 {
-                    int y = data.getLiving().getPosition().getY() + i;
+                    int y = data.getLiving().blockPosition().getY() + i;
                     BlockPos pos = new BlockPos(x, y, z);
-                    World world = data.getLiving().world;
+                    World world = data.getLiving().level;
 
-                    if (world.isAirBlock(pos))
+                    if (world.isEmptyBlock(pos))
                     {
                         continue;
                     }
 
                     BlockState state = world.getBlockState(pos);
-                    state.randomTick((ServerWorld) world, pos, world.rand);
+                    state.randomTick((ServerWorld) world, pos, world.random);
 
                     break;
                 }
@@ -59,7 +59,7 @@ public class AllomancyBendalloy extends AllomancyBase
 
                 for (LivingEntity e : entitiesToCheck)
                 {
-                    e.livingTick();
+                    e.aiStep();
                 }
             }
         }

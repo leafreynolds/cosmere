@@ -30,7 +30,7 @@ public class ChangeSelectedManifestationMessage
         NetworkEvent.Context context = ctx.get();
         ServerPlayerEntity sender = context.getSender();
         MinecraftServer server = sender.getServer();
-        server.deferTask(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+        server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
         {
             TextComponent manifestationText;
             String manifestation;
@@ -39,7 +39,7 @@ public class ChangeSelectedManifestationMessage
 
             manifestationText = TextHelper.createTranslatedText(Constants.Strings.POWER_SET_SUCCESS, TextHelper.createTranslatedText(manifestation));
 
-            sender.sendMessage(manifestationText, Util.DUMMY_UUID);
+            sender.sendMessage(manifestationText, Util.NIL_UUID);
             cap.syncToClients(null);
         }));
         context.setPacketHandled(true);

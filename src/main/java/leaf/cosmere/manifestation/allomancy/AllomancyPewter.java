@@ -21,21 +21,21 @@ public class AllomancyPewter extends AllomancyBase
     protected void performEffect(ISpiritweb data)
     {
         LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
         //Increases Physical Abilities
         if (isActiveTick)
         {
             int mode = data.getMode(manifestationType, getMetalType().getID());
-            livingEntity.addPotionEffect(EffectsHelper.getNewEffect(Effects.SPEED, 0));
+            livingEntity.addEffect(EffectsHelper.getNewEffect(Effects.MOVEMENT_SPEED, 0));
             switch (mode)
             {
                 case 3:
                 case 2:
-                    livingEntity.addPotionEffect(EffectsHelper.getNewEffect(Effects.HASTE, 0));
-                    livingEntity.addPotionEffect(EffectsHelper.getNewEffect(Effects.RESISTANCE, mode - 2));
+                    livingEntity.addEffect(EffectsHelper.getNewEffect(Effects.DIG_SPEED, 0));
+                    livingEntity.addEffect(EffectsHelper.getNewEffect(Effects.DAMAGE_RESISTANCE, mode - 2));
                 case 1:
-                    livingEntity.addPotionEffect(EffectsHelper.getNewEffect(Effects.STRENGTH, mode - 1));
+                    livingEntity.addEffect(EffectsHelper.getNewEffect(Effects.DAMAGE_BOOST, mode - 1));
                     break;
             }
         }

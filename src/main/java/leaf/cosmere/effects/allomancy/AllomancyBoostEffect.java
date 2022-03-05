@@ -25,7 +25,7 @@ public class AllomancyBoostEffect extends Effect
                     //todo powers to NOT increase?
                     //skip duralumin and nicrosil?
 
-                    addAttributesModifier(
+                    addAttributeModifier(
                             attributeRegistered.getValue().get(),
                             "ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
                             0.334D,
@@ -34,11 +34,11 @@ public class AllomancyBoostEffect extends Effect
     }
 
     @Override
-    public void performEffect(LivingEntity livingEntity, int amplifier)
+    public void applyEffectTick(LivingEntity livingEntity, int amplifier)
     {
         //todo boost metal drain balancing
         //4 times a second?
-        boolean isActiveTick = livingEntity.ticksExisted % 5 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 5 == 0;
 
         if (isActiveTick)
         {

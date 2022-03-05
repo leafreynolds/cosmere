@@ -66,7 +66,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
 
-    public static final DamageSource SPIKED = (new DamageSource("spiked")).setDamageBypassesArmor().setDamageIsAbsolute();
+    public static final DamageSource SPIKED = (new DamageSource("spiked")).bypassArmor().bypassMagic();
 
     //todo move
     private static final ResourceLocation SPIKE_TEXTURE = new ResourceLocation("cosmere", "textures/block/metal_block.png");
@@ -79,8 +79,8 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         //todo decide on damage
         this.attackDamage = 2f + 1f;//tier.getAttackDamage();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) this.attackDamage, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double) -2.4f, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", (double) this.attackDamage, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", (double) -2.4f, AttributeModifier.Operation.ADDITION));
         this.attributeModifiers = builder.build();
     }
 
@@ -100,18 +100,18 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     }
 
     @Override
-    public void fillItemGroup(@Nonnull ItemGroup tab, @Nonnull NonNullList<ItemStack> stacks)
+    public void fillItemCategory(@Nonnull ItemGroup tab, @Nonnull NonNullList<ItemStack> stacks)
     {
-        if (isInGroup(tab))
+        if (allowdedIn(tab))
         {
             ItemStack stack = new ItemStack(this);
-            stack.addEnchantment(Enchantments.BINDING_CURSE, 1);
+            stack.enchant(Enchantments.BINDING_CURSE, 1);
             stacks.add(stack);
 
             if (getMetalType().hasFeruchemicalEffect())
             {
                 ItemStack fullPower = new ItemStack(this);
-                fullPower.addEnchantment(Enchantments.BINDING_CURSE, 1);
+                fullPower.enchant(Enchantments.BINDING_CURSE, 1);
                 setCharge(fullPower, getMaxCharge(fullPower));
                 stacks.add(fullPower);
 
@@ -129,10 +129,10 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                         try
                         {
                             ItemStack allomancySpike = new ItemStack(this);
-                            allomancySpike.addEnchantment(Enchantments.BINDING_CURSE, 1);
+                            allomancySpike.enchant(Enchantments.BINDING_CURSE, 1);
 
                             ItemStack feruchemySpike = new ItemStack(this);
-                            feruchemySpike.addEnchantment(Enchantments.BINDING_CURSE, 1);
+                            feruchemySpike.enchant(Enchantments.BINDING_CURSE, 1);
 
                             CompoundNBT allomancySpikeInfo = getHemalurgicInfo(allomancySpike);
                             CompoundNBT feruchemySpikeInfo = getHemalurgicInfo(feruchemySpike);
@@ -166,7 +166,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
             if (this.getMetalType() == Metals.MetalType.LERASIUM)
             {
                 ItemStack bound = new ItemStack(this);
-                bound.addEnchantment(Enchantments.BINDING_CURSE, 1);
+                bound.enchant(Enchantments.BINDING_CURSE, 1);
                 setHemalurgicIdentity(bound, UUID.randomUUID());
                 CompoundNBT hemalurgicInfo = getHemalurgicInfo(bound);
                 for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
@@ -181,9 +181,9 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn)
+    public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn)
     {
-        stack.addEnchantment(Enchantments.BINDING_CURSE, 1);
+        stack.enchant(Enchantments.BINDING_CURSE, 1);
     }
 
     //todo hemalurgic decay
@@ -218,9 +218,9 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
 
         // no extra info if there isn't any
@@ -243,12 +243,12 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event)
     {
-        if (event.getSource().getTrueSource() instanceof PlayerEntity)
+        if (event.getSource().getEntity() instanceof PlayerEntity)
         {
-            PlayerEntity playerEntity = (PlayerEntity) event.getSource().getTrueSource();
+            PlayerEntity playerEntity = (PlayerEntity) event.getSource().getEntity();
             SpiritwebCapability.get(playerEntity).ifPresent(iSpiritweb ->
             {
-                ItemStack itemstack = playerEntity.getHeldItemMainhand();
+                ItemStack itemstack = playerEntity.getMainHandItem();
                 if (itemstack.getItem() instanceof HemalurgicSpikeItem)
                 {
                     //entity was killed by a spike
@@ -266,7 +266,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         //https://wob.coppermind.net/events/332/#e9569
 
         // do nothing if an identity exists and doesn't match
-        if (!matchHemalurgicIdentity(stack, entityKilled.getUniqueID()))
+        if (!matchHemalurgicIdentity(stack, entityKilled.getUUID()))
         {
             return;
         }
@@ -276,19 +276,19 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     }
 
     @Override
-    public boolean hasEffect(@Nonnull ItemStack stack)
+    public boolean isFoil(@Nonnull ItemStack stack)
     {
-        return super.hasEffect(stack) || hemalurgicIdentityExists(stack);
+        return super.isFoil(stack) || hemalurgicIdentityExists(stack);
     }
 
     /**
      * Gets a map of item attribute modifiers, used by damage when used as melee weapon.
      */
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot)
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot)
     {
         return equipmentSlot == EquipmentSlotType.MAINHAND ? this.attributeModifiers
-                                                           : super.getAttributeModifiers(equipmentSlot);
+                                                           : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 
     @Override
@@ -316,7 +316,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
             //then do hemalurgy spike logic
             //hurt the user
             //spiritweb attributes are handled in metalmind
-            slotContext.getWearer().attackEntityFrom(SPIKED, 4);
+            slotContext.getWearer().hurt(SPIKED, 4);
         }
     }
 
@@ -374,18 +374,18 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
             case CHARM:
             case CURIO:
                 //setup biped model stuff
-                spike.setLivingAnimations(livingEntity, limbSwing, limbSwingAmount, partialTicks);
-                spike.setRotationAngles(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+                spike.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTicks);
+                spike.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
                 //and have it follow body rotations
                 ICurio.RenderHelper.followBodyRotations(livingEntity, (BipedModel<LivingEntity>) spike);
                 break;
         }
 
 
-        IVertexBuilder vertexBuilder = ItemRenderer.getBuffer(renderTypeBuffer, spike.getRenderType(SPIKE_TEXTURE), false, false);
+        IVertexBuilder vertexBuilder = ItemRenderer.getFoilBuffer(renderTypeBuffer, spike.renderType(SPIKE_TEXTURE), false, false);
 
         Color col = getMetalType().getColor();
-        spike.render(matrixStack,
+        spike.renderToBuffer(matrixStack,
                 vertexBuilder,
                 light,
                 OverlayTexture.NO_OVERLAY,

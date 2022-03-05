@@ -120,12 +120,12 @@ public class SpiritwebMenu extends Screen
         this.spiritweb = spiritweb;
         final boolean wasVisible = isVisible();
 
-        if (!MANIFESTATION_MENU.isInvalid() && MANIFESTATION_MENU.isKeyDown())
+        if (!MANIFESTATION_MENU.isUnbound() && MANIFESTATION_MENU.isDown())
         {
             actionUsed = false;
             if (raiseVisibility())
             {
-                getMinecraft().mouseHelper.ungrabMouse();
+                getMinecraft().mouseHandler.releaseMouse();
             }
         }
         else
@@ -184,25 +184,25 @@ public class SpiritwebMenu extends Screen
         if (isVisible())
         {
             final MainWindow window = event.getWindow();
-            init(Minecraft.getInstance(), window.getScaledWidth(), window.getScaledHeight());
-            setScaledResolution(window.getScaledWidth(), window.getScaledHeight());
+            init(Minecraft.getInstance(), window.getGuiScaledWidth(), window.getGuiScaledHeight());
+            setScaledResolution(window.getGuiScaledWidth(), window.getGuiScaledHeight());
 
             if (!wasVisible)
             {
-                getMinecraft().currentScreen = SpiritwebMenu.instance;
-                getMinecraft().mouseHelper.ungrabMouse();
+                getMinecraft().screen = SpiritwebMenu.instance;
+                getMinecraft().mouseHandler.releaseMouse();
             }
 
-            if (getMinecraft().mouseHelper.isMouseGrabbed())
+            if (getMinecraft().mouseHandler.isMouseGrabbed())
             {
-                KeyBinding.unPressAllKeys();
+                KeyBinding.releaseAll();
             }
         }
         else
         {
             if (wasVisible)
             {
-                getMinecraft().mouseHelper.grabMouse();
+                getMinecraft().mouseHandler.grabMouse();
             }
         }
     }
@@ -212,13 +212,13 @@ public class SpiritwebMenu extends Screen
     {
         this.visibility = 0f;
         canShow = false;
-        this.minecraft.displayGuiScreen(null);
+        this.minecraft.setScreen(null);
 
-        if (this.minecraft.currentScreen == null)
+        if (this.minecraft.screen == null)
         {
-            this.minecraft.setGameFocused(true);
-            this.minecraft.getSoundHandler().resume();
-            this.minecraft.mouseHelper.grabMouse();
+            this.minecraft.setWindowActive(true);
+            this.minecraft.getSoundManager().resume();
+            this.minecraft.mouseHandler.grabMouse();
         }
         return true;
     }
@@ -317,7 +317,7 @@ public class SpiritwebMenu extends Screen
             return;
         }
 
-        matrixStack.push();
+        matrixStack.pushPose();
 
         final int start = (int) (visibility * 98) << 24;
         final int end = (int) (visibility * 128) << 24;
@@ -330,7 +330,7 @@ public class SpiritwebMenu extends Screen
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
         final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder buffer = tessellator.getBuffer();
+        final BufferBuilder buffer = tessellator.getBuilder();
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
@@ -353,7 +353,7 @@ public class SpiritwebMenu extends Screen
         setupSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
 
         //draw out what we've asked for
-        tessellator.draw();
+        tessellator.end();
 
         //then we switch to icons
         RenderSystem.shadeModel(GL11.GL_FLAT);
@@ -362,7 +362,7 @@ public class SpiritwebMenu extends Screen
         RenderSystem.color4f(1, 1, 1, 1.0f);
         RenderSystem.disableBlend();
         RenderSystem.enableAlphaTest();
-        RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE).getGlTextureId());
+        RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.BLOCK_ATLAS).getId());
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
@@ -372,7 +372,7 @@ public class SpiritwebMenu extends Screen
         //put the icons on the sided buttons
         setupSidedButtonIcons(buffer, middle_x, middle_y);
 
-        tessellator.draw();
+        tessellator.end();
 
         // draw radial button strings
         setupRadialButtonStrings(matrixStack, (int) middle_x, (int) middle_y);
@@ -383,7 +383,7 @@ public class SpiritwebMenu extends Screen
         //do extra text info stuff
         setupAnyExtraInfoTexts(matrixStack, (int) middle_y);
 
-        matrixStack.pop();
+        matrixStack.popPose();
     }
 
     private void setupAnyExtraInfoTexts(MatrixStack matrixStack, int middle_y)
@@ -397,7 +397,7 @@ public class SpiritwebMenu extends Screen
             {
                 //todo localisation check
                 final String text = key.name().toLowerCase(Locale.ROOT) + ": " + value;
-                font.drawStringWithShadow(matrixStack, text, x, (int) y[0], 0xffffffff);
+                font.drawShadow(matrixStack, text, x, (int) y[0], 0xffffffff);
                 y[0] += 10;
             }
         });
@@ -410,21 +410,21 @@ public class SpiritwebMenu extends Screen
             //but only if that sided button is highlighted
             if (sideButton.highlighted)
             {
-                final String text = I18n.format(sideButton.name);
+                final String text = I18n.get(sideButton.name);
 
                 switch (sideButton.textSide)
                 {
                     case WEST:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + sideButton.x1 - 8) - font.getStringWidth(text), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
+                        font.drawShadow(matrixStack, text, (int) (middle_x + sideButton.x1 - 8) - font.width(text), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
                         break;
                     case EAST:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + sideButton.x2 + 8), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
+                        font.drawShadow(matrixStack, text, (int) (middle_x + sideButton.x2 + 8), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
                         break;
                     case UP:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.getStringWidth(text) * 0.5), (int) (middle_y + sideButton.y1 - 14), 0xffffffff);
+                        font.drawShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.width(text) * 0.5), (int) (middle_y + sideButton.y1 - 14), 0xffffffff);
                         break;
                     case DOWN:
-                        font.drawStringWithShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.getStringWidth(text) * 0.5), (int) (middle_y + sideButton.y1 + 24), 0xffffffff);
+                        font.drawShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.width(text) * 0.5), (int) (middle_y + sideButton.y1 + 24), 0xffffffff);
                         break;
                 }
 
@@ -446,13 +446,13 @@ public class SpiritwebMenu extends Screen
                 final int fixed_y = (int) y;//(y + TEXT_DISTANCE);
 
                 //todo localisation check
-                final String text = I18n.format(button.manifestation.translation().getKey());
+                final String text = I18n.get(button.manifestation.translation().getKey());
 
                 fixed_x = (int) (x < 0
-                                 ? fixed_x - (font.getStringWidth(text) + TEXT_DISTANCE)
+                                 ? fixed_x - (font.width(text) + TEXT_DISTANCE)
                                  : fixed_x + TEXT_DISTANCE);
 
-                font.drawStringWithShadow(matrixStack, text, middle_x + fixed_x, middle_y + fixed_y, 0xffffffff);
+                font.drawShadow(matrixStack, text, middle_x + fixed_x, middle_y + fixed_y, 0xffffffff);
 
                 //no need to keep searching, we only keep one highlighted at a time.
                 break;
@@ -483,10 +483,10 @@ public class SpiritwebMenu extends Screen
             final float green = f * ((button.color >> 8 & 0xff) / 255.0f);
             final float blue = f * ((button.color & 0xff) / 255.0f);
 
-            buffer.pos(middle_x + btnx1, middle_y + btny1, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1)).color(red, green, blue, a).endVertex();
-            buffer.pos(middle_x + btnx1, middle_y + btny2, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v2)).color(red, green, blue, a).endVertex();
-            buffer.pos(middle_x + btnx2, middle_y + btny2, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v2)).color(red, green, blue, a).endVertex();
-            buffer.pos(middle_x + btnx2, middle_y + btny1, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v1)).color(red, green, blue, a).endVertex();
+            buffer.vertex(middle_x + btnx1, middle_y + btny1, 0).uv(sprite.getU(u1), sprite.getV(v1)).color(red, green, blue, a).endVertex();
+            buffer.vertex(middle_x + btnx1, middle_y + btny2, 0).uv(sprite.getU(u1), sprite.getV(v2)).color(red, green, blue, a).endVertex();
+            buffer.vertex(middle_x + btnx2, middle_y + btny2, 0).uv(sprite.getU(u2), sprite.getV(v2)).color(red, green, blue, a).endVertex();
+            buffer.vertex(middle_x + btnx2, middle_y + btny1, 0).uv(sprite.getU(u2), sprite.getV(v1)).color(red, green, blue, a).endVertex();
         }
     }
 
@@ -516,10 +516,10 @@ public class SpiritwebMenu extends Screen
             final double v1 = sip.top * 16.0;
             final double v2 = (sip.top + sip.height) * 16.0;
 
-            buffer.pos(middle_x + x1, middle_y + y1, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v1)).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + x1, middle_y + y2, 0).tex(sprite.getInterpolatedU(u1), sprite.getInterpolatedV(v2)).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + x2, middle_y + y2, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v2)).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + x2, middle_y + y1, 0).tex(sprite.getInterpolatedU(u2), sprite.getInterpolatedV(v1)).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + x1, middle_y + y1, 0).uv(sprite.getU(u1), sprite.getV(v1)).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + x1, middle_y + y2, 0).uv(sprite.getU(u1), sprite.getV(v2)).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + x2, middle_y + y2, 0).uv(sprite.getU(u2), sprite.getV(v2)).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + x2, middle_y + y1, 0).uv(sprite.getU(u2), sprite.getV(v1)).color(f, f, f, a).endVertex();
         }
     }
 
@@ -538,11 +538,11 @@ public class SpiritwebMenu extends Screen
             }
 
             //set first triangle
-            buffer.pos(middle_x + button.x1, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + button.x1, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + button.x1, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + button.x1, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
             //set second triangle
-            buffer.pos(middle_x + button.x2, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
-            buffer.pos(middle_x + button.x2, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + button.x2, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
+            buffer.vertex(middle_x + button.x2, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
         }
     }
 
@@ -661,18 +661,18 @@ public class SpiritwebMenu extends Screen
 
                 if (smallMode)
                 {
-                    buffer.pos(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
-                    buffer.pos(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
-                    buffer.pos(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
-                    buffer.pos(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
                 }
                 else
                 {
                     //set the square pos
-                    buffer.pos(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
-                    buffer.pos(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
-                    buffer.pos(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
-                    buffer.pos(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
+                    buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
                 }
 
             }

@@ -49,7 +49,7 @@ public class EntityEventHandler
     {
         Entity eventEntity = event.getEntity();
 
-        if (eventEntity.world.isRemote || !(eventEntity instanceof LivingEntity))
+        if (eventEntity.level.isClientSide || !(eventEntity instanceof LivingEntity))
         {
             return;
         }
@@ -139,7 +139,7 @@ public class EntityEventHandler
             return;
         }
 
-        ItemStack stack = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
+        ItemStack stack = event.getPlayer().getItemInHand(Hand.MAIN_HAND);
         LivingEntity target = (LivingEntity) event.getTarget();
 
         SpiritwebCapability.get(target).ifPresent(cap ->

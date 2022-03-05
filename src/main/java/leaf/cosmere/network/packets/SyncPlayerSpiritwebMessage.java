@@ -28,19 +28,19 @@ public class SyncPlayerSpiritwebMessage
     public static void encode(SyncPlayerSpiritwebMessage mes, PacketBuffer buf)
     {
         buf.writeInt(mes.id);
-        buf.writeCompoundTag(mes.data);
+        buf.writeNbt(mes.data);
     }
 
     public static SyncPlayerSpiritwebMessage decode(PacketBuffer buf)
     {
-        return new SyncPlayerSpiritwebMessage(buf.readInt(), buf.readCompoundTag());
+        return new SyncPlayerSpiritwebMessage(buf.readInt(), buf.readNbt());
     }
 
     public static void handle(SyncPlayerSpiritwebMessage mes, Supplier<NetworkEvent.Context> cont)
     {
         cont.get().enqueueWork(() ->
         {
-            Entity result = Minecraft.getInstance().world.getEntityByID(mes.id);
+            Entity result = Minecraft.getInstance().level.getEntity(mes.id);
             if (result != null)
             {
                 result.getCapability(Capabilities.SPIRITWEB_CAPABILITY).ifPresent(cap -> cap.deserializeNBT(mes.data));

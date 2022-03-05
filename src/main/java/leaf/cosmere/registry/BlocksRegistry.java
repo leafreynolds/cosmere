@@ -58,7 +58,7 @@ public class BlocksRegistry
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, Rarity itemRarity)
     {
         RegistryObject<T> registryObject = BLOCKS.register(id, blockSupplier);
-        ItemsRegistry.ITEMS.register(id, () -> new BlockItem(registryObject.get(), new Item.Properties().group(CosmereItemGroups.BLOCKS).rarity(itemRarity)));
+        ItemsRegistry.ITEMS.register(id, () -> new BlockItem(registryObject.get(), new Item.Properties().tab(CosmereItemGroups.BLOCKS).rarity(itemRarity)));
 
 
         return registryObject;

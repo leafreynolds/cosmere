@@ -31,7 +31,7 @@ public class MetalmindChargeHelper
             //player is storing investiture,
             //set the powers they have to the stack.
 
-            CompoundNBT nbt = metalmind.getOrCreateChildTag("StoredInvestiture");
+            CompoundNBT nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
             //for each power the user has access to
             for (Manifestations.ManifestationTypes manifestationType : Manifestations.ManifestationTypes.values())
             {

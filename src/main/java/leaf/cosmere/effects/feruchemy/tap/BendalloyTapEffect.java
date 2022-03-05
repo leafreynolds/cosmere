@@ -20,7 +20,7 @@ public class BendalloyTapEffect extends FeruchemyEffectBase
 
 
     @Override
-    public boolean isReady(int duration, int amplifier)
+    public boolean isDurationEffectTick(int duration, int amplifier)
     {
         //assume we can apply the effect regardless
         boolean result = true;
@@ -35,11 +35,11 @@ public class BendalloyTapEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (!entityLivingBaseIn.world.isRemote)
+        if (!entityLivingBaseIn.level.isClientSide)
         {
-            ((PlayerEntity) entityLivingBaseIn).getFoodStats().addStats(amplifier + 1, 0.0F);
+            ((PlayerEntity) entityLivingBaseIn).getFoodData().eat(amplifier + 1, 0.0F);
 
             //todo add tough as nails mod compatibility?
         }

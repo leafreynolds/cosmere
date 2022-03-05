@@ -41,7 +41,7 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
 
     private CompoundNBT getContainedMetalsTag(ItemStack stack)
     {
-        return stack.getOrCreateChildTag(metals_contained);
+        return stack.getOrCreateTagElement(metals_contained);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
 
     @Nonnull
     @Override
-    public UseAction getUseAction(ItemStack stack)
+    public UseAction getUseAnimation(ItemStack stack)
     {
         return UseAction.DRINK;
     }
@@ -72,25 +72,25 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, @Nonnull Hand hand)
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, @Nonnull Hand hand)
     {
-        ItemStack stack = player.getHeldItem(hand);
-        if (player.canEat(true) && containedMetalCount(player.getHeldItem(hand)) > 0)
+        ItemStack stack = player.getItemInHand(hand);
+        if (player.canEat(true) && containedMetalCount(player.getItemInHand(hand)) > 0)
         {
-            player.setActiveHand(hand);
-            return ActionResult.resultConsume(stack);
+            player.startUsingItem(hand);
+            return ActionResult.consume(stack);
         }
-        return ActionResult.resultPass(stack);
+        return ActionResult.pass(stack);
     }
 
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
+    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving)
     {
 
         PlayerEntity playerentity = entityLiving instanceof PlayerEntity ? (PlayerEntity) entityLiving : null;
 
-        if (!worldIn.isRemote)
+        if (!worldIn.isClientSide)
         {
             SpiritwebCapability.get(entityLiving).ifPresent(iSpiritweb ->
             {
@@ -118,7 +118,7 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
         }
 
 
-        if (playerentity == null || !playerentity.abilities.isCreativeMode)
+        if (playerentity == null || !playerentity.abilities.instabuild)
         {
             if (stack.isEmpty())
             {
@@ -134,7 +134,7 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
                     ItemStack splitStack = stack.split(1);
                     emptyMetals(splitStack);
 
-                    playerentity.addItemStackToInventory(splitStack);
+                    playerentity.addItem(splitStack);
                 }
                 else
                 {
@@ -213,7 +213,7 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
         Map<Integer, Integer> sorted = getStoredMetalsMap(getContainedMetalsTag(stack));
         tooltip.add(TextHelper.createTranslatedText(CONTAINED_METALS));
@@ -223,7 +223,7 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
             String metalName = Metals.MetalType.valueOf(metalInfo.getKey()).get().name();
 
             String metalTranslation = String.format("item.cosmere.%s_nugget", metalName.toLowerCase());
-            tooltip.add(TextHelper.createTranslatedText(metalTranslation).appendSibling(TextHelper.createText(String.format(": x%s", metalInfo.getValue()))));
+            tooltip.add(TextHelper.createTranslatedText(metalTranslation).append(TextHelper.createText(String.format(": x%s", metalInfo.getValue()))));
 
         });
 

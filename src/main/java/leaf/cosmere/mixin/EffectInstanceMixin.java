@@ -16,21 +16,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EffectInstance.class)
 public class EffectInstanceMixin
 {
-    @Inject(
-            at = @At("RETURN"),
-            method = "getIsPotionDurationMax",
+    @Inject(at = @At("RETURN"),
+            method = "isNoCounter",
             cancellable = true
     )
     private void getIsFeruchemyEffect(CallbackInfoReturnable<Boolean> cir)
     {
-        if (getPotion() instanceof FeruchemyEffectBase)
+        if (getEffect() instanceof FeruchemyEffectBase)
         {
             cir.setReturnValue(true);
         }
     }
 
+
     @Shadow
-    public Effect getPotion() {
+    public Effect getEffect() {
         throw new IllegalStateException("Mixin failed to shadow getPotion()");
     }
 }

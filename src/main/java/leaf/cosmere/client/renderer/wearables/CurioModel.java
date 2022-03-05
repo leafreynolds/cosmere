@@ -29,16 +29,16 @@ public abstract class CurioModel<T extends LivingEntity> extends BipedModel<T>
     public CurioModel(float modelSize)
     {
         super(modelSize);
-        this.textureWidth = 16;
-        this.textureHeight = 16;
+        this.texWidth = 16;
+        this.texHeight = 16;
     }
 
-    public void setRotationAngles(@Nonnull T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float netHeadPitch)
+    public void setupAnim(@Nonnull T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float netHeadPitch)
     {
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrixStack, @Nonnull IVertexBuilder vertexBuilder, int light, int overlay, float red, float green, float blue, float alpha)
+    public void renderToBuffer(@Nonnull MatrixStack matrixStack, @Nonnull IVertexBuilder vertexBuilder, int light, int overlay, float red, float green, float blue, float alpha)
     {
         Optional<SlotTypePreset> slotTypePreset = SlotTypePreset.findPreset(renderMode);
         if (!slotTypePreset.isPresent())
@@ -50,18 +50,18 @@ public abstract class CurioModel<T extends LivingEntity> extends BipedModel<T>
         {
             case BACK:
             case BODY:
-                this.bipedBody.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
+                this.body.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
                 break;
             case BRACELET:
             case HANDS:
             case RING:
                 if (renderIndex == 0)
                 {
-                    this.bipedLeftArm.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
+                    this.leftArm.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
                 }
                 else
                 {
-                    this.bipedRightArm.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
+                    this.rightArm.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
                 }
                 break;
             case BELT:
@@ -69,11 +69,11 @@ public abstract class CurioModel<T extends LivingEntity> extends BipedModel<T>
             case CHARM:
                 if (renderIndex == 0)
                 {
-                    this.bipedLeftLeg.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
+                    this.leftLeg.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
                 }
                 else
                 {
-                    this.bipedRightLeg.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
+                    this.rightLeg.render(matrixStack, vertexBuilder, light, overlay, red, green, blue, alpha);
                 }
                 break;
         }

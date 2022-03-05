@@ -30,19 +30,19 @@ public class BrassTapEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (!entityLivingBaseIn.world.isRemote && amplifier > 10 && !entityLivingBaseIn.isInWater())
+        if (!entityLivingBaseIn.level.isClientSide && amplifier > 10 && !entityLivingBaseIn.isInWater())
         {
             //set user on fire
-            entityLivingBaseIn.setFire(3);
+            entityLivingBaseIn.setSecondsOnFire(3);
         }
 
     }
 
 
     @Override
-    public boolean isReady(int duration, int amplifier)
+    public boolean isDurationEffectTick(int duration, int amplifier)
     {
         //assume we can apply the effect regardless
         boolean result = true;
@@ -63,14 +63,14 @@ public class BrassTapEffect extends FeruchemyEffectBase
     @SubscribeEvent
     public static void onLivingDamageEvent(LivingDamageEvent event)
     {
-        if (event.getSource().getTrueSource() instanceof LivingEntity)
+        if (event.getSource().getEntity() instanceof LivingEntity)
         {
-            LivingEntity livingEntity = (LivingEntity) event.getSource().getTrueSource();
-            EffectInstance effectInstance = livingEntity.getActivePotionEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.BRASS).get());
+            LivingEntity livingEntity = (LivingEntity) event.getSource().getEntity();
+            EffectInstance effectInstance = livingEntity.getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.BRASS).get());
 
             if (effectInstance != null && effectInstance.getDuration() > 0 && effectInstance.getAmplifier() > 3)
             {
-                event.getEntityLiving().setFire(effectInstance.getAmplifier());
+                event.getEntityLiving().setSecondsOnFire(effectInstance.getAmplifier());
             }
         }
     }

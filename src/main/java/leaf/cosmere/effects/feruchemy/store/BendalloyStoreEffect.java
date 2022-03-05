@@ -19,7 +19,7 @@ public class BendalloyStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier)
+    public boolean isDurationEffectTick(int duration, int amplifier)
     {
         //assume we can apply the effect regardless
         boolean result = true;
@@ -34,11 +34,11 @@ public class BendalloyStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (!entityLivingBaseIn.world.isRemote)
+        if (!entityLivingBaseIn.level.isClientSide)
         {
-            ((PlayerEntity) entityLivingBaseIn).getFoodStats().addExhaustion(0.5F * (float) (amplifier + 1));
+            ((PlayerEntity) entityLivingBaseIn).getFoodData().addExhaustion(0.5F * (float) (amplifier + 1));
 
             //todo add tough as nails mod compatibility?
         }

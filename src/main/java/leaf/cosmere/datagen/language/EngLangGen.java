@@ -72,7 +72,7 @@ public class EngLangGen extends LanguageProvider
                 }
 
 
-                add(item.getTranslationKey(), localisedString);
+                add(item.getDescriptionId(), localisedString);
             }
         }
 
@@ -81,7 +81,7 @@ public class EngLangGen extends LanguageProvider
         {
             if (type.getRegistryName().getNamespace().equals(Cosmere.MODID))
             {
-                add(type.getTranslationKey(), StringHelper.fixCapitalisation(type.getRegistryName().getPath()));
+                add(type.getDescriptionId(), StringHelper.fixCapitalisation(type.getRegistryName().getPath()));
             }
         }
 
@@ -153,9 +153,9 @@ public class EngLangGen extends LanguageProvider
         add("cosmere.category.hemalurgy", "Hemalurgy");
 
         //ItemGroups/Tabs
-        add("itemGroup." + CosmereItemGroups.ITEMS.getPath(), "Cosmere Items");
-        add("itemGroup." + CosmereItemGroups.METALMINDS.getPath(), "Cosmere Metalminds");
-        add("itemGroup." + CosmereItemGroups.BLOCKS.getPath(), "Cosmere Blocks");
+        add("itemGroup." + CosmereItemGroups.ITEMS.getRecipeFolderName(), "Cosmere Items");
+        add("itemGroup." + CosmereItemGroups.METALMINDS.getRecipeFolderName(), "Cosmere Metalminds");
+        add("itemGroup." + CosmereItemGroups.BLOCKS.getRecipeFolderName(), "Cosmere Blocks");
 
         //Damage Sources
 
@@ -164,7 +164,7 @@ public class EngLangGen extends LanguageProvider
         //effects
         for (RegistryObject<Effect> effect : EffectsRegistry.EFFECTS.getEntries())
         {
-            add(effect.get().getName(), StringHelper.fixCapitalisation(effect.get().getRegistryName().getPath()));
+            add(effect.get().getDescriptionId(), StringHelper.fixCapitalisation(effect.get().getRegistryName().getPath()));
 
         }
 
@@ -233,7 +233,7 @@ public class EngLangGen extends LanguageProvider
         String subtitleTranslationKey = "";
         if (subtitleTranslationKey.isEmpty() || subtitleTranslationKey == null)
         {
-            subtitleTranslationKey = Util.makeTranslationKey("subtitle", sound.getRegistryName());
+            subtitleTranslationKey = Util.makeDescriptionId("subtitle", sound.getRegistryName());
         }
         return subtitleTranslationKey;
     }

@@ -20,13 +20,13 @@ public class FeruchemyZinc extends FeruchemyBase
 
     public void onXPChange(PlayerXpEvent.XpChange event)
     {
-        boolean isRemote = event.getEntityLiving().world.isRemote;
+        boolean isRemote = event.getEntityLiving().level.isClientSide;
         if (isRemote)
         {
             return;
         }
-        EffectInstance tappingZincEffect = event.getPlayer().getActivePotionEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ZINC).get());
-        EffectInstance storingZincEffect = event.getPlayer().getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ZINC).get());
+        EffectInstance tappingZincEffect = event.getPlayer().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ZINC).get());
+        EffectInstance storingZincEffect = event.getPlayer().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ZINC).get());
 
         if (tappingZincEffect != null)
         {

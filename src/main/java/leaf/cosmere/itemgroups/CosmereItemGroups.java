@@ -16,7 +16,7 @@ public class CosmereItemGroups
     public static ItemGroup ITEMS = new ItemGroup(Cosmere.MODID + ".items")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             return new ItemStack(ItemsRegistry.GUIDE.get());
         }
@@ -25,7 +25,7 @@ public class CosmereItemGroups
     public static ItemGroup METALMINDS = new ItemGroup(Cosmere.MODID + ".metalminds")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             return new ItemStack(ItemsRegistry.METAL_BRACELETS.entrySet().stream().findAny().get().getValue().get());
         }
@@ -34,7 +34,7 @@ public class CosmereItemGroups
     public static ItemGroup HEMALURGIC_SPIKES = new ItemGroup(Cosmere.MODID + ".spikes")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             return new ItemStack(ItemsRegistry.METAL_SPIKE.entrySet().stream().findAny().get().getValue().get());
         }
@@ -43,7 +43,7 @@ public class CosmereItemGroups
     public static ItemGroup BLOCKS = new ItemGroup(Cosmere.MODID + ".blocks")
     {
         @Override
-        public ItemStack createIcon()
+        public ItemStack makeIcon()
         {
             return new ItemStack(BlocksRegistry.GEM_BLOCK.get());
         }

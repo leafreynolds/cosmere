@@ -61,7 +61,7 @@ public interface IHemalurgicInfo
 
     default CompoundNBT getHemalurgicInfo(ItemStack stack)
     {
-        return stack.getOrCreateChildTag("hemalurgy");
+        return stack.getOrCreateTagElement("hemalurgy");
     }
 
     default void stealFromSpiritweb(ItemStack stack, Metals.MetalType spikeMetalType, LivingEntity entityKilled)
@@ -83,7 +83,7 @@ public interface IHemalurgicInfo
                 //don't steal modified values, only base value
                 //todo decide how much strength is reasonable to steal and how much goes to waste
                 //currently will try 70%
-                double strengthToAdd = entityKilled.getAttributeManager().getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
+                double strengthToAdd = entityKilled.getAttributes().getBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
                 CompoundNBTHelper.setDouble(hemalurgyInfo, spikeMetalType.name(), strengthCurrent + strengthToAdd);
                 saveIdentity = true;
                 break;
@@ -182,7 +182,7 @@ public interface IHemalurgicInfo
 
         if (saveIdentity)
         {
-            setHemalurgicIdentity(stack, entityKilled.getUniqueID());
+            setHemalurgicIdentity(stack, entityKilled.getUUID());
             CompoundNBTHelper.setBoolean(hemalurgyInfo, "hasHemalurgicPower", true);
         }
     }

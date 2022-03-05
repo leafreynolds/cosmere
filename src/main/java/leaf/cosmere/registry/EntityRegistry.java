@@ -16,14 +16,14 @@ public class EntityRegistry
 			ENTITIES.register(
 					"spren_flame",
 					() -> EntityType.Builder
-							.create(SprenFlameEntity::new, EntityClassification.CREATURE)
-							.size(.5f, .5f)
+							.of(SprenFlameEntity::new, EntityClassification.CREATURE)
+							.sized(.5f, .5f)
 							.setShouldReceiveVelocityUpdates(false)
 							.build("spren_flame"));
 
 
 	public static void PrepareEntityAttributes()
 	{
-		GlobalEntityTypeAttributes.put(SPREN_FIRE.get(), SprenFlameEntity.prepareAttributes().create());
+		GlobalEntityTypeAttributes.put(SPREN_FIRE.get(), SprenFlameEntity.prepareAttributes().build());
 	}
 }

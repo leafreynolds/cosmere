@@ -22,7 +22,7 @@ public class ChromiumTapEffect extends FeruchemyEffectBase
     {
         super(type, effectType);
 
-        addAttributesModifier(
+        addAttributeModifier(
                 Attributes.LUCK,
                 "7faaa8a8-fee1-422c-8f85-6794042e8f09",
                 1.0D,
@@ -33,15 +33,15 @@ public class ChromiumTapEffect extends FeruchemyEffectBase
 
     public void onLootingLevelEvent(LootingLevelEvent event)
     {
-        boolean isRemote = event.getEntityLiving().world.isRemote;
-        boolean entityNotLiving = !(event.getDamageSource().getTrueSource() instanceof LivingEntity);
+        boolean isRemote = event.getEntityLiving().level.isClientSide;
+        boolean entityNotLiving = !(event.getDamageSource().getEntity() instanceof LivingEntity);
 
         if (isRemote || entityNotLiving)
         {
             return;
         }
 
-        EffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getTrueSource()).getActivePotionEffect(this);
+        EffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getEntity()).getEffect(this);
         if (effectInstance != null && effectInstance.getDuration() > 0)
         {
             event.setLootingLevel(event.getLootingLevel() + effectInstance.getAmplifier());
@@ -51,8 +51,8 @@ public class ChromiumTapEffect extends FeruchemyEffectBase
 
 
     @Override
-    public void applyAttributesModifiersToEntity(LivingEntity entityLivingBaseIn, AttributeModifierManager attributeMapIn, int amplifier)
+    public void addAttributeModifiers(LivingEntity entityLivingBaseIn, AttributeModifierManager attributeMapIn, int amplifier)
     {
-        super.applyAttributesModifiersToEntity(entityLivingBaseIn, attributeMapIn, amplifier);
+        super.addAttributeModifiers(entityLivingBaseIn, attributeMapIn, amplifier);
     }
 }

@@ -24,7 +24,7 @@ public class AllomancyDuralumin extends AllomancyBase
     public void performEffect(ISpiritweb data)
     {
         LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
         if (isActiveTick)
         {
@@ -33,7 +33,7 @@ public class AllomancyDuralumin extends AllomancyBase
                     EffectsRegistry.ALLOMANCY_BOOST.get(),
                     MathHelper.floor(getAllomanticStrength(data))
             );
-            data.getLiving().addPotionEffect(newEffect);
+            data.getLiving().addEffect(newEffect);
         }
     }
 }

@@ -28,8 +28,8 @@ public class Constants
 
     public static class Suffix
     {
-        public static final IFormattableTextComponent INVESTITURE_UNITS = new StringTextComponent(" IU").mergeStyle(TextFormatting.RESET);
-        public static final IFormattableTextComponent STORMLIGHT_UNITS = new StringTextComponent(" SU").mergeStyle(TextFormatting.RESET);
+        public static final IFormattableTextComponent INVESTITURE_UNITS = new StringTextComponent(" IU").withStyle(TextFormatting.RESET);
+        public static final IFormattableTextComponent STORMLIGHT_UNITS = new StringTextComponent(" SU").withStyle(TextFormatting.RESET);
     }
 
     public static class NBT

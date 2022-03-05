@@ -33,12 +33,12 @@ public class AllomancyTin extends AllomancyBase
     {
         //Increases Physical Senses
         LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
         //give night vision
         if (isActiveTick)
         {
-            livingEntity.addPotionEffect(EffectsHelper.getNewEffect(Effects.NIGHT_VISION, 0));
+            livingEntity.addEffect(EffectsHelper.getNewEffect(Effects.NIGHT_VISION, 0));
         }
     }
 

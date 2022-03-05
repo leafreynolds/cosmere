@@ -7,13 +7,15 @@ package leaf.cosmere.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BaseBlock extends Block
 {
 
     public BaseBlock(Properties properties, SoundType sound, float hardness, float resistance)
     {
 
-        super(properties.sound(sound).hardnessAndResistance(hardness, resistance));
+        super(properties.sound(sound).strength(hardness, resistance));
     }
 
     public BaseBlock(Properties properties)

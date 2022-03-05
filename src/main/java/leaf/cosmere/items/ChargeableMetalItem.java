@@ -15,7 +15,7 @@ public class ChargeableMetalItem extends ChargeableItemBase implements IHasMetal
 
     public ChargeableMetalItem(Metals.MetalType metalType, ItemGroup group)
     {
-        super(PropTypes.Items.ONE.get().rarity(metalType.getRarity()).group(group));
+        super(PropTypes.Items.ONE.get().rarity(metalType.getRarity()).tab(group));
 
         this.metalType = metalType;
     }

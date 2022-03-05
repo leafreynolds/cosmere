@@ -22,19 +22,19 @@ public class SprenFlameRenderer extends MobRenderer<SprenFlameEntity, SprenFlame
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getEntityTexture(SprenFlameEntity entity)
+	public ResourceLocation getTextureLocation(SprenFlameEntity entity)
 	{
 		return FIRE_SPREN_TEXTURES;
 	}
 
-	protected void preRenderCallback(SprenFlameEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime)
+	protected void scale(SprenFlameEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime)
 	{
 		matrixStackIn.scale(0.8F, 0.8F, 0.8F);
 	}
 
-	protected void applyRotations(SprenFlameEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks)
+	protected void setupRotations(SprenFlameEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks)
 	{
 		matrixStackIn.translate(0.0D, (double) (MathHelper.cos(ageInTicks * 0.3F) * 0.1F), 0.0D);
-		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+		super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
 	}
 }

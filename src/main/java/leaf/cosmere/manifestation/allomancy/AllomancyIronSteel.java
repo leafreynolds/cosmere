@@ -51,7 +51,7 @@ public class AllomancyIronSteel extends AllomancyBase
     @Override
     public void performEffect(ISpiritweb data)
     {
-        if (data.getLiving().world.isRemote)
+        if (data.getLiving().level.isClientSide)
         {
             performEffectClient(data);
         }
@@ -73,19 +73,19 @@ public class AllomancyIronSteel extends AllomancyBase
         entities = isPush ? data.pushEntities : data.pullEntities;
 
         //Pushes on Nearby Metals
-        if (getKeyBinding().isKeyDown())
+        if (getKeyBinding().isDown())
         {
             Minecraft mc = Minecraft.getInstance();
             RayTraceResult ray = cap.getLiving().pick(getRange(cap), 0, false);
 
-            if (ray.getType() == RayTraceResult.Type.BLOCK && !blocks.contains(((BlockRayTraceResult) ray).getPos()))
+            if (ray.getType() == RayTraceResult.Type.BLOCK && !blocks.contains(((BlockRayTraceResult) ray).getBlockPos()))
             {
-                BlockPos pos = ((BlockRayTraceResult) ray).getPos();
+                BlockPos pos = ((BlockRayTraceResult) ray).getBlockPos();
                 //todo check block is of ihasmetal type
-                BlockState state = mc.world.getBlockState(pos);
+                BlockState state = mc.level.getBlockState(pos);
                 if (state.getBlock() instanceof IHasMetalType)
                 {
-                    blocks.add(pos.toImmutable());
+                    blocks.add(pos.immutable());
 
                     if (blocks.size() > 5)
                     {
@@ -94,10 +94,10 @@ public class AllomancyIronSteel extends AllomancyBase
                     hasChanged = true;
                 }
             }
-            else if (ray.getType() == RayTraceResult.Type.ENTITY && !entities.contains(((EntityRayTraceResult) ray).getEntity().getEntityId()))
+            else if (ray.getType() == RayTraceResult.Type.ENTITY && !entities.contains(((EntityRayTraceResult) ray).getEntity().getId()))
             {
                 //todo check for metal
-                entities.add(((EntityRayTraceResult) ray).getEntity().getEntityId());
+                entities.add(((EntityRayTraceResult) ray).getEntity().getId());
 
                 if (entities.size() > 5)
                 {
@@ -142,7 +142,7 @@ public class AllomancyIronSteel extends AllomancyBase
 
     private void performEffectServer(ISpiritweb cap)
     {
-        if (cap.getLiving().ticksExisted % 3 == 0)
+        if (cap.getLiving().tickCount % 3 == 0)
         {
             return;
         }
@@ -161,14 +161,14 @@ public class AllomancyIronSteel extends AllomancyBase
 
         LivingEntity living = data.getLiving();
         Vector3d direction;
-        float renderPartialTicks = Minecraft.getInstance().getRenderPartialTicks();
+        float renderPartialTicks = Minecraft.getInstance().getFrameTime();
 
         double strength = getAllomanticStrength(cap);
 
         for (int i = blockListCount - 1; i >= 0; i--)
         {
             BlockPos blockPos = blocks.get(i);
-            if (!isPush && blockPos.manhattanDistance(living.getPosition()) < 2)
+            if (!isPush && blockPos.distManhattan(living.blockPosition()) < 2)
             {
                 //stop shoving the user into the block
                 continue;
@@ -177,23 +177,23 @@ public class AllomancyIronSteel extends AllomancyBase
 
             //if the entity is in range of being able to push or pull from
             double maxDistance = (strength * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getMetalType().getID()));// * 0.1f;
-            if (blockPos.withinDistance(living.getPositionVec(), maxDistance))
+            if (blockPos.closerThan(living.position(), maxDistance))
             {
-                Vector3d blockCenter = Vector3d.copyCentered(blockPos);
+                Vector3d blockCenter = Vector3d.atCenterOf(blockPos);
 
                 direction = VectorHelper.getDirection(
                         blockCenter,
-                        living.getPositionVec(),
+                        living.position(),
                         (isPush ? -1f : 2f) * renderPartialTicks);
 
                 //todo, clean up all the unnecessary calculations once we find what feels good at run time
                 Vector3d normalize = direction.normalize();
 
                 double shortenFactor = isPush ? 0.2 : 0.4;
-                Vector3d add = living.getMotion().add(normalize.mul(shortenFactor, shortenFactor, shortenFactor));
+                Vector3d add = living.getDeltaMovement().add(normalize.multiply(shortenFactor, shortenFactor, shortenFactor));
 
                 //don't let the motion go crazy large
-                living.setMotion(VectorHelper.ClampMagnitude(add, 1));
+                living.setDeltaMovement(VectorHelper.ClampMagnitude(add, 1));
 
                 //let people get damaged but not too much?
                 //todo check what a good max fall distance would be
@@ -209,7 +209,7 @@ public class AllomancyIronSteel extends AllomancyBase
                 blocks.remove(i);
             }
         }
-        living.velocityChanged = true;
+        living.hurtMarked = true;
     }
 
     private static List<Vector3d> found = new ArrayList<>();
@@ -220,7 +220,7 @@ public class AllomancyIronSteel extends AllomancyBase
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity playerEntity = mc.player;
         //only update box list every so often
-        if (playerEntity.ticksExisted % 5 != 0 && found.size() > 0)
+        if (playerEntity.tickCount % 5 != 0 && found.size() > 0)
         {
             return found;
         }
@@ -232,10 +232,10 @@ public class AllomancyIronSteel extends AllomancyBase
         //todo stop aluminum showing up, check IHasMetalType.getMetalType != aluminum
 
         //metal blocks
-        BlockPos.getProximitySortedBoxPositions(playerEntity.getPosition(), range, range, range)
+        BlockPos.withinManhattanStream(playerEntity.blockPosition(), range, range, range)
                 .filter(blockPos ->
                 {
-                    Block block = playerEntity.world.getBlockState(blockPos).getBlock();
+                    Block block = playerEntity.level.getBlockState(blockPos).getBlock();
 
                     if (block instanceof IHasMetalType)
                     {
@@ -263,11 +263,11 @@ public class AllomancyIronSteel extends AllomancyBase
 
                 if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof IHasMetalType)
                 {
-                    found.add(entity.getPositionVec());
+                    found.add(entity.position());
                 }
                 else if (item instanceof IHasMetalType)
                 {
-                    found.add(entity.getPositionVec());
+                    found.add(entity.position());
                 }
             }
         });

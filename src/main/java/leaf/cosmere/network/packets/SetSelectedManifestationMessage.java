@@ -28,7 +28,7 @@ public class SetSelectedManifestationMessage
         NetworkEvent.Context context = ctx.get();
         ServerPlayerEntity sender = context.getSender();
         MinecraftServer server = sender.getServer();
-        server.deferTask(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+        server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
         {
             cap.setSelectedManifestation(message.manifestation);
             cap.syncToClients(null);
@@ -40,12 +40,12 @@ public class SetSelectedManifestationMessage
     public static void encode(SetSelectedManifestationMessage mes, PacketBuffer buf)
     {
         String namespace = mes.manifestation.getRegistryName().toString();
-        buf.writeString(namespace);
+        buf.writeUtf(namespace);
     }
 
     public static SetSelectedManifestationMessage decode(PacketBuffer buf)
     {
-        String location = buf.readString();
+        String location = buf.readUtf();
         return new SetSelectedManifestationMessage(ManifestationRegistry.fromID(location));
     }
 

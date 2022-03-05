@@ -19,21 +19,21 @@ public class BronzeStoreEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
         //sleep
-        if (!(entityLivingBaseIn instanceof PlayerEntity) || entityLivingBaseIn.ticksExisted % (200 / (amplifier + 1)) != 0)
+        if (!(entityLivingBaseIn instanceof PlayerEntity) || entityLivingBaseIn.tickCount % (200 / (amplifier + 1)) != 0)
         {
             return;
         }
 
         PlayerEntity player = (PlayerEntity) entityLivingBaseIn;
 
-        player.trySleep(player.getPosition()).ifLeft((result) ->
+        player.startSleepInBed(player.blockPosition()).ifLeft((result) ->
         {
             if (result != null && result.getMessage() != null)
             {
-                player.sendStatusMessage(result.getMessage(), true);
+                player.displayClientMessage(result.getMessage(), true);
             }
 
         });

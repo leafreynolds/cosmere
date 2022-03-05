@@ -13,7 +13,7 @@ public class PlayerHelper
 {
     public static String getPlayerName(UUID id, MinecraftServer server)
     {
-        GameProfile profileByUUID = server.getPlayerProfileCache().getProfileByUUID(id);
+        GameProfile profileByUUID = server.getProfileCache().get(id);
         return profileByUUID != null ? profileByUUID.getName() : "OFFLINE Player";
     }
 }

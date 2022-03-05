@@ -51,8 +51,8 @@ public class ItemsRegistry
     public static final RegistryObject<net.minecraft.item.Item> METAL_FILE = ITEMS.register("metal_file", () -> createItem(new MetalFileItem()));
     public static final RegistryObject<net.minecraft.item.Item> METAL_VIAL = ITEMS.register("metal_vial", () -> createItem(new MetalVialItem()));
 
-    public static final RegistryObject<net.minecraft.item.Item> JAR_EMPTY = ITEMS.register("jar_empty", () -> createItem(new BaseItem(PropTypes.Items.SIXTEEN.get().group(CosmereItemGroups.ITEMS))));
-    public static final RegistryObject<net.minecraft.item.Item> JAR_OF_BLOOD = ITEMS.register("jar_of_blood", () -> createItem(new BaseItem(PropTypes.Items.ONE.get().group(CosmereItemGroups.ITEMS))));
+    public static final RegistryObject<net.minecraft.item.Item> JAR_EMPTY = ITEMS.register("jar_empty", () -> createItem(new BaseItem(PropTypes.Items.SIXTEEN.get().tab(CosmereItemGroups.ITEMS))));
+    public static final RegistryObject<net.minecraft.item.Item> JAR_OF_BLOOD = ITEMS.register("jar_of_blood", () -> createItem(new BaseItem(PropTypes.Items.ONE.get().tab(CosmereItemGroups.ITEMS))));
 
 
     //Mass items gen

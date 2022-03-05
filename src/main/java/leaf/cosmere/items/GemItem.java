@@ -12,7 +12,7 @@ public class GemItem extends ChargeableItemBase
 {
     public GemItem()
     {
-        super(PropTypes.Items.SIXTY_FOUR.get().group(CosmereItemGroups.ITEMS).rarity(Rarity.UNCOMMON));
+        super(PropTypes.Items.SIXTY_FOUR.get().tab(CosmereItemGroups.ITEMS).rarity(Rarity.UNCOMMON));
     }
 
 }

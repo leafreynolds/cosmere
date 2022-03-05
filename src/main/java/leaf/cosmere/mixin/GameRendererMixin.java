@@ -17,25 +17,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin
 {
-    @Inject(at = @At("RETURN"), method = "getNightVisionBrightness(Lnet/minecraft/entity/LivingEntity;F)F", cancellable = true)
+    @Inject(at = @At("RETURN"), method = "getNightVisionScale(Lnet/minecraft/entity/LivingEntity;F)F", cancellable = true)
     private static void removeNightVisionFlash(LivingEntity livingEntity, float f, CallbackInfoReturnable<Float> info)
     {
-        float i = livingEntity.getActivePotionEffect(Effects.NIGHT_VISION).getDuration();
+        float i = livingEntity.getEffect(Effects.NIGHT_VISION).getDuration();
         info.setReturnValue(i > 0 ? 1 : i);
     }
 
 
     @Inject(
             at = @At("RETURN"),
-            method = "getFOVModifier",
+            method = "getFov",
             cancellable = true
     )
     private void getZoomedFov(ActiveRenderInfo activeRenderInfoIn, float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Double> info)
     {
         double fov = info.getReturnValue();
-        PlayerEntity player = (PlayerEntity)Minecraft.getInstance().getRenderViewEntity();
-        EffectInstance tinTapEffect = player.getActivePotionEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.TIN).get());
-        EffectInstance tinStoreEffect = player.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.TIN).get());
+        PlayerEntity player = (PlayerEntity)Minecraft.getInstance().getCameraEntity();
+        EffectInstance tinTapEffect = player.getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.TIN).get());
+        EffectInstance tinStoreEffect = player.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.TIN).get());
         if (tinTapEffect != null && tinTapEffect.getDuration() > 0)
         {
             int amplifier = tinTapEffect.getAmplifier();

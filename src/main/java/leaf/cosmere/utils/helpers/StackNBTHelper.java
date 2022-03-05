@@ -85,7 +85,7 @@ public final class StackNBTHelper
 
     public static void setUuid(ItemStack stack, String tag, UUID value)
     {
-        stack.getOrCreateTag().putUniqueId(tag, value);
+        stack.getOrCreateTag().putUUID(tag, value);
     }
 
     public static void setList(ItemStack stack, String tag, ListNBT list)
@@ -170,7 +170,7 @@ public final class StackNBTHelper
     public static UUID getUuid(ItemStack stack, String tag)
     {
         return verifyExistance(stack, tag)
-               ? stack.getOrCreateTag().getUniqueId(tag)
+               ? stack.getOrCreateTag().getUUID(tag)
                : null;
     }
 
@@ -186,7 +186,7 @@ public final class StackNBTHelper
      */
     public static JsonObject serializeStack(ItemStack stack)
     {
-        CompoundNBT nbt = stack.write(new CompoundNBT());
+        CompoundNBT nbt = stack.save(new CompoundNBT());
         byte c = nbt.getByte("Count");
         if (c != 1)
         {
@@ -228,7 +228,7 @@ public final class StackNBTHelper
             return false;
         }
 
-        for (String key : template.keySet())
+        for (String key : template.getAllKeys())
         {
             if (!matchTag(template.get(key), target.get(key)))
             {

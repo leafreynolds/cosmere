@@ -30,7 +30,7 @@ public final class ColorHandler
 
         IItemColor blockItemColorHandler =
                 (itemStack, tintIndex) -> tintIndex == 0
-                                      ? Minecraft.getInstance().getBlockColors().getColor(((BlockItem) itemStack.getItem()).getBlock().getDefaultState(), null, null, tintIndex)
+                                      ? Minecraft.getInstance().getBlockColors().getColor(((BlockItem) itemStack.getItem()).getBlock().defaultBlockState(), null, null, tintIndex)
                                       : -1;
 
         IBlockColor metalBlockColorHandler =

@@ -20,10 +20,10 @@ public class MetalNuggetItem extends MetalItem
     }
 
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        playerIn.setActiveHand(handIn);
+        ItemStack itemstack = playerIn.getItemInHand(handIn);
+        playerIn.startUsingItem(handIn);
 
         //todo convert to shavings
 
@@ -41,6 +41,6 @@ public class MetalNuggetItem extends MetalItem
 
 
 
-        return ActionResult.resultConsume(itemstack);
+        return ActionResult.consume(itemstack);
     }
 }

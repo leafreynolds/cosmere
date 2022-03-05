@@ -23,32 +23,32 @@ public class DrawUtils
     //https://forums.minecraftforge.net/topic/81895-problems-with-rendering-a-line-1152/?tab=comments#comment-388662
     public static void drawLinesFromPoint(RenderWorldLastEvent event, Vector3d point, List<Vector3d> endPoints, Color color)
     {
-        IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         IVertexBuilder builder = buffer.getBuffer(RenderType.LINES);
 
         //move where the line is in the world. otherwise it is drawn around origin 0,0,0 I think?
-        Vector3d view = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
+        Vector3d view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         MatrixStack matrixStack = event.getMatrixStack();
         RenderSystem.lineWidth(3);
 
-        matrixStack.push();
+        matrixStack.pushPose();
         matrixStack.translate(-view.x, -view.y, -view.z);
-        Matrix4f matrix = matrixStack.getLast().getMatrix();
+        Matrix4f matrix = matrixStack.last().pose();
 
         for (Vector3d endPoint : endPoints)
         {
-            builder.pos(matrix,(float) point.getX(), (float) point.getY(), (float) point.getZ())
+            builder.vertex(matrix,(float) point.x(), (float) point.y(), (float) point.z())
                     .color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
                     .endVertex();
 
-            builder.pos(matrix, (float) endPoint.getX(), (float) endPoint.getY(), (float) endPoint.getZ())
+            builder.vertex(matrix, (float) endPoint.x(), (float) endPoint.y(), (float) endPoint.z())
                     .color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
                     .endVertex();
         }
 
-        matrixStack.pop();
+        matrixStack.popPose();
         RenderSystem.disableDepthTest();
-        buffer.finish(RenderType.LINES);
+        buffer.endBatch(RenderType.LINES);
 
     }
 }

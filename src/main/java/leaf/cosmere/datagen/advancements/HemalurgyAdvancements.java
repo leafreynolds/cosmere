@@ -26,8 +26,8 @@ public class HemalurgyAdvancements implements Consumer<Consumer<Advancement>>
     public void accept(Consumer<Advancement> advancementConsumer)
     {
         final String categoryName = "hemalurgy";
-        Advancement root = Advancement.Builder.builder()
-                .withDisplay(ItemsRegistry.GUIDE.get(),
+        Advancement root = Advancement.Builder.advancement()
+                .display(ItemsRegistry.GUIDE.get(),
                         new TranslationTextComponent("advancements.cosmere." + categoryName + ".title"),
                         new TranslationTextComponent("advancements.cosmere." + categoryName + ".description"),
                         new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
@@ -35,8 +35,8 @@ public class HemalurgyAdvancements implements Consumer<Consumer<Advancement>>
                         false,
                         false,
                         false)
-                .withCriterion("spike", InventoryChangeTrigger.Instance.forItems(ItemPredicate.Builder.create().tag(TagsRegistry.Items.METAL_SPIKE).build()))
+                .addCriterion("spike", InventoryChangeTrigger.Instance.hasItems(ItemPredicate.Builder.item().of(TagsRegistry.Items.METAL_SPIKE).build()))
                 //.withRewards(new AdvancementRewards(0, new ResourceLocation[]{new ResourceLocation("cosmere:guide")}, new ResourceLocation[0], FunctionObject.CacheableFunction.EMPTY))
-                .register(advancementConsumer, categoryName + "/root");
+                .save(advancementConsumer, categoryName + "/root");
     }
 }

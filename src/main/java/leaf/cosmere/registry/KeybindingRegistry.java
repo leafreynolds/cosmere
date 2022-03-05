@@ -46,6 +46,6 @@ public class KeybindingRegistry
 
     public static KeyBinding createKeybinding(String description, KeyModifier keyModifier, int keyCode, String category)
     {
-        return new KeyBinding(description, KeyConflictContext.DEFAULT, keyModifier, InputMappings.Type.KEYSYM.getOrMakeInput(keyCode), category);
+        return new KeyBinding(description, KeyConflictContext.DEFAULT, keyModifier, InputMappings.Type.KEYSYM.getOrCreate(keyCode), category);
     }
 }

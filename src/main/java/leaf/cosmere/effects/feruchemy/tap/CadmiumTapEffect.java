@@ -19,14 +19,14 @@ public class CadmiumTapEffect extends FeruchemyEffectBase
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier)
+    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
-        if (entityLivingBaseIn.world.isRemote)
+        if (entityLivingBaseIn.level.isClientSide)
         {
             return;
         }
 
-        entityLivingBaseIn.setAir(MathHelper.clamp(entityLivingBaseIn.getAir() + 3 + (amplifier), entityLivingBaseIn.getAir(), entityLivingBaseIn.getMaxAir()));
+        entityLivingBaseIn.setAirSupply(MathHelper.clamp(entityLivingBaseIn.getAirSupply() + 3 + (amplifier), entityLivingBaseIn.getAirSupply(), entityLivingBaseIn.getMaxAirSupply()));
 
     }
 }

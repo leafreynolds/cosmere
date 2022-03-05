@@ -50,12 +50,12 @@ public class FeatureRegistry
                         .collect(Collectors.toMap(
                                 Function.identity(),
                                 metalType ->
-                                        FeatureRegistry.ORE_FEATURES.get(metalType).get().withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-                                                BlocksRegistry.METAL_ORE.get(metalType).get().getDefaultState(), 5)) //vein size of 5
-                                                .withPlacement(
-                                                        Placement.RANGE.configure(new TopSolidRangeConfig(6, 0, 64))
+                                        FeatureRegistry.ORE_FEATURES.get(metalType).get().configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+                                                BlocksRegistry.METAL_ORE.get(metalType).get().defaultBlockState(), 5)) //vein size of 5
+                                                .decorated(
+                                                        Placement.RANGE.configured(new TopSolidRangeConfig(6, 0, 64))
                                                                 .chance(5))//Config.COMMON_SPEC.oreSpawnChance.get(metalType).get()))//todo config vein size based on ore type
-                                                .square()
+                                                .squared()
                                                 .count(5)
                         ));
     }

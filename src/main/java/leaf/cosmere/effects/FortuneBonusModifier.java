@@ -46,19 +46,19 @@ public class FortuneBonusModifier extends LootModifier
     {
         final String hasCosmereFortuneBonus = "HasCosmereFortuneBonus";
 
-        ItemStack tool = context.get(LootParameters.TOOL);
+        ItemStack tool = context.getParamOrNull(LootParameters.TOOL);
 
         if (tool != null && (!tool.hasTag() || tool.getTag() == null || !tool.getTag().getBoolean(hasCosmereFortuneBonus)))
         {
-            Entity entity = context.get(LootParameters.THIS_ENTITY);
-            BlockState blockState = context.get(LootParameters.BLOCK_STATE);
+            Entity entity = context.getParamOrNull(LootParameters.THIS_ENTITY);
+            BlockState blockState = context.getParamOrNull(LootParameters.BLOCK_STATE);
 
             if (blockState != null && entity instanceof LivingEntity)
             {
                 LivingEntity player = (LivingEntity) entity;
 
-                EffectInstance storingLuckEffect = player.getActivePotionEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());
-                EffectInstance tappingLuckEffect = player.getActivePotionEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());
+                EffectInstance storingLuckEffect = player.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());
+                EffectInstance tappingLuckEffect = player.getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());
 
                 //bonus for tapping amplifier.
                 int totalFortuneBonus = 0;
@@ -81,17 +81,17 @@ public class FortuneBonusModifier extends LootModifier
                     fakeTool.getOrCreateTag().putBoolean(hasCosmereFortuneBonus, true);
 
                     Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(fakeTool);
-                    enchantments.put(Enchantments.FORTUNE, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, fakeTool) + totalFortuneBonus);
+                    enchantments.put(Enchantments.BLOCK_FORTUNE, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, fakeTool) + totalFortuneBonus);
 
                     EnchantmentHelper.setEnchantments(enchantments, fakeTool);
 
                     LootContext.Builder builder = new LootContext.Builder(context);
                     builder.withParameter(LootParameters.TOOL, fakeTool);
 
-                    LootContext newContext = builder.build(LootParameterSets.BLOCK);
-                    LootTable lootTable = context.getWorld().getServer().getLootTableManager().getLootTableFromLocation(blockState.getBlock().getLootTable());
+                    LootContext newContext = builder.create(LootParameterSets.BLOCK);
+                    LootTable lootTable = context.getLevel().getServer().getLootTables().get(blockState.getBlock().getLootTable());
 
-                    return lootTable.generate(newContext);
+                    return lootTable.getRandomItems(newContext);
                 }
             }
         }

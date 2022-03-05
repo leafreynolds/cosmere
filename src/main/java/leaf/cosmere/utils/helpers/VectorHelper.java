@@ -24,7 +24,7 @@ public class VectorHelper
         }
         else
         {
-            vec = Vector3i.NULL_VECTOR;
+            vec = Vector3i.ZERO;
         }
 
         return vec;
@@ -68,9 +68,9 @@ public class VectorHelper
     // Moves a point /current/ in a straight line towards a /target/ point.
     public static Vector3d getDirection(Vector3d target, Vector3d current, float multiplicationFactor)
     {
-        double toVector_x = target.getX() - current.x;
-        double toVector_y = target.getY() - current.y;
-        double toVector_z = target.getZ() - current.z;
+        double toVector_x = target.x() - current.x;
+        double toVector_y = target.y() - current.y;
+        double toVector_z = target.z() - current.z;
 
         return new Vector3d(
                 toVector_x * multiplicationFactor,

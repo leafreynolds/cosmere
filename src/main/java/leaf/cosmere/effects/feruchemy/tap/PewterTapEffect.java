@@ -17,12 +17,12 @@ public class PewterTapEffect extends FeruchemyEffectBase
     {
         super(type, effectType);
 
-        addAttributesModifier(
+        addAttributeModifier(
                 Attributes.ATTACK_DAMAGE,
                 "00bebe52-fe9e-4966-989c-28de0cd2eb1f",
                 1.0D,
                 AttributeModifier.Operation.ADDITION);
-        addAttributesModifier(
+        addAttributeModifier(
                 Attributes.ATTACK_KNOCKBACK,
                 "74b5b82b-58e0-4a34-9cc2-fd4b92f0b11b",
                 1.0D,

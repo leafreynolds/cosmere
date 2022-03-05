@@ -21,6 +21,6 @@ public abstract class ModCommand implements Command<CommandSource>
 
     public boolean canExecute(CommandSource source) throws CommandSyntaxException
     {
-        return source.hasPermissionLevel(permLevel);
+        return source.hasPermission(permLevel);
     }
 }

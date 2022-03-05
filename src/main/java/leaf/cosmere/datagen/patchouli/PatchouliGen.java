@@ -53,7 +53,7 @@ public class PatchouliGen implements IDataProvider
     /**
      * Performs this provider's action.
      */
-    public void act(DirectoryCache cache) throws IOException
+    public void run(DirectoryCache cache) throws IOException
     {
         Path path = this.generator.getOutputFolder();
         Set<String> entryIDs = Sets.newHashSet();

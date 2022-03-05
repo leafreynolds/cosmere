@@ -95,17 +95,17 @@ public class BraceletMetalmind extends Metalmind
             case CHARM:
             case CURIO:
                 //setup biped model stuff
-                bracelet.setLivingAnimations(livingEntity, limbSwing, limbSwingAmount, partialTicks);
-                bracelet.setRotationAngles(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+                bracelet.prepareMobModel(livingEntity, limbSwing, limbSwingAmount, partialTicks);
+                bracelet.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
                 //and have it follow body rotations
                 ICurio.RenderHelper.followBodyRotations(livingEntity, (BipedModel<LivingEntity>) bracelet);
                 break;
         }
 
-        IVertexBuilder vertexBuilder = ItemRenderer.getBuffer(renderTypeBuffer, bracelet.getRenderType(METAL_TEXTURE), false, false);
+        IVertexBuilder vertexBuilder = ItemRenderer.getFoilBuffer(renderTypeBuffer, bracelet.renderType(METAL_TEXTURE), false, false);
 
         Color col = getMetalType().getColor();
-        bracelet.render(matrixStack,
+        bracelet.renderToBuffer(matrixStack,
                 vertexBuilder,
                 light,
                 OverlayTexture.NO_OVERLAY,

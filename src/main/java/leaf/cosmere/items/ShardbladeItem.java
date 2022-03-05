@@ -7,6 +7,8 @@ package leaf.cosmere.items;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.SwordItem;
 
+import net.minecraft.item.Item.Properties;
+
 public class ShardbladeItem extends SwordItem
 {
     public ShardbladeItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
@@ -15,7 +17,7 @@ public class ShardbladeItem extends SwordItem
     }
 
     @Override
-    public boolean isImmuneToFire()
+    public boolean isFireResistant()
     {
         return true;
     }

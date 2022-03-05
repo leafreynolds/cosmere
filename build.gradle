@@ -19,7 +19,7 @@ ext.configFile = file('gradle.properties')
 ext.config = parseConfig(configFile)
 
 version = "${forge_version}-${mod_version}-b${build_number}"
-group = 'net.cosmere.mod' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'leaf.cosmere' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${project.jar_name}"
 
 // Process resources on build
@@ -50,7 +50,6 @@ sourceSets {
 
 minecraft {
     mappings channel: "${mappings_type}", version: "${mappings_version}"
-    // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
     runs {
         client {
             property 'mixin.env.remapRefMap', 'true'

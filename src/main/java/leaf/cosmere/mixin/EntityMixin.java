@@ -31,7 +31,7 @@ public class EntityMixin
             return;
         }
 
-        PlayerEntity clientPlayer = (PlayerEntity) Minecraft.getInstance().getRenderViewEntity();
+        PlayerEntity clientPlayer = (PlayerEntity) Minecraft.getInstance().getCameraEntity();
         LivingEntity target = (LivingEntity) e;
 
         SpiritwebCapability.get(clientPlayer).ifPresent(playerSpiritweb ->
@@ -70,7 +70,7 @@ public class EntityMixin
                 //then close out
 
 
-                if (clientPlayer != null && clientPlayer.getDistance(target) < range)
+                if (clientPlayer != null && clientPlayer.distanceTo(target) < range)
                 {
                     cir.setReturnValue(true);
                 }

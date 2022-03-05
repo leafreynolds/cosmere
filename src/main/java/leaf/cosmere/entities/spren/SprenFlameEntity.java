@@ -28,7 +28,7 @@ import java.util.*;
 
 public class SprenFlameEntity extends ASprenEntity
 {
-	private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.createKey(SprenFlameEntity.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(SprenFlameEntity.class, DataSerializers.BYTE);
 
 	private float rollAmount;
 	private float rollAmountO;
@@ -48,37 +48,37 @@ public class SprenFlameEntity extends ASprenEntity
 	public SprenFlameEntity(EntityType<? extends SprenFlameEntity> type, World worldIn)
 	{
 		super(type, worldIn);
-		this.moveController = new FlyingMovementController(this, 20, true);
-		this.lookController = new LookController(this);
-		this.setPathPriority(PathNodeType.WATER, -1.0F);
-		this.setPathPriority(PathNodeType.WATER_BORDER, 16.0F);
-		this.setPathPriority(PathNodeType.COCOA, -1.0F);
-		this.setPathPriority(PathNodeType.FENCE, -1.0F);
+		this.moveControl = new FlyingMovementController(this, 20, true);
+		this.lookControl = new LookController(this);
+		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+		this.setPathfindingMalus(PathNodeType.WATER_BORDER, 16.0F);
+		this.setPathfindingMalus(PathNodeType.COCOA, -1.0F);
+		this.setPathfindingMalus(PathNodeType.FENCE, -1.0F);
 	}
 
 	@Override
-	public boolean isImmuneToFire()
+	public boolean fireImmune()
 	{
 		return true;
 	}
 
-	protected void registerData()
+	protected void defineSynchedData()
 	{
-		super.registerData();
-		this.dataManager.register(DATA_FLAGS_ID, (byte) 0);
+		super.defineSynchedData();
+		this.entityData.define(DATA_FLAGS_ID, (byte) 0);
 	}
 
 	public static AttributeModifierMap.MutableAttribute prepareAttributes()
 	{
-		return MobEntity.func_233666_p_()
-				.createMutableAttribute(Attributes.MAX_HEALTH, 10.0D)
-				.createMutableAttribute(Attributes.FLYING_SPEED, 0.6F)
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 2.0D)
-				.createMutableAttribute(Attributes.FOLLOW_RANGE, 48.0D);
+		return MobEntity.createMobAttributes()
+				.add(Attributes.MAX_HEALTH, 10.0D)
+				.add(Attributes.FLYING_SPEED, 0.6F)
+				.add(Attributes.MOVEMENT_SPEED, 0.3F)
+				.add(Attributes.ATTACK_DAMAGE, 2.0D)
+				.add(Attributes.FOLLOW_RANGE, 48.0D);
 	}
 
-	public float getBlockPathWeight(BlockPos pos, IWorldReader worldIn)
+	public float getWalkTargetValue(BlockPos pos, IWorldReader worldIn)
 	{
 		return worldIn.getBlockState(pos).isAir() ? 10.0F : 0.0F;
 	}
@@ -87,7 +87,7 @@ public class SprenFlameEntity extends ASprenEntity
 	{
 		this.goalSelector.addGoal(1, new SprenFlameEntity.EnterFireGoal());
 		this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
-		this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.fromItems(Items.TORCH, Items.SOUL_TORCH), false));
+		this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.of(Items.TORCH, Items.SOUL_TORCH), false));
 		this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
 
 		this.goalSelector.addGoal(5, new SprenFlameEntity.UpdateFireGoal());
@@ -100,9 +100,9 @@ public class SprenFlameEntity extends ASprenEntity
 		this.goalSelector.addGoal(9, new SwimGoal(this));
 	}
 
-	public void writeAdditional(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundNBT compound)
 	{
-		super.writeAdditional(compound);
+		super.addAdditionalSaveData(compound);
 
 		if (this.hasFire())
 		{
@@ -115,7 +115,7 @@ public class SprenFlameEntity extends ASprenEntity
 	/**
 	 * (abstract) Protected helper method to read subclass entity data from NBT.
 	 */
-	public void readAdditional(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundNBT compound)
 	{
 		this.firePos = null;
 		if (compound.contains("FirePos"))
@@ -133,16 +133,16 @@ public class SprenFlameEntity extends ASprenEntity
 	public void tick()
 	{
 		super.tick();
-		if (this.rand.nextFloat() < 0.05F)
+		if (this.random.nextFloat() < 0.05F)
 		{
-			for (int i = 0; i < this.rand.nextInt(2) + 1; ++i)
+			for (int i = 0; i < this.random.nextInt(2) + 1; ++i)
 			{
-				this.addParticle(this.world,
-						this.getPosX() - (double) 0.3F,
-						this.getPosX() + (double) 0.3F,
-						this.getPosZ() - (double) 0.3F,
-						this.getPosZ() + (double) 0.3F,
-						this.getPosYHeight(0.5D));
+				this.addParticle(this.level,
+						this.getX() - (double) 0.3F,
+						this.getX() + (double) 0.3F,
+						this.getZ() - (double) 0.3F,
+						this.getZ() + (double) 0.3F,
+						this.getY(0.5D));
 			}
 		}
 
@@ -151,14 +151,14 @@ public class SprenFlameEntity extends ASprenEntity
 
 	private void addParticle(World worldIn, double p_226397_2_, double p_226397_4_, double p_226397_6_, double p_226397_8_, double posY)
 	{
-		worldIn.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, MathHelper.lerp(worldIn.rand.nextDouble(), p_226397_2_, p_226397_4_), posY, MathHelper.lerp(worldIn.rand.nextDouble(), p_226397_6_, p_226397_8_), 0.0D, 0.0D, 0.0D);
+		worldIn.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, MathHelper.lerp(worldIn.random.nextDouble(), p_226397_2_, p_226397_4_), posY, MathHelper.lerp(worldIn.random.nextDouble(), p_226397_6_, p_226397_8_), 0.0D, 0.0D, 0.0D);
 	}
 
 	private void startMovingTo(BlockPos pos)
 	{
-		Vector3d vector3d = Vector3d.copyCenteredHorizontally(pos);
+		Vector3d vector3d = Vector3d.atBottomCenterOf(pos);
 		int i = 0;
-		BlockPos blockpos = this.getPosition();
+		BlockPos blockpos = this.blockPosition();
 		int j = (int) vector3d.y - blockpos.getY();
 		if (j > 2)
 		{
@@ -171,25 +171,25 @@ public class SprenFlameEntity extends ASprenEntity
 
 		int k = 6;
 		int l = 8;
-		int i1 = blockpos.manhattanDistance(pos);
+		int i1 = blockpos.distManhattan(pos);
 		if (i1 < 15)
 		{
 			k = i1 / 2;
 			l = i1 / 2;
 		}
 
-		Vector3d vector3d1 = RandomPositionGenerator.func_226344_b_(this, k, l, i, vector3d, (float) Math.PI / 10F);
+		Vector3d vector3d1 = RandomPositionGenerator.getAirPosTowards(this, k, l, i, vector3d, (float) Math.PI / 10F);
 		if (vector3d1 != null)
 		{
-			this.navigator.setSearchDepthMultiplier(0.5F);
-			this.navigator.tryMoveToXYZ(vector3d1.x, vector3d1.y, vector3d1.z, 1.0D);
+			this.navigation.setMaxVisitedNodesMultiplier(0.5F);
+			this.navigation.moveTo(vector3d1.x, vector3d1.y, vector3d1.z, 1.0D);
 		}
 	}
 
 
 	private boolean canEnterFire()
 	{
-		return (this.stayOutOfFireCountdown <= 0) || (this.world.isRaining() || this.world.isNightTime());
+		return (this.stayOutOfFireCountdown <= 0) || (this.level.isRaining() || this.level.isNight());
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -204,9 +204,9 @@ public class SprenFlameEntity extends ASprenEntity
 		this.rollAmount = Math.max(0.0F, this.rollAmount - 0.24F);
 	}
 
-	protected void updateAITasks()
+	protected void customServerAiStep()
 	{
-		if (this.isInWaterOrBubbleColumn())
+		if (this.isInWaterOrBubble())
 		{
 			++this.underWaterTicks;
 		}
@@ -217,7 +217,7 @@ public class SprenFlameEntity extends ASprenEntity
 
 		if (this.underWaterTicks > 20)
 		{
-			this.attackEntityFrom(DamageSource.DROWN, 10.0F);
+			this.hurt(DamageSource.DROWN, 10.0F);
 		}
 
 	}
@@ -237,10 +237,10 @@ public class SprenFlameEntity extends ASprenEntity
 	 * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
 	 * use this to react to sunlight and start to burn.
 	 */
-	public void livingTick()
+	public void aiStep()
 	{
-		super.livingTick();
-		if (!this.world.isRemote)
+		super.aiStep();
+		if (!this.level.isClientSide)
 		{
 			if (this.stayOutOfFireCountdown > 0)
 			{
@@ -257,7 +257,7 @@ public class SprenFlameEntity extends ASprenEntity
 				--this.remainingCooldownBeforeLocatingNewFlower;
 			}
 
-			if (this.ticksExisted % 20 == 0 && !this.isFireValid())
+			if (this.tickCount % 20 == 0 && !this.isFireValid())
 			{
 				this.firePos = null;
 			}
@@ -273,7 +273,7 @@ public class SprenFlameEntity extends ASprenEntity
 		}
 		else
 		{
-			return this.world.getBlockState(this.firePos).getBlock() == Blocks.FIRE;
+			return this.level.getBlockState(this.firePos).getBlock() == Blocks.FIRE;
 		}
 	}
 
@@ -285,13 +285,13 @@ public class SprenFlameEntity extends ASprenEntity
 	/**
 	 * Returns new PathNavigateGround instance
 	 */
-	protected PathNavigator createNavigator(World worldIn)
+	protected PathNavigator createNavigation(World worldIn)
 	{
 		FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn)
 		{
-			public boolean canEntityStandOnPos(BlockPos pos)
+			public boolean isStableDestination(BlockPos pos)
 			{
-				return !this.world.getBlockState(pos.down()).isAir();
+				return !this.level.getBlockState(pos.below()).isAir();
 			}
 
 			public void tick()
@@ -300,8 +300,8 @@ public class SprenFlameEntity extends ASprenEntity
 			}
 		};
 		flyingpathnavigator.setCanOpenDoors(false);
-		flyingpathnavigator.setCanSwim(false);
-		flyingpathnavigator.setCanEnterDoors(true);
+		flyingpathnavigator.setCanFloat(false);
+		flyingpathnavigator.setCanPassDoors(true);
 		return flyingpathnavigator;
 	}
 
@@ -309,9 +309,9 @@ public class SprenFlameEntity extends ASprenEntity
 	 * Checks if the parameter is an item which this animal can be fed to breed it (wheat, carrots or seeds depending on
 	 * the animal type)
 	 */
-	public boolean isBreedingItem(ItemStack stack)
+	public boolean isFood(ItemStack stack)
 	{
-		return stack.getItem().isIn(ItemTags.FLOWERS);
+		return stack.getItem().is(ItemTags.FLOWERS);
 	}
 
 	protected void playStepSound(BlockPos pos, BlockState blockIn)
@@ -325,12 +325,12 @@ public class SprenFlameEntity extends ASprenEntity
 
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return SoundEvents.ENTITY_BEE_HURT;
+		return SoundEvents.BEE_HURT;
 	}
 
 	protected SoundEvent getDeathSound()
 	{
-		return SoundEvents.ENTITY_BEE_DEATH;
+		return SoundEvents.BEE_DEATH;
 	}
 
 	/**
@@ -341,22 +341,22 @@ public class SprenFlameEntity extends ASprenEntity
 		return 0.4F;
 	}
 
-	public SprenFlameEntity createChild(ServerWorld world, AgeableEntity mate)
+	public SprenFlameEntity getBreedOffspring(ServerWorld world, AgeableEntity mate)
 	{
 		return EntityRegistry.SPREN_FIRE.get().create(world);
 	}
 
 	protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn)
 	{
-		return this.isChild() ? sizeIn.height * 0.5F : sizeIn.height * 0.5F;
+		return this.isBaby() ? sizeIn.height * 0.5F : sizeIn.height * 0.5F;
 	}
 
-	public boolean onLivingFall(float distance, float damageMultiplier)
+	public boolean causeFallDamage(float distance, float damageMultiplier)
 	{
 		return false;
 	}
 
-	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos)
+	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos)
 	{
 	}
 
@@ -368,7 +368,7 @@ public class SprenFlameEntity extends ASprenEntity
 	/**
 	 * Called when the entity is attacked.
 	 */
-	public boolean attackEntityFrom(DamageSource source, float amount)
+	public boolean hurt(DamageSource source, float amount)
 	{
 		if (this.isInvulnerableTo(source))
 		{
@@ -376,24 +376,24 @@ public class SprenFlameEntity extends ASprenEntity
 		}
 		else
 		{
-			return super.attackEntityFrom(source, amount);
+			return super.hurt(source, amount);
 		}
 	}
 
-	public CreatureAttribute getCreatureAttribute()
+	public CreatureAttribute getMobType()
 	{
 		return AttributesRegistry.SPREN;
 	}
 
-	protected void handleFluidJump(ITag<Fluid> fluidTag)
+	protected void jumpInLiquid(ITag<Fluid> fluidTag)
 	{
-		this.setMotion(this.getMotion().add(0.0D, 0.01D, 0.0D));
+		this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.01D, 0.0D));
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public Vector3d getLeashStartPosition()
+	public Vector3d getLeashOffset()
 	{
-		return new Vector3d(0.0D, 0.5F * this.getEyeHeight(), this.getWidth() * 0.2F);
+		return new Vector3d(0.0D, 0.5F * this.getEyeHeight(), this.getBbWidth() * 0.2F);
 	}
 
 	private boolean isWithinDistance(BlockPos pos, int distance)
@@ -401,8 +401,8 @@ public class SprenFlameEntity extends ASprenEntity
 		try
 		{
 			SprenFlameEntity sprenFlameEntity = this;
-			BlockPos position = sprenFlameEntity.getPosition();
-			return pos != null && pos.withinDistance(position, distance);
+			BlockPos position = sprenFlameEntity.blockPosition();
+			return pos != null && pos.closerThan(position, distance);
 
 		}
 		catch (Exception e)
@@ -419,7 +419,7 @@ public class SprenFlameEntity extends ASprenEntity
 
 		public boolean canSprenStart()
 		{
-			if (SprenFlameEntity.this.hasFire() && SprenFlameEntity.this.canEnterFire() && SprenFlameEntity.this.firePos.withinDistance(SprenFlameEntity.this.getPositionVec(), 2.0D))
+			if (SprenFlameEntity.this.hasFire() && SprenFlameEntity.this.canEnterFire() && SprenFlameEntity.this.firePos.closerThan(SprenFlameEntity.this.position(), 2.0D))
 			{
 				return true;
 			}
@@ -435,7 +435,7 @@ public class SprenFlameEntity extends ASprenEntity
 		/**
 		 * Execute a one shot task or start executing a continuous task
 		 */
-		public void startExecuting()
+		public void start()
 		{
 			if (isFireValid())
 			{
@@ -446,20 +446,20 @@ public class SprenFlameEntity extends ASprenEntity
 
 	public class MoveToFireGoal extends SprenFlameEntity.PassiveGoal
 	{
-		private int ticks = SprenFlameEntity.this.world.rand.nextInt(10);
+		private int ticks = SprenFlameEntity.this.level.random.nextInt(10);
 		private List<BlockPos> possibleFires = Lists.newArrayList();
 		@Nullable
 		private Path path = null;
-		private int field_234183_f_;
+		private int ticksStuck;
 
 		MoveToFireGoal()
 		{
-			this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE));
 		}
 
 		public boolean canSprenStart()
 		{
-			return SprenFlameEntity.this.firePos != null && !SprenFlameEntity.this.detachHome() && SprenFlameEntity.this.canEnterFire() && !this.isCloseEnough(SprenFlameEntity.this.firePos);
+			return SprenFlameEntity.this.firePos != null && !SprenFlameEntity.this.hasRestriction() && SprenFlameEntity.this.canEnterFire() && !this.isCloseEnough(SprenFlameEntity.this.firePos);
 		}
 
 		public boolean canSprenContinue()
@@ -470,22 +470,22 @@ public class SprenFlameEntity extends ASprenEntity
 		/**
 		 * Execute a one shot task or start executing a continuous task
 		 */
-		public void startExecuting()
+		public void start()
 		{
 			this.ticks = 0;
-			this.field_234183_f_ = 0;
-			super.startExecuting();
+			this.ticksStuck = 0;
+			super.start();
 		}
 
 		/**
 		 * Reset the task's internal state. Called when this task is interrupted by another one
 		 */
-		public void resetTask()
+		public void stop()
 		{
 			this.ticks = 0;
-			this.field_234183_f_ = 0;
-			SprenFlameEntity.this.navigator.clearPath();
-			SprenFlameEntity.this.navigator.resetSearchDepthMultiplier();
+			this.ticksStuck = 0;
+			SprenFlameEntity.this.navigation.stop();
+			SprenFlameEntity.this.navigation.resetMaxVisitedNodesMultiplier();
 		}
 
 		/**
@@ -500,7 +500,7 @@ public class SprenFlameEntity extends ASprenEntity
 				{
 					this.makeChosenFirePossibleFire();
 				}
-				else if (!SprenFlameEntity.this.navigator.hasPath())
+				else if (!SprenFlameEntity.this.navigation.isInProgress())
 				{
 					if (!SprenFlameEntity.this.isWithinDistance(SprenFlameEntity.this.firePos, 16))
 					{
@@ -520,18 +520,18 @@ public class SprenFlameEntity extends ASprenEntity
 						{
 							this.makeChosenFirePossibleFire();
 						}
-						else if (this.path != null && SprenFlameEntity.this.navigator.getPath().isSamePath(this.path))
+						else if (this.path != null && SprenFlameEntity.this.navigation.getPath().sameAs(this.path))
 						{
-							++this.field_234183_f_;
-							if (this.field_234183_f_ > 60)
+							++this.ticksStuck;
+							if (this.ticksStuck > 60)
 							{
 								this.reset();
-								this.field_234183_f_ = 0;
+								this.ticksStuck = 0;
 							}
 						}
 						else
 						{
-							this.path = SprenFlameEntity.this.navigator.getPath();
+							this.path = SprenFlameEntity.this.navigation.getPath();
 						}
 
 					}
@@ -541,9 +541,9 @@ public class SprenFlameEntity extends ASprenEntity
 
 		private boolean startMovingToFar(BlockPos pos)
 		{
-			SprenFlameEntity.this.navigator.setSearchDepthMultiplier(10.0F);
-			SprenFlameEntity.this.navigator.tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
-			return SprenFlameEntity.this.navigator.getPath() != null && SprenFlameEntity.this.navigator.getPath().reachesTarget();
+			SprenFlameEntity.this.navigation.setMaxVisitedNodesMultiplier(10.0F);
+			SprenFlameEntity.this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
+			return SprenFlameEntity.this.navigation.getPath() != null && SprenFlameEntity.this.navigation.getPath().canReach();
 		}
 
 		private boolean isPossibleFire(BlockPos pos)
@@ -591,8 +591,8 @@ public class SprenFlameEntity extends ASprenEntity
 			}
 			else
 			{
-				Path path = SprenFlameEntity.this.navigator.getPath();
-				return path != null && path.getTarget().equals(pos) && path.reachesTarget() && path.isFinished();
+				Path path = SprenFlameEntity.this.navigation.getPath();
+				return path != null && path.getTarget().equals(pos) && path.canReach() && path.isDone();
 			}
 		}
 	}
@@ -616,7 +616,7 @@ public class SprenFlameEntity extends ASprenEntity
 		/**
 		 * Execute a one shot task or start executing a continuous task
 		 */
-		public void startExecuting()
+		public void start()
 		{
 			SprenFlameEntity.this.remainingCooldownBeforeLocatingNewFire = 200;
 			List<BlockPos> list = this.getNearbyFreeFires();
@@ -639,10 +639,10 @@ public class SprenFlameEntity extends ASprenEntity
 		private List<BlockPos> getNearbyFreeFires()
 		{
 			List<BlockPos> found = new ArrayList<>();
-			BlockPos.getProximitySortedBoxPositions(SprenFlameEntity.this.getPosition(), 15, 15, 15)
+			BlockPos.withinManhattanStream(SprenFlameEntity.this.blockPosition(), 15, 15, 15)
 					.filter(blockPos ->
 					{
-						Block block = SprenFlameEntity.this.world.getBlockState(blockPos).getBlock();
+						Block block = SprenFlameEntity.this.level.getBlockState(blockPos).getBlock();
 
 						if (block instanceof FireBlock)
 						{

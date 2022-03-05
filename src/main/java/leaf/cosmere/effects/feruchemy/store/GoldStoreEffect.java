@@ -17,7 +17,7 @@ public class GoldStoreEffect extends FeruchemyEffectBase
     public GoldStoreEffect(Metals.MetalType type, EffectType effectType)
     {
         super(type, effectType);
-        addAttributesModifier(
+        addAttributeModifier(
                 Attributes.MAX_HEALTH,
                 "2ee9153f-372f-4bd2-b21a-ccf08fecb8fa",
                 -4.0D,

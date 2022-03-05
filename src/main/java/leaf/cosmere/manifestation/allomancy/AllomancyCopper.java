@@ -26,7 +26,7 @@ public class AllomancyCopper extends AllomancyBase
     protected void performEffect(ISpiritweb data)
     {
         LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
         //Hides Allomantic Pulses
         if (isActiveTick)
@@ -38,7 +38,7 @@ public class AllomancyCopper extends AllomancyBase
 
             for (LivingEntity e : entitiesToApplyEffect)
             {
-                e.addPotionEffect(newEffect);
+                e.addEffect(newEffect);
             }
         }
     }

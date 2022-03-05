@@ -104,7 +104,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 
         //don't check every tick.
         LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.ticksExisted % 20 == 0;
+        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
         data.adjustIngestedMetal(metalType, mode, isActiveTick);
 
         //if we get to this point, we are in an active burn state.
