@@ -306,11 +306,22 @@ public class SpiritwebCapability implements ISpiritweb
         int y = mainWindow.getGuiScaledHeight() / 5;
 
         //todo translations
-        String stringToDraw = "Selected Power: " + I18n.get(selectedManifestation.translation().getString());
+        String stringToDraw = I18n.get(selectedManifestation.translation().getString());
         mc.font.drawShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
 
         int mode = getMode(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID());
-        String stringToDraw2 = "Mode: " + mode;
+
+        String stringToDraw2 = "";
+
+        if (selectedManifestation.getManifestationType() == ManifestationTypes.FERUCHEMY)
+        {
+            stringToDraw2 = "Mode: " + (mode < 0 ? "Tapping " : "Storing ") + mode;
+        }
+        else
+        {
+            stringToDraw2 = "Mode: " + mode;
+        }
+
         mc.font.drawShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
 
 

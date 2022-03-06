@@ -18,6 +18,6 @@ public class NecklaceMetalmind extends Metalmind
     @Override
     public float getMaxChargeModifier()
     {
-        return (4f / 9f);
+        return (6f / 9f);
     }
 }

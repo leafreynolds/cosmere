@@ -26,7 +26,7 @@ public interface IChargeable
 {
     default int getMaxCharge(ItemStack itemStack)
     {
-        return MathHelper.floor(18000 * getMaxChargeModifier());
+        return MathHelper.floor(9000 * getMaxChargeModifier());
     }
 
     default float getMaxChargeModifier()

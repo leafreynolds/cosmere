@@ -34,21 +34,7 @@ public class BraceletMetalmind extends Metalmind
     @Override
     public float getMaxChargeModifier()
     {
-        return (6f / 9f);
-    }
-
-    @Override
-    public boolean canEquip(String identifier, LivingEntity livingEntity, ItemStack stack)
-    {
-        //has to be a conscious decision to stab yourself
-        return true;
-    }
-
-    @Override
-    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack)
-    {
-        //has to be a conscious decision to stab yourself
-        return true;
+        return (5f / 9f);
     }
 
     @Override

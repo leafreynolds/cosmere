@@ -213,7 +213,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
         }
         if (metalType.hasHemalurgicEffect())
         {
-            ShapedRecipeBuilder.shaped(metalType.getSpikeItem()).define('X', inputMaterial).pattern(" X ").pattern(" X ").group("spike").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+            ShapedRecipeBuilder.shaped(metalType.getSpikeItem()).define('X', inputMaterial).pattern("X").pattern("X").group("spike").unlockedBy("has_material", has(inputMaterial)).save(consumer);
         }
     }
 

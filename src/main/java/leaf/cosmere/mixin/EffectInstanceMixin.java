@@ -18,7 +18,8 @@ public class EffectInstanceMixin
 {
     @Inject(at = @At("RETURN"),
             method = "isNoCounter",
-            cancellable = true
+            cancellable = true,
+            remap = false
     )
     private void getIsFeruchemyEffect(CallbackInfoReturnable<Boolean> cir)
     {
@@ -29,7 +30,7 @@ public class EffectInstanceMixin
     }
 
 
-    @Shadow
+    @Shadow(remap = false)
     public Effect getEffect() {
         throw new IllegalStateException("Mixin failed to shadow getPotion()");
     }

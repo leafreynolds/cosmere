@@ -93,20 +93,22 @@ public class EngLangGen extends LanguageProvider
             String key = manifestation.translation().getKey();
             String path = manifestation.getRegistryName().getPath();
 
-            //Name
-            add(key, StringHelper.fixCapitalisation(path));
 
             //description
             //can't auto generate the descriptions ya dingleberry
+            String name = path;
             String description;
 
+            String metalName = Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString().toLowerCase(Locale.ROOT);
             switch (manifestation.getManifestationType())
             {
                 case ALLOMANCY:
-                    description = "Users can burn " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString().toLowerCase(Locale.ROOT);
+                    name = "Allomantic " + metalName;
+                    description = "Users can burn " + metalName;
                     break;
                 case FERUCHEMY:
-                    description = "Users can tap " + Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString().toLowerCase(Locale.ROOT);
+                    name = "Feruchemical " + metalName;
+                    description = "Users can tap " + metalName;
                     break;
                 case RADIANT:
                 case ELANTRIAN:
@@ -117,6 +119,8 @@ public class EngLangGen extends LanguageProvider
                     break;
             }
 
+            //Name
+            add(key, StringHelper.fixCapitalisation(name));
             add(manifestation.description().getKey(), description);
         }
 
@@ -165,7 +169,6 @@ public class EngLangGen extends LanguageProvider
         for (RegistryObject<Effect> effect : EffectsRegistry.EFFECTS.getEntries())
         {
             add(effect.get().getDescriptionId(), StringHelper.fixCapitalisation(effect.get().getRegistryName().getPath()));
-
         }
 
         //Sound Schemes

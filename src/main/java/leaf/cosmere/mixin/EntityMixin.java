@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public class EntityMixin
 {
-
+/*
     @Inject(method = "isGlowing", at = @At("RETURN"), cancellable = true)
     private void handleIsGlowing(CallbackInfoReturnable<Boolean> cir)
     {
@@ -76,7 +76,7 @@ public class EntityMixin
                 }
             });
         });
-    }
+    }*/
 
 }
 

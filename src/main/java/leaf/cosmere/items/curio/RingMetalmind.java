@@ -15,11 +15,9 @@ public class RingMetalmind extends Metalmind
         super(metalType, CosmereItemGroups.METALMINDS);
     }
 
-
     @Override
     public float getMaxChargeModifier()
     {
-        return (3f / 9f);
+        return (4f / 9f);
     }
-
 }
