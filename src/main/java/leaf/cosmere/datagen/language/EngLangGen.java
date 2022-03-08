@@ -159,6 +159,7 @@ public class EngLangGen extends LanguageProvider
         //ItemGroups/Tabs
         add("itemGroup." + CosmereItemGroups.ITEMS.getRecipeFolderName(), "Cosmere Items");
         add("itemGroup." + CosmereItemGroups.METALMINDS.getRecipeFolderName(), "Cosmere Metalminds");
+        add("itemGroup." + CosmereItemGroups.HEMALURGIC_SPIKES.getRecipeFolderName(), "Cosmere Spikes");
         add("itemGroup." + CosmereItemGroups.BLOCKS.getRecipeFolderName(), "Cosmere Blocks");
 
         //Damage Sources
