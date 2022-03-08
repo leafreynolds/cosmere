@@ -30,25 +30,15 @@ public class BraceletModel<T extends LivingEntity> extends CurioModel
 
 		//left arm
 		this.leftArm = new ModelRenderer(this, 0, 0);
-		this.leftArm.mirror = true;
-		this.leftArm.setPos(-5.0F, 2.0F, 0.0F);
-		this.leftArm.addBox(-2.0F, 4.0F, -0.5F, 5, 1, 1, 0.4F);
+		//this.leftArm.mirror = false;
+		this.leftArm.setPos(1.0F, 2.0F, 0.0F);
+		this.leftArm.addBox(2.2F, 6.0F, -2.5F, 1, 1, 5, 0.4F);
 
 		//right arm
 		this.rightArm = new ModelRenderer(this, 0, 0);
-		this.rightArm.setPos(-5.0F, 2.0F, 0.0F);
-		this.rightArm.addBox(-3.0F, 4.0F, -0.5F, 5, 1, 1, 0.4F);
+		this.rightArm.setPos(1.0F, 2.0F, 0.0F);
+		this.rightArm.addBox(-3.2F, 6.0F, -2.5F, 1, 1, 5, 0.4F);
 
-		//left leg
-		this.leftLeg = new ModelRenderer(this, 0, 0);
-		this.leftLeg.mirror = true;
-		this.leftLeg.setPos(-5.0F, 2.0F, 0.0F);
-		this.leftLeg.addBox(0.0F, 4.0F, -0.5F, 1, 1, 5, 0.4F);
-
-		//right leg
-		this.rightLeg = new ModelRenderer(this, 0, 0);
-		this.rightLeg.setPos(-5.0F, 2.0F, 0.0F);
-		this.rightLeg.addBox(-1.0F, 4.0F, -0.5F, 1, 1, 5, 0.4F);
 
 	}
 
