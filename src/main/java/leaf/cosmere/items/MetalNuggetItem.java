@@ -27,20 +27,28 @@ public class MetalNuggetItem extends MetalItem
 
         //todo convert to shavings
 
+        consumeNugget(playerIn, getMetalType(), itemstack);
+
+        return ActionResult.consume(itemstack);
+    }
+
+    public static void consumeNugget(PlayerEntity playerIn, Metals.MetalType metalType, ItemStack itemstack)
+    {
+        if (metalType == null)
+        {
+            return;
+        }
+
         SpiritwebCapability.get(playerIn).ifPresent(iSpiritweb ->
         {
             SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
 
             //add to metal stored
-            Integer metalIngested = spiritweb.METALS_INGESTED.get(getMetalType());
-            spiritweb.METALS_INGESTED.put(getMetalType(),metalIngested + 9); // todo decide what value should be used for ingestion
+            Integer metalIngested = spiritweb.METALS_INGESTED.get(metalType);
+            spiritweb.METALS_INGESTED.put(metalType,metalIngested + 9); // todo decide what value should be used for ingestion
 
             itemstack.shrink(1);
 
         });
-
-
-
-        return ActionResult.consume(itemstack);
     }
 }

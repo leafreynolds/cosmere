@@ -11,11 +11,11 @@ import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.utils.helpers.MathHelper;
-import leaf.cosmere.utils.helpers.TextHelper;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.registry.ItemsRegistry;
+import leaf.cosmere.utils.helpers.MathHelper;
+import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -28,7 +28,9 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.horse.LlamaEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -37,6 +39,8 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Arrays;
 
 import static leaf.cosmere.utils.helpers.EntityHelper.giveEntityStartingManifestation;
 
@@ -130,6 +134,39 @@ public class EntityEventHandler
             ItemChargeHelper.dispatchCharge(event.getPlayer(), 1000, true);
         }
     }
+
+    @SubscribeEvent
+    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
+    {
+        final PlayerEntity player = event.getPlayer();
+        ItemStack itemInHand = player.getItemInHand(event.getHand());
+
+        final Item[] allowedItems = {Items.IRON_NUGGET, Items.GOLD_NUGGET/*,Items.COPPER_NUGGET*/};
+
+        final Item handItem = itemInHand.getItem();
+
+        if (!itemInHand.isEmpty() && Arrays.asList(allowedItems).contains(handItem))
+        {
+            Metals.MetalType metalType = null;
+
+            if (handItem == Items.IRON_NUGGET)
+            {
+                metalType = Metals.MetalType.IRON;
+            }
+            else if (handItem == Items.GOLD_NUGGET)
+            {
+                metalType = Metals.MetalType.GOLD;
+            }
+            /*else if (handItem == Items.COPPER_NUGGET)
+            {
+                metalType = Metals.MetalType.COPPER;
+            }*/
+
+            MetalNuggetItem.consumeNugget(player, metalType, itemInHand);
+        }
+
+    }
+
 
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
