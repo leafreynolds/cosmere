@@ -1,5 +1,19 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B22
+
+Remove curse of binding from spikes. Fix bracelet curio render location. Consume minecraft:iron/gold nuggets. Lerasium & Lerasatium can be consumed to gain powers. Added missing localisation for hemalurgic spike creative mode tab. Fixed bronze allomancy glow effect.
+
+
+B21
+
+Fixed Mixin related crash
+
+B20
+
+Localisation should now use "manifestation type - metal type" instead of the name of the manifestation for allomancy and feruchemy. Eg "Feruchemical Steel" instead of Steelrunner.
+Fixed some balancing of the metalminds, so that it's 1000 capacity per ingot used to make it.
+
 B19
 
 The creative mode menu now has a more comprehensive list of hemalurgic spikes with the abilities that they can steal
