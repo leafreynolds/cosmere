@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin
 {
-    @Inject(at = @At("RETURN"), method = "getNightVisionScale", cancellable = true, remap = false)
+    @Inject(at = @At("RETURN"), method = "getNightVisionScale", cancellable = true)
     private static void removeNightVisionFlash(LivingEntity livingEntity, float f, CallbackInfoReturnable<Float> info)
     {
         EffectInstance effect = livingEntity.getEffect(Effects.NIGHT_VISION);
@@ -25,12 +25,10 @@ public class GameRendererMixin
         info.setReturnValue(i > 0 ? 1 : i);
     }
 
-
     @Inject(
             at = @At("RETURN"),
             method = "getFov",
-            cancellable = true,
-            remap = false
+            cancellable = true
     )
     private void getZoomedFov(ActiveRenderInfo activeRenderInfoIn, float partialTicks, boolean useFOVSetting, CallbackInfoReturnable<Double> info)
     {
