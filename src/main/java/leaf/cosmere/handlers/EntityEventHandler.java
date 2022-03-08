@@ -161,6 +161,7 @@ public class EntityEventHandler
             {
                 metalType = Metals.MetalType.COPPER;
             }*/
+            player.startUsingItem(event.getHand());
 
             MetalNuggetItem.consumeNugget(player, metalType, itemInHand);
         }
