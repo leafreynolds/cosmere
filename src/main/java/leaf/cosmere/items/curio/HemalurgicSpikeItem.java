@@ -105,13 +105,11 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         if (allowdedIn(tab))
         {
             ItemStack stack = new ItemStack(this);
-            stack.enchant(Enchantments.BINDING_CURSE, 1);
             stacks.add(stack);
 
             if (getMetalType().hasFeruchemicalEffect())
             {
                 ItemStack fullPower = new ItemStack(this);
-                fullPower.enchant(Enchantments.BINDING_CURSE, 1);
                 setCharge(fullPower, getMaxCharge(fullPower));
                 stacks.add(fullPower);
 
@@ -129,10 +127,8 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                         try
                         {
                             ItemStack allomancySpike = new ItemStack(this);
-                            allomancySpike.enchant(Enchantments.BINDING_CURSE, 1);
 
                             ItemStack feruchemySpike = new ItemStack(this);
-                            feruchemySpike.enchant(Enchantments.BINDING_CURSE, 1);
 
                             CompoundNBT allomancySpikeInfo = getHemalurgicInfo(allomancySpike);
                             CompoundNBT feruchemySpikeInfo = getHemalurgicInfo(feruchemySpike);
@@ -166,7 +162,6 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
             if (this.getMetalType() == Metals.MetalType.LERASIUM)
             {
                 ItemStack bound = new ItemStack(this);
-                bound.enchant(Enchantments.BINDING_CURSE, 1);
                 setHemalurgicIdentity(bound, UUID.randomUUID());
                 CompoundNBT hemalurgicInfo = getHemalurgicInfo(bound);
                 for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
@@ -178,12 +173,6 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                 stacks.add(bound);
             }
         }
-    }
-
-    @Override
-    public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn)
-    {
-        stack.enchant(Enchantments.BINDING_CURSE, 1);
     }
 
     //todo hemalurgic decay
