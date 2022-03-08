@@ -191,35 +191,7 @@ public class EntityEventHandler
                     return;
                 }
 
-                if (!event.getPlayer().isCreative())
-                {
-                    stack.shrink(1);
-                }
-
-                for (int i = 0; i < 16; i++)
-                {
-                    switch (metalType)
-                    {
-                        case LERASIUM:
-                            //give allomancy
-                            cap.giveManifestation(Manifestations.ManifestationTypes.ALLOMANCY, i);
-
-                            //https://www.theoryland.com/intvmain.php?i=977#43
-                            if (target instanceof LlamaEntity && !target.hasCustomName())
-                            {
-                                //todo translations
-                                target.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
-                            }
-
-                            break;
-                        case LERASATIUM:
-                            //give feruchemy
-                            cap.giveManifestation(Manifestations.ManifestationTypes.FERUCHEMY, i);
-                            break;
-                    }
-                }
-
-
+                MetalNuggetItem.consumeNugget(target, metalType, stack);
             }
             else if (stack.getItem() instanceof HemalurgicSpikeItem)
             {
