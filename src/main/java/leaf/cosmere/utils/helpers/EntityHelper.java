@@ -103,7 +103,7 @@ public class EntityHelper
             spiritwebCapability.giveManifestation(powerType, powerID);
             //todo translations
             //todo grant random name
-            entity.setCustomName(powerType.getManifestation(powerID).translation());
+            //entity.setCustomName(powerType.getManifestation(powerID).translation());
         }
     }
 }

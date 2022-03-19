@@ -1,5 +1,11 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B24
+
+Fixed creative mode spikes to only contain their correct powers, not both allomancy and feruchemy.
+Added localisation for spike tooltips. No more 'cosmere.trueself'. 
+
+
 B23
 
 Duralumin feruchemy tapping gives Hero of the Village effect.

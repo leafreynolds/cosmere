@@ -6,7 +6,6 @@ package leaf.cosmere.datagen.language;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.datagen.patchouli.PatchouliGen;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.Metalmind;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
@@ -25,9 +24,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import static leaf.cosmere.constants.Constants.Strings.*;
 
@@ -129,15 +126,15 @@ public class EngLangGen extends LanguageProvider
         {
             String metalName = metalType.name().toLowerCase(Locale.ROOT);
 
-            String a = metalName + " - " + metalType.getMistingName();
-            String f = metalName + " - " + metalType.getFerringName();
-            String h = metalName;
+            final String mistingName = metalType.getMistingName();
+            final String ferringName = metalType.getFerringName();
 
+            String a = metalName + " - " + mistingName;
+            String f = metalName + " - " + ferringName;
 
             String aKey = "allomantic_" + metalName;
             String fKey = "feruchemical_" + metalName;
             String hKey = "hemalurgic_" + metalName;
-
 
             String allomancyGuide = "cosmere.entry." + aKey;
             String feruchemyGuide = "cosmere.entry." + fKey;
@@ -145,7 +142,16 @@ public class EngLangGen extends LanguageProvider
 
             add(allomancyGuide, StringHelper.fixCapitalisation(a));
             add(feruchemyGuide, StringHelper.fixCapitalisation(f));
-            add(hemalurgyGuide, StringHelper.fixCapitalisation(h));
+            add(hemalurgyGuide, StringHelper.fixCapitalisation(metalName));
+
+
+            if (!metalType.hasAssociatedManifestation())
+            {
+                continue;
+            }
+
+            add("cosmere." + mistingName, StringHelper.fixCapitalisation(mistingName));
+            add("cosmere." + ferringName, StringHelper.fixCapitalisation(ferringName));
         }
 
 
