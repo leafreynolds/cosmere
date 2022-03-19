@@ -5,7 +5,7 @@ B23
 Duralumin feruchemy tapping gives Hero of the Village effect.
 Fixed a crash related to bronze feruchemy. Player can now sleep at night anywhere properly.
 Cleaned up a bunch of scripts.
-
+Swapped the bendalloy and cadmium effects, so cadmium speeds up things around you, implying you're really slow and bendalloy slows things around you, implying that you're faster.
 
 B22
 
