@@ -11,7 +11,6 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.renderer.wearables.SpikeModel;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.Metalmind;
@@ -25,7 +24,6 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -53,8 +51,10 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.util.*;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
@@ -126,29 +126,58 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                         }
                         try
                         {
-                            ItemStack allomancySpike = new ItemStack(this);
-
-                            ItemStack feruchemySpike = new ItemStack(this);
-
-                            CompoundNBT allomancySpikeInfo = getHemalurgicInfo(allomancySpike);
-                            CompoundNBT feruchemySpikeInfo = getHemalurgicInfo(feruchemySpike);
-
-                            AManifestation allomancyMani = ManifestationRegistry.ALLOMANCY_POWERS.get(stealType).get();
-                            AManifestation feruchemyMani = ManifestationRegistry.FERUCHEMY_POWERS.get(stealType).get();
 
                             //then we've found something to steal!
-                            CompoundNBTHelper.setBoolean(allomancySpikeInfo, allomancyMani.getRegistryName().getPath(), true);
-                            CompoundNBTHelper.setBoolean(allomancySpikeInfo, "hasHemalurgicPower", true);
-                            CompoundNBTHelper.setDouble(allomancySpikeInfo, getMetalType().name(), 10);
-                            setHemalurgicIdentity(allomancySpike, UUID.randomUUID());
+                            switch (this.getMetalType())
+                            {
+                                case IRON:
+                                    ItemStack filledIronSpike = new ItemStack(this);
+                                    CompoundNBT filledIronSpikeInfo = getHemalurgicInfo(filledIronSpike);
+                                    //steals physical strength
+                                    double strengthCurrent = CompoundNBTHelper.getDouble(filledIronSpikeInfo, stealType.name(), 0);
+                                    //don't steal modified values, only base value
+                                    //todo decide how much strength is reasonable to steal and how much goes to waste
+                                    //currently will try 70%
+                                    double strengthToAdd = 15 * 0.7D;// Iron golems have the most base attack damage of normal mods (giants have 50??). Ravagers have
+                                    CompoundNBTHelper.setDouble(filledIronSpikeInfo, stealType.name(), strengthCurrent + strengthToAdd);
+                                    stacks.add(filledIronSpike);
+                                    break;
+                                //steals allomantic abilities
+                                case STEEL:
+                                case BRONZE:
+                                case CADMIUM:
+                                case ELECTRUM:
+                                    ItemStack allomancySpike = new ItemStack(this);
+                                    AManifestation allomancyMani = ManifestationRegistry.ALLOMANCY_POWERS.get(stealType).get();
 
-                            CompoundNBTHelper.setBoolean(feruchemySpikeInfo, feruchemyMani.getRegistryName().getPath(), true);
-                            CompoundNBTHelper.setBoolean(feruchemySpikeInfo, "hasHemalurgicPower", true);
-                            CompoundNBTHelper.setDouble(feruchemySpikeInfo, getMetalType().name(), 10);
-                            setHemalurgicIdentity(feruchemySpike, UUID.randomUUID());
+                                    CompoundNBT allomancySpikeInfo = getHemalurgicInfo(allomancySpike);
+                                    CompoundNBTHelper.setBoolean(allomancySpikeInfo, allomancyMani.getRegistryName().getPath(), true);
+                                    CompoundNBTHelper.setBoolean(allomancySpikeInfo, "hasHemalurgicPower", true);
+                                    CompoundNBTHelper.setDouble(allomancySpikeInfo, getMetalType().name(), 10);
 
-                            stacks.add(allomancySpike);
-                            stacks.add(feruchemySpike);
+                                    setHemalurgicIdentity(allomancySpike, UUID.randomUUID());
+
+                                    stacks.add(allomancySpike);
+                                    break;
+                                //steals feruchemical abilities
+                                case PEWTER:
+                                case BRASS:
+                                case BENDALLOY:
+                                case GOLD:
+                                    ItemStack feruchemySpike = new ItemStack(this);
+                                    AManifestation feruchemyMani = ManifestationRegistry.FERUCHEMY_POWERS.get(stealType).get();
+
+                                    CompoundNBT feruchemySpikeInfo = getHemalurgicInfo(feruchemySpike);
+                                    CompoundNBTHelper.setBoolean(feruchemySpikeInfo, feruchemyMani.getRegistryName().getPath(), true);
+                                    CompoundNBTHelper.setBoolean(feruchemySpikeInfo, "hasHemalurgicPower", true);
+                                    CompoundNBTHelper.setDouble(feruchemySpikeInfo, getMetalType().name(), 10);
+
+                                    setHemalurgicIdentity(feruchemySpike, UUID.randomUUID());
+
+                                    stacks.add(feruchemySpike);
+                                    break;
+                            }
+
 
                         }
                         catch (Exception e)
