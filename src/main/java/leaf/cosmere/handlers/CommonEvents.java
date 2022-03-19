@@ -34,7 +34,6 @@ public class CommonEvents
         CosmereCommand.register(event.getDispatcher());
     }
 
-
     @SubscribeEvent
     public static void onServerStarting(FMLServerStartingEvent event)
     {

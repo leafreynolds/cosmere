@@ -5,10 +5,13 @@
 package leaf.cosmere.manifestation.allomancy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
+import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.utils.helpers.EffectsHelper;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effects;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 
@@ -24,24 +27,45 @@ public class AllomancyCadmium extends AllomancyBase
     @Override
     protected void performEffect(ISpiritweb data)
     {
-        LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
-
-        //Slows Down Time
-        if (isActiveTick)
+        //Speeds Up Time for everything around the user, implying the user is slower
         {
-            int mode = data.getMode(manifestationType, getMetalType().getID());
-
-            int range = 5 * mode;
-
-            List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
-
-            for (LivingEntity e : entitiesToAffect)
+            //tick entities around user
+            if (data.getLiving().tickCount % 6 == 0)
             {
-                e.addEffect(EffectsHelper.getNewEffect(Effects.MOVEMENT_SLOWDOWN,mode));
-            }
+                int range = 3 * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID());
+                int x = (int) (data.getLiving().getX() + (data.getLiving().getRandomX(range * 2 + 1) - range));
+                int z = (int) (data.getLiving().getZ() + (data.getLiving().getRandomZ(range * 2 + 1) - range));
 
-            //todo slow tile entities? not sure how to do that. bendalloy just calls tick more often.
+                for (int i = 4; i > -2; i--)
+                {
+                    int y = data.getLiving().blockPosition().getY() + i;
+                    BlockPos pos = new BlockPos(x, y, z);
+                    World world = data.getLiving().level;
+
+                    if (world.isEmptyBlock(pos))
+                    {
+                        continue;
+                    }
+
+                    BlockState state = world.getBlockState(pos);
+                    state.randomTick((ServerWorld) world, pos, world.random);
+
+                    break;
+                }
+
+                //todo tick living entities?
+
+                List<LivingEntity> entitiesToCheck = getLivingEntitiesInRange(data.getLiving(), range, true);
+
+                for (LivingEntity e : entitiesToCheck)
+                {
+                    e.aiStep();
+                }
+            }
         }
+
+
     }
+
+
 }
