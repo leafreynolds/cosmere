@@ -56,6 +56,7 @@ public class SteelTapEffect extends FeruchemyEffectBase
     @Override
     public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
+        //todo replace this with something better
         //code for checking block under player
         //https://stackoverflow.com/a/62026168
         if (entityLivingBaseIn.level.getBlockState(entityLivingBaseIn.blockPosition().below()).getMaterial() == Material.WATER)

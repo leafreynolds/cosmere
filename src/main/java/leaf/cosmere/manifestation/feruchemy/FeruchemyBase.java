@@ -44,12 +44,14 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
         return false;
     }
 
+    //storing is positive, eg adding to store
     @Override
     public int modeMax(ISpiritweb data)
     {
         return 3;
     }
 
+    //tapping is negative, eg taking from store
     @Override
     public int modeMin(ISpiritweb data)
     {

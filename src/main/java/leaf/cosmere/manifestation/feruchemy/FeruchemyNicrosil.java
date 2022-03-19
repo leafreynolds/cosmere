@@ -36,7 +36,6 @@ public class FeruchemyNicrosil extends FeruchemyBase
     @Override
     public void tick(ISpiritweb data)
     {
-
         //don't check every tick.
         LivingEntity livingEntity = data.getLiving();
 

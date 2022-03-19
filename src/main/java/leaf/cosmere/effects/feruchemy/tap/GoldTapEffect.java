@@ -15,11 +15,6 @@ public class GoldTapEffect extends FeruchemyEffectBase
     public GoldTapEffect(Metals.MetalType type, EffectType effectType)
     {
         super(type, effectType);
-/*        addAttributesModifier(
-                Attributes.MAX_HEALTH,
-                "17a9094f-d300-46c4-8607-83f64a98bb42",
-                4.0D,
-                AttributeModifier.Operation.ADDITION);*/
     }
 
     @Override

@@ -30,7 +30,6 @@ public class IronTapEffect extends FeruchemyEffectBase
     public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
     {
         //ensure the user has correct buffs at least as strong as their store effect
-
         if (entityLivingBaseIn.level.isClientSide || entityLivingBaseIn.tickCount % 20 != 0)
         {
             return;

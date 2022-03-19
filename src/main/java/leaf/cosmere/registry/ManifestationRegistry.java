@@ -139,18 +139,23 @@ public class ManifestationRegistry
 
     private static FeruchemyBase makeFeruchemyManifestation(Metals.MetalType metalType)
     {
-        if (metalType == Metals.MetalType.COPPER)
-            return new FeruchemyCopper(metalType);
-        else if (metalType == Metals.MetalType.ZINC)
-            return new FeruchemyZinc(metalType);
-        else if (metalType == Metals.MetalType.ALUMINUM)
-            return new FeruchemyAluminum(metalType);
-        else if (metalType == Metals.MetalType.NICROSIL)
-            return new FeruchemyNicrosil(metalType);
-        else if (metalType == Metals.MetalType.ELECTRUM)
-            return new FeruchemyElectrum(metalType);
-        else
-            return new FeruchemyBase(metalType);
+        switch (metalType)
+        {
+            case COPPER:
+                return new FeruchemyCopper(metalType);
+            case BRONZE:
+                return new FeruchemyBronze(metalType);
+            case ZINC:
+                return new FeruchemyZinc(metalType);
+            case ALUMINUM:
+                return new FeruchemyAluminum(metalType);
+            case NICROSIL:
+                return new FeruchemyNicrosil(metalType);
+            case ELECTRUM:
+                return new FeruchemyElectrum(metalType);
+            default:
+                return new FeruchemyBase(metalType);
+        }
     }
 
     public static Map<ResourceLocation, String> getManifestations()

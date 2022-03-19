@@ -22,10 +22,4 @@ public class LootModifierRegistry
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, Cosmere.MODID);
     public static final RegistryObject<GlobalLootModifierSerializer<?>> FORTUNE_BONUS = LOOT_MODIFIERS.register("fortune_bonus", FortuneBonusModifier.Serializer::new);
 
-   //@SubscribeEvent
-   //public static void registerLootModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event)
-   //{
-   //    IForgeRegistry<GlobalLootModifierSerializer<?>> registry = event.getRegistry();
-   //    registry.register((new FortuneBonusModifier.Serializer()).setRegistryName(ResourceLocationHelper.prefix("fortune_bonus")));
-   //}
 }

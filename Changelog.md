@@ -1,8 +1,20 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B23
+
+Duralumin feruchemy tapping gives Hero of the Village effect.
+Fixed a crash related to bronze feruchemy. Player can now sleep at night anywhere properly.
+Cleaned up a bunch of scripts.
+
+
 B22
 
-Remove curse of binding from spikes. Fix bracelet curio render location. Consume minecraft:iron/gold nuggets. Lerasium & Lerasatium can be consumed to gain powers. Added missing localisation for hemalurgic spike creative mode tab. Fixed bronze allomancy glow effect.
+Remove curse of binding from spikes. 
+Fix bracelet curio render location. 
+Consume minecraft:iron/gold nuggets. 
+Lerasium & Lerasatium can be consumed to gain powers. 
+Added missing localisation for hemalurgic spike creative mode tab. 
+Fixed bronze allomancy glow effect.
 
 
 B21
