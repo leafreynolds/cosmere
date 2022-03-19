@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -585,6 +586,9 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public void setMode(ManifestationTypes manifestationTypeID, int powerID, int mode)
     {
+        AManifestation aim = manifestationTypeID.getManifestation(powerID);
+        mode = MathHelper.clamp(mode, aim.modeMin(this),aim.modeMax(this));
+
         MANIFESTATIONS_MODE.get(manifestationTypeID)[powerID] = mode;
     }
 
@@ -597,7 +601,6 @@ public class SpiritwebCapability implements ISpiritweb
     @Override
     public int nextMode(ManifestationTypes manifestationType, int powerID)
     {
-
         AManifestation aim = manifestationType.getManifestation(powerID);
 
         int currentMode = getMode(manifestationType, powerID);

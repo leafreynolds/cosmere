@@ -37,13 +37,18 @@ public class ChangeManifestationModeMessage
             TextComponent manifestationText;
             int newMode;
 
-            if (message.dir >= 0)
+            if (message.dir == 1)
             {
                 newMode = cap.nextMode(message.powerType, message.powerID);
             }
-            else
+            else if (message.dir == -1)
             {
                 newMode = cap.previousMode(message.powerType, message.powerID);
+            }
+            else if (message.dir != 0)
+            {
+                newMode = message.dir + cap.getMode(message.powerType, message.powerID);
+                cap.setMode(message.powerType, message.powerID, newMode);
             }
 
             cap.manifestation(message.powerType, message.powerID).onModeChange(cap);

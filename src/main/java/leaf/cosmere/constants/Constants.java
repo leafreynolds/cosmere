@@ -74,8 +74,12 @@ public class Constants
     {
         public static final String KEYS_CATEGORY = "keys.cosmere.main";
 
-        public static final String KEY_MANIFESTATION_MODE_NEXT = "key.cosmere.powers.next";
-        public static final String KEY_MANIFESTATION_MODE_PREVIOUS = "key.cosmere.powers.previous";
+        public static final String KEY_MANIFESTATION_MODE_INCREASE = "key.cosmere.powers.mode.increase";
+        public static final String KEY_MANIFESTATION_MODE_DECREASE = "key.cosmere.powers.mode.decrease";
+
+        public static final String KEY_MANIFESTATION_NEXT = "key.cosmere.powers.next";
+        public static final String KEY_MANIFESTATION_PREVIOUS = "key.cosmere.powers.previous";
+
         public static final String KEY_MANIFESTATION_TOGGLE = "key.cosmere.powers.toggle";
         public static final String KEY_MANIFESTATION_MENU = "key.cosmere.powers.menu";
 

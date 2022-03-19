@@ -87,14 +87,27 @@ public class ClientEvents
                     //todo decide if there is an activation state?
                 }
             }
+
             //check keybinds with modifiers first?
-            else if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_PREVIOUS))
+            if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_PREVIOUS))
             {
                 Network.sendToServer(new ChangeSelectedManifestationMessage(-1));
             }
-            else if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_NEXT))
+            else if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_NEXT))
             {
                 Network.sendToServer(new ChangeSelectedManifestationMessage(1));
+            }
+
+
+            if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_INCREASE))
+            {
+                int dir = (player.isCrouching() ? 3 : 1);
+                Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), dir));
+            }
+            if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_DECREASE))
+            {
+                int dir = (player.isCrouching() ? -3 : -1);
+                Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), dir));
             }
         });
     }

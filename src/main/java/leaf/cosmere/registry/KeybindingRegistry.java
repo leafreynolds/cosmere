@@ -26,8 +26,11 @@ public class KeybindingRegistry
 
     public static KeyBinding MANIFESTATION_MENU;
     public static KeyBinding MANIFESTATION_TOGGLE;
-    public static KeyBinding MANIFESTATION_MODE_NEXT;
-    public static KeyBinding MANIFESTATION_MODE_PREVIOUS;
+    public static KeyBinding MANIFESTATION_NEXT;
+    public static KeyBinding MANIFESTATION_PREVIOUS;
+
+    public static KeyBinding MANIFESTATION_MODE_INCREASE;
+    public static KeyBinding MANIFESTATION_MODE_DECREASE;
 
     public static KeyBinding ALLOMANCY_PUSH;
     public static KeyBinding ALLOMANCY_PULL;
@@ -37,8 +40,12 @@ public class KeybindingRegistry
     {
         ClientRegistry.registerKeyBinding(MANIFESTATION_MENU = new KeyBinding(KEY_MANIFESTATION_MENU, GLFW.GLFW_KEY_G, KEYS_CATEGORY));
         ClientRegistry.registerKeyBinding(MANIFESTATION_TOGGLE = new KeyBinding(KEY_MANIFESTATION_TOGGLE, GLFW.GLFW_KEY_C, KEYS_CATEGORY));
-        ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_NEXT = new KeyBinding(KEY_MANIFESTATION_MODE_NEXT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
-        ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_PREVIOUS = createKeybinding(KEY_MANIFESTATION_MODE_PREVIOUS, KeyModifier.SHIFT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
+
+        ClientRegistry.registerKeyBinding(MANIFESTATION_NEXT = new KeyBinding(KEY_MANIFESTATION_NEXT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
+        ClientRegistry.registerKeyBinding(MANIFESTATION_PREVIOUS = createKeybinding(KEY_MANIFESTATION_PREVIOUS, KeyModifier.SHIFT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
+
+        ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_INCREASE = new KeyBinding(KEY_MANIFESTATION_MODE_INCREASE, GLFW.GLFW_KEY_KP_ADD, KEYS_CATEGORY));
+        ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_DECREASE = new KeyBinding(KEY_MANIFESTATION_MODE_DECREASE, GLFW.GLFW_KEY_KP_SUBTRACT, KEYS_CATEGORY));
 
         ClientRegistry.registerKeyBinding(ALLOMANCY_PUSH = new KeyBinding(KEY_ALLOMANCY_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
         ClientRegistry.registerKeyBinding(ALLOMANCY_PULL = new KeyBinding(KEY_ALLOMANCY_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));

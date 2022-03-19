@@ -211,9 +211,12 @@ public class EngLangGen extends LanguageProvider
 
         //KeyBindings
         add(KEYS_CATEGORY, "Cosmere");
+        add(KEY_MANIFESTATION_MENU, "Powers Menu");
         add(KEY_MANIFESTATION_TOGGLE, "Toggle Current Powers");
-        add(KEY_MANIFESTATION_MODE_NEXT, "Mode Next");
-        add(KEY_MANIFESTATION_MODE_PREVIOUS, "Mode Previous");
+        add(KEY_MANIFESTATION_NEXT, "Next Power");
+        add(KEY_MANIFESTATION_PREVIOUS, "Previous Power");
+        add(KEY_MANIFESTATION_MODE_INCREASE, "Mode Increase");
+        add(KEY_MANIFESTATION_MODE_DECREASE, "Mode Decrease");
 
         add(KEY_ALLOMANCY_PUSH, "Push");
         add(KEY_ALLOMANCY_PULL, "Pull");
