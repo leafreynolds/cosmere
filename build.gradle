@@ -152,6 +152,10 @@ repositories {
         url "https://maven.tehnut.info"
     }
     maven {
+        //Mekanism Maven
+        url 'https://modmaven.dev/'
+    }
+    maven {
         url "https://www.cursemaven.com"
         content {
             includeGroup "curse.maven"
@@ -180,9 +184,13 @@ dependencies {
     compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}:api")
     runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
 
+    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+
     //modname-modid:fileid?
     implementation fg.deobf("curse.maven:appleskin-248787:3035787")
     implementation fg.deobf("curse.maven:journeymap-32274:3397059")
+    runtimeOnly fg.deobf("curse.maven:configured-457570:${configured_version}")
     //implementation fg.deobf("curse.maven:ctm-267602:2642375")
 }
 

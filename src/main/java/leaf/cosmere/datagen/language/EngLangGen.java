@@ -74,6 +74,7 @@ public class EngLangGen extends LanguageProvider
         }
 
         //Entities
+        add("entity.minecraft.villager.cosmere.metal_trader", "Metal Trader");
         for (EntityType<?> type : ForgeRegistries.ENTITIES)
         {
             if (type.getRegistryName().getNamespace().equals(Cosmere.MODID))
@@ -81,6 +82,7 @@ public class EngLangGen extends LanguageProvider
                 add(type.getDescriptionId(), StringHelper.fixCapitalisation(type.getRegistryName().getPath()));
             }
         }
+
 
         //innate
 

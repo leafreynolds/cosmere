@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cosmere:block/metalworking_table_front",
+    "north": "cosmere:block/metalworking_table_front",
+    "south": "cosmere:block/metalworking_table_front",
+    "east": "cosmere:block/metalworking_table_side",
+    "west": "cosmere:block/metalworking_table_side",
+    "up": "cosmere:block/metalworking_table_top",
+    "down": "cosmere:block/metalworking_table_bottom"
+  }
+}

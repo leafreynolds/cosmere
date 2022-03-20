@@ -14,7 +14,6 @@ public class BaseBlock extends Block
 
     public BaseBlock(Properties properties, SoundType sound, float hardness, float resistance)
     {
-
         super(properties.sound(sound).strength(hardness, resistance));
     }
 

@@ -6,8 +6,9 @@ package leaf.cosmere.datagen.blocks;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.blocks.MetalBlock;
-import leaf.cosmere.utils.helpers.ResourceLocationHelper;
+import leaf.cosmere.blocks.MetalworkingTableBlock;
 import leaf.cosmere.registry.BlocksRegistry;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.OreBlock;
 import net.minecraft.data.DataGenerator;
@@ -39,6 +40,19 @@ public class BlockModelsGen extends BlockStateProvider
                 ModelFile blockModel = models().withExistingParent("metal_block", ResourceLocationHelper.prefix("block/shapes/cube_all_tinted"))
                         .texture("all", ResourceLocationHelper.prefix("block/metal_block"));
 
+                simpleBlock(itemRegistryObject.get(), blockModel);
+                continue;
+            }
+            else if (itemRegistryObject.get() instanceof MetalworkingTableBlock)
+            {
+                ModelFile blockModel = models().withExistingParent("metalworking_table", new ResourceLocation("block/cube"))
+                        .texture("particle", ResourceLocationHelper.prefix("block/metalworking_table_front"))
+                        .texture("north", ResourceLocationHelper.prefix("block/metalworking_table_front"))
+                        .texture("south", ResourceLocationHelper.prefix("block/metalworking_table_front"))
+                        .texture("east", ResourceLocationHelper.prefix("block/metalworking_table_side"))
+                        .texture("west", ResourceLocationHelper.prefix("block/metalworking_table_side"))
+                        .texture("up", ResourceLocationHelper.prefix("block/metalworking_table_top"))
+                        .texture("down", ResourceLocationHelper.prefix("block/metalworking_table_bottom"));
                 simpleBlock(itemRegistryObject.get(), blockModel);
                 continue;
             }

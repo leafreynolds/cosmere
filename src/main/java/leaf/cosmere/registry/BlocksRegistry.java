@@ -11,6 +11,7 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.blocks.BaseBlock;
 import leaf.cosmere.blocks.MetalBlock;
 import leaf.cosmere.blocks.MetalOreBlock;
+import leaf.cosmere.blocks.MetalworkingTableBlock;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
@@ -34,6 +35,7 @@ public class BlocksRegistry
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Cosmere.MODID);
     public static final RegistryObject<Block> GEM_BLOCK = register("gem_block", () -> (new BaseBlock(PropTypes.Blocks.EXAMPLE.get(), SoundType.STONE, 1F, 2F)), Rarity.COMMON);
+    public static final RegistryObject<Block> METALWORKING_TABLE = register("metalworking_table", () -> (new MetalworkingTableBlock()), Rarity.COMMON);
 
     public static final Map<Metals.MetalType, RegistryObject<MetalBlock>> METAL_BLOCKS =
             Arrays.stream(Metals.MetalType.values())

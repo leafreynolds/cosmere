@@ -51,6 +51,8 @@ public class Cosmere
         ManifestationRegistry.MANIFESTATIONS.register(modBus);
         AttributesRegistry.ATTRIBUTES.register(modBus);
         EntityRegistry.ENTITIES.register(modBus);
+        PointOfInterestRegistry.POINT_OF_INTERESTS.register(modBus);
+        VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
 
         FeatureRegistry.FEATURES.register(modBus);
         RecipeRegistry.SPECIAL_RECIPES.register(modBus);

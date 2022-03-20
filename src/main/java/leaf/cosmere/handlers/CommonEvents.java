@@ -6,19 +6,32 @@ package leaf.cosmere.handlers;
 
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.blocks.MetalOreBlock;
 import leaf.cosmere.commands.CosmereCommand;
 import leaf.cosmere.commands.permissions.PermissionManager;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.utils.helpers.LogHelper;
+import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.FeatureRegistry;
+import leaf.cosmere.registry.ItemsRegistry;
+import leaf.cosmere.registry.VillagerProfessionRegistry;
+import leaf.cosmere.utils.helpers.LogHelper;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraftforge.common.BasicTrade;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +78,48 @@ public class CommonEvents
                 }
             }
 
+        }
+    }
+
+    @SubscribeEvent
+    public static void registerTrades(VillagerTradesEvent event)
+    {
+        if (event.getType() == VillagerProfessionRegistry.METAL_TRADER.get())
+        {
+            for (int i = 1; i <= 5 ; i++)
+            {
+                final List<VillagerTrades.ITrade> tradesForLevel = event.getTrades().get(i);
+                switch (i)
+                {
+                    case 1:
+                        for (RegistryObject<Item> item : ItemsRegistry.METAL_NUGGETS.values())
+                        {
+                            tradesForLevel.add(new BasicTrade(1, new ItemStack(item.get(), 16),2,1));
+                        }
+                        break;
+                    case 2:
+                        for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_BLEND.values())
+                        {
+                            tradesForLevel.add(new BasicTrade(10, new ItemStack(item.get()),3,2));
+                        }
+                        break;
+                    case 3:
+                        tradesForLevel.add(new BasicTrade(10, new ItemStack(ItemsRegistry.METAL_VIAL.get(),16),2,3));
+                        break;
+                    case 4:
+                        for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_ORE.values())
+                        {
+                            tradesForLevel.add(new BasicTrade(23, new ItemStack(item.get()),6,4));
+                        }
+                        break;
+                    case 5:
+                        for (RegistryObject<MetalOreBlock> item : BlocksRegistry.METAL_ORE.values())
+                        {
+                            tradesForLevel.add(new BasicTrade(23, new ItemStack(item.get()),1,5));
+                        }
+                        break;
+                }
+            }
         }
     }
 }
