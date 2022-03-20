@@ -52,6 +52,16 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 
         ShapedRecipeBuilder.shaped(ItemsRegistry.METAL_VIAL.get()).define('X', Items.IRON_NUGGET).define('Y', Items.GLASS).pattern("X").pattern("Y").unlockedBy("has_material", has(Items.GLASS)).save(consumer);
 
+        ShapedRecipeBuilder
+                .shaped(BlocksRegistry.METALWORKING_TABLE.get())
+                .define('X', Tags.Items.INGOTS)
+                .define('Y', ItemTags.PLANKS)
+                .pattern("XX")
+                .pattern("YY")
+                .pattern("YY")
+                .unlockedBy("has_material", has(Tags.Items.INGOTS))
+                .save(consumer);
+
         CustomRecipeBuilder.special(RecipeRegistry.VIAL_RECIPE_SERIALIZER.get()).save(consumer, ResourceLocationHelper.prefix("vial_mixing").toString());
 
         for (Metals.MetalType metalType : Metals.MetalType.values())

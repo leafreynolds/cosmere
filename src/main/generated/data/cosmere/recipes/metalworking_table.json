@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    "YY",
+    "YY"
+  ],
+  "key": {
+    "X": {
+      "tag": "forge:ingots"
+    },
+    "Y": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "cosmere:metalworking_table"
+  }
+}
