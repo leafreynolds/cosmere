@@ -206,6 +206,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
 
     //todo hemalurgic decay
     //https://wob.coppermind.net/events/332/#e9534
+    //https://wob.coppermind.net/events/121/#e5060
     private void addDecay(ItemStack stack)
     {
 
