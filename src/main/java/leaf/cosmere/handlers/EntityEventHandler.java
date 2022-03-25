@@ -18,11 +18,10 @@ import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.WitchEntity;
-import net.minecraft.entity.monster.ZombieVillagerEntity;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CatEntity;
@@ -81,11 +80,10 @@ public class EntityEventHandler
                     giveEntityStartingManifestation(livingEntity, spiritweb);
                 }
             }
-            else if (eventEntity instanceof VillagerEntity
+            else if (eventEntity instanceof AbstractVillagerEntity
                     || eventEntity instanceof ZombieVillagerEntity
-                    || eventEntity instanceof AbstractIllagerEntity
-                    || eventEntity instanceof WitchEntity
-                    || eventEntity instanceof PiglinEntity)
+                    || (eventEntity instanceof AbstractRaiderEntity && !(eventEntity instanceof  RavagerEntity))
+                    || eventEntity instanceof AbstractPiglinEntity)
             {
                 //random 1/16
                 // only 1 in 16 will have the gene

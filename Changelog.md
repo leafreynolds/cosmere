@@ -5,6 +5,7 @@ B24
 Fixed creative mode spikes to only contain their correct powers, not both allomancy and feruchemy.
 Added localisation for spike tooltips. No more 'cosmere.trueself'.
 Non-scroll wheel based power mode increase/decrease
+Wandering trader and several Illager types added to list of potential metalborn mobs.
 
 B23
 
