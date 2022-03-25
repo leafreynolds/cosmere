@@ -6,6 +6,9 @@ Fixed creative mode spikes to only contain their correct powers, not both alloma
 Added localisation for spike tooltips. No more 'cosmere.trueself'.
 Non-scroll wheel based power mode increase/decrease
 Wandering trader and several Illager types added to list of potential metalborn mobs.
+Boosted ore spawn rate. Was closer to diamond, now is near iron levels of distribution
+Fixed some item tagging, so raw ore items from other mods should be more compatible.
+
 
 B23
 
