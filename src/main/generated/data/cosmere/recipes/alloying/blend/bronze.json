@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:raw/copper"
+      "tag": "forge:raw_materials/copper"
     },
     {
-      "tag": "forge:raw/copper"
+      "tag": "forge:raw_materials/copper"
     },
     {
-      "tag": "forge:raw/copper"
+      "tag": "forge:raw_materials/copper"
     },
     {
-      "tag": "forge:raw/tin"
+      "tag": "forge:raw_materials/tin"
     }
   ],
   "result": {

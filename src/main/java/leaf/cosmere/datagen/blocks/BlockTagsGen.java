@@ -36,6 +36,11 @@ public class BlockTagsGen extends BlockTagsProvider
             if (!metalType.hasMaterialItem())
                 continue;
 
+            if (metalType.hasOre())
+            {
+                add(TagsRegistry.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType), metalType.getOreBlock());
+            }
+
             //put metal type tag on block
             MetalBlock metalBlock = metalType.getBlock();
 

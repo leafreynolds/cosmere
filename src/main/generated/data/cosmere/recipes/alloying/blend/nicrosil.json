@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:raw/chromium"
+      "tag": "forge:raw_materials/chromium"
     },
     {
-      "tag": "forge:raw/nickel"
+      "tag": "forge:raw_materials/nickel"
     },
     {
-      "tag": "forge:raw/nickel"
+      "tag": "forge:raw_materials/nickel"
     },
     {
-      "tag": "forge:raw/nickel"
+      "tag": "forge:raw_materials/nickel"
     }
   ],
   "result": {

@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:raw/tin"
+      "tag": "forge:raw_materials/tin"
     },
     {
-      "tag": "forge:raw/tin"
+      "tag": "forge:raw_materials/tin"
     },
     {
-      "tag": "forge:raw/tin"
+      "tag": "forge:raw_materials/tin"
     },
     {
-      "tag": "forge:raw/tin"
+      "tag": "forge:raw_materials/tin"
     },
     {
-      "tag": "forge:raw/lead"
+      "tag": "forge:raw_materials/lead"
     }
   ],
   "result": {

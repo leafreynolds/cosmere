@@ -208,12 +208,15 @@ public class Metals
             }
         }
 
+        //Used for metals that exist in the base minecraft
+        //todo add copper in 1.18
         public boolean hasMaterialItem()
         {
             switch (this)
             {
                 case IRON:
                 case GOLD:
+                //case COPPER:
                     return false;
                 default:
                     return true;

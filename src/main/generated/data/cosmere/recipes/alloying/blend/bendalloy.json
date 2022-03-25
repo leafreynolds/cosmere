@@ -2,31 +2,31 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:raw/cadmium"
+      "tag": "forge:raw_materials/cadmium"
     },
     {
-      "tag": "forge:raw/lead"
+      "tag": "forge:raw_materials/lead"
     },
     {
-      "tag": "forge:raw/lead"
+      "tag": "forge:raw_materials/lead"
     },
     {
-      "tag": "forge:raw/lead"
+      "tag": "forge:raw_materials/lead"
     },
     {
-      "tag": "forge:raw/lead"
+      "tag": "forge:raw_materials/lead"
     },
     {
-      "tag": "forge:raw/lead"
+      "tag": "forge:raw_materials/lead"
     },
     {
-      "tag": "forge:raw/lead"
+      "tag": "forge:raw_materials/lead"
     },
     {
-      "tag": "forge:raw/tin"
+      "tag": "forge:raw_materials/tin"
     },
     {
-      "tag": "forge:raw/tin"
+      "tag": "forge:raw_materials/tin"
     }
   ],
   "result": {

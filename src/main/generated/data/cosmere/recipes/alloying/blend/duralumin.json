@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:raw/aluminum"
+      "tag": "forge:raw_materials/aluminum"
     },
     {
-      "tag": "forge:raw/aluminum"
+      "tag": "forge:raw_materials/aluminum"
     },
     {
-      "tag": "forge:raw/aluminum"
+      "tag": "forge:raw_materials/aluminum"
     },
     {
-      "tag": "forge:raw/aluminum"
+      "tag": "forge:raw_materials/aluminum"
     },
     {
-      "tag": "forge:raw/copper"
+      "tag": "forge:raw_materials/copper"
     }
   ],
   "result": {
