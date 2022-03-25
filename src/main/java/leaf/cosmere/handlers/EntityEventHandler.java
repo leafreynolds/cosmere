@@ -125,12 +125,12 @@ public class EntityEventHandler
     {
         //seriously, get item three times is stupid, I know it.
         //but entity item, itemstack and then the actual item is needed.
-        if (event.getItem().getItem().getItem() == ItemsRegistry.INVESTITURE.get())
+/*        if (event.getItem().getItem().getItem() == ItemsRegistry.INVESTITURE.get())
         {
             event.getItem().getItem().shrink(1);
 
             ItemChargeHelper.dispatchCharge(event.getPlayer(), 1000, true);
-        }
+        }*/
     }
 
     @SubscribeEvent
