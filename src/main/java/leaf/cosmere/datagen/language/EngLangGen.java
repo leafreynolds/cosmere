@@ -233,7 +233,7 @@ public class EngLangGen extends LanguageProvider
         add(POWER_INACTIVE, "Power now inactive: %s");
 
         add(POWERS_FOUND, "Powers found for: %s \n");
-        add(CONTAINED_POWERS_FOUND, "Contained Powers:");
+        add(CONTAINED_POWERS_FOUND, "Hemalurgic Charge:");
 
 
     }
