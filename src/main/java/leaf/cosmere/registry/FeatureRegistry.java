@@ -44,6 +44,8 @@ public class FeatureRegistry
 
     public static class ConfiguredFeatures
     {
+        //todo have ore specific changes, rather than all using the same settings
+        //reference Features.java
         public static final Map<Metals.MetalType, ConfiguredFeature<?, ?>> ORE_FEATURES =
                 Arrays.stream(Metals.MetalType.values())
                         .filter(Metals.MetalType::hasOre)
@@ -51,12 +53,10 @@ public class FeatureRegistry
                                 Function.identity(),
                                 metalType ->
                                         FeatureRegistry.ORE_FEATURES.get(metalType).get().configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
-                                                BlocksRegistry.METAL_ORE.get(metalType).get().defaultBlockState(), 5)) //vein size of 5
-                                                .decorated(
-                                                        Placement.RANGE.configured(new TopSolidRangeConfig(6, 0, 64))
-                                                                .chance(5))//Config.COMMON_SPEC.oreSpawnChance.get(metalType).get()))//todo config vein size based on ore type
+                                                BlocksRegistry.METAL_ORE.get(metalType).get().defaultBlockState(), 8))
+                                                .range(64)
                                                 .squared()
-                                                .count(5)
+                                                .count(15)
                         ));
     }
 

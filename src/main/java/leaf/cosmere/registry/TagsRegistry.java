@@ -62,7 +62,7 @@ public class TagsRegistry
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeItemTag("raw/" + type.name().toLowerCase())));
+                                type -> forgeItemTag("raw_materials/" + type.name().toLowerCase())));
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_DUST_TAGS =
                 Arrays.stream(Metals.MetalType.values())
@@ -117,6 +117,13 @@ public class TagsRegistry
 
         public static ITag.INamedTag<Block> DRAGON_PROOF = makeBlock("minecraft", "dragon_immune");
         public static ITag.INamedTag<Block> WITHER_PROOF = makeBlock("minecraft", "wither_immune");
+
+        public static final Map<Metals.MetalType, ITag.INamedTag<Block>> METAL_ORE_BLOCK_TAGS =
+                Arrays.stream(Metals.MetalType.values())
+                        .filter(Metals.MetalType::hasOre)
+                        .collect(Collectors.toMap(
+                                Function.identity(),
+                                type -> forgeTag("ores/" + type.name().toLowerCase())));
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Block>> METAL_BLOCK_TAGS =
                 Arrays.stream(Metals.MetalType.values())
