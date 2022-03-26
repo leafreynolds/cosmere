@@ -115,6 +115,23 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
 
                 //what powers can this metal type contain
 
+                if (this.getMetalType() == Metals.MetalType.IRON)
+                {
+                    ItemStack filledIronSpike = new ItemStack(this);
+                    CompoundNBT filledIronSpikeInfo = getHemalurgicInfo(filledIronSpike);
+                    //steals physical strength
+                    double strengthCurrent = CompoundNBTHelper.getDouble(filledIronSpikeInfo, getMetalType().name(), 0);
+                    //don't steal modified values, only base value
+                    //todo decide how much strength is reasonable to steal and how much goes to waste
+                    //currently will try 70%
+                    double strengthToAdd = 15 * 0.7D;// Iron golems have the most base attack damage of normal mods (giants have 50??). Ravagers have
+                    CompoundNBTHelper.setDouble(filledIronSpikeInfo, getMetalType().name(), strengthCurrent + strengthToAdd);
+                    CompoundNBTHelper.setBoolean(filledIronSpikeInfo, "hasHemalurgicPower", true);
+                    setHemalurgicIdentity(filledIronSpike, UUID.randomUUID());
+                    stacks.add(filledIronSpike);
+                }
+
+
                 Collection<Metals.MetalType> hemalurgyStealWhitelist = getMetalType().getHemalurgyStealWhitelist();
                 if (hemalurgyStealWhitelist != null)
                 {
@@ -130,18 +147,6 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                             //then we've found something to steal!
                             switch (this.getMetalType())
                             {
-                                case IRON:
-                                    ItemStack filledIronSpike = new ItemStack(this);
-                                    CompoundNBT filledIronSpikeInfo = getHemalurgicInfo(filledIronSpike);
-                                    //steals physical strength
-                                    double strengthCurrent = CompoundNBTHelper.getDouble(filledIronSpikeInfo, stealType.name(), 0);
-                                    //don't steal modified values, only base value
-                                    //todo decide how much strength is reasonable to steal and how much goes to waste
-                                    //currently will try 70%
-                                    double strengthToAdd = 15 * 0.7D;// Iron golems have the most base attack damage of normal mods (giants have 50??). Ravagers have
-                                    CompoundNBTHelper.setDouble(filledIronSpikeInfo, stealType.name(), strengthCurrent + strengthToAdd);
-                                    stacks.add(filledIronSpike);
-                                    break;
                                 //steals allomantic abilities
                                 case STEEL:
                                 case BRONZE:
@@ -241,7 +246,6 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
     {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
-
         // no extra info if there isn't any
         if (getHemalurgicIdentity(stack) == null)
         {
@@ -252,7 +256,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
         //stolen identities listed?
 
         //extra investiture powers added
-        addInvestitureInformation(stack, tooltip);
+        addInvestitureInformation(stack, this, tooltip);
 
         //etc?
 

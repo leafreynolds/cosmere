@@ -287,7 +287,7 @@ public interface IHemalurgicInfo
     }
 
 
-    default void addInvestitureInformation(ItemStack stack, List<ITextComponent> tooltip)
+    default void addInvestitureInformation(ItemStack stack, HemalurgicSpikeItem hemalurgicSpikeItem, List<ITextComponent> tooltip)
     {
         if (!hemalurgicIdentityExists(stack))
         {
@@ -295,6 +295,15 @@ public interface IHemalurgicInfo
         }
 
         tooltip.add(TextHelper.createTranslatedText(CONTAINED_POWERS_FOUND));
+
+        double attackDamage = CompoundNBTHelper.getDouble(hemalurgicSpikeItem.getHemalurgicInfo(stack), hemalurgicSpikeItem.getMetalType().name(), 0);
+
+        if (attackDamage > 0)
+        {
+            //todo, make this translated text
+            tooltip.add(TextHelper.createText("+" + attackDamage + " Attack Damage"));
+        }
+
         IForgeRegistry<AManifestation> manifestations = ManifestationRegistry.MANIFESTATION_REGISTRY.get();
         for (AManifestation manifestation : manifestations)
         {
