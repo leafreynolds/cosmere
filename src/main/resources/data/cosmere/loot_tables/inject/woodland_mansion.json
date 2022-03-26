@@ -8,7 +8,12 @@
       {
         "type": "minecraft:item",
         "name": "cosmere:atium_spike",
-        "weight": 1
+        "functions": [
+          {
+            "function": "cosmere:invest_spike"
+          }
+        ],
+        "weight": 33
       },
       {
         "type": "minecraft:item",

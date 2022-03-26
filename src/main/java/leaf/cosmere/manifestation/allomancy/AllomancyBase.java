@@ -142,7 +142,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         return null;
     }
 
-    protected double getAllomanticStrength(ISpiritweb cap)
+    public double getStrength(ISpiritweb cap)
     {
         RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(metalType.getMistingName());
         ModifiableAttributeInstance attribute = cap.getLiving().getAttribute(mistingAttribute.get());
@@ -156,7 +156,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
             return 0;
 
         //get allomantic strength
-        double allomanticStrength = getAllomanticStrength(cap);
+        double allomanticStrength = getStrength(cap);
         return MathHelper.floor(allomanticStrength * cap.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()));
 
     }

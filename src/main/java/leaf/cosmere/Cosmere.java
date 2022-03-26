@@ -72,6 +72,7 @@ public class Cosmere
         {
             FeatureRegistry.registerConfiguredFeatures();
             EntityRegistry.PrepareEntityAttributes();
+            LootFunctionRegistry.Register();
         });
 
         //Entity Caps

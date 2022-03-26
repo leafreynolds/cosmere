@@ -163,7 +163,7 @@ public class AllomancyIronSteel extends AllomancyBase
         Vector3d direction;
         float renderPartialTicks = Minecraft.getInstance().getFrameTime();
 
-        double strength = getAllomanticStrength(cap);
+        double strength = getStrength(cap);
 
         for (int i = blockListCount - 1; i >= 0; i--)
         {

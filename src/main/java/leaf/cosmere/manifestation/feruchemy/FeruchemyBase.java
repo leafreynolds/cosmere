@@ -8,12 +8,16 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.utils.helpers.EffectsHelper;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.manifestation.ManifestationBase;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraftforge.fml.RegistryObject;
 
 public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 {
@@ -24,7 +28,6 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
         super(Manifestations.ManifestationTypes.FERUCHEMY, metalType.getColorValue());
         this.metalType = metalType;
     }
-
 
     @Override
     public int getPowerID()
@@ -127,5 +130,12 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
             return metalType.getStoringEffect();
         }
 
+    }
+
+    public double getStrength(ISpiritweb cap)
+    {
+        RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(metalType.getFerringName());
+        ModifiableAttributeInstance attribute = cap.getLiving().getAttribute(mistingAttribute.get());
+        return attribute != null ? attribute.getValue() : 0;
     }
 }

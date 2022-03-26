@@ -77,4 +77,10 @@ public class ManifestationBase extends AManifestation
     {
         return data.canTickManifestation(this.manifestationType, this.getPowerID());
     }
+
+    @Override
+    public double getStrength(ISpiritweb data)
+    {
+        return 0;
+    }
 }

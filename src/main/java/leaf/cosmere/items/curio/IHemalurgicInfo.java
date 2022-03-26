@@ -85,8 +85,9 @@ public interface IHemalurgicInfo
                 //currently will try 70%
                 double strengthToAdd = entityKilled.getAttributes().getBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
                 CompoundNBTHelper.setDouble(hemalurgyInfo, spikeMetalType.name(), strengthCurrent + strengthToAdd);
-                saveIdentity = true;
-                break;
+
+                Invest(stack, spikeMetalType, strengthToAdd, entityKilled.getUUID());
+                return;
             case TIN:
                 //Steals senses
                 //todo figure out what that means in minecraft
@@ -119,76 +120,90 @@ public interface IHemalurgicInfo
         }
 
         List<AManifestation> manifestationsFound = new ArrayList<>();
-        SpiritwebCapability.get(entityKilled).ifPresent(cap ->
+        SpiritwebCapability.get(entityKilled).ifPresent(entityKilledSpiritWeb ->
         {
             //only grab innate manifestations, not ones added by hemalurgy
-            manifestationsFound.addAll(cap.getAvailableManifestations(true));
+            manifestationsFound.addAll(entityKilledSpiritWeb.getAvailableManifestations(true));
 
+
+            if (manifestationsFound.size() > 0)
+            {
+                whiteList.clear();
+
+                //The type of thing you can steal is dependant on the type of metal.
+                Collection<Metals.MetalType> hemalurgyStealWhitelist = spikeMetalType.getHemalurgyStealWhitelist();
+                if (hemalurgyStealWhitelist != null)
+                {
+                    whiteList.addAll(hemalurgyStealWhitelist);
+                }
+
+                switch (spikeMetalType)
+                {
+                    //steals allomantic abilities
+                    case STEEL:
+                    case BRONZE:
+                    case CADMIUM:
+                    case ELECTRUM:
+                    {
+                        AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
+                        if (manifestation != null)
+                        {
+                            Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
+                            return;
+                        }
+
+                    }
+                    break;
+                    //steals feruchemical abilities
+                    case PEWTER:
+                    case BRASS:
+                    case BENDALLOY:
+                    case GOLD:
+                    {
+                        AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
+                        if (manifestation != null)
+                        {
+                            Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
+                            return;
+                        }
+                    }
+                    break;
+                    //The god metals don't follow the 'normal' rules.
+                    //Todo decide if they can steal powers from other investiture types or just scadrial related
+                    case ATIUM:
+                    {
+                        //Steals any one power
+                        //todo decide if we just pick a random power
+                        //then try steal it
+                        //todo decide if prefer allomancy over feruchemy?
+                        AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
+                        if (manifestation == null)
+                        {
+                            manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
+                        }
+
+                        if (manifestation != null)
+                        {
+                            Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
+                            return;
+                        }
+                    }
+                    break;
+                    case LERASIUM:
+                    {
+                        for (AManifestation manifestation : manifestationsFound)
+                        {
+                            Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb), entityKilled.getUUID());
+                        }
+                    }
+                    break;
+                }
+            }
         });
 
-        if (manifestationsFound.size() > 0)
-        {
-            whiteList.clear();
-
-            //The type of thing you can steal is dependant on the type of metal.
-            Collection<Metals.MetalType> hemalurgyStealWhitelist = spikeMetalType.getHemalurgyStealWhitelist();
-            if (hemalurgyStealWhitelist != null)
-            {
-                whiteList.addAll(hemalurgyStealWhitelist);
-            }
-
-            switch (spikeMetalType)
-            {
-                //steals allomantic abilities
-                case STEEL:
-                case BRONZE:
-                case CADMIUM:
-                case ELECTRUM:
-                    saveIdentity = tryStealScadrialManifestation(hemalurgyInfo, manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
-                    break;
-                //steals feruchemical abilities
-                case PEWTER:
-                case BRASS:
-                case BENDALLOY:
-                case GOLD:
-                    saveIdentity = tryStealScadrialManifestation(hemalurgyInfo, manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
-                    break;
-                //The god metals don't follow the 'normal' rules.
-                //Todo decide if they can steal powers from other investiture types or just scadrial related
-                case ATIUM:
-                    //Steals any one power
-                    //todo decide if we just pick a random power
-                    whiteList.addAll(Arrays.asList(Metals.MetalType.values()));
-                    //then try steal it
-                    //todo decide if prefer allomancy over feruchemy?
-                    if (!tryStealScadrialManifestation(hemalurgyInfo, manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY))
-                    {
-                        saveIdentity = tryStealScadrialManifestation(hemalurgyInfo, manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
-                    }
-                    else
-                    {
-                        saveIdentity = true;
-                    }
-                    break;
-                case LERASIUM:
-                    for (AManifestation manifestation : manifestationsFound)
-                    {
-                        CompoundNBTHelper.setBoolean(hemalurgyInfo, manifestation.getRegistryName().getPath(), true);
-                    }
-                    saveIdentity = true;
-                    break;
-            }
-        }
-
-        if (saveIdentity)
-        {
-            setHemalurgicIdentity(stack, entityKilled.getUUID());
-            CompoundNBTHelper.setBoolean(hemalurgyInfo, "hasHemalurgicPower", true);
-        }
     }
 
-    default boolean tryStealScadrialManifestation(
-            CompoundNBT hemalurgyInfo,
+    default AManifestation getRandomMetalPowerFromList(
             List<AManifestation> manifestationsFound,
             List<Metals.MetalType> whiteList,
             Manifestations.ManifestationTypes powerType)
@@ -203,13 +218,11 @@ public interface IHemalurgicInfo
             if (i >= 0)
             {
                 //then we've found something to steal!
-                CompoundNBTHelper.setBoolean(hemalurgyInfo, manifestationsFound.get(i).getRegistryName().getPath(), true);
-                CompoundNBTHelper.setBoolean(hemalurgyInfo, "hasHemalurgicPower", true);
-                return true;
+                return manifestationsFound.get(i);
             }
         }
 
-        return false;
+        return null;
     }
 
     default Multimap<Attribute, AttributeModifier> getHemalurgicAttributes(Multimap<Attribute, AttributeModifier> attributeModifiers, ItemStack stack, Metals.MetalType metalType)
@@ -222,19 +235,20 @@ public interface IHemalurgicInfo
             return attributeModifiers;
         }
 
+        final double strength = CompoundNBTHelper.getDouble(
+                hemalurgyInfo,
+                metalType.name(),
+                0);
+
         switch (metalType)
         {
             case IRON:
-
                 attributeModifiers.put(
                         Attributes.ATTACK_DAMAGE,
                         new AttributeModifier(
                                 hemalurgicIdentity,
                                 "Hemalurgic " + metalType.name(),
-                                (double) CompoundNBTHelper.getDouble(
-                                        hemalurgyInfo,
-                                        metalType.name(),
-                                        0),
+                                strength,
                                 AttributeModifier.Operation.ADDITION));
 
                 break;
@@ -277,7 +291,7 @@ public interface IHemalurgicInfo
                         new AttributeModifier(
                                 hemalurgicIdentity,
                                 String.format("Hemalurgic-%s: %s", path, hemalurgicIdentity.toString()),
-                                6,//todo get this value from the item?
+                                CompoundNBTHelper.getDouble(hemalurgyInfo, "power_" + path, 6),//todo get this value from the item?
                                 AttributeModifier.Operation.ADDITION));
             }
         }
@@ -324,5 +338,26 @@ public interface IHemalurgicInfo
         return CompoundNBTHelper.getBoolean(getHemalurgicInfo(stack), manifestation.getRegistryName().getPath(), false);
     }
 
+
+    default void Invest(ItemStack stack, AManifestation manifestation, double level, UUID identity)
+    {
+        CompoundNBT spikeInfo = getHemalurgicInfo(stack);
+        final String manifestationName = manifestation.getRegistryName().getPath();
+        CompoundNBTHelper.setBoolean(spikeInfo, manifestationName, true);
+        CompoundNBTHelper.setBoolean(spikeInfo, "hasHemalurgicPower", true);
+        CompoundNBTHelper.setDouble(spikeInfo, "power_" + manifestationName, level);
+
+        setHemalurgicIdentity(stack, identity);
+    }
+
+    default void Invest(ItemStack stack, Metals.MetalType metalType, double level, UUID identity)
+    {
+        CompoundNBT spikeInfo = getHemalurgicInfo(stack);
+
+        CompoundNBTHelper.setBoolean(spikeInfo, "hasHemalurgicPower", true);
+        CompoundNBTHelper.setDouble(spikeInfo, metalType.name(), level);
+
+        setHemalurgicIdentity(stack, identity);
+    }
 }
 

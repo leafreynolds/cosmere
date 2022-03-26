@@ -118,16 +118,15 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                 if (this.getMetalType() == Metals.MetalType.IRON)
                 {
                     ItemStack filledIronSpike = new ItemStack(this);
-                    CompoundNBT filledIronSpikeInfo = getHemalurgicInfo(filledIronSpike);
                     //steals physical strength
-                    double strengthCurrent = CompoundNBTHelper.getDouble(filledIronSpikeInfo, getMetalType().name(), 0);
                     //don't steal modified values, only base value
                     //todo decide how much strength is reasonable to steal and how much goes to waste
                     //currently will try 70%
                     double strengthToAdd = 15 * 0.7D;// Iron golems have the most base attack damage of normal mods (giants have 50??). Ravagers have
-                    CompoundNBTHelper.setDouble(filledIronSpikeInfo, getMetalType().name(), strengthCurrent + strengthToAdd);
-                    CompoundNBTHelper.setBoolean(filledIronSpikeInfo, "hasHemalurgicPower", true);
-                    setHemalurgicIdentity(filledIronSpike, UUID.randomUUID());
+
+
+                    Invest(filledIronSpike,getMetalType(),strengthToAdd, UUID.randomUUID());
+
                     stacks.add(filledIronSpike);
                 }
 
@@ -154,14 +153,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                                 case ELECTRUM:
                                     ItemStack allomancySpike = new ItemStack(this);
                                     AManifestation allomancyMani = ManifestationRegistry.ALLOMANCY_POWERS.get(stealType).get();
-
-                                    CompoundNBT allomancySpikeInfo = getHemalurgicInfo(allomancySpike);
-                                    CompoundNBTHelper.setBoolean(allomancySpikeInfo, allomancyMani.getRegistryName().getPath(), true);
-                                    CompoundNBTHelper.setBoolean(allomancySpikeInfo, "hasHemalurgicPower", true);
-                                    CompoundNBTHelper.setDouble(allomancySpikeInfo, getMetalType().name(), 10);
-
-                                    setHemalurgicIdentity(allomancySpike, UUID.randomUUID());
-
+                                    Invest(allomancySpike, allomancyMani,10, UUID.randomUUID());
                                     stacks.add(allomancySpike);
                                     break;
                                 //steals feruchemical abilities
@@ -171,14 +163,7 @@ public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
                                 case GOLD:
                                     ItemStack feruchemySpike = new ItemStack(this);
                                     AManifestation feruchemyMani = ManifestationRegistry.FERUCHEMY_POWERS.get(stealType).get();
-
-                                    CompoundNBT feruchemySpikeInfo = getHemalurgicInfo(feruchemySpike);
-                                    CompoundNBTHelper.setBoolean(feruchemySpikeInfo, feruchemyMani.getRegistryName().getPath(), true);
-                                    CompoundNBTHelper.setBoolean(feruchemySpikeInfo, "hasHemalurgicPower", true);
-                                    CompoundNBTHelper.setDouble(feruchemySpikeInfo, getMetalType().name(), 10);
-
-                                    setHemalurgicIdentity(feruchemySpike, UUID.randomUUID());
-
+                                    Invest(feruchemySpike, feruchemyMani,10, UUID.randomUUID());
                                     stacks.add(feruchemySpike);
                                     break;
                             }

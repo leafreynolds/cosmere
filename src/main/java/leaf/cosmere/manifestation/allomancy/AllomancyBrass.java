@@ -27,7 +27,7 @@ public class AllomancyBrass extends AllomancyBase
         int mode = data.getMode(manifestationType, getMetalType().getID());
 
         //todo, replace x * mode with config based value
-        double allomanticStrength = getAllomanticStrength(data);
+        double allomanticStrength = getStrength(data);
 
         int range = (int) (allomanticStrength * mode);
 

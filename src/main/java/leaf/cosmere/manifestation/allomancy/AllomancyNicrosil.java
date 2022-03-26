@@ -6,7 +6,6 @@ package leaf.cosmere.manifestation.allomancy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.utils.helpers.EffectsHelper;
 import leaf.cosmere.registry.EffectsRegistry;
@@ -66,7 +65,7 @@ public class AllomancyNicrosil extends AllomancyBase
                         //valid set up found.
                         EffectInstance newEffect = EffectsHelper.getNewEffect(
                                 EffectsRegistry.ALLOMANCY_BOOST.get(),
-                                MathHelper.floor(getAllomanticStrength(iSpiritweb))
+                                MathHelper.floor(getStrength(iSpiritweb))
                         );
 
                         //apply to the hit entity
