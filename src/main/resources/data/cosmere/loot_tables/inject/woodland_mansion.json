@@ -8,6 +8,16 @@
       {
         "type": "minecraft:item",
         "name": "cosmere:atium_nugget",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
         "weight": 33
       },
       {
