@@ -28,6 +28,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /*
  *   All hope abandon ye who enter here.
@@ -564,8 +565,8 @@ public class Metals
                             Metals.MetalType.ALUMINUM,
                             Metals.MetalType.DURALUMIN);
                 case ATIUM:
-                    return Arrays.asList(Metals.MetalType.values());
                 case LERASIUM:
+                    return Arrays.stream(MetalType.values()).filter(MetalType::hasAssociatedManifestation).collect(Collectors.toList());
                 case MALATIUM:
                 case LERASATIUM:
                     break;
