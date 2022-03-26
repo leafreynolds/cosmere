@@ -1,0 +1,19 @@
+{
+  "__comment": "This table is injected as its own pool into minecraft:chests/woodland_mansion",
+  "pools": [
+    {
+    "name": "main",
+    "rolls": 1,
+    "entries": [
+      {
+        "type": "minecraft:item",
+        "name": "cosmere:atium_nugget",
+        "weight": 33
+      },
+      {
+        "type": "minecraft:empty"
+      }
+    ]
+  }
+  ]
+}
