@@ -1,8 +1,8 @@
 /*
- * File created ~ 24 - 4 - 2021 ~ Leaf
+ * File created ~ 26 - 3 - 2022 ~ Leaf
  */
 
-package leaf.cosmere.effects;
+package leaf.cosmere.loot;
 
 import com.google.gson.JsonObject;
 import leaf.cosmere.constants.Metals;

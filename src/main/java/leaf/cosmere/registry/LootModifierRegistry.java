@@ -6,7 +6,7 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.effects.FortuneBonusModifier;
+import leaf.cosmere.loot.FortuneBonusModifier;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
