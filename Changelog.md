@@ -9,7 +9,7 @@ Wandering trader and several Illager types added to list of potential metalborn 
 Boosted ore spawn rate. Was closer to diamond, now is near iron levels of distribution
 Fixed some item tagging, so raw ore items from other mods should be more compatible.
 Fixed iron spike tool tip so it doesn't list empty power. Now lists attack damage granted.
-
+Updated a lot of the loot chest tables to have a chance of adding items from Cosmere, like ores in the mineshaft or lerasium nuggets in rarer loot chests.
 
 B23
 
