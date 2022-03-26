@@ -296,12 +296,15 @@ public interface IHemalurgicInfo
 
         tooltip.add(TextHelper.createTranslatedText(CONTAINED_POWERS_FOUND));
 
-        double attackDamage = CompoundNBTHelper.getDouble(hemalurgicSpikeItem.getHemalurgicInfo(stack), hemalurgicSpikeItem.getMetalType().name(), 0);
-
-        if (attackDamage > 0)
+        if (hemalurgicSpikeItem.getMetalType() == Metals.MetalType.IRON)
         {
+            double attackDamage = CompoundNBTHelper.getDouble(hemalurgicSpikeItem.getHemalurgicInfo(stack), hemalurgicSpikeItem.getMetalType().name(), 0);
+
             //todo, make this translated text
-            tooltip.add(TextHelper.createText("+" + attackDamage + " Attack Damage"));
+            if (attackDamage > 0)
+            {
+                tooltip.add(TextHelper.createText("+" + attackDamage + " Attack Damage"));
+            }
         }
 
         IForgeRegistry<AManifestation> manifestations = ManifestationRegistry.MANIFESTATION_REGISTRY.get();
