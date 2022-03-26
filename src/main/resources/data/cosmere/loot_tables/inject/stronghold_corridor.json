@@ -2,14 +2,18 @@
   "__comment": "This table is injected as its own pool into minecraft:chests/stronghold_corridor",
   "pools": [
     {
-    "name": "main",
-    "rolls": 1,
-    "entries": [
-      {
-        "type": "empty",
-        "weight": 100
-      }
-    ]
-  }
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cosmere:lerasium_nugget",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:empty"
+        }
+      ]
+    }
   ]
 }

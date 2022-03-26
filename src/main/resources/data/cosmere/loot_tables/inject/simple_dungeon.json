@@ -6,8 +6,22 @@
     "rolls": 1,
     "entries": [
       {
-        "type": "empty",
-        "weight": 100
+        "type": "minecraft:item",
+        "name": "cosmere:atium_nugget",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 2.0,
+              "max": 8.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "weight": 12
+      },
+      {
+        "type": "minecraft:empty"
       }
     ]
   }

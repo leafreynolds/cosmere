@@ -1,5 +1,5 @@
 {
-  "__comment": "This table is injected as its own pool into minecraft:chests/desert_pyramid",
+  "__comment": "This table is injected as its own pool into minecraft:chests/woodland_mansion",
   "pools": [
     {
     "name": "main",
@@ -7,23 +7,28 @@
     "entries": [
       {
         "type": "minecraft:item",
+        "name": "cosmere:atium_spike",
+        "weight": 1
+      },
+      {
+        "type": "minecraft:item",
+        "name": "cosmere:lerasium_nugget",
+        "weight": 16
+      },
+      {
+        "type": "minecraft:item",
         "name": "cosmere:atium_nugget",
         "functions": [
           {
             "function": "minecraft:set_count",
             "count": {
-              "min": 2.0,
-              "max": 8.0,
+              "min": 3.0,
+              "max": 7.0,
               "type": "minecraft:uniform"
             }
           }
         ],
-        "weight": 12
-      },
-      {
-        "type": "minecraft:item",
-        "name": "cosmere:lerasium_nugget",
-        "weight": 5
+        "weight": 33
       },
       {
         "type": "minecraft:empty"

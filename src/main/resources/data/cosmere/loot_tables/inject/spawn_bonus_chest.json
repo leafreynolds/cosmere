@@ -6,8 +6,7 @@
     "rolls": 1,
     "entries": [
       {
-        "type": "empty",
-        "weight": 100
+        "type": "minecraft:empty"
       }
     ]
   }]
