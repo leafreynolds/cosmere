@@ -6,13 +6,138 @@
     "rolls": 1,
     "entries": [
       {
-        "type": "item",
+        "type": "minecraft:item",
         "name": "cosmere:atium_nugget",
         "weight": 5
       },
       {
-        "type": "empty",
-        "weight": 95
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_tin_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_zinc_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_copper_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_aluminum_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_chromium_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_cadmium_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_nickel_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_lead_ore"
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_silver_ore"
+      },
+      {
+        "type": "minecraft:empty"
       }
     ]
   }
