@@ -1,5 +1,10 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B25
+Fixed some loot chests not being injected into
+
+
+
 B24
 
 Fixed creative mode spikes to only contain their correct powers, not both allomancy and feruchemy.

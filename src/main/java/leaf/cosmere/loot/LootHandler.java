@@ -31,12 +31,17 @@ public final class LootHandler
             switch (file)
             {
                 case "abandoned_mineshaft":
+                case "bastion_treasure":
                 case "desert_pyramid":
+                case "end_city_treasure":
                 case "jungle_temple":
                 case "simple_dungeon":
                 case "spawn_bonus_chest":
                 case "stronghold_corridor":
+                case "stronghold_crossing":
+                case "stronghold_library":
                 case "village_blacksmith":
+                case "woodland_mansion":
                     evt.getTable().addPool(getInjectPool(file));
                     break;
                 default:
