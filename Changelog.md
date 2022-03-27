@@ -1,5 +1,11 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B26
+
+Removed accidental character left in village_blacksmith loot table json.
+
+
+
 B25
 Fixed some loot chests not being injected into
 Implemented ability for partially charged unsealed metalminds to be found in loot chests.
