@@ -2,6 +2,9 @@ The Cosmere Project - For 1.16 Minecraft
 
 B25
 Fixed some loot chests not being injected into
+Implemented ability for partially charged unsealed metalminds to be found in loot chests.
+Updated metal trader potential trades, now sets costs, amounts, trades per day and xp per trade based on item rarity.
+Updated a lot of loot chest loot. Look for hemalurgically charged spikes, invested metalminds and atium/lerasium beads and raw ore in various chests. Still checking that I've got the loot tables working correctly, but I was able to get things to show up rarely in chests.
 
 
 
