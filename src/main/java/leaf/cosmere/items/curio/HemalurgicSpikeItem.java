@@ -13,7 +13,7 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.renderer.wearables.SpikeModel;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
-import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.items.MetalmindItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
@@ -57,7 +57,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class HemalurgicSpikeItem extends Metalmind implements IHemalurgicInfo
+public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInfo
 {
     private final float attackDamage;
     /**

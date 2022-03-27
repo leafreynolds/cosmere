@@ -8,10 +8,10 @@ import leaf.cosmere.blocks.MetalBlock;
 import leaf.cosmere.items.MetalIngotItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalRawOreItem;
-import leaf.cosmere.items.curio.BraceletMetalmind;
+import leaf.cosmere.items.curio.BraceletMetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
-import leaf.cosmere.items.curio.NecklaceMetalmind;
-import leaf.cosmere.items.curio.RingMetalmind;
+import leaf.cosmere.items.curio.NecklaceMetalmindItem;
+import leaf.cosmere.items.curio.RingMetalmindItem;
 import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
@@ -236,19 +236,19 @@ public class Metals
             return EffectsRegistry.TAPPING_EFFECTS.get(this).get();
         }
 
-        public NecklaceMetalmind getNecklaceItem()
+        public NecklaceMetalmindItem getNecklaceItem()
         {
-            return (NecklaceMetalmind) ItemsRegistry.METAL_NECKLACES.get(this).get();
+            return (NecklaceMetalmindItem) ItemsRegistry.METAL_NECKLACES.get(this).get();
         }
 
-        public RingMetalmind getRingItem()
+        public RingMetalmindItem getRingItem()
         {
-            return (RingMetalmind) ItemsRegistry.METAL_RINGS.get(this).get();
+            return (RingMetalmindItem) ItemsRegistry.METAL_RINGS.get(this).get();
         }
 
-        public BraceletMetalmind getBraceletItem()
+        public BraceletMetalmindItem getBraceletItem()
         {
-            return (BraceletMetalmind) ItemsRegistry.METAL_BRACELETS.get(this).get();
+            return (BraceletMetalmindItem) ItemsRegistry.METAL_BRACELETS.get(this).get();
         }
 
         public MetalIngotItem getIngotItem()

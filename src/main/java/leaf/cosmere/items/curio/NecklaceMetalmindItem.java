@@ -6,11 +6,11 @@ package leaf.cosmere.items.curio;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
-import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.items.MetalmindItem;
 
-public class RingMetalmind extends Metalmind
+public class NecklaceMetalmindItem extends MetalmindItem
 {
-    public RingMetalmind(Metals.MetalType metalType)
+    public NecklaceMetalmindItem(Metals.MetalType metalType)
     {
         super(metalType, CosmereItemGroups.METALMINDS);
     }
@@ -18,6 +18,6 @@ public class RingMetalmind extends Metalmind
     @Override
     public float getMaxChargeModifier()
     {
-        return (4f / 9f);
+        return (6f / 9f);
     }
 }

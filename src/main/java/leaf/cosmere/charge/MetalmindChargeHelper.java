@@ -7,7 +7,7 @@ package leaf.cosmere.charge;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.items.MetalmindItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -60,16 +60,16 @@ public class MetalmindChargeHelper
         //remove items that don't match the metal type we are looking for
         items.removeIf(obj ->
                 {
-                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof Metalmind);
-                    boolean metalMindIsNotCorrectType = ((Metalmind) obj.getItem()).getMetalType() != metalType;
+                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof MetalmindItem);
+                    boolean metalMindIsNotCorrectType = ((MetalmindItem) obj.getItem()).getMetalType() != metalType;
 
                     return (objectIsNotMetalmind || metalMindIsNotCorrectType);
                 }
         );
         acc.removeIf(obj ->
                 {
-                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof Metalmind);
-                    boolean metalMindIsNotCorrectType = ((Metalmind) obj.getItem()).getMetalType() != metalType;
+                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof MetalmindItem);
+                    boolean metalMindIsNotCorrectType = ((MetalmindItem) obj.getItem()).getMetalType() != metalType;
 
                     return (objectIsNotMetalmind || metalMindIsNotCorrectType);
                 }

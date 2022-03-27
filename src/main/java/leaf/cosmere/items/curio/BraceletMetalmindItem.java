@@ -9,7 +9,7 @@ import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.client.renderer.wearables.*;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
-import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.items.MetalmindItem;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.model.*;
 import net.minecraft.client.renderer.texture.*;
@@ -22,9 +22,9 @@ import top.theillusivec4.curios.api.type.capability.*;
 import java.awt.*;
 import java.util.*;
 
-public class BraceletMetalmind extends Metalmind
+public class BraceletMetalmindItem extends MetalmindItem
 {
-    public BraceletMetalmind(Metals.MetalType metalType)
+    public BraceletMetalmindItem(Metals.MetalType metalType)
     {
         super(metalType, CosmereItemGroups.METALMINDS);
     }

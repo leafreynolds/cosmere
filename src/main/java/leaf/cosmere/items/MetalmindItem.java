@@ -8,6 +8,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
+import leaf.cosmere.properties.PropTypes;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.items.curio.IHemalurgicInfo;
 import leaf.cosmere.manifestation.AManifestation;
@@ -23,13 +24,21 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.UUID;
 
-public class Metalmind extends ChargeableMetalItem implements ICurioItem
+public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, ICurioItem
 {
-    public Metalmind(Metals.MetalType metalType, ItemGroup group)
+    private final Metals.MetalType metalType;
+
+    public MetalmindItem(Metals.MetalType metalType, ItemGroup group)
     {
-        super(metalType, group);
+        super(PropTypes.Items.ONE.get().rarity(metalType.getRarity()).tab(group));
+        this.metalType = metalType;
     }
 
+    @Override
+    public Metals.MetalType getMetalType()
+    {
+        return this.metalType;
+    }
 
     /**
      * generate new map of attributes for when used as a curio item.

@@ -10,17 +10,13 @@ package leaf.cosmere.registry;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Constants.RegNameStubs;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.*;
-import leaf.cosmere.items.curio.BraceletMetalmind;
+import leaf.cosmere.items.curio.BraceletMetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
-import leaf.cosmere.items.curio.NecklaceMetalmind;
-import leaf.cosmere.items.curio.RingMetalmind;
+import leaf.cosmere.items.curio.NecklaceMetalmindItem;
+import leaf.cosmere.items.curio.RingMetalmindItem;
 import leaf.cosmere.properties.PropTypes;
-import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemTier;
-import net.minecraft.item.Rarity;
-import net.minecraft.item.SwordItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -115,7 +111,7 @@ public class ItemsRegistry
                             Function.identity(),
                             type -> ITEMS.register(
                                     type.name().toLowerCase() + RegNameStubs.RING + RegNameStubs.METALMIND,
-                                    () -> createItem(new RingMetalmind(type))
+                                    () -> createItem(new RingMetalmindItem(type))
                             )));
 
     public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_BRACELETS =
@@ -125,7 +121,7 @@ public class ItemsRegistry
                             Function.identity(),
                             type -> ITEMS.register(
                                     type.name().toLowerCase() + RegNameStubs.BRACELET + RegNameStubs.METALMIND,
-                                    () -> createItem(new BraceletMetalmind(type))
+                                    () -> createItem(new BraceletMetalmindItem(type))
                             )));
 
     public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_NECKLACES =
@@ -135,7 +131,7 @@ public class ItemsRegistry
                             Function.identity(),
                             type -> ITEMS.register(
                                     type.name().toLowerCase() + RegNameStubs.NECKLACE + RegNameStubs.METALMIND,
-                                    () -> createItem(new NecklaceMetalmind(type))
+                                    () -> createItem(new NecklaceMetalmindItem(type))
                             )));
 
     public static final Map<Metals.MetalType, RegistryObject<net.minecraft.item.Item>> METAL_SPIKE =

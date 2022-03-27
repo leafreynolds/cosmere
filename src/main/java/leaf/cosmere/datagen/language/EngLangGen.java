@@ -7,7 +7,7 @@ package leaf.cosmere.datagen.language;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
-import leaf.cosmere.items.Metalmind;
+import leaf.cosmere.items.MetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.EffectsRegistry;
@@ -62,9 +62,9 @@ public class EngLangGen extends LanguageProvider
                     String use = ((HemalurgicSpikeItem) item).getMetalType().getHemalurgicUseString();
                     add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
                 }
-                else if (item instanceof Metalmind)
+                else if (item instanceof MetalmindItem)
                 {
-                    String use = ((Metalmind) item).getMetalType().getFeruchemyMetalmindUse();
+                    String use = ((MetalmindItem) item).getMetalType().getFeruchemyMetalmindUse();
                     add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
                 }
 

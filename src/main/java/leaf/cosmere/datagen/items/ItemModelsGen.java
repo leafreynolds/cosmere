@@ -9,10 +9,10 @@ import leaf.cosmere.items.MetalIngotItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalRawOreItem;
 import leaf.cosmere.items.ShardbladeItem;
-import leaf.cosmere.items.curio.BraceletMetalmind;
+import leaf.cosmere.items.curio.BraceletMetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
-import leaf.cosmere.items.curio.NecklaceMetalmind;
-import leaf.cosmere.items.curio.RingMetalmind;
+import leaf.cosmere.items.curio.NecklaceMetalmindItem;
+import leaf.cosmere.items.curio.RingMetalmindItem;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
@@ -58,17 +58,17 @@ public class ItemModelsGen extends ItemModelProvider
                 simpleItem(path, "metal_nugget");
                 continue;
             }
-            else if (item instanceof BraceletMetalmind)
+            else if (item instanceof BraceletMetalmindItem)
             {
                 simpleItem(path, "metal_bracelet");
                 continue;
             }
-            else if (item instanceof RingMetalmind)
+            else if (item instanceof RingMetalmindItem)
             {
                 simpleItem(path, "metal_ring");
                 continue;
             }
-            else if (item instanceof NecklaceMetalmind)
+            else if (item instanceof NecklaceMetalmindItem)
             {
                 simpleItem(path, "metal_necklace");
                 continue;

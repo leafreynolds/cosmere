@@ -104,7 +104,7 @@ public class EntityEventHandler
 
         if (eventEntity instanceof PlayerEntity
                 || eventEntity instanceof AnimalEntity
-                || eventEntity instanceof VillagerEntity
+                || eventEntity instanceof AbstractVillagerEntity
                 || eventEntity instanceof MonsterEntity)
         {
             LivingEntity livingEntity = (LivingEntity) eventEntity;
@@ -155,7 +155,7 @@ public class EntityEventHandler
             {
                 metalType = Metals.MetalType.GOLD;
             }
-            /*else if (handItem == Items.COPPER_NUGGET)
+            /*else if (handItem == Items.COPPER_NUGGET)//todo copper 1.18
             {
                 metalType = Metals.MetalType.COPPER;
             }*/
