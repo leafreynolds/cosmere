@@ -6,6 +6,7 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.loot.InvestMetalmindLootFunction;
 import leaf.cosmere.loot.InvestSpikeLootFunction;
 import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.loot.ILootSerializer;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 public class LootFunctionRegistry
 {
     public static final LootFunctionType INVEST_SPIKE = register("invest_spike", new InvestSpikeLootFunction.Serializer());
+    public static final LootFunctionType INVEST_METALMIND = register("invest_metalmind", new InvestMetalmindLootFunction.Serializer());
 
     private static LootFunctionType register(String name, ILootSerializer<? extends ILootFunction> serializer)
     {
@@ -26,6 +28,7 @@ public class LootFunctionRegistry
 
     public static void Register()
     {
+        //static finals get initialized on class being referenced
         LogHelper.info("Registering Loot Functions");
     }
 }

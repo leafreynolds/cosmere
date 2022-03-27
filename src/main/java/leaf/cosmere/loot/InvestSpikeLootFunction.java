@@ -30,6 +30,13 @@ public class InvestSpikeLootFunction extends LootFunction
         super(conditionsIn);
     }
 
+
+    @Override
+    public LootFunctionType getType()
+    {
+        return LootFunctionRegistry.INVEST_SPIKE;
+    }
+
     @Override
     protected ItemStack run(ItemStack stack, LootContext lootContext)
     {
@@ -48,11 +55,14 @@ public class InvestSpikeLootFunction extends LootFunction
 
         Collection<Metals.MetalType> hemalurgyStealWhitelist = spikeMetalType.getHemalurgyStealWhitelist();
 
-        Optional<Metals.MetalType> stealType = hemalurgyStealWhitelist
-                .stream()
-                .filter(metalType -> metalType.hasAssociatedManifestation())
-                .skip(lootContext.getRandom().nextInt(hemalurgyStealWhitelist.size()))
-                .findFirst();
+        Optional<Metals.MetalType> stealType =
+                hemalurgyStealWhitelist == null
+                ? Optional.empty()
+                : hemalurgyStealWhitelist
+                        .stream()
+                        .filter(metalType -> metalType.hasAssociatedManifestation())
+                        .skip(lootContext.getRandom().nextInt(hemalurgyStealWhitelist.size()))
+                        .findFirst();
 
 
         final float strengthLevel = MathHelper.clamp(5 + lootContext.getLuck(), 1, 10);
@@ -61,7 +71,7 @@ public class InvestSpikeLootFunction extends LootFunction
         {
             case IRON:
                 // add strength
-                item.Invest(stack,spikeMetalType, strengthLevel, UUID.randomUUID());
+                item.Invest(stack, spikeMetalType, strengthLevel, UUID.randomUUID());
 
                 break;
             //steals allomantic abilities
@@ -94,7 +104,7 @@ public class InvestSpikeLootFunction extends LootFunction
 
                 item.Invest(stack, feruchemyMani, strengthLevel, UUID.randomUUID());
             }
-
+            break;
             case ATIUM:
 
                 if (!stealType.isPresent())
@@ -119,12 +129,6 @@ public class InvestSpikeLootFunction extends LootFunction
         }
 
         return stack;
-    }
-
-    @Override
-    public LootFunctionType getType()
-    {
-        return LootFunctionRegistry.INVEST_SPIKE;
     }
 
     public static class Serializer extends LootFunction.Serializer<InvestSpikeLootFunction>
