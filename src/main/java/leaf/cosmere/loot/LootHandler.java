@@ -32,6 +32,8 @@ public final class LootHandler
             {
                 case "abandoned_mineshaft":
                 case "bastion_treasure":
+                case "bastion_other":
+                case "bastion_bridge":
                 case "desert_pyramid":
                 case "end_city_treasure":
                 case "jungle_temple":

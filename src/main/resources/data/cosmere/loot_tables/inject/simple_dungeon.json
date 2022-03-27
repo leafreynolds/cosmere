@@ -7,21 +7,34 @@
     "entries": [
       {
         "type": "minecraft:item",
+        "__comment": "with randomise metal type function, only tin doesn't matter here.",
+        "name": "cosmere:tin_ring_metalmind",
+        "functions": [
+          {
+            "function": "cosmere:randomise_metaltype"
+          },
+          {
+            "function": "cosmere:invest_metalmind"
+          }
+        ]
+      },
+      {
+        "type": "minecraft:item",
         "name": "cosmere:atium_nugget",
         "functions": [
           {
             "function": "minecraft:set_count",
             "count": {
-              "min": 2.0,
-              "max": 8.0,
+              "min": 3.0,
+              "max": 7.0,
               "type": "minecraft:uniform"
             }
           }
-        ],
-        "weight": 12
+        ]
       },
       {
-        "type": "minecraft:empty"
+        "type": "minecraft:empty",
+        "weight": 33
       }
     ]
   }

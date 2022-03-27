@@ -7,11 +7,40 @@
     "entries": [
       {
         "type": "minecraft:item",
-        "name": "cosmere:lerasium_nugget",
-        "weight": 10
+        "name": "cosmere:atium_spike",
+        "functions": [
+          {
+            "function": "cosmere:randomise_metaltype"
+          },
+          {
+            "function": "cosmere:invest_spike"
+          },
+          {
+            "function": "cosmere:invest_metalmind"
+          }
+        ]
       },
       {
-        "type": "minecraft:empty"
+        "type": "minecraft:item",
+        "name": "cosmere:lerasium_nugget"
+      },
+      {
+        "type": "minecraft:item",
+        "name": "cosmere:atium_nugget",
+        "functions": [
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ]
+      },
+      {
+        "type": "minecraft:empty",
+        "weight": 16
       }
     ]
   }

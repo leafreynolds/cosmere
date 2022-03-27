@@ -7,6 +7,37 @@
     "entries": [
       {
         "type": "minecraft:empty"
+      },
+      {
+        "type": "minecraft:item",
+        "__comment": "with randomise metal type function, only tin doesn't matter here.",
+        "name": "cosmere:tin_ring_metalmind",
+        "functions": [
+          {
+            "function": "cosmere:randomise_metaltype"
+          },
+          {
+            "function": "cosmere:invest_metalmind"
+          }
+        ]
+      },
+      {
+        "type": "minecraft:item",
+        "functions": [
+          {
+            "function": "cosmere:randomise_metaltype"
+          },
+          {
+            "function": "minecraft:set_count",
+            "count": {
+              "min": 3.0,
+              "max": 7.0,
+              "type": "minecraft:uniform"
+            }
+          }
+        ],
+        "name": "cosmere:raw_tin_ore",
+        "__comment": "with randomise metal type function, only tin doesn't matter here."
       }
     ]
   }

@@ -8,6 +8,7 @@ package leaf.cosmere.registry;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.loot.InvestMetalmindLootFunction;
 import leaf.cosmere.loot.InvestSpikeLootFunction;
+import leaf.cosmere.loot.RandomiseMetalTypeLootFunction;
 import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.loot.ILootSerializer;
 import net.minecraft.loot.LootFunctionType;
@@ -20,6 +21,7 @@ public class LootFunctionRegistry
 {
     public static final LootFunctionType INVEST_SPIKE = register("invest_spike", new InvestSpikeLootFunction.Serializer());
     public static final LootFunctionType INVEST_METALMIND = register("invest_metalmind", new InvestMetalmindLootFunction.Serializer());
+    public static final LootFunctionType RANDOMISE_METALTYPE = register("randomise_metaltype", new RandomiseMetalTypeLootFunction.Serializer());
 
     private static LootFunctionType register(String name, ILootSerializer<? extends ILootFunction> serializer)
     {

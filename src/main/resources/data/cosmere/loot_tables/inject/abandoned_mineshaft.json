@@ -2,144 +2,33 @@
   "__comment": "This table is injected as its own pool into minecraft:chests/abandoned_mineshaft",
   "pools": [
     {
-    "name": "main",
-    "rolls": 1,
-    "entries": [
-      {
-        "type": "minecraft:item",
-        "name": "cosmere:atium_nugget",
-        "weight": 5
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cosmere:atium_nugget",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "cosmere:randomise_metaltype"
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
+              }
             }
-          }
-        ],
-        "name": "cosmere:raw_tin_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_zinc_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_copper_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_aluminum_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_chromium_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_cadmium_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_nickel_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_lead_ore"
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
-            }
-          }
-        ],
-        "name": "cosmere:raw_silver_ore"
-      },
-      {
-        "type": "minecraft:empty"
-      }
-    ]
-  }
+          ],
+          "name": "cosmere:raw_tin_ore",
+          "__comment": "with randomise metal type function, only tin doesn't matter here."
+        }
+      ]
+    }
   ]
 }
