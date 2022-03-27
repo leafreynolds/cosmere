@@ -18,8 +18,6 @@ import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.common.BasicTrade;
@@ -31,7 +29,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.List;
@@ -86,7 +83,7 @@ public class CommonEvents
     {
         if (event.getType() == VillagerProfessionRegistry.METAL_TRADER.get())
         {
-            for (int i = 1; i <= 5 ; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 final List<VillagerTrades.ITrade> tradesForLevel = event.getTrades().get(i);
                 switch (i)
@@ -94,32 +91,135 @@ public class CommonEvents
                     case 1:
                         for (RegistryObject<Item> item : ItemsRegistry.METAL_NUGGETS.values())
                         {
-                            tradesForLevel.add(new BasicTrade(1, new ItemStack(item.get(), 16),2,1));
+                            tradesForLevel.add(makeTrade(item.get()));
                         }
                         break;
                     case 2:
                         for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_BLEND.values())
                         {
-                            tradesForLevel.add(new BasicTrade(10, new ItemStack(item.get()),3,2));
+                            tradesForLevel.add(makeTrade(item.get()));
                         }
                         break;
                     case 3:
-                        tradesForLevel.add(new BasicTrade(10, new ItemStack(ItemsRegistry.METAL_VIAL.get(),16),2,3));
+                        tradesForLevel.add(makeTrade(ItemsRegistry.METAL_VIAL.get()));
                         break;
                     case 4:
                         for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_ORE.values())
                         {
-                            tradesForLevel.add(new BasicTrade(23, new ItemStack(item.get()),6,4));
+                            tradesForLevel.add(makeTrade(item.get()));
                         }
                         break;
                     case 5:
                         for (RegistryObject<MetalOreBlock> item : BlocksRegistry.METAL_ORE.values())
                         {
-                            tradesForLevel.add(new BasicTrade(23, new ItemStack(item.get()),1,5));
+                            tradesForLevel.add(makeTrade(item.get().asItem()));
                         }
                         break;
                 }
             }
         }
+    }
+
+
+    private static BasicTrade makeTrade(Item item)
+    {
+        ItemStack itemStackForSale = new ItemStack(item, 1);
+
+        itemStackForSale.setCount(getCount(itemStackForSale));
+
+        return new BasicTrade(
+                getCost(itemStackForSale),
+                itemStackForSale,
+                getMaxTradesPerDay(itemStackForSale),
+                getXpPerTrade(itemStackForSale));
+
+    }
+
+    private static int getCost(ItemStack item)
+    {
+        int cost = 0;
+        switch (item.getItem().getRarity(item))
+        {
+            case COMMON:
+                cost = 1;
+                break;
+            case UNCOMMON:
+                cost = 16;
+                break;
+            case RARE:
+                cost = 32;
+                break;
+            case EPIC:
+                cost = 64;
+                break;
+        }
+
+        return cost;
+    }
+
+    private static int getCount(ItemStack item)
+    {
+        int count = 0;
+        switch (item.getItem().getRarity(item))
+        {
+            case COMMON:
+                count = 16;
+                break;
+            case UNCOMMON:
+                count = 8;
+                break;
+            case RARE:
+                count = 4;
+                break;
+            case EPIC:
+                count = 1;
+                break;
+        }
+
+        return count;
+    }
+
+    private static int getMaxTradesPerDay(ItemStack item)
+    {
+        int count = 0;
+        switch (item.getItem().getRarity(item))
+        {
+            case COMMON:
+                count = 8;
+                break;
+            case UNCOMMON:
+                count = 5;
+                break;
+            case RARE:
+                count = 3;
+                break;
+            case EPIC:
+                count = 1;
+                break;
+        }
+
+        return count;
+    }
+
+    private static int getXpPerTrade(ItemStack item)
+    {
+        int count = 0;
+        switch (item.getItem().getRarity(item))
+        {
+            case COMMON:
+                count = 2;
+                break;
+            case UNCOMMON:
+                count = 4;
+                break;
+            case RARE:
+                count = 6;
+                break;
+            case EPIC:
+                count = 8;
+                break;
+        }
+
+        return count;
     }
 }
