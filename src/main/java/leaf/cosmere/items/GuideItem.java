@@ -4,7 +4,7 @@
 
 package leaf.cosmere.items;
 
-import leaf.cosmere.compat.curios.PatchouliCompat;
+import leaf.cosmere.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.properties.PropTypes;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.TextHelper;
@@ -20,7 +20,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;

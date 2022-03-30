@@ -1,8 +1,8 @@
 /*
- * File created ~ 24 - 4 - 2021 ~ Leaf
+ * File created ~ 31 - 3 - 2022 ~ Leaf
  */
 
-package leaf.cosmere.compat.curios;
+package leaf.cosmere.compat.patchouli;
 
 import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraftforge.eventbus.api.IEventBus;

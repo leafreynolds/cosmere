@@ -41,16 +41,16 @@ public class TagsRegistry
     {
 
 
-        public static ITag.INamedTag<Item> CURIO_ANY = makeItem("curios", "curio");
-        public static ITag.INamedTag<Item> CURIO_BACK = makeItem("curios", "back");
-        public static ITag.INamedTag<Item> CURIO_BELT = makeItem("curios", "belt");
-        public static ITag.INamedTag<Item> CURIO_BODY = makeItem("curios", "body");
-        public static ITag.INamedTag<Item> CURIO_BRACELET = makeItem("curios", "bracelet");
-        public static ITag.INamedTag<Item> CURIO_CHARM = makeItem("curios", "charm");
-        public static ITag.INamedTag<Item> CURIO_HEAD = makeItem("curios", "head");
-        public static ITag.INamedTag<Item> CURIO_HANDS = makeItem("curios", "hands");
-        public static ITag.INamedTag<Item> CURIO_NECKLACE = makeItem("curios", "necklace");
-        public static ITag.INamedTag<Item> CURIO_RING = makeItem("curios", "ring");
+        public static final ITag.INamedTag<Item> CURIO_ANY = makeItem("curios", "curio");
+        public static final ITag.INamedTag<Item> CURIO_BACK = makeItem("curios", "back");
+        public static final ITag.INamedTag<Item> CURIO_BELT = makeItem("curios", "belt");
+        public static final ITag.INamedTag<Item> CURIO_BODY = makeItem("curios", "body");
+        public static final ITag.INamedTag<Item> CURIO_BRACELET = makeItem("curios", "bracelet");
+        public static final ITag.INamedTag<Item> CURIO_CHARM = makeItem("curios", "charm");
+        public static final ITag.INamedTag<Item> CURIO_HEAD = makeItem("curios", "head");
+        public static final ITag.INamedTag<Item> CURIO_HANDS = makeItem("curios", "hands");
+        public static final ITag.INamedTag<Item> CURIO_NECKLACE = makeItem("curios", "necklace");
+        public static final ITag.INamedTag<Item> CURIO_RING = makeItem("curios", "ring");
 
         public static ITag.INamedTag<Item> METAL_SPIKE = makeItem("cosmere", "spike");
 
@@ -115,7 +115,7 @@ public class TagsRegistry
             return BlockTags.bind(new ResourceLocation(domain, path).toString());
         }
 
-        public static ITag.INamedTag<Block> DRAGON_PROOF = makeBlock("minecraft", "dragon_immune");
+        public static ITag.INamedTag<Block>  DRAGON_PROOF = makeBlock("minecraft", "dragon_immune");
         public static ITag.INamedTag<Block> WITHER_PROOF = makeBlock("minecraft", "wither_immune");
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Block>> METAL_ORE_BLOCK_TAGS =

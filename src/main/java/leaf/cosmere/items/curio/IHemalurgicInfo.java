@@ -6,6 +6,7 @@ package leaf.cosmere.items.curio;
 
 import com.google.common.collect.Multimap;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
@@ -26,7 +27,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.*;
 
-import static leaf.cosmere.constants.Constants.Strings.CONTAINED_POWERS_FOUND;
 
 public interface IHemalurgicInfo
 {
@@ -308,7 +308,7 @@ public interface IHemalurgicInfo
             return;
         }
 
-        tooltip.add(TextHelper.createTranslatedText(CONTAINED_POWERS_FOUND));
+        tooltip.add(TextHelper.createTranslatedText(Constants.Strings.CONTAINED_POWERS_FOUND));
 
         if (hemalurgicSpikeItem.getMetalType() == Metals.MetalType.IRON)
         {
