@@ -33,7 +33,7 @@ public class PatchouliHemalurgy
                 continue;
             }
 
-            String metalName = metalType.name().toLowerCase(Locale.ROOT);
+            String metalName = metalType.getName();
             BookStuff.Entry e = new BookStuff.Entry(
                     "hemalurgic_" + metalName,
                     hemalurgy,

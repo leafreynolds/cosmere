@@ -66,7 +66,7 @@ public class FeatureRegistry
         {
             if (metalType.hasOre())
             {
-                registerConfiguredFeature(metalType.name().toLowerCase() + Constants.RegNameStubs.ORE, ConfiguredFeatures.ORE_FEATURES.get(metalType));
+                registerConfiguredFeature(metalType.getName() + Constants.RegNameStubs.ORE, ConfiguredFeatures.ORE_FEATURES.get(metalType));
             }
         }
     }

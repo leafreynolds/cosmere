@@ -7,9 +7,10 @@
   "mixins": [
   ],
   "client": [
-    "GameRendererMixin",
     "EffectInstanceMixin",
-    "EntityMixin"
+    "EntityMixin",
+    "GameRendererMixin",
+    "LightTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -80,7 +80,6 @@ public class ItemModelsGen extends ItemModelProvider
             }
             else if (item instanceof ShardbladeItem)
             {
-                //simpleItem(path, "metal_spike");
                 continue;
             }
             else if (item instanceof MetalRawOreItem)

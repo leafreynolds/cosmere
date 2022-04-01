@@ -51,7 +51,7 @@ public class AllomancyAdvancements implements Consumer<Consumer<Advancement>>
             AllomancyBase allomancyBase = (AllomancyBase) manifestation.get();
 
             Metals.MetalType metalType = allomancyBase.getMetalType();
-            String metalName = metalType.name().toLowerCase(Locale.ROOT);
+            String metalName = metalType.getName();
 
             Advancement manifestationObtainedAdvancement = Advancement.Builder.advancement()
                     .parent(root)

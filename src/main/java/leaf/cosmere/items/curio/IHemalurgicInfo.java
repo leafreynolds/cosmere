@@ -78,45 +78,25 @@ public interface IHemalurgicInfo
         switch (spikeMetalType)
         {
             case IRON:
-                //steals physical strength
-                double strengthCurrent = CompoundNBTHelper.getDouble(hemalurgyInfo, spikeMetalType.name(), 0);
-                //don't steal modified values, only base value
-                //todo decide how much strength is reasonable to steal and how much goes to waste
-                //currently will try 70%
-                double strengthToAdd = entityKilled.getAttributes().getBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
-                CompoundNBTHelper.setDouble(hemalurgyInfo, spikeMetalType.name(), strengthCurrent + strengthToAdd);
-
-                Invest(stack, spikeMetalType, strengthToAdd, entityKilled.getUUID());
-                return;
             case TIN:
-                //Steals senses
-                //todo figure out what that means in minecraft
-                break;
             case COPPER:
-                //Steals mental fortitude, memory, and intelligence
-                //todo increase base xp gain?
-                break;
             case ZINC:
-                //Steals emotional fortitude
-                //todo figure out what that means
-                break;
             case ALUMINUM:
-                //Removes all powers
-                //... ooops?
-                //maybe its an item you can equip on others that they then have to remove?
-                break;
             case DURALUMIN:
-                //Steals Connection/Identity
-                break;
             case CHROMIUM:
-                //Might steal destiny
-                //so we could add some permanent luck?
-                break;
             case NICROSIL:
-                //Steals Investiture
-                //todo figure out what that means
-                //probably in the breaths/stormlight
-                break;
+
+                //Non-Manifestation based hemalurgy all comes here
+                //How much is already stored? (like koloss spikes could keep storing strength on the same spike)
+                final double strengthCurrent = CompoundNBTHelper.getDouble(hemalurgyInfo, spikeMetalType.name(), 0);
+                //how much should we add.
+                final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled);
+                final double strengthToAdd = strengthCurrent + entityAbilityStrength;
+                if (strengthToAdd > 0)
+                {
+                    Invest(stack, spikeMetalType, strengthToAdd, entityKilled.getUUID());
+                }
+                return;
         }
 
         List<AManifestation> manifestationsFound = new ArrayList<>();
@@ -240,21 +220,19 @@ public interface IHemalurgicInfo
                 metalType.name(),
                 0);
 
+        Attribute attribute = null;
+        AttributeModifier.Operation attributeModifier = AttributeModifier.Operation.ADDITION;
+
         switch (metalType)
         {
             case IRON:
-                attributeModifiers.put(
-                        Attributes.ATTACK_DAMAGE,
-                        new AttributeModifier(
-                                hemalurgicIdentity,
-                                "Hemalurgic " + metalType.name(),
-                                strength,
-                                AttributeModifier.Operation.ADDITION));
-
+                attribute = Attributes.ATTACK_DAMAGE;
                 break;
             case TIN:
                 //Steals senses
-                //todo figure out what that means in minecraft
+                //a type of night vision
+                attribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.name()).get();
+
                 break;
             case ZINC:
                 //Steals emotional fortitude
@@ -274,6 +252,17 @@ public interface IHemalurgicInfo
                 break;
         }
 
+        if (attribute != null)
+        {
+            attributeModifiers.put(
+                    attribute,
+                    new AttributeModifier(
+                            hemalurgicIdentity,
+                            "Hemalurgic " + metalType.name(),
+                            strength,
+                            attributeModifier));
+        }
+
 
         for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
         {
@@ -281,13 +270,13 @@ public interface IHemalurgicInfo
 
             if (CompoundNBTHelper.getBoolean(hemalurgyInfo, path, false))
             {
-                if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(path))
+                if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
                 {
                     continue;
                 }
 
                 attributeModifiers.put(
-                        AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path).get(),
+                        AttributesRegistry.COSMERE_ATTRIBUTES.get(path).get(),
                         new AttributeModifier(
                                 hemalurgicIdentity,
                                 String.format("Hemalurgic-%s: %s", path, hemalurgicIdentity.toString()),
@@ -344,7 +333,6 @@ public interface IHemalurgicInfo
         CompoundNBT spikeInfo = getHemalurgicInfo(stack);
         final String manifestationName = manifestation.getRegistryName().getPath();
         CompoundNBTHelper.setBoolean(spikeInfo, manifestationName, true);
-        CompoundNBTHelper.setBoolean(spikeInfo, "hasHemalurgicPower", true);
         CompoundNBTHelper.setDouble(spikeInfo, "power_" + manifestationName, level);
 
         setHemalurgicIdentity(stack, identity);
@@ -353,10 +341,7 @@ public interface IHemalurgicInfo
     default void Invest(ItemStack stack, Metals.MetalType metalType, double level, UUID identity)
     {
         CompoundNBT spikeInfo = getHemalurgicInfo(stack);
-
-        CompoundNBTHelper.setBoolean(spikeInfo, "hasHemalurgicPower", true);
         CompoundNBTHelper.setDouble(spikeInfo, metalType.name(), level);
-
         setHemalurgicIdentity(stack, identity);
     }
 }

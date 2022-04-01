@@ -17,6 +17,12 @@ import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.block.OreBlock;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.monster.PhantomEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
@@ -27,6 +33,7 @@ import net.minecraft.tags.ITag;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -103,6 +110,8 @@ public class Metals
         {
             return id;
         }
+
+        public String getName(){ return name().toLowerCase(Locale.ROOT);}
 
         public Rarity getRarity()
         {
@@ -573,6 +582,82 @@ public class Metals
             }
 
             return null;
+        }
+
+        public double getEntityAbilityStrength(LivingEntity killedEntity)
+        {
+            //Steals non-manifestation based abilities. traits inherent to an entity?
+            double strengthToAdd = 0;
+            switch (this)
+            {
+                case IRON:
+                    //steals physical strength
+                    //don't steal modified values, only base value
+                    //todo decide how much strength is reasonable to steal and how much goes to waste
+                    //currently will try 70%
+                    strengthToAdd = killedEntity.getAttributes().getBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
+
+                    break;
+                case TIN:
+                    //Steals senses
+
+                    //can track you on a huge island, even underground.
+                    if (killedEntity instanceof EnderDragonEntity)
+                    {
+                        strengthToAdd = 0.77;
+                    }
+                    //Literally hunt players at night
+                    else if (killedEntity instanceof PhantomEntity)
+                    {
+                        strengthToAdd = 0.66;
+                    }
+                    else if (killedEntity instanceof PlayerEntity)
+                    {
+                        strengthToAdd = 0.25;
+                    }
+                    else
+                    {
+                        final ModifiableAttributeInstance attribute = killedEntity.getAttribute(Attributes.FOLLOW_RANGE);
+
+                        if (attribute != null)
+                        {
+                            //ghasts have 100 base follow range,
+                            //most others have 16-40
+                            final int hemalurgicDecay = 150;
+                            strengthToAdd = attribute.getBaseValue() / hemalurgicDecay;
+                        }
+                        else
+                        {
+                            //at this point, who cares.
+                            strengthToAdd =  0.10;
+                        }
+                    }
+                    break;
+                case COPPER:
+                    //Steals mental fortitude, memory, and intelligence
+                    //todo increase base xp gain?
+                    break;
+                case ZINC:
+                    //Steals emotional fortitude
+                    //todo figure out what that means
+                    break;
+                case ALUMINUM:
+                    //Removes all powers
+                    //... ooops?
+                    //maybe its an item you can equip on others that they then have to remove?
+                    break;
+                case DURALUMIN:
+                    //Steals Connection/Identity
+                    break;
+                case CHROMIUM:
+                    //Might steal destiny
+                    //so we could add some permanent luck?
+                    break;
+                case NICROSIL:
+                    //Steals Investiture
+                    break;
+            }
+            return strengthToAdd;
         }
 
         public String getHemalurgicUseString()

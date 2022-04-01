@@ -43,7 +43,7 @@ public class BlocksRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             metalType -> register(
-                                    metalType.name().toLowerCase() + Constants.RegNameStubs.BLOCK,
+                                    metalType.getName() + Constants.RegNameStubs.BLOCK,
                                     () -> new MetalBlock(metalType), metalType.getRarity())));
 
     public static final Map<Metals.MetalType, RegistryObject<MetalOreBlock>> METAL_ORE =
@@ -52,7 +52,7 @@ public class BlocksRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             metalType -> register(
-                                    metalType.name().toLowerCase() + Constants.RegNameStubs.ORE,
+                                    metalType.getName() + Constants.RegNameStubs.ORE,
                                     () -> new MetalOreBlock(metalType),
                                     Rarity.COMMON)));
 

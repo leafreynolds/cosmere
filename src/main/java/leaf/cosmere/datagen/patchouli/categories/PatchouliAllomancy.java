@@ -55,7 +55,7 @@ public class PatchouliAllomancy
                 continue;
             }
 
-            String metalName = metalType.name().toLowerCase(Locale.ROOT);
+            String metalName = metalType.getName();
 
             BookStuff.Entry entryForThisPower = new BookStuff.Entry(
                     "allomantic_" + metalName,

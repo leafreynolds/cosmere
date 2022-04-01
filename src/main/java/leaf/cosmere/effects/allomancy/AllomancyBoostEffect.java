@@ -19,7 +19,7 @@ public class AllomancyBoostEffect extends Effect
     {
         super(effectType, type.getColorValue());
 
-        AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.entrySet()
+        AttributesRegistry.COSMERE_ATTRIBUTES.entrySet()
                 .forEach(attributeRegistered ->
                 {
                     //todo powers to NOT increase?

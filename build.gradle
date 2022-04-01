@@ -191,9 +191,9 @@ dependencies {
     //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
 
     //modname-modid:fileid?
-    implementation fg.deobf("curse.maven:appleskin-248787:3035787")
-    implementation fg.deobf("curse.maven:journeymap-32274:3397059")
-    runtimeOnly fg.deobf("curse.maven:configured-457570:${configured_version}")
+    //runtimeOnly fg.deobf("curse.maven:appleskin-248787:3035787")
+    //runtimeOnly fg.deobf("curse.maven:journeymap-32274:3397059")
+    //runtimeOnly fg.deobf("curse.maven:configured-457570:${configured_version}")
     //implementation fg.deobf("curse.maven:ctm-267602:2642375")
 }
 

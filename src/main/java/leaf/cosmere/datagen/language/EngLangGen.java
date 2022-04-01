@@ -126,7 +126,7 @@ public class EngLangGen extends LanguageProvider
         //guidebook
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-            String metalName = metalType.name().toLowerCase(Locale.ROOT);
+            String metalName = metalType.getName();
 
             final String mistingName = metalType.getMistingName();
             final String ferringName = metalType.getFerringName();

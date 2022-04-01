@@ -76,10 +76,10 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
             }
 
             compressRecipe(BlocksRegistry.METAL_BLOCKS.get(metalType).get(), TagsRegistry.Items.METAL_INGOT_TAGS.get(metalType)).save(consumer);
-            decompressRecipe(consumer, ItemsRegistry.METAL_INGOTS.get(metalType).get(), TagsRegistry.Items.METAL_BLOCK_ITEM_TAGS.get(metalType), metalType.name().toLowerCase() + "_block_deconstruct");
+            decompressRecipe(consumer, ItemsRegistry.METAL_INGOTS.get(metalType).get(), TagsRegistry.Items.METAL_BLOCK_ITEM_TAGS.get(metalType), metalType.getName() + "_block_deconstruct");
 
             compressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), TagsRegistry.Items.METAL_NUGGET_TAGS.get(metalType)).save(consumer);
-            decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), TagsRegistry.Items.METAL_INGOT_TAGS.get(metalType), metalType.name().toLowerCase() + "_item_deconstruct");
+            decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), TagsRegistry.Items.METAL_INGOT_TAGS.get(metalType), metalType.getName() + "_item_deconstruct");
 
             if (metalType.hasOre())
             {
@@ -119,7 +119,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                         .requires(Ingredient.of(Tags.Items.INGOTS_IRON))
                         .requires(Ingredient.of(Tags.Items.INGOTS_IRON))
                         .requires(Ingredient.of(Items.COAL, Items.CHARCOAL))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
             case PEWTER:
                 ShapelessRecipeBuilder.shapeless(output, 5)
@@ -129,14 +129,14 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                         .requires(materialTag.get(Metals.MetalType.TIN))
                         .requires(materialTag.get(Metals.MetalType.TIN))
                         .requires(materialTag.get(Metals.MetalType.LEAD))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
             case BRASS:
                 ShapelessRecipeBuilder.shapeless(output, 2)
                         .unlockedBy("has_item", has(output))
                         .requires(materialTag.get(Metals.MetalType.ZINC))
                         .requires(materialTag.get(Metals.MetalType.COPPER))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
             case BRONZE:
                 ShapelessRecipeBuilder.shapeless(output, 4)
@@ -145,7 +145,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                         .requires(materialTag.get(Metals.MetalType.COPPER))
                         .requires(materialTag.get(Metals.MetalType.COPPER))
                         .requires(materialTag.get(Metals.MetalType.TIN))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
             case DURALUMIN:
                 ShapelessRecipeBuilder.shapeless(output, 5)
@@ -155,7 +155,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                         .requires(materialTag.get(Metals.MetalType.ALUMINUM))
                         .requires(materialTag.get(Metals.MetalType.ALUMINUM))
                         .requires(materialTag.get(Metals.MetalType.COPPER))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
             case NICROSIL:
                 ShapelessRecipeBuilder.shapeless(output, 4)
@@ -164,7 +164,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                         .requires(materialTag.get(Metals.MetalType.NICKEL))
                         .requires(materialTag.get(Metals.MetalType.NICKEL))
                         .requires(materialTag.get(Metals.MetalType.NICKEL))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
             case BENDALLOY:
                 ShapelessRecipeBuilder.shapeless(output, 9)
@@ -178,14 +178,14 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                         .requires(materialTag.get(Metals.MetalType.LEAD))
                         .requires(materialTag.get(Metals.MetalType.TIN))
                         .requires(materialTag.get(Metals.MetalType.TIN))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
             case ELECTRUM:
                 ShapelessRecipeBuilder.shapeless(output, 2)
                         .unlockedBy("has_item", has(output))
                         .requires(Ingredient.of(Tags.Items.INGOTS_GOLD))
                         .requires(materialTag.get(Metals.MetalType.SILVER))
-                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.name().toLowerCase(Locale.ROOT)));
+                        .save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
                 break;
         }
     }

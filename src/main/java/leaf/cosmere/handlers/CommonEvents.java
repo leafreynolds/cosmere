@@ -71,7 +71,7 @@ public class CommonEvents
                 if (metalType.hasOre())
                 {
                     event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, FeatureRegistry.ConfiguredFeatures.ORE_FEATURES.get(metalType));
-                    LogHelper.debug(String.format("Added %s to: %s", metalType.name().toLowerCase(Locale.ROOT), event.getName()));
+                    LogHelper.debug(String.format("Added %s to: %s", metalType.getName(), event.getName()));
                 }
             }
 

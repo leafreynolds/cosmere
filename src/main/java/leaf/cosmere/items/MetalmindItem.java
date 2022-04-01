@@ -7,7 +7,6 @@ package leaf.cosmere.items;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.properties.PropTypes;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.items.curio.IHemalurgicInfo;
@@ -64,7 +63,7 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
             for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
             {
                 String manifestationName = manifestation.getRegistryName().getPath();
-                if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(manifestationName))
+                if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
                 {
                     continue;
                 }
@@ -73,7 +72,7 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
                 {
                     UUID someUUID = UUID.nameUUIDFromBytes((manifestationName + uuid.toString()).getBytes());
                     attributeModifiers.put(
-                            AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName).get(),
+                            AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get(),
                             new AttributeModifier(
                                     someUUID,
                                     manifestationName,

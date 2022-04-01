@@ -133,7 +133,7 @@ public class SpiritwebCapability implements ISpiritweb
 
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-            nbt.putInt(metalType.name().toLowerCase() + "_ingested", METALS_INGESTED.get(metalType));
+            nbt.putInt(metalType.getName() + "_ingested", METALS_INGESTED.get(metalType));
         }
 
         return nbt;
@@ -162,7 +162,7 @@ public class SpiritwebCapability implements ISpiritweb
 
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-            METALS_INGESTED.put(metalType, nbt.getInt(metalType.name().toLowerCase() + "_ingested"));
+            METALS_INGESTED.put(metalType, nbt.getInt(metalType.getName() + "_ingested"));
         }
     }
 
@@ -357,12 +357,12 @@ public class SpiritwebCapability implements ISpiritweb
         {
             String path = manifestation.getRegistryName().getPath();
 
-            if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(path))
+            if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
             {
                 continue;
             }
 
-            RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
+            RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(path);
             Attribute attribute = attributeRegistryObject.get();
 
             ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
@@ -392,12 +392,12 @@ public class SpiritwebCapability implements ISpiritweb
     {
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
         String manifestationName = manifestation.getRegistryName().getPath();
-        if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(manifestationName))
+        if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
         {
             return false;
         }
 
-        Attribute attribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName).get();
+        Attribute attribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get();
         ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
 
         if (manifestationAttribute != null)
@@ -417,11 +417,11 @@ public class SpiritwebCapability implements ISpiritweb
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
 
         String manifestationName = manifestation.getRegistryName().getPath();
-        if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(manifestationName))
+        if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
         {
             return;
         }
-        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(manifestationName);
+        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName);
 
         Attribute attribute = attributeRegistryObject.get();
         ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
@@ -443,12 +443,12 @@ public class SpiritwebCapability implements ISpiritweb
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
         String path = manifestation.getRegistryName().getPath();
 
-        if (!AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.containsKey(path))
+        if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
         {
             return;
         }
 
-        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(path);
+        RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(path);
 
         Attribute attribute = attributeRegistryObject.get();
         ModifiableAttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);

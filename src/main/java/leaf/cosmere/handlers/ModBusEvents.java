@@ -15,6 +15,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Locale;
+
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBusEvents
@@ -44,20 +46,29 @@ public class ModBusEvents
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
     {
-        for (Metals.MetalType metalType : Metals.MetalType.values())
+        for (EntityType entityType : entityTypes)
         {
-            if (!metalType.hasAssociatedManifestation())
+            for (Metals.MetalType metalType : Metals.MetalType.values())
             {
-                continue;
-            }
+                if (!metalType.hasAssociatedManifestation())
+                {
+                    continue;
+                }
 
-            RegistryObject<Attribute> mistingAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(metalType.getMistingName());
-            RegistryObject<Attribute> ferringAttribute = AttributesRegistry.MANIFESTATION_STRENGTH_ATTRIBUTES.get(metalType.getFerringName());
+                RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getMistingName());
+                RegistryObject<Attribute> ferringAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getFerringName());
 
-            for (EntityType entityType : entityTypes)
-            {
                 event.add(entityType, mistingAttribute.get());
                 event.add(entityType, ferringAttribute.get());
+
+                //check for others
+                final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
+
+                if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+                {
+                    event.add(entityType, metalRelatedAttribute.get());
+                }
+
             }
         }
     }

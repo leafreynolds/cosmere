@@ -14,13 +14,14 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AttributesRegistry
 {
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, Cosmere.MODID);
 
-    public static final Map<String, RegistryObject<Attribute>> MANIFESTATION_STRENGTH_ATTRIBUTES = makeAttributeMap();
+    public static final Map<String, RegistryObject<Attribute>> COSMERE_ATTRIBUTES = makeAttributeMap();
 
 
     public static final CreatureAttribute SPREN = new CreatureAttribute();
@@ -59,6 +60,17 @@ public class AttributesRegistry
             attributeModifiers.put(mistingNamePath, mistingAttribute);
             attributeModifiers.put(ferringNamePath, ferringAttribute);
         }
+
+        final String tinName = Metals.MetalType.TIN.name().toLowerCase(Locale.ROOT);
+        RegistryObject<Attribute> tin_senses_attribute = ATTRIBUTES.register(
+                tinName,
+                () -> (new RangedAttribute(
+                        Cosmere.MODID + "." + tinName,
+                        0,
+                        0,
+                        1)).setSyncable(true)
+        );
+        attributeModifiers.put(tinName, tin_senses_attribute);
 
         return attributeModifiers;
     }

@@ -52,7 +52,7 @@ public class FeruchemyAdvancements implements Consumer<Consumer<Advancement>>
             FeruchemyBase feruchemyBase = (FeruchemyBase) manifestation.get();
 
             Metals.MetalType metalType = feruchemyBase.getMetalType();
-            String metalName = metalType.name().toLowerCase(Locale.ROOT);
+            String metalName = metalType.getName();
 
             Advancement manifestationObtainedAdvancement = Advancement.Builder.advancement()
                     .parent(root)
