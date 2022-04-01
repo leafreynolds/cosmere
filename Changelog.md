@@ -3,7 +3,7 @@ The Cosmere Project - For 1.16 Minecraft
 B26
 
 Removed accidental character left in village_blacksmith loot table json.
-
+Hemalurgic Tin spikes implemented.
 
 
 B25
