@@ -60,7 +60,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    RegNameStubs.RAW + type.name().toLowerCase() + RegNameStubs.ORE,
+                                    RegNameStubs.RAW + type.getName() + RegNameStubs.ORE,
                                     () -> createItem(new MetalRawOreItem(type))
                             )));
 
@@ -70,7 +70,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + RegNameStubs.BLEND,
+                                    type.getName() + RegNameStubs.BLEND,
                                     () -> createItem(new MetalRawOreItem(type))
                             )));
 
@@ -80,7 +80,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + RegNameStubs.NUGGET,
+                                    type.getName() + RegNameStubs.NUGGET,
                                     () -> createItem(new MetalNuggetItem(type))
                             )));
 
@@ -90,7 +90,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + Item.SHAVINGS,
+                                    type.getName() + Item.SHAVINGS,
                                     () -> createItem(new MetalShavingsItem(type))
                             )));*/
 
@@ -100,7 +100,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + RegNameStubs.INGOT,
+                                    type.getName() + RegNameStubs.INGOT,
                                     () -> createItem(new MetalIngotItem(type))
                             )));
 
@@ -110,7 +110,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + RegNameStubs.RING + RegNameStubs.METALMIND,
+                                    type.getName() + RegNameStubs.RING + RegNameStubs.METALMIND,
                                     () -> createItem(new RingMetalmindItem(type))
                             )));
 
@@ -120,7 +120,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + RegNameStubs.BRACELET + RegNameStubs.METALMIND,
+                                    type.getName() + RegNameStubs.BRACELET + RegNameStubs.METALMIND,
                                     () -> createItem(new BraceletMetalmindItem(type))
                             )));
 
@@ -130,7 +130,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + RegNameStubs.NECKLACE + RegNameStubs.METALMIND,
+                                    type.getName() + RegNameStubs.NECKLACE + RegNameStubs.METALMIND,
                                     () -> createItem(new NecklaceMetalmindItem(type))
                             )));
 
@@ -140,7 +140,7 @@ public class ItemsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> ITEMS.register(
-                                    type.name().toLowerCase() + RegNameStubs.SPIKE,
+                                    type.getName() + RegNameStubs.SPIKE,
                                     () -> createItem(new HemalurgicSpikeItem(type))
                             )));
 

@@ -61,7 +61,7 @@ public class AttributesRegistry
             attributeModifiers.put(ferringNamePath, ferringAttribute);
         }
 
-        final String tinName = Metals.MetalType.TIN.name().toLowerCase(Locale.ROOT);
+        final String tinName = Metals.MetalType.TIN.getName();
         RegistryObject<Attribute> tin_senses_attribute = ATTRIBUTES.register(
                 tinName,
                 () -> (new RangedAttribute(

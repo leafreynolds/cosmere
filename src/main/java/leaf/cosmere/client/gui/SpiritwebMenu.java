@@ -396,7 +396,7 @@ public class SpiritwebMenu extends Screen
             if (value > 0)
             {
                 //todo localisation check
-                final String text = key.name().toLowerCase(Locale.ROOT) + ": " + value;
+                final String text = key.getName() + ": " + value;
                 font.drawShadow(matrixStack, text, x, (int) y[0], 0xffffffff);
                 y[0] += 10;
             }

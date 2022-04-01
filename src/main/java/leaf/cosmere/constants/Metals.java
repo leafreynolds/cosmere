@@ -419,7 +419,7 @@ public class Metals
                 default:
                 case LERASIUM:
                 case MALATIUM:
-                    return "ferring_" + this.name().toLowerCase();
+                    return "ferring_" + this.getName();
             }
         }
 
@@ -520,7 +520,7 @@ public class Metals
                 default:
                 case MALATIUM:
                 case LERASATIUM:
-                    return "misting_" + this.name().toLowerCase();
+                    return "misting_" + this.getName();
 
             }
         }

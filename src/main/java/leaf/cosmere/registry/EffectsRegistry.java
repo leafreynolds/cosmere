@@ -27,7 +27,7 @@ public class EffectsRegistry
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Cosmere.MODID);
 
     public static final RegistryObject<Effect> ALLOMANTIC_COPPER = EFFECTS.register(
-            "burning_" + Metals.MetalType.COPPER.name().toLowerCase(),
+            "burning_" + Metals.MetalType.COPPER.getName(),
             () -> new AllomancyEffectBase(Metals.MetalType.COPPER, EffectType.BENEFICIAL));
 
     public static final RegistryObject<Effect> ALLOMANCY_BOOST = EFFECTS.register(
@@ -40,7 +40,7 @@ public class EffectsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> EFFECTS.register(
-                                    "tapping_" + type.name().toLowerCase(),
+                                    "tapping_" + type.getName(),
                                     () -> makeTappingEffect(type))
                             )
                     );
@@ -51,7 +51,7 @@ public class EffectsRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> EFFECTS.register(
-                                    "storing_" + type.name().toLowerCase(),
+                                    "storing_" + type.getName(),
                                     () -> makeStoringEffect(type))
                             )
                     );

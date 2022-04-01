@@ -35,7 +35,7 @@ public class FeatureRegistry
                     .collect(Collectors.toMap(
                             Function.identity(),
                             type -> FEATURES.register(
-                                    type.name().toLowerCase() + Constants.RegNameStubs.ORE,
+                                    type.getName() + Constants.RegNameStubs.ORE,
                                     () -> new OreFeature(OreFeatureConfig.CODEC))));
 
 

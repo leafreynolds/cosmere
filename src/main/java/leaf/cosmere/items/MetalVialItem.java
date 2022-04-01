@@ -220,9 +220,9 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
         sorted.entrySet().stream().forEach(metalInfo ->
         {
             // MetalName x Value
-            String metalName = Metals.MetalType.valueOf(metalInfo.getKey()).get().name();
+            String metalName = Metals.MetalType.valueOf(metalInfo.getKey()).get().getName();
 
-            String metalTranslation = String.format("item.cosmere.%s_nugget", metalName.toLowerCase());
+            String metalTranslation = String.format("item.cosmere.%s_nugget", metalName);
             tooltip.add(TextHelper.createTranslatedText(metalTranslation).append(TextHelper.createText(String.format(": x%s", metalInfo.getValue()))));
 
         });

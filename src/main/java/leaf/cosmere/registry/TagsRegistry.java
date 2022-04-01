@@ -62,31 +62,31 @@ public class TagsRegistry
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeItemTag("raw_materials/" + type.name().toLowerCase())));
+                                type -> forgeItemTag("raw_materials/" + type.getName())));
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_DUST_TAGS =
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeItemTag("dust/" + type.name().toLowerCase())));
+                                type -> forgeItemTag("dust/" + type.getName())));
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_NUGGET_TAGS =
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeItemTag("nuggets/" + type.name().toLowerCase())));
+                                type -> forgeItemTag("nuggets/" + type.getName())));
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_INGOT_TAGS =
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeItemTag("ingots/" + type.name().toLowerCase())));
+                                type -> forgeItemTag("ingots/" + type.getName())));
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Item>> METAL_BLOCK_ITEM_TAGS =
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeItemTag("storage_blocks/" + type.name().toLowerCase())));
+                                type -> forgeItemTag("storage_blocks/" + type.getName())));
 
 
         private static ITag.INamedTag<Item> itemTag(String name)
@@ -123,13 +123,13 @@ public class TagsRegistry
                         .filter(Metals.MetalType::hasOre)
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeTag("ores/" + type.name().toLowerCase())));
+                                type -> forgeTag("ores/" + type.getName())));
 
         public static final Map<Metals.MetalType, ITag.INamedTag<Block>> METAL_BLOCK_TAGS =
                 Arrays.stream(Metals.MetalType.values())
                         .collect(Collectors.toMap(
                                 Function.identity(),
-                                type -> forgeTag("storage_blocks/" + type.name().toLowerCase())));
+                                type -> forgeTag("storage_blocks/" + type.getName())));
 
         private static ITag.INamedTag<Block> forgeTag(String name)
         {
