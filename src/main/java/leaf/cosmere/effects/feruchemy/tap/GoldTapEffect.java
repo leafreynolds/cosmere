@@ -24,6 +24,8 @@ public class GoldTapEffect extends FeruchemyEffectBase
         {
             entityLivingBaseIn.heal(amplifier + 1);
         }
+
+        //todo reduce harmful effects timer
     }
 
     @Override

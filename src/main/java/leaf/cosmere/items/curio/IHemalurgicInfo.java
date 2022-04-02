@@ -225,17 +225,18 @@ public interface IHemalurgicInfo
                 attribute = Attributes.ATTACK_DAMAGE;
                 break;
             default:
+                //TIN:
+                //Steals senses
+                //a type of night vision
+
+
                 final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
                 if (attributeRegistryObject != null && attributeRegistryObject.isPresent())
                 {
                     attribute = attributeRegistryObject.get();
                 }
                 break;
-            /* TIN:
-                //Steals senses
-                //a type of night vision
-
-                break;
+            /*
             case ZINC:
                 //Steals emotional fortitude
                 //todo figure out what that means
