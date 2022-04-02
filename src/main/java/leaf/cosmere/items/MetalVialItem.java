@@ -7,10 +7,12 @@ package leaf.cosmere.items;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
+import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
@@ -134,7 +136,11 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
                     ItemStack splitStack = stack.split(1);
                     emptyMetals(splitStack);
 
-                    playerentity.addItem(splitStack);
+                    if (!playerentity.addItem(splitStack) && !playerentity.level.isClientSide)
+                    {
+                        ItemEntity entity = new ItemEntity(playerentity.getCommandSenderWorld(), playerentity.position().x(), playerentity.position().y(), playerentity.position().z(), splitStack);
+                        playerentity.getCommandSenderWorld().addFreshEntity(entity);
+                    }
                 }
                 else
                 {
@@ -207,7 +213,7 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
     @Override
     public double getDurabilityForDisplay(ItemStack stack)
     {
-        return 1 - (containedMetalCount(stack) / MAX_METALS_COUNT);
+        return MathHelper.clamp01((float) (1 - (containedMetalCount(stack) / MAX_METALS_COUNT)));
     }
 
 
