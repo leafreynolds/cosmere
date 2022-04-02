@@ -7,12 +7,12 @@ package leaf.cosmere.items;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.properties.PropTypes;
-import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.items.curio.IHemalurgicInfo;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.properties.PropTypes;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemGroup;
@@ -55,7 +55,7 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
         }
 
         //todo better nicrosil tracking.
-        if (metalType == Metals.MetalType.NICROSIL)
+        if (metalType == Metals.MetalType.NICROSIL || metalType == Metals.MetalType.HARMONIUM)
         {
             CompoundNBT nbt = stack.getOrCreateTagElement("StoredInvestiture");
             //for each power the user has access to
@@ -68,7 +68,7 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
                     continue;
                 }
 
-                if (nbt.getBoolean(manifestationName))
+                if (CompoundNBTHelper.getDouble(nbt, manifestationName, 0) > 0)
                 {
                     UUID someUUID = UUID.nameUUIDFromBytes((manifestationName + uuid.toString()).getBytes());
                     attributeModifiers.put(

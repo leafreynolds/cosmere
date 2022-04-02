@@ -41,10 +41,10 @@ public class MetalmindChargeHelper
                     //update the nbt.
                     //this will add/remove powers based on what the user currently has.
                     //todo, come back to this later when more sleep. bugs me about losing potential stored powers
-                    nbt.putBoolean(
-                            manifestationType.getManifestation(i).getRegistryName().getPath(),
-                            data.hasManifestation(manifestationType, i)
-                    );
+                    if (data.hasManifestation(manifestationType, i))
+                    {
+                        nbt.putDouble(manifestationType.getManifestation(i).getName(), data.manifestation(manifestationType, i).getStrength(data));
+                    }
                 }
             }
         }

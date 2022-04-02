@@ -8,6 +8,7 @@ package leaf.cosmere.handlers;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
+import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -38,6 +39,7 @@ public final class ColorHandler
                                                   ? ((IHasMetalType) blockState.getBlock()).getMetalType().getColorValue()
                                                   : -1;
 
+        itemColors.register(metalColorHandler, ItemsRegistry.BANDS_OF_MOURNING.get());
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
 

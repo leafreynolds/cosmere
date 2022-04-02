@@ -8,6 +8,7 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.MetalIngotItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
+import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -30,6 +31,9 @@ public class ItemTagsGen extends ItemTagsProvider
     @Override
     protected void addTags()
     {
+
+        add(TagsRegistry.Items.CURIO_BRACELET, ItemsRegistry.BANDS_OF_MOURNING.get());
+
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
             if (metalType.hasFeruchemicalEffect())
