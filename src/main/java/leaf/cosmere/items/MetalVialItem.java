@@ -107,9 +107,8 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
                     // MetalName x Value
                     Metals.MetalType metalType = Metals.MetalType.valueOf(metalInfo.getKey()).get();
 
-
-                    //todo decide what value should be used for ingestion
-                    int secondsPerNugget = 180;
+                    //reference ConsumeNugget from metalNuggetItem
+                    int secondsPerNugget = metalInfo.getValue() * metalType.getAllomancyBurnTimeSeconds();
 
                     //add to metal stored
                     spiritweb.METALS_INGESTED.put(metalType, spiritweb.METALS_INGESTED.get(metalType) + secondsPerNugget);

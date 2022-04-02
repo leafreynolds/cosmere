@@ -584,6 +584,65 @@ public class Metals
             return null;
         }
 
+        public int getAllomancyBurnTimeSeconds()
+        {
+            //todo decide burn rate of metals
+            //todo convert to config item
+            int burnTimeInSeconds = 99;
+            switch (this)
+            {
+                case IRON:
+                    break;
+                case STEEL:
+                    break;
+                case TIN:
+                    break;
+                case PEWTER:
+                    break;
+                case ZINC:
+                    break;
+                case BRASS:
+                    break;
+                case COPPER:
+                    break;
+                case BRONZE:
+                    break;
+                case ALUMINUM:
+                    break;
+                case DURALUMIN:
+                    break;
+                case CHROMIUM:
+                    break;
+                case NICROSIL:
+                    break;
+                case CADMIUM:
+                    break;
+                case BENDALLOY:
+                    break;
+                case GOLD:
+                    break;
+                case ELECTRUM:
+                    break;
+                case ATIUM:
+                    break;
+                case LERASIUM:
+                    break;
+                case HARMONIUM:
+                    break;
+                case MALATIUM:
+                    break;
+                case LERASATIUM:
+                    break;
+                case NICKEL:
+                    break;
+                case LEAD:
+                    break;
+                case SILVER:
+                    break;
+            }
+            return burnTimeInSeconds;
+        }
+
         public double getEntityAbilityStrength(LivingEntity killedEntity)
         {
             //Steals non-manifestation based abilities. traits inherent to an entity?

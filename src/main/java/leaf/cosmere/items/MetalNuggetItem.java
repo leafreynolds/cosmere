@@ -23,6 +23,12 @@ public class MetalNuggetItem extends MetalItem
         super(metalType);
     }
 
+    @Override
+    public int getUseDuration(ItemStack stack)
+    {
+        //be annoying enough that people prefer metal vials
+        return 16;
+    }
 
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
@@ -76,7 +82,7 @@ public class MetalNuggetItem extends MetalItem
             {
                 //add to metal stored
                 Integer metalIngested = spiritweb.METALS_INGESTED.get(metalType);
-                spiritweb.METALS_INGESTED.put(metalType,metalIngested + 9); // todo decide what value should be used for ingestion
+                spiritweb.METALS_INGESTED.put(metalType,metalIngested + metalType.getAllomancyBurnTimeSeconds());
             }
 
             if (livingEntity instanceof PlayerEntity && !((PlayerEntity) livingEntity).isCreative())
