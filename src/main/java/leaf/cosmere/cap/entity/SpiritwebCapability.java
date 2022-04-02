@@ -121,7 +121,7 @@ public class SpiritwebCapability implements ISpiritweb
     {
         CompoundNBT nbt = new CompoundNBT();
 
-        nbt.putString("selected_power", selectedManifestation.getName());
+        nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
         nbt.putInt("stored_breaths", biochromaticBreathStored);
         nbt.putInt("stored_stormlight", stormlightStored);
 

@@ -8,6 +8,7 @@ import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Optional;
 
 public class Manifestations
@@ -82,6 +83,11 @@ public class Manifestations
                     break;
             }
             return ManifestationRegistry.NONE.get();
+        }
+
+        public String getName()
+        {
+            return this.name().toLowerCase(Locale.ROOT);
         }
     }
 

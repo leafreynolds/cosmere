@@ -141,7 +141,7 @@ public class ClientEvents
             {
                 SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
                 {
-                    profiler.push(spiritweb.manifestation().getRegistryName().getNamespace());
+                    profiler.push(spiritweb.manifestation().getName());
                     spiritweb.renderWorldEffects(event);
                     profiler.pop();
 
