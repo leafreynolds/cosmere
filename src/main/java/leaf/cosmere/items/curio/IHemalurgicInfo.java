@@ -14,6 +14,7 @@ import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.utils.helpers.StackNBTHelper;
+import leaf.cosmere.utils.helpers.StringHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -67,11 +68,8 @@ public interface IHemalurgicInfo
     default void stealFromSpiritweb(ItemStack stack, Metals.MetalType spikeMetalType, LivingEntity entityKilled)
     {
         //todo
-        boolean isPlayerEntity = (entityKilled instanceof PlayerEntity);
-        boolean saveIdentity = false;
         //we should probably check a config to see if pvp real stealing of attributes is wanted.
-
-        CompoundNBT hemalurgyInfo = getHemalurgicInfo(stack);
+        boolean isPlayerEntity = (entityKilled instanceof PlayerEntity);
 
 
         //Steals non-manifestation based abilities. traits inherent to an entity?
@@ -88,7 +86,7 @@ public interface IHemalurgicInfo
 
                 //Non-Manifestation based hemalurgy all comes here
                 //How much is already stored? (like koloss spikes could keep storing strength on the same spike)
-                final double strengthCurrent = CompoundNBTHelper.getDouble(hemalurgyInfo, spikeMetalType.name(), 0);
+                final double strengthCurrent = getHemalurgicStrength(stack,spikeMetalType);
                 //how much should we add.
                 final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled);
                 final double strengthToAdd = strengthCurrent + entityAbilityStrength;
@@ -215,10 +213,7 @@ public interface IHemalurgicInfo
             return attributeModifiers;
         }
 
-        final double strength = CompoundNBTHelper.getDouble(
-                hemalurgyInfo,
-                metalType.name(),
-                0);
+        final double strength = getHemalurgicStrength(stack, metalType);
 
         Attribute attribute = null;
         AttributeModifier.Operation attributeModifier = AttributeModifier.Operation.ADDITION;
@@ -266,9 +261,10 @@ public interface IHemalurgicInfo
 
         for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
         {
-            String path = manifestation.getRegistryName().getPath();
+            String path = manifestation.getName();
 
-            if (CompoundNBTHelper.getBoolean(hemalurgyInfo, path, false))
+            final double hemalurgicStrength = getHemalurgicStrength(stack, manifestation);
+            if (hemalurgicStrength > 0)
             {
                 if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
                 {
@@ -280,13 +276,46 @@ public interface IHemalurgicInfo
                         new AttributeModifier(
                                 hemalurgicIdentity,
                                 String.format("Hemalurgic-%s: %s", path, hemalurgicIdentity.toString()),
-                                CompoundNBTHelper.getDouble(hemalurgyInfo, "power_" + path, 6),//todo get this value from the item?
+                                hemalurgicStrength,
                                 AttributeModifier.Operation.ADDITION));
             }
         }
 
 
         return attributeModifiers;
+    }
+
+    default double getHemalurgicStrength(ItemStack stack, Metals.MetalType metalType)
+    {
+        return getHemalurgicStrength(stack, metalType.name());
+    }
+
+    default double getHemalurgicStrength(ItemStack stack, AManifestation manifestation)
+    {
+        return getHemalurgicStrength(stack, "power_" + manifestation.getName());
+    }
+
+    default double getHemalurgicStrength(ItemStack stack, String name)
+    {
+        return CompoundNBTHelper.getDouble(
+                getHemalurgicInfo(stack),
+                name,
+                0);
+    }
+
+    default void setHemalurgicStrength(ItemStack stack, Metals.MetalType metalType, double val)
+    {
+        setHemalurgicStrength(stack,metalType.getName(),val);
+    }
+
+    default void setHemalurgicStrength(ItemStack stack, AManifestation manifestation, double val)
+    {
+        setHemalurgicStrength(stack,"power_" + manifestation.getName(),val);
+    }
+
+    default void setHemalurgicStrength(ItemStack stack, String name, double val)
+    {
+        CompoundNBTHelper.setDouble(getHemalurgicInfo(stack), name, val);
     }
 
 
@@ -299,15 +328,21 @@ public interface IHemalurgicInfo
 
         tooltip.add(TextHelper.createTranslatedText(Constants.Strings.CONTAINED_POWERS_FOUND));
 
-        if (hemalurgicSpikeItem.getMetalType() == Metals.MetalType.IRON)
+        if (hasHemalurgicPower(stack, hemalurgicSpikeItem.getMetalType()))
         {
-            double attackDamage = CompoundNBTHelper.getDouble(hemalurgicSpikeItem.getHemalurgicInfo(stack), hemalurgicSpikeItem.getMetalType().name(), 0);
+            double hemalurgicStrength = getHemalurgicStrength(stack, hemalurgicSpikeItem.getMetalType());
+            String s;
 
-            //todo, make this translated text
-            if (attackDamage > 0)
+            if (hemalurgicSpikeItem.getMetalType() == Metals.MetalType.IRON)
             {
-                tooltip.add(TextHelper.createText("+" + attackDamage + " Attack Damage"));
+                s = "+" + hemalurgicStrength + " Attack Damage";
             }
+            else
+            {
+                s = "+" + hemalurgicStrength + " Hemalurgic " + StringHelper.fixCapitalisation(hemalurgicSpikeItem.getMetalType().name());
+            }
+            //todo, make this translated text
+            tooltip.add(TextHelper.createText(s));
         }
 
         IForgeRegistry<AManifestation> manifestations = ManifestationRegistry.MANIFESTATION_REGISTRY.get();
@@ -324,24 +359,23 @@ public interface IHemalurgicInfo
 
     default boolean hasHemalurgicPower(ItemStack stack, AManifestation manifestation)
     {
-        return CompoundNBTHelper.getBoolean(getHemalurgicInfo(stack), manifestation.getRegistryName().getPath(), false);
+        return getHemalurgicStrength(stack,manifestation) > 0;
     }
 
+    default boolean hasHemalurgicPower(ItemStack stack, Metals.MetalType metalType)
+    {
+        return getHemalurgicStrength(stack,metalType) > 0;
+    }
 
     default void Invest(ItemStack stack, AManifestation manifestation, double level, UUID identity)
     {
-        CompoundNBT spikeInfo = getHemalurgicInfo(stack);
-        final String manifestationName = manifestation.getRegistryName().getPath();
-        CompoundNBTHelper.setBoolean(spikeInfo, manifestationName, true);
-        CompoundNBTHelper.setDouble(spikeInfo, "power_" + manifestationName, level);
-
+        setHemalurgicStrength(stack, manifestation, level);
         setHemalurgicIdentity(stack, identity);
     }
 
     default void Invest(ItemStack stack, Metals.MetalType metalType, double level, UUID identity)
     {
-        CompoundNBT spikeInfo = getHemalurgicInfo(stack);
-        CompoundNBTHelper.setDouble(spikeInfo, metalType.name(), level);
+        setHemalurgicStrength(stack, metalType, level);
         setHemalurgicIdentity(stack, identity);
     }
 }

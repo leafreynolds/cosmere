@@ -13,6 +13,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import java.util.Locale;
+
 public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
 {
 
@@ -51,4 +53,8 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
     @OnlyIn(Dist.CLIENT)
     public void renderWorldEffects(RenderWorldLastEvent event, ISpiritweb cap){}
 
+    public String getName()
+    {
+        return this.getRegistryName().getPath().toLowerCase(Locale.ROOT);
+    }
 }

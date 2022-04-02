@@ -90,7 +90,7 @@ public class EngLangGen extends LanguageProvider
         {
             //power type
             String key = manifestation.translation().getKey();
-            String path = manifestation.getRegistryName().getPath();
+            String path = manifestation.getName();
 
 
             //description

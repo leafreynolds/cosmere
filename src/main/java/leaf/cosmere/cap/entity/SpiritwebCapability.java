@@ -121,7 +121,7 @@ public class SpiritwebCapability implements ISpiritweb
     {
         CompoundNBT nbt = new CompoundNBT();
 
-        nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
+        nbt.putString("selected_power", selectedManifestation.getName());
         nbt.putInt("stored_breaths", biochromaticBreathStored);
         nbt.putInt("stored_stormlight", stormlightStored);
 
@@ -355,7 +355,7 @@ public class SpiritwebCapability implements ISpiritweb
     {
         for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
         {
-            String path = manifestation.getRegistryName().getPath();
+            String path = manifestation.getName();
 
             if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
             {
@@ -391,7 +391,7 @@ public class SpiritwebCapability implements ISpiritweb
     public boolean hasManifestation(ManifestationTypes manifestationTypeID, int powerID, boolean ignoreTemporaryPower)
     {
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
-        String manifestationName = manifestation.getRegistryName().getPath();
+        String manifestationName = manifestation.getName();
         if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
         {
             return false;
@@ -416,7 +416,7 @@ public class SpiritwebCapability implements ISpiritweb
     {
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
 
-        String manifestationName = manifestation.getRegistryName().getPath();
+        String manifestationName = manifestation.getName();
         if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
         {
             return;
@@ -441,7 +441,7 @@ public class SpiritwebCapability implements ISpiritweb
     public void removeManifestation(ManifestationTypes manifestationTypeID, int powerID)
     {
         AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
-        String path = manifestation.getRegistryName().getPath();
+        String path = manifestation.getName();
 
         if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
         {

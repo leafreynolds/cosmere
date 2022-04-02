@@ -191,11 +191,10 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
             if (this.getMetalType() == Metals.MetalType.LERASIUM)
             {
                 ItemStack bound = new ItemStack(this);
-                setHemalurgicIdentity(bound, UUID.randomUUID());
-                CompoundNBT hemalurgicInfo = getHemalurgicInfo(bound);
+                final UUID identity = UUID.randomUUID();
                 for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
                 {
-                    CompoundNBTHelper.setBoolean(hemalurgicInfo, manifestation.getRegistryName().getPath(), true);
+                    Invest(bound, manifestation,6, identity);
                 }
 
                 stacks.add(bound);

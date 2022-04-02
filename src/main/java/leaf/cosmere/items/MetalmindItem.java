@@ -62,7 +62,7 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
 
             for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
             {
-                String manifestationName = manifestation.getRegistryName().getPath();
+                String manifestationName = manifestation.getName();
                 if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
                 {
                     continue;

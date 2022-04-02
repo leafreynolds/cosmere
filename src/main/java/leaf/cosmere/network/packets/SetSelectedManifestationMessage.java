@@ -39,7 +39,7 @@ public class SetSelectedManifestationMessage
 
     public static void encode(SetSelectedManifestationMessage mes, PacketBuffer buf)
     {
-        String namespace = mes.manifestation.getRegistryName().toString();
+        String namespace = mes.manifestation.getName();
         buf.writeUtf(namespace);
     }
 
