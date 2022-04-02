@@ -24,6 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.*;
@@ -223,10 +224,16 @@ public interface IHemalurgicInfo
             case IRON:
                 attribute = Attributes.ATTACK_DAMAGE;
                 break;
-            case TIN:
+            default:
+                final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
+                if (attributeRegistryObject != null && attributeRegistryObject.isPresent())
+                {
+                    attribute = attributeRegistryObject.get();
+                }
+                break;
+            /* TIN:
                 //Steals senses
                 //a type of night vision
-                attribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.name()).get();
 
                 break;
             case ZINC:
@@ -244,7 +251,7 @@ public interface IHemalurgicInfo
             case NICROSIL:
                 //Steals Investiture
                 //todo figure out what that means
-                break;
+                break;*/
         }
 
         if (attribute != null)
