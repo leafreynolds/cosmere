@@ -126,17 +126,17 @@ public class EngLangGen extends LanguageProvider
         //guidebook
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-            String metalName = metalType.getName();
+            final String name = metalType.getName();
 
             final String mistingName = metalType.getMistingName();
             final String ferringName = metalType.getFerringName();
 
-            String a = metalName + " - " + mistingName;
-            String f = metalName + " - " + ferringName;
+            String a = name + " - " + mistingName;
+            String f = name + " - " + ferringName;
 
-            String aKey = "allomantic_" + metalName;
-            String fKey = "feruchemical_" + metalName;
-            String hKey = "hemalurgic_" + metalName;
+            String aKey = "allomantic_" + name;
+            String fKey = "feruchemical_" + name;
+            String hKey = "hemalurgic_" + name;
 
             String allomancyGuide = "cosmere.entry." + aKey;
             String feruchemyGuide = "cosmere.entry." + fKey;
@@ -144,16 +144,27 @@ public class EngLangGen extends LanguageProvider
 
             add(allomancyGuide, StringHelper.fixCapitalisation(a));
             add(feruchemyGuide, StringHelper.fixCapitalisation(f));
-            add(hemalurgyGuide, StringHelper.fixCapitalisation(metalName));
+            add(hemalurgyGuide, StringHelper.fixCapitalisation(name));
 
-
-            if (!metalType.hasAssociatedManifestation())
+            if (!metalType.hasMaterialItem())
             {
-                continue;
+                //if a vanilla metal, like iron/gold
+                //add(item.getDescriptionId(), localisedString);
+                final String n = name + "_nugget";
+                final String i = name + "_ingot";
+                final String b = name + "_block";
+                add("item.cosmere." + n, StringHelper.fixCapitalisation(n));
+                add("item.cosmere." + i, StringHelper.fixCapitalisation(i));
+                add("item.cosmere." + b, StringHelper.fixCapitalisation(b));
             }
 
-            add("cosmere." + mistingName, StringHelper.fixCapitalisation(mistingName));
-            add("cosmere." + ferringName, StringHelper.fixCapitalisation(ferringName));
+
+            if (metalType.hasAssociatedManifestation())
+            {
+                add("cosmere." + mistingName, StringHelper.fixCapitalisation(mistingName));
+                add("cosmere." + ferringName, StringHelper.fixCapitalisation(ferringName));
+            }
+
         }
 
 
