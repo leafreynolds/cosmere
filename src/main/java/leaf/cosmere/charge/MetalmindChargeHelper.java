@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class MetalmindChargeHelper
 {
@@ -58,23 +59,24 @@ public class MetalmindChargeHelper
         List<ItemStack> acc = ItemChargeHelper.getChargeCurios(player);
 
         //remove items that don't match the metal type we are looking for
-        items.removeIf(obj ->
-                {
-                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof MetalmindItem);
-                    boolean metalMindIsNotCorrectType = ((MetalmindItem) obj.getItem()).getMetalType() != metalType;
-
-                    return (objectIsNotMetalmind || metalMindIsNotCorrectType);
-                }
-        );
-        acc.removeIf(obj ->
-                {
-                    boolean objectIsNotMetalmind = !(obj.getItem() instanceof MetalmindItem);
-                    boolean metalMindIsNotCorrectType = ((MetalmindItem) obj.getItem()).getMetalType() != metalType;
-
-                    return (objectIsNotMetalmind || metalMindIsNotCorrectType);
-                }
-        );
+        items.removeIf(getIsItemInvalidMetalmind(metalType));
+        acc.removeIf(getIsItemInvalidMetalmind(metalType));
 
         return ItemChargeHelper.adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
+    }
+
+    private static Predicate<ItemStack> getIsItemInvalidMetalmind(Metals.MetalType metalType)
+    {
+        return obj ->
+        {
+            if (obj.getItem() instanceof MetalmindItem)
+            {
+                final MetalmindItem item = (MetalmindItem) obj.getItem();
+
+                //Correct metal or harmonium which I'm using as universal
+                return item.getMetalType() != metalType && item.getMetalType() != Metals.MetalType.HARMONIUM;
+            }
+            return false;
+        };
     }
 }
