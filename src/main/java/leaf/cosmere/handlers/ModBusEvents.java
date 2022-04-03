@@ -55,8 +55,8 @@ public class ModBusEvents
                     continue;
                 }
 
-                RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getMistingName());
-                RegistryObject<Attribute> ferringAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getFerringName());
+                RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getAllomancyRegistryName());
+                RegistryObject<Attribute> ferringAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getFeruchemyRegistryName());
 
                 event.add(entityType, mistingAttribute.get());
                 event.add(entityType, ferringAttribute.get());

@@ -112,8 +112,8 @@ public class SpiritwebCapability implements ISpiritweb
     @Nonnull
     public static LazyOptional<ISpiritweb> get(LivingEntity entity)
     {
-        return entity instanceof LivingEntity ? entity.getCapability(SpiritwebCapability.CAPABILITY, null)
-                                              : LazyOptional.empty();
+        return entity != null ? entity.getCapability(SpiritwebCapability.CAPABILITY, null)
+                              : LazyOptional.empty();
     }
 
     @Override
@@ -131,10 +131,13 @@ public class SpiritwebCapability implements ISpiritweb
             nbt.putIntArray(manifestationTypeName + "_mode", MANIFESTATIONS_MODE.get(manifestationType));
         }
 
+
+        final CompoundNBT ingestedMetals = new CompoundNBT();
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-            nbt.putInt(metalType.getName() + "_ingested", METALS_INGESTED.get(metalType));
+            ingestedMetals.putInt(metalType.getName() + "_ingested", METALS_INGESTED.get(metalType));
         }
+        nbt.put("ingested_metals", ingestedMetals);
 
         return nbt;
     }
@@ -160,9 +163,11 @@ public class SpiritwebCapability implements ISpiritweb
         biochromaticBreathStored = nbt.getInt("stored_breaths");
         stormlightStored = nbt.getInt("stored_stormlight");
 
+
+        final CompoundNBT ingestedMetals = nbt.getCompound("ingested_metals");
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-            METALS_INGESTED.put(metalType, nbt.getInt(metalType.getName() + "_ingested"));
+            METALS_INGESTED.put(metalType, ingestedMetals.getInt(metalType.getName() + "_ingested"));
         }
     }
 

@@ -917,6 +917,15 @@ public class Metals
             return Ingredient.of(getMetalIngotTag());
         }
 
+        public String getAllomancyRegistryName()
+        {
+            return "allomantic_" + this.getName();
+        }
+
+        public String getFeruchemyRegistryName()
+        {
+            return "feruchemical_" + this.getName();
+        }
     }
 
     private static class MetalColor

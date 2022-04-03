@@ -40,7 +40,7 @@ public class ManifestationRegistry
                             Function.identity(),
                             metalType ->
                                     MANIFESTATIONS.register(
-                                            metalType.getMistingName(),
+                                            metalType.getAllomancyRegistryName(),
                                             () -> makeAllomancyManifestation(metalType))//get the specific instance of the manifestation for allomancy
                     ));
 
@@ -52,7 +52,7 @@ public class ManifestationRegistry
                             Function.identity(),
                             metalType ->
                                     MANIFESTATIONS.register(
-                                            metalType.getFerringName(),
+                                            metalType.getFeruchemyRegistryName(),
                                             () -> makeFeruchemyManifestation(metalType))//feruchemy can be base manifestation type because it mostly functions through effects
                     ));
 

@@ -35,26 +35,25 @@ public class AttributesRegistry
             if (!metalType.hasAssociatedManifestation())
                 continue;
 
-            String mistingNamePath = metalType.getMistingName();
-            String ferringNamePath = metalType.getFerringName();
-
+            String mistingNamePath = metalType.getAllomancyRegistryName();
+            String ferringNamePath = metalType.getFeruchemyRegistryName();
 
             RegistryObject<Attribute> mistingAttribute = ATTRIBUTES.register(
-                    mistingNamePath.toLowerCase(),
+                    mistingNamePath,
                     () -> (new RangedAttribute(
-                            Cosmere.MODID + "." + mistingNamePath.toLowerCase(),
+                            "manifestation." + Cosmere.MODID + "." + mistingNamePath,
                             0,
                             0,
-                            1000)).setSyncable(true)
+                            20)).setSyncable(true)
             );
 
             RegistryObject<Attribute> ferringAttribute = ATTRIBUTES.register(
-                    ferringNamePath.toLowerCase(),
+                    ferringNamePath,
                     () -> (new RangedAttribute(
-                            Cosmere.MODID + "." + ferringNamePath.toLowerCase(),
+                            "manifestation." + Cosmere.MODID + "." + ferringNamePath,
                             0,
                             0,
-                            1000)).setSyncable(true)
+                            20)).setSyncable(true)
             );
 
             attributeModifiers.put(mistingNamePath, mistingAttribute);
@@ -65,7 +64,7 @@ public class AttributesRegistry
         RegistryObject<Attribute> tin_senses_attribute = ATTRIBUTES.register(
                 tinName,
                 () -> (new RangedAttribute(
-                        Cosmere.MODID + "." + tinName,
+                        Cosmere.MODID + "." + "eye_sight",
                         0,
                         0,
                         1)).setSyncable(true)

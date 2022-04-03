@@ -144,7 +144,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 
     public double getStrength(ISpiritweb cap)
     {
-        RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getMistingName());
+        RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getAllomancyRegistryName());
         ModifiableAttributeInstance attribute = cap.getLiving().getAttribute(mistingAttribute.get());
         return attribute != null ? attribute.getValue() : 0;
     }
