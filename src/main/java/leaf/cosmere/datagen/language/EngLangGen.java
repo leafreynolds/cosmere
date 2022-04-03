@@ -10,11 +10,13 @@ import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.MetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.StringHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.SoundEvent;
@@ -123,6 +125,18 @@ public class EngLangGen extends LanguageProvider
             add(manifestation.description().getKey(), description);
         }
 
+        //Attributes
+        for (RegistryObject<Attribute> registryObject : AttributesRegistry.ATTRIBUTES.getEntries())
+        {
+            //no duplicates pls
+            final String descriptionId = registryObject.get().getDescriptionId();
+            if (!descriptionId.startsWith("manifestation"))
+            {
+                String translation = descriptionId.split("\\.")[1];
+                add(descriptionId, StringHelper.fixCapitalisation(translation));
+            }
+        }
+
         //guidebook
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
@@ -134,8 +148,8 @@ public class EngLangGen extends LanguageProvider
             String a = name + " - " + mistingName;
             String f = name + " - " + ferringName;
 
-            String aKey = "allomantic_" + name;
-            String fKey = "feruchemical_" + name;
+            String aKey = metalType.getAllomancyRegistryName();
+            String fKey = metalType.getFeruchemyRegistryName();
             String hKey = "hemalurgic_" + name;
 
             String allomancyGuide = "cosmere.entry." + aKey;
