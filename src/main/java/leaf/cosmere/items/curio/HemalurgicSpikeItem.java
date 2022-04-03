@@ -106,16 +106,11 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
     @Override
     public void fillItemCategory(@Nonnull ItemGroup tab, @Nonnull NonNullList<ItemStack> stacks)
     {
+        super.fillItemCategory(tab, stacks);
         if (allowdedIn(tab))
         {
-            ItemStack stack = new ItemStack(this);
-            stacks.add(stack);
-
             if (getMetalType().hasFeruchemicalEffect())
             {
-                ItemStack fullPower = new ItemStack(this);
-                setCharge(fullPower, getMaxCharge(fullPower));
-                stacks.add(fullPower);
 
                 //what powers can this metal type contain
 
@@ -129,7 +124,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
                     double strengthToAdd = 15 * 0.7D;// Iron golems have the most base attack damage of normal mods (giants have 50??). Ravagers have
 
 
-                    Invest(filledIronSpike,getMetalType(),strengthToAdd, UUID.randomUUID());
+                    Invest(filledIronSpike, this.getMetalType(), strengthToAdd, UUID.randomUUID());
 
                     stacks.add(filledIronSpike);
                 }

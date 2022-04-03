@@ -261,7 +261,7 @@ public interface IHemalurgicInfo
                     attribute,
                     new AttributeModifier(
                             hemalurgicIdentity,
-                            "Hemalurgic " + metalType.name(),
+                            "Hemalurgic " + metalType.getName(),
                             strength,
                             attributeModifier));
         }
@@ -295,7 +295,7 @@ public interface IHemalurgicInfo
 
     default double getHemalurgicStrength(ItemStack stack, Metals.MetalType metalType)
     {
-        return getHemalurgicStrength(stack, metalType.name());
+        return getHemalurgicStrength(stack, metalType.getName());
     }
 
     default double getHemalurgicStrength(ItemStack stack, AManifestation manifestation)
@@ -313,7 +313,7 @@ public interface IHemalurgicInfo
 
     default void setHemalurgicStrength(ItemStack stack, Metals.MetalType metalType, double val)
     {
-        setHemalurgicStrength(stack,metalType.getName(),val);
+        setHemalurgicStrength(stack, metalType.getName(),val);
     }
 
     default void setHemalurgicStrength(ItemStack stack, AManifestation manifestation, double val)
@@ -347,7 +347,7 @@ public interface IHemalurgicInfo
             }
             else
             {
-                s = "+" + hemalurgicStrength + " Hemalurgic " + StringHelper.fixCapitalisation(hemalurgicSpikeItem.getMetalType().name());
+                s = "+" + hemalurgicStrength + " Hemalurgic " + StringHelper.fixCapitalisation(hemalurgicSpikeItem.getMetalType().getName());
             }
             //todo, make this translated text
             tooltip.add(TextHelper.createText(s));

@@ -127,7 +127,7 @@ public class SpiritwebCapability implements ISpiritweb
 
         for (ManifestationTypes manifestationType : ManifestationTypes.values())
         {
-            String manifestationTypeName = manifestationType.name().toLowerCase();
+            String manifestationTypeName = manifestationType.getName();
             nbt.putIntArray(manifestationTypeName + "_mode", MANIFESTATIONS_MODE.get(manifestationType));
         }
 
@@ -147,7 +147,7 @@ public class SpiritwebCapability implements ISpiritweb
     {
         for (ManifestationTypes manifestationType : ManifestationTypes.values())
         {
-            String manifestationTypeName = manifestationType.name().toLowerCase();
+            String manifestationTypeName = manifestationType.getName();
 
             int[] storedIntArray = nbt.getIntArray(manifestationTypeName + "_mode");
             int length = storedIntArray.length;
