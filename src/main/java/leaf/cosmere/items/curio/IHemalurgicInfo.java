@@ -66,7 +66,7 @@ public interface IHemalurgicInfo
         return stack.getOrCreateTagElement("hemalurgy");
     }
 
-    default void stealFromSpiritweb(ItemStack stack, Metals.MetalType spikeMetalType, LivingEntity entityKilled)
+    default void stealFromSpiritweb(ItemStack stack, Metals.MetalType spikeMetalType, PlayerEntity playerEntity, LivingEntity entityKilled)
     {
         //todo
         //we should probably check a config to see if pvp real stealing of attributes is wanted.
@@ -89,7 +89,7 @@ public interface IHemalurgicInfo
                 //How much is already stored? (like koloss spikes could keep storing strength on the same spike)
                 final double strengthCurrent = getHemalurgicStrength(stack,spikeMetalType);
                 //how much should we add.
-                final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled);
+                final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled, playerEntity);
                 final double strengthToAdd = strengthCurrent + entityAbilityStrength;
                 if (strengthToAdd > 0)
                 {

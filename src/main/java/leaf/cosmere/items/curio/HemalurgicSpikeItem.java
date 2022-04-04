@@ -265,14 +265,14 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
                     //entity was killed by a spike
                     HemalurgicSpikeItem spikeItem = (HemalurgicSpikeItem) itemstack.getItem();
                     //pass in killed entity for the item to figure out what to do
-                    spikeItem.killedEntity(itemstack, event.getEntityLiving());
+                    spikeItem.killedEntity(itemstack, playerEntity, event.getEntityLiving());
                 }
 
             });
         }
     }
 
-    public void killedEntity(ItemStack stack, LivingEntity entityKilled)
+    public void killedEntity(ItemStack stack, PlayerEntity playerEntity, LivingEntity entityKilled)
     {
         //https://wob.coppermind.net/events/332/#e9569
 
@@ -283,7 +283,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
         }
 
         // ensure we set the stolen identity
-        stealFromSpiritweb(stack, getMetalType(), entityKilled);
+        stealFromSpiritweb(stack, getMetalType(), playerEntity, entityKilled);
     }
 
     @Override

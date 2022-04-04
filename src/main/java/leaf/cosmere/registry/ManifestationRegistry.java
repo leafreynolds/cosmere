@@ -145,8 +145,6 @@ public class ManifestationRegistry
                 return new FeruchemyCopper(metalType);
             case BRONZE:
                 return new FeruchemyBronze(metalType);
-            case ZINC:
-                return new FeruchemyZinc(metalType);
             case ALUMINUM:
                 return new FeruchemyAluminum(metalType);
             case NICROSIL:

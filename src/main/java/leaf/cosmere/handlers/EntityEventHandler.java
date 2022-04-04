@@ -13,11 +13,14 @@ import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.*;
@@ -37,6 +40,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
@@ -78,6 +82,23 @@ public class EntityEventHandler
                 {
                     //give random power
                     giveEntityStartingManifestation(livingEntity, spiritweb);
+
+
+                    for (Metals.MetalType metalType : Metals.MetalType.values())
+                    {
+                        //check for others
+                        final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
+                        if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+                        {
+                            ModifiableAttributeInstance newPlayerAttribute = ((PlayerEntity) eventEntity).getAttribute(metalRelatedAttribute.get());
+
+                            if (newPlayerAttribute != null)
+                            {
+                                newPlayerAttribute.setBaseValue(newPlayerAttribute.getBaseValue());
+                            }
+
+                        }
+                    }
                 }
             }
             else if (eventEntity instanceof AbstractVillagerEntity

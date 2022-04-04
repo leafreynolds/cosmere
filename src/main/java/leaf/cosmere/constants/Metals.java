@@ -12,10 +12,7 @@ import leaf.cosmere.items.curio.BraceletMetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.items.curio.NecklaceMetalmindItem;
 import leaf.cosmere.items.curio.RingMetalmindItem;
-import leaf.cosmere.registry.BlocksRegistry;
-import leaf.cosmere.registry.EffectsRegistry;
-import leaf.cosmere.registry.ItemsRegistry;
-import leaf.cosmere.registry.TagsRegistry;
+import leaf.cosmere.registry.*;
 import net.minecraft.block.OreBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -625,25 +622,13 @@ public class Metals
                     break;
                 case ATIUM:
                     break;
-                case LERASIUM:
-                    break;
-                case HARMONIUM:
-                    break;
                 case MALATIUM:
-                    break;
-                case LERASATIUM:
-                    break;
-                case NICKEL:
-                    break;
-                case LEAD:
-                    break;
-                case SILVER:
                     break;
             }
             return burnTimeInSeconds;
         }
 
-        public double getEntityAbilityStrength(LivingEntity killedEntity)
+        public double getEntityAbilityStrength(LivingEntity killedEntity, PlayerEntity playerEntity)
         {
             //Steals non-manifestation based abilities. traits inherent to an entity?
             double strengthToAdd = 0;
@@ -694,7 +679,38 @@ public class Metals
                     break;
                 case COPPER:
                     //Steals mental fortitude, memory, and intelligence
-                    //todo increase base xp gain?
+                    //increase base xp gain rate
+                    final float potentialRewardRate = killedEntity.getExperienceReward(playerEntity) / 150f;
+
+	                if (killedEntity instanceof PlayerEntity)
+	                {
+		                final ModifiableAttributeInstance attribute = killedEntity.getAttribute(AttributesRegistry.COSMERE_ATTRIBUTES.get(MetalType.COPPER.getName()).get());
+		                if (attribute != null)
+                        {
+                            //70% strength to spike
+                            strengthToAdd = attribute.getValue() * 0.70;
+                            //25% remaining on player
+                            final double newBaseValue = attribute.getValue() * 0.25;
+                            attribute.setBaseValue(((int)(newBaseValue * 100)) / 100f);
+                        }
+		                else
+                        {
+                            strengthToAdd = potentialRewardRate;
+                        }
+                    }
+                    else if (killedEntity instanceof EnderDragonEntity)
+                    {
+                        EnderDragonEntity dragonEntity = (EnderDragonEntity) killedEntity;
+                        //dragon doesn't reward xp in a typical way
+                        strengthToAdd =
+                                dragonEntity.getDragonFight() != null && !dragonEntity.getDragonFight().hasPreviouslyKilledDragon()
+                                ? 1 //give first person to kill dragon a full rate increase spike
+                                : 0.33;//else similar to wither rate.
+	                }
+	                else
+	                {
+                        strengthToAdd = potentialRewardRate;
+	                }
                     break;
                 case ZINC:
                     //Steals emotional fortitude
