@@ -19,6 +19,10 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.monster.PhantomEntity;
+import net.minecraft.entity.monster.WitherSkeletonEntity;
+import net.minecraft.entity.passive.CatEntity;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.passive.fish.PufferfishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
@@ -727,6 +731,32 @@ public class Metals
                 case CHROMIUM:
                     //Might steal destiny
                     //so we could add some permanent luck?
+
+                    if (killedEntity instanceof RabbitEntity)
+                    {
+                        strengthToAdd = 0.77;
+                    }
+                    else if (killedEntity instanceof WitherSkeletonEntity)
+                    {
+                        strengthToAdd = -0.77;
+                    }
+                    else if (killedEntity instanceof PufferfishEntity)
+                    {
+                        strengthToAdd = -0.05;
+                    }
+                    else if (killedEntity instanceof CatEntity)
+                    {
+                        CatEntity cat = (CatEntity) killedEntity;
+                        final int catType = cat.getCatType();
+                        if (catType == 10)//all black
+                        {
+                            strengthToAdd = -1;
+                        }
+                        else if (catType == 8)//white
+                        {
+                            strengthToAdd = 0.35;
+                        }
+                    }
                     break;
                 case NICROSIL:
                     //Steals Investiture

@@ -91,7 +91,7 @@ public interface IHemalurgicInfo
                 //how much should we add.
                 final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled, playerEntity);
                 final double strengthToAdd = strengthCurrent + entityAbilityStrength;
-                if (strengthToAdd > 0)
+                if (strengthToAdd > 0.01 || strengthToAdd < -0.01)
                 {
                     Invest(stack, spikeMetalType, strengthToAdd, entityKilled.getUUID());
                 }
@@ -224,11 +224,16 @@ public interface IHemalurgicInfo
             case IRON:
                 attribute = Attributes.ATTACK_DAMAGE;
                 break;
+            case CHROMIUM:
+                attribute = Attributes.LUCK;
+                break;
             default:
                 //TIN:
                 //Steals senses
                 //a type of night vision
 
+                //Copper:
+                //Steals mental fortitude, memory, and intelligence
 
                 final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
                 if (attributeRegistryObject != null && attributeRegistryObject.isPresent())
@@ -240,14 +245,6 @@ public interface IHemalurgicInfo
             case ZINC:
                 //Steals emotional fortitude
                 //todo figure out what that means
-                break;
-            case COPPER:
-                //Steals mental fortitude, memory, and intelligence
-                //todo increase base xp gain?
-                break;
-            case CHROMIUM:
-                //Might steal destiny
-                //so we could add some permanent luck?
                 break;
             case NICROSIL:
                 //Steals Investiture
@@ -338,19 +335,14 @@ public interface IHemalurgicInfo
 
         if (hasHemalurgicPower(stack, hemalurgicSpikeItem.getMetalType()))
         {
-            double hemalurgicStrength = getHemalurgicStrength(stack, hemalurgicSpikeItem.getMetalType());
-            String s;
+            tooltip.add(TextHelper.createTranslatedText("tooltip.hemalurgy." + hemalurgicSpikeItem.getMetalType()));
 
             if (hemalurgicSpikeItem.getMetalType() == Metals.MetalType.IRON)
             {
-                s = "+" + hemalurgicStrength + " Attack Damage";
+                double hemalurgicStrength = getHemalurgicStrength(stack, hemalurgicSpikeItem.getMetalType());
+                String s = "+" + hemalurgicStrength + " Attack Damage";
+                tooltip.add(TextHelper.createText(s));
             }
-            else
-            {
-                s = "+" + hemalurgicStrength + " Hemalurgic " + StringHelper.fixCapitalisation(hemalurgicSpikeItem.getMetalType().getName());
-            }
-            //todo, make this translated text
-            tooltip.add(TextHelper.createText(s));
         }
 
         IForgeRegistry<AManifestation> manifestations = ManifestationRegistry.MANIFESTATION_REGISTRY.get();
@@ -372,7 +364,9 @@ public interface IHemalurgicInfo
 
     default boolean hasHemalurgicPower(ItemStack stack, Metals.MetalType metalType)
     {
-        return getHemalurgicStrength(stack,metalType) > 0;
+        final double hemalurgicStrength = getHemalurgicStrength(stack, metalType);
+        final double marginOfError = 0.01;
+        return hemalurgicStrength > marginOfError || hemalurgicStrength < -marginOfError;
     }
 
     default void Invest(ItemStack stack, AManifestation manifestation, double level, UUID identity)
