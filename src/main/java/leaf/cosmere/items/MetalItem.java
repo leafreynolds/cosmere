@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 
+import java.awt.*;
+
 public class MetalItem extends BaseItem implements IHasMetalType
 {
     private final Metals.MetalType metalType;
@@ -24,6 +26,12 @@ public class MetalItem extends BaseItem implements IHasMetalType
         this.metalType = metalType;
     }
 
+
+    @Override
+    public Color getColour()
+    {
+        return metalType.getColor();
+    }
 
     /**
      * Returns true if the item can be used on the given entity, e.g. shears on sheep.

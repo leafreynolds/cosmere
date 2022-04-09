@@ -6,7 +6,19 @@ package leaf.cosmere.items;
 
 import leaf.cosmere.constants.Metals;
 
-public interface IHasMetalType
+import java.awt.*;
+
+public interface IHasMetalType extends IHasColour
 {
     Metals.MetalType getMetalType();
+
+    default Color getColour()
+    {
+        return getMetalType().getColor();
+    }
+
+    default int getColourValue()
+    {
+        return getColour().getRGB();
+    }
 }

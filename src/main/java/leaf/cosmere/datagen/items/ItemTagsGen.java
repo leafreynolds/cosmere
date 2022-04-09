@@ -9,7 +9,6 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.items.MetalIngotItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
-import leaf.cosmere.items.gems.PolestoneItem;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.data.BlockTagsProvider;

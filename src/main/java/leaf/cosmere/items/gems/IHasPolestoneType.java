@@ -5,8 +5,21 @@
 package leaf.cosmere.items.gems;
 
 import leaf.cosmere.constants.Roshar;
+import leaf.cosmere.items.IHasColour;
 
-public interface IHasPolestoneType
+import java.awt.*;
+
+public interface IHasPolestoneType extends IHasColour
 {
     Roshar.Polestone getPolestoneType();
+
+    default Color getColour()
+    {
+        return getPolestoneType().getColor();
+    }
+
+    default int getColourValue()
+    {
+        return getColour().getRGB();
+    }
 }

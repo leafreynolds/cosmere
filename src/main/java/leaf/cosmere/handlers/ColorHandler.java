@@ -8,7 +8,7 @@ package leaf.cosmere.handlers;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.constants.Roshar;
-import leaf.cosmere.items.IHasMetalType;
+import leaf.cosmere.items.IHasColour;
 import leaf.cosmere.items.gems.IHasPolestoneType;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.client.Minecraft;
@@ -26,9 +26,9 @@ public final class ColorHandler
         BlockColors blockColors = Minecraft.getInstance().getBlockColors();
         ItemColors itemColors = Minecraft.getInstance().getItemColors();
 
-        IItemColor metalColorHandler =
+        IItemColor cosmereColourHandler =
                 (itemStack, tintIndex) -> tintIndex == 0
-                                      ? ((IHasMetalType) itemStack.getItem()).getMetalType().getColorValue()
+                                      ? ((IHasColour) itemStack.getItem()).getColourValue()
                                       : -1;
 
         IItemColor blockItemColorHandler =
@@ -36,62 +36,57 @@ public final class ColorHandler
                                       ? Minecraft.getInstance().getBlockColors().getColor(((BlockItem) itemStack.getItem()).getBlock().defaultBlockState(), null, null, tintIndex)
                                       : -1;
 
-        IBlockColor metalBlockColorHandler =
+        IBlockColor cosmereBlockColorHandler =
                 (blockState, world, pos, tintIndex) -> tintIndex == 0
-                                                  ? ((IHasMetalType) blockState.getBlock()).getMetalType().getColorValue()
+                                                  ? ((IHasColour) blockState.getBlock()).getColourValue()
                                                   : -1;
 
-        itemColors.register(metalColorHandler, ItemsRegistry.BANDS_OF_MOURNING.get());
+        itemColors.register(cosmereColourHandler, ItemsRegistry.BANDS_OF_MOURNING.get());
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
             if (metalType.hasOre())
             {
                 //blocks in world
-                blockColors.register(metalBlockColorHandler, metalType.getOreBlock());
+                blockColors.register(cosmereBlockColorHandler, metalType.getOreBlock());
                 itemColors.register(blockItemColorHandler, metalType.getOreBlock());
-                itemColors.register(metalColorHandler, metalType.getRawMetalItem());
+                itemColors.register(cosmereColourHandler, metalType.getRawMetalItem());
             }
 
             if (metalType.isAlloy())
             {
-                itemColors.register(metalColorHandler, metalType.getRawMetalItem());
+                itemColors.register(cosmereColourHandler, metalType.getRawMetalItem());
             }
 
             if (metalType.hasMaterialItem())
             {
                 //ingots
-                itemColors.register(metalColorHandler, metalType.getNuggetItem());
-                itemColors.register(metalColorHandler, metalType.getIngotItem());
+                itemColors.register(cosmereColourHandler, metalType.getNuggetItem());
+                itemColors.register(cosmereColourHandler, metalType.getIngotItem());
                 //blocks in inventory
                 itemColors.register(blockItemColorHandler, metalType.getBlock());
                 //blocks in world
-                blockColors.register(metalBlockColorHandler, metalType.getBlock());
+                blockColors.register(cosmereBlockColorHandler, metalType.getBlock());
             }
 
             if (metalType.hasFeruchemicalEffect())
             {
-                itemColors.register(metalColorHandler, metalType.getRingItem());
-                itemColors.register(metalColorHandler, metalType.getBraceletItem());
-                itemColors.register(metalColorHandler, metalType.getNecklaceItem());
+                itemColors.register(cosmereColourHandler, metalType.getRingItem());
+                itemColors.register(cosmereColourHandler, metalType.getBraceletItem());
+                itemColors.register(cosmereColourHandler, metalType.getNecklaceItem());
             }
 
             if (metalType.hasHemalurgicEffect())
             {
-                itemColors.register(metalColorHandler, metalType.getSpikeItem());
+                itemColors.register(cosmereColourHandler, metalType.getSpikeItem());
             }
         }
 
-        IItemColor gemColorHandler =
-                (itemStack, tintIndex) -> tintIndex == 0
-                                          ? ((IHasPolestoneType) itemStack.getItem()).getPolestoneType().getColorValue()
-                                          : -1;
-
         for (Roshar.Polestone polestone : Roshar.Polestone.values())
         {
-            //blockColors.register(metalBlockColorHandler, metalType.getOreBlock());
+            //blockColors.register(cosmereBlockColorHandler, metalType.getOreBlock());
             for (Roshar.GemSize size : Roshar.GemSize.values())
             {
-                itemColors.register(gemColorHandler, polestone.getPolestoneItem(size));
+                itemColors.register(cosmereColourHandler, polestone.getPolestoneItem(size));
             }
         }
     }
