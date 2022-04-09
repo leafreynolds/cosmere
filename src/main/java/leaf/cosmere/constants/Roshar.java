@@ -81,6 +81,7 @@ public class Roshar
 		}
 	}
 
+	//https://coppermind.net/wiki/Polestone
 	public enum Polestone implements IItemTier
 	{
 		SAPPHIRE(0),

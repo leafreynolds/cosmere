@@ -1,5 +1,7 @@
 /*
  * File created ~ 9 - 4 - 2022 ~ Leaf
+ * The Gemstones of Roshar
+ * https://coppermind.net/wiki/Polestone
  */
 
 package leaf.cosmere.items.gems;

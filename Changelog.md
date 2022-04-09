@@ -2,8 +2,13 @@ The Cosmere Project - For 1.16 Minecraft
 
 B26
 
+This build contains breaking changes. Players, metalminds and spikes will not load related powers that were saved to them.
 Removed accidental character left in village_blacksmith loot table json.
-Hemalurgic Tin spikes implemented.
+Hemalurgic Tin, Copper, Chromium, Aluminum spikes implemented.
+Added Bands Of Mourning creative item. Grants allomancy & feruchemy.
+Fixed metal vial amounts. Made nuggets annoying to eat, to encourage vial use.
+Prep work for Roshar.
+Gem stone item added (not yet available via world gen). Gemstones charge when outside in thunderstorms. Charge faster when not in player inventory.
 
 
 B25
