@@ -6,8 +6,10 @@ package leaf.cosmere.datagen.items;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.items.MetalIngotItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
+import leaf.cosmere.items.gems.PolestoneItem;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.data.BlockTagsProvider;
@@ -83,6 +85,16 @@ public class ItemTagsGen extends ItemTagsProvider
             if (metalType.isAlloy() || metalType.hasOre())
             {
                 add(metalType.getMetalRawTag(), metalType.getRawMetalItem());
+            }
+        }
+
+        for (Roshar.Polestone polestone : Roshar.Polestone.values())
+        {
+            for (Roshar.GemSize size : Roshar.GemSize.values())
+            {
+                final Item polestoneItem = polestone.getPolestoneItem(size);
+                add(Tags.Items.GEMS, polestoneItem);
+                add(TagsRegistry.Items.GEM_TAGS.get(polestone), polestoneItem);
             }
         }
     }

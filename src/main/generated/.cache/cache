@@ -836,6 +836,17 @@ c263527b3a980fa055242e5a14f9abb8d7b3669f data/forge/tags/blocks/storage_blocks/p
 dcbe0dd7a0ee71d3369df355128a650b44d03fd1 data/forge/tags/blocks/storage_blocks/steel.json
 2186f095063727aa76a726cb4f4203e9c01f0d53 data/forge/tags/blocks/storage_blocks/tin.json
 ae07d8a5dc1b927d44e31a4b974a18a1ff70b79b data/forge/tags/blocks/storage_blocks/zinc.json
+519be0abe6d74794730327106eee397ce85a1f3f data/forge/tags/items/gems.json
+fbe7b971352a8c7b774b0f60283e44682341d013 data/forge/tags/items/gems/amethyst.json
+1e4fc7207d7240a184909b620f49c07458979b1c data/forge/tags/items/gems/diamond.json
+89bc5e5ed8b87c7bae80e95548288730004f9c3e data/forge/tags/items/gems/emerald.json
+5c98eead69c1e69d93bbf543a6347d45d7704479 data/forge/tags/items/gems/garnet.json
+b72a38c5578ecaed94990359c28e2667bedb1b4d data/forge/tags/items/gems/heliodor.json
+e5e5b55aa8694f98f8688cd2d2f2e6142bea1cf3 data/forge/tags/items/gems/ruby.json
+3f40d895cf00a15049349bc9012dfc557c15e067 data/forge/tags/items/gems/sapphire.json
+99043e2828836a2de58fcd82bc997836f8d748cd data/forge/tags/items/gems/smokestone.json
+a71df79cb107e3e476a2347b7c3a97d48edca537 data/forge/tags/items/gems/topaz.json
+071d6ebbe4248609cbd8a35e2d8de33cf5e4765e data/forge/tags/items/gems/zircon.json
 923618653a5da1a3e7c61e5d4f870bb89e525d60 data/forge/tags/items/ingots.json
 e1e14cdbd80f6a0fed198cbf570e0f55647ba5bc data/forge/tags/items/ingots/aluminum.json
 955c5a6dda0e6ef7a1125f926cbeddcf34b637c2 data/forge/tags/items/ingots/atium.json

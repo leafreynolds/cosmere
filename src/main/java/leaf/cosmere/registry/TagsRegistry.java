@@ -5,6 +5,7 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
@@ -87,6 +88,14 @@ public class TagsRegistry
                         .collect(Collectors.toMap(
                                 Function.identity(),
                                 type -> forgeItemTag("storage_blocks/" + type.getName())));
+
+
+
+        public static final Map<Roshar.Polestone, ITag.INamedTag<Item>> GEM_TAGS =
+                Arrays.stream(Roshar.Polestone.values())
+                        .collect(Collectors.toMap(
+                                Function.identity(),
+                                type -> forgeItemTag("gems/" + type.getName())));
 
 
         private static ITag.INamedTag<Item> itemTag(String name)

@@ -6,8 +6,8 @@ package leaf.cosmere.constants;
 
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -69,7 +69,10 @@ public class Roshar
 			return id;
 		}
 
-		public String getName(){ return name().toLowerCase(Locale.ROOT);}
+		public String getName()
+		{
+			return name().toLowerCase(Locale.ROOT);
+		}
 
 
 		public int getColor()
@@ -111,7 +114,10 @@ public class Roshar
 			return id;
 		}
 
-		public String getName(){ return name().toLowerCase(Locale.ROOT);}
+		public String getName()
+		{
+			return name().toLowerCase(Locale.ROOT);
+		}
 
 
 		public String getAssociatedOrder()
@@ -175,9 +181,7 @@ public class Roshar
 			}
 		}
 
-
-
-		public IItemProvider getPolestoneItem(GemSize size)
+		public Item getPolestoneItem(GemSize size)
 		{
 			switch (size)
 			{
