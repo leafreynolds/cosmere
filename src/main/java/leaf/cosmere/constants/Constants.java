@@ -42,6 +42,7 @@ public class Constants
 
 
         public static final UUID UNSEALED_UUID = UUID.fromString("422fc419-1e39-4eac-ac01-6fc98512c122");
+        public static final UUID ALUMINUM_UUID = UUID.fromString("8da98b83-be5e-4b34-b51e-5fdd79700893");
     }
 
     //todo rename this when I remember the word

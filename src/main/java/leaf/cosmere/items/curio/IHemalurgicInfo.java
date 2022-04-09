@@ -14,7 +14,6 @@ import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.utils.helpers.StackNBTHelper;
-import leaf.cosmere.utils.helpers.StringHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -206,10 +205,30 @@ public interface IHemalurgicInfo
 
     default Multimap<Attribute, AttributeModifier> getHemalurgicAttributes(Multimap<Attribute, AttributeModifier> attributeModifiers, ItemStack stack, Metals.MetalType metalType)
     {
-        CompoundNBT hemalurgyInfo = getHemalurgicInfo(stack);
         UUID hemalurgicIdentity = getHemalurgicIdentity(stack);
 
-        if (hemalurgicIdentity == null)
+        if (metalType == Metals.MetalType.ALUMINUM)
+        {
+            for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
+            {
+                String path = manifestation.getName();
+
+                if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
+                {
+                    continue;
+                }
+
+                attributeModifiers.put(
+                        AttributesRegistry.COSMERE_ATTRIBUTES.get(path).get(),
+                        new AttributeModifier(
+                                Constants.NBT.ALUMINUM_UUID,
+                                manifestation.translation().getKey(),
+                                -100,
+                                AttributeModifier.Operation.ADDITION));
+            }
+            return attributeModifiers;
+        }
+        else if (hemalurgicIdentity == null)
         {
             return attributeModifiers;
         }
@@ -379,6 +398,12 @@ public interface IHemalurgicInfo
     {
         setHemalurgicStrength(stack, metalType, level);
         setHemalurgicIdentity(stack, identity);
+    }
+
+    default void Divest(ItemStack stack)
+    {
+        StackNBTHelper.removeEntry(stack, "hemalurgy");
+        StackNBTHelper.removeEntry(stack, stolen_identity_tag);
     }
 }
 

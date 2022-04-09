@@ -12,6 +12,7 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.renderer.wearables.SpikeModel;
 import leaf.cosmere.compat.curios.CosmereCurios;
+import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.MetalmindItem;
@@ -338,18 +339,33 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
     }
 
     @Override
-    protected void onEquipStatusChanged(SlotContext slotContext, ItemStack stack, boolean isEquipping)
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
     {
-        //first do normal equip status changed, in case this spike metalmind has nicrosil powers stored
-        super.onEquipStatusChanged(slotContext, stack, isEquipping);
+        //todo better logic.
+        boolean isEquipping = prevStack == null || stack.getItem() != prevStack.getItem();
 
         if (isEquipping)
         {
             //then do hemalurgy spike logic
             //hurt the user
             //spiritweb attributes are handled in metalmind
-            slotContext.getWearer().hurt(SPIKED, 4);
+            final LivingEntity entity = slotContext.getWearer();
+            entity.hurt(SPIKED, 4);
         }
+
+    }
+
+    @Override
+    public boolean showAttributesTooltip(String identifier, ItemStack stack)
+    {
+        return false;
+    }
+
+    @Override
+    public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack)
+    {
+        final LivingEntity entity = slotContext.getWearer();
+        entity.hurt(SPIKED, 4);
     }
 
     @Override

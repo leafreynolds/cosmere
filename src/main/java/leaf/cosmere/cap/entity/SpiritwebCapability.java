@@ -184,6 +184,15 @@ public class SpiritwebCapability implements ISpiritweb
                 didSetup = true;
             }
 
+            if (selectedManifestation != ManifestationRegistry.NONE.get() && !hasManifestation(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID()))
+            {
+                selectedManifestation = ManifestationRegistry.NONE.get();
+                if (getLiving() instanceof ServerPlayerEntity)
+                {
+                    syncToClients((ServerPlayerEntity)getLiving());
+                }
+            }
+
             //Tick
             for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
             {

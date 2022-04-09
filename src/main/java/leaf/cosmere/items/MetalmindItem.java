@@ -88,22 +88,4 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
 
         return attributeModifiers;
     }
-
-    @Override
-    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
-    {
-        //todo better logic.
-        boolean isEquipping = prevStack == null || stack.getItem() != prevStack.getItem();
-        onEquipStatusChanged(slotContext, stack, isEquipping);
-    }
-
-    @Override
-    public void onUnequip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
-    {
-        onEquipStatusChanged(slotContext, stack, false);
-    }
-
-    protected void onEquipStatusChanged(SlotContext slotContext, ItemStack stack, boolean isEquipping)
-    {
-    }
 }
