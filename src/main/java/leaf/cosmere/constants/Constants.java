@@ -62,6 +62,11 @@ public class Constants
         public static final String NUGGET = "_nugget";
         public static final String SHAVINGS = "_shavings";
         public static final String SPIKE = "_spike";
+
+
+        public static final String CHIP = "_chip";
+        public static final String MARK = "_mark";
+        public static final String BROAM = "_broam";
     }
 
 

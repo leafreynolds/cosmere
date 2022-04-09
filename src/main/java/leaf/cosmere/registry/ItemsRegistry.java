@@ -10,8 +10,10 @@ package leaf.cosmere.registry;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Constants.RegNameStubs;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.items.*;
 import leaf.cosmere.items.curio.*;
+import leaf.cosmere.items.gems.PolestoneItem;
 import leaf.cosmere.properties.PropTypes;
 import net.minecraft.item.ItemTier;
 import net.minecraftforge.fml.RegistryObject;
@@ -143,6 +145,36 @@ public class ItemsRegistry
                             type -> ITEMS.register(
                                     type.getName() + RegNameStubs.SPIKE,
                                     () -> createItem(new HemalurgicSpikeItem(type))
+                            )));
+
+
+    public static final Map<Roshar.Polestone, RegistryObject<net.minecraft.item.Item>> POLESTONE_CHIPS =
+            Arrays.stream(Roshar.Polestone.values())
+                    .collect(Collectors.toMap(
+                            Function.identity(),
+                            type -> ITEMS.register(
+                                    type.getName() + RegNameStubs.CHIP,
+                                    () -> createItem(new PolestoneItem(type, Roshar.GemSize.CHIP))
+                            )));
+
+
+    public static final Map<Roshar.Polestone, RegistryObject<net.minecraft.item.Item>> POLESTONE_MARKS =
+            Arrays.stream(Roshar.Polestone.values())
+                    .collect(Collectors.toMap(
+                            Function.identity(),
+                            type -> ITEMS.register(
+                                    type.getName() + RegNameStubs.MARK,
+                                    () -> createItem(new PolestoneItem(type, Roshar.GemSize.MARK))
+                            )));
+
+
+    public static final Map<Roshar.Polestone, RegistryObject<net.minecraft.item.Item>> POLESTONE_BROAMS =
+            Arrays.stream(Roshar.Polestone.values())
+                    .collect(Collectors.toMap(
+                            Function.identity(),
+                            type -> ITEMS.register(
+                                    type.getName() + RegNameStubs.BROAM,
+                                    () -> createItem(new PolestoneItem(type, Roshar.GemSize.BROAM))
                             )));
 
 

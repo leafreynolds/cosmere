@@ -8,6 +8,7 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.items.gems.PolestoneItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.EffectsRegistry;
@@ -79,31 +80,6 @@ public class PlayerEventHandler
 		{
 			cap.syncToClients(null);
 		});
-	}
-
-	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent event)
-	{
-		PlayerEntity player = event.player;
-
-		//charge gemstones in inventory if the player is outside during a thunderstorm
-		if (player.level.isRainingAt(player.blockPosition()) && player.level.isThundering())
-		{
-			IInventory mainInv = player.inventory;
-			int size = mainInv.getContainerSize();
-
-			for (int i = 0; i < size; i++)
-			{
-				IInventory inv = mainInv;
-				int slot = i;
-
-				ItemStack stackInSlot = inv.getItem(slot);
-				//todo finish :D
-				//if (stackInSlot != null && stackInSlot.getItem() instanceof ItemGemstone)
-				{
-				}
-			}
-		}
 	}
 
 	@SubscribeEvent

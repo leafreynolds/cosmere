@@ -7,7 +7,9 @@
 package leaf.cosmere.handlers;
 
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.items.IHasMetalType;
+import leaf.cosmere.items.gems.IHasPolestoneType;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -42,7 +44,6 @@ public final class ColorHandler
         itemColors.register(metalColorHandler, ItemsRegistry.BANDS_OF_MOURNING.get());
         for (Metals.MetalType metalType : Metals.MetalType.values())
         {
-
             if (metalType.hasOre())
             {
                 //blocks in world
@@ -77,6 +78,20 @@ public final class ColorHandler
             if (metalType.hasHemalurgicEffect())
             {
                 itemColors.register(metalColorHandler, metalType.getSpikeItem());
+            }
+        }
+
+        IItemColor gemColorHandler =
+                (itemStack, tintIndex) -> tintIndex == 0
+                                          ? ((IHasPolestoneType) itemStack.getItem()).getPolestoneType().getColorValue()
+                                          : -1;
+
+        for (Roshar.Polestone polestone : Roshar.Polestone.values())
+        {
+            //blockColors.register(metalBlockColorHandler, metalType.getOreBlock());
+            for (Roshar.GemSize size : Roshar.GemSize.values())
+            {
+                itemColors.register(gemColorHandler, polestone.getPolestoneItem(size));
             }
         }
     }

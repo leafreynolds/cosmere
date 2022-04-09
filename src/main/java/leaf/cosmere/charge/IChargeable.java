@@ -127,9 +127,12 @@ public interface IChargeable
 
     default void increaseCurrentCharge(ItemStack itemStack)
     {
-        int currentCharge = getCharge(itemStack);
-        int nextChargeLevel = currentCharge + 1;
-        setCharge(itemStack, (int) nextChargeLevel);
+        increaseCurrentCharge(itemStack, 1);
+    }
+
+    default void increaseCurrentCharge(ItemStack stack, int i)
+    {
+        setCharge(stack, getCharge(stack) + i);
     }
 
     default void decreaseCurrentCharge(ItemStack itemStack)
@@ -148,4 +151,5 @@ public interface IChargeable
     {
         return true;
     }
+
 }
