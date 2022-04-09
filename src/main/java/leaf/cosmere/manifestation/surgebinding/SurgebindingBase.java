@@ -4,13 +4,14 @@
 
 package leaf.cosmere.manifestation.surgebinding;
 
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.manifestation.ManifestationBase;
 
 public class SurgebindingBase extends ManifestationBase
 {
-    public SurgebindingBase(int color)
+    public SurgebindingBase(Roshar.Surges surge)
     {
-        super(Manifestations.ManifestationTypes.RADIANT, color);
+        super(Manifestations.ManifestationTypes.RADIANT, surge.getColor());
     }
 }

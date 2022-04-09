@@ -5,14 +5,14 @@
 package leaf.cosmere.manifestation.surgebinding;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.constants.Roshar;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SurgeTransportation extends SurgebindingBase
 {
-    public SurgeTransportation(int color)
+    public SurgeTransportation(Roshar.Surges surge)
     {
-        super(color);
+        super(surge);
     }
 
 

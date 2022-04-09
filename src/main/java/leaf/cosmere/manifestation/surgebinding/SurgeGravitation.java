@@ -5,6 +5,7 @@
 package leaf.cosmere.manifestation.surgebinding;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -12,18 +13,18 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+//@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SurgeGravitation extends SurgebindingBase
 {
-    public SurgeGravitation(int color)
+    public SurgeGravitation(Roshar.Surges surge)
     {
-        super(color);
+        super(surge);
     }
 
     //gravitational attraction
 
 
-    @SubscribeEvent
+    //@SubscribeEvent
     public void onLivingHurtEvent(LivingHurtEvent event)
     {
         if (event.getSource().getEntity() instanceof PlayerEntity)

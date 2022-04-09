@@ -5,12 +5,14 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.manifestation.allomancy.*;
 import leaf.cosmere.manifestation.feruchemy.*;
+import leaf.cosmere.manifestation.surgebinding.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -66,16 +68,16 @@ public class ManifestationRegistry
 
     // Surgebinder
     //todo knights radiant
-    //public static final RegistryObject<AbstractInvestitureManifestation> WINDRUNNER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.WINDRUNNER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> SKYBREAKER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.SKYBREAKER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> DUSTBRINGER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.DUSTBRINGER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> EDGEDANCER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.EDGEDANCER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> TRUTHWATCHER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.TRUTHWATCHER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> LIGHTWEAVER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.LIGHTWEAVER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> ELSECALLER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.ELSECALLER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> WILLSHAPER = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.WILLSHAPER, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> STONEWARD = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.STONEWARD, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
-    //public static final RegistryObject<AbstractInvestitureManifestation> BONDSMITH = MANIFESTATIONS.register(Constants.Manifestations.Surgebinding.BONDSMITH, () -> new InvestitureManifestationBase(Color.WHITE.getRGB()));
+
+    public static final Map<Roshar.Surges, RegistryObject<AManifestation>> SURGEBINDING_POWERS =
+            Arrays.stream(Roshar.Surges.values())
+                    .collect(Collectors.toMap(
+                            Function.identity(),
+                            surge ->
+                                    MANIFESTATIONS.register(
+                                            surge.getName(),
+                                            () -> makeSurgebindingManifestation(surge))//get the specific instance of the manifestation for allomancy
+                    ));
 
     //Create Registry
     public static AManifestation fromID(String location)
@@ -154,6 +156,35 @@ public class ManifestationRegistry
             default:
                 return new FeruchemyBase(metalType);
         }
+    }
+    private static SurgebindingBase makeSurgebindingManifestation(Roshar.Surges surge)
+    {
+        switch (surge)
+        {
+            case ADHESION:
+                return new SurgeAdhesion(surge);
+            case GRAVITATION:
+                return new SurgeGravitation(surge);
+            case DIVISION:
+                return new SurgeDivision(surge);
+            case ABRASION:
+                return new SurgeAbrasion(surge);
+            case PROGRESSION:
+                return new SurgeProgression(surge);
+            case ILLUMINATION:
+                return new SurgeIllumination(surge);
+            case TRANSFORMATION:
+                return new SurgeTransformation(surge);
+            case TRANSPORTATION:
+                return new SurgeTransportation(surge);
+            case COHESION:
+                return new SurgeCohesion(surge);
+            case TENSION:
+                return new SurgeTension(surge);
+        }
+
+        //shouldn't ever make it here
+        return new SurgebindingBase(surge);
     }
 
     public static Map<ResourceLocation, String> getManifestations()
