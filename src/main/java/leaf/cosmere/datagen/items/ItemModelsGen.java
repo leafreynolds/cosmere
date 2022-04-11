@@ -85,12 +85,8 @@ public class ItemModelsGen extends ItemModelProvider
             }
             else if (item instanceof MetalRawOreItem)
             {
-                //todo split between raw ore and alloy blend
-                //MetalRawOreItem rawItem = (MetalRawOreItem)item;
-                //if (rawItem.getMetalType().isAlloy())
-                //    simpleItem(path, "metal_blend");
-                //else
-                    simpleItem(path, "metal_raw");
+                MetalRawOreItem rawItem = (MetalRawOreItem)item;
+                simpleItem(path, rawItem.getMetalType().isAlloy() ? "metal_blend" : "metal_raw");
                 continue;
             }
             else if (item instanceof PolestoneItem)

@@ -21,6 +21,7 @@ import net.minecraft.nbt.CompoundNBT;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
+import java.awt.*;
 import java.util.UUID;
 
 public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, ICurioItem
@@ -37,6 +38,13 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
     public Metals.MetalType getMetalType()
     {
         return this.metalType;
+    }
+
+
+    @Override
+    public boolean showAttributesTooltip(String identifier, ItemStack stack)
+    {
+        return false;
     }
 
     /**

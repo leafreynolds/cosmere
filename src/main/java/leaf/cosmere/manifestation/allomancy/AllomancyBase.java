@@ -116,6 +116,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
         //feruchemy power exists and is active
         if (feruchemyMode != 0 && isActiveTick)
         {
+            //todo config variable
             int secondsOfFeruchemyToAdd = 5;
             if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (-secondsOfFeruchemyToAdd) * (mode), true, true))
             {

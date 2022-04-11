@@ -11,14 +11,11 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.renderer.wearables.SpikeModel;
-import leaf.cosmere.compat.curios.CosmereCurios;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.MetalmindItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
-import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -36,7 +33,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -353,12 +349,6 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
             entity.hurt(SPIKED, 4);
         }
 
-    }
-
-    @Override
-    public boolean showAttributesTooltip(String identifier, ItemStack stack)
-    {
-        return false;
     }
 
     @Override
