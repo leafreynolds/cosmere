@@ -57,6 +57,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+//Other ideas?
+//Spike Guns?
+//https://wob.coppermind.net/events/390-stuttgart-signing/#e12677
+
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInfo
 {
@@ -313,10 +317,15 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
                 Predicate<ItemStack> spikePredicate = stackToFind ->
                 {
                     final boolean isSpike = stackToFind.getItem() instanceof HemalurgicSpikeItem;
+
+                    if (!isSpike)
+                    {
+                        return false;
+                    }
+
                     final HemalurgicSpikeItem hemalurgicSpikeItem = (HemalurgicSpikeItem) stackToFind.getItem();
                     final UUID foundSpikeUUID = getHemalurgicIdentity(stackToFind);
-                    return isSpike
-                            && hemalurgicSpikeItem.getMetalType() == getMetalType()
+                    return hemalurgicSpikeItem.getMetalType() == getMetalType()
                             && foundSpikeUUID != null
                             && foundSpikeUUID.compareTo(stackWeWantToEquipUUID) == 0;
                 };
