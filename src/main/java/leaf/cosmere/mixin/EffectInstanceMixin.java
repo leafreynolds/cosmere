@@ -27,6 +27,17 @@ public class EffectInstanceMixin
             cir.setReturnValue(true);
         }
     }
+    @Inject(at = @At("RETURN"),
+            method = "showIcon",
+            cancellable = true
+    )
+    private void getShowIcon(CallbackInfoReturnable<Boolean> cir)
+    {
+        if (getEffect() instanceof FeruchemyEffectBase)
+        {
+            cir.setReturnValue(false);
+        }
+    }
 
 
     @Shadow
