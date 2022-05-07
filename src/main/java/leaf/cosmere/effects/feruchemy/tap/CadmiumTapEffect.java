@@ -6,27 +6,27 @@ package leaf.cosmere.effects.feruchemy.tap;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectType;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
 
 public class CadmiumTapEffect extends FeruchemyEffectBase
 {
-    public CadmiumTapEffect(Metals.MetalType type, EffectType effectType)
-    {
-        super(type, effectType);
-    }
+	public CadmiumTapEffect(Metals.MetalType type, MobEffectCategory effectType)
+	{
+		super(type, effectType);
+	}
 
-    @Override
-    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
-    {
-        if (entityLivingBaseIn.level.isClientSide)
-        {
-            return;
-        }
+	@Override
+	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	{
+		if (entityLivingBaseIn.level.isClientSide)
+		{
+			return;
+		}
 
-        entityLivingBaseIn.setAirSupply(MathHelper.clamp(entityLivingBaseIn.getAirSupply() + 3 + (amplifier), entityLivingBaseIn.getAirSupply(), entityLivingBaseIn.getMaxAirSupply()));
+		entityLivingBaseIn.setAirSupply(Mth.clamp(entityLivingBaseIn.getAirSupply() + 3 + (amplifier), entityLivingBaseIn.getAirSupply(), entityLivingBaseIn.getMaxAirSupply()));
 
-    }
+	}
 }

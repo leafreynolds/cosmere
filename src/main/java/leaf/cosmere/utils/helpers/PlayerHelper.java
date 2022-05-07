@@ -7,13 +7,14 @@ package leaf.cosmere.utils.helpers;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.MinecraftServer;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerHelper
 {
-    public static String getPlayerName(UUID id, MinecraftServer server)
-    {
-        GameProfile profileByUUID = server.getProfileCache().get(id);
-        return profileByUUID != null ? profileByUUID.getName() : "OFFLINE Player";
-    }
+	public static String getPlayerName(UUID id, MinecraftServer server)
+	{
+		final Optional<GameProfile> gameProfile = server.getProfileCache().get(id);
+		return gameProfile.isPresent() ? gameProfile.get().getName() : "OFFLINE Player";
+	}
 }

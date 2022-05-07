@@ -9,10 +9,10 @@ import leaf.cosmere.constants.Metals;
 public class MetalIngotItem extends MetalItem
 {
 
-    public MetalIngotItem(Metals.MetalType metalType)
-    {
-        super(metalType);
-    }
+	public MetalIngotItem(Metals.MetalType metalType)
+	{
+		super(metalType);
+	}
 
 
 }

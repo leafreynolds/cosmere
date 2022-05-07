@@ -6,39 +6,39 @@ package leaf.cosmere.effects.feruchemy.tap;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
 
 public class GoldTapEffect extends FeruchemyEffectBase
 {
-    public GoldTapEffect(Metals.MetalType type, EffectType effectType)
-    {
-        super(type, effectType);
-    }
+	public GoldTapEffect(Metals.MetalType type, MobEffectCategory effectType)
+	{
+		super(type, effectType);
+	}
 
-    @Override
-    public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
-    {
-        if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
-        {
-            entityLivingBaseIn.heal(amplifier + 1);
-        }
+	@Override
+	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	{
+		if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
+		{
+			entityLivingBaseIn.heal(amplifier + 1);
+		}
 
-        //todo reduce harmful effects timer
-    }
+		//todo reduce harmful effects timer
+	}
 
-    @Override
-    public boolean isDurationEffectTick(int duration, int amplifier)
-    {
-        int k = 40 >> amplifier;
-        if (k > 0)
-        {
-            return duration % k == 0;
-        }
-        else
-        {
-            return true;
-        }
-    }
+	@Override
+	public boolean isDurationEffectTick(int duration, int amplifier)
+	{
+		int k = 40 >> amplifier;
+		if (k > 0)
+		{
+			return duration % k == 0;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }

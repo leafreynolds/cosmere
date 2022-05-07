@@ -9,19 +9,19 @@ import leaf.cosmere.constants.Metals;
 
 public class AllomancyElectrum extends AllomancyBase
 {
-    public AllomancyElectrum(Metals.MetalType metalType)
-    {
-        super(metalType);
-    }
+	public AllomancyElectrum(Metals.MetalType metalType)
+	{
+		super(metalType);
+	}
 
-    @Override
-    protected void performEffect(ISpiritweb data)
-    {
-        //Reveals Your Future
-        {
-            //todo
-        }
-    }
-    //add client side stuff
+	@Override
+	protected void performEffect(ISpiritweb data)
+	{
+		//Reveals Your Future
+		{
+			//todo
+		}
+	}
+	//add client side stuff
 
 }

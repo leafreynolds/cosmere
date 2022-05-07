@@ -6,55 +6,57 @@ package leaf.cosmere.effects.feruchemy.store;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierManager;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
 //luck
 public class ChromiumStoreEffect extends FeruchemyEffectBase
 {
-    public ChromiumStoreEffect(Metals.MetalType type, EffectType effectType)
-    {
-        super(type, effectType);
+	public ChromiumStoreEffect(Metals.MetalType type, MobEffectCategory effectType)
+	{
+		super(type, effectType);
 
-        addAttributeModifier(
-                Attributes.LUCK,
-                "97c8b98f-fb33-4218-bd32-1ace62d75019",
-                -1.0D,
-                AttributeModifier.Operation.ADDITION);
+		addAttributeModifier(
+				Attributes.LUCK,
+				"97c8b98f-fb33-4218-bd32-1ace62d75019",
+				-1.0D,
+				AttributeModifier.Operation.ADDITION);
 
-        MinecraftForge.EVENT_BUS.addListener(this::onLootingLevelEvent);
-    }
+		MinecraftForge.EVENT_BUS.addListener(this::onLootingLevelEvent);
+	}
 
-    public void onLootingLevelEvent(LootingLevelEvent event)
-    {
-        if (event.getDamageSource() == null)
-            return;
-    
-        boolean isRemote = event.getEntityLiving().level.isClientSide;
-        boolean entityNotLiving = !(event.getDamageSource().getEntity() instanceof LivingEntity);
+	public void onLootingLevelEvent(LootingLevelEvent event)
+	{
+		if (event.getDamageSource() == null)
+		{
+			return;
+		}
 
-        if (isRemote || entityNotLiving)
-        {
-            return;
-        }
+		boolean isRemote = event.getEntityLiving().level.isClientSide;
+		boolean entityNotLiving = !(event.getDamageSource().getEntity() instanceof LivingEntity);
 
-        EffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getEntity()).getEffect(this);
-        if (effectInstance != null && effectInstance.getDuration() > 0)
-        {
-            event.setLootingLevel(event.getLootingLevel() - effectInstance.getAmplifier());
-        }
-    }
+		if (isRemote || entityNotLiving)
+		{
+			return;
+		}
+
+		MobEffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getEntity()).getEffect(this);
+		if (effectInstance != null && effectInstance.getDuration() > 0)
+		{
+			event.setLootingLevel(event.getLootingLevel() - effectInstance.getAmplifier());
+		}
+	}
 
 
-    @Override
-    public void addAttributeModifiers(LivingEntity entityLivingBaseIn, AttributeModifierManager attributeMapIn, int amplifier)
-    {
-        super.addAttributeModifiers(entityLivingBaseIn, attributeMapIn, amplifier);
-    }
+	@Override
+	public void addAttributeModifiers(LivingEntity entityLivingBaseIn, AttributeMap attributeMapIn, int amplifier)
+	{
+		super.addAttributeModifiers(entityLivingBaseIn, attributeMapIn, amplifier);
+	}
 }

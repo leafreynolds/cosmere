@@ -4,18 +4,15 @@
 
 package leaf.cosmere.compat.hwyla;
 
-import mcp.mobius.waila.api.IRegistrar;
-import mcp.mobius.waila.api.IWailaPlugin;
-import mcp.mobius.waila.api.TooltipPosition;
-import mcp.mobius.waila.api.WailaPlugin;
-import net.minecraft.entity.LivingEntity;
+import mcp.mobius.waila.api.*;
+import net.minecraft.world.entity.LivingEntity;
 
 @WailaPlugin
 public class HwylaCompat implements IWailaPlugin
 {
-    @Override
-    public void register(IRegistrar iRegistrar)
-    {
-        iRegistrar.registerComponentProvider(SpiritWebTooltip.INSTANCE, TooltipPosition.BODY, LivingEntity.class);
-    }
+	@Override
+	public void registerClient(IWailaClientRegistration registration)
+	{
+		registration.registerComponentProvider(SpiritWebTooltip.INSTANCE, TooltipPosition.BODY, LivingEntity.class);
+	}
 }

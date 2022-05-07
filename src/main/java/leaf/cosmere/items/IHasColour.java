@@ -8,6 +8,7 @@ import java.awt.*;
 
 public interface IHasColour
 {
-    Color getColour();
-    int getColourValue();
+	Color getColour();
+
+	int getColourValue();
 }

@@ -17,27 +17,27 @@ import java.io.InputStream;
 public final class TextureUtils
 {
 
-    private TextureUtils()
-    {
-        throw new IllegalStateException("Tried to initialize: TextureUtils but this is a Utility class.");
-    }
+	private TextureUtils()
+	{
+		throw new IllegalStateException("Tried to initialize: TextureUtils but this is a Utility class.");
+	}
 
 
-    //special thank you to the chisels and bits team who have an example of how to to register other sprites
-    public static BufferedImage readBufferedImage(InputStream imageStream) throws IOException
-    {
-        BufferedImage bufferedimage;
+	//special thank you to the chisels and bits team who have an example of how to to register other sprites
+	public static BufferedImage readBufferedImage(InputStream imageStream) throws IOException
+	{
+		BufferedImage bufferedimage;
 
-        try
-        {
-            bufferedimage = ImageIO.read(imageStream);
-        }
-        finally
-        {
-            IOUtils.closeQuietly(imageStream);
-        }
+		try
+		{
+			bufferedimage = ImageIO.read(imageStream);
+		}
+		finally
+		{
+			IOUtils.closeQuietly(imageStream);
+		}
 
-        return bufferedimage;
-    }
+		return bufferedimage;
+	}
 
 }

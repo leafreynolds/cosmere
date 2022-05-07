@@ -4,12 +4,12 @@
 
 package leaf.cosmere.items;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IContainsMetal
 {
-    default boolean containsMetal(ItemStack stack)
-    {
-        return true;
-    }
+	default boolean containsMetal(ItemStack stack)
+	{
+		return true;
+	}
 }

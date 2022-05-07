@@ -9,21 +9,21 @@ import leaf.cosmere.constants.Metals;
 
 public class FeruchemyAluminum extends FeruchemyBase
 {
-    public FeruchemyAluminum(Metals.MetalType metalType)
-    {
-        super(metalType);
-    }
+	public FeruchemyAluminum(Metals.MetalType metalType)
+	{
+		super(metalType);
+	}
 
-    @Override
-    public int modeMin(ISpiritweb data)
-    {
-        return -1;
-    }
+	@Override
+	public int modeMin(ISpiritweb data)
+	{
+		return -1;
+	}
 
-    @Override
-    public int modeMax(ISpiritweb data)
-    {
-        return 1;
-    }
+	@Override
+	public int modeMax(ISpiritweb data)
+	{
+		return 1;
+	}
 
 }

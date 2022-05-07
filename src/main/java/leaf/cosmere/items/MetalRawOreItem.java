@@ -8,9 +8,9 @@ import leaf.cosmere.constants.Metals;
 
 public class MetalRawOreItem extends MetalItem
 {
-    public MetalRawOreItem(Metals.MetalType metalType)
-    {
-        super(metalType);
-    }
+	public MetalRawOreItem(Metals.MetalType metalType)
+	{
+		super(metalType);
+	}
 
 }

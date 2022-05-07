@@ -4,21 +4,19 @@
 
 package leaf.cosmere.items;
 
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.SwordItem;
-
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
 
 public class ShardbladeItem extends SwordItem
 {
-    public ShardbladeItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
-    {
-        super(tier, attackDamageIn, attackSpeedIn, builderIn);
-    }
+	public ShardbladeItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
+	{
+		super(tier, attackDamageIn, attackSpeedIn, builderIn);
+	}
 
-    @Override
-    public boolean isFireResistant()
-    {
-        return true;
-    }
+	@Override
+	public boolean isFireResistant()
+	{
+		return true;
+	}
 }

@@ -10,14 +10,14 @@ import leaf.cosmere.items.MetalmindItem;
 
 public class NecklaceMetalmindItem extends MetalmindItem
 {
-    public NecklaceMetalmindItem(Metals.MetalType metalType)
-    {
-        super(metalType, CosmereItemGroups.METALMINDS);
-    }
+	public NecklaceMetalmindItem(Metals.MetalType metalType)
+	{
+		super(metalType, CosmereItemGroups.METALMINDS);
+	}
 
-    @Override
-    public float getMaxChargeModifier()
-    {
-        return (6f / 9f);
-    }
+	@Override
+	public float getMaxChargeModifier()
+	{
+		return (6f / 9f);
+	}
 }

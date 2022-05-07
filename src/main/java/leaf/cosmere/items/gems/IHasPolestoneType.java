@@ -11,15 +11,15 @@ import java.awt.*;
 
 public interface IHasPolestoneType extends IHasColour
 {
-    Roshar.Polestone getPolestoneType();
+	Roshar.Polestone getPolestoneType();
 
-    default Color getColour()
-    {
-        return getPolestoneType().getColor();
-    }
+	default Color getColour()
+	{
+		return getPolestoneType().getColor();
+	}
 
-    default int getColourValue()
-    {
-        return getColour().getRGB();
-    }
+	default int getColourValue()
+	{
+		return getColour().getRGB();
+	}
 }

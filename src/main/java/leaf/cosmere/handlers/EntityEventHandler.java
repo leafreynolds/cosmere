@@ -7,42 +7,45 @@ package leaf.cosmere.handlers;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.constants.Constants;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.registry.AttributesRegistry;
-import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
-import net.minecraft.entity.monster.piglin.PiglinEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.horse.LlamaEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 import static leaf.cosmere.utils.helpers.EntityHelper.giveEntityStartingManifestation;
@@ -51,192 +54,214 @@ import static leaf.cosmere.utils.helpers.EntityHelper.giveEntityStartingManifest
 public class EntityEventHandler
 {
 
-    @SubscribeEvent
-    public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event)
-    {
-        Entity eventEntity = event.getEntity();
+	@SubscribeEvent
+	public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event)
+	{
+		Entity eventEntity = event.getEntity();
 
-        if (eventEntity.level.isClientSide || !(eventEntity instanceof LivingEntity))
-        {
-            return;
-        }
+		if (eventEntity.level.isClientSide || !(eventEntity instanceof LivingEntity))
+		{
+			return;
+		}
 
-        LivingEntity livingEntity = (LivingEntity) eventEntity;
-        SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
-        {
-            SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
+		LivingEntity livingEntity = (LivingEntity) eventEntity;
+		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
+		{
+			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
 
-            //find out if any innate powers exist on the entity first
-            //if they do
-            if (spiritweb.hasAnyPowers())
-            {
-                //then skip
-                //no need to give them extras just for rejoining the world.
-                return;
-            }
+			//find out if any innate powers exist on the entity first
+			//if they do
+			if (spiritweb.hasAnyPowers())
+			{
+				//then skip
+				//no need to give them extras just for rejoining the world.
+				return;
+			}
 
-            //if player or villager
-            if (eventEntity instanceof PlayerEntity)
-            {
-                //from random powertype
-                {
-                    //give random power
-                    giveEntityStartingManifestation(livingEntity, spiritweb);
+			//if player or villager
+			if (eventEntity instanceof Player)
+			{
+				//from random powertype
+				{
+					//give random power
+					giveEntityStartingManifestation(livingEntity, spiritweb);
 
 
-                    for (Metals.MetalType metalType : Metals.MetalType.values())
-                    {
-                        //check for others
-                        final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
-                        if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
-                        {
-                            ModifiableAttributeInstance newPlayerAttribute = ((PlayerEntity) eventEntity).getAttribute(metalRelatedAttribute.get());
+					for (Metals.MetalType metalType : Metals.MetalType.values())
+					{
+						//check for others
+						final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
+						if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+						{
+							AttributeInstance newPlayerAttribute = ((Player) eventEntity).getAttribute(metalRelatedAttribute.get());
 
-                            if (newPlayerAttribute != null)
-                            {
-                                newPlayerAttribute.setBaseValue(newPlayerAttribute.getBaseValue());
-                            }
+							if (newPlayerAttribute != null)
+							{
+								newPlayerAttribute.setBaseValue(newPlayerAttribute.getBaseValue());
+							}
 
-                        }
-                    }
-                }
-            }
-            else if (eventEntity instanceof AbstractVillagerEntity
-                    || eventEntity instanceof ZombieVillagerEntity
-                    || (eventEntity instanceof AbstractRaiderEntity && !(eventEntity instanceof  RavagerEntity))
-                    || eventEntity instanceof AbstractPiglinEntity)
-            {
-                //random 1/16
-                // only 1 in 16 will have the gene
-                if (MathHelper.randomInt(1, 16) % 16 == 0)
-                {
-                    giveEntityStartingManifestation(livingEntity, spiritweb);
-                }
+						}
+					}
+				}
+			}
+			else if (eventEntity instanceof AbstractVillager
+					|| eventEntity instanceof ZombieVillager
+					|| (eventEntity instanceof Raider && !(eventEntity instanceof Ravager))
+					|| eventEntity instanceof AbstractPiglin)
+			{
+				//random 1/16
+				// only 1 in 16 will have the gene
+				if (MathHelper.randomInt(1, 16) % 16 == 0)
+				{
+					giveEntityStartingManifestation(livingEntity, spiritweb);
+				}
 
-            }
-        });
+			}
+		});
 
-    }
+	}
 
-    @SubscribeEvent
-    public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
-    {
-        Entity eventEntity = event.getObject();
+	@SubscribeEvent
+	public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
+	{
+		Entity eventEntity = event.getObject();
 
-        if (eventEntity instanceof PlayerEntity
-                || eventEntity instanceof AnimalEntity
-                || eventEntity instanceof AbstractVillagerEntity
-                || eventEntity instanceof MonsterEntity)
-        {
-            LivingEntity livingEntity = (LivingEntity) eventEntity;
-            SpiritwebCapability spiritwebCapability = new SpiritwebCapability(livingEntity);
+		if (eventEntity instanceof Player
+				|| eventEntity instanceof Animal
+				|| eventEntity instanceof AbstractVillager
+				|| eventEntity instanceof Monster)
+		{
+			LivingEntity livingEntity = (LivingEntity) eventEntity;
+			event.addCapability(Constants.Resources.SPIRITWEB_CAP, new ICapabilitySerializable<CompoundTag>()
+			{
+				final SpiritwebCapability spiritweb = new SpiritwebCapability(livingEntity);
+				final LazyOptional<ISpiritweb> spiritwebInstance = LazyOptional.of(() -> spiritweb);
 
-            event.addCapability(Constants.Resources.SPIRITWEB_CAP, new ISpiritweb.Provider(spiritwebCapability));
-        }
-    }
+				@Nonnull
+				@Override
+				public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @javax.annotation.Nullable Direction side)
+				{
+					return cap == SpiritwebCapability.CAPABILITY ? (LazyOptional<T>) spiritwebInstance
+					                                             : LazyOptional.empty();
+				}
 
-    @SubscribeEvent
-    public static void onLivingTick(LivingEvent.LivingUpdateEvent event)
-    {
-        SpiritwebCapability.get(event.getEntityLiving()).ifPresent(ISpiritweb::tick);
-    }
+				@Override
+				public CompoundTag serializeNBT()
+				{
+					return spiritweb.serializeNBT();
+				}
 
-    @SubscribeEvent
-    public static void onEntityItemPickUp(EntityItemPickupEvent event)
-    {
-        //seriously, get item three times is stupid, I know it.
-        //but entity item, itemstack and then the actual item is needed.
+				@Override
+				public void deserializeNBT(CompoundTag nbt)
+				{
+					spiritweb.deserializeNBT(nbt);
+				}
+			});
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLivingTick(LivingEvent.LivingUpdateEvent event)
+	{
+		SpiritwebCapability.get(event.getEntityLiving()).ifPresent(ISpiritweb::tick);
+	}
+
+	@SubscribeEvent
+	public static void onEntityItemPickUp(EntityItemPickupEvent event)
+	{
+		//seriously, get item three times is stupid, I know it.
+		//but entity item, itemstack and then the actual item is needed.
 /*        if (event.getItem().getItem().getItem() == ItemsRegistry.INVESTITURE.get())
         {
             event.getItem().getItem().shrink(1);
 
             ItemChargeHelper.dispatchCharge(event.getPlayer(), 1000, true);
         }*/
-    }
+	}
 
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
-    {
-        final PlayerEntity player = event.getPlayer();
-        ItemStack itemInHand = player.getItemInHand(event.getHand());
+	@SubscribeEvent
+	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
+	{
+		final Player player = event.getPlayer();
+		ItemStack itemInHand = player.getItemInHand(event.getHand());
 
-        final Item[] allowedItems = {Items.IRON_NUGGET, Items.GOLD_NUGGET/*,Items.COPPER_NUGGET*/};
+		final Item[] allowedItems = {Items.IRON_NUGGET, Items.GOLD_NUGGET/*,Items.COPPER_NUGGET*/};
 
-        final Item handItem = itemInHand.getItem();
+		final Item handItem = itemInHand.getItem();
 
-        if (!itemInHand.isEmpty() && Arrays.asList(allowedItems).contains(handItem))
-        {
-            Metals.MetalType metalType = null;
+		if (!itemInHand.isEmpty() && Arrays.asList(allowedItems).contains(handItem))
+		{
+			Metals.MetalType metalType = null;
 
-            if (handItem == Items.IRON_NUGGET)
-            {
-                metalType = Metals.MetalType.IRON;
-            }
-            else if (handItem == Items.GOLD_NUGGET)
-            {
-                metalType = Metals.MetalType.GOLD;
-            }
+			if (handItem == Items.IRON_NUGGET)
+			{
+				metalType = Metals.MetalType.IRON;
+			}
+			else if (handItem == Items.GOLD_NUGGET)
+			{
+				metalType = Metals.MetalType.GOLD;
+			}
             /*else if (handItem == Items.COPPER_NUGGET)//todo copper 1.18
             {
                 metalType = Metals.MetalType.COPPER;
             }*/
-            player.startUsingItem(event.getHand());
+			player.startUsingItem(event.getHand());
 
-            MetalNuggetItem.consumeNugget(player, metalType, itemInHand);
-        }
+			MetalNuggetItem.consumeNugget(player, metalType, itemInHand);
+		}
 
-    }
-
-
-    @SubscribeEvent
-    public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
-    {
-        if (!(event.getTarget() instanceof LivingEntity))
-        {
-            return;
-        }
-
-        ItemStack stack = event.getPlayer().getItemInHand(Hand.MAIN_HAND);
-        LivingEntity target = (LivingEntity) event.getTarget();
-
-        SpiritwebCapability.get(target).ifPresent(cap ->
-        {
-            if (stack.getItem() instanceof MetalNuggetItem)
-            {
-                MetalNuggetItem beadItem = (MetalNuggetItem) stack.getItem();
-                Metals.MetalType metalType = beadItem.getMetalType();
-
-                if (metalType != Metals.MetalType.LERASATIUM && metalType != Metals.MetalType.LERASIUM)
-                {
-                    return;
-                }
-
-                MetalNuggetItem.consumeNugget(target, metalType, stack);
-            }
-            else if (stack.getItem() instanceof HemalurgicSpikeItem)
-            {
-                //https://www.theoryland.com/intvmain.php?i=977#43
-                if (!(event.getTarget() instanceof CatEntity))
-                {
-                    return;
-                }
-
-                HemalurgicSpikeItem spike = (HemalurgicSpikeItem) stack.getItem();
-
-                //only apply spike if it has a power
-                //no accidentally losing spikes
-                if (!spike.hemalurgicIdentityExists(stack))
-                {
-                    return;
-                }
+	}
 
 
-                //todo random list of catquisitor names
-                target.setCustomName(TextHelper.createTranslatedText("Catquisitor "));
+	@SubscribeEvent
+	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
+	{
+		if (!(event.getTarget() instanceof LivingEntity))
+		{
+			return;
+		}
 
-                boolean spikeApplied = false;
+		ItemStack stack = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
+		LivingEntity target = (LivingEntity) event.getTarget();
 
-                //todo catquisitor
+		SpiritwebCapability.get(target).ifPresent(cap ->
+		{
+			if (stack.getItem() instanceof MetalNuggetItem)
+			{
+				MetalNuggetItem beadItem = (MetalNuggetItem) stack.getItem();
+				Metals.MetalType metalType = beadItem.getMetalType();
+
+				if (metalType != Metals.MetalType.LERASATIUM && metalType != Metals.MetalType.LERASIUM)
+				{
+					return;
+				}
+
+				MetalNuggetItem.consumeNugget(target, metalType, stack);
+			}
+			else if (stack.getItem() instanceof HemalurgicSpikeItem)
+			{
+				//https://www.theoryland.com/intvmain.php?i=977#43
+				if (!(event.getTarget() instanceof Cat))
+				{
+					return;
+				}
+
+				HemalurgicSpikeItem spike = (HemalurgicSpikeItem) stack.getItem();
+
+				//only apply spike if it has a power
+				//no accidentally losing spikes
+				if (!spike.hemalurgicIdentityExists(stack))
+				{
+					return;
+				}
+
+
+				//todo random list of catquisitor names
+				target.setCustomName(TextHelper.createTranslatedText("Catquisitor "));
+
+				boolean spikeApplied = false;
+
+				//todo catquisitor
                 /*
                 switch (spike.getMetalType())
                 {
@@ -263,12 +288,12 @@ public class EntityEventHandler
                         break;
                 }*/
 
-                if (spikeApplied && !event.getPlayer().isCreative())
-                {
-                    stack.shrink(1);
-                }
-            }
+				if (spikeApplied && !event.getPlayer().isCreative())
+				{
+					stack.shrink(1);
+				}
+			}
 
-        });
-    }
+		});
+	}
 }

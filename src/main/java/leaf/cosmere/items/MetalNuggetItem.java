@@ -8,13 +8,13 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.utils.helpers.TextHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.horse.LlamaEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class MetalNuggetItem extends MetalItem
 {
@@ -30,7 +30,7 @@ public class MetalNuggetItem extends MetalItem
 		return 16;
 	}
 
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
 	{
 		ItemStack itemstack = playerIn.getItemInHand(handIn);
 		playerIn.startUsingItem(handIn);
@@ -39,7 +39,7 @@ public class MetalNuggetItem extends MetalItem
 
 		consumeNugget(playerIn, getMetalType(), itemstack);
 
-		return ActionResult.consume(itemstack);
+		return InteractionResultHolder.consume(itemstack);
 	}
 
 	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, ItemStack itemstack)
@@ -56,7 +56,7 @@ public class MetalNuggetItem extends MetalItem
 			if (metalType == Metals.MetalType.LERASIUM || metalType == Metals.MetalType.LERASATIUM)
 			{
 				//https://www.theoryland.com/intvmain.php?i=977#43
-				if (metalType == Metals.MetalType.LERASIUM && livingEntity instanceof LlamaEntity && !livingEntity.hasCustomName())
+				if (metalType == Metals.MetalType.LERASIUM && livingEntity instanceof Llama && !livingEntity.hasCustomName())
 				{
 					//todo translations
 					livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
@@ -83,7 +83,7 @@ public class MetalNuggetItem extends MetalItem
 				spiritweb.METALS_INGESTED.put(metalType, metalIngested + metalType.getAllomancyBurnTimeSeconds());
 			}
 
-			if (livingEntity instanceof PlayerEntity && !((PlayerEntity) livingEntity).isCreative())
+			if (livingEntity instanceof Player && !((Player) livingEntity).isCreative())
 			{
 				itemstack.shrink(1);
 			}

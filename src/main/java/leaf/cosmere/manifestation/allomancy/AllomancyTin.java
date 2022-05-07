@@ -10,10 +10,10 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
@@ -23,45 +23,45 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AllomancyTin extends AllomancyBase
 {
-    public AllomancyTin(Metals.MetalType metalType)
-    {
-        super(metalType);
-    }
+	public AllomancyTin(Metals.MetalType metalType)
+	{
+		super(metalType);
+	}
 
-    @Override
-    protected void performEffect(ISpiritweb data)
-    {
-        //Increases Physical Senses
-        LivingEntity livingEntity = data.getLiving();
-        boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+	@Override
+	protected void performEffect(ISpiritweb data)
+	{
+		//Increases Physical Senses
+		LivingEntity livingEntity = data.getLiving();
+		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
-        //give night vision
-        if (isActiveTick)
-        {
-            livingEntity.addEffect(EffectsHelper.getNewEffect(Effects.NIGHT_VISION, 0));
-        }
-    }
+		//give night vision
+		if (isActiveTick)
+		{
+			livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.NIGHT_VISION, 0));
+		}
+	}
 
 
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public void onSound(PlaySoundEvent event)
-    {
-        ISound eventSound = event.getSound();
+	@OnlyIn(Dist.CLIENT)
+	@SubscribeEvent
+	public void onSound(PlaySoundEvent event)
+	{
+		SoundInstance eventSound = event.getSound();
 
-        if ((eventSound == null))
-        {
-            return;
-        }
+		if ((eventSound == null))
+		{
+			return;
+		}
 
-        PlayerEntity localPlayer = Minecraft.getInstance().player;
+		Player localPlayer = Minecraft.getInstance().player;
 
-        SpiritwebCapability.get(localPlayer).ifPresent(playerSpiritweb ->
-        {
-            if (isActive(playerSpiritweb))
-            {
-                //todo make the entity glow or something to the user?
-            }
-        });
-    }
+		SpiritwebCapability.get(localPlayer).ifPresent(playerSpiritweb ->
+		{
+			if (isActive(playerSpiritweb))
+			{
+				//todo make the entity glow or something to the user?
+			}
+		});
+	}
 }

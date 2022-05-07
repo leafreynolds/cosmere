@@ -8,27 +8,20 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.items.gems.PolestoneItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.EffectsRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifierManager;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerEventHandler
@@ -36,9 +29,10 @@ public class PlayerEventHandler
 	@SubscribeEvent
 	public static void onPlayerClone(PlayerEvent.Clone event)
 	{
-		Capability.IStorage<ISpiritweb> storage = SpiritwebCapability.CAPABILITY.getStorage();
 		event.getOriginal().revive();
-		SpiritwebCapability.get(event.getOriginal()).ifPresent((oldSpiritWeb) ->
+
+
+/*		SpiritwebCapability.get(event.getOriginal()).ifPresent((oldSpiritWeb) ->
 				SpiritwebCapability.get(event.getPlayer()).ifPresent((newSpiritWeb) ->
 				{
 					//clear out the attributes that were placed on the newly cloned player at creation
@@ -49,28 +43,28 @@ public class PlayerEventHandler
 						newSpiritWeb.giveManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
 					}
 
-					CompoundNBT nbt = (CompoundNBT) storage.writeNBT(SpiritwebCapability.CAPABILITY, oldSpiritWeb, null);
+					CompoundTag nbt = (CompoundTag) storage.writeNBT(SpiritwebCapability.CAPABILITY, oldSpiritWeb, null);
 					storage.readNBT(SpiritwebCapability.CAPABILITY, newSpiritWeb, null, nbt);
 
-                    for (Metals.MetalType metalType : Metals.MetalType.values())
-                    {
-	                    //check for others
-	                    final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
-	                    if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
-	                    {
-		                    ModifiableAttributeInstance oldPlayerAttribute = event.getOriginal().getAttribute(metalRelatedAttribute.get());
-		                    ModifiableAttributeInstance newPlayerAttribute = event.getPlayer().getAttribute(metalRelatedAttribute.get());
-
-		                    if (newPlayerAttribute != null && oldPlayerAttribute != null)
-		                    {
-			                    newPlayerAttribute.setBaseValue(oldPlayerAttribute.getBaseValue());
-		                    }
-
-	                    }
-                    }
-				}));
+				}));*/
 
 
+		for (Metals.MetalType metalType : Metals.MetalType.values())
+		{
+			//check for others
+			final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
+			if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+			{
+				AttributeInstance oldPlayerAttribute = event.getOriginal().getAttribute(metalRelatedAttribute.get());
+				AttributeInstance newPlayerAttribute = event.getPlayer().getAttribute(metalRelatedAttribute.get());
+
+				if (newPlayerAttribute != null && oldPlayerAttribute != null)
+				{
+					newPlayerAttribute.setBaseValue(oldPlayerAttribute.getBaseValue());
+				}
+
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -120,8 +114,8 @@ public class PlayerEventHandler
 
 		//Feruchemical Zinc
 		{
-			EffectInstance tappingZincEffect = event.getPlayer().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ZINC).get());
-			EffectInstance storingZincEffect = event.getPlayer().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ZINC).get());
+			MobEffectInstance tappingZincEffect = event.getPlayer().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ZINC).get());
+			MobEffectInstance storingZincEffect = event.getPlayer().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ZINC).get());
 
 			if (tappingZincEffect != null)
 			{
@@ -136,7 +130,7 @@ public class PlayerEventHandler
 		RegistryObject<Attribute> xpGainRateAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.COPPER.getName());
 		if (xpGainRateAttribute != null && xpGainRateAttribute.isPresent())
 		{
-			ModifiableAttributeInstance attribute = event.getPlayer().getAttribute(xpGainRateAttribute.get());
+			AttributeInstance attribute = event.getPlayer().getAttribute(xpGainRateAttribute.get());
 			if (attribute != null)
 			{
 				event.setAmount((int) (event.getAmount() * attribute.getValue()));

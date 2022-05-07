@@ -4,37 +4,37 @@
 
 package leaf.cosmere.registry;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 
 public class DataSerializersRegistry
 {
-    public static final IDataSerializer<ResourceLocation> RESOURCE_LOCATION = new IDataSerializer<ResourceLocation>()
-    {
+	public static final EntityDataSerializer<ResourceLocation> RESOURCE_LOCATION = new EntityDataSerializer<ResourceLocation>()
+	{
 
-        @Override
-        public void write(PacketBuffer buf, ResourceLocation value)
-        {
-            buf.writeResourceLocation(value);
-        }
+		@Override
+		public void write(FriendlyByteBuf buf, ResourceLocation value)
+		{
+			buf.writeResourceLocation(value);
+		}
 
-        public ResourceLocation read(PacketBuffer buf)
-        {
-            return buf.readResourceLocation();
-        }
+		public ResourceLocation read(FriendlyByteBuf buf)
+		{
+			return buf.readResourceLocation();
+		}
 
-        @Override
-        public ResourceLocation copy(ResourceLocation value)
-        {
-            return value;
-        }
-    };
+		@Override
+		public ResourceLocation copy(ResourceLocation value)
+		{
+			return value;
+		}
+	};
 
-    public static void register()
-    {
-        DataSerializers.registerSerializer(RESOURCE_LOCATION);
-    }
+	public static void register()
+	{
+		EntityDataSerializers.registerSerializer(RESOURCE_LOCATION);
+	}
 
 }

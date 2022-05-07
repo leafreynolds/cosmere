@@ -10,12 +10,12 @@ import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.ChargeableItemBase;
 import leaf.cosmere.properties.PropTypes;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.Level;
 
 public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneType
 {
@@ -32,7 +32,7 @@ public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneTy
 	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
-		return MathHelper.floor(10000 * getMaxChargeModifier());
+		return Mth.floor(10000 * getMaxChargeModifier());
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneTy
 	}
 
 	@Override
-	public int getEntityLifespan(ItemStack itemStack, World world)
+	public int getEntityLifespan(ItemStack itemStack, Level world)
 	{
 		return Integer.MAX_VALUE;
 	}
@@ -69,11 +69,11 @@ public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneTy
 				this.increaseCurrentCharge(stack, 5);
 			}
 		}
-		return super.onEntityItemUpdate(stack,entityItem);
+		return super.onEntityItemUpdate(stack, entityItem);
 	}
 
 	@Override
-	public void inventoryTick(ItemStack pStack, World pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
+	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
 	{
 		if (pLevel.isRainingAt(pEntity.blockPosition()) && pLevel.isThundering())
 		{

@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SurgeDivision extends SurgebindingBase
 {
-    public SurgeDivision(Roshar.Surges surge)
-    {
-        super(surge);
-    }
+	public SurgeDivision(Roshar.Surges surge)
+	{
+		super(surge);
+	}
 
-    //power over destruction and decay
+	//power over destruction and decay
 
 }

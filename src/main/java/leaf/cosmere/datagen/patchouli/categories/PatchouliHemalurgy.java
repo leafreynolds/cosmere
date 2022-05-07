@@ -8,44 +8,43 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.datagen.patchouli.BookStuff;
 
 import java.util.List;
-import java.util.Locale;
 
 public class PatchouliHemalurgy
 {
-    public static void collect(List<BookStuff.Category> categories, List<BookStuff.Entry> entries)
-    {
-        BookStuff.Category hemalurgy = new BookStuff.Category(
-                "hemalurgy",
-                "The forbidden field of magic that takes from others so that you may get stronger.",
-                "cosmere:atium_spike");
-        hemalurgy.sortnum = 3;
-        hemalurgy.secret = true;
+	public static void collect(List<BookStuff.Category> categories, List<BookStuff.Entry> entries)
+	{
+		BookStuff.Category hemalurgy = new BookStuff.Category(
+				"hemalurgy",
+				"The forbidden field of magic that takes from others so that you may get stronger.",
+				"cosmere:atium_spike");
+		hemalurgy.sortnum = 3;
+		hemalurgy.secret = true;
 
 
-        categories.add(hemalurgy);
+		categories.add(hemalurgy);
 
 
-        //hemalurgy
-        for (Metals.MetalType metalType : Metals.MetalType.values())
-        {
-            if (!metalType.hasHemalurgicEffect())
-            {
-                continue;
-            }
+		//hemalurgy
+		for (Metals.MetalType metalType : Metals.MetalType.values())
+		{
+			if (!metalType.hasHemalurgicEffect())
+			{
+				continue;
+			}
 
-            String metalName = metalType.getName();
-            BookStuff.Entry e = new BookStuff.Entry(
-                    "hemalurgic_" + metalName,
-                    hemalurgy,
-                    hemalurgy.icon.replace("atium", metalName));
-            e.sortnum = metalType.getID();
+			String metalName = metalType.getName();
+			BookStuff.Entry e = new BookStuff.Entry(
+					"hemalurgic_" + metalName,
+					hemalurgy,
+					hemalurgy.icon.replace("atium", metalName));
+			e.sortnum = metalType.getID();
 
-            e.pages = new BookStuff.Page[]
-                    {
-                            new BookStuff.TextPage(metalType.getHemalurgicUseString())
-                    };
+			e.pages = new BookStuff.Page[]
+					{
+							new BookStuff.TextPage(metalType.getHemalurgicUseString())
+					};
 
-            entries.add(e);
-        }
-    }
+			entries.add(e);
+		}
+	}
 }

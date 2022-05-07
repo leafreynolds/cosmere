@@ -12,18 +12,18 @@ import com.mojang.brigadier.CommandDispatcher;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.commands.subcommands.ManifestationCommand;
 import leaf.cosmere.commands.subcommands.TestCommand;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 
 public class CosmereCommand
 {
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher)
-    {
-        dispatcher.register(Commands.literal(Cosmere.MODID)
-                .then(TestCommand.register(dispatcher))
-                .then(ManifestationCommand.register(dispatcher))
-        );
-    }
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
+	{
+		dispatcher.register(Commands.literal(Cosmere.MODID)
+				.then(TestCommand.register(dispatcher))
+				.then(ManifestationCommand.register(dispatcher))
+		);
+	}
 }

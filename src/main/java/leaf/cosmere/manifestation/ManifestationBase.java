@@ -15,72 +15,72 @@ import leaf.cosmere.constants.Manifestations;
 //Manifestation of investiture
 public class ManifestationBase extends AManifestation
 {
-    final protected Manifestations.ManifestationTypes manifestationType;
-    final protected int color;
+	final protected Manifestations.ManifestationTypes manifestationType;
+	final protected int color;
 
-    public ManifestationBase(Manifestations.ManifestationTypes manifestationType, int color)
-    {
-        this.manifestationType = manifestationType;
-        this.color = color;
-    }
+	public ManifestationBase(Manifestations.ManifestationTypes manifestationType, int color)
+	{
+		this.manifestationType = manifestationType;
+		this.color = color;
+	}
 
-    @Override
-    public Manifestations.ManifestationTypes getManifestationType()
-    {
-        return manifestationType;
-    }
+	@Override
+	public Manifestations.ManifestationTypes getManifestationType()
+	{
+		return manifestationType;
+	}
 
-    @Override
-    public int getPowerID()
-    {
-        return 0;
-    }
+	@Override
+	public int getPowerID()
+	{
+		return 0;
+	}
 
-    @Override
-    public void onModeChange(ISpiritweb data)
-    {
+	@Override
+	public void onModeChange(ISpiritweb data)
+	{
 
-    }
+	}
 
-    @Override
-    public int getMode(ISpiritweb data)
-    {
-        return data.getMode(manifestationType, getPowerID());
-    }
+	@Override
+	public int getMode(ISpiritweb data)
+	{
+		return data.getMode(manifestationType, getPowerID());
+	}
 
-    @Override
-    public int modeMax(ISpiritweb data)
-    {
-        return 0;
-    }
+	@Override
+	public int modeMax(ISpiritweb data)
+	{
+		return 0;
+	}
 
-    @Override
-    public int modeMin(ISpiritweb data)
-    {
-        return 0;
-    }
+	@Override
+	public int modeMin(ISpiritweb data)
+	{
+		return 0;
+	}
 
-    @Override
-    public boolean modeWraps(ISpiritweb data)
-    {
-        return false;
-    }
+	@Override
+	public boolean modeWraps(ISpiritweb data)
+	{
+		return false;
+	}
 
-    @Override
-    public void tick(ISpiritweb data)
-    {
+	@Override
+	public void tick(ISpiritweb data)
+	{
 
-    }
+	}
 
-    @Override
-    public boolean isActive(ISpiritweb data)
-    {
-        return data.canTickManifestation(this.manifestationType, this.getPowerID());
-    }
+	@Override
+	public boolean isActive(ISpiritweb data)
+	{
+		return data.canTickManifestation(this.manifestationType, this.getPowerID());
+	}
 
-    @Override
-    public double getStrength(ISpiritweb data)
-    {
-        return 0;
-    }
+	@Override
+	public double getStrength(ISpiritweb data)
+	{
+		return 0;
+	}
 }

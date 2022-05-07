@@ -7,73 +7,115 @@ package leaf.cosmere.registry;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.placement.TopSolidRangeConfig;
-import net.minecraftforge.fml.RegistryObject;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class FeatureRegistry
 {
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Cosmere.MODID);
+	public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Cosmere.MODID);
 
-    public static final Map<Metals.MetalType, RegistryObject<Feature<OreFeatureConfig>>> ORE_FEATURES =
-            Arrays.stream(Metals.MetalType.values())
-                    .filter(Metals.MetalType::hasOre)
-                    .collect(Collectors.toMap(
-                            Function.identity(),
-                            type -> FEATURES.register(
-                                    type.getName() + Constants.RegNameStubs.ORE,
-                                    () -> new OreFeature(OreFeatureConfig.CODEC))));
+	public static final Map<Metals.MetalType, RegistryObject<Feature<OreConfiguration>>> ORE_FEATURES =
+			Arrays.stream(Metals.MetalType.values())
+					.filter(Metals.MetalType::hasOre)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> FEATURES.register(
+									type.getName() + Constants.RegNameStubs.ORE,
+									() -> new OreFeature(OreConfiguration.CODEC))));
 
 
-    // The "New Tardis Mod" code says we should register configured versions of the features in FMLCommonSetup
-    // since it helps prevent mod incompatibility issues. No need to delete other mod's world gen. Thank you 50!
+	// The "New Tardis Mod" code says we should register configured versions of the features in FMLCommonSetup
+	// since it helps prevent mod incompatibility issues. No need to delete other mod's world gen. Thank you 50!
 
-    public static class ConfiguredFeatures
-    {
-        //todo have ore specific changes, rather than all using the same settings
-        //reference Features.java
-        public static final Map<Metals.MetalType, ConfiguredFeature<?, ?>> ORE_FEATURES =
-                Arrays.stream(Metals.MetalType.values())
-                        .filter(Metals.MetalType::hasOre)
-                        .collect(Collectors.toMap(
-                                Function.identity(),
-                                metalType ->
-                                        FeatureRegistry.ORE_FEATURES.get(metalType).get().configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
-                                                BlocksRegistry.METAL_ORE.get(metalType).get().defaultBlockState(), 8))
-                                                .range(64)
-                                                .squared()
-                                                .count(15)
-                        ));
-    }
+	public static class ConfiguredFeatures
+	{
+		//todo have ore specific changes, rather than all using the same settings
+		//reference Features.java
+		public static final Map<Metals.MetalType, Holder<ConfiguredFeature<?, ?>>> ORE_FEATURES =
+				Arrays.stream(Metals.MetalType.values())
+						.filter(Metals.MetalType::hasOre)
+						.collect(Collectors.toMap(
+								Function.identity(),
+								metalType -> registerConfiguredFeature(
+										metalType.getName() + Constants.RegNameStubs.ORE,
+										new ConfiguredFeature<>(
+												FeatureRegistry.ORE_FEATURES.get(metalType).get(),
+												new OreConfiguration(makeTarget(metalType), 7)
+										)
+								)));
 
-    public static void registerConfiguredFeatures()
-    {
-        for (Metals.MetalType metalType : Metals.MetalType.values())
-        {
-            if (metalType.hasOre())
-            {
-                registerConfiguredFeature(metalType.getName() + Constants.RegNameStubs.ORE, ConfiguredFeatures.ORE_FEATURES.get(metalType));
-            }
-        }
-    }
+		private static List<OreConfiguration.TargetBlockState> makeTarget(Metals.MetalType metalType)
+		{
+			return
+					List.of(OreConfiguration.target(
+							OreFeatures.STONE_ORE_REPLACEABLES,
+							BlocksRegistry.METAL_ORE.get(metalType).get().defaultBlockState()),
+							OreConfiguration.target(
+									OreFeatures.DEEPSLATE_ORE_REPLACEABLES,
+									BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType).get().defaultBlockState())
+					);
+		}
 
-    private static <T extends Feature<?>> void registerConfiguredFeature(String registryName, ConfiguredFeature<?, ?> configuredFeature)
-    {
-        Registry<ConfiguredFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_FEATURE;
-        Registry.register(registry, new ResourceLocation(Cosmere.MODID, registryName), configuredFeature);
-    }
+
+		public static void registerConfiguredFeatures()
+		{
+			//call to static will trigger static finals to be created
+		}
+	}
+
+	public static class PlacedFeatures
+	{
+		public static final Map<Metals.MetalType, Holder<PlacedFeature>> PLACED_ORE_FEATURES =
+				Arrays.stream(Metals.MetalType.values())
+						.filter(Metals.MetalType::hasOre)
+						.collect(Collectors.toMap(
+								Function.identity(),
+								metalType ->
+										registerPlacedFeature(
+												metalType.getName() + Constants.RegNameStubs.ORE,
+												ConfiguredFeatures.ORE_FEATURES.get(metalType),
+												List.of(RarityFilter.onAverageOnceEvery(64),
+														InSquarePlacement.spread(),
+														HeightRangePlacement.triangle(
+																VerticalAnchor.bottom(),
+																VerticalAnchor.absolute(128)),
+														BiomeFilter.biome()))
+						));
+
+		public static void registerPlacedFeatures()
+		{
+			//call to static will trigger static finals to be created
+		}
+	}
+
+
+	private static Holder<PlacedFeature> registerPlacedFeature(String registryName, Holder<ConfiguredFeature<?, ?>> configuredFeature, List<PlacementModifier> placementModifiers)
+	{
+		return BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, ResourceLocationHelper.prefix(registryName), new PlacedFeature(Holder.hackyErase(configuredFeature), List.copyOf(placementModifiers)));
+	}
+
+	private static <FC extends FeatureConfiguration, F extends Feature<FC>> Holder<ConfiguredFeature<?, ?>> registerConfiguredFeature(String registryName, ConfiguredFeature<?, ?> configuredFeature)
+	{
+		Registry<ConfiguredFeature<?, ?>> registry = BuiltinRegistries.CONFIGURED_FEATURE;
+		return BuiltinRegistries.register(registry, ResourceLocationHelper.prefix(registryName), configuredFeature);
+	}
 }

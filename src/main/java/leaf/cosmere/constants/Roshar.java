@@ -5,9 +5,9 @@
 package leaf.cosmere.constants;
 
 import leaf.cosmere.registry.ItemsRegistry;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -82,7 +82,7 @@ public class Roshar
 	}
 
 	//https://coppermind.net/wiki/Polestone
-	public enum Polestone implements IItemTier
+	public enum Polestone implements Tier
 	{
 		SAPPHIRE(0),
 		SMOKESTONE(1),

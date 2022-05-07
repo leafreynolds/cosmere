@@ -10,15 +10,15 @@ import java.awt.*;
 
 public interface IHasMetalType extends IHasColour
 {
-    Metals.MetalType getMetalType();
+	Metals.MetalType getMetalType();
 
-    default Color getColour()
-    {
-        return getMetalType().getColor();
-    }
+	default Color getColour()
+	{
+		return getMetalType().getColor();
+	}
 
-    default int getColourValue()
-    {
-        return getColour().getRGB();
-    }
+	default int getColourValue()
+	{
+		return getColour().getRGB();
+	}
 }

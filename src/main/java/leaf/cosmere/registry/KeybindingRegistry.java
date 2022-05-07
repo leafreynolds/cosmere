@@ -4,14 +4,14 @@
 
 package leaf.cosmere.registry;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.client.settings.KeyConflictContext;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
+import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -24,35 +24,35 @@ import static leaf.cosmere.constants.Constants.Strings.*;
 public class KeybindingRegistry
 {
 
-    public static KeyBinding MANIFESTATION_MENU;
-    public static KeyBinding MANIFESTATION_TOGGLE;
-    public static KeyBinding MANIFESTATION_NEXT;
-    public static KeyBinding MANIFESTATION_PREVIOUS;
+	public static KeyMapping MANIFESTATION_MENU;
+	public static KeyMapping MANIFESTATION_TOGGLE;
+	public static KeyMapping MANIFESTATION_NEXT;
+	public static KeyMapping MANIFESTATION_PREVIOUS;
 
-    public static KeyBinding MANIFESTATION_MODE_INCREASE;
-    public static KeyBinding MANIFESTATION_MODE_DECREASE;
+	public static KeyMapping MANIFESTATION_MODE_INCREASE;
+	public static KeyMapping MANIFESTATION_MODE_DECREASE;
 
-    public static KeyBinding ALLOMANCY_PUSH;
-    public static KeyBinding ALLOMANCY_PULL;
+	public static KeyMapping ALLOMANCY_PUSH;
+	public static KeyMapping ALLOMANCY_PULL;
 
-    @SubscribeEvent
-    public static void register(FMLClientSetupEvent event)
-    {
-        ClientRegistry.registerKeyBinding(MANIFESTATION_MENU = new KeyBinding(KEY_MANIFESTATION_MENU, GLFW.GLFW_KEY_G, KEYS_CATEGORY));
-        ClientRegistry.registerKeyBinding(MANIFESTATION_TOGGLE = new KeyBinding(KEY_MANIFESTATION_TOGGLE, GLFW.GLFW_KEY_C, KEYS_CATEGORY));
+	@SubscribeEvent
+	public static void register(FMLClientSetupEvent event)
+	{
+		ClientRegistry.registerKeyBinding(MANIFESTATION_MENU = new KeyMapping(KEY_MANIFESTATION_MENU, GLFW.GLFW_KEY_G, KEYS_CATEGORY));
+		ClientRegistry.registerKeyBinding(MANIFESTATION_TOGGLE = new KeyMapping(KEY_MANIFESTATION_TOGGLE, GLFW.GLFW_KEY_C, KEYS_CATEGORY));
 
-        ClientRegistry.registerKeyBinding(MANIFESTATION_NEXT = new KeyBinding(KEY_MANIFESTATION_NEXT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
-        ClientRegistry.registerKeyBinding(MANIFESTATION_PREVIOUS = createKeybinding(KEY_MANIFESTATION_PREVIOUS, KeyModifier.SHIFT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
+		ClientRegistry.registerKeyBinding(MANIFESTATION_NEXT = new KeyMapping(KEY_MANIFESTATION_NEXT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
+		ClientRegistry.registerKeyBinding(MANIFESTATION_PREVIOUS = createKeybinding(KEY_MANIFESTATION_PREVIOUS, KeyModifier.SHIFT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
 
-        ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_INCREASE = new KeyBinding(KEY_MANIFESTATION_MODE_INCREASE, GLFW.GLFW_KEY_KP_ADD, KEYS_CATEGORY));
-        ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_DECREASE = new KeyBinding(KEY_MANIFESTATION_MODE_DECREASE, GLFW.GLFW_KEY_KP_SUBTRACT, KEYS_CATEGORY));
+		ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_INCREASE = new KeyMapping(KEY_MANIFESTATION_MODE_INCREASE, GLFW.GLFW_KEY_KP_ADD, KEYS_CATEGORY));
+		ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_DECREASE = new KeyMapping(KEY_MANIFESTATION_MODE_DECREASE, GLFW.GLFW_KEY_KP_SUBTRACT, KEYS_CATEGORY));
 
-        ClientRegistry.registerKeyBinding(ALLOMANCY_PUSH = new KeyBinding(KEY_ALLOMANCY_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
-        ClientRegistry.registerKeyBinding(ALLOMANCY_PULL = new KeyBinding(KEY_ALLOMANCY_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
-    }
+		ClientRegistry.registerKeyBinding(ALLOMANCY_PUSH = new KeyMapping(KEY_ALLOMANCY_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
+		ClientRegistry.registerKeyBinding(ALLOMANCY_PULL = new KeyMapping(KEY_ALLOMANCY_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
+	}
 
-    public static KeyBinding createKeybinding(String description, KeyModifier keyModifier, int keyCode, String category)
-    {
-        return new KeyBinding(description, KeyConflictContext.DEFAULT, keyModifier, InputMappings.Type.KEYSYM.getOrCreate(keyCode), category);
-    }
+	public static KeyMapping createKeybinding(String description, KeyModifier keyModifier, int keyCode, String category)
+	{
+		return new KeyMapping(description, KeyConflictContext.DEFAULT, keyModifier, InputConstants.Type.KEYSYM.getOrCreate(keyCode), category);
+	}
 }

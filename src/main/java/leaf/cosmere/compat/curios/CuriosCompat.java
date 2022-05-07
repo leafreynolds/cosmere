@@ -15,60 +15,60 @@ import top.theillusivec4.curios.api.SlotTypePreset;
 
 public class CuriosCompat
 {
-    private static boolean curiosModDetected;
+	private static boolean curiosModDetected;
 
 
-    public static boolean CuriosIsPresent()
-    {
-        return curiosModDetected;
-    }
+	public static boolean CuriosIsPresent()
+	{
+		return curiosModDetected;
+	}
 
-    public static void init()
-    {
-        curiosModDetected = ModList.get().isLoaded("curios");
+	public static void init()
+	{
+		curiosModDetected = ModList.get().isLoaded("curios");
 
-        if (!curiosModDetected)
-        {
-            return;
-        }
+		if (!curiosModDetected)
+		{
+			return;
+		}
 
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.addListener(CuriosCompat::onEnqueueIMC);
-    }
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modBus.addListener(CuriosCompat::onEnqueueIMC);
+	}
 
 
-    private static void onEnqueueIMC(InterModEnqueueEvent event)
-    {
-        if (!curiosModDetected)
-        {
-            return;
-        }
+	private static void onEnqueueIMC(InterModEnqueueEvent event)
+	{
+		if (!curiosModDetected)
+		{
+			return;
+		}
 
-        SlotTypePreset[] oneSlot = {
-                SlotTypePreset.BACK,
-                SlotTypePreset.BELT,
-                SlotTypePreset.BODY,
-                SlotTypePreset.HEAD,
-                SlotTypePreset.NECKLACE,
-        };
+		SlotTypePreset[] oneSlot = {
+				SlotTypePreset.BACK,
+				SlotTypePreset.BELT,
+				SlotTypePreset.BODY,
+				SlotTypePreset.HEAD,
+				SlotTypePreset.NECKLACE,
+		};
 
-        for (SlotTypePreset type : oneSlot)
-        {
-            InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> type.getMessageBuilder().build());
-        }
+		for (SlotTypePreset type : oneSlot)
+		{
+			InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> type.getMessageBuilder().build());
+		}
 
-        SlotTypePreset[] twoSlot = {
-                SlotTypePreset.HANDS,
-                SlotTypePreset.RING,
-                SlotTypePreset.CHARM,
-                SlotTypePreset.BRACELET,
-                SlotTypePreset.NECKLACE,
-        };
+		SlotTypePreset[] twoSlot = {
+				SlotTypePreset.HANDS,
+				SlotTypePreset.RING,
+				SlotTypePreset.CHARM,
+				SlotTypePreset.BRACELET,
+				SlotTypePreset.NECKLACE,
+		};
 
-        for (SlotTypePreset type : twoSlot)
-        {
-            InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> type.getMessageBuilder().size(2).build());
-        }
+		for (SlotTypePreset type : twoSlot)
+		{
+			InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> type.getMessageBuilder().size(2).build());
+		}
 
-    }
+	}
 }

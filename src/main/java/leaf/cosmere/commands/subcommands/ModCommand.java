@@ -6,21 +6,23 @@ package leaf.cosmere.commands.subcommands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
-public abstract class ModCommand implements Command<CommandSource>
+public abstract class ModCommand implements Command<CommandSourceStack>
 {
-    private int permLevel = 2;
+	private int permLevel = 2;
 
-    public ModCommand(){}
+	public ModCommand()
+	{
+	}
 
-    public ModCommand(int level)
-    {
-        this.permLevel = level;
-    }
+	public ModCommand(int level)
+	{
+		this.permLevel = level;
+	}
 
-    public boolean canExecute(CommandSource source) throws CommandSyntaxException
-    {
-        return source.hasPermission(permLevel);
-    }
+	public boolean canExecute(CommandSourceStack source) throws CommandSyntaxException
+	{
+		return source.hasPermission(permLevel);
+	}
 }

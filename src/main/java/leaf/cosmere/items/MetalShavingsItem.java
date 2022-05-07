@@ -8,8 +8,8 @@ import leaf.cosmere.constants.Metals;
 
 public class MetalShavingsItem extends MetalItem
 {
-    public MetalShavingsItem(Metals.MetalType metalType)
-    {
-        super(metalType);
-    }
+	public MetalShavingsItem(Metals.MetalType metalType)
+	{
+		super(metalType);
+	}
 }

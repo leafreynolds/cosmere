@@ -10,14 +10,14 @@ import leaf.cosmere.items.MetalmindItem;
 
 public class RingMetalmindItem extends MetalmindItem
 {
-    public RingMetalmindItem(Metals.MetalType metalType)
-    {
-        super(metalType, CosmereItemGroups.METALMINDS);
-    }
+	public RingMetalmindItem(Metals.MetalType metalType)
+	{
+		super(metalType, CosmereItemGroups.METALMINDS);
+	}
 
-    @Override
-    public float getMaxChargeModifier()
-    {
-        return (4f / 9f);
-    }
+	@Override
+	public float getMaxChargeModifier()
+	{
+		return (4f / 9f);
+	}
 }

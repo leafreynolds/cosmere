@@ -4,18 +4,16 @@
 
 package leaf.cosmere.manifestation.surgebinding;
 
-import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Roshar;
-import net.minecraftforge.fml.common.Mod;
 
 public class SurgeProgression extends SurgebindingBase
 {
-    public SurgeProgression(Roshar.Surges surge)
-    {
-        super(surge);
-    }
+	public SurgeProgression(Roshar.Surges surge)
+	{
+		super(surge);
+	}
 
 
-    //alter growth and healing
+	//alter growth and healing
 
 }

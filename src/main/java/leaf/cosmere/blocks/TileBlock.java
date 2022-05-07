@@ -4,12 +4,12 @@
 
 package leaf.cosmere.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class TileBlock extends Block
 {
-    public TileBlock(Block.Properties properties)
-    {
-        super(properties);
-    }
+	public TileBlock(Block.Properties properties)
+	{
+		super(properties);
+	}
 }

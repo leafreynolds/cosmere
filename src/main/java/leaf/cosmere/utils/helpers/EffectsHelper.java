@@ -4,23 +4,23 @@
 
 package leaf.cosmere.utils.helpers;
 
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 
 public class EffectsHelper
 {
 
 
-    public static EffectInstance getNewEffect(Effect effect, int amplifier)
-    {
-        EffectInstance effectInstance = new EffectInstance(
-                effect,
-                21,
-                Math.max(0, amplifier),
-                false, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
-                false, // definitely don't want particles.
-                true); // show icon though
+	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier)
+	{
+		MobEffectInstance effectInstance = new MobEffectInstance(
+				effect,
+				21,
+				Math.max(0, amplifier),
+				false, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
+				false, // definitely don't want particles.
+				true); // show icon though
 
-        return effectInstance;
-    }
+		return effectInstance;
+	}
 }

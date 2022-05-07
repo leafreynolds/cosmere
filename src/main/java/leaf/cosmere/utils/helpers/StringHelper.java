@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 public class StringHelper
 {
 
-    public static String fixCapitalisation(String text)
-    {
-        String original = text.trim().replace("    ", "").replace("_", " ").replace("/", ".");
-        String output = Arrays.stream(original.split("\\s+")).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1)).collect(Collectors.joining(" "));
-        return output;
-    }
+	public static String fixCapitalisation(String text)
+	{
+		String original = text.trim().replace("    ", "").replace("_", " ").replace("/", ".");
+		String output = Arrays.stream(original.split("\\s+")).map(t -> t.substring(0, 1).toUpperCase() + t.substring(1)).collect(Collectors.joining(" "));
+		return output;
+	}
 }

@@ -6,85 +6,85 @@
 
 package leaf.cosmere.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class CapWrapper implements IInventory
+public class CapWrapper implements Container
 {
-    private final IItemHandler handler;
+	private final IItemHandler handler;
 
-    public CapWrapper(IItemHandler handler)
-    {
-        this.handler = handler;
-    }
+	public CapWrapper(IItemHandler handler)
+	{
+		this.handler = handler;
+	}
 
-    @Override
-    public int getContainerSize()
-    {
-        return handler.getSlots();
-    }
+	@Override
+	public int getContainerSize()
+	{
+		return handler.getSlots();
+	}
 
-    @Override
-    public boolean isEmpty()
-    {
-        for (int i = 0; i < getContainerSize(); i++)
-        {
-            if (!getItem(i).isEmpty())
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean isEmpty()
+	{
+		for (int i = 0; i < getContainerSize(); i++)
+		{
+			if (!getItem(i).isEmpty())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
-    @Override
-    public ItemStack getItem(int index)
-    {
-        return handler.getStackInSlot(index);
-    }
+	@Override
+	public ItemStack getItem(int index)
+	{
+		return handler.getStackInSlot(index);
+	}
 
-    @Override
-    public ItemStack removeItem(int index, int count)
-    {
-        return handler.extractItem(index, count, false);
-    }
+	@Override
+	public ItemStack removeItem(int index, int count)
+	{
+		return handler.extractItem(index, count, false);
+	}
 
-    @Override
-    public ItemStack removeItemNoUpdate(int index)
-    {
-        return handler.extractItem(index, Integer.MAX_VALUE, false);
-    }
+	@Override
+	public ItemStack removeItemNoUpdate(int index)
+	{
+		return handler.extractItem(index, Integer.MAX_VALUE, false);
+	}
 
-    @Override
-    public void setItem(int index, ItemStack stack)
-    {
-        if (handler instanceof IItemHandlerModifiable)
-        {
-            ((IItemHandlerModifiable) handler).setStackInSlot(index, stack);
-        }
-    }
+	@Override
+	public void setItem(int index, ItemStack stack)
+	{
+		if (handler instanceof IItemHandlerModifiable)
+		{
+			((IItemHandlerModifiable) handler).setStackInSlot(index, stack);
+		}
+	}
 
-    @Override
-    public void setChanged()
-    {
+	@Override
+	public void setChanged()
+	{
 
-    }
+	}
 
-    @Override
-    public boolean stillValid(PlayerEntity player)
-    {
-        return false;
-    }
+	@Override
+	public boolean stillValid(Player player)
+	{
+		return false;
+	}
 
-    @Override
-    public void clearContent()
-    {
-        for (int i = 0; i < getContainerSize(); i++)
-        {
-            removeItemNoUpdate(i);
-        }
-    }
+	@Override
+	public void clearContent()
+	{
+		for (int i = 0; i < getContainerSize(); i++)
+		{
+			removeItemNoUpdate(i);
+		}
+	}
 }

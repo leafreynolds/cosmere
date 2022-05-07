@@ -7,46 +7,46 @@ package leaf.cosmere.network.packets;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class SetSelectedManifestationMessage
 {
-    AManifestation manifestation;
+	AManifestation manifestation;
 
-    public SetSelectedManifestationMessage(AManifestation manifestation)
-    {
-        this.manifestation = manifestation;
-    }
+	public SetSelectedManifestationMessage(AManifestation manifestation)
+	{
+		this.manifestation = manifestation;
+	}
 
-    public static void handle(SetSelectedManifestationMessage message, Supplier<NetworkEvent.Context> ctx)
-    {
-        NetworkEvent.Context context = ctx.get();
-        ServerPlayerEntity sender = context.getSender();
-        MinecraftServer server = sender.getServer();
-        server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
-        {
-            cap.setSelectedManifestation(message.manifestation);
-            cap.syncToClients(null);
-        }));
-        context.setPacketHandled(true);
-    }
+	public static void handle(SetSelectedManifestationMessage message, Supplier<NetworkEvent.Context> ctx)
+	{
+		NetworkEvent.Context context = ctx.get();
+		ServerPlayer sender = context.getSender();
+		MinecraftServer server = sender.getServer();
+		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+		{
+			cap.setSelectedManifestation(message.manifestation);
+			cap.syncToClients(null);
+		}));
+		context.setPacketHandled(true);
+	}
 
 
-    public static void encode(SetSelectedManifestationMessage mes, PacketBuffer buf)
-    {
-        String namespace = mes.manifestation.getRegistryName().toString();
-        buf.writeUtf(namespace);
-    }
+	public static void encode(SetSelectedManifestationMessage mes, FriendlyByteBuf buf)
+	{
+		String namespace = mes.manifestation.getRegistryName().toString();
+		buf.writeUtf(namespace);
+	}
 
-    public static SetSelectedManifestationMessage decode(PacketBuffer buf)
-    {
-        String location = buf.readUtf();
-        return new SetSelectedManifestationMessage(ManifestationRegistry.fromID(location));
-    }
+	public static SetSelectedManifestationMessage decode(FriendlyByteBuf buf)
+	{
+		String location = buf.readUtf();
+		return new SetSelectedManifestationMessage(ManifestationRegistry.fromID(location));
+	}
 
 }

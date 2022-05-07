@@ -6,10 +6,10 @@ package leaf.cosmere.registry;
 
 public class AdvancementTriggerRegistry
 {
-    //public static final TriggerBase COSMERE = new TriggerBase("cosmere");
+	//public static final TriggerBase COSMERE = new TriggerBase("cosmere");
 
-    public static void init()
-    {
-        //CriteriaTriggers.register(COSMERE);
-    }
+	public static void init()
+	{
+		//CriteriaTriggers.register(COSMERE);
+	}
 }

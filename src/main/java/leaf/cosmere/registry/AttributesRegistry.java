@@ -6,12 +6,12 @@ package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class AttributesRegistry
 	public static final Map<String, RegistryObject<Attribute>> COSMERE_ATTRIBUTES = makeAttributeMap();
 
 
-	public static final CreatureAttribute SPREN = new CreatureAttribute();
+	public static final MobType SPREN = new MobType();
 
 	public static Map<String, RegistryObject<Attribute>> makeAttributeMap()
 	{

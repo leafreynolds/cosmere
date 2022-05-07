@@ -8,17 +8,17 @@ import net.minecraftforge.client.settings.IKeyConflictContext;
 
 public class KeyConflictContext implements IKeyConflictContext
 {
-    public static final KeyConflictContext DEFAULT = new KeyConflictContext();
+	public static final KeyConflictContext DEFAULT = new KeyConflictContext();
 
-    @Override
-    public boolean isActive()
-    {
-        return true;
-    }
+	@Override
+	public boolean isActive()
+	{
+		return true;
+	}
 
-    @Override
-    public boolean conflicts(IKeyConflictContext other)
-    {
-        return false;
-    }
+	@Override
+	public boolean conflicts(IKeyConflictContext other)
+	{
+		return false;
+	}
 }

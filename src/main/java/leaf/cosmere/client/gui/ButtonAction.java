@@ -6,8 +6,8 @@ package leaf.cosmere.client.gui;
 
 public enum ButtonAction
 {
-    INACTIVE,
-    ACTIVE,
-    MODE_INCREASE,
-    MODE_DECREASE,
+	INACTIVE,
+	ACTIVE,
+	MODE_INCREASE,
+	MODE_DECREASE,
 }

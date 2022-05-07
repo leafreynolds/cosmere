@@ -4,49 +4,49 @@
 
 package leaf.cosmere.network.packets;
 
-import leaf.cosmere.cap.Capabilities;
+import leaf.cosmere.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class SyncPlayerSpiritwebMessage
 {
+	public int entityID;
+	public CompoundTag entityNBT;
 
-    public int id;
-    public CompoundNBT data;
+	public SyncPlayerSpiritwebMessage(int entityID, CompoundTag entityNBT)
+	{
+		this.entityID = entityID;
+		this.entityNBT = entityNBT;
+	}
 
-    public SyncPlayerSpiritwebMessage(int id, CompoundNBT data)
-    {
-        this.id = id;
-        this.data = data;
-    }
+	public static void encode(SyncPlayerSpiritwebMessage mes, FriendlyByteBuf buf)
+	{
+		buf.writeInt(mes.entityID);
+		buf.writeNbt(mes.entityNBT);
+	}
 
-    public static void encode(SyncPlayerSpiritwebMessage mes, PacketBuffer buf)
-    {
-        buf.writeInt(mes.id);
-        buf.writeNbt(mes.data);
-    }
+	public static SyncPlayerSpiritwebMessage decode(FriendlyByteBuf buf)
+	{
+		return new SyncPlayerSpiritwebMessage(buf.readInt(), buf.readNbt());
+	}
 
-    public static SyncPlayerSpiritwebMessage decode(PacketBuffer buf)
-    {
-        return new SyncPlayerSpiritwebMessage(buf.readInt(), buf.readNbt());
-    }
-
-    public static void handle(SyncPlayerSpiritwebMessage mes, Supplier<NetworkEvent.Context> cont)
-    {
-        cont.get().enqueueWork(() ->
-        {
-            Entity result = Minecraft.getInstance().level.getEntity(mes.id);
-            if (result != null)
-            {
-                result.getCapability(Capabilities.SPIRITWEB_CAPABILITY).ifPresent(cap -> cap.deserializeNBT(mes.data));
-            }
-        });
-        cont.get().setPacketHandled(true);
-    }
+	public static void handle(SyncPlayerSpiritwebMessage mes, Supplier<NetworkEvent.Context> cont)
+	{
+		cont.get().enqueueWork(() ->
+		{
+			Entity result = Minecraft.getInstance().level.getEntity(mes.entityID);
+			if (result != null)
+			{
+				SpiritwebCapability.get((LivingEntity) result).ifPresent((c) -> c.deserializeNBT(mes.entityNBT));
+			}
+		});
+		cont.get().setPacketHandled(true);
+	}
 
 }
