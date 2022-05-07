@@ -70,7 +70,10 @@ public class ChangeManifestationModeMessage
 
     public static ChangeManifestationModeMessage decode(PacketBuffer buf)
     {
-        return new ChangeManifestationModeMessage(Manifestations.ManifestationTypes.valueOf(buf.readInt()).get(), buf.readInt(), buf.readInt());
+        final Manifestations.ManifestationTypes manifestationType = Manifestations.ManifestationTypes.valueOf(buf.readInt()).get();
+        final int powerID = buf.readInt();
+        final int dir = buf.readInt();
+        return new ChangeManifestationModeMessage(manifestationType, powerID, dir);
     }
 
 }

@@ -26,7 +26,9 @@ public class EntityMixin
     {
         Entity e = (Entity) (Object) this;
 
-        if (!(e instanceof LivingEntity))
+        final boolean isServerSide = !(e.level.isClientSide);
+        final boolean isInanimateEntity = !(e instanceof LivingEntity);
+        if (isServerSide || isInanimateEntity)
         {
             return;
         }
@@ -37,7 +39,17 @@ public class EntityMixin
         SpiritwebCapability.get(clientPlayer).ifPresent(playerSpiritweb ->
         {
             //if the player does not have bronze, early exit
-            if (!(playerSpiritweb.hasManifestation(Manifestations.ManifestationTypes.ALLOMANCY, Metals.MetalType.BRONZE.getID())))
+            final boolean playerHasBronzeAllomancy = playerSpiritweb.hasManifestation(
+                    Manifestations.ManifestationTypes.ALLOMANCY,
+                    Metals.MetalType.BRONZE.getID()
+            );
+
+            final boolean playerBronzeBurning = playerSpiritweb.canTickManifestation(
+                    Manifestations.ManifestationTypes.ALLOMANCY,
+                    Metals.MetalType.BRONZE.getID()
+            );
+
+            if (!playerHasBronzeAllomancy || !playerBronzeBurning)
             {
                 return;
             }
@@ -68,12 +80,13 @@ public class EntityMixin
                 {
                     //don't tick powers that the user doesn't have
                     //don't tick powers that are not active
-                    if (!(target instanceof PlayerEntity) && targetSpiritweb.hasManifestation(manifestation.getManifestationType(), manifestation.getPowerID()))
+                    final boolean targetIsPlayer = target instanceof PlayerEntity;
+                    if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation.getManifestationType(), manifestation.getPowerID()))
                     {
                         found = true;
                         break;
                     }
-                    else if ((target instanceof PlayerEntity) && manifestation.isActive(targetSpiritweb))
+                    else if (targetIsPlayer && manifestation.isActive(targetSpiritweb))
                     {
                         found = true;
                         break;

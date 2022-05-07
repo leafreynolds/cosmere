@@ -32,7 +32,7 @@ public class ManifestationRegistry
     public static final DeferredRegister<AManifestation> MANIFESTATIONS = DeferredRegister.create(AManifestation.class, Cosmere.MODID);
     public static Supplier<IForgeRegistry<AManifestation>> MANIFESTATION_REGISTRY = MANIFESTATIONS.makeRegistry("investiture_manifestations", () -> new RegistryBuilder<AManifestation>().setMaxID(Integer.MAX_VALUE - 1));
 
-    public static final RegistryObject<AManifestation> NONE = MANIFESTATIONS.register(Manifestations.NONE, () -> new ManifestationBase(Manifestations.ManifestationTypes.NONE, Color.WHITE.getRGB()));
+    public static final RegistryObject<AManifestation> NONE = MANIFESTATIONS.register("none", () -> new ManifestationBase(Manifestations.ManifestationTypes.NONE, Color.WHITE.getRGB()));
 
     // Allomancy
     public static final Map<Metals.MetalType, RegistryObject<AManifestation>> ALLOMANCY_POWERS =

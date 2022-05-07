@@ -91,35 +91,4 @@ public class Manifestations
         }
     }
 
-
-    public static final String NONE = "none";
-
-    public static class AonDor
-    {
-        public static final String ELANTRIAN = "elantrian";
-    }
-
-    public static class Biochroma
-    {
-        public static final String AWAKENING = "awakening";
-    }
-
-    public static class Hemalurgy
-    {
-        public static final String NONE = "none";
-    }
-
-    public static class Surgebinding
-    {
-        public static final String WINDRUNNER = "windrunner";
-        public static final String SKYBREAKER = "skybreaker";
-        public static final String DUSTBRINGER = "dustbringer";
-        public static final String EDGEDANCER = "edgedancer";
-        public static final String TRUTHWATCHER = "truthwatcher";
-        public static final String LIGHTWEAVER = "lightweaver";
-        public static final String ELSECALLER = "elsecaller";
-        public static final String WILLSHAPER = "willshaper";
-        public static final String STONEWARD = "stoneward";
-        public static final String BONDSMITH = "bondsmith";
-    }
 }
