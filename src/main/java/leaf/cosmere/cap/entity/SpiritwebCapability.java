@@ -31,6 +31,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -413,16 +414,22 @@ public class SpiritwebCapability implements ISpiritweb
 			return false;
 		}
 
-		Attribute attribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get();
-		AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+		final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName);
 
-		if (manifestationAttribute != null)
+		if (attributeRegistryObject.isPresent())
 		{
-			double manifestationStrength =
-					ignoreTemporaryPower ? manifestationAttribute.getBaseValue() : manifestationAttribute.getValue();
-
-			return manifestationStrength > 5;
+			AttributeMap attributeManager = livingEntity.getAttributes();
+			Attribute attribute = attributeRegistryObject.get();
+			if (attributeManager.hasAttribute(attribute))
+			{
+				double manifestationStrength =
+						ignoreTemporaryPower
+						? attributeManager.getBaseValue(attribute)
+						: attributeManager.getValue(attribute);
+				return manifestationStrength > 3;
+			}
 		}
+
 		return false;
 	}
 
@@ -541,9 +548,12 @@ public class SpiritwebCapability implements ISpiritweb
 		List<AManifestation> list = new ArrayList<AManifestation>();
 
 		//todo intelligently handle multiple powers
-		for (int i = 0; i < 16; i++)
+		for (ManifestationTypes manifestationTypes : ManifestationTypes.values())
 		{
-			for (ManifestationTypes manifestationTypes : ManifestationTypes.values())
+			if (manifestationTypes == ManifestationTypes.NONE)
+				continue;
+
+			for (int i = 0; i < 16; i++)
 			{
 				if (hasManifestation(manifestationTypes, i, ignoreTemporaryPower))
 				{

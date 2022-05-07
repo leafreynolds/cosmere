@@ -34,28 +34,22 @@ public class ChangeManifestationModeMessage
 		MinecraftServer server = sender.getServer();
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
 		{
-			BaseComponent manifestationText;
-			int newMode;
 
 			if (message.dir == 1)
 			{
-				newMode = cap.nextMode(message.powerType, message.powerID);
+				cap.nextMode(message.powerType, message.powerID);
 			}
 			else if (message.dir == -1)
 			{
-				newMode = cap.previousMode(message.powerType, message.powerID);
+				cap.previousMode(message.powerType, message.powerID);
 			}
 			else if (message.dir != 0)
 			{
-				newMode = message.dir + cap.getMode(message.powerType, message.powerID);
+				int newMode = message.dir + cap.getMode(message.powerType, message.powerID);
 				cap.setMode(message.powerType, message.powerID, newMode);
 			}
 
 			cap.manifestation(message.powerType, message.powerID).onModeChange(cap);
-
-			//manifestationText = TextHelper.createTranslatedText(Constants.Strings.POWER_MODE_SET, TextHelper.createText(newMode));
-			//sender.sendMessage(manifestationText, Util.DUMMY_UUID);
-
 			cap.syncToClients(null);
 		}));
 		context.setPacketHandled(true);
@@ -70,7 +64,10 @@ public class ChangeManifestationModeMessage
 
 	public static ChangeManifestationModeMessage decode(FriendlyByteBuf buf)
 	{
-		return new ChangeManifestationModeMessage(Manifestations.ManifestationTypes.valueOf(buf.readInt()).get(), buf.readInt(), buf.readInt());
+		final Manifestations.ManifestationTypes manifestationType = Manifestations.ManifestationTypes.valueOf(buf.readInt()).get();
+		final int powerID = buf.readInt();
+		final int dir = buf.readInt();
+		return new ChangeManifestationModeMessage(manifestationType, powerID, dir);
 	}
 
 }
