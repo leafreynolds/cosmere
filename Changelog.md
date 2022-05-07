@@ -1,5 +1,9 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B27
+
+Fixed crash related to bronze allomancy checking if an entity should be glowing
+
 B26
 
 This build contains breaking changes. Players, metalminds and spikes will not load related powers that were saved to them.
