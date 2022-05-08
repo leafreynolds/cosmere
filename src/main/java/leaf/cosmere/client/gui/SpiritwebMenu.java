@@ -12,6 +12,7 @@
 package leaf.cosmere.client.gui;
 
 import com.google.common.base.Stopwatch;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -27,6 +28,7 @@ import leaf.cosmere.utils.math.Vector2;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
@@ -288,9 +290,6 @@ public class SpiritwebMenu extends Screen
 
 	protected void SetupButtons()
 	{
-
-		//todo buttons
-		//todo button icons
 		sidedMenuButtons.add(spiritweb.canTickSelectedManifestation()
 		                     ? new SidedMenuButton("gui.cosmere.other.inactive", ButtonAction.INACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.off, Direction.WEST)
 		                     : new SidedMenuButton("gui.cosmere.other.active", ButtonAction.ACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.on, Direction.WEST));
@@ -312,7 +311,7 @@ public class SpiritwebMenu extends Screen
 		{
 			return;
 		}
-/*
+
 		matrixStack.pushPose();
 
 		final int start = (int) (visibility * 98) << 24;
@@ -322,9 +321,9 @@ public class SpiritwebMenu extends Screen
 
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
-		RenderSystem.disableAlphaTest();
+		//RenderSystem.disableAlphaTest();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-		RenderSystem.shadeModel(GL11.GL_SMOOTH);
+		//RenderSystem.shadeModel(GL11.GL_SMOOTH);
 		final Tesselator tessellator = Tesselator.getInstance();
 		final BufferBuilder buffer = tessellator.getBuilder();
 
@@ -344,45 +343,39 @@ public class SpiritwebMenu extends Screen
 		switchToPower = null;
 		doAction = null;
 
-		setupRadialButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
-
-		setupSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
+		//render the button backgrounds
+		renderRadialButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
+		renderSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
 
 		//draw out what we've asked for
 		tessellator.end();
 
 		//then we switch to icons
-		RenderSystem.shadeModel(GL11.GL_FLAT);
-
 		RenderSystem.enableTexture();
 		RenderSystem.setShaderColor(1, 1, 1, 1.0f);
-		RenderSystem.disableBlend();
-		RenderSystem.enableAlphaTest();
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS).getId());
-
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
 		//put the icons on the region buttons
-		setupRadialButtonIcons(buffer, middle_x, middle_y);
-
+		renderRadialButtonIcons(buffer, middle_x, middle_y);
 		//put the icons on the sided buttons
-		setupSidedButtonIcons(buffer, middle_x, middle_y);
+		renderSidedButtonIcons(buffer, middle_x, middle_y);
 
 		tessellator.end();
 
 		// draw radial button strings
-		setupRadialButtonStrings(matrixStack, (int) middle_x, (int) middle_y);
-
+		renderRadialButtonStrings(matrixStack, (int) middle_x, (int) middle_y);
 		//draw sided button strings
-		setupSidedButtonStrings(matrixStack, middle_x, middle_y);
-
+		renderSidedButtonStrings(matrixStack, middle_x, middle_y);
 		//do extra text info stuff
-		setupAnyExtraInfoTexts(matrixStack, (int) middle_y);
+		renderAnyExtraInfoTexts(matrixStack, (int) middle_y);
 
-		matrixStack.popPose();*/
+		matrixStack.popPose();
 	}
 
-	private void setupAnyExtraInfoTexts(PoseStack matrixStack, int middle_y)
+	private void renderAnyExtraInfoTexts(PoseStack matrixStack, int middle_y)
 	{
 		int x = 10;
 		final int[] y = {middle_y / 2};
@@ -399,7 +392,7 @@ public class SpiritwebMenu extends Screen
 		});
 	}
 
-	private void setupSidedButtonStrings(PoseStack matrixStack, double middle_x, double middle_y)
+	private void renderSidedButtonStrings(PoseStack matrixStack, double middle_x, double middle_y)
 	{
 		for (final SidedMenuButton sideButton : sidedMenuButtons)
 		{
@@ -428,7 +421,7 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void setupRadialButtonStrings(PoseStack matrixStack, int middle_x, int middle_y)
+	private void renderRadialButtonStrings(PoseStack matrixStack, int middle_x, int middle_y)
 	{
 		for (final RadialButtonRegion button : radialButtonRegions)
 		{
@@ -456,7 +449,7 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void setupSidedButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
+	private void renderSidedButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
 	{
 		for (final SidedMenuButton button : sidedMenuButtons)
 		{
@@ -486,7 +479,7 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void setupRadialButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
+	private void renderRadialButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
 	{
 		for (final RadialButtonRegion mnuRgn : radialButtonRegions)
 		{
@@ -519,7 +512,7 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void setupSidedButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
+	private void renderSidedButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
 	{
 		for (final SidedMenuButton button : sidedMenuButtons)
 		{
@@ -542,7 +535,7 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void setupRadialButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
+	private void renderRadialButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
 	{
 		if (!radialButtonRegions.isEmpty())
 		{
