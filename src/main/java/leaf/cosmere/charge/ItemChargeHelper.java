@@ -135,36 +135,40 @@ public class ItemChargeHelper
 		return adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
 	}
 
-	public static ItemStack adjustChargeExact(Player player, int chargeToGet, boolean doAdjust, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
+	public static ItemStack adjustChargeExact(Player player, int adjustValue, boolean doAdjust, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
 	{
 		MobEffectInstance storingIdentity = player.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
 		boolean isStoringIdentity = (storingIdentity != null && storingIdentity.getDuration() > 0);
-
 
 		for (ItemStack stackInSlot : Iterables.concat(items, acc))
 		{
 			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
 
-			boolean playerUnableToAccess = !chargeItemSlot.trySetAttunedPlayer(stackInSlot, player);
-			if (checkPlayer && playerUnableToAccess //if we need to make sure the player has access and they do not
-					|| //or if the player is trying to store in an unsealed metalmind but have identity
-					chargeToGet < 0 && !isStoringIdentity && chargeItemSlot.getAttunedPlayer(stackInSlot).compareTo(Constants.NBT.UNSEALED_UUID) == 0)
+			if (chargeItemSlot.getCharge(stackInSlot) <= 0)
 			{
 				continue;
 			}
 
-			boolean storing = chargeToGet < 0;
+			boolean playerUnableToAccess = !chargeItemSlot.trySetAttunedPlayer(stackInSlot, player);
+			if (checkPlayer && playerUnableToAccess //if we need to make sure the player has access and they do not
+					|| //or if the player is trying to store in an unsealed metalmind but have identity
+					adjustValue < 0 && !isStoringIdentity && chargeItemSlot.getAttunedPlayer(stackInSlot).compareTo(Constants.NBT.UNSEALED_UUID) == 0)
+			{
+				continue;
+			}
+
+			boolean storing = adjustValue < 0;
 
 			int slotCharge = chargeItemSlot.getCharge(stackInSlot);
 			int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
 
 
-			if ((storing && (slotCharge + (-chargeToGet)) < slotMaxCharge)//storing and can fit in this item
-					|| !storing && slotCharge > chargeToGet)
+			if ((storing && (slotCharge + (-adjustValue)) <= slotMaxCharge)//storing and can fit in this item
+					|| !storing && slotCharge >= adjustValue)
 			{
 				if (doAdjust)
 				{
-					chargeItemSlot.adjustCharge(stackInSlot, -chargeToGet);
+					chargeItemSlot.adjustCharge(stackInSlot, -adjustValue);
 				}
 
 				return stackInSlot;

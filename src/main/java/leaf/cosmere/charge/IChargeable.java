@@ -42,6 +42,12 @@ public interface IChargeable
 	default void setCharge(ItemStack itemStack, int chargeLevel)
 	{
 		StackNBTHelper.setInt(itemStack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(chargeLevel, 0, this.getMaxCharge(itemStack)));
+
+		if (chargeLevel == 0 && getAttunedPlayer(itemStack) != null)
+		{
+			StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER);
+			StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME);
+		}
 	}
 
 	default boolean trySetAttunedPlayer(ItemStack itemStack, Player entity)
@@ -71,7 +77,7 @@ public interface IChargeable
 		//or if the metalmind is unsealed (anyone can access)
 		if (noAttunedPlayer || attunedPlayerID.compareTo(playerID) == 0 || attunedPlayerID.compareTo(Constants.NBT.UNSEALED_UUID) == 0)
 		{
-			if (noAttunedPlayer)
+			if (noAttunedPlayer && getCharge(itemStack) > 0)
 			{
 				setAttunedPlayer(itemStack, entity);
 				setAttunedPlayerName(itemStack, entity);

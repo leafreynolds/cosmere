@@ -112,6 +112,14 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 
 			livingEntity.addEffect(currentEffect);
 		}
+		else
+		{
+			if (mode < 0)
+			{
+				//move towards turning off feruchemy.
+				data.setMode(manifestationType, metalType.getID(), mode + 1);
+			}
+		}
 
 	}
 
