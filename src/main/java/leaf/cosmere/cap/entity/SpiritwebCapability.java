@@ -134,11 +134,14 @@ public class SpiritwebCapability implements ISpiritweb
 			nbt.putIntArray(manifestationTypeName + "_mode", MANIFESTATIONS_MODE.get(manifestationType));
 		}
 
-
 		final CompoundTag ingestedMetals = new CompoundTag();
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-			ingestedMetals.putInt(metalType.getName() + "_ingested", METALS_INGESTED.get(metalType));
+			final Integer ingestedMetalAmount = METALS_INGESTED.get(metalType);
+			if (ingestedMetalAmount > 0)
+			{
+				ingestedMetals.putInt(metalType.getName() + "_ingested", ingestedMetalAmount);
+			}
 		}
 		nbt.put("ingested_metals", ingestedMetals);
 
@@ -170,7 +173,16 @@ public class SpiritwebCapability implements ISpiritweb
 		final CompoundTag ingestedMetals = nbt.getCompound("ingested_metals");
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-			METALS_INGESTED.put(metalType, ingestedMetals.getInt(metalType.getName() + "_ingested"));
+			final String metalKey = metalType.getName() + "_ingested";
+			if (ingestedMetals.contains(metalKey))
+			{
+				final int ingestedMetalAmount = ingestedMetals.getInt(metalKey);
+				METALS_INGESTED.put(metalType, ingestedMetalAmount);
+			}
+			else
+			{
+				METALS_INGESTED.put(metalType, 0);
+			}
 		}
 	}
 
