@@ -193,7 +193,7 @@ public class Metals
 				case CHROMIUM:
 					//case IRON: // covered by minecraft
 				case NICKEL:
-				case COPPER:
+					//case COPPER: // covered by minecraft
 				case ZINC:
 				case SILVER:
 				case TIN:
@@ -302,6 +302,11 @@ public class Metals
 		public OreBlock getOreBlock()
 		{
 			return BlocksRegistry.METAL_ORE.get(this).get();
+		}
+
+		public OreBlock getDeepslateOreBlock()
+		{
+			return BlocksRegistry.METAL_ORE_DEEPSLATE.get(this).get();
 		}
 
 		public TagKey<Item> getMetalRawTag()

@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:silver_ingot"
+            "items": [
+              "cosmere:silver_ingot"
+            ]
           }
         ]
       }

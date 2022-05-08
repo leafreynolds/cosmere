@@ -47,7 +47,11 @@ public final class ColorHandler
 			{
 				//blocks in world
 				blockColors.register(cosmereBlockColorHandler, metalType.getOreBlock());
+				blockColors.register(cosmereBlockColorHandler, metalType.getDeepslateOreBlock());
+
 				itemColors.register(blockItemColorHandler, metalType.getOreBlock());
+				itemColors.register(blockItemColorHandler, metalType.getDeepslateOreBlock());
+
 				itemColors.register(cosmereColourHandler, metalType.getRawMetalItem());
 			}
 

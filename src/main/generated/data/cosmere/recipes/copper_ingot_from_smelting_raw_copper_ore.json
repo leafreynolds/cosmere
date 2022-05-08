@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "cosmere:raw_copper_ore"
-  },
-  "result": "cosmere:copper_ingot",
-  "experience": 1.0,
-  "cookingtime": 200
-}

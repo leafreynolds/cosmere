@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:tin_ingot"
+            "items": [
+              "cosmere:tin_ingot"
+            ]
           }
         ]
       }

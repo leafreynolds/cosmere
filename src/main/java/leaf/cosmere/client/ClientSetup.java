@@ -51,6 +51,7 @@ public class ClientSetup
 
 			RenderType cutoutMipped = RenderType.cutoutMipped();
 			ItemBlockRenderTypes.setRenderLayer(metalType.getOreBlock(), cutoutMipped);
+			ItemBlockRenderTypes.setRenderLayer(metalType.getDeepslateOreBlock(), cutoutMipped);
 		}
 
 		LogHelper.info("Client setup complete!");

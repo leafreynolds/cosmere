@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:chromium_ingot"
+            "items": [
+              "cosmere:chromium_ingot"
+            ]
           }
         ]
       }

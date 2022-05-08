@@ -32,7 +32,8 @@ public class BlockModelsGen extends BlockStateProvider
 	{
 		for (RegistryObject<Block> itemRegistryObject : BlocksRegistry.BLOCKS.getEntries())
 		{
-			if (itemRegistryObject.get() instanceof MetalBlock)
+			final Block block = itemRegistryObject.get();
+			if (block instanceof MetalBlock)
 			{
 				//ModelFile blockModel = models().cubeAll(getPath(itemRegistryObject), new ResourceLocation(Cosmere.MODID, "block/metal_block"));
 
@@ -40,10 +41,10 @@ public class BlockModelsGen extends BlockStateProvider
 				ModelFile blockModel = models().withExistingParent("metal_block", ResourceLocationHelper.prefix("block/shapes/cube_all_tinted"))
 						.texture("all", ResourceLocationHelper.prefix("block/metal_block"));
 
-				simpleBlock(itemRegistryObject.get(), blockModel);
+				simpleBlock(block, blockModel);
 				continue;
 			}
-			else if (itemRegistryObject.get() instanceof MetalworkingTableBlock)
+			else if (block instanceof MetalworkingTableBlock)
 			{
 				ModelFile blockModel = models().withExistingParent("metalworking_table", new ResourceLocation("block/cube"))
 						.texture("particle", ResourceLocationHelper.prefix("block/metalworking_table_front"))
@@ -53,18 +54,23 @@ public class BlockModelsGen extends BlockStateProvider
 						.texture("west", ResourceLocationHelper.prefix("block/metalworking_table_side"))
 						.texture("up", ResourceLocationHelper.prefix("block/metalworking_table_top"))
 						.texture("down", ResourceLocationHelper.prefix("block/metalworking_table_bottom"));
-				simpleBlock(itemRegistryObject.get(), blockModel);
+				simpleBlock(block, blockModel);
 				continue;
 			}
-			else if (itemRegistryObject.get() instanceof OreBlock)
+			else if (block instanceof OreBlock)
 			{
 				//Special thanks to @Random & @sciwhiz12  on discord who helped me get these running
 				//To get the overlay working, you need to tell the blocks they have transparency, which I've donne in the ClientSetup script.
-				ModelFile blockModel = models().withExistingParent("ore_block", ResourceLocationHelper.prefix("block/shapes/cube_with_tint_overlay"))
-						.texture("all", ResourceLocationHelper.prefix("block/ore_block"))
+				final boolean deepslate = block.getRegistryName().getPath().contains("deepslate");
+
+				final String stoneType = deepslate ? "block/ore_block_deepslate" : "block/ore_block";
+				final String stoneFileName = deepslate ? "ore_block_deepslate" : "ore_block";
+
+				ModelFile blockModel = models().withExistingParent(stoneFileName, ResourceLocationHelper.prefix("block/shapes/cube_with_tint_overlay"))
+						.texture("all", ResourceLocationHelper.prefix(stoneType))
 						.texture("overlay", ResourceLocationHelper.prefix("block/ore_block_tint_overlay"));
 
-				simpleBlock(itemRegistryObject.get(), blockModel);
+				simpleBlock(block, blockModel);
 				continue;
 			}
 

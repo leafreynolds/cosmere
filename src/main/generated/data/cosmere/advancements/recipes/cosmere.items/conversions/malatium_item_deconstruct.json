@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:malatium_nugget"
+            "items": [
+              "cosmere:malatium_nugget"
+            ]
           }
         ]
       }

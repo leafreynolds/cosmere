@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:aluminum_ore"
+            "items": [
+              "cosmere:aluminum_ore"
+            ]
           }
         ]
       }

@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:silver_nugget"
+            "items": [
+              "cosmere:silver_nugget"
+            ]
           }
         ]
       }

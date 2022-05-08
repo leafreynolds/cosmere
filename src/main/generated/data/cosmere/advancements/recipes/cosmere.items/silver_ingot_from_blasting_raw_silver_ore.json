@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:raw_silver_ore"
+            "items": [
+              "cosmere:raw_silver_ore"
+            ]
           }
         ]
       }

@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:lead_ore"
+            "items": [
+              "cosmere:lead_ore"
+            ]
           }
         ]
       }

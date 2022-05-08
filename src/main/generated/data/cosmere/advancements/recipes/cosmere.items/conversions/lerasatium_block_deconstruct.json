@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "cosmere:lerasatium_ingot"
+            "items": [
+              "cosmere:lerasatium_ingot"
+            ]
           }
         ]
       }
