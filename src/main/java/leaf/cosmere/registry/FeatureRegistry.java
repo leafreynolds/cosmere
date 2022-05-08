@@ -66,9 +66,10 @@ public class FeatureRegistry
 		private static List<OreConfiguration.TargetBlockState> makeTarget(Metals.MetalType metalType)
 		{
 			return
-					List.of(OreConfiguration.target(
-							OreFeatures.STONE_ORE_REPLACEABLES,
-							BlocksRegistry.METAL_ORE.get(metalType).get().defaultBlockState()),
+					List.of(
+							OreConfiguration.target(
+									OreFeatures.STONE_ORE_REPLACEABLES,
+									BlocksRegistry.METAL_ORE.get(metalType).get().defaultBlockState()),
 							OreConfiguration.target(
 									OreFeatures.DEEPSLATE_ORE_REPLACEABLES,
 									BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType).get().defaultBlockState())
@@ -93,13 +94,32 @@ public class FeatureRegistry
 										registerPlacedFeature(
 												metalType.getName() + Constants.RegNameStubs.ORE,
 												ConfiguredFeatures.ORE_FEATURES.get(metalType),
-												List.of(RarityFilter.onAverageOnceEvery(64),
-														InSquarePlacement.spread(),
+												commonOrePlacement(
+														20,//width?
 														HeightRangePlacement.triangle(
-																VerticalAnchor.bottom(),
-																VerticalAnchor.absolute(128)),
-														BiomeFilter.biome()))
-						));
+																VerticalAnchor.absolute(-32),
+																VerticalAnchor.absolute(150))
+												)
+										)
+								)
+						);
+
+
+		//copied from OrePlacements.java, since they're private methods that should really be public
+		private static List<PlacementModifier> commonOrePlacement(int p_195344_, PlacementModifier p_195345_)
+		{
+			return orePlacement(CountPlacement.of(p_195344_), p_195345_);
+		}
+
+		private static List<PlacementModifier> rareOrePlacement(int p_195350_, PlacementModifier p_195351_)
+		{
+			return orePlacement(RarityFilter.onAverageOnceEvery(p_195350_), p_195351_);
+		}
+
+		private static List<PlacementModifier> orePlacement(PlacementModifier p_195347_, PlacementModifier p_195348_)
+		{
+			return List.of(p_195347_, InSquarePlacement.spread(), p_195348_, BiomeFilter.biome());
+		}
 
 		public static void registerPlacedFeatures()
 		{
