@@ -1,5 +1,13 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B29
+
+Fixing deepslate ore, no more pink texture or missing name. Also potentially better ore spawn frequency so it actually appears in deepslate.
+
+B28
+
+First build on 1.18.2. Spike/Metalmind rendering temporarily broken. Potentially other things too
+
 B27
 
 Fixed crash related to bronze allomancy checking if an entity should be glowing
