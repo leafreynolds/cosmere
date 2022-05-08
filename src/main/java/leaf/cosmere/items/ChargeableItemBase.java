@@ -16,6 +16,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -61,40 +62,29 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 	}
 
 	@Override
-	public boolean isBarVisible(ItemStack stack)
+	public boolean isBarVisible(@NotNull ItemStack stack)
 	{
-		if (stack.getItem() instanceof IChargeable)
-		{
-			IChargeable item = (IChargeable) stack.getItem();
-			return item.getCharge(stack) > 1;
-		}
-		return false;
+		return getCharge(stack) > 1;
 	}
 
 	@Override
-	public int getBarWidth(ItemStack stack)
+	public int getBarWidth(@NotNull ItemStack stack)
 	{
-		if (stack.getItem() instanceof IChargeable)
-		{
-			IChargeable item = (IChargeable) stack.getItem();
+		int maxCharge = getMaxCharge(stack);
+		int charge = getCharge(stack);
 
-			int maxCharge = item.getMaxCharge(stack);
-			int charge = item.getCharge(stack);
-
-			return getBarWidth(charge, maxCharge);
-		}
-
-		return 13;
+		return getBarWidth(charge, maxCharge);
 	}
 
 	@Override
-	public boolean isFoil(ItemStack stack)
+	public int getBarColor(@NotNull ItemStack stack)
 	{
-		if (stack.getItem() instanceof IChargeable)
-		{
-			IChargeable item = (IChargeable) stack.getItem();
-			return item.getCharge(stack) > 0;
-		}
-		return false;
+		return getBarColour(getCharge(stack), getMaxCharge(stack));
+	}
+
+	@Override
+	public boolean isFoil(@NotNull ItemStack stack)
+	{
+		return getCharge(stack) > 0;
 	}
 }

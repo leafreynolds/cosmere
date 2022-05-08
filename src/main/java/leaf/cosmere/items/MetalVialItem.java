@@ -213,17 +213,13 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
 	@Override
 	public int getBarWidth(ItemStack stack)
 	{
-		if (stack.getItem() instanceof IChargeable)
-		{
-			IChargeable item = (IChargeable) stack.getItem();
+		return getBarWidth(containedMetalCount(stack), MAX_METALS_COUNT);
+	}
 
-			int maxCharge = item.getMaxCharge(stack);
-			int charge = item.getCharge(stack);
-
-			return getBarWidth(containedMetalCount(stack), MAX_METALS_COUNT);
-		}
-
-		return 13;
+	@Override
+	public int getBarColor(ItemStack stack)
+	{
+		return getBarColour(containedMetalCount(stack), MAX_METALS_COUNT);
 	}
 
 	@Override
