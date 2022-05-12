@@ -11,6 +11,7 @@ package leaf.cosmere.cap.entity;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.client.gui.DrawUtils;
 import leaf.cosmere.constants.Manifestations.ManifestationTypes;
@@ -22,6 +23,7 @@ import leaf.cosmere.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -319,11 +321,8 @@ public class SpiritwebCapability implements ISpiritweb
 		if (linesToDrawByColor.size() > 0)
 		{
 			Vec3 originPoint = getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
-			for (Map.Entry<Color, List<Vec3>> entry : linesToDrawByColor.entries())
-			{
-				//For all found things, draw the line
-				DrawUtils.drawLinesFromPoint(event, originPoint, entry.getValue(), entry.getKey());
-			}
+			PoseStack matrixStack = event.getPoseStack();
+			DrawUtils.drawLinesFromPoint(matrixStack,originPoint,linesToDrawByColor);
 		}
 	}
 

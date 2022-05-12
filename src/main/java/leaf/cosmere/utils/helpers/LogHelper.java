@@ -4,7 +4,6 @@
 
 package leaf.cosmere.utils.helpers;
 
-import leaf.cosmere.Cosmere;
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
 
