@@ -28,7 +28,7 @@ public class EffectsRegistry
 	public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Cosmere.MODID);
 
 	public static final RegistryObject<MobEffect> ALLOMANTIC_COPPER = EFFECTS.register(
-			"burning_" + Metals.MetalType.COPPER.getName(),
+			"copper_cloud",
 			() -> new AllomancyEffectBase(Metals.MetalType.COPPER, MobEffectCategory.BENEFICIAL));
 
 	public static final RegistryObject<MobEffect> ALLOMANCY_BOOST = EFFECTS.register(
