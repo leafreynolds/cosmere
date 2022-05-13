@@ -67,7 +67,7 @@ public class CommonEvents
 							FeatureRegistry.PlacedFeatures.PLACED_ORE_FEATURES.get(metalType)
 					);
 
-					LogHelper.debug(String.format("Added %s to: %s", metalType.getName(), event.getName()));
+					//LogHelper.debug(String.format("Added %s to: %s", metalType.getName(), event.getName()));
 				}
 			}
 

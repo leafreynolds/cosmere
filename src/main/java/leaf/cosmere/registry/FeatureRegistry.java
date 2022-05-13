@@ -95,7 +95,7 @@ public class FeatureRegistry
 												metalType.getName() + Constants.RegNameStubs.ORE,
 												ConfiguredFeatures.ORE_FEATURES.get(metalType),
 												commonOrePlacement(
-														20,//width?
+														10,//width?
 														HeightRangePlacement.triangle(
 																VerticalAnchor.absolute(-32),
 																VerticalAnchor.absolute(150))
