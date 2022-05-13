@@ -152,9 +152,9 @@ public class EngLangGen extends LanguageProvider
 			String fKey = metalType.getFeruchemyRegistryName();
 			String hKey = "hemalurgic_" + name;
 
-			String allomancyGuide = "cosmere.entry." + aKey;
-			String feruchemyGuide = "cosmere.entry." + fKey;
-			String hemalurgyGuide = "cosmere.entry." + hKey;
+			String allomancyGuide = "entry." + aKey;
+			String feruchemyGuide = "entry." + fKey;
+			String hemalurgyGuide = "entry." + hKey;
 
 			add(allomancyGuide, StringHelper.fixCapitalisation(a));
 			add(feruchemyGuide, StringHelper.fixCapitalisation(f));
@@ -181,14 +181,14 @@ public class EngLangGen extends LanguageProvider
 
 		}
 
+		add("category.basics", "Basics");
+		add("category.allomancy", "Allomancy");
+		add("entry.allomancy_basics", "Allomancy Basics");
+		add("category.feruchemy", "Feruchemy");
+		add("category.hemalurgy", "Hemalurgy");
+
 
 		add("tooltip.cosmere.metals.contained", "Contained Metals:");
-
-		add("cosmere.category.basics", "Basics");
-		add("cosmere.category.allomancy", "Allomancy");
-		add("cosmere.entry.allomancy_basics", "Allomancy Basics");
-		add("cosmere.category.feruchemy", "Feruchemy");
-		add("cosmere.category.hemalurgy", "Hemalurgy");
 
 		//ItemGroups/Tabs
 		add("itemGroup." + CosmereItemGroups.ITEMS.getRecipeFolderName(), "Cosmere Items");
