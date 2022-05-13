@@ -730,9 +730,7 @@ public class Metals
 					//todo figure out what that means
 					break;
 				case ALUMINUM:
-					//Removes all powers
-					//... ooops?
-					//maybe its an item you can equip on others that they then have to remove?
+					//done else where.
 					break;
 				case DURALUMIN:
 					//Steals Connection/Identity

@@ -24,6 +24,7 @@ public class EffectInstanceMixin
 	{
 		if (getEffect() instanceof FeruchemyEffectBase)
 		{
+			// allways show **:** instead of the 3 second timer
 			cir.setReturnValue(true);
 		}
 	}
@@ -36,6 +37,8 @@ public class EffectInstanceMixin
 	{
 		if (getEffect() instanceof FeruchemyEffectBase)
 		{
+			//never show the icon on the normal HUD.
+			//should only show in inventory if they're interested.
 			cir.setReturnValue(false);
 		}
 	}
