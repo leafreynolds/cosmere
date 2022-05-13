@@ -32,7 +32,7 @@ public class BrassTapEffect extends FeruchemyEffectBase
 	@Override
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
-		if (!entityLivingBaseIn.level.isClientSide && amplifier > 10 && !entityLivingBaseIn.isInWater())
+		if (!entityLivingBaseIn.level.isClientSide && amplifier >= 5 && !entityLivingBaseIn.isInWater())
 		{
 			//set user on fire
 			entityLivingBaseIn.setSecondsOnFire(3);
