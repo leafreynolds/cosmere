@@ -186,6 +186,7 @@ public class EngLangGen extends LanguageProvider
 
 		add("cosmere.category.basics", "Basics");
 		add("cosmere.category.allomancy", "Allomancy");
+		add("cosmere.entry.allomancy_basics", "Allomancy Basics");
 		add("cosmere.category.feruchemy", "Feruchemy");
 		add("cosmere.category.hemalurgy", "Hemalurgy");
 

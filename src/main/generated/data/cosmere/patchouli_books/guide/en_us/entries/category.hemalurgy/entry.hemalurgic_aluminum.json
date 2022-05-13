@@ -1,0 +1,15 @@
+{
+  "name": "entry.hemalurgic_aluminum",
+  "category": "cosmere:category.hemalurgy",
+  "icon": "cosmere:aluminum_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Removes all powers."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 8
+}

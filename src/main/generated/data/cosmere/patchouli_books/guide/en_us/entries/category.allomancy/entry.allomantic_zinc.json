@@ -1,0 +1,19 @@
+{
+  "name": "entry.allomantic_zinc",
+  "category": "cosmere:category.allomancy",
+  "icon": "cosmere:zinc_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns zinc is known as a \"Rioter\"."
+    },
+    {
+      "type": "text",
+      "text": "In allomancy, zinc gives the ability to intensify the emotions of others, an ability called \"rioting\""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 4
+}

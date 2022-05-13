@@ -1,0 +1,15 @@
+{
+  "name": "entry.feruchemical_copper",
+  "category": "cosmere:category.feruchemy",
+  "icon": "cosmere:copper_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.feruchemical_copper.description"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 6
+}

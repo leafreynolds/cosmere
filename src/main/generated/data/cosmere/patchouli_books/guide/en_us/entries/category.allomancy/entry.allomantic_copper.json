@@ -1,0 +1,19 @@
+{
+  "name": "entry.allomantic_copper",
+  "category": "cosmere:category.allomancy",
+  "icon": "cosmere:copper_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns copper is known as a \"Smoker\"."
+    },
+    {
+      "type": "text",
+      "text": "Copper is an elemental Allomantic metal that allows one to hide Allomancy. A misting or mistborn burning copper generates a \u0027coppercloud\u0027 which hides Allomancy from being detected by Bronze. "
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 6
+}

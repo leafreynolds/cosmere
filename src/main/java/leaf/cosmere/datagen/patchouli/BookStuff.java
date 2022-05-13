@@ -24,7 +24,7 @@ public class BookStuff
 
 		public Category(String name, String description, String icon)
 		{
-			this.name = "cosmere.category." + name.toLowerCase();
+			this.name = "category." + name.toLowerCase();
 			this.description = description;
 			this.icon = icon;
 		}
@@ -74,9 +74,16 @@ public class BookStuff
 		//itemstack strings -> page 0-index num
 		public Map<String, Integer> extra_recipe_mappings;
 
+		public Entry() {        }
+
+		public Entry(String name, Category category)
+		{
+			this(name, category, category.icon);
+		}
+
 		public Entry(String name, Category category, String icon)
 		{
-			this.name = "cosmere.entry." + name.toLowerCase();
+			this.name = "entry." + name.toLowerCase();
 			this.category = category;
 			this.icon = icon;
 		}
@@ -88,7 +95,7 @@ public class BookStuff
 
 			//enforced
 			jsonobject.addProperty("name", this.name);
-			jsonobject.addProperty("category", this.category.name);
+			jsonobject.addProperty("category", "cosmere:" + this.category.name);
 			jsonobject.addProperty("icon", this.icon);
 
 			JsonArray jsonarray = new JsonArray();
@@ -192,6 +199,12 @@ public class BookStuff
 			{
 				jsonObject.addProperty(key, value);
 			}
+		}
+
+		public Page setTitle(String title)
+		{
+			this.title = title;
+			return this;
 		}
 	}
 

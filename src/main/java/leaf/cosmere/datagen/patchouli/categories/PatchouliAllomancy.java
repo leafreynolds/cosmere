@@ -56,10 +56,12 @@ public class PatchouliAllomancy
 
 			String metalName = metalType.getName();
 
+			String itemFullName = metalType.getNuggetItem().getRegistryName().toString();
+
 			BookStuff.Entry entryForThisPower = new BookStuff.Entry(
 					"allomantic_" + metalName,
 					allomancy,
-					String.format("%s_ingot", metalName));
+					itemFullName);
 			entryForThisPower.sortnum = metalType.getID();
 
 			pages.clear();

@@ -1,0 +1,19 @@
+{
+  "name": "entry.allomantic_duralumin",
+  "category": "cosmere:category.allomancy",
+  "icon": "cosmere:duralumin_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who can only burn duralumin is known as a \"Duralumin Gnat\" as they gain no discernible effect from burning their metal."
+    },
+    {
+      "type": "text",
+      "text": "An allomancer that burns duralumin causes an amazing burst of power from all currently burning metals, draining all of them rapidly."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 9
+}

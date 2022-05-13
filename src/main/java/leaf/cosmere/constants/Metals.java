@@ -26,6 +26,7 @@ import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -270,9 +271,17 @@ public class Metals
 			return (MetalIngotItem) ItemsRegistry.METAL_INGOTS.get(this).get();
 		}
 
-		public MetalNuggetItem getNuggetItem()
+		public Item getNuggetItem()
 		{
-			return (MetalNuggetItem) ItemsRegistry.METAL_NUGGETS.get(this).get();
+			switch (this)
+			{
+				case IRON:
+					return Items.IRON_NUGGET;
+				case GOLD:
+					return Items.GOLD_NUGGET;
+			}
+
+			return ItemsRegistry.METAL_NUGGETS.get(this).get();
 		}
 
 		public HemalurgicSpikeItem getSpikeItem()

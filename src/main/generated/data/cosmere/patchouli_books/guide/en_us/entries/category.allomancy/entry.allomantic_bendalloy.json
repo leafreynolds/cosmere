@@ -1,0 +1,19 @@
+{
+  "name": "entry.allomantic_bendalloy",
+  "category": "cosmere:category.allomancy",
+  "icon": "cosmere:bendalloy_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns bendalloy is known as a \"Slider\"."
+    },
+    {
+      "type": "text",
+      "text": "Bendalloy allows the burner to push on time in a bubble around them, making time pass quickly within the bubble. Expect to see your furnaces finish more quickly or crops grow faster!"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 13
+}
