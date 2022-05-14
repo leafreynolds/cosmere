@@ -1,5 +1,16 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B30
+
+Fixed brass feruchemy not letting player set others on fire at high burn rates.
+Buffed electrum feruchemy to be more noticeable. 
+Changed copper allomancy effect name from "Burning Copper", to "Copper Cloud".
+Fixed and updated patchouli documentation. Hemalurgy now has better descriptions.
+Fixed cosmere fortune bonus.
+Fix looting event crash when there's a null damage source.
+Make Cosmere's ores half as common, because they were ridiculously common.
+
+
 B29
 
 Fixing deepslate ore, no more pink texture or missing name. Also potentially better ore spawn frequency so it actually appears in deepslate.
