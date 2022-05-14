@@ -12,6 +12,7 @@ import leaf.cosmere.datagen.patchouli.categories.PatchouliBasics;
 import leaf.cosmere.datagen.patchouli.categories.PatchouliFeruchemy;
 import leaf.cosmere.datagen.patchouli.categories.PatchouliHemalurgy;
 import leaf.cosmere.utils.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.StringHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -152,7 +153,7 @@ public class PatchouliGen implements DataProvider
 				String.format(
 						"data/cosmere/patchouli_books/%s/en_us/categories/%s.json",
 						GUIDE_NAME,
-						category.name));
+						StringHelper.fixPath(category.name)));
 	}
 
 	private static Path getEntryPath(Path pathIn, BookStuff.Entry entry)
@@ -161,8 +162,8 @@ public class PatchouliGen implements DataProvider
 				String.format(
 						"data/cosmere/patchouli_books/%s/en_us/entries/%s/%s.json",
 						GUIDE_NAME,
-						entry.category.name,
-						entry.name));
+						StringHelper.fixPath(entry.category.name),
+						StringHelper.fixPath(entry.name)));
 	}
 
 	/**

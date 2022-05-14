@@ -61,7 +61,7 @@ public class EngLangGen extends LanguageProvider
 
 				if (item instanceof HemalurgicSpikeItem)
 				{
-					String use = ((HemalurgicSpikeItem) item).getMetalType().getHemalurgicUseString();
+					String use = ((HemalurgicSpikeItem) item).getMetalType().getShortHemalurgicUseString();
 					add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
 				}
 				else if (item instanceof MetalmindItem)
@@ -137,7 +137,7 @@ public class EngLangGen extends LanguageProvider
 			}
 		}
 
-		//guidebook
+		//work through each metal and generate localisation for related things.
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
 			final String name = metalType.getName();
@@ -180,12 +180,6 @@ public class EngLangGen extends LanguageProvider
 			}
 
 		}
-
-		add("category.basics", "Basics");
-		add("category.allomancy", "Allomancy");
-		add("entry.allomancy_basics", "Allomancy Basics");
-		add("category.feruchemy", "Feruchemy");
-		add("category.hemalurgy", "Hemalurgy");
 
 
 		add("tooltip.cosmere.metals.contained", "Contained Metals:");

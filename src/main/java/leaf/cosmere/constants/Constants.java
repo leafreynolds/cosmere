@@ -61,7 +61,6 @@ public class Constants
 		public static final String NECKLACE = "_necklace";
 		public static final String INGOT = "_ingot";
 		public static final String NUGGET = "_nugget";
-		public static final String SHAVINGS = "_shavings";
 		public static final String SPIKE = "_spike";
 
 

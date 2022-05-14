@@ -7,6 +7,7 @@ package leaf.cosmere.datagen.patchouli;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import leaf.cosmere.utils.helpers.StringHelper;
 
 import java.util.Map;
 
@@ -24,17 +25,16 @@ public class BookStuff
 
 		public Category(String name, String description, String icon)
 		{
-			this.name = "category." + name.toLowerCase();
+			this.name = name.toLowerCase();
 			this.description = description;
 			this.icon = icon;
 		}
-
 
 		public JsonElement serialize()
 		{
 			JsonObject jsonobject = new JsonObject();
 
-			jsonobject.addProperty("name", this.name);
+			jsonobject.addProperty("name", StringHelper.fixCapitalisation(this.name));//Convert to people readable text
 			jsonobject.addProperty("description", this.description);
 			jsonobject.addProperty("icon", this.icon);
 
@@ -61,6 +61,7 @@ public class BookStuff
 
 		public Page[] pages;
 
+		public String displayTitle = "";
 		public String advancement = "";
 		public String flag = "";
 
@@ -83,18 +84,18 @@ public class BookStuff
 
 		public Entry(String name, Category category, String icon)
 		{
-			this.name = "entry." + name.toLowerCase();
+			this.name = name.toLowerCase();
 			this.category = category;
 			this.icon = icon;
 		}
-
 
 		public JsonElement serialize()
 		{
 			JsonObject jsonobject = new JsonObject();
 
 			//enforced
-			jsonobject.addProperty("name", this.name);
+			final String displayTitleName = this.displayTitle.isEmpty() ? this.name : this.displayTitle;
+			jsonobject.addProperty("name", StringHelper.fixCapitalisation(displayTitleName));//ensure people readable text
 			jsonobject.addProperty("category", "cosmere:" + this.category.name);
 			jsonobject.addProperty("icon", this.icon);
 
@@ -139,6 +140,12 @@ public class BookStuff
 
 			return jsonobject;
 		}
+
+		public Entry setDisplayTitle(String s)
+		{
+			displayTitle = s;
+			return this;
+		}
 	}
 
 	public abstract static class Page
@@ -150,6 +157,12 @@ public class BookStuff
 		public String flag = "";
 		public String anchor = "";
 		public String[] recipes = null;
+
+		public Page(String type)
+		{
+			this.type = type;
+			this.text = "";
+		}
 
 		public Page(String type, String text)
 		{
@@ -206,6 +219,12 @@ public class BookStuff
 			this.title = title;
 			return this;
 		}
+
+		public Page setText(String s)
+		{
+			text = s;
+			return this;
+		}
 	}
 
 	public static class CraftingPage extends Page
@@ -215,19 +234,19 @@ public class BookStuff
 
 		public CraftingPage(String recipe)
 		{
-			super("crafting", "");
+			super("patchouli:crafting", "");
 			this.recipe = recipe;
 		}
 
 		public CraftingPage(String text, String recipe)
 		{
-			super("crafting", text);
+			super("patchouli:crafting", text);
 			this.recipe = recipe;
 		}
 
 		public CraftingPage(String text, String recipe, String recipe2)
 		{
-			super("crafting", text);
+			super("patchouli:crafting", text);
 			this.recipe = recipe;
 			this.recipe2 = recipe2;
 		}
@@ -493,6 +512,11 @@ public class BookStuff
 
 	public static class TextPage extends Page
 	{
+		public TextPage()
+		{
+			super("text");
+		}
+
 		public TextPage(String text)
 		{
 			super("text", text);
