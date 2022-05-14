@@ -1,0 +1,30 @@
+{
+  "name": "Feruchemical Chromium",
+  "category": "cosmere:feruchemy",
+  "icon": "cosmere:chromium_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.feruchemical_chromium.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:chromium_bracelet_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:chromium_ring_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:chromium_necklace_metalmind",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 10
+}

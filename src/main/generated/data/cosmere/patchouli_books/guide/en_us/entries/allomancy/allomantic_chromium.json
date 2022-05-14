@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Chromium",
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:chromium_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)chromium$() is known as a \"$(thing)Leecher$()\"."
+    },
+    {
+      "type": "text",
+      "text": "Chromium allows the burner to, with physical contact, deplete the metals in another with an effect similar to that of $(l:cosmere:allomancy/allomantic_aluminum)aluminum$()."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 10
+}

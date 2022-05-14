@@ -1,0 +1,30 @@
+{
+  "name": "Feruchemical Bendalloy",
+  "category": "cosmere:feruchemy",
+  "icon": "cosmere:bendalloy_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.feruchemical_bendalloy.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:bendalloy_bracelet_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:bendalloy_ring_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:bendalloy_necklace_metalmind",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 13
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Bronze",
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:bronze_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)bronze$() is known as a \"$(thing)Seeker$()\"."
+    },
+    {
+      "type": "text",
+      "text": "When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 7
+}

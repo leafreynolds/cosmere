@@ -1,0 +1,20 @@
+{
+  "name": "Hemalurgic Tin",
+  "category": "cosmere:hemalurgy",
+  "icon": "cosmere:tin_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Tin spikes steal the senses: $(p)As a result, tin spikes grant better vision in the dark. $(p)It seems that donors with a better sense of their surroundings provide a more potent effect."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:tin_spike",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 2
+}

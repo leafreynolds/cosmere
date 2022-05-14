@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Pewter",
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:pewter_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)pewter$() is known as a \"$(thing)Thug$()\"."
+    },
+    {
+      "type": "text",
+      "text": "Pewter is an allomantic metal that, when burnt, gives the user extreme strength, resistance and durability. Its uses include combat, moving quickly, surviving attacks and healing oneself."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 3
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Nicrosil",
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:nicrosil_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)nicrosil$() is known as a \"$(thing)Nicroburst$()\"."
+    },
+    {
+      "type": "text",
+      "text": "It allows the burner to, with physical contact with another allomancer, have an effect on them as if they were burning $(l:cosmere:allomancy/allomantic_duralumin)duralumin$() themselves."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 11
+}

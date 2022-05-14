@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Iron",
+  "category": "cosmere:allomancy",
+  "icon": "minecraft:iron_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)iron$() is known as a \"$(thing)Lurcher$()\"."
+    },
+    {
+      "type": "text",
+      "text": "Iron is an Allomantic metal that, when burned, allows the user to Pull on various metal objects around them, pulling any of these objects towards them."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 0
+}

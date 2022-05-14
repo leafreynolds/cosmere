@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Steel",
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:steel_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)steel$() is known as a \"$(thing)Coinshot$()\"."
+    },
+    {
+      "type": "text",
+      "text": "Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to telekinetically push against a metal object."
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 1
+}

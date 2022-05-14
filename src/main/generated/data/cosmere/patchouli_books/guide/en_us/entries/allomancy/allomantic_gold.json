@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Gold",
+  "category": "cosmere:allomancy",
+  "icon": "minecraft:gold_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)gold$() is known as a \"$(thing)Augur$()\"."
+    },
+    {
+      "type": "text",
+      "text": "$(#f00)(NYI)$()"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 14
+}

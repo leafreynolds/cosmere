@@ -1,0 +1,30 @@
+{
+  "name": "Feruchemical Brass",
+  "category": "cosmere:feruchemy",
+  "icon": "cosmere:brass_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.feruchemical_brass.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:brass_bracelet_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:brass_ring_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:brass_necklace_metalmind",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 5
+}

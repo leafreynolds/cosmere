@@ -1,0 +1,20 @@
+{
+  "name": "Hemalurgic Atium",
+  "category": "cosmere:hemalurgy",
+  "icon": "cosmere:atium_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Steals an Allomantic or Feruchemical power."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:atium_spike",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 16
+}

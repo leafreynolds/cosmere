@@ -1,0 +1,20 @@
+{
+  "name": "Hemalurgic Cadmium",
+  "category": "cosmere:hemalurgy",
+  "icon": "cosmere:cadmium_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Cadmium spikes steal the temporal allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_gold)Gold$(), $(l:cosmere:allomancy/allomantic_electrum)Electrum$(), $(l:cosmere:allomancy/allomantic_cadmium)Cadmium$() and $(l:cosmere:allomancy/allomantic_bendalloy)Bendalloy$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:cadmium_spike",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 12
+}

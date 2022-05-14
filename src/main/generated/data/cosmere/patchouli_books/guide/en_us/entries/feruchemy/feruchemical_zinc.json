@@ -1,0 +1,30 @@
+{
+  "name": "Feruchemical Zinc",
+  "category": "cosmere:feruchemy",
+  "icon": "cosmere:zinc_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.feruchemical_zinc.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:zinc_bracelet_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:zinc_ring_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:zinc_necklace_metalmind",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 4
+}

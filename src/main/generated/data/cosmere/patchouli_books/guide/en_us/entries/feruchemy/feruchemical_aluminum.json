@@ -1,0 +1,30 @@
+{
+  "name": "Feruchemical Aluminum",
+  "category": "cosmere:feruchemy",
+  "icon": "cosmere:aluminum_bracelet_metalmind",
+  "pages": [
+    {
+      "type": "text",
+      "text": "manifestation.cosmere.feruchemical_aluminum.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:aluminum_bracelet_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:aluminum_ring_metalmind",
+      "recipe2": ""
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:aluminum_necklace_metalmind",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 8
+}

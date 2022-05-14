@@ -1,0 +1,20 @@
+{
+  "name": "Hemalurgic Steel",
+  "category": "cosmere:hemalurgy",
+  "icon": "cosmere:steel_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Steel spikes steal the physical allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_iron)Iron$(), $(l:cosmere:allomancy/allomantic_steel)Steel$(), $(l:cosmere:allomancy/allomantic_tin)Tin$() and $(l:cosmere:allomancy/allomantic_pewter)Pewter$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:steel_spike",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 1
+}

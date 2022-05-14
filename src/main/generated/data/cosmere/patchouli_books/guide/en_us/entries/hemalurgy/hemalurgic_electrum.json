@@ -1,0 +1,20 @@
+{
+  "name": "Hemalurgic Electrum",
+  "category": "cosmere:hemalurgy",
+  "icon": "cosmere:electrum_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Electrum spikes steal the enhancement allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_aluminum)Aluminum$(), $(l:cosmere:allomancy/allomantic_duralumin)Duralumin$(), $(l:cosmere:allomancy/allomantic_chromium)Chromium$() and $(l:cosmere:allomancy/allomantic_nicrosil)Nicrosil$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:electrum_spike",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 15
+}

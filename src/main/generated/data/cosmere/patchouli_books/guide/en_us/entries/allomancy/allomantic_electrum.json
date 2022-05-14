@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Electrum",
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:electrum_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\"."
+    },
+    {
+      "type": "text",
+      "text": "$(#f00)(NYI)$()"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 15
+}
