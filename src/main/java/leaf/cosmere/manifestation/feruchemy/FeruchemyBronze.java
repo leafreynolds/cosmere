@@ -10,7 +10,9 @@ import leaf.cosmere.constants.Metals;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Monster;
@@ -37,7 +39,7 @@ public class FeruchemyBronze extends FeruchemyBase
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
-		return 0;
+		return -1;
 	}
 
 	@Override
@@ -60,14 +62,28 @@ public class FeruchemyBronze extends FeruchemyBase
 		int mode = data.getMode(manifestationType, metalType.getID());
 
 		//can't store or tap any more
-		if (mode == 0)
+		switch (mode)
 		{
-			//remove active effects.
-			//let the current effect run out.
-			return;
+			case -1:
+				resetSleepTimers(data);
+				break;
+			case 1:
+				trySleep(data);
+				break;
+			default:
+				//remove active effects.
+				//let the current effect run out.
+				break;
 		}
 
-		trySleep(data);
+
+	}
+
+	private void resetSleepTimers(ISpiritweb data)
+	{
+		ServerPlayer player = (ServerPlayer) data.getLiving();
+		//ServerStatsCounter serverstatscounter = player.getStats();
+		player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
 
 	}
 
