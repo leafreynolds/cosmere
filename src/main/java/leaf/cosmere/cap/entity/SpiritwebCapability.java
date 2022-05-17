@@ -315,7 +315,9 @@ public class SpiritwebCapability implements ISpiritweb
 
 			if (range > 0)
 			{
+				Minecraft.getInstance().getProfiler().push("cosmere-getDrawLines");
 				linesToDrawByColor.put(Color.BLUE, AllomancyIronSteel.getDrawLines(range));
+				Minecraft.getInstance().getProfiler().pop();
 			}
 		}
 		if (linesToDrawByColor.size() > 0)

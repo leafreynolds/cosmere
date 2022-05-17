@@ -35,22 +35,15 @@ import java.util.stream.IntStream;
 
 import static leaf.cosmere.constants.Constants.Strings.CONTAINED_METALS;
 
-public class MetalVialItem extends BaseItem implements IContainsMetal
+public class MetalVialItem extends BaseItem implements IHasMetalType
 {
-	final String metals_contained = "metals_contained";
-	final String metal_ids = "metalIDs";
-	final String metal_amounts = "metalAmounts";
+	private final String metal_ids = "metalIDs";
+	private final String metal_amounts = "metalAmounts";
 	private final int MAX_METALS_COUNT = 8;
 
 	private CompoundTag getContainedMetalsTag(ItemStack stack)
 	{
-		return stack.getOrCreateTagElement(metals_contained);
-	}
-
-	@Override
-	public boolean containsMetal(ItemStack stack)
-	{
-		return getContainedMetalsTag(stack).contains(metal_ids);
+		return stack.getOrCreateTagElement("metals_contained");
 	}
 
 	public boolean isFull(ItemStack stack)
@@ -240,5 +233,11 @@ public class MetalVialItem extends BaseItem implements IContainsMetal
 
 		tooltip.add(TextHelper.createText(String.format("%s / %s", containedMetalCount(stack), MAX_METALS_COUNT)));
 
+	}
+
+	@Override
+	public Metals.MetalType getMetalType()
+	{
+		return Metals.MetalType.IRON;
 	}
 }

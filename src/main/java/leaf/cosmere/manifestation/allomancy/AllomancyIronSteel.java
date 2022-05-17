@@ -19,6 +19,10 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
@@ -32,15 +36,17 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static leaf.cosmere.utils.helpers.EntityHelper.getEntitiesInRange;
 
 public class AllomancyIronSteel extends AllomancyBase
 {
 	private final boolean isPush;
+	private static Set<String> s_whiteList = null;
 
 	public AllomancyIronSteel(Metals.MetalType metalType)
 	{
@@ -214,13 +220,15 @@ public class AllomancyIronSteel extends AllomancyBase
 
 	private static final List<Vec3> found = new ArrayList<>();
 
+
 	@OnlyIn(Dist.CLIENT)
 	public static List<Vec3> getDrawLines(int range)
 	{
-		Minecraft mc = Minecraft.getInstance();
+		final Minecraft mc = Minecraft.getInstance();
+		final ProfilerFiller profiler = mc.getProfiler();
 		LocalPlayer playerEntity = mc.player;
 		//only update box list every so often
-		if (playerEntity.tickCount % 5 != 0 && found.size() > 0)
+		if (playerEntity.tickCount % 15 != 0)
 		{
 			return found;
 		}
@@ -232,18 +240,19 @@ public class AllomancyIronSteel extends AllomancyBase
 		//todo stop aluminum showing up, check IHasMetalType.getMetalType != aluminum
 
 		//metal blocks
+		profiler.push("cosmere-getBlocksInRange");
 		BlockPos.withinManhattanStream(playerEntity.blockPosition(), range, range, range)
 				.filter(blockPos ->
 				{
 					Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-
-					return block instanceof IHasMetalType;
+					return block instanceof IHasMetalType || AllomancyIronSteel.containsMetal(block.getRegistryName().getPath());
 				})
 				.forEach(blockPos -> found.add(new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5)));
 
+		profiler.pop();
 
 		//entities with metal armor/tools
-
+		profiler.push("cosmere-getEntitiesInRange");
 		getEntitiesInRange(playerEntity, range, false).forEach(entity ->
 		{
 			if (entity instanceof LivingEntity)
@@ -256,19 +265,76 @@ public class AllomancyIronSteel extends AllomancyBase
 				ItemStack stack = ((ItemEntity) entity).getItem();
 				Item item = stack.getItem();
 
-				if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof IHasMetalType)
+				/*if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof IHasMetalType || )
 				{
 					found.add(entity.position());
-				}
-				else if (item instanceof IHasMetalType)
+				}*/
+				if (item instanceof IHasMetalType || AllomancyIronSteel.containsMetal(item.getRegistryName().getPath()))
 				{
 					found.add(entity.position());
 				}
 			}
 		});
+		profiler.pop();
 
 		return found;
 	}
 
+	private static boolean containsMetal(String path)
+	{
+		Minecraft.getInstance().getProfiler().push("cosmere-containsMetal");
+		if (s_whiteList == null)
+		{
+			createWhitelist();
+		}
+
+		final boolean foundMatch = s_whiteList.contains(path);
+
+		//look for any block or item that contains one of our metals
+		//eg iron fence
+		Minecraft.getInstance().getProfiler().pop();
+
+		return foundMatch;
+	}
+
+	//client side is the only time this gets initialized.
+	private static void createWhitelist()
+	{
+		s_whiteList = new HashSet<>();
+
+		//add the obvious stuff
+		s_whiteList.add("lightning_rod");
+
+		String[] metalNames = Arrays.stream(Metals.MetalType.values()).map(Metals.MetalType::getName).toArray(String[]::new);
+
+		//add the potential stuff.
+		//This may result in false positives.
+		//requires testing.
+		ForgeRegistries.ITEMS.getValues()
+				.stream()
+				.filter(test -> testPath(test.getRegistryName(), metalNames))
+				.forEach(match -> s_whiteList.add(match.getRegistryName().getPath()));
+		ForgeRegistries.BLOCKS.getValues()
+				.stream()
+				.filter(test -> testPath(test.getRegistryName(), metalNames))
+				.forEach(match -> s_whiteList.add(match.getRegistryName().getPath()));
+		ForgeRegistries.ENTITIES.getValues()
+				.stream()
+				.filter(test -> testPath(test.getRegistryName(), metalNames))
+				.forEach(match -> s_whiteList.add(match.getRegistryName().getPath()));
+
+		for (String s : s_whiteList)
+		{
+			LogHelper.LOGGER.info("Cosmere: %s added to Push/Pull whitelist".formatted(s));
+		}
+	}
+
+	private static boolean testPath(ResourceLocation test, String[] metalNames)
+	{
+		final String path = test.getPath();
+		//No twisting vines, paintings, crafting tables or silverfish. Lead by itself is also incorrect.
+		boolean misMatch = path.contains("ting") || path.contains("silverfish") || path.equals("lead");
+		return !misMatch && Arrays.stream(metalNames).anyMatch(path::contains);
+	}
 
 }
