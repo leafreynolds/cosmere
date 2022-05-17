@@ -40,12 +40,11 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 	@Override
 	protected ItemStack run(ItemStack stack, LootContext lootContext)
 	{
-		if (!(stack.getItem() instanceof HemalurgicSpikeItem))
+		if (!(stack.getItem() instanceof HemalurgicSpikeItem item))
 		{
 			return stack;
 		}
 
-		HemalurgicSpikeItem item = (HemalurgicSpikeItem) stack.getItem();
 		final Metals.MetalType spikeMetalType = item.getMetalType();
 
 		if (!spikeMetalType.hasHemalurgicEffect())

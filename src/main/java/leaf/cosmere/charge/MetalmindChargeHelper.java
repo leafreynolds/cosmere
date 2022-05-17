@@ -69,9 +69,8 @@ public class MetalmindChargeHelper
 	{
 		return obj ->
 		{
-			if (obj.getItem() instanceof MetalmindItem)
+			if (obj.getItem() instanceof final MetalmindItem item)
 			{
-				final MetalmindItem item = (MetalmindItem) obj.getItem();
 
 				//Correct metal or harmonium which I'm using as universal
 				return item.getMetalType() != metalType && item.getMetalType() != Metals.MetalType.HARMONIUM;

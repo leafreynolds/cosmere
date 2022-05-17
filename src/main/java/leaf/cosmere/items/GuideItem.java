@@ -106,9 +106,8 @@ public class GuideItem extends Item
 	{
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
-		if (playerIn instanceof ServerPlayer)
+		if (playerIn instanceof ServerPlayer player)
 		{
-			ServerPlayer player = (ServerPlayer) playerIn;
 
 			//UseItemSuccessTrigger.INSTANCE.trigger(player, stack, player.getServerWorld(), player.getPosX(), player.getPosY(), player.getPosZ());
 

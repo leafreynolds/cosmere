@@ -53,9 +53,8 @@ public class FortuneBonusModifier extends LootModifier
 			Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
 			BlockState blockState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 
-			if (blockState != null && entity instanceof LivingEntity)
+			if (blockState != null && entity instanceof LivingEntity player)
 			{
-				LivingEntity player = (LivingEntity) entity;
 
 				MobEffectInstance storingLuckEffect = player.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());
 				MobEffectInstance tappingLuckEffect = player.getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());

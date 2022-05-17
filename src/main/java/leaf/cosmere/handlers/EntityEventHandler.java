@@ -59,12 +59,11 @@ public class EntityEventHandler
 	{
 		Entity eventEntity = event.getEntity();
 
-		if (eventEntity.level.isClientSide || !(eventEntity instanceof LivingEntity))
+		if (eventEntity.level.isClientSide || !(eventEntity instanceof LivingEntity livingEntity))
 		{
 			return;
 		}
 
-		LivingEntity livingEntity = (LivingEntity) eventEntity;
 		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
@@ -216,19 +215,17 @@ public class EntityEventHandler
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
 	{
-		if (!(event.getTarget() instanceof LivingEntity))
+		if (!(event.getTarget() instanceof LivingEntity target))
 		{
 			return;
 		}
 
 		ItemStack stack = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
-		LivingEntity target = (LivingEntity) event.getTarget();
 
 		SpiritwebCapability.get(target).ifPresent(cap ->
 		{
-			if (stack.getItem() instanceof MetalNuggetItem)
+			if (stack.getItem() instanceof MetalNuggetItem beadItem)
 			{
-				MetalNuggetItem beadItem = (MetalNuggetItem) stack.getItem();
 				Metals.MetalType metalType = beadItem.getMetalType();
 
 				if (metalType != Metals.MetalType.LERASATIUM && metalType != Metals.MetalType.LERASIUM)
@@ -238,15 +235,13 @@ public class EntityEventHandler
 
 				MetalNuggetItem.consumeNugget(target, metalType, stack);
 			}
-			else if (stack.getItem() instanceof HemalurgicSpikeItem)
+			else if (stack.getItem() instanceof HemalurgicSpikeItem spike)
 			{
 				//https://www.theoryland.com/intvmain.php?i=977#43
 				if (!(event.getTarget() instanceof Cat))
 				{
 					return;
 				}
-
-				HemalurgicSpikeItem spike = (HemalurgicSpikeItem) stack.getItem();
 
 				//only apply spike if it has a power
 				//no accidentally losing spikes

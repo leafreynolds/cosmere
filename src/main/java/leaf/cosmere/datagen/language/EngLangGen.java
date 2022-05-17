@@ -16,6 +16,7 @@ import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.StringHelper;
 import net.minecraft.Util;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -47,9 +48,10 @@ public class EngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			if (item.getRegistryName().getNamespace().contentEquals(Cosmere.MODID))
+			final ResourceLocation registryName = item.getRegistryName();
+			if (registryName.getNamespace().contentEquals(Cosmere.MODID))
 			{
-				String localisedString = StringHelper.fixCapitalisation(item.getRegistryName().getPath());
+				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
 
 				//string overrides
 				switch (localisedString)
@@ -62,12 +64,12 @@ public class EngLangGen extends LanguageProvider
 				if (item instanceof HemalurgicSpikeItem)
 				{
 					String use = ((HemalurgicSpikeItem) item).getMetalType().getShortHemalurgicUseString();
-					add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
+					add("item.cosmere." + registryName.getPath() + ".tooltip", use);
 				}
 				else if (item instanceof MetalmindItem)
 				{
 					String use = ((MetalmindItem) item).getMetalType().getFeruchemyMetalmindUse();
-					add("item.cosmere." + item.getRegistryName().getPath() + ".tooltip", use);
+					add("item.cosmere." + registryName.getPath() + ".tooltip", use);
 				}
 
 

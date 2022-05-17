@@ -24,9 +24,8 @@ public class SurgeGravitation extends SurgebindingBase
 	//@SubscribeEvent
 	public void onLivingHurtEvent(LivingHurtEvent event)
 	{
-		if (event.getSource().getEntity() instanceof Player)
+		if (event.getSource().getEntity() instanceof Player player)
 		{
-			Player player = (Player) event.getSource().getEntity();
 			LogHelper.info(player.getName() + " has attacked a " + event.getEntityLiving().getName());
 			//ISurgeState SState = player.getCapability(CosmereCapabilities.SURGE_STATE, null);
 

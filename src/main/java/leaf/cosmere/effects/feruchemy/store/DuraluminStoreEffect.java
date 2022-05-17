@@ -43,12 +43,10 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 
 	public void onRenderNameplateEvent(RenderNameplateEvent event)
 	{
-		if (!(event.getEntity() instanceof LivingEntity))
+		if (!(event.getEntity() instanceof LivingEntity livingEntity))
 		{
 			return;
 		}
-
-		LivingEntity livingEntity = (LivingEntity) event.getEntity();
 
 		MobEffectInstance effectInstance = livingEntity.getEffect(this);
 		if (effectInstance != null && effectInstance.getDuration() > 0)

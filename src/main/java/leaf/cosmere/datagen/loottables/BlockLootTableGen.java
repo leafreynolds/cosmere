@@ -21,9 +21,8 @@ public class BlockLootTableGen extends BlockLoot
 
 		for (RegistryObject<Block> itemRegistryObject : BlocksRegistry.BLOCKS.getEntries())
 		{
-			if ((itemRegistryObject.get() instanceof MetalOreBlock))
+			if ((itemRegistryObject.get() instanceof MetalOreBlock oreBlock))
 			{
-				MetalOreBlock oreBlock = (MetalOreBlock) itemRegistryObject.get();
 
 				this.add(oreBlock, (ore) ->
 				{

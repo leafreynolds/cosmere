@@ -39,11 +39,10 @@ public class FeruchemyCopper extends FeruchemyBase
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 
-		if (!(livingEntity instanceof Player) || livingEntity.tickCount % 20 != 0)
+		if (!(livingEntity instanceof Player playerEntity) || livingEntity.tickCount % 20 != 0)
 		{
 			return;
 		}
-		Player playerEntity = (Player) livingEntity;
 
 		int mode = data.getMode(manifestationType, metalType.getID());
 

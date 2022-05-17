@@ -77,9 +77,8 @@ public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneTy
 	{
 		if (pLevel.isRainingAt(pEntity.blockPosition()) && pLevel.isThundering())
 		{
-			if (pStack.getItem() instanceof PolestoneItem)
+			if (pStack.getItem() instanceof PolestoneItem polestoneItem)
 			{
-				PolestoneItem polestoneItem = (PolestoneItem) pStack.getItem();
 				polestoneItem.increaseCurrentCharge(pStack);
 			}
 		}

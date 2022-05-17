@@ -63,9 +63,8 @@ public class BrassTapEffect extends FeruchemyEffectBase
 	@SubscribeEvent
 	public static void onLivingDamageEvent(LivingDamageEvent event)
 	{
-		if (event.getSource().getEntity() instanceof LivingEntity)
+		if (event.getSource().getEntity() instanceof LivingEntity livingEntity)
 		{
-			LivingEntity livingEntity = (LivingEntity) event.getSource().getEntity();
 			MobEffectInstance effectInstance = livingEntity.getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.BRASS).get());
 
 			if (effectInstance != null && effectInstance.getDuration() > 0 && effectInstance.getAmplifier() > 3)

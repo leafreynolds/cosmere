@@ -37,9 +37,8 @@ public class AllomancyBronze extends AllomancyBase
 		//Detects Allomantic Pulses
 
 		//passive active ability, if any
-		if (livingEntity instanceof ServerPlayer && isActiveTick)
+		if (livingEntity instanceof ServerPlayer playerEntity && isActiveTick)
 		{
-			ServerPlayer playerEntity = (ServerPlayer) livingEntity;
 
 			int distance = getRange(data);
 			List<LivingEntity> entitiesToCheckForAllomancy = getLivingEntitiesInRange(livingEntity, distance, false);

@@ -35,9 +35,8 @@ public class AllomancyBrass extends AllomancyBase
 
 		for (LivingEntity e : entitiesToAffect)
 		{
-			if (e instanceof Mob)
+			if (e instanceof Mob mob)
 			{
-				Mob mob = (Mob) e;
 				mob.setNoAi(mode == 3 && allomanticStrength > 15);
 
 				switch (mode)

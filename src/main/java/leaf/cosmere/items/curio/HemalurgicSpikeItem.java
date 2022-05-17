@@ -254,16 +254,14 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 	@SubscribeEvent
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		if (event.getSource().getEntity() instanceof Player)
+		if (event.getSource().getEntity() instanceof Player playerEntity)
 		{
-			Player playerEntity = (Player) event.getSource().getEntity();
 			SpiritwebCapability.get(playerEntity).ifPresent(iSpiritweb ->
 			{
 				ItemStack itemstack = playerEntity.getMainHandItem();
-				if (itemstack.getItem() instanceof HemalurgicSpikeItem)
+				if (itemstack.getItem() instanceof HemalurgicSpikeItem spikeItem)
 				{
 					//entity was killed by a spike
-					HemalurgicSpikeItem spikeItem = (HemalurgicSpikeItem) itemstack.getItem();
 					//pass in killed entity for the item to figure out what to do
 					spikeItem.killedEntity(itemstack, playerEntity, event.getEntityLiving());
 				}
@@ -306,9 +304,8 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 	public boolean canEquip(String identifier, LivingEntity livingEntity, ItemStack stack)
 	{
 		//do not allow players to wear two spikes of the same metal empowered by the same killed entity UUID
-		if (livingEntity instanceof Player)
+		if (livingEntity instanceof Player player)
 		{
-			Player player = (Player) livingEntity;
 			final UUID stackWeWantToEquipUUID = getHemalurgicIdentity(stack);
 
 			if (stackWeWantToEquipUUID != null)

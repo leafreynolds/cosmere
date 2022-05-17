@@ -37,9 +37,8 @@ public class AllomancyZinc extends AllomancyBase
 
 		for (LivingEntity e : entitiesToAffect)
 		{
-			if (e instanceof Mob)
+			if (e instanceof Mob mob)
 			{
-				Mob mob = (Mob) e;
 
 				//mob.targetSelector.enableFlag(Goal.Flag.TARGET);
 				mob.setNoAi(false);

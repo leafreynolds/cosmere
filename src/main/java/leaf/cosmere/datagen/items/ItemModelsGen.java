@@ -83,9 +83,8 @@ public class ItemModelsGen extends ItemModelProvider
 			{
 				continue;
 			}
-			else if (item instanceof MetalRawOreItem)
+			else if (item instanceof MetalRawOreItem rawItem)
 			{
-				MetalRawOreItem rawItem = (MetalRawOreItem) item;
 				simpleItem(path, rawItem.getMetalType().isAlloy() ? "metal_blend" : "metal_raw");
 				continue;
 			}

@@ -720,9 +720,8 @@ public class Metals
 							strengthToAdd = potentialRewardRate;
 						}
 					}
-					else if (killedEntity instanceof EnderDragon)
+					else if (killedEntity instanceof EnderDragon dragonEntity)
 					{
-						EnderDragon dragonEntity = (EnderDragon) killedEntity;
 						//dragon doesn't reward xp in a typical way
 						strengthToAdd =
 								dragonEntity.getDragonFight() != null && !dragonEntity.getDragonFight().hasPreviouslyKilledDragon()
@@ -760,9 +759,8 @@ public class Metals
 					{
 						strengthToAdd = -0.05;
 					}
-					else if (killedEntity instanceof Cat)
+					else if (killedEntity instanceof Cat cat)
 					{
-						Cat cat = (Cat) killedEntity;
 						final int catType = cat.getCatType();
 						if (catType == 10)//all black
 						{
