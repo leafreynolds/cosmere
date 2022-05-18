@@ -380,15 +380,34 @@ public interface IHemalurgicInfo
 
 		tooltip.add(TextHelper.createTranslatedText(Constants.Strings.CONTAINED_POWERS_FOUND));
 
-		if (hasHemalurgicPower(stack, hemalurgicSpikeItem.getMetalType()))
+		//iterate through all metals, because lerasium spikes steal all attributes
+		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-			tooltip.add(TextHelper.createTranslatedText("tooltip.hemalurgy." + hemalurgicSpikeItem.getMetalType()));
-
-			if (hemalurgicSpikeItem.getMetalType() == Metals.MetalType.IRON)
+			//all **attribute** metals EXCEPT lerasium
+			switch (metalType)
 			{
-				double hemalurgicStrength = getHemalurgicStrength(stack, hemalurgicSpikeItem.getMetalType());
-				String s = "+" + hemalurgicStrength + " Attack Damage";
-				tooltip.add(TextHelper.createText(s));
+				case IRON:
+				case TIN:
+				case COPPER:
+				case ZINC:
+				case ALUMINUM:
+				case DURALUMIN:
+				case CHROMIUM:
+				case NICROSIL:
+					if (hasHemalurgicPower(stack, metalType))
+					{
+						double hemalurgicStrength = getHemalurgicStrength(stack, metalType);
+
+						if (metalType != Metals.MetalType.IRON)
+						{
+							hemalurgicStrength = hemalurgicStrength * 100;
+						}
+						double roundOff = (double) Math.round(hemalurgicStrength * 100) / 100;
+
+
+						tooltip.add(TextHelper.createTranslatedText("tooltip.cosmere.attribute." + metalType.getName(), roundOff));
+					}
+					break;
 			}
 		}
 

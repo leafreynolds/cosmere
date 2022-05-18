@@ -735,7 +735,7 @@ public class Metals
 				case ALUMINUM:
 					//done else where.
 					break;
-				case DURALUMIN:
+				case DURALUMIN://todo hemalurgic connection/identity
 					//Steals Connection/Identity
 					break;
 				case CHROMIUM:
@@ -767,7 +767,7 @@ public class Metals
 						}
 					}
 					break;
-				case NICROSIL:
+				case NICROSIL://todo hemalurgic investiture
 					//Steals Investiture
 					break;
 			}
