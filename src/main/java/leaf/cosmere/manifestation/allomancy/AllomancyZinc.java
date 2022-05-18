@@ -44,14 +44,15 @@ public class AllomancyZinc extends AllomancyBase
 					case 3:
 						if (mob.getTarget() == null)
 						{
-							LivingEntity attackTarget = entitiesToAffect.get(MathHelper.randomInt(0, entitiesToAffect.size() - 1));
+							LivingEntity attackTarget = entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size()));
 							mob.setTarget(attackTarget);
 						}
 					case 2:
 						if (mob.getLastHurtByMob() == null)
 						{
-							mob.setLastHurtByMob(mob.getTarget() != null ? mob.getTarget()
-							                                             : entitiesToAffect.get(MathHelper.randomInt(0, entitiesToAffect.size() - 1)));
+							mob.setLastHurtByMob(mob.getTarget() != null
+							                     ? mob.getTarget()
+							                     : entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size())));
 						}
 
 					case 1:
