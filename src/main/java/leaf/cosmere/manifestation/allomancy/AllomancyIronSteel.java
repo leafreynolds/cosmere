@@ -6,13 +6,13 @@ package leaf.cosmere.manifestation.allomancy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.SyncPushPullMessage;
 import leaf.cosmere.utils.helpers.CodecHelper;
 import leaf.cosmere.utils.helpers.LogHelper;
+import leaf.cosmere.utils.helpers.PlayerHelper;
 import leaf.cosmere.utils.helpers.VectorHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -20,11 +20,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -39,7 +40,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static leaf.cosmere.utils.helpers.EntityHelper.getEntitiesInRange;
 
@@ -82,7 +82,7 @@ public class AllomancyIronSteel extends AllomancyBase
 		if (getKeyBinding().isDown())
 		{
 			Minecraft mc = Minecraft.getInstance();
-			HitResult ray = cap.getLiving().pick(getRange(cap), 0, false);
+			HitResult ray = PlayerHelper.pickWithRange(cap.getLiving(), getRange(cap));
 
 			if (ray.getType() == HitResult.Type.BLOCK && !blocks.contains(((BlockHitResult) ray).getBlockPos()))
 			{
@@ -100,16 +100,21 @@ public class AllomancyIronSteel extends AllomancyBase
 					hasChanged = true;
 				}
 			}
-			else if (ray.getType() == HitResult.Type.ENTITY && !entities.contains(((EntityHitResult) ray).getEntity().getId()))
-			{
-				//todo check for metal
-				entities.add(((EntityHitResult) ray).getEntity().getId());
 
-				if (entities.size() > 5)
+			if (ray instanceof EntityHitResult entityHitResult)
+			{
+				final Entity hitResultEntity = entityHitResult.getEntity();
+
+				if (!entities.contains(hitResultEntity.getId()) && entityContainsMetal(hitResultEntity))
 				{
-					entities.remove(0);
+					entities.add(hitResultEntity.getId());
+					if (entities.size() > 5)
+					{
+						entities.remove(0);
+					}
+					hasChanged = true;
 				}
-				hasChanged = true;
+
 			}
 		}
 		else
@@ -133,15 +138,10 @@ public class AllomancyIronSteel extends AllomancyBase
 		if (hasChanged)
 		{
 			CompoundTag nbt = new CompoundTag();
-
-			final String pushBlocks = "pushBlocks";
-			final String pullBlocks = "pullBlocks";
-			String target = isPush ? pushBlocks : pullBlocks;
-
 			CodecHelper.BlockPosListCodec.encodeStart(NbtOps.INSTANCE, blocks)
 					.resultOrPartial(LogHelper.LOGGER::error)
-					.ifPresent(inbt1 -> nbt.put(target, inbt1));
-
+					.ifPresent(inbt1 -> nbt.put(isPush ? "pushBlocks" : "pullBlocks", inbt1));
+			nbt.putIntArray(isPush ? "pushEntities" : "pullEntities", entities);
 			Network.sendToServer(new SyncPushPullMessage(nbt));
 		}
 	}
@@ -155,9 +155,85 @@ public class AllomancyIronSteel extends AllomancyBase
 
 		//perform the entity move thing.
 		SpiritwebCapability data = (SpiritwebCapability) cap;
+		//todo change this. We shouldn't be setting data on the manifestation base
 		blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		entities = isPush ? data.pushEntities : data.pullEntities;
 
+		if (!blocks.isEmpty())
+		{
+			pushpullBlocks(data);
+		}
+		if (!entities.isEmpty())
+		{
+			pushpullEntities(data);
+		}
+
+	}
+
+	private void pushpullEntities(SpiritwebCapability data)
+	{
+		for (int i = entities.size() - 1; i >= 0; i--)
+		{
+			int entityID = entities.get(i);
+			Entity entity = data.getLiving().level.getEntity(entityID);
+
+			if (entity.blockPosition().closerThan(data.getLiving().blockPosition(), getRange(data)))
+			{
+				if (entity instanceof ItemEntity itemEntity)
+				{
+					move(itemEntity, data.getLiving().blockPosition());
+				}
+				else if (entity instanceof LivingEntity livingEntity)
+				{
+					move(livingEntity, data.getLiving().blockPosition());
+					move(data.getLiving(), livingEntity.blockPosition());
+					data.getLiving().hurtMarked = true;
+				}
+			}
+			else
+			{
+				//we don't want to remove entities that are out of distance
+				//in case we are still holding the button down and get back into range
+				//entities.remove(i);
+			}
+		}
+	}
+
+	private void move(Entity entity, BlockPos toMoveTo)
+	{
+		Vec3 blockCenter = Vec3.atCenterOf(toMoveTo);
+		float renderPartialTicks = Minecraft.getInstance().getFrameTime();
+
+		Vec3 direction = VectorHelper.getDirection(
+				blockCenter,
+				Vec3.atCenterOf(entity.blockPosition()),//use entity block position, so we can do things like hover directly over a block more easily
+				(isPush ? -1f : 2f) * renderPartialTicks);
+
+		//todo, clean up all the unnecessary calculations once we find what feels good at run time
+		Vec3 normalize = direction.normalize();
+
+		double shortenFactor = isPush ? 0.2 : 0.4;
+		Vec3 add = entity.getDeltaMovement().add(normalize.multiply(shortenFactor, shortenFactor, shortenFactor));
+
+		//get flung off rides
+		entity.stopRiding();
+		//don't let the motion go crazy large
+		entity.setDeltaMovement(VectorHelper.ClampMagnitude(add, 1));
+		//hurt marked true means it will tell clients that they are moving.
+		entity.hurtMarked = true;
+
+		//let people get damaged but not too much?
+		//todo check what a good max fall distance would be
+		//todo add to config
+		if (entity instanceof Player player)
+		{
+			//doesn't really work, because entity may not be pushing anymore and so this wont get hit.
+			player.fallDistance = Math.min(player.fallDistance, 1);
+		}
+	}
+
+	private void pushpullBlocks(SpiritwebCapability data)
+	{
 		int blockListCount = blocks.size();
 
 		if (blockListCount == 0)
@@ -166,10 +242,6 @@ public class AllomancyIronSteel extends AllomancyBase
 		}
 
 		LivingEntity living = data.getLiving();
-		Vec3 direction;
-		float renderPartialTicks = Minecraft.getInstance().getFrameTime();
-
-		double strength = getStrength(cap);
 
 		for (int i = blockListCount - 1; i >= 0; i--)
 		{
@@ -179,40 +251,17 @@ public class AllomancyIronSteel extends AllomancyBase
 				//stop shoving the user into the block
 				continue;
 			}
-
-
 			//if the entity is in range of being able to push or pull from
-			double maxDistance = (strength * getMode(data));// * 0.1f;
+			double maxDistance = getRange(data);
 			if (blockPos.closerThan(living.blockPosition(), maxDistance))
 			{
-				Vec3 blockCenter = Vec3.atCenterOf(blockPos);
-
-				direction = VectorHelper.getDirection(
-						blockCenter,
-						living.position(),
-						(isPush ? -1f : 2f) * renderPartialTicks);
-
-				//todo, clean up all the unnecessary calculations once we find what feels good at run time
-				Vec3 normalize = direction.normalize();
-
-				double shortenFactor = isPush ? 0.2 : 0.4;
-				Vec3 add = living.getDeltaMovement().add(normalize.multiply(shortenFactor, shortenFactor, shortenFactor));
-
-				//don't let the motion go crazy large
-				living.setDeltaMovement(VectorHelper.ClampMagnitude(add, 1));
-
-				//let people get damaged but not too much?
-				//todo check what a good max fall distance would be
-				//todo add to config
-				if (living.fallDistance > 3)
-				{
-					living.fallDistance = Math.min(living.fallDistance, 3);
-				}
+				move(living, blockPos);
 			}
 			else
 			{
-				//remove blocks that are out of distance
-				blocks.remove(i);
+				//we don't want to remove blocks that are out of distance
+				//in case we are still holding the button down and get back into range
+				//blocks.remove(i);
 			}
 		}
 		living.hurtMarked = true;
@@ -255,29 +304,73 @@ public class AllomancyIronSteel extends AllomancyBase
 		profiler.push("cosmere-getEntitiesInRange");
 		getEntitiesInRange(playerEntity, range, false).forEach(entity ->
 		{
-			if (entity instanceof LivingEntity)
+			if (entityContainsMetal(entity))
 			{
-				//check for metal items on the entity
-
-			}
-			else if (entity instanceof ItemEntity)
-			{
-				ItemStack stack = ((ItemEntity) entity).getItem();
-				Item item = stack.getItem();
-
-				/*if (item instanceof BlockItem && ((BlockItem) item).getBlock() instanceof IHasMetalType || )
-				{
-					found.add(entity.position());
-				}*/
-				if (item instanceof IHasMetalType || AllomancyIronSteel.containsMetal(item.getRegistryName().getPath()))
-				{
-					found.add(entity.position());
-				}
+				found.add(entity.position());
 			}
 		});
 		profiler.pop();
 
 		return found;
+	}
+
+
+	private static boolean entityContainsMetal(Entity entity)
+	{
+		if (entity instanceof LivingEntity livingEntity)
+		{
+			//metal entities like iron golems
+			if (containsMetal(entity.getType().getRegistryName().getPath()))
+			{
+				return true;
+			}
+
+			if (containsMetal(livingEntity.getMainHandItem().getItem().getRegistryName().getPath()))
+			{
+				return true;
+			}
+			if (containsMetal(livingEntity.getOffhandItem().getItem().getRegistryName().getPath()))
+			{
+				return true;
+			}
+
+			for (ItemStack itemStack : livingEntity.getArmorSlots())
+			{
+				if (containsMetal(itemStack.getItem().getRegistryName().getPath()))
+				{
+					return true;
+				}
+			}
+
+			/* //probably overkill, todo decide if we want this.
+			if (livingEntity instanceof Player)
+			{
+				Player player = ((Player) livingEntity);
+				for (ItemStack itemStack : player.getInventory().items)
+				{
+					if (containsMetal(itemStack.getItem().getRegistryName().getPath()))
+					{
+						return true;
+					}
+				}
+			}*/
+			return false;
+		}
+		else if (entity instanceof ItemEntity itemEntity)
+		{
+			ItemStack stack = (itemEntity).getItem();
+			Item item = stack.getItem();
+
+			if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof IHasMetalType || containsMetal(item.getRegistryName().getPath()))
+			{
+				found.add(entity.position());
+			}
+			if (item instanceof IHasMetalType || containsMetal(item.getRegistryName().getPath()))
+			{
+				found.add(entity.position());
+			}
+		}
+		return false;
 	}
 
 	private static boolean containsMetal(String path)

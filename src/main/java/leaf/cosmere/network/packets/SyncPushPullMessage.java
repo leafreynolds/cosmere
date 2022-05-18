@@ -15,6 +15,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -71,6 +73,25 @@ public class SyncPushPullMessage
 							spiritweb.pullBlocks.addAll(messageBlocks);
 						}
 					});
+
+			if (isPushMessage)
+			{
+				spiritweb.pushEntities.clear();
+				final int[] pushEntities = mes.data.getIntArray("pushEntities");
+				for (int id : pushEntities)
+				{
+					spiritweb.pushEntities.add(id);
+				}
+			}
+			else
+			{
+				spiritweb.pullEntities.clear();
+				final int[] pullEntities = mes.data.getIntArray("pullEntities");
+				for (int id : pullEntities)
+				{
+					spiritweb.pullEntities.add(id);
+				}
+			}
 		}));
 		cont.get().setPacketHandled(true);
 	}
