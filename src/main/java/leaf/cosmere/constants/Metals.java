@@ -153,7 +153,6 @@ public class Metals
 			switch (this)
 			{
 				case MALATIUM:
-				case LERASATIUM:
 				case HARMONIUM:
 				case NICKEL:
 				case LEAD:

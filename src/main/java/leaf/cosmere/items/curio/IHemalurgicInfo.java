@@ -73,28 +73,9 @@ public interface IHemalurgicInfo
 
 
 		//Steals non-manifestation based abilities. traits inherent to an entity?
-		switch (spikeMetalType)
+		if (getAttributes(stack, spikeMetalType, playerEntity, entityKilled))
 		{
-			case IRON:
-			case TIN:
-			case COPPER:
-			case ZINC:
-			case ALUMINUM:
-			case DURALUMIN:
-			case CHROMIUM:
-			case NICROSIL:
-
-				//Non-Manifestation based hemalurgy all comes here
-				//How much is already stored? (like koloss spikes could keep storing strength on the same spike)
-				final double strengthCurrent = getHemalurgicStrength(stack, spikeMetalType);
-				//how much should we add.
-				final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled, playerEntity);
-				final double strengthToAdd = strengthCurrent + entityAbilityStrength;
-				if (strengthToAdd > 0.01 || strengthToAdd < -0.01)
-				{
-					Invest(stack, spikeMetalType, strengthToAdd, entityKilled.getUUID());
-				}
-				return;
+			return;
 		}
 
 		List<AManifestation> manifestationsFound = new ArrayList<>();
@@ -167,7 +148,7 @@ public interface IHemalurgicInfo
 						}
 					}
 					break;
-					case LERASIUM:
+					case LERASATIUM:
 					{
 						for (AManifestation manifestation : manifestationsFound)
 						{
@@ -179,6 +160,53 @@ public interface IHemalurgicInfo
 			}
 		});
 
+	}
+
+	private boolean getAttributes(ItemStack stack, Metals.MetalType spikeMetalType, Player playerEntity, LivingEntity entityKilled)
+	{
+		switch (spikeMetalType)
+		{
+			case LERASIUM:
+				for (Metals.MetalType metalType : Metals.MetalType.values())
+				{
+					//all **attribute** metals EXCEPT lerasium
+					switch (metalType)
+					{
+						case IRON:
+						case TIN:
+						case COPPER:
+						case ZINC:
+						case ALUMINUM:
+						case DURALUMIN:
+						case CHROMIUM:
+						case NICROSIL:
+							getAttributes(stack, metalType, playerEntity, entityKilled);
+							break;
+					}
+				}
+				return true;
+			case IRON:
+			case TIN:
+			case COPPER:
+			case ZINC:
+			case ALUMINUM:
+			case DURALUMIN:
+			case CHROMIUM:
+			case NICROSIL:
+
+				//Non-Manifestation based hemalurgy all comes here
+				//How much is already stored? (like koloss spikes could keep storing strength on the same spike)
+				final double strengthCurrent = getHemalurgicStrength(stack, spikeMetalType);
+				//how much should we add.
+				final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled, playerEntity);
+				final double strengthToAdd = strengthCurrent + entityAbilityStrength;
+				if (strengthToAdd > 0.01 || strengthToAdd < -0.01)
+				{
+					Invest(stack, spikeMetalType, strengthToAdd, entityKilled.getUUID());
+				}
+				return true;
+		}
+		return false;
 	}
 
 	default AManifestation getRandomMetalPowerFromList(

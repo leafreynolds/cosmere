@@ -8,16 +8,16 @@ import java.util.Random;
 
 public class MathHelper
 {
-	final static Random rand = new Random();
+	public final static Random RANDOM = new Random();
 
 	public static int randomInt(int min, int max)
 	{
-		return rand.nextInt((max - min) + 1) + min;
+		return RANDOM.nextInt((max - min) + 1) + min;
 	}
 
 	public static boolean randomBool()
 	{
-		return rand.nextBoolean();
+		return RANDOM.nextBoolean();
 	}
 
 

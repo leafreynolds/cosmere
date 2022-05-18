@@ -1,0 +1,20 @@
+{
+  "name": "Hemalurgic Lerasatium",
+  "category": "cosmere:hemalurgy",
+  "icon": "cosmere:lerasatium_spike",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Unknown..."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "cosmere:lerasatium_spike",
+      "recipe2": ""
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 20
+}
