@@ -45,7 +45,7 @@ public class AllomancyAdvancements implements Consumer<Consumer<Advancement>>
 				//.withRewards(new AdvancementRewards(0, new ResourceLocation[]{new ResourceLocation("cosmere:guide")}, new ResourceLocation[0], FunctionObject.CacheableFunction.EMPTY))
 				.save(advancementConsumer, categoryName + "/root");
 
-		for (RegistryObject<AManifestation> manifestation : ManifestationRegistry.ALLOMANCY_POWERS.values())
+		for (RegistryObject<AllomancyBase> manifestation : ManifestationRegistry.ALLOMANCY_POWERS.values())
 		{
 			AllomancyBase allomancyBase = (AllomancyBase) manifestation.get();
 

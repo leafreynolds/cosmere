@@ -26,7 +26,7 @@ public class AllomancyPewter extends AllomancyBase
 		//Increases Physical Abilities
 		if (isActiveTick)
 		{
-			int mode = data.getMode(manifestationType, getMetalType().getID());
+			int mode = getMode(data);
 			livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
 			switch (mode)
 			{

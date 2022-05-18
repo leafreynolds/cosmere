@@ -65,7 +65,7 @@ public class AllomancyBronze extends AllomancyBase
 						int metalTypeID = metalType.getID();
 						//todo decide what to do about this part
 						//since this is running on the server specifically.
-						if (targetSpiritweb.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY, metalTypeID))
+						if (targetSpiritweb.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalTypeID)))
 						{
 							//found one
 

@@ -44,7 +44,7 @@ public class FeruchemyCopper extends FeruchemyBase
 			return;
 		}
 
-		int mode = data.getMode(manifestationType, metalType.getID());
+		int mode = getMode(data);
 
 		//can't store or tap any more
 		if (mode == 0)

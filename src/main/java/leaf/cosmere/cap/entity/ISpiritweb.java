@@ -26,29 +26,27 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	LivingEntity getLiving();
 
-	boolean hasManifestation(Manifestations.ManifestationTypes type, int powerID);
+	boolean hasManifestation(AManifestation aManifestation);
 
-	boolean hasManifestation(Manifestations.ManifestationTypes type, int powerID, boolean ignoreTemporaryPower);
+	boolean hasManifestation(AManifestation aManifestation, boolean ignoreTemporaryPower);
 
-	void giveManifestation(Manifestations.ManifestationTypes type, int powerID);
+	void giveManifestation(AManifestation aManifestation);
 
-	void removeManifestation(Manifestations.ManifestationTypes type, int powerID);
+	void removeManifestation(AManifestation aManifestation);
 
 	AManifestation manifestation();
 
-	AManifestation manifestation(Manifestations.ManifestationTypes powerType, int powerID);
-
-	boolean canTickManifestation(Manifestations.ManifestationTypes powerType, int powerID);
+	boolean canTickManifestation(AManifestation aManifestation);
 
 	boolean canTickSelectedManifestation();
 
-	int nextMode(Manifestations.ManifestationTypes powerType, int powerID);
+	int nextMode(AManifestation aManifestation);
 
-	int previousMode(Manifestations.ManifestationTypes powerType, int powerID);
+	int previousMode(AManifestation aManifestation);
 
-	void setMode(Manifestations.ManifestationTypes powerType, int powerID, int mode);
+	void setMode(AManifestation aManifestation, int mode);
 
-	int getMode(Manifestations.ManifestationTypes powerType, int powerID);
+	int getMode(AManifestation aManifestation);
 
 	void syncToClients(@Nullable ServerPlayer serverPlayerEntity);
 

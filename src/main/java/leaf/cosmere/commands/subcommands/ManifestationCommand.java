@@ -110,7 +110,7 @@ public class ManifestationCommand extends ModCommand
 		SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 		{
 			spiritweb.clearManifestations();
-			spiritweb.giveManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
+			spiritweb.giveManifestation(manifestation);
 			spiritweb.syncToClients(null);
 			source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 		});
@@ -133,7 +133,7 @@ public class ManifestationCommand extends ModCommand
 		}
 		SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 		{
-			spiritweb.giveManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
+			spiritweb.giveManifestation(manifestation);
 			source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 			spiritweb.syncToClients(null);
 		});
@@ -156,7 +156,7 @@ public class ManifestationCommand extends ModCommand
 		}
 		SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 		{
-			spiritweb.removeManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
+			spiritweb.removeManifestation(manifestation);
 			spiritweb.syncToClients(null);
 			source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 		});

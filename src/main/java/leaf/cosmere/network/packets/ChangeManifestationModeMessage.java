@@ -6,8 +6,9 @@ package leaf.cosmere.network.packets;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
+import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -16,14 +17,12 @@ import java.util.function.Supplier;
 
 public class ChangeManifestationModeMessage
 {
-	Manifestations.ManifestationTypes powerType;
-	int powerID;
+	AManifestation manifestation;
 	int dir;
 
-	public ChangeManifestationModeMessage(Manifestations.ManifestationTypes powerType, int powerID, int dir)
+	public ChangeManifestationModeMessage(AManifestation aManifestation, int dir)
 	{
-		this.powerType = powerType;
-		this.powerID = powerID;
+		this.manifestation = aManifestation;
 		this.dir = dir;
 	}
 
@@ -32,42 +31,41 @@ public class ChangeManifestationModeMessage
 		NetworkEvent.Context context = ctx.get();
 		ServerPlayer sender = context.getSender();
 		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((data) ->
 		{
 
 			if (message.dir == 1)
 			{
-				cap.nextMode(message.powerType, message.powerID);
+				data.nextMode(message.manifestation);
 			}
 			else if (message.dir == -1)
 			{
-				cap.previousMode(message.powerType, message.powerID);
+				data.previousMode(message.manifestation);
 			}
 			else if (message.dir != 0)
 			{
-				int newMode = message.dir + cap.getMode(message.powerType, message.powerID);
-				cap.setMode(message.powerType, message.powerID, newMode);
+				int newMode = message.dir + message.manifestation.getMode(data);
+				data.setMode(message.manifestation, newMode);
 			}
 
-			cap.manifestation(message.powerType, message.powerID).onModeChange(cap);
-			cap.syncToClients(null);
+			message.manifestation.onModeChange(data);
+			data.syncToClients(null);
 		}));
 		context.setPacketHandled(true);
 	}
 
 	public static void encode(ChangeManifestationModeMessage mes, FriendlyByteBuf buf)
 	{
-		buf.writeInt(mes.powerType.getID());
-		buf.writeInt(mes.powerID);
+		String namespace = mes.manifestation.getRegistryName().toString();
+		buf.writeUtf(namespace);
 		buf.writeInt(mes.dir);
 	}
 
 	public static ChangeManifestationModeMessage decode(FriendlyByteBuf buf)
 	{
-		final Manifestations.ManifestationTypes manifestationType = Manifestations.ManifestationTypes.valueOf(buf.readInt()).get();
-		final int powerID = buf.readInt();
+		String location = buf.readUtf();
 		final int dir = buf.readInt();
-		return new ChangeManifestationModeMessage(manifestationType, powerID, dir);
+		return new ChangeManifestationModeMessage(ManifestationRegistry.fromID(location), dir);
 	}
 
 }

@@ -24,12 +24,12 @@ public class AllomancyBrass extends AllomancyBase
 	@Override
 	protected void performEffect(ISpiritweb data)
 	{
-		int mode = data.getMode(manifestationType, getMetalType().getID());
+		int mode = getMode(data);
 
 		//todo, replace x * mode with config based value
 		double allomanticStrength = getStrength(data);
 
-		int range = (int) (allomanticStrength * mode);
+		int range = getRange(data);
 
 		List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
 

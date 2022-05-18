@@ -8,6 +8,8 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.MetalmindItem;
+import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -34,18 +36,15 @@ public class MetalmindChargeHelper
 
 			CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
 			//for each power the user has access to
-			for (Manifestations.ManifestationTypes manifestationType : Manifestations.ManifestationTypes.values())
+			for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 			{
-				for (int i = 0; i < 16; i++)
+				//even if it's granted from hemalurgy/temporary
+				//update the nbt.
+				//this will add/remove powers based on what the user currently has.
+				//todo, come back to this later when more sleep. bugs me about losing potential stored powers
+				if (data.hasManifestation(manifestation))
 				{
-					//even if it's granted from hemalurgy/temporary
-					//update the nbt.
-					//this will add/remove powers based on what the user currently has.
-					//todo, come back to this later when more sleep. bugs me about losing potential stored powers
-					if (data.hasManifestation(manifestationType, i))
-					{
-						nbt.putDouble(manifestationType.getManifestation(i).getName(), data.manifestation(manifestationType, i).getStrength(data));
-					}
+					nbt.putDouble(manifestation.getName(), manifestation.getStrength(data));
 				}
 			}
 		}

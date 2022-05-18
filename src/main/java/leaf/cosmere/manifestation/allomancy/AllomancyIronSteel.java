@@ -182,7 +182,7 @@ public class AllomancyIronSteel extends AllomancyBase
 
 
 			//if the entity is in range of being able to push or pull from
-			double maxDistance = (strength * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getMetalType().getID()));// * 0.1f;
+			double maxDistance = (strength * getMode(data));// * 0.1f;
 			if (blockPos.closerThan(living.blockPosition(), maxDistance))
 			{
 				Vec3 blockCenter = Vec3.atCenterOf(blockPos);

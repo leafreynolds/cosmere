@@ -165,11 +165,11 @@ public class SpiritwebMenu extends Screen
 							break;
 						case MODE_INCREASE:
 							//change mode to positive
-							Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), 1));
+							Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), 1));
 							break;
 						case MODE_DECREASE:
 							//change mode to negative.
-							Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), -1));
+							Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), -1));
 							break;
 					}
 				}

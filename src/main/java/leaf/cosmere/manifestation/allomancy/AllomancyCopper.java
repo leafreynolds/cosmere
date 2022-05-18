@@ -31,7 +31,7 @@ public class AllomancyCopper extends AllomancyBase
 		//Hides Allomantic Pulses
 		if (isActiveTick)
 		{
-			int mode = data.getMode(manifestationType, getMetalType().getID());
+			int mode = getMode(data);
 			MobEffectInstance newEffect = EffectsHelper.getNewEffect(EffectsRegistry.ALLOMANTIC_COPPER.get(), mode - 1);
 
 			List<LivingEntity> entitiesToApplyEffect = getLivingEntitiesInRange(livingEntity, 5, true);

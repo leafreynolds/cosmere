@@ -27,7 +27,7 @@ public class AllomancyChromium extends AllomancyBase
 	{
 		//Wipes Allomantic Reserves of Target
 		{
-			int range = data.getMode(manifestationType, getMetalType().getID());
+			int range = getRange(data);
 
 			LivingEntity living = data.getLiving();
 			Level world = living.level;

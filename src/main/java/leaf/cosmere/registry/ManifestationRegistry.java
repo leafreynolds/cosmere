@@ -35,7 +35,7 @@ public class ManifestationRegistry
 	public static final RegistryObject<AManifestation> NONE = MANIFESTATIONS.register("none", () -> new ManifestationBase(Manifestations.ManifestationTypes.NONE, Color.WHITE.getRGB()));
 
 	// Allomancy
-	public static final Map<Metals.MetalType, RegistryObject<AManifestation>> ALLOMANCY_POWERS =
+	public static final Map<Metals.MetalType, RegistryObject<AllomancyBase>> ALLOMANCY_POWERS =
 			Arrays.stream(Metals.MetalType.values())
 					.filter(Metals.MetalType::hasAssociatedManifestation)
 					.collect(Collectors.toMap(
@@ -192,8 +192,7 @@ public class ManifestationRegistry
 	{
 		Map<ResourceLocation, String> map = new HashMap<>();
 
-		IForgeRegistry<AManifestation> abstractInvestitureManifestations = ManifestationRegistry.MANIFESTATION_REGISTRY.get();
-		for (AManifestation data : abstractInvestitureManifestations)
+		for (AManifestation data : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			map.put(data.getRegistryName(), data.description().getKey());
 		}

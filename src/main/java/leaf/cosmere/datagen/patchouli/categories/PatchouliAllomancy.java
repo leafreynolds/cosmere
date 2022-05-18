@@ -43,7 +43,7 @@ public class PatchouliAllomancy
 		entries.add(allomancyBasics);
 
 		//allomancy
-		for (RegistryObject<AManifestation> manifestation : ALLOMANCY_POWERS.values())
+		for (RegistryObject<AllomancyBase> manifestation : ALLOMANCY_POWERS.values())
 		{
 			AManifestation aManifestation = manifestation.get();
 			AllomancyBase allomancyManifestation = (AllomancyBase) aManifestation;

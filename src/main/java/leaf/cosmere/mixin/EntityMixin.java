@@ -5,9 +5,9 @@
 package leaf.cosmere.mixin;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -38,18 +38,10 @@ public class EntityMixin
 
 		SpiritwebCapability.get(clientPlayer).ifPresent(playerSpiritweb ->
 		{
+			final AllomancyBase bronzeAllomancyManifestation = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
 			//if the player does not have bronze, early exit
-			final boolean playerHasBronzeAllomancy = playerSpiritweb.hasManifestation(
-					Manifestations.ManifestationTypes.ALLOMANCY,
-					Metals.MetalType.BRONZE.getID()
-			);
-
-			final boolean playerBronzeBurning = playerSpiritweb.canTickManifestation(
-					Manifestations.ManifestationTypes.ALLOMANCY,
-					Metals.MetalType.BRONZE.getID()
-			);
-
-			if (!playerHasBronzeAllomancy || !playerBronzeBurning)
+			if (!playerSpiritweb.hasManifestation(bronzeAllomancyManifestation)
+					|| !playerSpiritweb.canTickManifestation(bronzeAllomancyManifestation))
 			{
 				return;
 			}
@@ -65,10 +57,10 @@ public class EntityMixin
 
 				//get allomantic strength of
 
-				int mode = playerSpiritweb.getMode(Manifestations.ManifestationTypes.ALLOMANCY, Metals.MetalType.BRONZE.getID());
+				int mode = bronzeAllomancyManifestation.getMode(playerSpiritweb);
 
 				//todo range to config
-				int range = 5 * mode;
+				double range = bronzeAllomancyManifestation.getRange(playerSpiritweb);
 				boolean found = false;
 
 				//if target is player and has any active manifestations,
@@ -82,7 +74,7 @@ public class EntityMixin
 					//don't tick powers that are not active
 					final boolean targetIsPlayer = target instanceof Player;
 
-					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation.getManifestationType(), manifestation.getPowerID()))
+					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation))
 					{
 						found = true;
 						break;

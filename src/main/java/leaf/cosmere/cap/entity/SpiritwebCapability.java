@@ -11,7 +11,6 @@ package leaf.cosmere.cap.entity;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.client.gui.DrawUtils;
 import leaf.cosmere.constants.Manifestations.ManifestationTypes;
@@ -23,7 +22,6 @@ import leaf.cosmere.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -80,11 +78,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 	private final LivingEntity livingEntity;
 
-	public final Map<ManifestationTypes, int[]> MANIFESTATIONS_MODE =
-			Arrays.stream(ManifestationTypes.values())
-					.collect(Collectors.toMap(
-							Function.identity(),
-							type -> new int[Metals.MetalType.values().length]));//todo come back here eventually because not all power types will be the same as num metals. and some metals don't have powers >:(
+	public final Map<AManifestation, Integer> MANIFESTATIONS_MODE = new HashMap<>();
 
 	private AManifestation selectedManifestation = ManifestationRegistry.NONE.get();
 
@@ -130,11 +124,15 @@ public class SpiritwebCapability implements ISpiritweb
 		nbt.putInt("stored_breaths", biochromaticBreathStored);
 		nbt.putInt("stored_stormlight", stormlightStored);
 
-		for (ManifestationTypes manifestationType : ManifestationTypes.values())
+		final CompoundTag modeNBT = new CompoundTag();
+		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			String manifestationTypeName = manifestationType.getName();
-			nbt.putIntArray(manifestationTypeName + "_mode", MANIFESTATIONS_MODE.get(manifestationType));
+			if (MANIFESTATIONS_MODE.containsKey(manifestation))
+			{
+				modeNBT.putInt(manifestation.getRegistryName().toString(), MANIFESTATIONS_MODE.get(manifestation));
+			}
 		}
+		nbt.put("manifestation_modes", modeNBT);
 
 		final CompoundTag ingestedMetals = new CompoundTag();
 		for (Metals.MetalType metalType : Metals.MetalType.values())
@@ -153,17 +151,13 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void deserializeNBT(CompoundTag nbt)
 	{
-		for (ManifestationTypes manifestationType : ManifestationTypes.values())
+		CompoundTag modeNBT = nbt.getCompound("manifestation_modes");;
+		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			String manifestationTypeName = manifestationType.getName();
-
-			int[] storedIntArray = nbt.getIntArray(manifestationTypeName + "_mode");
-			int length = storedIntArray.length;
-
-			for (int i = 0; i < length; i++)
+			final String manifestationLoc = manifestation.getRegistryName().toString();
+			if (modeNBT.contains(manifestationLoc))
 			{
-				//doing it this way for backwards compatibility in cases where we add new powers.
-				MANIFESTATIONS_MODE.get(manifestationType)[i] = storedIntArray[i];
+				MANIFESTATIONS_MODE.put(manifestation, modeNBT.getInt(manifestationLoc));
 			}
 		}
 		selectedManifestation = ManifestationRegistry.fromID(nbt.getString("selected_power"));
@@ -194,14 +188,14 @@ public class SpiritwebCapability implements ISpiritweb
 		//if server
 		if (!livingEntity.level.isClientSide)
 		{
-			//Login setup
+			//Login sync
 			if (!didSetup)
 			{
 				syncToClients(null);
 				didSetup = true;
 			}
 
-			if (selectedManifestation != ManifestationRegistry.NONE.get() && !hasManifestation(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID()))
+			if (selectedManifestation != ManifestationRegistry.NONE.get() && !hasManifestation(selectedManifestation))
 			{
 				selectedManifestation = ManifestationRegistry.NONE.get();
 				if (getLiving() instanceof ServerPlayer)
@@ -302,16 +296,14 @@ public class SpiritwebCapability implements ISpiritweb
 	public void renderWorldEffects(RenderLevelLastEvent event)
 	{
 		Multimap<Color, List<Vec3>> linesToDrawByColor = LinkedHashMultimap.create();
+		AllomancyIronSteel ironAllomancy = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
+		AllomancyIronSteel steelAllomancy = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
 
 		//if user has iron or steel manifestation
-		if (hasManifestation(ManifestationTypes.ALLOMANCY, Metals.MetalType.IRON.getID())
-				|| hasManifestation(ManifestationTypes.ALLOMANCY, Metals.MetalType.STEEL.getID()))
+		if (hasManifestation(ironAllomancy) || hasManifestation(steelAllomancy))
 		{
-			AllomancyIronSteel iron = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
-			AllomancyIronSteel steel = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
-
 			//is zero if the manifestation is not active.
-			int range = Math.max(iron.getRange(this), steel.getRange(this));
+			int range = Math.max(ironAllomancy.getRange(this), steelAllomancy.getRange(this));
 
 			if (range > 0)
 			{
@@ -340,7 +332,7 @@ public class SpiritwebCapability implements ISpiritweb
 		String stringToDraw = I18n.get(selectedManifestation.translation().getString());
 		mc.font.drawShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
 
-		int mode = getMode(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID());
+		int mode = getMode(selectedManifestation);
 
 		String stringToDraw2 = "";
 
@@ -412,15 +404,14 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public boolean hasManifestation(ManifestationTypes manifestationTypeID, int powerID)
+	public boolean hasManifestation(AManifestation aManifestation)
 	{
-		return hasManifestation(manifestationTypeID, powerID, false);
+		return hasManifestation(aManifestation, false);
 	}
 
 	@Override
-	public boolean hasManifestation(ManifestationTypes manifestationTypeID, int powerID, boolean ignoreTemporaryPower)
+	public boolean hasManifestation(AManifestation manifestation, boolean ignoreTemporaryPower)
 	{
-		AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
 		String manifestationName = manifestation.getName();
 		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
 		{
@@ -448,10 +439,8 @@ public class SpiritwebCapability implements ISpiritweb
 
 
 	@Override
-	public void giveManifestation(ManifestationTypes manifestationTypeID, int powerID)
+	public void giveManifestation(AManifestation manifestation)
 	{
-		AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
-
 		String manifestationName = manifestation.getName();
 		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
 		{
@@ -474,9 +463,8 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public void removeManifestation(ManifestationTypes manifestationTypeID, int powerID)
+	public void removeManifestation(AManifestation manifestation)
 	{
-		AManifestation manifestation = manifestationTypeID.getManifestation(powerID);
 		String path = manifestation.getName();
 
 		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
@@ -495,21 +483,19 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public boolean canTickManifestation(ManifestationTypes manifestationType, int powerID)
+	public boolean canTickManifestation(AManifestation aManifestation)
 	{
-		if (!hasManifestation(manifestationType, powerID))
+		if (!hasManifestation(aManifestation))
 		{
 			return false;
 		}
 
-		int[] manifestationPowersModes = MANIFESTATIONS_MODE.get(manifestationType);
-
-		if (manifestationType == ManifestationTypes.NONE || manifestationPowersModes.length == 0)
+		if (MANIFESTATIONS_MODE.containsKey(aManifestation))
 		{
-			return false;
+			return MANIFESTATIONS_MODE.get(aManifestation) != 0;
 		}
 
-		return manifestationPowersModes[powerID] != 0;
+		return false;
 	}
 
 	@Override
@@ -520,22 +506,19 @@ public class SpiritwebCapability implements ISpiritweb
 			return false;
 		}
 
-		return canTickManifestation(selectedManifestation.getManifestationType(), selectedManifestation.getPowerID());
+		return canTickManifestation(selectedManifestation);
 	}
 
 	@Override
 	public void deactivateCurrentManifestation()
 	{
-		MANIFESTATIONS_MODE.get(selectedManifestation.getManifestationType())[selectedManifestation.getPowerID()] = 0;
+		MANIFESTATIONS_MODE.remove(selectedManifestation);
 	}
 
 	@Override
 	public void deactivateManifestations()
 	{
-		for (ManifestationTypes manifestationTypes : ManifestationTypes.values())
-		{
-			Arrays.fill(MANIFESTATIONS_MODE.get(manifestationTypes), 0);
-		}
+		MANIFESTATIONS_MODE.clear();
 	}
 
 	@Override
@@ -545,7 +528,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			removeManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
+			removeManifestation(manifestation);
 		}
 	}
 
@@ -561,17 +544,14 @@ public class SpiritwebCapability implements ISpiritweb
 		List<AManifestation> list = new ArrayList<AManifestation>();
 
 		//todo intelligently handle multiple powers
-		for (ManifestationTypes manifestationTypes : ManifestationTypes.values())
+		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			if (manifestationTypes == ManifestationTypes.NONE)
+			if (manifestation == ManifestationRegistry.NONE.get())
 				continue;
 
-			for (int i = 0; i < 16; i++)
+			if (hasManifestation(manifestation, ignoreTemporaryPower))
 			{
-				if (hasManifestation(manifestationTypes, i, ignoreTemporaryPower))
-				{
-					list.add(manifestationTypes.getManifestation(i));
-				}
+				list.add(manifestation);
 			}
 		}
 
@@ -582,13 +562,6 @@ public class SpiritwebCapability implements ISpiritweb
 	public AManifestation manifestation()
 	{
 		return selectedManifestation;
-	}
-
-
-	@Override
-	public AManifestation manifestation(ManifestationTypes manifestationType, int powerID)
-	{
-		return manifestationType.getManifestation(powerID);
 	}
 
 	@Override
@@ -623,56 +596,50 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public void setMode(ManifestationTypes manifestationTypeID, int powerID, int mode)
+	public void setMode(AManifestation aManifestation, int mode)
 	{
-		AManifestation aim = manifestationTypeID.getManifestation(powerID);
-		mode = Mth.clamp(mode, aim.modeMin(this), aim.modeMax(this));
-
-		MANIFESTATIONS_MODE.get(manifestationTypeID)[powerID] = mode;
+		mode = Mth.clamp(mode, aManifestation.modeMin(this), aManifestation.modeMax(this));
+		MANIFESTATIONS_MODE.put(aManifestation, mode);
 	}
 
 	@Override
-	public int getMode(ManifestationTypes manifestationTypeID, int powerID)
+	public int getMode(AManifestation aManifestation)
 	{
-		return MANIFESTATIONS_MODE.get(manifestationTypeID)[powerID];
+		return MANIFESTATIONS_MODE.getOrDefault(aManifestation, 0);
 	}
 
 	@Override
-	public int nextMode(ManifestationTypes manifestationType, int powerID)
+	public int nextMode(AManifestation aim)
 	{
-		AManifestation aim = manifestationType.getManifestation(powerID);
-
-		int currentMode = getMode(manifestationType, powerID);
+		int currentMode = getMode(aim);
 
 		if (aim.modeWraps(this) && currentMode == aim.modeMax(this))
 		{
 			int modeMin = aim.modeMin(this);
-			this.setMode(manifestationType, powerID, modeMin);
+			this.setMode(aim, modeMin);
 			return modeMin;
 		}
 
 		int mode = Math.min(currentMode + 1, aim.modeMax(this));
-		this.setMode(manifestationType, powerID, mode);
+		this.setMode(aim, mode);
 
 		return mode;
 	}
 
 	@Override
-	public int previousMode(ManifestationTypes manifestationType, int powerID)
+	public int previousMode(AManifestation aim)
 	{
-		AManifestation aim = manifestationType.getManifestation(powerID);
-
-		int currentMode = getMode(manifestationType, powerID);
+		int currentMode = getMode(aim);
 
 		if (aim.modeWraps(this) && currentMode == aim.modeMin(this))
 		{
 			int modeMax = aim.modeMax(this);
-			this.setMode(manifestationType, powerID, modeMax);
+			this.setMode(aim, modeMax);
 			return modeMax;
 		}
 
 		int mode = Math.max(currentMode - 1, aim.modeMin(this));
-		this.setMode(manifestationType, powerID, mode);
+		this.setMode(aim, mode);
 		return mode;
 	}
 

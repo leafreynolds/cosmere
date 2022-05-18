@@ -59,7 +59,7 @@ public class FeruchemyBronze extends FeruchemyBase
 			return;
 		}
 
-		int mode = data.getMode(manifestationType, metalType.getID());
+		int mode = getMode(data);
 
 		//can't store or tap any more
 		switch (mode)
@@ -96,7 +96,7 @@ public class FeruchemyBronze extends FeruchemyBase
 		if (!canSleep)
 		{
 			//todo add message to player saying can't sleep
-			data.setMode(this.manifestationType, this.metalType.getID(), 0);
+			data.setMode(this, 0);
 			return;
 		}
 
@@ -148,7 +148,7 @@ public class FeruchemyBronze extends FeruchemyBase
 		player.awardStat(Stats.SLEEP_IN_BED);
 		CriteriaTriggers.SLEPT_IN_BED.trigger(player);
 
-		data.setMode(this.manifestationType, this.metalType.getID(), 0);
+		data.setMode(this, 0);
 
 	}
 
@@ -205,7 +205,7 @@ public class FeruchemyBronze extends FeruchemyBase
 		{
 			SpiritwebCapability.get(event.getEntityLiving()).ifPresent(iSpiritweb ->
 			{
-				if (iSpiritweb.hasManifestation(this.manifestationType, this.metalType.getID()))
+				if (iSpiritweb.hasManifestation(this))
 				{
 					event.setResult(Event.Result.ALLOW);
 				}

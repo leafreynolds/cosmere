@@ -45,7 +45,7 @@ public class ClientEvents
 			{
 				final int delta = Mth.clamp((int) Math.round(event.getScrollDelta()), -1, 1);
 
-				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), delta));
+				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), delta));
 
 				event.setCanceled(true);
 
@@ -93,12 +93,12 @@ public class ClientEvents
 			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_INCREASE))
 			{
 				int dir = (player.isCrouching() ? 3 : 1);
-				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), dir));
+				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), dir));
 			}
 			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_DECREASE))
 			{
 				int dir = (player.isCrouching() ? -3 : -1);
-				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation().getManifestationType(), spiritweb.manifestation().getPowerID(), dir));
+				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), dir));
 			}
 		});
 	}

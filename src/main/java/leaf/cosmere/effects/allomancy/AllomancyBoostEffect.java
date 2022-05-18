@@ -55,7 +55,7 @@ public class AllomancyBoostEffect extends MobEffect
 							}
 
 							//if metal is active
-							if (data.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY, metalType.getID()))
+							if (data.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID())))
 							{
 								int ingestedMetalAmount = data.getIngestedMetal(metalType);
 

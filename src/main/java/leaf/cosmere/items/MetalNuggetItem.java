@@ -7,6 +7,8 @@ package leaf.cosmere.items;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -61,17 +63,25 @@ public class MetalNuggetItem extends MetalItem
 					//todo translations
 					livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
 				}
-				for (int i = 0; i < 16; i++)
+
+
+				for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 				{
 					switch (metalType)
 					{
 						case LERASIUM:
 							//give allomancy
-							spiritweb.giveManifestation(Manifestations.ManifestationTypes.ALLOMANCY, i);
+							if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
+							{
+								spiritweb.giveManifestation(manifestation);
+							}
 							break;
 						case LERASATIUM:
 							//give feruchemy
-							spiritweb.giveManifestation(Manifestations.ManifestationTypes.FERUCHEMY, i);
+							if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
+							{
+								spiritweb.giveManifestation(manifestation);
+							}
 							break;
 					}
 				}

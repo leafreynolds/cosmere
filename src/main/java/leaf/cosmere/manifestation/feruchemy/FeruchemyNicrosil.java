@@ -44,7 +44,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
 			return;
 		}
 
-		int mode = data.getMode(manifestationType, metalType.getID());
+		int mode = getMode(data);
 
 		int cost;
 

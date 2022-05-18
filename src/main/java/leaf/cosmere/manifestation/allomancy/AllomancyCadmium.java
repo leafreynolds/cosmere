@@ -32,7 +32,7 @@ public class AllomancyCadmium extends AllomancyBase
 			//tick entities around user
 			if (data.getLiving().tickCount % 6 == 0)
 			{
-				int range = 3 * data.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID());
+				int range = getRange(data);
 				int x = (int) (data.getLiving().getX() + (data.getLiving().getRandomX(range * 2 + 1) - range));
 				int z = (int) (data.getLiving().getZ() + (data.getLiving().getRandomZ(range * 2 + 1) - range));
 

@@ -30,9 +30,9 @@ public class AllomancyBendalloy extends AllomancyBase
 		//Slows Down Time for the entities around the user
 		if (isActiveTick)
 		{
-			int mode = data.getMode(manifestationType, getMetalType().getID());
+			int mode = getMode(data);
 
-			int range = 5 * mode;
+			int range = this.getRange(data);
 
 			List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
 

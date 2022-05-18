@@ -9,9 +9,11 @@ import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
+import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.KeybindingRegistry;
+import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -69,7 +71,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 
 	public boolean isMetalBurning(ISpiritweb data)
 	{
-		int mode = data.getMode(manifestationType, metalType.getID());
+		int mode = getMode(data);
 
 		//make sure the user can afford the cost of burning this metal
 		while (mode > 0)
@@ -84,7 +86,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 			{
 				mode--;
 				//set that mode back to the capability.
-				data.setMode(manifestationType, metalType.getID(), mode);
+				data.setMode(this, mode);
 				//if it hits zero then return out
 				//try again at a lower burn rate.
 			}
@@ -95,7 +97,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 	@Override
 	public void tick(ISpiritweb data)
 	{
-		int mode = data.getMode(manifestationType, metalType.getID());
+		int mode = getMode(data);
 
 		if (!isActive(data))
 		{
@@ -109,8 +111,9 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 
 		//if we get to this point, we are in an active burn state.
 		//check for compound.
-		int feruchemyMode = data.hasManifestation(Manifestations.ManifestationTypes.FERUCHEMY, getPowerID())
-		                    ? data.getMode(Manifestations.ManifestationTypes.FERUCHEMY, metalType.getID())
+		final AManifestation feruchemyManifestation = ManifestationRegistry.FERUCHEMY_POWERS.get(metalType).get();
+		int feruchemyMode = data.hasManifestation(feruchemyManifestation)
+		                    ? feruchemyManifestation.getMode(data)
 		                    : 0;
 
 		//feruchemy power exists and is active
@@ -145,24 +148,24 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		return null;
 	}
 
-	public double getStrength(ISpiritweb cap)
+	public double getStrength(ISpiritweb data)
 	{
 		RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getAllomancyRegistryName());
-		AttributeInstance attribute = cap.getLiving().getAttribute(mistingAttribute.get());
+		AttributeInstance attribute = data.getLiving().getAttribute(mistingAttribute.get());
 		return attribute != null ? attribute.getValue() : 0;
 	}
 
 
-	public int getRange(ISpiritweb cap)
+	public int getRange(ISpiritweb data)
 	{
-		if (!isActive(cap))
+		if (!isActive(data))
 		{
 			return 0;
 		}
 
 		//get allomantic strength
-		double allomanticStrength = getStrength(cap);
-		return Mth.floor(allomanticStrength * cap.getMode(Manifestations.ManifestationTypes.ALLOMANCY, getPowerID()));
+		double allomanticStrength = getStrength(data);
+		return Mth.floor(allomanticStrength * getMode(data));
 
 	}
 }

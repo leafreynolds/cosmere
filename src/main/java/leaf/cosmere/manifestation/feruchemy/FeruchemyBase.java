@@ -72,7 +72,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 			return;
 		}
 
-		int mode = data.getMode(manifestationType, metalType.getID());
+		int mode = getMode(data);
 
 		int cost;
 
@@ -117,7 +117,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 			if (mode < 0)
 			{
 				//move towards turning off feruchemy.
-				data.setMode(manifestationType, metalType.getID(), mode + 1);
+				data.setMode(this, mode + 1);
 			}
 		}
 

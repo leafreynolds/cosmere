@@ -45,7 +45,7 @@ public class ManifestationBase extends AManifestation
 	@Override
 	public int getMode(ISpiritweb data)
 	{
-		return data.getMode(manifestationType, getPowerID());
+		return data.getMode(this);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class ManifestationBase extends AManifestation
 	@Override
 	public boolean isActive(ISpiritweb data)
 	{
-		return data.canTickManifestation(this.manifestationType, this.getPowerID());
+		return data.canTickManifestation(this);
 	}
 
 	@Override

@@ -6,7 +6,6 @@ package leaf.cosmere.constants;
 
 import leaf.cosmere.blocks.MetalBlock;
 import leaf.cosmere.items.MetalIngotItem;
-import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalRawOreItem;
 import leaf.cosmere.items.curio.BraceletMetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
@@ -33,10 +32,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.OreBlock;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
