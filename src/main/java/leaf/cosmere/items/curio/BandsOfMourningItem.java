@@ -57,6 +57,6 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 	@Override
 	public int getMaxCharge(ItemStack stack)
 	{
-		return Integer.MAX_VALUE;
+		return Integer.MAX_VALUE - 100;
 	}
 }
