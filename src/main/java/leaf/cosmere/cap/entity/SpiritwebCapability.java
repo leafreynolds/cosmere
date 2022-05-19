@@ -291,6 +291,23 @@ public class SpiritwebCapability implements ISpiritweb
 		return false;
 	}
 
+	//Copy things from an old spiritweb into the new one.
+	//Eg a player has died and we need to make sure they get their stormlight and breaths back.
+	@Override
+	public void transferFrom(ISpiritweb oldSpiritWeb)
+	{
+		var oldWeb = (SpiritwebCapability) oldSpiritWeb;
+
+		//TODO config options that let you choose what can be transferred
+
+		stormlightStored += oldWeb.stormlightStored;
+		biochromaticBreathStored += oldWeb.biochromaticBreathStored;
+		for (Metals.MetalType metalType : oldWeb.METALS_INGESTED.keySet())
+		{
+			METALS_INGESTED.put(metalType, oldWeb.METALS_INGESTED.get(metalType));
+		}
+	}
+
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderWorldEffects(RenderLevelLastEvent event)

@@ -31,38 +31,41 @@ public class PlayerEventHandler
 	{
 		event.getOriginal().revive();
 
-
-/*		SpiritwebCapability.get(event.getOriginal()).ifPresent((oldSpiritWeb) ->
+		SpiritwebCapability.get(event.getOriginal()).ifPresent((oldSpiritWeb) ->
 				SpiritwebCapability.get(event.getPlayer()).ifPresent((newSpiritWeb) ->
 				{
-					//clear out the attributes that were placed on the newly cloned player at creation
-					// and make sure that they then match what the old player entity had.
-					newSpiritWeb.clearManifestations();
-					for (AManifestation manifestation : oldSpiritWeb.getAvailableManifestations(true))
-					{
-						newSpiritWeb.giveManifestation(manifestation.getManifestationType(), manifestation.getPowerID());
-					}
+					//copy across anything from the old player if needed
+					//Metals ingested?
+					//Stormlight?
 
-					CompoundTag nbt = (CompoundTag) storage.writeNBT(SpiritwebCapability.CAPABILITY, oldSpiritWeb, null);
-					storage.readNBT(SpiritwebCapability.CAPABILITY, newSpiritWeb, null, nbt);
+					newSpiritWeb.transferFrom(oldSpiritWeb);
+				}));
 
-				}));*/
+		var oldAttMap = event.getOriginal().getAttributes();
+		var newAttMap = event.getPlayer().getAttributes();
 
-
-		for (Metals.MetalType metalType : Metals.MetalType.values())
+		// A player's manifestations is now determined by attributes, which lets me do cool things like mess with strength in a power.
+		// So if we've set a base value for an attribute on the player, copy it to the new one.
+		for (RegistryObject<Attribute> attributeRegistryObject : AttributesRegistry.COSMERE_ATTRIBUTES.values())
 		{
-			//check for others
-			final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
-			if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+			if (attributeRegistryObject != null && attributeRegistryObject.isPresent())
 			{
-				AttributeInstance oldPlayerAttribute = event.getOriginal().getAttribute(metalRelatedAttribute.get());
-				AttributeInstance newPlayerAttribute = event.getPlayer().getAttribute(metalRelatedAttribute.get());
+				AttributeInstance oldPlayerAttribute = oldAttMap.getInstance(attributeRegistryObject.get());
+				AttributeInstance newPlayerAttribute = newAttMap.getInstance(attributeRegistryObject.get());
 
 				if (newPlayerAttribute != null && oldPlayerAttribute != null)
 				{
-					newPlayerAttribute.setBaseValue(oldPlayerAttribute.getBaseValue());
+					// make sure that they match what the old player entity had.
+					if (oldPlayerAttribute.getBaseValue() > 0)
+					{
+						newPlayerAttribute.setBaseValue(oldPlayerAttribute.getBaseValue());
+					}
+					//clear out the attributes that were placed on the newly cloned player at creation
+					else if (newPlayerAttribute.getBaseValue() > 0)
+					{
+						newPlayerAttribute.setBaseValue(0);
+					}
 				}
-
 			}
 		}
 	}
