@@ -1,5 +1,10 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B32
+
+Fix feruchemy not working with completely empty metalminds.
+Fix bands of mourning, storing when full caused it to overflow and start from 0 again.
+
 B31
 
 Tapping feruchemical bronze will reset time since sleep timer.
