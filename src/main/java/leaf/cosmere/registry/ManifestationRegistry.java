@@ -75,8 +75,8 @@ public class ManifestationRegistry
 							Function.identity(),
 							surge ->
 									MANIFESTATIONS.register(
-											surge.getName(),
-											() -> makeSurgebindingManifestation(surge))//get the specific instance of the manifestation for allomancy
+											surge.getRegistryName(),
+											() -> makeSurgebindingManifestation(surge))
 					));
 
 	//Create Registry

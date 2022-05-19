@@ -6,6 +6,7 @@ package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -28,6 +29,21 @@ public class AttributesRegistry
 	public static Map<String, RegistryObject<Attribute>> makeAttributeMap()
 	{
 		Map<String, RegistryObject<Attribute>> attributeModifiers = new HashMap<>();
+
+		for (Roshar.Surges surge : Roshar.Surges.values())
+		{
+			String attributeName = surge.getRegistryName();
+			RegistryObject<Attribute> attribute = ATTRIBUTES.register(
+					attributeName,
+					() -> (new RangedAttribute(
+							"manifestation." + Cosmere.MODID + "." + attributeName,
+							0,
+							0,
+							10)).setSyncable(true)
+			);
+
+			attributeModifiers.put(attributeName, attribute);
+		}
 
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{

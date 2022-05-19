@@ -177,6 +177,15 @@ public class ItemsRegistry
 									() -> createItem(new PolestoneItem(type, Roshar.GemSize.BROAM))
 							)));
 
+	public static final Map<Roshar.Polestone, RegistryObject<net.minecraft.world.item.Item>> HONORBLADES =
+			Arrays.stream(Roshar.Polestone.values())
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> ITEMS.register(
+									type.getAssociatedOrder() + "_honorblade",
+									() -> createItem(new HonorbladeItem(type, Tiers.NETHERITE, 24, -1.4F, PropTypes.Items.SHARDBLADE.get()))
+							)));
+
 
 	private static <T extends net.minecraft.world.item.Item> T createItem(T item)
 	{

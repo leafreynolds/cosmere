@@ -4,10 +4,15 @@
 
 package leaf.cosmere.constants;
 
+import leaf.cosmere.manifestation.surgebinding.SurgebindingBase;
+import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
+import leaf.cosmere.registry.ManifestationRegistry;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -74,10 +79,26 @@ public class Roshar
 			return name().toLowerCase(Locale.ROOT);
 		}
 
+		public SurgebindingBase getSurge()
+		{
+			return (SurgebindingBase) ManifestationRegistry.SURGEBINDING_POWERS.get(this).get();
+		}
 
 		public int getColor()
 		{
 			return 0;
+		}
+
+		public Attribute getAttribute()
+		{
+			final String registryName = getRegistryName();
+			final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(registryName);
+			return attributeRegistryObject.get();
+		}
+
+		public String getRegistryName()
+		{
+			return "surgebinding_" + getName();
 		}
 	}
 
@@ -234,6 +255,61 @@ public class Roshar
 			return null;
 		}
 
+		public Attribute getFirstSurgeAttribute()
+		{
+			switch (this)
+			{
+				default:
+				case SAPPHIRE://Adhesion & Gravitation
+					return Surges.ADHESION.getAttribute();
+				case SMOKESTONE://Gravitation & Division
+					return Surges.GRAVITATION.getAttribute();
+				case RUBY://Division & Abrasion
+					return Surges.DIVISION.getAttribute();
+				case DIAMOND://Abrasion & Progression
+					return Surges.ABRASION.getAttribute();
+				case EMERALD://Progression & Illumination
+					return Surges.PROGRESSION.getAttribute();
+				case GARNET://Illumination & Transformation
+					return Surges.ILLUMINATION.getAttribute();
+				case ZIRCON://	Transformation & Transportation
+					return Surges.TRANSFORMATION.getAttribute();
+				case AMETHYST://Transportation & Cohesion
+					return Surges.TRANSPORTATION.getAttribute();
+				case TOPAZ://Cohesion & Tension
+					return Surges.COHESION.getAttribute();
+				case HELIODOR://Tension & Adhesion
+					return Surges.TENSION.getAttribute();
+			}
+		}
+
+		public Attribute getSecondSurgeAttribute()
+		{
+			switch (this)
+			{
+				default:
+				case SAPPHIRE://Adhesion & Gravitation
+					return Surges.GRAVITATION.getAttribute();
+				case SMOKESTONE://Gravitation & Division
+					return Surges.DIVISION.getAttribute();
+				case RUBY://Division & Abrasion
+					return Surges.ABRASION.getAttribute();
+				case DIAMOND://Abrasion & Progression
+					return Surges.PROGRESSION.getAttribute();
+				case EMERALD://Progression & Illumination
+					return Surges.ILLUMINATION.getAttribute();
+				case GARNET://Illumination & Transformation
+					return Surges.TRANSFORMATION.getAttribute();
+				case ZIRCON://Transformation & Transportation
+					return Surges.TRANSPORTATION.getAttribute();
+				case AMETHYST://Transportation & Cohesion
+					return Surges.COHESION.getAttribute();
+				case TOPAZ://Cohesion & Tension
+					return Surges.TENSION.getAttribute();
+				case HELIODOR://Tension & Adhesion
+					return Surges.ADHESION.getAttribute();
+			}
+		}
 	}
 
 

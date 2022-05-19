@@ -294,10 +294,25 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 	 * Gets a map of item attribute modifiers, used by damage when used as melee weapon.
 	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot)
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack)
 	{
-		return equipmentSlot == EquipmentSlot.MAINHAND ? this.attributeModifiers
-		                                               : super.getDefaultAttributeModifiers(equipmentSlot);
+		switch (equipmentSlot)
+		{
+			case MAINHAND:
+			case OFFHAND:
+				return this.attributeModifiers;
+			case FEET:
+				break;
+			case LEGS:
+				break;
+			case CHEST:
+				break;
+			case HEAD:
+				break;
+		}
+
+
+		return super.getAttributeModifiers(equipmentSlot, stack);
 	}
 
 	@Override

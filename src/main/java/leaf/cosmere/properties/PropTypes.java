@@ -25,9 +25,10 @@ public class PropTypes
 		public static final Supplier<Item.Properties> SHARDBLADE = () -> new Item.Properties()
 				.tab(CosmereItemGroups.ITEMS)
 				.stacksTo(1)
-				.defaultDurability(0)
-				.durability(0)
-				.setNoRepair()
+				//.defaultDurability(0)
+				//.durability(0)
+				//.setNoRepair()
+				.fireResistant()
 				.rarity(Rarity.EPIC);
 
 		public static final Supplier<Item.Properties> ONE = () -> new Item.Properties().tab(CosmereItemGroups.ITEMS).stacksTo(1);

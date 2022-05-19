@@ -44,12 +44,12 @@ public class Cosmere
 		MinecraftForge.EVENT_BUS.register(this);
 
 		//Register our deferred registries
+		ManifestationRegistry.MANIFESTATIONS.register(modBus);
+		AttributesRegistry.ATTRIBUTES.register(modBus);
 		BlocksRegistry.BLOCKS.register(modBus);
 		ItemsRegistry.ITEMS.register(modBus);
 		EffectsRegistry.EFFECTS.register(modBus);
 		LootModifierRegistry.LOOT_MODIFIERS.register(modBus);
-		ManifestationRegistry.MANIFESTATIONS.register(modBus);
-		AttributesRegistry.ATTRIBUTES.register(modBus);
 		EntityRegistry.ENTITIES.register(modBus);
 		PointOfInterestRegistry.POINT_OF_INTERESTS.register(modBus);
 		VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
