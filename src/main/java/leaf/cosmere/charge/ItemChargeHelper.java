@@ -26,6 +26,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class ItemChargeHelper
 {
@@ -143,24 +144,25 @@ public class ItemChargeHelper
 		for (ItemStack stackInSlot : Iterables.concat(items, acc))
 		{
 			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+			boolean storing = adjustValue < 0;
 
-			if (chargeItemSlot.getCharge(stackInSlot) <= 0)
+			int slotCharge = chargeItemSlot.getCharge(stackInSlot);
+			int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
+
+			//if draining, skip empty.
+			if (!storing && slotCharge <= 0 || storing && slotCharge >= slotMaxCharge)
 			{
 				continue;
 			}
 
 			boolean playerUnableToAccess = !chargeItemSlot.trySetAttunedPlayer(stackInSlot, player);
+			final UUID attunedPlayer = chargeItemSlot.getAttunedPlayer(stackInSlot);
 			if (checkPlayer && playerUnableToAccess //if we need to make sure the player has access and they do not
 					|| //or if the player is trying to store in an unsealed metalmind but have identity
-					adjustValue < 0 && !isStoringIdentity && chargeItemSlot.getAttunedPlayer(stackInSlot).compareTo(Constants.NBT.UNSEALED_UUID) == 0)
+					adjustValue < 0 && !isStoringIdentity && attunedPlayer != null && attunedPlayer.compareTo(Constants.NBT.UNSEALED_UUID) == 0)
 			{
 				continue;
 			}
-
-			boolean storing = adjustValue < 0;
-
-			int slotCharge = chargeItemSlot.getCharge(stackInSlot);
-			int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
 
 
 			if ((storing && (slotCharge + (-adjustValue)) <= slotMaxCharge)//storing and can fit in this item

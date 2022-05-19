@@ -61,6 +61,11 @@ public class MetalmindChargeHelper
 		items.removeIf(getIsItemInvalidMetalmind(metalType));
 		acc.removeIf(getIsItemInvalidMetalmind(metalType));
 
+		if (items.isEmpty() && acc.isEmpty())
+		{
+			return null;
+		}
+
 		return ItemChargeHelper.adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
 	}
 
