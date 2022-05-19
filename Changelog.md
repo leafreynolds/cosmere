@@ -1,5 +1,16 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B31
+
+Tapping feruchemical bronze will reset time since sleep timer.
+Fixing bug that caused powers not to persist through death.
+Lerasium spikes now steal attributes, like they are supposed to. Lerasatium spikes steal all powers.
+Decreased spiritweb nbt save size by a bunch.
+Better spike tooltips. 
+Iron/Steel tries to approximate which non-mod items and entities contain metal.
+Iron/Steel can push and pull mob and item entities.
+Allomancy mode lists off, burning and flaring modes when selected power.
+
 B30
 
 Fixed brass feruchemy not letting player set others on fire at high burn rates.
