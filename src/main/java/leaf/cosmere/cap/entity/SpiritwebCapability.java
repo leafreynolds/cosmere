@@ -357,6 +357,28 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			stringToDraw2 = "Mode: " + (mode < 0 ? "Tapping " : "Storing ") + mode;
 		}
+		else if (selectedManifestation.getManifestationType() == ManifestationTypes.ALLOMANCY)
+		{
+			String rate;
+			if (mode <=0)
+			{
+				rate = "Off";
+			}
+			else if (mode == 1)
+			{
+				rate = "Burning";
+			}
+			else if (mode == 2)
+			{
+				rate = "Hard Burn";
+			}
+			else// if (mode >= 3)
+			{
+				rate = "Flared!";
+			}
+
+			stringToDraw2 = "Mode: " + rate;
+		}
 		else
 		{
 			stringToDraw2 = "Mode: " + mode;
