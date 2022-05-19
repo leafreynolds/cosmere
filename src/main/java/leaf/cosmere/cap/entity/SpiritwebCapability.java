@@ -368,10 +368,6 @@ public class SpiritwebCapability implements ISpiritweb
 			{
 				rate = "Burning";
 			}
-			else if (mode == 2)
-			{
-				rate = "Hard Burn";
-			}
 			else// if (mode >= 3)
 			{
 				rate = "Flared!";

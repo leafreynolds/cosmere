@@ -54,12 +54,15 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 	@Override
 	public int modeMax(ISpiritweb data)
 	{
-		return 3;
+		//1 for burning
+		//2 for flaring
+		return 2;
 	}
 
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
+		//Allmancy doesn't have a negative, so 0 as 'off'
 		return 0;
 	}
 
