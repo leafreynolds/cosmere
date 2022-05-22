@@ -1,5 +1,11 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B33
+
+Coinshots can now shoot coins! Crouch and right click a coin pouch to open pouch inventory and add metal nuggets. 
+Then hold your allomancy push keybind and use (right click) the coin pouch. You'll shoot out a projectile that you'll automatically be pushing against.
+If you have allomantic iron, you can pull those projectiles directly back into your coin pouch or inventory.
+
 B32
 
 Fix feruchemy not working with completely empty metalminds.
