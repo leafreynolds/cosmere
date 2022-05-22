@@ -1,5 +1,9 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B34
+
+Fixed server crashing due to Cosmere. Duralumin feruchemy was trying to run client side code on the server, for hiding a nameplate while storing oops
+
 B33
 
 Coinshots can now shoot coins! Crouch and right click a coin pouch to open pouch inventory and add metal nuggets. 
