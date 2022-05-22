@@ -6,6 +6,7 @@ package leaf.cosmere.effects.feruchemy.store;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
+import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +22,6 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 	{
 		super(type, effectType);
 		MinecraftForge.EVENT_BUS.addListener(this::onLivingVisibilityEvent);
-		MinecraftForge.EVENT_BUS.addListener(this::onRenderNameplateEvent);
 	}
 
 	@Override
@@ -41,14 +41,14 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 		}
 	}
 
-	public void onRenderNameplateEvent(RenderNameplateEvent event)
+	public static void onRenderNameplateEvent(RenderNameplateEvent event)
 	{
 		if (!(event.getEntity() instanceof LivingEntity livingEntity))
 		{
 			return;
 		}
 
-		MobEffectInstance effectInstance = livingEntity.getEffect(this);
+		MobEffectInstance effectInstance = livingEntity.getEffect(Metals.MetalType.DURALUMIN.getStoringEffect());
 		if (effectInstance != null && effectInstance.getDuration() > 0)
 		{
 			if (effectInstance.getAmplifier() > 2)

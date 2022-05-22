@@ -7,6 +7,7 @@ package leaf.cosmere.client;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.client.gui.SpriteIconPositioning;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.effects.feruchemy.store.DuraluminStoreEffect;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ContainersRegistry;
 import leaf.cosmere.registry.EntityRegistry;
@@ -26,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -40,6 +42,7 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
+		MinecraftForge.EVENT_BUS.addListener(DuraluminStoreEffect::onRenderNameplateEvent);
 		event.enqueueWork(() ->
 		{
 			ContainersRegistry.registerGUIFactories();
