@@ -8,18 +8,23 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.client.gui.SpriteIconPositioning;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.ContainersRegistry;
+import leaf.cosmere.registry.EntityRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,13 +37,12 @@ import java.util.Locale;
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup
 {
-
-
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
 		event.enqueueWork(() ->
 		{
+			ContainersRegistry.registerGUIFactories();
 		});
 
 		//special thank you to @Random on the forge discord who told me that you have to tell the block it has transparency
@@ -57,7 +61,13 @@ public class ClientSetup
 		LogHelper.info("Client setup complete!");
 	}
 
-	//special thank you to the chisels and bits team who have an example of how to to register other sprites
+	@SubscribeEvent
+	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
+	{
+		event.registerEntityRenderer(EntityRegistry.COIN_PROJECTILE.get(), ThrownItemRenderer::new);
+	}
+
+	//special thank you to the chisels and bits team who have an example of how to register other sprites
 	@SubscribeEvent
 	public static void registerIconTextures(TextureStitchEvent.Pre event)
 	{
@@ -175,5 +185,4 @@ public class ClientSetup
 
 		return sip;
 	}
-
 }

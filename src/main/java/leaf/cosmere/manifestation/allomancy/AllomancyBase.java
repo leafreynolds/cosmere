@@ -72,6 +72,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		return super.isActive(data) && isMetalBurning(data);
 	}
 
+	//A metal is considered burning if the user has the power and can afford the next tick of burning.
 	public boolean isMetalBurning(ISpiritweb data)
 	{
 		int mode = getMode(data);

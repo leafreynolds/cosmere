@@ -38,6 +38,7 @@ public class Network
 		NETWORK_CHANNEL.registerMessage(id++, ChangeSelectedManifestationMessage.class, ChangeSelectedManifestationMessage::encode, ChangeSelectedManifestationMessage::decode, ChangeSelectedManifestationMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, SetSelectedManifestationMessage.class, SetSelectedManifestationMessage::encode, SetSelectedManifestationMessage::decode, SetSelectedManifestationMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, SyncPushPullMessage.class, SyncPushPullMessage::encode, SyncPushPullMessage::decode, SyncPushPullMessage::handle);
+		NETWORK_CHANNEL.registerMessage(id++, PlayerShootProjectileMessage.class, PlayerShootProjectileMessage::encode, PlayerShootProjectileMessage::decode, PlayerShootProjectileMessage::handle);
 
 	}
 

@@ -36,9 +36,10 @@ public class Cosmere
 		modBus.addListener(this::loadComplete);
 		modBus.addListener(this::onAddCaps);
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init));
+/*		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init));
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::RegisterRenderers));
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::registerIconTextures));
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::retrieveRegisteredIconSprites));
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::retrieveRegisteredIconSprites));*/
 
 
 		MinecraftForge.EVENT_BUS.register(this);
@@ -53,6 +54,7 @@ public class Cosmere
 		EntityRegistry.ENTITIES.register(modBus);
 		PointOfInterestRegistry.POINT_OF_INTERESTS.register(modBus);
 		VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
+		ContainersRegistry.CONTAINERS.register(modBus);
 
 		FeatureRegistry.FEATURES.register(modBus);
 		RecipeRegistry.SPECIAL_RECIPES.register(modBus);

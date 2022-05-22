@@ -62,6 +62,13 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 				.unlockedBy("has_material", has(Tags.Items.INGOTS))
 				.save(consumer);
 
+
+		ShapelessRecipeBuilder.shapeless(ItemsRegistry.COIN_POUCH.get(), 1)
+				.unlockedBy("has_item", has(Tags.Items.LEATHER))
+				.requires(Tags.Items.LEATHER)
+				.requires(Tags.Items.STRING)
+				.save(consumer);
+
 		SpecialRecipeBuilder.special(RecipeRegistry.VIAL_RECIPE_SERIALIZER.get()).save(consumer, ResourceLocationHelper.prefix("vial_mixing").toString());
 
 		for (Metals.MetalType metalType : Metals.MetalType.values())

@@ -36,10 +36,6 @@ public class TagsRegistry
 
 		public static TagKey<Item> METAL_SPIKE = makeItem("cosmere", "spike");
 
-
-		public static TagKey<Item> NUGGET = forgeItemTag("nugget");
-
-
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_RAW_TAGS =
 				Arrays.stream(Metals.MetalType.values())
 						.collect(Collectors.toMap(

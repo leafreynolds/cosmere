@@ -9,6 +9,7 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.registry.AttributesRegistry;
@@ -168,9 +169,13 @@ public class EntityEventHandler
 	@SubscribeEvent
 	public static void onEntityItemPickUp(EntityItemPickupEvent event)
 	{
+		if (CoinPouchItem.onPickupItem(event.getItem(), event.getPlayer()))
+		{
+			event.setCanceled(true);
+		}
 		//seriously, get item three times is stupid, I know it.
 		//but entity item, itemstack and then the actual item is needed.
-/*        if (event.getItem().getItem().getItem() == ItemsRegistry.INVESTITURE.get())
+/*      else if (event.getItem().getItem().getItem() == ItemsRegistry.INVESTITURE.get())
         {
             event.getItem().getItem().shrink(1);
 

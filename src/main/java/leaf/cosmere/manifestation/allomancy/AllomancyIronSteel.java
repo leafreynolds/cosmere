@@ -7,9 +7,13 @@ package leaf.cosmere.manifestation.allomancy;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.entities.CoinProjectile;
+import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.network.Network;
+import leaf.cosmere.network.packets.PlayerShootProjectileMessage;
 import leaf.cosmere.network.packets.SyncPushPullMessage;
+import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.CodecHelper;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.utils.helpers.PlayerHelper;
@@ -20,8 +24,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -67,18 +71,15 @@ public class AllomancyIronSteel extends AllomancyBase
 		}
 	}
 
-	private List<BlockPos> blocks;
-	private List<Integer> entities;
-
 	@OnlyIn(Dist.CLIENT)
 	private void performEffectClient(ISpiritweb cap)
 	{
 		boolean hasChanged = false;
 		SpiritwebCapability data = (SpiritwebCapability) cap;
-		blocks = isPush ? data.pushBlocks : data.pullBlocks;
-		entities = isPush ? data.pushEntities : data.pullEntities;
+		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
+		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 
-		//Pushes on Nearby Metals
+		//Pushes/Pulls on Nearby Metals
 		if (getKeyBinding().isDown())
 		{
 			Minecraft mc = Minecraft.getInstance();
@@ -89,7 +90,7 @@ public class AllomancyIronSteel extends AllomancyBase
 				BlockPos pos = ((BlockHitResult) ray).getBlockPos();
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
-				if (state.getBlock() instanceof IHasMetalType)
+				if (state.getBlock() instanceof IHasMetalType || containsMetal(state.getBlock().getRegistryName().getPath()))
 				{
 					blocks.add(pos.immutable());
 
@@ -104,17 +105,9 @@ public class AllomancyIronSteel extends AllomancyBase
 			if (ray instanceof EntityHitResult entityHitResult)
 			{
 				final Entity hitResultEntity = entityHitResult.getEntity();
-
-				if (!entities.contains(hitResultEntity.getId()) && entityContainsMetal(hitResultEntity))
-				{
-					entities.add(hitResultEntity.getId());
-					if (entities.size() > 5)
-					{
-						entities.remove(0);
-					}
-					hasChanged = true;
-				}
-
+				//tracks entity if it meets requirements
+				//eg must contain metal
+				hasChanged = trackValidEntity(data, hitResultEntity);
 			}
 		}
 		else
@@ -146,6 +139,26 @@ public class AllomancyIronSteel extends AllomancyBase
 		}
 	}
 
+
+	public boolean trackValidEntity(ISpiritweb cap, Entity entity)
+	{
+		//perform the entity move thing.
+		SpiritwebCapability data = (SpiritwebCapability) cap;
+		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
+
+		if (!entities.contains(entity.getId()) && entityContainsMetal(entity))
+		{
+			entities.add(entity.getId());
+			if (entities.size() > 5)
+			{
+				entities.remove(0);
+			}
+			return true;
+		}
+
+		return false;
+	}
+
 	private void performEffectServer(ISpiritweb cap)
 	{
 		if (cap.getLiving().tickCount % 3 == 0)
@@ -156,8 +169,8 @@ public class AllomancyIronSteel extends AllomancyBase
 		//perform the entity move thing.
 		SpiritwebCapability data = (SpiritwebCapability) cap;
 		//todo change this. We shouldn't be setting data on the manifestation base
-		blocks = isPush ? data.pushBlocks : data.pullBlocks;
-		entities = isPush ? data.pushEntities : data.pullEntities;
+		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
+		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 
 		if (!blocks.isEmpty())
 		{
@@ -172,29 +185,49 @@ public class AllomancyIronSteel extends AllomancyBase
 
 	private void pushpullEntities(SpiritwebCapability data)
 	{
+		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 		for (int i = entities.size() - 1; i >= 0; i--)
 		{
 			int entityID = entities.get(i);
 			Entity entity = data.getLiving().level.getEntity(entityID);
-
-			if (entity.blockPosition().closerThan(data.getLiving().blockPosition(), getRange(data)))
+			if (entity != null)
 			{
-				if (entity instanceof ItemEntity itemEntity)
+				if (entity.blockPosition().closerThan(data.getLiving().blockPosition(), getRange(data)))
 				{
-					move(itemEntity, data.getLiving().blockPosition());
-				}
-				else if (entity instanceof LivingEntity livingEntity)
-				{
-					move(livingEntity, data.getLiving().blockPosition());
-					move(data.getLiving(), livingEntity.blockPosition());
-					data.getLiving().hurtMarked = true;
+					//move small things
+					if (entity instanceof ItemEntity itemEntity)
+					{
+						move(itemEntity, data.getLiving().blockPosition());
+					}
+					//affect both entities
+					else if (entity instanceof LivingEntity livingEntity)
+					{
+						move(livingEntity, data.getLiving().blockPosition());
+						move(data.getLiving(), livingEntity.blockPosition());
+						data.getLiving().hurtMarked = true;
+					}
+					//affect entity who is doing the push/pull
+					else
+					{
+						if (isPush)
+						{
+							move(data.getLiving(), entity.blockPosition());
+						}
+						//if not push, then check if we should pull coin projectiles back to player
+						else if (data.getLiving() instanceof Player player && entity instanceof CoinProjectile coinProjectile)
+						{
+							//technically we could do this with item entities, but I like how those currently work
+							//Doing this with projectiles meansa I don't have to mess with the physics of un-sticking
+							//the coin projectiles from whatever surface they may be attached to
+							coinProjectile.playerTouch(player);
+						}
+					}
 				}
 			}
 			else
 			{
-				//we don't want to remove entities that are out of distance
-				//in case we are still holding the button down and get back into range
-				//entities.remove(i);
+				//remove entities the level couldn't find
+				entities.remove(i);
 			}
 		}
 	}
@@ -234,6 +267,7 @@ public class AllomancyIronSteel extends AllomancyBase
 
 	private void pushpullBlocks(SpiritwebCapability data)
 	{
+		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		int blockListCount = blocks.size();
 
 		if (blockListCount == 0)
@@ -363,17 +397,22 @@ public class AllomancyIronSteel extends AllomancyBase
 
 			if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof IHasMetalType || containsMetal(item.getRegistryName().getPath()))
 			{
-				found.add(entity.position());
+				return true;
 			}
 			if (item instanceof IHasMetalType || containsMetal(item.getRegistryName().getPath()))
 			{
-				found.add(entity.position());
+				return true;
 			}
 		}
+		else if (entity instanceof CoinProjectile coinProjectile)
+		{
+			return true;
+		}
+
 		return false;
 	}
 
-	private static boolean containsMetal(String path)
+	public static boolean containsMetal(String path)
 	{
 		Minecraft.getInstance().getProfiler().push("cosmere-containsMetal");
 		if (s_whiteList == null)
@@ -426,8 +465,7 @@ public class AllomancyIronSteel extends AllomancyBase
 	{
 		final String path = test.getPath();
 		//No twisting vines, paintings, crafting tables or silverfish. Lead by itself is also incorrect.
-		boolean misMatch = path.contains("ting") || path.contains("silverfish") || path.equals("lead");
+		boolean misMatch = path.contains("ting") || path.contains("tint") || path.contains("silverfish") || path.equals("lead");
 		return !misMatch && Arrays.stream(metalNames).anyMatch(path::contains);
 	}
-
 }
