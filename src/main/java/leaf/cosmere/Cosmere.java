@@ -6,6 +6,7 @@ package leaf.cosmere;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.client.ClientSetup;
+import leaf.cosmere.commands.CosmereCommand;
 import leaf.cosmere.compat.curios.CuriosCompat;
 import leaf.cosmere.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.handlers.ColorHandler;
@@ -72,6 +73,7 @@ public class Cosmere
 	{
 		event.enqueueWork(() ->
 		{
+			CosmereCommand.registerCustomArgumentTypes();
 			FeatureRegistry.ConfiguredFeatures.registerConfiguredFeatures();
 			FeatureRegistry.PlacedFeatures.registerPlacedFeatures();
 			EntityRegistry.PrepareEntityAttributes();

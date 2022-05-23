@@ -13,7 +13,6 @@ import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.FeatureRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.VillagerProfessionRegistry;
-import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
