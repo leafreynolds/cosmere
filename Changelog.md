@@ -1,5 +1,10 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B35
+
+Fix commands not working on server.
+Fixed bug that crashed players trying to use the coin pouch or allomantic iron/steel.
+
 B34
 
 Fixed server crashing due to Cosmere. Duralumin feruchemy was trying to run client side code on the server, for hiding a nameplate while storing oops
