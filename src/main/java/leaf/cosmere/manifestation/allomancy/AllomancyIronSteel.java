@@ -8,12 +8,9 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.entities.CoinProjectile;
-import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.network.Network;
-import leaf.cosmere.network.packets.PlayerShootProjectileMessage;
 import leaf.cosmere.network.packets.SyncPushPullMessage;
-import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.CodecHelper;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.utils.helpers.PlayerHelper;
@@ -25,7 +22,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -197,13 +193,13 @@ public class AllomancyIronSteel extends AllomancyBase
 					//move small things
 					if (entity instanceof ItemEntity itemEntity)
 					{
-						move(itemEntity, data.getLiving().blockPosition());
+						moveEntityTowards(itemEntity, data.getLiving().blockPosition());
 					}
 					//affect both entities
 					else if (entity instanceof LivingEntity livingEntity)
 					{
-						move(livingEntity, data.getLiving().blockPosition());
-						move(data.getLiving(), livingEntity.blockPosition());
+						moveEntityTowards(livingEntity, data.getLiving().blockPosition());
+						moveEntityTowards(data.getLiving(), livingEntity.blockPosition());
 						data.getLiving().hurtMarked = true;
 					}
 					//affect entity who is doing the push/pull
@@ -211,7 +207,7 @@ public class AllomancyIronSteel extends AllomancyBase
 					{
 						if (isPush)
 						{
-							move(data.getLiving(), entity.blockPosition());
+							moveEntityTowards(data.getLiving(), entity.blockPosition());
 						}
 						//if not push, then check if we should pull coin projectiles back to player
 						else if (data.getLiving() instanceof Player player && entity instanceof CoinProjectile coinProjectile)
@@ -232,15 +228,14 @@ public class AllomancyIronSteel extends AllomancyBase
 		}
 	}
 
-	private void move(Entity entity, BlockPos toMoveTo)
+	private void moveEntityTowards(Entity entity, BlockPos toMoveTo)
 	{
 		Vec3 blockCenter = Vec3.atCenterOf(toMoveTo);
-		float renderPartialTicks = Minecraft.getInstance().getFrameTime();
 
 		Vec3 direction = VectorHelper.getDirection(
 				blockCenter,
 				Vec3.atCenterOf(entity.blockPosition()),//use entity block position, so we can do things like hover directly over a block more easily
-				(isPush ? -1f : 2f) * renderPartialTicks);
+				(isPush ? -1f : 2f));
 
 		//todo, clean up all the unnecessary calculations once we find what feels good at run time
 		Vec3 normalize = direction.normalize();
@@ -289,7 +284,7 @@ public class AllomancyIronSteel extends AllomancyBase
 			double maxDistance = getRange(data);
 			if (blockPos.closerThan(living.blockPosition(), maxDistance))
 			{
-				move(living, blockPos);
+				moveEntityTowards(living, blockPos);
 			}
 			else
 			{
@@ -414,7 +409,6 @@ public class AllomancyIronSteel extends AllomancyBase
 
 	public static boolean containsMetal(String path)
 	{
-		Minecraft.getInstance().getProfiler().push("cosmere-containsMetal");
 		if (s_whiteList == null)
 		{
 			createWhitelist();
@@ -424,7 +418,6 @@ public class AllomancyIronSteel extends AllomancyBase
 
 		//look for any block or item that contains one of our metals
 		//eg iron fence
-		Minecraft.getInstance().getProfiler().pop();
 
 		return foundMatch;
 	}
