@@ -48,7 +48,6 @@ public class ChangeManifestationModeMessage
 				data.setMode(message.manifestation, newMode);
 			}
 
-			message.manifestation.onModeChange(data);
 			data.syncToClients(null);
 		}));
 		context.setPacketHandled(true);

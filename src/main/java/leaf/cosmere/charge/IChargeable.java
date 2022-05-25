@@ -11,6 +11,7 @@ package leaf.cosmere.charge;
 
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.utils.helpers.PlayerHelper;
 import leaf.cosmere.utils.helpers.StackNBTHelper;
@@ -52,40 +53,43 @@ public interface IChargeable
 
 	default boolean trySetAttunedPlayer(ItemStack itemStack, Player entity)
 	{
-		UUID attunedPlayerID = getAttunedPlayer(itemStack);
-		UUID playerID = entity.getUUID();
-
-		boolean noAttunedPlayer = attunedPlayerID == null;
-
-		if (noAttunedPlayer)
+		if (itemStack.getItem() instanceof IHasMetalType metalType)
 		{
-			//No attuned player! Check to see whether they are storing identity
-			MobEffectInstance storingIdentity = entity.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
-			//if they are
-			if (storingIdentity != null && storingIdentity.getDuration() > 0)
+			UUID attunedPlayerID = getAttunedPlayer(itemStack);
+			UUID playerID = entity.getUUID();
+			boolean noAttunedPlayer = attunedPlayerID == null;
+
+			//only allow unkeyed metalminds if they aren't aluminum
+			if (noAttunedPlayer && metalType.getMetalType() != Metals.MetalType.ALUMINUM)
 			{
-				//then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
-				StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNSEALED_UUID);
-				StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unsealed"); // todo translation
+				//No attuned player! Check to see whether they are storing identity
+				MobEffectInstance storingIdentity = entity.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
+				//if they are
+				if (storingIdentity != null && storingIdentity.getDuration() > 0)
+				{
+					//then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
+					StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNKEYED_UUID);
+					StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unkeyed"); // todo translation
+					return true;
+
+				}
+			}
+
+			//if theres no attuned player on the metalmind
+			//or if the player is attuned to the metalmind
+			//or if the metalmind is unsealed (anyone can access)
+			if (noAttunedPlayer || attunedPlayerID.compareTo(playerID) == 0 || attunedPlayerID.compareTo(Constants.NBT.UNKEYED_UUID) == 0)
+			{
+				if (noAttunedPlayer && getCharge(itemStack) > 0)
+				{
+					setAttunedPlayer(itemStack, entity);
+					setAttunedPlayerName(itemStack, entity);
+				}
+				//auto success if that player is already attuned
 				return true;
-
 			}
-		}
 
-		//if theres no attuned player on the metalmind
-		//or if the player is attuned to the metalmind
-		//or if the metalmind is unsealed (anyone can access)
-		if (noAttunedPlayer || attunedPlayerID.compareTo(playerID) == 0 || attunedPlayerID.compareTo(Constants.NBT.UNSEALED_UUID) == 0)
-		{
-			if (noAttunedPlayer && getCharge(itemStack) > 0)
-			{
-				setAttunedPlayer(itemStack, entity);
-				setAttunedPlayerName(itemStack, entity);
-			}
-			//auto success if that player is already attuned
-			return true;
 		}
-
 		return false;
 	}
 

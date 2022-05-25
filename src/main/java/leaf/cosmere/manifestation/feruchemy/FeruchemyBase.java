@@ -17,6 +17,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.RegistryObject;
 
 public class FeruchemyBase extends ManifestationBase implements IHasMetalType
@@ -101,7 +102,8 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 			return;
 		}
 
-		if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true))
+		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true);
+		if (metalmind != null)//success
 		{
 			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 

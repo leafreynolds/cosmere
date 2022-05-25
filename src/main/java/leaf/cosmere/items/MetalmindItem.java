@@ -14,10 +14,13 @@ import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
@@ -59,38 +62,6 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
 		{
 			//add hemalurgic attributes, if any.
 			((IHemalurgicInfo) (stack.getItem())).getHemalurgicAttributes(attributeModifiers, stack, metalType);
-		}
-
-		//todo better nicrosil tracking.
-		if (metalType == Metals.MetalType.NICROSIL || metalType == Metals.MetalType.HARMONIUM)
-		{
-			CompoundTag nbt = stack.getOrCreateTagElement("StoredInvestiture");
-			//for each power the user has access to
-
-			for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
-			{
-				String manifestationName = manifestation.getName();
-				if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
-				{
-					continue;
-				}
-
-				if (CompoundNBTHelper.getDouble(nbt, manifestationName, 0) > 0)
-				{
-					UUID someUUID = UUID.nameUUIDFromBytes((manifestationName + uuid.toString()).getBytes());
-					attributeModifiers.put(
-							AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get(),
-							new AttributeModifier(
-									someUUID,
-									manifestationName,
-									CompoundNBTHelper.getDouble(
-											nbt,
-											manifestationName,
-											0),
-									AttributeModifier.Operation.ADDITION));
-
-				}
-			}
 		}
 
 		return attributeModifiers;

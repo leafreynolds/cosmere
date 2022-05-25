@@ -125,7 +125,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		{
 			//todo config variable
 			int secondsOfFeruchemyToAdd = 5;
-			if (MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (-secondsOfFeruchemyToAdd) * (mode), true, true))
+			if (null != MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (-secondsOfFeruchemyToAdd) * (mode), true, true))
 			{
 				//compound successful
 			}
