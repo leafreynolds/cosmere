@@ -1,5 +1,13 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B36
+
+Fixed hemalurgic spikes constantly damaging when used as feruchemical storage.
+Fixed aluminum feruchemy so it can't make unkeyed metalminds.
+Some progress towards fixing nicrosil metalminds.
+Some set up for proper advancements. Currently not triggering correctly. Does not have correct localisation.
+Attempts at making metal traders not so imbalanced.
+
 B35
 
 Fix commands not working on server.
