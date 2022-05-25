@@ -4,14 +4,23 @@
 
 package leaf.cosmere.datagen.advancements;
 
+import leaf.cosmere.constants.Metals;
+import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
 import leaf.cosmere.registry.ItemsRegistry;
+import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.TickTrigger;
+import net.minecraft.commands.CommandFunction;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
@@ -23,18 +32,25 @@ public class HemalurgyAdvancements implements Consumer<Consumer<Advancement>>
 
 	public void accept(Consumer<Advancement> advancementConsumer)
 	{
-		final String categoryName = "hemalurgy";
+		String tabName = "hemalurgy";
+
+		final String titleFormat = "advancements.cosmere.%s.title";
+		final String descriptionFormat = "advancements.cosmere.%s.description";
+		final String achievementPathFormat = "cosmere:%s/%s";
+
 		Advancement root = Advancement.Builder.advancement()
-				.display(ItemsRegistry.GUIDE.get(),
-						new TranslatableComponent("advancements.cosmere." + categoryName + ".title"),
-						new TranslatableComponent("advancements.cosmere." + categoryName + ".description"),
+				.display(ItemsRegistry.METAL_SPIKE.get(Metals.MetalType.IRON).get(),
+						new TranslatableComponent(String.format(titleFormat, tabName)),
+						new TranslatableComponent(String.format(descriptionFormat, tabName)),
 						new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
 						FrameType.TASK,
-						false,
-						false,
-						false)
+						false,//showToast
+						false,//announceChat
+						false)//hidden
 				.addCriterion("spike", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(TagsRegistry.Items.METAL_SPIKE).build()))
-				//.withRewards(new AdvancementRewards(0, new ResourceLocation[]{new ResourceLocation("cosmere:guide")}, new ResourceLocation[0], FunctionObject.CacheableFunction.EMPTY))
-				.save(advancementConsumer, categoryName + "/root");
+				.save(advancementConsumer, String.format(achievementPathFormat, tabName, "root"));
+
+
+
 	}
 }

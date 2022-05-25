@@ -1,28 +1,32 @@
 {
-  "parent": "minecraft:feruchemy/root",
+  "parent": "cosmere:feruchemy/root",
   "display": {
     "icon": {
-      "item": "minecraft:wooden_pickaxe",
-      "nbt": "{Damage:0}"
+      "item": "cosmere:bendalloy_ring_metalmind"
     },
     "title": {
-      "translate": "advancements.cosmere.feruchemy.title"
+      "translate": "advancements.cosmere.feruchemy.bendalloy.title"
     },
     "description": {
-      "translate": "advancements.cosmere.feruchemy.description"
+      "translate": "advancements.cosmere.feruchemy.bendalloy.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
+  "rewards": {
+    "experience": 50
+  },
   "criteria": {
-    "get_stone": {
+    "has_item": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "minecraft:stone_tool_materials"
+            "items": [
+              "cosmere:bendalloy_ring_metalmind"
+            ]
           }
         ]
       }
@@ -30,7 +34,7 @@
   },
   "requirements": [
     [
-      "get_stone"
+      "has_item"
     ]
   ]
 }

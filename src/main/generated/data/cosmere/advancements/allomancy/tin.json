@@ -1,28 +1,32 @@
 {
-  "parent": "minecraft:allomancy/root",
+  "parent": "cosmere:allomancy/root",
   "display": {
     "icon": {
-      "item": "minecraft:wooden_pickaxe",
-      "nbt": "{Damage:0}"
+      "item": "cosmere:tin_nugget"
     },
     "title": {
-      "translate": "advancements.cosmere.allomancy.title"
+      "translate": "advancements.cosmere.allomancy.tin.title"
     },
     "description": {
-      "translate": "advancements.cosmere.allomancy.description"
+      "translate": "advancements.cosmere.allomancy.tin.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
+  "rewards": {
+    "experience": 50
+  },
   "criteria": {
-    "get_stone": {
+    "has_item": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "minecraft:stone_tool_materials"
+            "items": [
+              "cosmere:tin_nugget"
+            ]
           }
         ]
       }
@@ -30,7 +34,7 @@
   },
   "requirements": [
     [
-      "get_stone"
+      "has_item"
     ]
   ]
 }

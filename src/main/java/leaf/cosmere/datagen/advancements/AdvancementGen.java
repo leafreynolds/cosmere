@@ -26,7 +26,7 @@ public class AdvancementGen implements DataProvider
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	private final DataGenerator generator;
 	private final List<Consumer<Consumer<Advancement>>> advancements = ImmutableList.of(
-			new CoreAdvancements(),
+			//new CoreAdvancements(),
 			new AllomancyAdvancements(),
 			new FeruchemyAdvancements(),
 			new HemalurgyAdvancements()

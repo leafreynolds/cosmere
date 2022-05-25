@@ -5,6 +5,7 @@
 package leaf.cosmere.datagen.language;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.MetalmindItem;
@@ -88,7 +89,16 @@ public class EngLangGen extends LanguageProvider
 		}
 
 
+
+		final String titleFormat = "advancements.cosmere.%s.title";
+		final String descriptionFormat = "advancements.cosmere.%s.description";
 		//innate
+		for (Manifestations.ManifestationTypes value : Manifestations.ManifestationTypes.values())
+		{
+			add(String.format(titleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
+			add(String.format(descriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));
+		}
+
 
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
@@ -102,16 +112,22 @@ public class EngLangGen extends LanguageProvider
 			String name = path;
 			String description;
 
+
+			String tabName = manifestation.getManifestationType().getName();
 			String metalName = Metals.MetalType.valueOf(manifestation.getPowerID()).get().toString().toLowerCase(Locale.ROOT);
 			switch (manifestation.getManifestationType())
 			{
 				case ALLOMANCY:
 					name = "Allomantic " + metalName;
 					description = "Users can burn " + metalName;
+					add(String.format(titleFormat, tabName + "." + metalName), StringHelper.fixCapitalisation(name));
+					add(String.format(descriptionFormat, tabName + "." + metalName), "Test description: " + StringHelper.fixCapitalisation(name));
 					break;
 				case FERUCHEMY:
 					name = "Feruchemical " + metalName;
 					description = "Users can tap " + metalName;
+					add(String.format(titleFormat, tabName + "." + metalName), StringHelper.fixCapitalisation(name));
+					add(String.format(descriptionFormat, tabName + "." + metalName), "Test description: " + StringHelper.fixCapitalisation(name));
 					break;
 				case RADIANT:
 				case ELANTRIAN:
@@ -119,6 +135,8 @@ public class EngLangGen extends LanguageProvider
 				default:
 				case NONE:
 					description = "No Special Powers";
+					add(String.format(titleFormat, tabName + "." + name), StringHelper.fixCapitalisation(name));
+					add(String.format(descriptionFormat, tabName + "." + name), "Test description: " + StringHelper.fixCapitalisation(name));
 					break;
 			}
 
@@ -184,13 +202,13 @@ public class EngLangGen extends LanguageProvider
 		}
 
 		add("tooltip.cosmere.metals.contained", "Contained Metals:");
-		add("tooltip.cosmere.attribute.iron","+%s Attack Damage");
-		add("tooltip.cosmere.attribute.tin","+%s%% Better Night Vision");
-		add("tooltip.cosmere.attribute.copper","+%s%% XP");
-		add("tooltip.cosmere.attribute.zinc","+%s%% Emotional Fortitude");
-		add("tooltip.cosmere.attribute.duralumin","");//todo hemalurgic connection/identity
-		add("tooltip.cosmere.attribute.chromium","+%s%% Luck");
-		add("tooltip.cosmere.attribute.nicrosil","");//todo hemalurgic investiture
+		add("tooltip.cosmere.attribute.iron", "+%s Attack Damage");
+		add("tooltip.cosmere.attribute.tin", "+%s%% Better Night Vision");
+		add("tooltip.cosmere.attribute.copper", "+%s%% XP");
+		add("tooltip.cosmere.attribute.zinc", "+%s%% Emotional Fortitude");
+		add("tooltip.cosmere.attribute.duralumin", "");//todo hemalurgic connection/identity
+		add("tooltip.cosmere.attribute.chromium", "+%s%% Luck");
+		add("tooltip.cosmere.attribute.nicrosil", "");//todo hemalurgic investiture
 
 		//ItemGroups/Tabs
 		add("itemGroup." + CosmereItemGroups.ITEMS.getRecipeFolderName(), "Cosmere Items");
