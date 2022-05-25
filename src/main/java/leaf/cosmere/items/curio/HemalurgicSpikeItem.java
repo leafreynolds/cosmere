@@ -213,6 +213,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 		//todo //add decay
 
 		//add decay if not equipped
+		addDecay(stack);
 		{
 			// unless its in a jar?
 		}
@@ -374,10 +375,14 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 	@Override
 	public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack)
 	{
-		final LivingEntity entity = slotContext.getWearer();
-		entity.hurt(SPIKED, 4);
+		//only damage if removing the spike. We can ignore replacing the spike with another spike.
+		boolean isUnequipping = newStack.isEmpty() || !newStack.is(stack.getItem());
+		if (isUnequipping)
+		{
+			final LivingEntity entity = slotContext.getWearer();
+			entity.hurt(SPIKED, 4);
+		}
 	}
-
 	/*@Override
 	public boolean canRender(String identifier, int index, LivingEntity livingEntity, ItemStack stack)
 	{
