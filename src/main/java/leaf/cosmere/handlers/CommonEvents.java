@@ -16,6 +16,7 @@ import leaf.cosmere.registry.VillagerProfessionRegistry;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.BasicItemListing;
@@ -84,49 +85,100 @@ public class CommonEvents
 				switch (i)
 				{
 					case 1:
-						for (RegistryObject<Item> item : ItemsRegistry.METAL_NUGGETS.values())
-						{
-							tradesForLevel.add(makeTrade(item.get()));
-						}
-						break;
+					{
+						addNuggetTrades(tradesForLevel, Rarity.COMMON);
+					}
+					break;
 					case 2:
-						for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_BLEND.values())
-						{
-							tradesForLevel.add(makeTrade(item.get()));
-						}
-						break;
+					{
+						addBlendTrades(tradesForLevel, Rarity.COMMON);
+					}
+					break;
 					case 3:
-						tradesForLevel.add(makeTrade(ItemsRegistry.METAL_VIAL.get()));
-						break;
+					{
+						addNuggetTrades(tradesForLevel, Rarity.UNCOMMON);
+						addBlendTrades(tradesForLevel, Rarity.COMMON);
+
+						ItemStack itemStackForSale = new ItemStack(ItemsRegistry.METAL_VIAL.get(), 1);
+						tradesForLevel.add(makeTrade(itemStackForSale));
+					}
+					break;
 					case 4:
-						for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_ORE.values())
-						{
-							tradesForLevel.add(makeTrade(item.get()));
-						}
-						break;
+					{
+						addNuggetTrades(tradesForLevel, Rarity.RARE);
+						addRawOreTrades(tradesForLevel, Rarity.COMMON);
+					}
+					break;
 					case 5:
-						for (RegistryObject<MetalOreBlock> item : BlocksRegistry.METAL_ORE.values())
-						{
-							tradesForLevel.add(makeTrade(item.get().asItem()));
-						}
-						break;
+					{
+						addNuggetTrades(tradesForLevel, Rarity.EPIC);
+						addOreTrades(tradesForLevel, Rarity.COMMON);
+					}
+					break;
 				}
 			}
 		}
 	}
 
-
-	private static VillagerTrades.ItemListing makeTrade(Item item)
+	private static void addNuggetTrades(List<VillagerTrades.ItemListing> tradesForLevel, Rarity rarity)
 	{
-		ItemStack itemStackForSale = new ItemStack(item, 1);
+		for (RegistryObject<Item> item : ItemsRegistry.METAL_NUGGETS.values())
+		{
+			if (item.get().getRarity(ItemStack.EMPTY) == rarity)
+			{
+				ItemStack itemStackForSale = new ItemStack(item.get(), 1);
+				tradesForLevel.add(makeTrade(itemStackForSale));
+			}
+		}
+	}
 
-		itemStackForSale.setCount(getCount(itemStackForSale));
+	private static void addBlendTrades(List<VillagerTrades.ItemListing> tradesForLevel, Rarity rarity)
+	{
+		for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_BLEND.values())
+		{
+			if (item.get().getRarity(ItemStack.EMPTY) == rarity)
+			{
+				ItemStack itemStackForSale = new ItemStack(item.get(), 1);
+				tradesForLevel.add(makeTrade(itemStackForSale));
+			}
+		}
+	}
+
+	private static void addRawOreTrades(List<VillagerTrades.ItemListing> tradesForLevel, Rarity rarity)
+	{
+		for (RegistryObject<Item> item : ItemsRegistry.METAL_RAW_ORE.values())
+		{
+			if (item.get().getRarity(ItemStack.EMPTY) == rarity)
+			{
+				ItemStack itemStackForSale = new ItemStack(item.get(), 1);
+				tradesForLevel.add(makeTrade(itemStackForSale));
+			}
+		}
+	}
+
+	private static void addOreTrades(List<VillagerTrades.ItemListing> tradesForLevel, Rarity rarity)
+	{
+		for (RegistryObject<MetalOreBlock> item : BlocksRegistry.METAL_ORE.values())
+		{
+			if (item.get().asItem().getRarity(ItemStack.EMPTY) == rarity)
+			{
+				ItemStack itemStackForSale = new ItemStack(item.get().asItem(), 1);
+				tradesForLevel.add(makeTrade(itemStackForSale));
+			}
+		}
+	}
+
+
+	private static VillagerTrades.ItemListing makeTrade(ItemStack itemStack)
+	{
+
+		itemStack.setCount(getCount(itemStack));
 
 		return new BasicItemListing(
-				getCost(itemStackForSale),
-				itemStackForSale,
-				getMaxTradesPerDay(itemStackForSale),
-				getXpPerTrade(itemStackForSale));
+				getCost(itemStack),
+				itemStack,
+				getMaxTradesPerDay(itemStack),
+				getXpPerTrade(itemStack));
 
 	}
 
