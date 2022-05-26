@@ -151,6 +151,8 @@ public class ManifestationRegistry
 				return new FeruchemyAluminum(metalType);
 			case NICROSIL:
 				return new FeruchemyNicrosil(metalType);
+			case GOLD:
+				return new FeruchemyGold(metalType);
 			case ELECTRUM:
 				return new FeruchemyElectrum(metalType);
 			default:
