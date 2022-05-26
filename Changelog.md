@@ -1,5 +1,23 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B38
+
+Make bendalloy only slow people around you
+
+
+B37
+
+Buffed compounding attribute gain amount.
+Added death by spike localisation.
+Fixed mod blocks being slow to mine. Should be faster with correct tool.
+Fixed tapping1 gold not doing anything.
+Fixed storing gold not updating health properly.
+Fixed feru gold removing from metalmind even when fully healthy
+Made feru gold reduce harmful effect timer each time gold tap effect ticks.
+Fixed a bunch of effects not running at tap 1 or two
+Fixed feru bendalloy not giving saturation.
+
+
 B36
 
 Fixed hemalurgic spikes constantly damaging when used as feruchemical storage.
