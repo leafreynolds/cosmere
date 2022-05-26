@@ -217,6 +217,8 @@ public class EngLangGen extends LanguageProvider
 		add("itemGroup." + CosmereItemGroups.BLOCKS.getRecipeFolderName(), "Cosmere Blocks");
 
 		//Damage Sources
+		add("death.attack.spiked", "%1$s was not careful with their hemalurgic spike");
+		add("death.attack.spiked.player", "%1$s was not careful with their hemalurgic spike while fighting %2$s");
 
 		//Containers
 
