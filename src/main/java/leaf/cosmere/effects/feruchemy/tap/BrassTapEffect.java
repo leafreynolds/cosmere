@@ -32,6 +32,11 @@ public class BrassTapEffect extends FeruchemyEffectBase
 	@Override
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
+		if (!isActiveTick(entityLivingBaseIn))
+		{
+			return;
+		}
+
 		if (!entityLivingBaseIn.level.isClientSide && amplifier >= 5 && !entityLivingBaseIn.isInWater())
 		{
 			//set user on fire
@@ -39,26 +44,6 @@ public class BrassTapEffect extends FeruchemyEffectBase
 		}
 
 	}
-
-
-	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
-	{
-		//assume we can apply the effect regardless
-		boolean result = true;
-
-		//but if we are a specific effect
-		if (metalType == Metals.MetalType.BENDALLOY)
-		{
-			int k = 100 >> amplifier;
-			if (k > 0)
-			{
-				result = duration % k == 0;
-			}
-		}
-		return result;
-	}
-
 
 	@SubscribeEvent
 	public static void onLivingDamageEvent(LivingDamageEvent event)

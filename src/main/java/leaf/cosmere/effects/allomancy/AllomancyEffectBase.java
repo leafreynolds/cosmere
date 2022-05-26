@@ -5,12 +5,13 @@
 package leaf.cosmere.effects.allomancy;
 
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.effects.MobEffectBase;
 import leaf.cosmere.items.IHasMetalType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-public class AllomancyEffectBase extends MobEffect implements IHasMetalType
+public class AllomancyEffectBase extends MobEffectBase implements IHasMetalType
 {
 	protected final Metals.MetalType metalType;
 
@@ -30,27 +31,15 @@ public class AllomancyEffectBase extends MobEffect implements IHasMetalType
 	@Override
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
+		if (!isActiveTick(entityLivingBaseIn))
+		{
+			return;
+		}
+
 		if (entityLivingBaseIn.level.isClientSide)
 		{
 			//client side only?
 		}
 	}
 
-	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
-	{
-		//assume we can apply the effect regardless
-		boolean result = true;
-/*
-        //but if we are a specific effect
-        if (metalType == Metals.MetalType.BENDALLOY)
-        {
-            int k = 50 >> amplifier;
-            if (k > 0)
-            {
-                result = duration % k == 0;
-            }
-        }*/
-		return result;
-	}
 }

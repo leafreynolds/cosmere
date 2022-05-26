@@ -22,41 +22,34 @@ public class GoldTapEffect extends FeruchemyEffectBase
 	@Override
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
+		if (!isActiveTick(entityLivingBaseIn))
+		{
+			return;
+		}
+
 		if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
 		{
 			entityLivingBaseIn.heal(1);
 		}
-		else
-		{
-			//remove harmful effects over time
-			for (MobEffectInstance activeEffect : entityLivingBaseIn.getActiveEffects())
-			{
-				if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > 5)
-				{
-					double reduceAmount = 1 - ((1 + amplifier) / 10d);
 
-					MobEffectInstance effectInstance = new MobEffectInstance(
-							activeEffect.getEffect(),
-							Mth.floor(activeEffect.getDuration() * reduceAmount),
-							activeEffect.getAmplifier(),
-							activeEffect.isAmbient(),
-							activeEffect.isVisible(),
-							activeEffect.showIcon());
-					entityLivingBaseIn.removeEffectNoUpdate(activeEffect.getEffect());
-					entityLivingBaseIn.addEffect(effectInstance);
-				}
+		//remove harmful effects over time
+		for (MobEffectInstance activeEffect : entityLivingBaseIn.getActiveEffects())
+		{
+			if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > 5)
+			{
+				double reduceAmount = 1 - ((1 + amplifier) / 10d);
+
+				MobEffectInstance effectInstance = new MobEffectInstance(
+						activeEffect.getEffect(),
+						Mth.floor(activeEffect.getDuration() * reduceAmount),
+						activeEffect.getAmplifier(),
+						activeEffect.isAmbient(),
+						activeEffect.isVisible(),
+						activeEffect.showIcon());
+				entityLivingBaseIn.removeEffectNoUpdate(activeEffect.getEffect());
+				entityLivingBaseIn.addEffect(effectInstance);
 			}
 		}
 	}
 
-	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
-	{
-		int k = 50 >> amplifier;
-		if (k > 0) {
-			return duration % k == 0;
-		} else {
-			return true;
-		}
-	}
 }

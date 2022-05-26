@@ -7,13 +7,14 @@ package leaf.cosmere.effects.allomancy;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.effects.MobEffectBase;
 import leaf.cosmere.registry.AttributesRegistry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-public class AllomancyBoostEffect extends MobEffect
+public class AllomancyBoostEffect extends MobEffectBase
 {
 	public AllomancyBoostEffect(Metals.MetalType type, MobEffectCategory effectType)
 	{

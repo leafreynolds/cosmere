@@ -24,12 +24,6 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 		MinecraftForge.EVENT_BUS.addListener(this::onLivingVisibilityEvent);
 	}
 
-	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
-	{
-		return true;
-	}
-
 	public void onLivingVisibilityEvent(LivingEvent.LivingVisibilityEvent event)
 	{
 		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(this);
