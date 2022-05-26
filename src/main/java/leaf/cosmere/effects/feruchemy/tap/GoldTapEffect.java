@@ -33,9 +33,11 @@ public class GoldTapEffect extends FeruchemyEffectBase
 			{
 				if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > 5)
 				{
+					double reduceAmount = 1 - ((1 + amplifier) / 10d);
+
 					MobEffectInstance effectInstance = new MobEffectInstance(
 							activeEffect.getEffect(),
-							Mth.floor(activeEffect.getDuration() * 0.8d),
+							Mth.floor(activeEffect.getDuration() * reduceAmount),
 							activeEffect.getAmplifier(),
 							activeEffect.isAmbient(),
 							activeEffect.isVisible(),
