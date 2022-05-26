@@ -7,6 +7,7 @@ package leaf.cosmere.blocks;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.properties.PropTypes;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.OreBlock;
 
 public class MetalOreBlock extends OreBlock implements IHasMetalType
@@ -15,7 +16,7 @@ public class MetalOreBlock extends OreBlock implements IHasMetalType
 
 	public MetalOreBlock(Metals.MetalType metalType)
 	{
-		super(PropTypes.Blocks.METAL.get());
+		super(PropTypes.Blocks.METAL.get().strength(3f, 3f).requiresCorrectToolForDrops(), UniformInt.of(0, 2));
 		this.metalType = metalType;
 	}
 

@@ -15,7 +15,7 @@ public class MetalBlock extends BaseBlock implements IHasMetalType
 
 	public MetalBlock(Metals.MetalType metalType)
 	{
-		super(PropTypes.Blocks.METAL.get(), SoundType.METAL, 1F, 2F);
+		super(PropTypes.Blocks.METAL.get(), SoundType.METAL, 3F, 3F);
 		this.metalType = metalType;
 	}
 

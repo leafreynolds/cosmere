@@ -14,6 +14,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.OreBlock;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -40,13 +41,18 @@ public class BlockTagsGen extends BlockTagsProvider
 
 			if (metalType.hasOre())
 			{
-				add(TagsRegistry.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType), metalType.getOreBlock());
+				final OreBlock oreBlock = metalType.getOreBlock();
+				add(TagsRegistry.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType), oreBlock);
+				add(BlockTags.MINEABLE_WITH_PICKAXE, oreBlock);
+				add(BlockTags.NEEDS_IRON_TOOL, oreBlock);
 			}
 
 			//put metal type tag on block
 			MetalBlock metalBlock = metalType.getBlock();
 
 			add(TagsRegistry.Blocks.METAL_BLOCK_TAGS.get(metalType), metalBlock);
+			add(BlockTags.MINEABLE_WITH_PICKAXE, metalBlock);
+			add(BlockTags.NEEDS_IRON_TOOL, metalBlock);
 			//put storage block tag on block, though I don't know what it is for.
 			add(Tags.Blocks.STORAGE_BLOCKS, metalBlock);
 			//put beacon tag on block

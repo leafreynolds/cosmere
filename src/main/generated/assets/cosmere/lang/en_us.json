@@ -176,6 +176,8 @@
   "cosmere.tineye": "Tineye",
   "cosmere.trueself": "Trueself",
   "cosmere.windwhisperer": "Windwhisperer",
+  "death.attack.spiked": "%1$s was not careful with their hemalurgic spike",
+  "death.attack.spiked.player": "%1$s was not careful with their hemalurgic spike while fighting %2$s",
   "effect.cosmere.allomancy_boost": "Allomancy Boost",
   "effect.cosmere.copper_cloud": "Copper Cloud",
   "effect.cosmere.storing_aluminum": "Storing Aluminum",

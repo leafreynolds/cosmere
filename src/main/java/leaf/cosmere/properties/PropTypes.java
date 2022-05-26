@@ -17,7 +17,11 @@ public class PropTypes
 	public static class Blocks
 	{
 		public static final Supplier<Block.Properties> EXAMPLE = () -> Block.Properties.of(Material.GLASS).strength(2.0F, 6.0F);
-		public static final Supplier<Block.Properties> METAL = () -> Block.Properties.of(Material.METAL).strength(2.0F, 6.0F);
+		public static final Supplier<Block.Properties> METAL = () ->
+				Block.Properties
+						.of(Material.METAL)
+						.strength(2.0F, 6.0F)
+						.requiresCorrectToolForDrops();
 	}
 
 	public static class Items
