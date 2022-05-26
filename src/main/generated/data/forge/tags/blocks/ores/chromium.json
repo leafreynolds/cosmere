@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cosmere:chromium_ore"
+    "cosmere:chromium_ore",
+    "cosmere:chromium_ore_deepslate"
   ]
 }

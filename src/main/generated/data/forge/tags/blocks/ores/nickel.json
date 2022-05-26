@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cosmere:nickel_ore"
+    "cosmere:nickel_ore",
+    "cosmere:nickel_ore_deepslate"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cosmere:aluminum_ore"
+    "cosmere:aluminum_ore",
+    "cosmere:aluminum_ore_deepslate"
   ]
 }

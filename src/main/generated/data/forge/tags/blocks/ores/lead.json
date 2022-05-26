@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cosmere:lead_ore"
+    "cosmere:lead_ore",
+    "cosmere:lead_ore_deepslate"
   ]
 }

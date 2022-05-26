@@ -44,7 +44,12 @@ public class BlockTagsGen extends BlockTagsProvider
 				final OreBlock oreBlock = metalType.getOreBlock();
 				add(TagsRegistry.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType), oreBlock);
 				add(BlockTags.MINEABLE_WITH_PICKAXE, oreBlock);
-				add(BlockTags.NEEDS_IRON_TOOL, oreBlock);
+				add(BlockTags.NEEDS_STONE_TOOL, oreBlock);
+
+				final OreBlock oreDeepslateBlock = metalType.getDeepslateOreBlock();
+				add(TagsRegistry.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType), oreDeepslateBlock);
+				add(BlockTags.MINEABLE_WITH_PICKAXE, oreDeepslateBlock);
+				add(BlockTags.NEEDS_IRON_TOOL, oreDeepslateBlock);
 			}
 
 			//put metal type tag on block

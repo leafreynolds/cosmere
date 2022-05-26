@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cosmere:tin_ore"
+    "cosmere:tin_ore",
+    "cosmere:tin_ore_deepslate"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cosmere:zinc_ore"
+    "cosmere:zinc_ore",
+    "cosmere:zinc_ore_deepslate"
   ]
 }
