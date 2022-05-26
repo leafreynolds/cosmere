@@ -9,6 +9,7 @@ import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 
 // food
 public class BendalloyStoreEffect extends FeruchemyEffectBase
@@ -18,27 +19,19 @@ public class BendalloyStoreEffect extends FeruchemyEffectBase
 		super(type, effectType);
 	}
 
-	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
-	{
-		//assume we can apply the effect regardless
-		boolean result = true;
-
-		int k = 50 >> amplifier;
-		if (k > 0)
-		{
-			result = duration % k == 0;
-		}
-
-		return result;
-	}
 
 	@Override
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
+		if (!isActiveTick(entityLivingBaseIn))
+		{
+			return;
+		}
+
 		if (!entityLivingBaseIn.level.isClientSide)
 		{
-			((Player) entityLivingBaseIn).getFoodData().addExhaustion(0.5F * (float) (amplifier + 1));
+			final FoodData foodData = ((Player) entityLivingBaseIn).getFoodData();
+			foodData.setFoodLevel(foodData.getFoodLevel() + 1 + amplifier);
 
 			//todo add tough as nails mod compatibility?
 		}
