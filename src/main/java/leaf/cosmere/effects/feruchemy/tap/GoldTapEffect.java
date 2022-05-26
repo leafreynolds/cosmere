@@ -26,21 +26,23 @@ public class GoldTapEffect extends FeruchemyEffectBase
 		{
 			entityLivingBaseIn.heal(1);
 		}
-
-		//remove harmful effects over time
-		for (MobEffectInstance activeEffect : entityLivingBaseIn.getActiveEffects())
+		else
 		{
-			if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > 5)
+			//remove harmful effects over time
+			for (MobEffectInstance activeEffect : entityLivingBaseIn.getActiveEffects())
 			{
-				MobEffectInstance effectInstance = new MobEffectInstance(
-						activeEffect.getEffect(),
-						Mth.floor(activeEffect.getDuration() * 0.8d),
-						activeEffect.getAmplifier(),
-						activeEffect.isAmbient(),
-						activeEffect.isVisible(),
-						activeEffect.showIcon());
-				entityLivingBaseIn.removeEffectNoUpdate(activeEffect.getEffect());
-				entityLivingBaseIn.addEffect(effectInstance);
+				if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > 5)
+				{
+					MobEffectInstance effectInstance = new MobEffectInstance(
+							activeEffect.getEffect(),
+							Mth.floor(activeEffect.getDuration() * 0.8d),
+							activeEffect.getAmplifier(),
+							activeEffect.isAmbient(),
+							activeEffect.isVisible(),
+							activeEffect.showIcon());
+					entityLivingBaseIn.removeEffectNoUpdate(activeEffect.getEffect());
+					entityLivingBaseIn.addEffect(effectInstance);
+				}
 			}
 		}
 	}
