@@ -34,7 +34,7 @@ public class AllomancyBendalloy extends AllomancyBase
 
 			int range = this.getRange(data);
 
-			List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, true);
+			List<LivingEntity> entitiesToAffect = getLivingEntitiesInRange(data.getLiving(), range, false);
 
 			for (LivingEntity e : entitiesToAffect)
 			{
