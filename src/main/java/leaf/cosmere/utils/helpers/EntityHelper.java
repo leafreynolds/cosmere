@@ -38,17 +38,8 @@ public class EntityHelper
 
 	public static List<Entity> getEntitiesInRange(Entity entity, int range, boolean includeSelf)
 	{
-		AABB areaOfEffect = new AABB(entity.blockPosition());
-		areaOfEffect = areaOfEffect.expandTowards(range, range, range);
-
-		List<Entity> entitiesFound = entity.level.getEntitiesOfClass(Entity.class, areaOfEffect);
-
-		if (!includeSelf)
-		{
-			entitiesFound.remove(entity);
-		}
-
-		return entitiesFound;
+		AABB areaOfEffect = new AABB(entity.blockPosition()).inflate(range, range, range);
+		return entity.level.getEntitiesOfClass(Entity.class, areaOfEffect, e -> includeSelf || e != entity);
 	}
 
 
