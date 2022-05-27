@@ -27,7 +27,7 @@ public class FeruchemyGold extends FeruchemyBase
 		LivingEntity livingEntity = data.getLiving();
 
 		//don't heal more than needed.
-		if (livingEntity.tickCount % 20 != 0 || livingEntity.getHealth() >= livingEntity.getMaxHealth())
+		if (livingEntity.tickCount % 20 != 0)
 		{
 			return;
 		}
@@ -65,6 +65,9 @@ public class FeruchemyGold extends FeruchemyBase
 				return;
 			}
 		}
+
+		if (tapping && livingEntity.getHealth() >= livingEntity.getMaxHealth())
+			return;
 
 		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true);
 		if (metalmind != null)//success
