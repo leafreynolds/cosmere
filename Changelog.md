@@ -2,8 +2,9 @@ The Cosmere Project - For 1.16 Minecraft
 
 B38
 
-Make bendalloy only slow people around you
-
+Make allo bendalloy only slow people around you
+fix feru gold storing not working when health was full.
+fix feru bendalloy for real this time. 
 
 B37
 

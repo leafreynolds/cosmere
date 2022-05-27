@@ -155,6 +155,8 @@ public class ManifestationRegistry
 				return new FeruchemyGold(metalType);
 			case ELECTRUM:
 				return new FeruchemyElectrum(metalType);
+			case BENDALLOY:
+				return new FeruchemyBendalloy(metalType);
 			default:
 				return new FeruchemyBase(metalType);
 		}

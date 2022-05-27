@@ -38,7 +38,7 @@ public class BendalloyTapEffect extends FeruchemyEffectBase
 			else
 			{
 				//add saturation after.
-				foodData.eat(0, i);
+				foodData.eat(1, i);
 			}
 
 			//todo add tough as nails mod compatibility?

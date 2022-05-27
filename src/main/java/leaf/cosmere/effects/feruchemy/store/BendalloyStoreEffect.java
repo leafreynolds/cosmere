@@ -31,9 +31,8 @@ public class BendalloyStoreEffect extends FeruchemyEffectBase
 		if (!entityLivingBaseIn.level.isClientSide)
 		{
 			final FoodData foodData = ((Player) entityLivingBaseIn).getFoodData();
-			foodData.setFoodLevel(foodData.getFoodLevel() + 1 + amplifier);
-
-			//todo add tough as nails mod compatibility?
+			foodData.setFoodLevel(Math.max(0, foodData.getFoodLevel() - (1 + amplifier)));
+			foodData.setSaturation(Math.min(foodData.getFoodLevel(), foodData.getSaturationLevel()));
 		}
 	}
 }
