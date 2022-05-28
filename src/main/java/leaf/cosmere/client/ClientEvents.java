@@ -156,12 +156,13 @@ public class ClientEvents
 		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(cap ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
-			spiritweb.renderSelectedHUD(event.getMatrixStack());
 
-			if (spiritweb.hasAnyPowers())
+			//if (!SpiritwebMenu.instance.isVisible())
 			{
-				SpiritwebMenu.instance.postRender(event, spiritweb);
+				spiritweb.renderSelectedHUD(event.getMatrixStack());
 			}
+
+			SpiritwebMenu.instance.postRender(event, spiritweb);
 		});
 
 	}

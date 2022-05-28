@@ -17,6 +17,10 @@ public class ClientHelper
 	public static TextureAtlasSprite arrowDown;
 	public static TextureAtlasSprite on;
 	public static TextureAtlasSprite off;
+
+	public static TextureAtlasSprite allomancy;
+	public static TextureAtlasSprite feruchemy;
+	public static TextureAtlasSprite surgebinding;
 	private final HashMap<AManifestation, SpriteIconPositioning> manifestationSprites = new HashMap<>();
 	public static TextureAtlasSprite blank;
 	public static SpriteIconPositioning blankSIP;

@@ -86,6 +86,10 @@ public class ClientSetup
 		event.addSprite(ResourceLocationHelper.prefix("icon/on"));
 		event.addSprite(ResourceLocationHelper.prefix("icon/off"));
 
+		event.addSprite(ResourceLocationHelper.prefix("icon/allomancy"));
+		event.addSprite(ResourceLocationHelper.prefix("icon/feruchemy"));
+		event.addSprite(ResourceLocationHelper.prefix("icon/surgebinding"));
+
 		for (final Metals.MetalType metalType : Metals.MetalType.values())
 		{
             if (!metalType.hasAssociatedManifestation())
@@ -114,6 +118,10 @@ public class ClientSetup
 		ClientHelper.arrowDown = map.getSprite(ResourceLocationHelper.prefix("icon/arrow_down"));
 		ClientHelper.on = map.getSprite(ResourceLocationHelper.prefix("icon/on"));
 		ClientHelper.off = map.getSprite(ResourceLocationHelper.prefix("icon/off"));
+
+		ClientHelper.allomancy = map.getSprite(ResourceLocationHelper.prefix("icon/allomancy"));
+		ClientHelper.feruchemy = map.getSprite(ResourceLocationHelper.prefix("icon/feruchemy"));
+		ClientHelper.surgebinding = map.getSprite(ResourceLocationHelper.prefix("icon/surgebinding"));
 
 		ClientHelper.blankSIP = getSIP(map, "blank");
 

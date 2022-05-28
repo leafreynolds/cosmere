@@ -18,14 +18,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientHelper;
+import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
-import leaf.cosmere.network.packets.DeactivateCurrentManifestationsMessage;
 import leaf.cosmere.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.registry.KeybindingRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.math.Vector2;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -35,30 +35,29 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import static leaf.cosmere.registry.KeybindingRegistry.MANIFESTATION_MENU;
 
 public class SpiritwebMenu extends Screen
 {
-
-	private final float TIME_SCALE = 0.01f;
 	final double TEXT_DISTANCE = 30;
 
 	public static final SpiritwebMenu instance = new SpiritwebMenu();
 	private SpiritwebCapability spiritweb = null;
 
 	private float visibility = 0.0f;
-	private boolean canShow = true;
 	private Stopwatch lastChange = Stopwatch.createStarted();
-	public AManifestation switchToPower = null;
-	public ButtonAction doAction = null;
-	public boolean actionUsed = false;
+	public AManifestation selectedManifestation = null;
+	public SidedMenuButton doAction = null;
+	private Manifestations.ManifestationTypes selectedPowerType = Manifestations.ManifestationTypes.ALLOMANCY;
 
-	protected ArrayList<RadialButtonRegion> radialButtonRegions = new ArrayList<>();
+	protected ArrayList<RadialMenuButton> radialMenuButtons = new ArrayList<>();
 	protected ArrayList<SidedMenuButton> sidedMenuButtons = new ArrayList<>();
 
 	protected SpiritwebMenu()
@@ -66,38 +65,17 @@ public class SpiritwebMenu extends Screen
 		super(new TextComponent("Menu"));
 	}
 
-	public boolean raiseVisibility()
+	@Override
+	public boolean isPauseScreen()
 	{
-		if (!canShow())
-		{
-			return false;
-		}
+		return false;
+	}
 
+	public void raiseVisibility()
+	{
+		final float TIME_SCALE = 0.01f;
 		visibility = MathHelper.clamp01(visibility + lastChange.elapsed(TimeUnit.MILLISECONDS) * TIME_SCALE);
 		lastChange = Stopwatch.createStarted();
-		return true;
-	}
-
-	public void decreaseVisibility()
-	{
-		setCanShow(true);
-		visibility = MathHelper.clamp01(visibility - lastChange.elapsed(TimeUnit.MILLISECONDS) * TIME_SCALE);
-		lastChange = Stopwatch.createStarted();
-	}
-
-	public boolean canShow()
-	{
-		return canShow;
-	}
-
-	public void setCanShow(final boolean canShow)
-	{
-		this.canShow = canShow;
-	}
-
-	public boolean isVisible()
-	{
-		return visibility > 0.001;
 	}
 
 	public void setScaledResolution(final int scaledWidth, final int scaledHeight)
@@ -115,110 +93,94 @@ public class SpiritwebMenu extends Screen
 
 	public void postRender(RenderGameOverlayEvent.Post event, SpiritwebCapability spiritweb)
 	{
-		this.spiritweb = spiritweb;
-		final boolean wasVisible = isVisible();
-
-		if (!MANIFESTATION_MENU.isUnbound() && MANIFESTATION_MENU.isDown())
-		{
-			actionUsed = false;
-			if (raiseVisibility())
-			{
-				getMinecraft().mouseHandler.releaseMouse();
-			}
-		}
-		else
-		{
-			if (!actionUsed)
-			{
-				if (switchToPower != null)
-				{
-					//todo open menu sound
-					//ClientSide.instance.playRadialMenu();
-
-					Network.sendToServer(new SetSelectedManifestationMessage(switchToPower));
-				}
-
-				if (doAction != null)
-				{
-					//todo open menu sound
-					//ClientSide.instance.playRadialMenu();
-					switch (doAction)
-					{
-/*                               case ROLL_X:
-                            PacketRotateVoxelBlob pri = new PacketRotateVoxelBlob(Direction.Axis.X, Rotation.CLOCKWISE_90);
-                            ChiselsAndBits.getNetworkChannel().sendToServer(pri);
-                            break;*/
-
-						case INACTIVE:
-							//deactivate current
-							if (spiritweb.canTickSelectedManifestation())
-							{
-								Network.sendToServer(new DeactivateCurrentManifestationsMessage());
-							}
-							break;
-						case ACTIVE:
-							//activate current
-							if (!spiritweb.canTickSelectedManifestation())
-							{
-								//Network.sendToServer(new ToggleManifestationMessage());
-							}
-							break;
-						case MODE_INCREASE:
-							//change mode to positive
-							Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), 1));
-							break;
-						case MODE_DECREASE:
-							//change mode to negative.
-							Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), -1));
-							break;
-					}
-				}
-			}
-
-			actionUsed = true;
-			decreaseVisibility();
-		}
-
-		if (isVisible())
+		if (KeybindingRegistry.MANIFESTATION_MENU.consumeClick())
 		{
 			final Window window = event.getWindow();
 			init(Minecraft.getInstance(), window.getGuiScaledWidth(), window.getGuiScaledHeight());
 			setScaledResolution(window.getGuiScaledWidth(), window.getGuiScaledHeight());
+			this.spiritweb = spiritweb;
+			getMinecraft().screen = SpiritwebMenu.instance;
+			getMinecraft().mouseHandler.releaseMouse();
+			visibility = 0;
+			lastChange = Stopwatch.createStarted();
 
-			if (!wasVisible)
-			{
-				getMinecraft().screen = SpiritwebMenu.instance;
-				getMinecraft().mouseHandler.releaseMouse();
-			}
+			selectedManifestation = spiritweb.manifestation();
 
-			if (getMinecraft().mouseHandler.isMouseGrabbed())
-			{
-				KeyMapping.releaseAll();
-			}
+			SetupButtons();
 		}
-		else
+		if (KeybindingRegistry.MANIFESTATION_MENU.isDown())
 		{
-			if (wasVisible)
-			{
-				getMinecraft().mouseHandler.grabMouse();
-			}
+			raiseVisibility();
 		}
+	}
+
+	@Override
+	public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers)
+	{
+		if (KeybindingRegistry.MANIFESTATION_MENU.matches(pKeyCode, pScanCode))
+		{
+			for (RadialMenuButton radialMenuButton : radialMenuButtons)
+			{
+				if (radialMenuButton.highlighted)
+				{
+					Network.sendToServer(new SetSelectedManifestationMessage(radialMenuButton.manifestation));
+					break;
+				}
+			}
+
+			CloseScreen();
+		}
+		return super.keyReleased(pKeyCode, pScanCode, pModifiers);
 	}
 
 	@Override
 	public boolean mouseClicked(final double mouseX, final double mouseY, final int button)
 	{
-		this.visibility = 0f;
-		canShow = false;
-		this.minecraft.setScreen(null);
+		for (RadialMenuButton radialMenuButton : radialMenuButtons)
+		{
+			if (radialMenuButton.highlighted)
+			{
+				if (button == 0)
+				{
+					Network.sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, 1));
+				}
+				else
+				{
+					Network.sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, -1));
+				}
+				return true;
+			}
+		}
+		for (SidedMenuButton sidedMenuButton : sidedMenuButtons)
+		{
+			if (sidedMenuButton.highlighted)
+			{
+				if (sidedMenuButton.powerType != -1)
+				{
+					selectedPowerType = Manifestations.ManifestationTypes.valueOf(doAction.powerType).get();
+					SetupButtons();
+				}
+				else if (sidedMenuButton.action != null)
+				{
+					//do other action
+				}
 
+				return true;
+			}
+		}
+		CloseScreen();
+		return true;
+	}
+
+	private void CloseScreen()
+	{
+		this.minecraft.setScreen(null);
 		if (this.minecraft.screen == null)
 		{
 			this.minecraft.setWindowActive(true);
 			this.minecraft.getSoundManager().resume();
 			this.minecraft.mouseHandler.grabMouse();
 		}
-		return true;
 	}
 
 	private static class SidedMenuButton
@@ -229,6 +191,7 @@ public class SpiritwebMenu extends Screen
 		public boolean highlighted;
 
 		public final ButtonAction action;
+		public final int powerType;
 		public TextureAtlasSprite icon;
 		public int color;
 		public String name;
@@ -244,6 +207,7 @@ public class SpiritwebMenu extends Screen
 		{
 			this.name = name;
 			this.action = action;
+			this.powerType = -1;
 			x1 = x;
 			x2 = x + 18;
 			y1 = y;
@@ -255,25 +219,26 @@ public class SpiritwebMenu extends Screen
 
 		public SidedMenuButton(
 				final String name,
-				final ButtonAction action,
+				final int powerType,
 				final double x,
 				final double y,
-				final int col,
+				final TextureAtlasSprite ico,
 				final Direction textSide)
 		{
 			this.name = name;
-			this.action = action;
+			this.action = null;
+			this.powerType = powerType;
 			x1 = x;
 			x2 = x + 18;
 			y1 = y;
 			y2 = y + 18;
-			color = col;
+			icon = ico;
+			color = 0xffffff;
 			this.textSide = textSide;
 		}
-
 	}
 
-	static class RadialButtonRegion
+	static class RadialMenuButton
 	{
 
 		public final AManifestation manifestation;
@@ -281,7 +246,7 @@ public class SpiritwebMenu extends Screen
 		public double centerY;
 		public boolean highlighted;
 
-		public RadialButtonRegion(final AManifestation manifestation)
+		public RadialMenuButton(final AManifestation manifestation)
 		{
 			this.manifestation = manifestation;
 		}
@@ -290,22 +255,51 @@ public class SpiritwebMenu extends Screen
 
 	protected void SetupButtons()
 	{
-		sidedMenuButtons.add(spiritweb.canTickSelectedManifestation()
-		                     ? new SidedMenuButton("gui.cosmere.other.inactive", ButtonAction.INACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.off, Direction.WEST)
-		                     : new SidedMenuButton("gui.cosmere.other.active", ButtonAction.ACTIVE, TEXT_DISTANCE + 20, -50, ClientHelper.on, Direction.WEST));
+		radialMenuButtons.clear();
+		sidedMenuButtons.clear();
 
-		sidedMenuButtons.add(new SidedMenuButton("gui.cosmere.mode.increase", ButtonAction.MODE_INCREASE, TEXT_DISTANCE * 2, -10, ClientHelper.arrowUp, Direction.EAST));
-		sidedMenuButtons.add(new SidedMenuButton("gui.cosmere.mode.decrease", ButtonAction.MODE_DECREASE, TEXT_DISTANCE * 2, 10, ClientHelper.arrowDown, Direction.EAST));
+		final List<AManifestation> availableManifestations = spiritweb.getAvailableManifestations();
 
-
-		for (AManifestation manifestation : spiritweb.getAvailableManifestations())
+		if (availableManifestations.size() <= 16)
 		{
-			radialButtonRegions.add(new RadialButtonRegion(manifestation));
+			for (AManifestation manifestation : availableManifestations)
+			{
+				radialMenuButtons.add(new RadialMenuButton(manifestation));
+			}
+		}
+		else
+		{
+			Set<Manifestations.ManifestationTypes> foundPowerTypes = new HashSet<>();
+
+			for (AManifestation manifestation : availableManifestations)
+			{
+				if (manifestation.getManifestationType() == selectedPowerType)
+				{
+					radialMenuButtons.add(new RadialMenuButton(manifestation));
+				}
+				foundPowerTypes.add(manifestation.getManifestationType());
+			}
+
+			for (Manifestations.ManifestationTypes foundPowerType : foundPowerTypes)
+			{
+				final int index = foundPowerType.getID() - 1;
+				final double v = TEXT_DISTANCE * index;
+				sidedMenuButtons.add(
+						new SidedMenuButton(
+								foundPowerType.getName(),
+								foundPowerType.getID(),
+								v - ((TEXT_DISTANCE * foundPowerTypes.size()) / 2) + 5,
+								-75,
+								foundPowerType.getSprite(),
+								Direction.UP)
+				);
+
+			}
 		}
 	}
 
 	@Override
-	public void render(final PoseStack matrixStack, final int mouseX, final int mouseY, final float partialTicks)
+	public void render(final @NotNull PoseStack matrixStack, final int mouseX, final int mouseY, final float partialTicks)
 	{
 		if (spiritweb == null)
 		{
@@ -321,9 +315,7 @@ public class SpiritwebMenu extends Screen
 
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
-		//RenderSystem.disableAlphaTest();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-		//RenderSystem.shadeModel(GL11.GL_SMOOTH);
 		final Tesselator tessellator = Tesselator.getInstance();
 		final BufferBuilder buffer = tessellator.getBuilder();
 
@@ -335,12 +327,7 @@ public class SpiritwebMenu extends Screen
 		final double middle_x = width / 2f;
 		final double middle_y = height / 2f;
 
-		radialButtonRegions.clear();
-		sidedMenuButtons.clear();
-
-		SetupButtons();
-
-		switchToPower = null;
+		selectedManifestation = null;
 		doAction = null;
 
 		//render the button backgrounds
@@ -370,15 +357,15 @@ public class SpiritwebMenu extends Screen
 		//draw sided button strings
 		renderSidedButtonStrings(matrixStack, middle_x, middle_y);
 		//do extra text info stuff
-		renderAnyExtraInfoTexts(matrixStack, (int) middle_y);
+		renderAnyExtraInfoTexts(matrixStack, (int) middle_x, (int) middle_y);
 
 		matrixStack.popPose();
 	}
 
-	private void renderAnyExtraInfoTexts(PoseStack matrixStack, int middle_y)
+	private void renderAnyExtraInfoTexts(PoseStack matrixStack, int middle_x, int middle_y)
 	{
-		int x = 10;
-		final int[] y = {middle_y / 2};
+		int leftSideX = 10;
+		final int[] y = {(int) middle_y / 2};
 
 		spiritweb.METALS_INGESTED.forEach((key, value) ->
 		{
@@ -386,10 +373,23 @@ public class SpiritwebMenu extends Screen
 			{
 				//todo localisation check
 				final String text = key.getName() + ": " + value;
-				font.drawShadow(matrixStack, text, x, y[0], 0xffffffff);
+				font.drawShadow(matrixStack, text, leftSideX, y[0], 0xffffffff);
 				y[0] += 10;
 			}
 		});
+
+		if (selectedManifestation == null)
+		{
+			return;
+		}
+
+		y[0] = (int) middle_y / 2;
+		int rightSideX = middle_x + 35;
+
+		font.drawShadow(matrixStack, I18n.get(selectedManifestation.translation().getKey()), rightSideX, y[0], 0xffffffff);
+		//todo mode translation
+		font.drawShadow(matrixStack, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
+
 	}
 
 	private void renderSidedButtonStrings(PoseStack matrixStack, double middle_x, double middle_y)
@@ -423,7 +423,7 @@ public class SpiritwebMenu extends Screen
 
 	private void renderRadialButtonStrings(PoseStack matrixStack, int middle_x, int middle_y)
 	{
-		for (final RadialButtonRegion button : radialButtonRegions)
+		for (final RadialMenuButton button : radialMenuButtons)
 		{
 			//but only if that button is highlighted
 			if (button.highlighted)
@@ -453,7 +453,7 @@ public class SpiritwebMenu extends Screen
 	{
 		for (final SidedMenuButton button : sidedMenuButtons)
 		{
-			final float f = switchToPower == null ? 1.0f : 0.5f;
+			final float f = selectedManifestation == null ? 1.0f : 0.5f;
 			final float a = 1.0f;
 
 			final double u1 = 0;
@@ -481,7 +481,7 @@ public class SpiritwebMenu extends Screen
 
 	private void renderRadialButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
 	{
-		for (final RadialButtonRegion mnuRgn : radialButtonRegions)
+		for (final RadialMenuButton mnuRgn : radialMenuButtons)
 		{
 			final double x = mnuRgn.centerX;
 			final double y = mnuRgn.centerY;
@@ -517,13 +517,22 @@ public class SpiritwebMenu extends Screen
 		for (final SidedMenuButton button : sidedMenuButtons)
 		{
 			final float a = 0.5f;
-			float f = 0f;
+			float f;
 
 			if (button.x1 <= mouseVecX && button.x2 >= mouseVecX && button.y1 <= mouseVecY && button.y2 >= mouseVecY)
 			{
 				f = 1;
 				button.highlighted = true;
-				doAction = button.action;
+				doAction = button;
+			}
+			else
+			{
+				button.highlighted = false;
+
+				//highlight button, but don't draw string unless mouse over
+				f = selectedPowerType.getID() == button.powerType
+				    ? 1
+				    : 0;
 			}
 
 			//set first triangle
@@ -537,26 +546,27 @@ public class SpiritwebMenu extends Screen
 
 	private void renderRadialButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
 	{
-		if (!radialButtonRegions.isEmpty())
+		if (!radialMenuButtons.isEmpty())
 		{
 
 			final float ring_inner_edge = -10;
 			final float ring_outer_edge = -50;
 
 			// todo test if I can get down to one button only
-			final int totalButtons = radialButtonRegions.size();
+			final int totalButtons = radialMenuButtons.size();
 
 			Vector2 innerEdge;
 			Vector2 outerEdge;
 
-			boolean smallMode = radialButtonRegions.size() == 2;
+			boolean smallMode = radialMenuButtons.size() == 2;
 
 			innerEdge = new Vector2(0, ring_inner_edge);
 			outerEdge = new Vector2(0, ring_outer_edge);
 
-
-			for (final RadialButtonRegion region : radialButtonRegions)
+			int i = radialMenuButtons.size() - 1;
+			while (i >= 0)
 			{
+				RadialMenuButton region = radialMenuButtons.get(i);
 				//left side inner point
 				double x1m1;
 				double y1m1;
@@ -589,9 +599,6 @@ public class SpiritwebMenu extends Screen
 					y1m2 = outerEdge.y;
 					outerEdge.Rotate(60);
 
-					//4
-					x2m2 = outerEdge.x;
-					y2m2 = outerEdge.y;
 				}
 				else
 				{
@@ -611,11 +618,11 @@ public class SpiritwebMenu extends Screen
 					//right side inner point
 					x1m2 = innerEdge.x;
 					y1m2 = innerEdge.y;
-					//right side outer point
-					x2m2 = outerEdge.x;
-					y2m2 = outerEdge.y;
 
 				}
+				//4 or right side outer point
+				x2m2 = outerEdge.x;
+				y2m2 = outerEdge.y;
 
 				//the center of a regular polygon can be found by adding up
 				// all corner positions and divide by the total count
@@ -642,28 +649,54 @@ public class SpiritwebMenu extends Screen
 				//if (begin_rad <= mouseAngle && mouseAngle <= end_rad && showHighlight)
 				if (showHighlight)
 				{
-					f = 1;
+					f = 0.1f;
 					region.highlighted = true;
-					switchToPower = region.manifestation;
+					selectedManifestation = region.manifestation;
+				}
+				else
+				{
+					region.highlighted = false;
 				}
 
+				float lerpPositive = 0;
+				float lerpNegative = 0;
+
+				if (region.manifestation != null)
+				{
+					int mode = region.manifestation.getMode(spiritweb);
+					int modeMin = region.manifestation.modeMin(spiritweb);
+					int modeMax = region.manifestation.modeMax(spiritweb);
+
+					if (mode > 0)
+					{
+						lerpPositive = MathHelper.InverseLerp(0, modeMax, mode) - 0.1f;
+					}
+					else if (mode < 0)
+					{
+						lerpNegative = MathHelper.InverseLerp(0, Math.abs(modeMin), Math.abs(mode)) - 0.1f;
+					}
+				}
+
+				float r = lerpPositive + f;
+				float g = f;
+				float b = lerpNegative + f;
 
 				if (smallMode)
 				{
-					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
-					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
-					buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
-					buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
+					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, a).endVertex();
+					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, a).endVertex();
 				}
 				else
 				{
 					//set the square pos
-					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(f, f, f, a).endVertex();
-					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(f, f, f, a).endVertex();
-					buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(f, f, f, a).endVertex();
-					buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(f, f, f, a).endVertex();
+					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, a).endVertex();
+					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, a).endVertex();
 				}
 
+				buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(r, g, b, a).endVertex();
+
+				i--;
 			}
 		}
 	}

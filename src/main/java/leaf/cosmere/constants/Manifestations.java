@@ -4,8 +4,10 @@
 
 package leaf.cosmere.constants;
 
+import leaf.cosmere.client.ClientHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -88,6 +90,24 @@ public class Manifestations
 		public String getName()
 		{
 			return this.name().toLowerCase(Locale.ROOT);
+		}
+
+		public TextureAtlasSprite getSprite()
+		{
+			switch (this)
+			{
+				case ALLOMANCY:
+					return ClientHelper.allomancy;
+				case FERUCHEMY:
+					return ClientHelper.feruchemy;
+				case RADIANT:
+					return ClientHelper.surgebinding;
+				case ELANTRIAN:
+					break;
+				case AWAKENER:
+					break;
+			}
+			return null;
 		}
 	}
 
