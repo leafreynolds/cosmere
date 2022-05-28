@@ -255,6 +255,9 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 	@SubscribeEvent
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
+		if (event.getEntityLiving().level.isClientSide())
+			return;
+
 		if (event.getSource().getEntity() instanceof Player playerEntity)
 		{
 			SpiritwebCapability.get(playerEntity).ifPresent(iSpiritweb ->
