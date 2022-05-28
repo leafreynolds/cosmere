@@ -75,6 +75,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 	//detect if capability has been set up yet
 	private boolean didSetup = false;
+	private boolean hasBeenInitialized = false;
 
 	private final LivingEntity livingEntity;
 
@@ -120,6 +121,7 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		CompoundTag nbt = new CompoundTag();
 
+		nbt.putBoolean("assigned_powers", hasBeenInitialized);
 		nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
 		nbt.putInt("stored_breaths", biochromaticBreathStored);
 		nbt.putInt("stored_stormlight", stormlightStored);
@@ -151,7 +153,8 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void deserializeNBT(CompoundTag nbt)
 	{
-		CompoundTag modeNBT = nbt.getCompound("manifestation_modes");;
+		hasBeenInitialized = nbt.getBoolean("assigned_powers");
+		CompoundTag modeNBT = nbt.getCompound("manifestation_modes");
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			final String manifestationLoc = manifestation.getRegistryName().toString();
@@ -408,6 +411,16 @@ public class SpiritwebCapability implements ISpiritweb
 		selectedManifestation = manifestation;
 	}
 
+	public boolean hasBeenInitialized()
+	{
+		return hasBeenInitialized;
+	}
+
+	public void setHasBeenInitialized()
+	{
+		hasBeenInitialized = true;
+	}
+
 	public boolean hasAnyPowers()
 	{
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
@@ -495,6 +508,8 @@ public class SpiritwebCapability implements ISpiritweb
                 manifestationAttribute.applyNonPersistentModifier(attributeModifier);*/
 
 		}
+
+		hasBeenInitialized = true;
 	}
 
 	@Override

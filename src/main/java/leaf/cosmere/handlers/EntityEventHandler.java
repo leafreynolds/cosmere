@@ -12,7 +12,6 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
-import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.core.Direction;
@@ -20,8 +19,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Monster;
@@ -44,7 +41,6 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -71,7 +67,7 @@ public class EntityEventHandler
 
 			//find out if any innate powers exist on the entity first
 			//if they do
-			if (spiritweb.hasAnyPowers())
+			if (spiritweb.hasBeenInitialized() || spiritweb.hasAnyPowers())
 			{
 				//then skip
 				//no need to give them extras just for rejoining the world.
@@ -85,23 +81,6 @@ public class EntityEventHandler
 				{
 					//give random power
 					giveEntityStartingManifestation(livingEntity, spiritweb);
-
-
-					for (Metals.MetalType metalType : Metals.MetalType.values())
-					{
-						//check for others
-						final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
-						if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
-						{
-							AttributeInstance newPlayerAttribute = ((Player) eventEntity).getAttribute(metalRelatedAttribute.get());
-
-							if (newPlayerAttribute != null)
-							{
-								newPlayerAttribute.setBaseValue(newPlayerAttribute.getBaseValue());
-							}
-
-						}
-					}
 				}
 			}
 			else if (eventEntity instanceof AbstractVillager
@@ -117,6 +96,8 @@ public class EntityEventHandler
 				}
 
 			}
+
+			spiritweb.setHasBeenInitialized();
 		});
 
 	}
@@ -205,7 +186,7 @@ public class EntityEventHandler
 			{
 				metalType = Metals.MetalType.GOLD;
 			}
-            /*else if (handItem == Items.COPPER_NUGGET)//todo copper 1.18
+            /*else if (handItem == Items.COPPER_NUGGET)//todo if copper ever has nuggets
             {
                 metalType = Metals.MetalType.COPPER;
             }*/
