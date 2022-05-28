@@ -955,7 +955,8 @@ dcbe0dd7a0ee71d3369df355128a650b44d03fd1 data/forge/tags/items/storage_blocks/st
 ae07d8a5dc1b927d44e31a4b974a18a1ff70b79b data/forge/tags/items/storage_blocks/zinc.json
 e41ca9272ddd7549f0065c670b382c34c92d81bb data/minecraft/tags/blocks/beacon_base_blocks.json
 8e54c7bc31ce3b75e637dee823f964ad5abc5596 data/minecraft/tags/blocks/dragon_immune.json
+4618f8470f32ec0298a79e361cf984bda2cf6b26 data/minecraft/tags/blocks/mineable/axe.json
 e0833578e138951e4cdc57c013a4fa95b8d6c39c data/minecraft/tags/blocks/mineable/pickaxe.json
 b8ae9405b2ede5a77424b927d0fc24a3f53be8fa data/minecraft/tags/blocks/needs_iron_tool.json
-f586e1b29fa4c5e6dd56092f75a5ea1db7e0e9e1 data/minecraft/tags/blocks/needs_stone_tool.json
+10d0b6dac23908b61ab208e5e0c1e001172efbb4 data/minecraft/tags/blocks/needs_stone_tool.json
 8e54c7bc31ce3b75e637dee823f964ad5abc5596 data/minecraft/tags/blocks/wither_immune.json
