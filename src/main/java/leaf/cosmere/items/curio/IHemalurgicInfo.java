@@ -107,8 +107,8 @@ public interface IHemalurgicInfo
 						AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
 						if (manifestation != null)
 						{
-							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 							return;
 						}
 
@@ -123,8 +123,8 @@ public interface IHemalurgicInfo
 						AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
 						if (manifestation != null)
 						{
-							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 							return;
 						}
 					}
@@ -145,8 +145,8 @@ public interface IHemalurgicInfo
 						//then try steal it
 						if (manifestation != null)
 						{
-							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 							return;
 						}
 					}
@@ -155,8 +155,8 @@ public interface IHemalurgicInfo
 					{
 						for (AManifestation manifestation : manifestationsFound)
 						{
-							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb), entityKilled.getUUID());
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 						}
 					}
 					break;
