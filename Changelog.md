@@ -1,10 +1,21 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B39
+
+Fix hemalurgic spikes not stealing powers properly
+
+
 B38
 
 Make allo bendalloy only slow people around you
 fix feru gold storing not working when health was full.
 fix feru bendalloy for real this time. 
+Better menu handling for over 16 powers
+Better menu information for what powers are active.
+fix mobs getting reinitialized on being reloaded, gaining powers when they shouldn't.
+fix metalworking table not dropping when broken
+fix hemalurgy not actually taking powers from player entities.
+
 
 B37
 
