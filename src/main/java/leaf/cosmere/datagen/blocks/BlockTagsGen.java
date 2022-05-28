@@ -32,6 +32,10 @@ public class BlockTagsGen extends BlockTagsProvider
 		add(TagsRegistry.Blocks.WITHER_PROOF, BlocksRegistry.GEM_BLOCK.get());
 		add(BlockTags.BEACON_BASE_BLOCKS, BlocksRegistry.GEM_BLOCK.get());
 
+		add(BlockTags.NEEDS_STONE_TOOL,BlocksRegistry.METALWORKING_TABLE.get());
+		add(BlockTags.MINEABLE_WITH_AXE,BlocksRegistry.METALWORKING_TABLE.get());
+
+
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
 			if (!metalType.hasMaterialItem())
