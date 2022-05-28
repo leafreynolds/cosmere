@@ -107,6 +107,7 @@ public interface IHemalurgicInfo
 						AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
 						if (manifestation != null)
 						{
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
 							return;
 						}
@@ -122,6 +123,7 @@ public interface IHemalurgicInfo
 						AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
 						if (manifestation != null)
 						{
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
 							return;
 						}
@@ -133,16 +135,17 @@ public interface IHemalurgicInfo
 					{
 						//Steals any one power
 						//todo decide if we just pick a random power
-						//then try steal it
-						//todo decide if prefer allomancy over feruchemy?
 						AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
 						if (manifestation == null)
 						{
+							//todo decide if prefer allomancy over feruchemy?
 							manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
 						}
 
+						//then try steal it
 						if (manifestation != null)
 						{
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb) * 0.7f, entityKilled.getUUID());
 							return;
 						}
@@ -152,6 +155,7 @@ public interface IHemalurgicInfo
 					{
 						for (AManifestation manifestation : manifestationsFound)
 						{
+							entityKilledSpiritWeb.removeManifestation(manifestation);
 							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb), entityKilled.getUUID());
 						}
 					}
