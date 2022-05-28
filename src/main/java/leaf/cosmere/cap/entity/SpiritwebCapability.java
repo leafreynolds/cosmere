@@ -443,11 +443,12 @@ public class SpiritwebCapability implements ISpiritweb
 
 			if (manifestationAttribute.getValue() > 5)
 			{
+				setHasBeenInitialized();
 				return true;
 			}
 		}
 
-
+		setHasBeenInitialized();
 		return false;
 	}
 
