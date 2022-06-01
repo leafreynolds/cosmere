@@ -351,12 +351,6 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 		return true;
 	}
 
-	@Override
-	public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack)
-	{
-		//has to be a conscious decision to stab yourself
-		return true;
-	}
 
 	@Override
 	public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
