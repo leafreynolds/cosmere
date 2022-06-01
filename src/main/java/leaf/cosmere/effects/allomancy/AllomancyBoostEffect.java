@@ -29,7 +29,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 					addAttributeModifier(
 							attributeRegistered.getValue().get(),
 							"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
-							0.334D,
+							1.334D,
 							AttributeModifier.Operation.MULTIPLY_TOTAL);
 				});
 	}
