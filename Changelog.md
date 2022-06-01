@@ -1,5 +1,14 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B40
+
+Curio spike and bracelet rendering again! Yay :D 
+Allomancy boost fix. Was accidentally making weaker instead of stronger.
+Allow tapping aluminum at a larger rate, so it's faster to drain and re-use.
+Fix spikes not auto equipping from mods like corail tombstone.
+Adding more stuff to the default iron/steel whitelist
+
+
 B39
 
 Fix hemalurgic spikes not stealing powers properly
