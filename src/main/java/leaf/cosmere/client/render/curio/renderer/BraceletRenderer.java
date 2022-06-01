@@ -3,7 +3,6 @@ package leaf.cosmere.client.render.curio.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.client.render.curio.CuriosLayerDefinitions;
 import leaf.cosmere.client.render.curio.model.BraceletModel;
-import leaf.cosmere.client.render.curio.model.SpikeModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
