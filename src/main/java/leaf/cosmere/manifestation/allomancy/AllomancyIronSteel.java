@@ -429,6 +429,9 @@ public class AllomancyIronSteel extends AllomancyBase
 
 		//add the obvious stuff
 		s_whiteList.add("lightning_rod");
+		s_whiteList.add("netherite");
+		s_whiteList.add("ancient_debris");
+		s_whiteList.add("hopper");
 
 		String[] metalNames = Arrays.stream(Metals.MetalType.values()).map(Metals.MetalType::getName).toArray(String[]::new);
 
