@@ -17,7 +17,7 @@ public class FeruchemyAluminum extends FeruchemyBase
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
-		return -1;
+		return -10;
 	}
 
 	@Override
