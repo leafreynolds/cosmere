@@ -5,6 +5,7 @@
 package leaf.cosmere.datagen.language;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
@@ -228,11 +229,25 @@ public class EngLangGen extends LanguageProvider
 			add(effect.get().getDescriptionId(), StringHelper.fixCapitalisation(effect.get().getRegistryName().getPath()));
 		}
 
+		//curios
+
+		add("curios.identifier.feet", "Feet");
+		add("curios.identifier.legs", "Legs");
+
 		//Sound Schemes
 
 		//Configs
 
 		//Commands
+		add(POWER_INVALID, "Invalid power");
+		add(POWER_SET_SUCCESS, "Successfully set power to: %s");
+		add(POWER_SET_FAIL, "Failed to update power");
+		add(POWER_MODE_SET, "Mode set to: %s");
+		add(POWER_ACTIVE, "Power now active: %s");
+		add(POWER_INACTIVE, "Power now inactive: %s");
+
+		add(POWERS_FOUND, "Powers found for: %s \n");
+		add(Constants.Strings.SET_EYE_HEIGHT_SUCCESS, "Set eye height to %s");
 
 
 		//Tooltips
@@ -273,14 +288,6 @@ public class EngLangGen extends LanguageProvider
 
 
 		//powers
-		add(POWER_INVALID, "Invalid power");
-		add(POWER_SET_SUCCESS, "Successfully set power to: %s");
-		add(POWER_SET_FAIL, "Failed to update power");
-		add(POWER_MODE_SET, "Mode set to: %s");
-		add(POWER_ACTIVE, "Power now active: %s");
-		add(POWER_INACTIVE, "Power now inactive: %s");
-
-		add(POWERS_FOUND, "Powers found for: %s \n");
 		add(CONTAINED_POWERS_FOUND, "Hemalurgic Charge:");
 
 

@@ -71,4 +71,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	boolean adjustIngestedMetal(Metals.MetalType metalType, int amountToAdjust, boolean doAdjust);
 
 	void transferFrom(ISpiritweb oldSpiritWeb);
+
+	int getEyeHeight();
+	void setEyeHeight(int eyeHeight);
 }

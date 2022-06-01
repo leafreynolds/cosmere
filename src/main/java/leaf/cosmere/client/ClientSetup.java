@@ -6,6 +6,10 @@ package leaf.cosmere.client;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.client.gui.SpriteIconPositioning;
+import leaf.cosmere.client.render.curio.CurioRenderers;
+import leaf.cosmere.client.render.curio.CuriosLayerDefinitions;
+import leaf.cosmere.client.render.curio.model.BraceletModel;
+import leaf.cosmere.client.render.curio.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.store.DuraluminStoreEffect;
 import leaf.cosmere.manifestation.AManifestation;
@@ -17,7 +21,6 @@ import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
@@ -39,6 +42,16 @@ import java.util.Locale;
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup
 {
+
+	@SubscribeEvent
+	public static void registerLayers(final EntityRenderersEvent.RegisterLayerDefinitions evt)
+	{
+		evt.registerLayerDefinition(CuriosLayerDefinitions.SPIKE, SpikeModel::createLayer);
+		evt.registerLayerDefinition(CuriosLayerDefinitions.BRACELET, BraceletModel::createLayer);
+		//evt.registerLayerDefinition(CuriosLayerDefinitions.NECKLACE, NecklaceModel::createLayer);
+	}
+
+
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
@@ -51,15 +64,17 @@ public class ClientSetup
 		//special thank you to @Random on the forge discord who told me that you have to tell the block it has transparency
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-            if (!metalType.hasOre())
-            {
-                continue;
-            }
+			if (!metalType.hasOre())
+			{
+				continue;
+			}
 
 			RenderType cutoutMipped = RenderType.cutoutMipped();
 			ItemBlockRenderTypes.setRenderLayer(metalType.getOreBlock(), cutoutMipped);
 			ItemBlockRenderTypes.setRenderLayer(metalType.getDeepslateOreBlock(), cutoutMipped);
 		}
+
+		CurioRenderers.register();
 
 		LogHelper.info("Client setup complete!");
 	}
@@ -92,10 +107,10 @@ public class ClientSetup
 
 		for (final Metals.MetalType metalType : Metals.MetalType.values())
 		{
-            if (!metalType.hasAssociatedManifestation())
-            {
-                continue;
-            }
+			if (!metalType.hasAssociatedManifestation())
+			{
+				continue;
+			}
 
 			String metalToLower = metalType.toString().toLowerCase(Locale.ROOT);
 			event.addSprite(ResourceLocationHelper.prefix("icon/allomancy/" + metalToLower));
@@ -127,10 +142,10 @@ public class ClientSetup
 
 		for (final Metals.MetalType metalType : Metals.MetalType.values())
 		{
-            if (!metalType.hasAssociatedManifestation())
-            {
-                continue;
-            }
+			if (!metalType.hasAssociatedManifestation())
+			{
+				continue;
+			}
 
 			//get allomantic version
 			AManifestation allo = ManifestationRegistry.ALLOMANCY_POWERS.get(metalType).get();
@@ -141,7 +156,6 @@ public class ClientSetup
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private static SpriteIconPositioning getSIP(final TextureAtlas map, final String path)
 	{
 		final SpriteIconPositioning sip = new SpriteIconPositioning();

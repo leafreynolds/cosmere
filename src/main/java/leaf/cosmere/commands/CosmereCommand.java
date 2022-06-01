@@ -11,6 +11,7 @@ package leaf.cosmere.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.commands.arguments.ManifestationsArgumentType;
+import leaf.cosmere.commands.subcommands.EyeCommand;
 import leaf.cosmere.commands.subcommands.ManifestationCommand;
 import leaf.cosmere.commands.subcommands.TestCommand;
 import net.minecraft.commands.CommandSourceStack;
@@ -25,7 +26,8 @@ public class CosmereCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal(Cosmere.MODID)
-				.then(TestCommand.register(dispatcher))
+				//.then(TestCommand.register(dispatcher))
+				.then(EyeCommand.register(dispatcher))
 				.then(ManifestationCommand.register(dispatcher))
 		);
 	}

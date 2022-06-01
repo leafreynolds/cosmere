@@ -90,6 +90,7 @@ public class SpiritwebCapability implements ISpiritweb
 	//stormlight stored
 
 	private int stormlightStored = 0;
+	private int eyeHeight = 0;
 
 	//metals ingested
 	public final Map<Metals.MetalType, Integer> METALS_INGESTED =
@@ -125,6 +126,7 @@ public class SpiritwebCapability implements ISpiritweb
 		nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
 		nbt.putInt("stored_breaths", biochromaticBreathStored);
 		nbt.putInt("stored_stormlight", stormlightStored);
+		nbt.putInt("eye_height", eyeHeight);
 
 		final CompoundTag modeNBT = new CompoundTag();
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
@@ -167,7 +169,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		biochromaticBreathStored = nbt.getInt("stored_breaths");
 		stormlightStored = nbt.getInt("stored_stormlight");
-
+		eyeHeight = nbt.getInt("eye_height");
 
 		final CompoundTag ingestedMetals = nbt.getCompound("ingested_metals");
 		for (Metals.MetalType metalType : Metals.MetalType.values())
@@ -309,6 +311,18 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			METALS_INGESTED.put(metalType, oldWeb.METALS_INGESTED.get(metalType));
 		}
+	}
+
+	@Override
+	public int getEyeHeight()
+	{
+		return eyeHeight;
+	}
+
+	@Override
+	public void setEyeHeight(int eyeHeight)
+	{
+		this.eyeHeight = eyeHeight;
 	}
 
 	@OnlyIn(Dist.CLIENT)

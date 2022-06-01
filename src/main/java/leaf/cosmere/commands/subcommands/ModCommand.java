@@ -5,24 +5,32 @@
 package leaf.cosmere.commands.subcommands;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class ModCommand implements Command<CommandSourceStack>
 {
-	private int permLevel = 2;
+	public ModCommand()	{	}
 
-	public ModCommand()
+	//I'm not entirely certain this works.
+	public static Collection<ServerPlayer> getPlayers(CommandContext<CommandSourceStack> context, int numOfParams) throws CommandSyntaxException
 	{
-	}
-
-	public ModCommand(int level)
-	{
-		this.permLevel = level;
-	}
-
-	public boolean canExecute(CommandSourceStack source) throws CommandSyntaxException
-	{
-		return source.hasPermission(permLevel);
+		Collection<ServerPlayer> players = new ArrayList<>();
+		final String[] s = context.getInput().split(" ");
+		if (s.length <= numOfParams)
+		{
+			players.add(context.getSource().getPlayerOrException());
+		}
+		else
+		{
+			players = EntityArgument.getPlayers(context, "target");
+		}
+		return players;
 	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -23,16 +24,21 @@ public class TagsRegistry
 
 	public static class Items
 	{
-		public static final TagKey<Item> CURIO_ANY = makeItem("curios", "curio");
-		public static final TagKey<Item> CURIO_BACK = makeItem("curios", "back");
-		public static final TagKey<Item> CURIO_BELT = makeItem("curios", "belt");
-		public static final TagKey<Item> CURIO_BODY = makeItem("curios", "body");
-		public static final TagKey<Item> CURIO_BRACELET = makeItem("curios", "bracelet");
-		public static final TagKey<Item> CURIO_CHARM = makeItem("curios", "charm");
-		public static final TagKey<Item> CURIO_HEAD = makeItem("curios", "head");
-		public static final TagKey<Item> CURIO_HANDS = makeItem("curios", "hands");
-		public static final TagKey<Item> CURIO_NECKLACE = makeItem("curios", "necklace");
-		public static final TagKey<Item> CURIO_RING = makeItem("curios", "ring");
+		public static final TagKey<Item> CURIO_ANY = makeItem(CuriosApi.MODID, "curio");
+		public static final TagKey<Item> CURIO_BACK = makeItem(CuriosApi.MODID, "back");
+		public static final TagKey<Item> CURIO_BELT = makeItem(CuriosApi.MODID, "belt");
+		public static final TagKey<Item> CURIO_BODY = makeItem(CuriosApi.MODID, "body");
+		public static final TagKey<Item> CURIO_BRACELET = makeItem(CuriosApi.MODID, "bracelet");
+		public static final TagKey<Item> CURIO_CHARM = makeItem(CuriosApi.MODID, "charm");
+		public static final TagKey<Item> CURIO_HEAD = makeItem(CuriosApi.MODID, "head");
+		public static final TagKey<Item> CURIO_HANDS = makeItem(CuriosApi.MODID, "hands");
+		public static final TagKey<Item> CURIO_NECKLACE = makeItem(CuriosApi.MODID, "necklace");
+		public static final TagKey<Item> CURIO_RING = makeItem(CuriosApi.MODID, "ring");
+		public static final TagKey<Item> CURIO_LEGS = makeItem(CuriosApi.MODID, "legs");
+		public static final TagKey<Item> CURIO_FEET = makeItem(CuriosApi.MODID, "feet");
+
+
+		public static final TagKey<Item> CURIO_LYNCHPIN = makeItem(CuriosApi.MODID, "lynchpin");
 
 		public static TagKey<Item> METAL_SPIKE = makeItem("cosmere", "spike");
 

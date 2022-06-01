@@ -34,6 +34,7 @@ public class ItemTagsGen extends ItemTagsProvider
 	{
 
 		add(TagsRegistry.Items.CURIO_BRACELET, ItemsRegistry.BANDS_OF_MOURNING.get());
+		add(TagsRegistry.Items.CURIO_HANDS, ItemsRegistry.BANDS_OF_MOURNING.get());
 
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
@@ -43,14 +44,22 @@ public class ItemTagsGen extends ItemTagsProvider
 				add(TagsRegistry.Items.CURIO_NECKLACE, metalType.getNecklaceItem());
 				add(TagsRegistry.Items.CURIO_RING, metalType.getRingItem());
 				add(TagsRegistry.Items.CURIO_BRACELET, metalType.getBraceletItem());
+				add(TagsRegistry.Items.CURIO_HANDS, metalType.getBraceletItem());
 			}
 
 			if (metalType.hasHemalurgicEffect())
 			{
 				HemalurgicSpikeItem spikeItem = metalType.getSpikeItem();
-
-				add(TagsRegistry.Items.CURIO_ANY, spikeItem);
 				add(TagsRegistry.Items.METAL_SPIKE, spikeItem);
+
+				add(TagsRegistry.Items.CURIO_HEAD, spikeItem);
+				add(TagsRegistry.Items.CURIO_LYNCHPIN, spikeItem);
+				add(TagsRegistry.Items.CURIO_BACK, spikeItem);
+				add(TagsRegistry.Items.CURIO_BODY, spikeItem);
+				add(TagsRegistry.Items.CURIO_BRACELET, spikeItem);
+				add(TagsRegistry.Items.CURIO_HANDS, spikeItem);
+				add(TagsRegistry.Items.CURIO_LEGS, spikeItem);
+				add(TagsRegistry.Items.CURIO_FEET, spikeItem);
 			}
 			// tell the ingots that our ingots are related
 

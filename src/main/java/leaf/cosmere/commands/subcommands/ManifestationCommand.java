@@ -29,8 +29,6 @@ import javax.naming.Context;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static leaf.cosmere.constants.Constants.Strings.POWERS_FOUND;
-
 public class ManifestationCommand extends ModCommand
 {
 
@@ -42,7 +40,7 @@ public class ManifestationCommand extends ModCommand
 
 	private static int check(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
 	{
-		Collection<ServerPlayer> players = getPlayers(context, 2);
+		Collection<ServerPlayer> players = getPlayers(context, 3);
 
 		for (ServerPlayer player : players)
 		{
@@ -50,7 +48,7 @@ public class ManifestationCommand extends ModCommand
 			{
 				CommandSourceStack source = context.getSource();
 
-				TranslatableComponent powersFound = new TranslatableComponent(POWERS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
+				TranslatableComponent powersFound = new TranslatableComponent(Constants.Strings.POWERS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
 
 				final BaseComponent leftBracketTextComponent = new TextComponent("[");
 				final BaseComponent rightBracketTextComponent = new TextComponent("]");
@@ -75,7 +73,7 @@ public class ManifestationCommand extends ModCommand
 
 	private static int clear(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
 	{
-		Collection<ServerPlayer> players = getPlayers(context, 2);
+		Collection<ServerPlayer> players = getPlayers(context, 3);
 
 		for (ServerPlayer player : players)
 		{
@@ -94,7 +92,7 @@ public class ManifestationCommand extends ModCommand
 
 	private static int reroll(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
 	{
-		Collection<ServerPlayer> players = getPlayers(context, 2);
+		Collection<ServerPlayer> players = getPlayers(context, 3);
 
 		for (ServerPlayer player : players)
 		{
@@ -118,7 +116,7 @@ public class ManifestationCommand extends ModCommand
 
 	private static int give(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
 	{
-		Collection<ServerPlayer> players = getPlayers(context, 2);
+		Collection<ServerPlayer> players = getPlayers(context, 4);
 
 		for (ServerPlayer player : players)
 		{
@@ -146,7 +144,7 @@ public class ManifestationCommand extends ModCommand
 
 	private static int remove(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
 	{
-		Collection<ServerPlayer> players = getPlayers(context, 2);
+		Collection<ServerPlayer> players = getPlayers(context, 4);
 
 		for (ServerPlayer player : players)
 		{
@@ -199,16 +197,5 @@ public class ManifestationCommand extends ModCommand
 								.then(Commands.argument("target", EntityArgument.players())
 										.executes(ManifestationCommand::remove))))
 				; // end add
-	}
-
-	//I'm not entirely certain this works.
-	public static Collection<ServerPlayer> getPlayers(CommandContext<CommandSourceStack> context, int numOfParams) throws CommandSyntaxException {
-		Collection<ServerPlayer> players = new ArrayList<>();
-		if(context.getInput().split(" ").length == numOfParams) {
-			players.add(context.getSource().getPlayerOrException());
-		} else {
-			players = EntityArgument.getPlayers(context, "target");
-		}
-		return players;
 	}
 }
