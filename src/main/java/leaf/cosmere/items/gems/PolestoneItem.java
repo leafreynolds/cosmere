@@ -53,12 +53,6 @@ public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneTy
 	}
 
 	@Override
-	public int getEntityLifespan(ItemStack itemStack, Level world)
-	{
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entityItem)
 	{
 		if (entityItem.level.isRainingAt(entityItem.blockPosition()) && entityItem.level.isThundering())
