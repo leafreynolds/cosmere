@@ -124,7 +124,12 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		if (feruchemyMode != 0 && isActiveTick)
 		{
 			//todo config variable
-			int secondsOfFeruchemyToAdd = 25;
+			//eg 10 base, * 2 for flaring mode = 20
+			//or from spike 7 * 2 = 14
+			//then add the config value
+			//max should be around 30. 50 was way too much
+
+			int secondsOfFeruchemyToAdd = (int) Math.floor(getRange(data)) - 5;
 			if (null != MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (-secondsOfFeruchemyToAdd) * (mode), true, true))
 			{
 				//compound successful

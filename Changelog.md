@@ -1,5 +1,10 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B41
+
+Changed compound amount to be dependant on allomantic strength and mode.
+
+
 B40
 
 Curio spike and bracelet rendering again! Yay :D 
