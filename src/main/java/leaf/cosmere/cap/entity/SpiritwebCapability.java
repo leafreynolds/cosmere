@@ -305,11 +305,59 @@ public class SpiritwebCapability implements ISpiritweb
 
 		//TODO config options that let you choose what can be transferred
 
+		//transfer attributes
+		var oldAttMap = oldWeb.getLiving().getAttributes();
+		var newAttMap = getLiving().getAttributes();
+
+		// A player's manifestations is now determined by attributes, which lets me do cool things like mess with strength in a power.
+		// So if we've set a base value for an attribute on the player, copy it to the new one.
+		for (RegistryObject<Attribute> attributeRegistryObject : AttributesRegistry.COSMERE_ATTRIBUTES.values())
+		{
+			if (attributeRegistryObject != null && attributeRegistryObject.isPresent())
+			{
+				AttributeInstance oldPlayerAttribute = oldAttMap.getInstance(attributeRegistryObject.get());
+				AttributeInstance newPlayerAttribute = newAttMap.getInstance(attributeRegistryObject.get());
+
+				if (newPlayerAttribute != null && oldPlayerAttribute != null)
+				{
+					// make sure that they match what the old player entity had.
+					if (oldPlayerAttribute.getBaseValue() > 0)
+					{
+						newPlayerAttribute.setBaseValue(oldPlayerAttribute.getBaseValue());
+					}
+					//clear out the attributes that were placed on the newly cloned player at creation
+					else if (newPlayerAttribute.getBaseValue() > 0)
+					{
+						newPlayerAttribute.setBaseValue(0);
+					}
+				}
+			}
+		}
+
 		stormlightStored += oldWeb.stormlightStored;
 		biochromaticBreathStored += oldWeb.biochromaticBreathStored;
 		for (Metals.MetalType metalType : oldWeb.METALS_INGESTED.keySet())
 		{
 			METALS_INGESTED.put(metalType, oldWeb.METALS_INGESTED.get(metalType));
+		}
+
+		selectedManifestation = oldWeb.manifestation();
+
+		eyeHeight = oldWeb.getEyeHeight();
+
+		//todo client config? not sure that's possible on a server side function
+		for (AManifestation manifestation : oldWeb.getAvailableManifestations())
+		{
+			int mode = oldWeb.getMode(manifestation);
+			if (mode != 0)
+			{
+				setMode(manifestation, mode);
+			}
+		}
+
+		if (oldWeb.hasBeenInitialized)
+		{
+			setHasBeenInitialized();
 		}
 	}
 

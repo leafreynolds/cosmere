@@ -2,7 +2,8 @@ The Cosmere Project - For 1.16 Minecraft
 
 B41
 
-Changed compound amount to be dependant on allomantic strength and mode.
+Changed compound amount to be dependent on allomantic strength and mode.
+Tidied up player clone code for when player dies or returns from the end.
 
 
 B40
