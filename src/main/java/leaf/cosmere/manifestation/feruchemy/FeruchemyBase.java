@@ -62,6 +62,35 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 		return -10;
 	}
 
+	public boolean isStoring(ISpiritweb data)
+	{
+		return getMode(data) > 0;
+	}
+	public boolean isTapping(ISpiritweb data)
+	{
+		return getMode(data) < 0;
+	}
+
+	public int getCost(int mode)
+	{
+		// if we are tapping
+		//check if there is charges to tap
+		if (mode < 0)
+		{
+			//wanting to tap
+			//get cost
+			return mode <= -3 ? mode : -(mode * mode);
+
+		}
+		//if we are storing
+		//check if there is space to store
+		else if (mode > 0)
+		{
+			return mode;
+		}
+		return 0;
+	}
+
 	@Override
 	public void tick(ISpiritweb data)
 	{

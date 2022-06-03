@@ -7,12 +7,11 @@ package leaf.cosmere.manifestation.feruchemy;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.utils.helpers.EffectsHelper;
 import leaf.cosmere.utils.helpers.XPHelper;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class FeruchemyCopper extends FeruchemyBase
 {
@@ -24,13 +23,13 @@ public class FeruchemyCopper extends FeruchemyBase
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
-		return -20;
+		return -1;
 	}
 
 	@Override
 	public int modeMax(ISpiritweb data)
 	{
-		return 20;
+		return 1;
 	}
 
 	@Override
@@ -54,62 +53,74 @@ public class FeruchemyCopper extends FeruchemyBase
 			return;
 		}
 
-		performXPAdjustment(playerEntity, mode);
+		performXPAdjustment(data, playerEntity);
 
 	}
 
-	private int getCost(int mode)
+
+	private void performXPAdjustment(ISpiritweb data, Player playerEntity)
 	{
-		// if we are tapping
-		//check if there is charges to tap
-		if (mode < 0)
-		{
-			//wanting to tap
-			//get cost
-			return mode <= -3 ? -(mode * mode) : mode;
+		float experiencePoints;// = playerEntity.isCreative() ? 10 : mode;
 
+		final boolean storing = isStoring(data);
+		final boolean tapping = isTapping(data);
+
+		if (storing) // active storage
+		{
+			//store xp progress, if any.
+			if (playerEntity.experienceProgress > 0)
+			{
+				experiencePoints = playerEntity.experienceProgress;
+			}
+			//else store a level's worth of xp points.
+			else
+			{
+				experiencePoints = XPHelper.getXpNeededForNextLevel(playerEntity.experienceLevel - 1);
+			}
 		}
-		//if we are storing
-		//check if there is space to store
-		else if (mode > 0)
+		else
 		{
-			return mode;
+			if (tapping) // tapping storage
+			{
+				experiencePoints = XPHelper.getXpNeededForNextLevel(playerEntity.experienceLevel);
+			}
+			else
+			{
+				return;
+			}
 		}
-		return 0;
-	}
 
 
-	private void performXPAdjustment(Player playerEntity, int mode)
-	{
-		int cost = getCost(mode);
-		int experiencePoints = playerEntity.isCreative() ? 10 : cost;
+		//mode < 0 means we are tapping eg. removing from metalmind
+		//mode > 0 means we are storing eg. adding to the metalmind
 
-		if (playerEntity.totalExperience > cost && MetalmindChargeHelper.adjustMetalmindChargeExact(playerEntity, metalType, -experiencePoints, true, true) != null)
+
+		//successfully added xp to metalmind
+		final int xp = Mth.floor(experiencePoints);
+
+
+		if ((storing && playerEntity.totalExperience >= xp) || tapping)
 		{
-			//successfully added xp to metalmind
-
-			if (!playerEntity.isCreative())
+			final ItemStack itemStack =
+					MetalmindChargeHelper.adjustMetalmindChargeExact(
+							playerEntity,
+							metalType,
+							storing ? -xp : xp,
+							true,
+							true);
+			if (itemStack != null)
 			{
 				//adjust player xp
 
-				if (cost > 0) // active storage
+				if (storing) // active storage
 				{
-					decreasePlayerExperience(playerEntity, cost);
+					decreasePlayerLevel(playerEntity, xp);
 				}
 				else // tapping storage
 				{
-					playerEntity.giveExperiencePoints(-cost);
+					XPHelper.giveExperiencePoints(playerEntity, xp);
 				}
-
 			}
-
-
-			MobEffect effect = getEffect(mode);
-
-			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
-
-			//potion effect doesn't do anything other than tell the player they are storing.
-			playerEntity.addEffect(currentEffect);
 		}
 	}
 
@@ -118,12 +129,11 @@ public class FeruchemyCopper extends FeruchemyBase
 	//unless it does, in which case I'm a goober who can't read.
 	//either way, thank you xreliquary and P3pp3rF1y showing their example of decreasing player xp nicely.
 	//https://github.com/P3pp3rF1y/Reliquary/blob/1.16.x/src/main/java/xreliquary/items/HeroMedallionItem.java
-	private void decreasePlayerExperience(Player player, int pointsToRemove)
+	private static void decreasePlayerLevel(Player player, int pointsToRemove)
 	{
-		player.totalExperience -= pointsToRemove;
-		int newLevel = XPHelper.getLevelForExperience(player.totalExperience);
-		player.experienceLevel = newLevel;
-		player.experienceProgress = (float) (player.totalExperience - XPHelper.getExperienceForLevel(newLevel)) / player.getXpNeededForNextLevel();
+		player.totalExperience = Math.max(player.totalExperience - pointsToRemove, 0);
+		player.experienceLevel = XPHelper.getLevelForTotalExperience(player.totalExperience);
+		player.experienceProgress = 0;
 	}
 
 }

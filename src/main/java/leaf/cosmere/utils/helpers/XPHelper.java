@@ -3,78 +3,81 @@
  */
 
 /*
- * File created ~ 27 - 4 - 2021 ~ Leaf
- *
- *
- * Code obtained from xReliquary @see {https://raw.githubusercontent.com/P3pp3rF1y/Reliquary/c18065d5874c106ef1c1befe9cbde4a4b754a05b/src/main/java/xreliquary/util/XpHelper.java}
- *
- * who in turn got it from:
- *
- * Code originally from EnderIO @see {https://github.com/SleepyTrousers/EnderIO/blob/master/src/main/java/crazypants/enderio/xp/XpUtil.java}
+ * File updated ~ 03 - 6 - 2022 ~ Leaf
  *
  */
 
 package leaf.cosmere.utils.helpers;
 
-/**
- *
- */
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+
 public class XPHelper
 {
-	private static final int RATIO = 20;
 
-	public static int liquidToExperience(int liquid)
+	/**
+	 * A copy of the related function in Player, except without the call to forge event
+	 * see {@link net.minecraft.world.entity.player.Player#giveExperiencePoints}#()
+	 */
+	public static void giveExperiencePoints(Player player, int points)
 	{
-		return liquid / RATIO;
+		player.increaseScore(points);
+		player.experienceProgress += (float) points / (float) player.getXpNeededForNextLevel();
+		player.totalExperience = Mth.clamp(player.totalExperience + points, 0, Integer.MAX_VALUE);
+
+		while (player.experienceProgress < 0.0F)
+		{
+			float f = player.experienceProgress * (float) player.getXpNeededForNextLevel();
+			if (player.experienceLevel > 0)
+			{
+				player.giveExperienceLevels(-1);
+				player.experienceProgress = 1.0F + f / (float) player.getXpNeededForNextLevel();
+			}
+			else
+			{
+				player.giveExperienceLevels(-1);
+				player.experienceProgress = 0.0F;
+			}
+		}
+
+		while (player.experienceProgress >= 1.0F)
+		{
+			player.experienceProgress = (player.experienceProgress - 1.0F) * (float) player.getXpNeededForNextLevel();
+			player.giveExperienceLevels(1);
+			player.experienceProgress /= (float) player.getXpNeededForNextLevel();
+		}
 	}
 
-	public static int experienceToLiquid(int xp)
-	{
-		return xp * RATIO;
-	}
 
-	public static int getExperienceForLevel(int level)
+	/**
+	 * see {@link net.minecraft.world.entity.player.Player#getXpNeededForNextLevel}#()
+	 */
+	public static int getXpNeededForNextLevel(int playerLevel)
 	{
-		if (level == 0)
+		if (playerLevel >= 30)
 		{
-			return 0;
+			return 112 + (playerLevel - 30) * 9;
 		}
-		if (level > 0 && level < 16)
+		else if (playerLevel >= 15)
 		{
-			return level * (12 + level * 2) / 2;
-		}
-		else if (level > 15 && level < 31)
-		{
-			return (level - 15) * (69 + (level - 15) * 5) / 2 + 315;
+			return 37 + (playerLevel - 15) * 5;
 		}
 		else
 		{
-			return (level - 30) * (215 + (level - 30) * 9) / 2 + 1395;
+			return 7 + playerLevel * 2;
 		}
 	}
 
-	public static int getExperienceLimitOnLevel(int level)
-	{
-		return level >= 30 ? 112 + (level - 30) * 9 : (level >= 15 ? 37 + (level - 15) * 5 : 7 + level * 2);
-	}
-
-	public static int getLevelForExperience(int experience)
+	public static int getLevelForTotalExperience(int experience)
 	{
 		int i = 0;
-		while (getExperienceForLevel(i) <= experience)
+		int xp = 0;
+		while (xp <= experience)
 		{
+			xp += getXpNeededForNextLevel(i);
+
 			i++;
 		}
 		return i - 1;
-	}
-
-	public static int durabilityToXp(int durability)
-	{
-		return durability / 2;
-	}
-
-	public static int xpToDurability(int xp)
-	{
-		return xp * 2;
 	}
 }

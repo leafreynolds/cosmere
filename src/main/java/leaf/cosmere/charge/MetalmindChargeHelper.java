@@ -41,7 +41,7 @@ public class MetalmindChargeHelper
 		};
 	}
 
-	public static ItemStack adjustMetalmindChargeExact(Player player, Metals.MetalType metalType, int chargeToGet, boolean remove, boolean checkPlayer)
+	public static ItemStack adjustMetalmindChargeExact(Player player, Metals.MetalType metalType, int adjustValue, boolean remove, boolean checkPlayer)
 	{
 		List<ItemStack> items = ItemChargeHelper.getChargeItems(player);
 		List<ItemStack> acc = ItemChargeHelper.getChargeCurios(player);
@@ -55,6 +55,6 @@ public class MetalmindChargeHelper
 			return null;
 		}
 
-		return ItemChargeHelper.adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
+		return ItemChargeHelper.adjustChargeExact(player, adjustValue, remove, checkPlayer, items, acc);
 	}
 }
