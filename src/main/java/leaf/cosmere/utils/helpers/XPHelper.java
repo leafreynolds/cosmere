@@ -17,7 +17,7 @@ public class XPHelper
 
 	/**
 	 * A copy of the related function in Player, except without the call to forge event
-	 * see {@link net.minecraft.world.entity.player.Player#giveExperiencePoints}#()
+	 * see {@link net.minecraft.world.entity.player.Player#giveExperiencePoints}
 	 */
 	public static void giveExperiencePoints(Player player, int points)
 	{

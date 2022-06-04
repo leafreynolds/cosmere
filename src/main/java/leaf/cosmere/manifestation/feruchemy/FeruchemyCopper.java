@@ -101,11 +101,12 @@ public class FeruchemyCopper extends FeruchemyBase
 
 		if ((storing && playerEntity.totalExperience >= xp) || tapping)
 		{
+			final int adjustValue = storing ? -xp : xp;
 			final ItemStack itemStack =
 					MetalmindChargeHelper.adjustMetalmindChargeExact(
 							playerEntity,
 							metalType,
-							storing ? -xp : xp,
+							adjustValue,
 							true,
 							true);
 			if (itemStack != null)
@@ -124,11 +125,6 @@ public class FeruchemyCopper extends FeruchemyBase
 		}
 	}
 
-
-	//why does minecraft not have functions that handle this better
-	//unless it does, in which case I'm a goober who can't read.
-	//either way, thank you xreliquary and P3pp3rF1y showing their example of decreasing player xp nicely.
-	//https://github.com/P3pp3rF1y/Reliquary/blob/1.16.x/src/main/java/xreliquary/items/HeroMedallionItem.java
 	private static void decreasePlayerLevel(Player player, int pointsToRemove)
 	{
 		player.totalExperience = Math.max(player.totalExperience - pointsToRemove, 0);
