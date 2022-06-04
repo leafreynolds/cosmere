@@ -252,15 +252,29 @@ public class SpiritwebCapability implements ISpiritweb
 		else//if client
 		{
 			AManifestation iron = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
-			if (iron.isActive(this))
+			final boolean ironActive = iron.isActive(this);
+			AManifestation steel = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
+			final boolean steelActive = steel.isActive(this);
+
+			if (ironActive)
 			{
 				((AllomancyIronSteel) iron).performEffect(this);
 			}
+			else if (!pullEntities.isEmpty() || !pullBlocks.isEmpty())
+			{
+				pullEntities.clear();
+				pullBlocks.clear();
+			}
 
-			AManifestation steel = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
-			if (steel.isActive(this))
+
+			if (steelActive)
 			{
 				((AllomancyIronSteel) steel).performEffect(this);
+			}
+			else if (!pushEntities.isEmpty() || !pushBlocks.isEmpty())
+			{
+				pushEntities.clear();
+				pushBlocks.clear();
 			}
 		}
 	}
