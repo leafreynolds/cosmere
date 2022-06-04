@@ -96,7 +96,7 @@ public class CommonEvents
 					break;
 					case 3:
 					{
-						addNuggetTrades(tradesForLevel, Rarity.UNCOMMON);
+						//addNuggetTrades(tradesForLevel, Rarity.UNCOMMON);
 						addBlendTrades(tradesForLevel, Rarity.COMMON);
 
 						ItemStack itemStackForSale = new ItemStack(ItemsRegistry.METAL_VIAL.get(), 1);
@@ -105,13 +105,13 @@ public class CommonEvents
 					break;
 					case 4:
 					{
-						addNuggetTrades(tradesForLevel, Rarity.RARE);
+						//addNuggetTrades(tradesForLevel, Rarity.RARE);
 						addRawOreTrades(tradesForLevel, Rarity.COMMON);
 					}
 					break;
 					case 5:
 					{
-						addNuggetTrades(tradesForLevel, Rarity.EPIC);
+						//addNuggetTrades(tradesForLevel, Rarity.EPIC);
 						addOreTrades(tradesForLevel, Rarity.COMMON);
 					}
 					break;
