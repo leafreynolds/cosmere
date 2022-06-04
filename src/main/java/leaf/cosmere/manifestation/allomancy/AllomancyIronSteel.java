@@ -67,6 +67,25 @@ public class AllomancyIronSteel extends AllomancyBase
 		}
 	}
 
+	@Override
+	public void onModeChange(ISpiritweb cap)
+	{
+		super.onModeChange(cap);
+
+		if (getMode(cap) != 0)
+		{
+			return;
+		}
+
+		SpiritwebCapability data = (SpiritwebCapability) cap;
+
+		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
+		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
+
+		blocks.clear();
+		entities.clear();
+	}
+
 	@OnlyIn(Dist.CLIENT)
 	private void performEffectClient(ISpiritweb cap)
 	{
