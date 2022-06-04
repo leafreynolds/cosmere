@@ -158,7 +158,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 								case ELECTRUM:
 									ItemStack allomancySpike = new ItemStack(this);
 									AManifestation allomancyMani = ManifestationRegistry.ALLOMANCY_POWERS.get(stealType).get();
-									Invest(allomancySpike, allomancyMani, 10, UUID.randomUUID());
+									Invest(allomancySpike, allomancyMani, 7, UUID.randomUUID());
 									stacks.add(allomancySpike);
 									break;
 								//steals feruchemical abilities
@@ -168,7 +168,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 								case GOLD:
 									ItemStack feruchemySpike = new ItemStack(this);
 									AManifestation feruchemyMani = ManifestationRegistry.FERUCHEMY_POWERS.get(stealType).get();
-									Invest(feruchemySpike, feruchemyMani, 10, UUID.randomUUID());
+									Invest(feruchemySpike, feruchemyMani, 7, UUID.randomUUID());
 									stacks.add(feruchemySpike);
 									break;
 							}
@@ -183,13 +183,13 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 				}
 			}
 
-			if (this.getMetalType() == Metals.MetalType.LERASIUM)
+			if (this.getMetalType() == Metals.MetalType.LERASATIUM)
 			{
 				ItemStack bound = new ItemStack(this);
 				final UUID identity = UUID.randomUUID();
 				for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 				{
-					Invest(bound, manifestation, 6, identity);
+					Invest(bound, manifestation, 5, identity);
 				}
 
 				stacks.add(bound);
