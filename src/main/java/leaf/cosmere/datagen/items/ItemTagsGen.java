@@ -53,7 +53,7 @@ public class ItemTagsGen extends ItemTagsProvider
 				add(TagsRegistry.Items.METAL_SPIKE, spikeItem);
 
 				add(TagsRegistry.Items.CURIO_HEAD, spikeItem);
-				add(TagsRegistry.Items.CURIO_LYNCHPIN, spikeItem);
+				add(TagsRegistry.Items.CURIO_LINCHPIN, spikeItem);
 				add(TagsRegistry.Items.CURIO_BACK, spikeItem);
 				add(TagsRegistry.Items.CURIO_BODY, spikeItem);
 				add(TagsRegistry.Items.CURIO_BRACELET, spikeItem);

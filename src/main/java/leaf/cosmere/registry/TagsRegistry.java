@@ -38,7 +38,7 @@ public class TagsRegistry
 		public static final TagKey<Item> CURIO_FEET = makeItem(CuriosApi.MODID, "feet");
 
 
-		public static final TagKey<Item> CURIO_LYNCHPIN = makeItem(CuriosApi.MODID, "lynchpin");
+		public static final TagKey<Item> CURIO_LINCHPIN = makeItem(CuriosApi.MODID, "linchpin");
 
 		public static TagKey<Item> METAL_SPIKE = makeItem("cosmere", "spike");
 

@@ -73,7 +73,7 @@ public class CuriosCompat
 		//custom slots
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("legs").priority(450).size(2).icon(InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS).build());
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("feet").priority(500).size(2).icon(InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS).build());
-		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("lynchpin").priority(59).size(1).icon(InventoryMenu.EMPTY_ARMOR_SLOT_HELMET).build());
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("linchpin").priority(59).size(1).icon(InventoryMenu.EMPTY_ARMOR_SLOT_HELMET).build());
 
 	}
 }

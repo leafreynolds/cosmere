@@ -233,7 +233,7 @@ public class EngLangGen extends LanguageProvider
 
 		add("curios.identifier.feet", "Feet");
 		add("curios.identifier.legs", "Legs");
-		add("curios.identifier.lynchpin", "Lynch Pin");
+		add("curios.identifier.linchpin", "Linch pin");
 
 		//Sound Schemes
 

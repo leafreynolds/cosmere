@@ -39,7 +39,7 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 	private static final String eyeRootID = "eyeRoot";
 	private static final String backID = "back";
 	private static final String bodyID = "body";
-	private static final String lynchpinID = "lynchpin";
+	private static final String linchpinID = "linchpin";
 	private static final String braceletID = "bracelet";
 	private static final String handsID = "hands";
 	private static final String legsID = "legs";
@@ -51,7 +51,7 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 	private final ModelPart eyeRoot;
 	private final ModelPart eyeLeft;
 	private final ModelPart eyeRight;
-	private final ModelPart lynchpin;
+	private final ModelPart linchpin;
 	private final ModelPart back;
 	private final ModelPart ribLeft;
 	private final ModelPart ribRight;
@@ -78,7 +78,7 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 		eyeRight = eyeRoot.getChild("right_eye");
 
 		find = part.getChild(bodyID);
-		lynchpin = find.getChild(lynchpinID);
+		linchpin = find.getChild(linchpinID);
 		back = find.getChild("back");
 		ribLeft = find.getChild("rib_left");
 		ribRight = find.getChild("rib_right");
@@ -143,7 +143,7 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 		);
 
 		body.addOrReplaceChild(
-				lynchpinID,
+				linchpinID,
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.addBox(-0.5F, 1.5F, 2.0F, 1.0F, 1.0F, 2.0F, cube),
@@ -301,8 +301,8 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				modelPartToRender = head;
 
 				break;
-			case lynchpinID:
-				modelPartToRender = lynchpin;
+			case linchpinID:
+				modelPartToRender = linchpin;
 				modelPartToRender.copyFrom(this.root.getChild(bodyID));
 
 				modelPartToRender.y = -1;
