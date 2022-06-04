@@ -14,6 +14,7 @@
         "type": "minecraft:item",
         "__comment": "with randomise metal type function, only tin doesn't matter here.",
         "name": "cosmere:tin_ring_metalmind",
+        "weight": 50,
         "functions": [
           {
             "function": "cosmere:randomise_metaltype"
@@ -24,7 +25,8 @@
         ]
       },
       {
-        "type": "minecraft:empty"
+        "type": "minecraft:empty",
+        "weight": 40
       }
     ]
   }

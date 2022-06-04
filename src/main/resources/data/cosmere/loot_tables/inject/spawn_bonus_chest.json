@@ -2,12 +2,30 @@
   "__comment": "This table is injected as its own pool into minecraft:chests/spawn_bonus_chest",
   "pools": [
     {
-    "name": "main",
-    "rolls": 1,
-    "entries": [
-      {
-        "type": "minecraft:empty"
-      }
-    ]
-  }]
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cosmere:steel_spike",
+          "weight": 50,
+          "functions": [
+            {
+              "function": "cosmere:randomise_metaltype"
+            },
+            {
+              "function": "cosmere:invest_spike"
+            },
+            {
+              "function": "cosmere:invest_metalmind"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 50
+        }
+      ]
+    }
+  ]
 }
