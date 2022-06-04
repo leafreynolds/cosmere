@@ -5,10 +5,12 @@
 package leaf.cosmere.items;
 
 import leaf.cosmere.compat.patchouli.PatchouliCompat;
+import leaf.cosmere.constants.Constants;
 import leaf.cosmere.properties.PropTypes;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,8 +31,6 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-
-import static leaf.cosmere.constants.Constants.Strings.PATCHOULI_NOT_INSTALLED;
 
 public class GuideItem extends Item
 {
@@ -96,7 +96,7 @@ public class GuideItem extends Item
 		}
 		else
 		{
-			return TextHelper.createTranslatedText(PATCHOULI_NOT_INSTALLED);
+			return TextHelper.createTranslatedText(Constants.Strings.PATCHOULI_NOT_INSTALLED);
 		}
 	}
 
@@ -106,7 +106,11 @@ public class GuideItem extends Item
 	{
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
-		if (playerIn instanceof ServerPlayer player)
+		if (!PatchouliCompat.PatchouliIsPresent())
+		{
+			playerIn.sendMessage(TextHelper.createTranslatedText(Constants.Strings.PATCHOULI_NOT_INSTALLED), Util.NIL_UUID);
+		}
+		else if (playerIn instanceof ServerPlayer player)
 		{
 
 			//UseItemSuccessTrigger.INSTANCE.trigger(player, stack, player.getServerWorld(), player.getPosX(), player.getPosY(), player.getPosZ());

@@ -669,6 +669,7 @@
   "tooltip.cosmere.attribute.tin": "+%s%% Better Night Vision",
   "tooltip.cosmere.attribute.zinc": "+%s%% Emotional Fortitude",
   "tooltip.cosmere.metals.contained": "Contained Metals:",
+  "tooltip.cosmere.patchouli.not_installed": "Patchouli is not installed. Documentation is not available.",
   "tooltip.cosmere.power.found": "Hemalurgic Charge:",
   "tooltip.item.info.control": "\u00A77Hold \u00A78[\u00A7eControl\u00A78]",
   "tooltip.item.info.shift": "\u00A77Hold \u00A78[\u00A7eShift\u00A78]",

@@ -273,6 +273,7 @@ public class EngLangGen extends LanguageProvider
 
 
 		//ARS Arcanum
+		add(PATCHOULI_NOT_INSTALLED, "Patchouli is not installed. Documentation is not available.");
 		add("cosmere.landing", "The Cosmere is filled with many fantastical things. I have left my findings written within this book.");
 
 		//KeyBindings
