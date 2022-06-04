@@ -4,6 +4,13 @@ B41
 
 Changed compound amount to be dependent on allomantic strength and mode.
 Tidied up player clone code for when player dies or returns from the end.
+Feruchemical copper now stores full levels, rather than xp points.
+Updated cosmere to build against forge version 40.1.30
+Renamed lynch to linch.
+Spikes available in more chests.
+Fix creative mode lerasium spikes containing powers, they've been moved to lerasatium spikes.
+Clear iron/steel push pull list when turning off powers.
+Fix crash from trying to use the guide book when patchouli is not installed.
 
 
 B40
