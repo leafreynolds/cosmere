@@ -58,7 +58,7 @@ public class InvestMetalmindLootFunction extends LootItemConditionalFunction
 		item.setCharge(stack, (int) Mth.lerp(strengthLevel / 10, 1, maxCharge));
 
 		StackNBTHelper.setUuid(stack, Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNKEYED_UUID);
-		StackNBTHelper.setString(stack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unsealed"); // todo translation
+		StackNBTHelper.setString(stack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unkeyed"); // todo translation
 
 		return stack;
 	}
