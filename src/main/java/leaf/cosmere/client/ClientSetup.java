@@ -160,8 +160,8 @@ public class ClientSetup
 	{
 		final SpriteIconPositioning sip = new SpriteIconPositioning();
 
-		final ResourceLocation sprite = new ResourceLocation("cosmere", "icon/" + path.toLowerCase(Locale.ROOT));
-		final ResourceLocation png = new ResourceLocation("cosmere", "textures/icon/" + path.toLowerCase(Locale.ROOT) + ".png");
+		final ResourceLocation sprite = ResourceLocationHelper.prefix("icon/" + path.toLowerCase(Locale.ROOT));
+		final ResourceLocation png = ResourceLocationHelper.prefix("textures/icon/" + path.toLowerCase(Locale.ROOT) + ".png");
 
 		sip.sprite = map.getSprite(sprite);
 

@@ -16,15 +16,19 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.allomancy.AllomancyBase;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.network.packets.SetSelectedManifestationMessage;
 import leaf.cosmere.registry.KeybindingRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import leaf.cosmere.utils.math.Vector2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,6 +37,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.jetbrains.annotations.NotNull;
@@ -192,7 +197,6 @@ public class SpiritwebMenu extends Screen
 
 		public final ButtonAction action;
 		public final int powerType;
-		public TextureAtlasSprite icon;
 		public int color;
 		public String name;
 		public Direction textSide;
@@ -202,7 +206,6 @@ public class SpiritwebMenu extends Screen
 				final ButtonAction action,
 				final double x,
 				final double y,
-				final TextureAtlasSprite ico,
 				final Direction textSide)
 		{
 			this.name = name;
@@ -212,7 +215,6 @@ public class SpiritwebMenu extends Screen
 			x2 = x + 18;
 			y1 = y;
 			y2 = y + 18;
-			icon = ico;
 			color = 0xffffff;
 			this.textSide = textSide;
 		}
@@ -222,7 +224,6 @@ public class SpiritwebMenu extends Screen
 				final int powerType,
 				final double x,
 				final double y,
-				final TextureAtlasSprite ico,
 				final Direction textSide)
 		{
 			this.name = name;
@@ -232,7 +233,6 @@ public class SpiritwebMenu extends Screen
 			x2 = x + 18;
 			y1 = y;
 			y2 = y + 18;
-			icon = ico;
 			color = 0xffffff;
 			this.textSide = textSide;
 		}
@@ -290,7 +290,6 @@ public class SpiritwebMenu extends Screen
 								foundPowerType.getID(),
 								v - ((TEXT_DISTANCE * foundPowerTypes.size()) / 2) + 5,
 								-75,
-								foundPowerType.getSprite(),
 								Direction.UP)
 				);
 
@@ -337,20 +336,8 @@ public class SpiritwebMenu extends Screen
 		//draw out what we've asked for
 		tessellator.end();
 
-		//then we switch to icons
-		RenderSystem.enableTexture();
-		RenderSystem.setShaderColor(1, 1, 1, 1.0f);
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS).getId());
-		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		drawIcons(matrixStack, buffer, middle_x, middle_y);
 
-		//put the icons on the region buttons
-		renderRadialButtonIcons(buffer, middle_x, middle_y);
-		//put the icons on the sided buttons
-		renderSidedButtonIcons(buffer, middle_x, middle_y);
-
-		tessellator.end();
 
 		// draw radial button strings
 		renderRadialButtonStrings(matrixStack, (int) middle_x, (int) middle_y);
@@ -358,6 +345,26 @@ public class SpiritwebMenu extends Screen
 		renderSidedButtonStrings(matrixStack, middle_x, middle_y);
 		//do extra text info stuff
 		renderAnyExtraInfoTexts(matrixStack, (int) middle_x, (int) middle_y);
+
+		matrixStack.popPose();
+	}
+
+	private void drawIcons(@NotNull PoseStack matrixStack, BufferBuilder buffer, double middle_x, double middle_y)
+	{
+		matrixStack.pushPose();
+		RenderSystem.enableTexture();
+		RenderSystem.enableBlend();
+
+		//then we switch to icons
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		//RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS).getId());
+		//buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+
+		//put the icons on the region buttons
+		renderRadialButtonIcons(matrixStack, middle_x, middle_y);
+		//put the icons on the sided buttons
+		renderSidedButtonIcons(matrixStack, middle_x, middle_y);
 
 		matrixStack.popPose();
 	}
@@ -449,44 +456,36 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void renderSidedButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
+	private void renderSidedButtonIcons(PoseStack matrixStack, double middleX, double middleY)
 	{
+		final StringBuilder stringBuilder = new StringBuilder();
 		for (final SidedMenuButton button : sidedMenuButtons)
 		{
-			final float f = selectedManifestation == null ? 1.0f : 0.5f;
-			final float a = 1.0f;
+			stringBuilder.setLength(0);
+			final double x = (button.x1 + button.x2) / 2 + 0.01;
+			final double y = (button.y1 + button.y2) / 2 + 0.01;
 
-			final double u1 = 0;
-			final double u2 = 16;
-			final double v1 = 0;
-			final double v2 = 16;
+			stringBuilder
+					.append("textures/icon/")
+					.append(button.name)
+					.append(".png");
 
-			final TextureAtlasSprite sprite = button.icon == null ? ClientHelper.blank : button.icon;
+			RenderSystem.setShaderTexture(0, ResourceLocationHelper.prefix(stringBuilder.toString()));
+			blit(matrixStack, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
 
-			final double btnx1 = button.x1 + 1;
-			final double btnx2 = button.x2 - 1;
-			final double btny1 = button.y1 + 1;
-			final double btny2 = button.y2 - 1;
-
-			final float red = f * ((button.color >> 16 & 0xff) / 255.0f);
-			final float green = f * ((button.color >> 8 & 0xff) / 255.0f);
-			final float blue = f * ((button.color & 0xff) / 255.0f);
-
-			buffer.vertex(middle_x + btnx1, middle_y + btny1, 0).uv(sprite.getU(u1), sprite.getV(v1)).color(red, green, blue, a).endVertex();
-			buffer.vertex(middle_x + btnx1, middle_y + btny2, 0).uv(sprite.getU(u1), sprite.getV(v2)).color(red, green, blue, a).endVertex();
-			buffer.vertex(middle_x + btnx2, middle_y + btny2, 0).uv(sprite.getU(u2), sprite.getV(v2)).color(red, green, blue, a).endVertex();
-			buffer.vertex(middle_x + btnx2, middle_y + btny1, 0).uv(sprite.getU(u2), sprite.getV(v1)).color(red, green, blue, a).endVertex();
 		}
 	}
 
-	private void renderRadialButtonIcons(BufferBuilder buffer, double middle_x, double middle_y)
+	private void renderRadialButtonIcons(PoseStack matrixStack, double middleX, double middleY)
 	{
-		for (final RadialMenuButton mnuRgn : radialMenuButtons)
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (final RadialMenuButton menuRegion : radialMenuButtons)
 		{
-			final double x = mnuRgn.centerX;
-			final double y = mnuRgn.centerY;
+			stringBuilder.setLength(0);
+			final double x = menuRegion.centerX;
+			final double y = menuRegion.centerY;
 
-			final SpriteIconPositioning sip = ClientHelper.instance.getIconForManifestation(mnuRgn.manifestation);
+			final SpriteIconPositioning sip = ClientHelper.instance.getIconForManifestation(menuRegion.manifestation);
 
 			final double scalex = 15 * sip.width * 0.5;
 			final double scaley = 15 * sip.height * 0.5;
@@ -505,10 +504,47 @@ public class SpiritwebMenu extends Screen
 			final double v1 = sip.top * 16.0;
 			final double v2 = (sip.top + sip.height) * 16.0;
 
-			buffer.vertex(middle_x + x1, middle_y + y1, 0).uv(sprite.getU(u1), sprite.getV(v1)).color(f, f, f, a).endVertex();
-			buffer.vertex(middle_x + x1, middle_y + y2, 0).uv(sprite.getU(u1), sprite.getV(v2)).color(f, f, f, a).endVertex();
-			buffer.vertex(middle_x + x2, middle_y + y2, 0).uv(sprite.getU(u2), sprite.getV(v2)).color(f, f, f, a).endVertex();
-			buffer.vertex(middle_x + x2, middle_y + y1, 0).uv(sprite.getU(u2), sprite.getV(v1)).color(f, f, f, a).endVertex();
+
+			AManifestation mani = menuRegion.manifestation;
+			final Manifestations.ManifestationTypes manifestationType = mani.getManifestationType();
+			stringBuilder
+					.append("textures/icon/")
+					.append(manifestationType.getName())
+					.append("/");
+
+			switch (manifestationType)
+			{
+				case ALLOMANCY:
+					AllomancyBase allomancyBase = (AllomancyBase) mani;
+					stringBuilder.append(allomancyBase.getMetalType().getName());
+					break;
+				case FERUCHEMY:
+					FeruchemyBase feruchemyBase = (FeruchemyBase) mani;
+					stringBuilder.append(feruchemyBase.getMetalType().getName());
+					break;
+				case RADIANT:
+					break;
+				case ELANTRIAN:
+					break;
+				case AWAKENER:
+					break;
+			}
+
+			stringBuilder.append(".png");
+			final ResourceLocation textureLocation = ResourceLocationHelper.prefix(stringBuilder.toString());
+			RenderSystem.setShaderTexture(0, textureLocation);
+			blit(matrixStack,
+					(int) (middleX + x1),
+					(int) (middleY + y1),
+					16,
+					16,
+					0,
+					0,
+					18,
+					18,
+					18,
+					18);
+
 		}
 	}
 

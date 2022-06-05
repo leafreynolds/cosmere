@@ -92,23 +92,6 @@ public class Manifestations
 			return this.name().toLowerCase(Locale.ROOT);
 		}
 
-		public TextureAtlasSprite getSprite()
-		{
-			switch (this)
-			{
-				case ALLOMANCY:
-					return ClientHelper.allomancy;
-				case FERUCHEMY:
-					return ClientHelper.feruchemy;
-				case RADIANT:
-					return ClientHelper.surgebinding;
-				case ELANTRIAN:
-					break;
-				case AWAKENER:
-					break;
-			}
-			return null;
-		}
 	}
 
 }
