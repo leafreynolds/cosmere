@@ -51,15 +51,13 @@ public class FeruchemyBronze extends FeruchemyBase
 	@Override
 	public void tick(ISpiritweb data)
 	{
-		//don't check every tick.
-		LivingEntity livingEntity = data.getLiving();
+		super.tick(data);
+		int mode = getMode(data);
 
-		if (!(livingEntity instanceof ServerPlayer) || livingEntity.tickCount % 20 != 0)
+		if (mode == 0)
 		{
 			return;
 		}
-
-		int mode = getMode(data);
 
 		//can't store or tap any more
 		switch (mode)
