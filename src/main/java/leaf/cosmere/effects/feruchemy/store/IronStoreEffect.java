@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.common.ForgeMod;
 
 
 public class IronStoreEffect extends FeruchemyEffectBase
@@ -22,8 +23,13 @@ public class IronStoreEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				Attributes.KNOCKBACK_RESISTANCE,
 				"a8fade1f-573d-405d-9885-39da3906d5f6",
-				-0.1D,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				-0.3D,
+				AttributeModifier.Operation.ADDITION);
+/*		addAttributeModifier(
+				ForgeMod.ENTITY_GRAVITY.get(),
+				"89499e2b-8797-4473-89c4-541aa703f17f",
+				-0.01D,
+				AttributeModifier.Operation.ADDITION);*/
 	}
 
 	@Override

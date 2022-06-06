@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.common.ForgeMod;
 
 
 public class IronTapEffect extends FeruchemyEffectBase
@@ -24,17 +25,10 @@ public class IronTapEffect extends FeruchemyEffectBase
 				"bb29d10a-c58f-4f7e-956b-133b2685831f",
 				0.1D,
 				AttributeModifier.Operation.ADDITION);
-	}
-
-	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
-	{
-		//ensure the user has correct buffs at least as strong as their store effect
-		if (entityLivingBaseIn.level.isClientSide || entityLivingBaseIn.tickCount % 20 != 0)
-		{
-			return;
-		}
-		entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(MobEffects.SLOW_FALLING, -amplifier));
-		entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, -amplifier));
+		addAttributeModifier(
+				ForgeMod.ENTITY_GRAVITY.get(),
+				"89499e2b-8797-4473-89c4-541aa703f17f",
+				0.01D,
+				AttributeModifier.Operation.ADDITION);
 	}
 }
