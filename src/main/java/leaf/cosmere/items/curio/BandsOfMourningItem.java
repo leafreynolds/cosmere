@@ -4,14 +4,25 @@
 
 package leaf.cosmere.items.curio;
 
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.registry.AttributesRegistry;
+import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.SlotContext;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+import java.util.UUID;
 
 public class BandsOfMourningItem extends BraceletMetalmindItem
 {
@@ -58,5 +69,36 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 	public int getMaxCharge(ItemStack stack)
 	{
 		return Integer.MAX_VALUE - 100;
+	}
+
+
+	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
+	{
+		Multimap<Attribute, AttributeModifier> attributeModifiers = super.getAttributeModifiers(slotContext, uuid, stack);
+		CompoundTag nbt = stack.getOrCreateTagElement("StoredInvestiture");
+
+		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
+		{
+			String manifestationName = manifestation.getName();
+			if (!CompoundNBTHelper.verifyExistance(nbt, manifestationName) || !AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
+			{
+				continue;
+			}
+
+			attributeModifiers.put(
+					AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get(),
+					new AttributeModifier(
+							Constants.NBT.UNKEYED_UUID,
+							manifestationName,
+							CompoundNBTHelper.getDouble(
+									nbt,
+									manifestationName,
+									0),
+							AttributeModifier.Operation.ADDITION));
+
+		}
+
+		return attributeModifiers;
 	}
 }

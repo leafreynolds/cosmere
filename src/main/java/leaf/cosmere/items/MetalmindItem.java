@@ -61,7 +61,7 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
 		if (stack.getItem() instanceof IHemalurgicInfo)
 		{
 			//add hemalurgic attributes, if any.
-			((IHemalurgicInfo) (stack.getItem())).getHemalurgicAttributes(attributeModifiers, stack, metalType);
+			((IHemalurgicInfo) stack.getItem()).getHemalurgicAttributes(attributeModifiers, stack, metalType);
 		}
 
 		return attributeModifiers;
