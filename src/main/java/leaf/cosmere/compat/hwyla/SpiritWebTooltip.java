@@ -29,7 +29,7 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 		SpiritwebCapability.get(accessor.getPlayer()).ifPresent(clientPlayer ->
 		{
 			AllomancyBronze allomancyBronze = (AllomancyBronze) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
-			if (allomancyBronze.isMetalBurning(clientPlayer))
+			if (allomancyBronze.isMetalBurning(clientPlayer) || accessor.getPlayer().isCreative())
 			{
 				//check the entity we are trying to
 				SpiritwebCapability.get((LivingEntity) accessor.getEntity()).ifPresent(targetSpiritweb ->
@@ -37,7 +37,7 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 					//show all manifestations, including hemalurgic based ones.
 					for (AManifestation manifestation : targetSpiritweb.getAvailableManifestations())
 					{
-						if (manifestation.isActive(targetSpiritweb))
+						if (manifestation.isActive(targetSpiritweb) || accessor.getPlayer().isCreative())
 						{
 							continue;
 						}
