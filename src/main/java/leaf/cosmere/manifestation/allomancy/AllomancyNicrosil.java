@@ -65,7 +65,7 @@ public class AllomancyNicrosil extends AllomancyBase
 						//valid set up found.
 						MobEffectInstance newEffect = EffectsHelper.getNewEffect(
 								EffectsRegistry.ALLOMANCY_BOOST.get(),
-								Mth.floor(getStrength(iSpiritweb))
+								Mth.floor(getStrength(iSpiritweb,false))
 						);
 
 						//apply to the hit entity

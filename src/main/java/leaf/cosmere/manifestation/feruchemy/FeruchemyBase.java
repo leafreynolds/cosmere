@@ -12,6 +12,7 @@ import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.utils.helpers.EffectsHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,8 +72,10 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 		return getMode(data) < 0;
 	}
 
-	public int getCost(int mode)
+	public int getCost(ISpiritweb data)
 	{
+		int mode = data.getMode(this);
+
 		// if we are tapping
 		//check if there is charges to tap
 		if (mode < 0)
@@ -171,10 +174,14 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 
 	}
 
-	public double getStrength(ISpiritweb cap)
+	public double getStrength(ISpiritweb cap, boolean getBaseStrength)
 	{
 		RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getFeruchemyRegistryName());
 		AttributeInstance attribute = cap.getLiving().getAttribute(attributeRegistryObject.get());
-		return attribute != null ? attribute.getValue() : 0;
+		if (attribute != null)
+		{
+			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
+		}
+		return 0;
 	}
 }

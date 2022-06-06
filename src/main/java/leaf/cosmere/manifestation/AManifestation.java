@@ -36,7 +36,7 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
 
 	public abstract boolean isActive(ISpiritweb data);
 
-	public abstract double getStrength(ISpiritweb data);
+	public abstract double getStrength(ISpiritweb data, boolean getBaseStrength);
 
 	public TranslatableComponent translation()
 	{

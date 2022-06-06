@@ -31,7 +31,7 @@ public class AllomancyDuralumin extends AllomancyBase
 			//apply the effect regardless, because duralumin is currently active.
 			MobEffectInstance newEffect = EffectsHelper.getNewEffect(
 					EffectsRegistry.ALLOMANCY_BOOST.get(),
-					Mth.floor(getStrength(data))
+					Mth.floor(getStrength(data,false))
 			);
 			data.getLiving().addEffect(newEffect);
 		}

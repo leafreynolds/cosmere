@@ -79,7 +79,7 @@ public class ManifestationBase extends AManifestation
 	}
 
 	@Override
-	public double getStrength(ISpiritweb data)
+	public double getStrength(ISpiritweb data, boolean getBaseStrength)
 	{
 		return 0;
 	}

@@ -175,7 +175,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
 			//this will add/remove powers based on what the user currently has.
 			if (data.hasManifestation(manifestation))
 			{
-				nbt.putDouble(manifestation.getName(), manifestation.getStrength(data));
+				nbt.putDouble(manifestation.getName(), manifestation.getStrength(data, false));
 			}
 			//remove if not available
 			else if (nbt.contains(manifestation.getName()))

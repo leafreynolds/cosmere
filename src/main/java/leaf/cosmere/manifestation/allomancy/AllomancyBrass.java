@@ -27,7 +27,7 @@ public class AllomancyBrass extends AllomancyBase
 		int mode = getMode(data);
 
 		//todo, replace x * mode with config based value
-		double allomanticStrength = getStrength(data);
+		double allomanticStrength = getStrength(data, false);
 
 		int range = getRange(data);
 
@@ -41,11 +41,10 @@ public class AllomancyBrass extends AllomancyBase
 
 				switch (mode)
 				{
-					case 3:
-						mob.setTarget(null);
 					case 2:
-						mob.setAggressive(false);
+						mob.setTarget(null);
 					case 1:
+						mob.setAggressive(false);
 					default:
 						//stop angry targets from attacking things
 						e.setLastHurtByMob(null);
