@@ -28,20 +28,6 @@ public class AllomancyTin extends AllomancyBase
 		super(metalType);
 	}
 
-	@Override
-	protected void performEffect(ISpiritweb data)
-	{
-		//Increases Physical Senses
-		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
-
-		//give night vision
-		if (isActiveTick)
-		{
-			livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.NIGHT_VISION, 0));
-		}
-	}
-
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
