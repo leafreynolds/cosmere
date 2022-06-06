@@ -1,0 +1,40 @@
+{
+  "parent": "cosmere:feruchemy/root",
+  "display": {
+    "icon": {
+      "item": "cosmere:atium_ring_metalmind"
+    },
+    "title": {
+      "translate": "advancements.cosmere.feruchemy.atium.title"
+    },
+    "description": {
+      "translate": "advancements.cosmere.feruchemy.atium.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 50
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cosmere:atium_ring_metalmind"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ]
+}

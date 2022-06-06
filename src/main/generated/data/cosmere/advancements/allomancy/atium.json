@@ -1,0 +1,40 @@
+{
+  "parent": "cosmere:allomancy/root",
+  "display": {
+    "icon": {
+      "item": "cosmere:atium_nugget"
+    },
+    "title": {
+      "translate": "advancements.cosmere.allomancy.atium.title"
+    },
+    "description": {
+      "translate": "advancements.cosmere.allomancy.atium.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 50
+  },
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cosmere:atium_nugget"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ]
+}

@@ -134,7 +134,7 @@ public class Metals
 		{
 			switch (this)
 			{
-				case ATIUM:
+				//case ATIUM:
 				case MALATIUM:
 				case LERASIUM: //these are mistborn, but its handled by giving access to all other metals
 				case LERASATIUM: //these are feruchemists, but its handled by giving access to all other metals

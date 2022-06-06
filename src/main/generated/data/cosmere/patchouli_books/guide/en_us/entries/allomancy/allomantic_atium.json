@@ -1,0 +1,19 @@
+{
+  "name": "Allomantic Atium",
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:atium_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)atium$() is known as a \"$(thing)Seer$()\"."
+    },
+    {
+      "type": "text",
+      "text": "$(#f00)(NYI)$()"
+    }
+  ],
+  "priority": false,
+  "secret": false,
+  "read_by_default": false,
+  "sortnum": 16
+}
