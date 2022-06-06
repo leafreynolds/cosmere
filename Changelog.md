@@ -1,5 +1,22 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B43
+
+Allomantic tin now has does incremental night vision improvement, rather than doing the potion effect.
+HWYLA limited to bronze allomancy and what's active
+Fix feruchemy bronze not storing to metalmind.
+Fixed a bug where manifestation strength was incorrect
+Made it so Feruchemical strength actually matters. Dictates how much you can store/tap.
+Fix feruchemical iron to increase gravity.
+Fix bands of mourning creative item not granting powers
+
+
+B42
+
+Fix icons not rendering when certain other mods are installed.
+Fix metalminds from loot chests incorrectly listing themselves as unsealed instead of unkeyed.
+
+
 B41
 
 Changed compound amount to be dependent on allomantic strength and mode.
