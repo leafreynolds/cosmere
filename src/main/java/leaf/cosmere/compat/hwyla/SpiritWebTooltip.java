@@ -48,7 +48,7 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 					//show all manifestations, including hemalurgic based ones.
 					for (AManifestation manifestation : targetSpiritweb.getAvailableManifestations())
 					{
-						if (manifestation.isActive(targetSpiritweb) || playerCreativeMode)
+						if (!manifestation.isActive(targetSpiritweb) && !playerCreativeMode)
 						{
 							continue;
 						}
