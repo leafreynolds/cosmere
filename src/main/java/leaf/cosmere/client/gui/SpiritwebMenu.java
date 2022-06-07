@@ -289,7 +289,7 @@ public class SpiritwebMenu extends Screen
 								foundPowerType.getName(),
 								foundPowerType.getID(),
 								v - ((TEXT_DISTANCE * foundPowerTypes.size()) / 2) + 5,
-								-75,
+								-90,
 								Direction.UP)
 				);
 
@@ -584,9 +584,8 @@ public class SpiritwebMenu extends Screen
 	{
 		if (!radialMenuButtons.isEmpty())
 		{
-
-			final float ring_inner_edge = -10;
-			final float ring_outer_edge = -50;
+			final float ring_inner_edge = -20;
+			final float ring_outer_edge = -60;
 
 			// todo test if I can get down to one button only
 			final int totalButtons = radialMenuButtons.size();
