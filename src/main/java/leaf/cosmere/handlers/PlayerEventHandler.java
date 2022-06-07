@@ -87,21 +87,6 @@ public class PlayerEventHandler
 			return;
 		}
 
-		//Feruchemical Zinc
-		{
-			MobEffectInstance tappingZincEffect = event.getPlayer().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ZINC).get());
-			MobEffectInstance storingZincEffect = event.getPlayer().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ZINC).get());
-
-			if (tappingZincEffect != null)
-			{
-				event.setAmount(event.getAmount() * (tappingZincEffect.getAmplifier() + 2));
-			}
-			if (storingZincEffect != null)
-			{
-				event.setAmount(event.getAmount() / (storingZincEffect.getAmplifier() + 2));
-			}
-		}
-
 		RegistryObject<Attribute> xpGainRateAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.COPPER.getName());
 		if (xpGainRateAttribute != null && xpGainRateAttribute.isPresent())
 		{

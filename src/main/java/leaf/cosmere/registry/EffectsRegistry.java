@@ -68,6 +68,8 @@ public class EffectsRegistry
 				return (new SteelStoreEffect(metalType, MobEffectCategory.BENEFICIAL));
 			case PEWTER:
 				return new PewterStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+			case ZINC:
+				return new ZincStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
 			case BRASS:
 				return new BrassStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
 			case DURALUMIN:
@@ -97,6 +99,8 @@ public class EffectsRegistry
 				return new SteelTapEffect(metalType, MobEffectCategory.BENEFICIAL);
 			case PEWTER:
 				return new PewterTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+			case ZINC:
+				return new ZincTapEffect(metalType, MobEffectCategory.BENEFICIAL);
 			case BRASS:
 				return new BrassTapEffect(metalType, MobEffectCategory.BENEFICIAL);
 			case DURALUMIN:
