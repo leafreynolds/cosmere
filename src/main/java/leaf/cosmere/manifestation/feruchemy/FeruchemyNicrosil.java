@@ -6,6 +6,7 @@ package leaf.cosmere.manifestation.feruchemy;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.mojang.blaze3d.shaders.Effect;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Constants;
@@ -19,6 +20,7 @@ import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -204,7 +206,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
 			attributeModifiers.put(
 					AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get(),
 					new AttributeModifier(
-							nbt.getUUID("identity"),
+							nbt.hasUUID("identity") ? nbt.getUUID("identity") : Constants.NBT.UNKEYED_UUID,
 							manifestationName,
 							CompoundNBTHelper.getDouble(
 									nbt,
