@@ -8,6 +8,7 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
+import leaf.cosmere.manifestation.allomancy.AllomancyCopper;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -45,28 +46,24 @@ public class EntityMixin
 			{
 				return;
 			}
+			final double bronzeStrength = bronzeAllomancyManifestation.getStrength(playerSpiritweb, false);
 
 			SpiritwebCapability.get(target).ifPresent(targetSpiritweb ->
 			{
 				//if target has copper and it's active, early exit
-				if (ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.COPPER).get().isActive(targetSpiritweb))
+				final AllomancyBase copperAllomancy = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.COPPER).get();
+				final double copperStrength = copperAllomancy.getStrength(targetSpiritweb, false);
+
+				if (copperAllomancy.isMetalBurning(targetSpiritweb) && copperStrength >= bronzeStrength)
 				{
-					//check whether or not the target beats the player in allomantic power
 					return;
 				}
 
 				//get allomantic strength of
 
-				int mode = bronzeAllomancyManifestation.getMode(playerSpiritweb);
-
 				//todo range to config
 				double range = bronzeAllomancyManifestation.getRange(playerSpiritweb);
 				boolean found = false;
-
-				//if target is player and has any active manifestations,
-
-
-				//or if target is not a player and has any manifestations at all
 
 				for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 				{
@@ -74,11 +71,13 @@ public class EntityMixin
 					//don't tick powers that are not active
 					final boolean targetIsPlayer = target instanceof Player;
 
+					//if target is not a player and has any manifestations at all
 					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation))
 					{
 						found = true;
 						break;
 					}
+					//if target is player and has any active manifestations,
 					else if (targetIsPlayer && manifestation.isActive(targetSpiritweb))
 					{
 						found = true;
