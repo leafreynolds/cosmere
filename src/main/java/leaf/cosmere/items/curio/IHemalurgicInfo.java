@@ -155,7 +155,7 @@ public interface IHemalurgicInfo
 					{
 						for (AManifestation manifestation : manifestationsFound)
 						{
-							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb, true), entityKilled.getUUID());
+							Invest(stack, manifestation, manifestation.getStrength(entityKilledSpiritWeb, true) * 0.5f, entityKilled.getUUID());
 							entityKilledSpiritWeb.removeManifestation(manifestation);
 						}
 					}
