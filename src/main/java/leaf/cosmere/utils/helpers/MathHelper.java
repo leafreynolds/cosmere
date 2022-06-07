@@ -10,6 +10,7 @@ public class MathHelper
 {
 	public final static Random RANDOM = new Random();
 
+	//inclusive
 	public static int randomInt(int min, int max)
 	{
 		return RANDOM.nextInt((max - min) + 1) + min;

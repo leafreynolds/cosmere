@@ -58,6 +58,9 @@ public class EntityHelper
 		int allomancyPower = MathHelper.randomInt(0, 15);
 		int feruchemyPower = MathHelper.randomInt(0, 15);
 
+		final Metals.MetalType allomancyMetal = Metals.MetalType.valueOf(allomancyPower).get();
+		final Metals.MetalType feruchemyMetal = Metals.MetalType.valueOf(feruchemyPower).get();
+
 		//if not twinborn, pick one power
 		boolean isAllomancy = MathHelper.randomBool();
 
@@ -85,29 +88,42 @@ public class EntityHelper
 				                                                     : "Feruchemist"));
 			}
 		}
-		else if (isTwinborn)
-		{
-			spiritwebCapability.giveManifestation(ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.valueOf(allomancyPower).get()).get());
-			spiritwebCapability.giveManifestation(ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.valueOf(feruchemyPower).get()).get());
-
-			if (!isPlayerEntity)
-			{
-				//todo translations
-				//todo grant random name
-				entity.setCustomName(TextHelper.createTranslatedText("Twinborn"));
-			}
-		}
 		else
 		{
-			AManifestation manifestation =
-					isAllomancy
-					? ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.valueOf(allomancyPower).get()).get()
-					: ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.valueOf(feruchemyPower).get()).get();
+			if (isTwinborn)
+			{
+				spiritwebCapability.giveManifestation(ManifestationRegistry.ALLOMANCY_POWERS.get(allomancyMetal).get());
+				spiritwebCapability.giveManifestation(ManifestationRegistry.FERUCHEMY_POWERS.get(feruchemyMetal).get());
 
-			spiritwebCapability.giveManifestation(manifestation);
-			//todo translations
-			//todo grant random name
-			//entity.setCustomName(powerType.getManifestation(powerID).translation());
+				if (!isPlayerEntity)
+				{
+					//todo translations
+					//todo grant random name
+					entity.setCustomName(TextHelper.createTranslatedText("Twinborn"));
+				}
+			}
+			else
+			{
+				AManifestation manifestation =
+						isAllomancy
+						? ManifestationRegistry.ALLOMANCY_POWERS.get(allomancyMetal).get()
+						: ManifestationRegistry.FERUCHEMY_POWERS.get(feruchemyMetal).get();
+
+				spiritwebCapability.giveManifestation(manifestation);
+				//todo translations
+				//todo grant random name
+				//entity.setCustomName(powerType.getManifestation(powerID).translation());
+
+				if (!isPlayerEntity)
+				{
+					//todo translations
+					//todo grant random name
+					entity.setCustomName(TextHelper.createTranslatedText(
+							isAllomancy
+							? allomancyMetal.getMistingName()
+							: feruchemyMetal.getFerringName()));
+				}
+			}
 		}
 	}
 }
