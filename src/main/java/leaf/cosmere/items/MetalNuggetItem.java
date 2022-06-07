@@ -29,7 +29,7 @@ public class MetalNuggetItem extends MetalItem
 	public int getUseDuration(ItemStack stack)
 	{
 		//be annoying enough that people prefer metal vials
-		return 16;
+		return 64;
 	}
 
 	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)

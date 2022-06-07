@@ -45,8 +45,11 @@ public class VialMixingRecipe extends CustomRecipe
 	public boolean matches(CraftingContainer inv, Level world)
 	{
 		boolean hasNugget = false;
-		ItemStack bottle = null;
+		ItemStack vialStack = null;
 		final Ingredient INGREDIENT_NUGGETS = Ingredient.of(Tags.Items.NUGGETS);
+		int bottleAmount = 0;
+		int nuggetTotal = 0;
+		MetalVialItem vialItem = null;
 
 		for (int i = 0; i < inv.getContainerSize(); i++)
 		{
@@ -59,32 +62,39 @@ public class VialMixingRecipe extends CustomRecipe
 			if (INGREDIENT_BOTTLE.test(stack))
 			{
 				//only one allowed
-				if (bottle != null)
+				if (vialStack != null)
 				{
 					return false;
 				}
 
-				bottle = stack;
+				vialStack = stack;
+				vialItem = (MetalVialItem) vialStack.getItem();
+				bottleAmount = vialItem.containedMetalCount(vialStack);
 			}
 			else if (INGREDIENT_NUGGETS.test(stack))
 			{
 				//but multiple nuggets allowed
 				hasNugget = true;
+				nuggetTotal++;
 			}
 		}
 
-		if (bottle == null)
+		if (vialStack == null)
 		{
-			//no bottle, no service
+			//no vialStack, no service
 			return false;
 		}
 
-		//check how full the bottle is, but only if its the vial
-		//minecraft bottles can be inherently empty
-		if (bottle.getItem() == ItemsRegistry.METAL_VIAL.get())
+		if (bottleAmount + nuggetTotal > vialItem.getMaxFillCount(vialStack))
 		{
-			MetalVialItem item = (MetalVialItem) bottle.getItem();
-			return hasNugget && !item.isFull(bottle);
+			return false;
+		}
+
+		//check how full the vialStack is, but only if its the vial
+		//minecraft bottles can be inherently empty
+		if (vialStack.getItem() == ItemsRegistry.METAL_VIAL.get())
+		{
+			return hasNugget && !vialItem.isFull(vialStack);
 		}
 
 
@@ -96,7 +106,6 @@ public class VialMixingRecipe extends CustomRecipe
 	public ItemStack assemble(CraftingContainer inv)
 	{
 		MetalVialItem metalVial = (MetalVialItem) ItemsRegistry.METAL_VIAL.get();
-		final Ingredient INGREDIENT_NUGGETS = Ingredient.of(Tags.Items.NUGGETS);
 		ItemStack itemstack = new ItemStack(metalVial);
 
 		for (int i = 0; i < inv.getContainerSize(); ++i)
@@ -107,7 +116,7 @@ public class VialMixingRecipe extends CustomRecipe
 				continue;
 			}
 
-			if (INGREDIENT_NUGGETS.test(stackInSlot))
+			if (stackInSlot.is(Tags.Items.NUGGETS))
 			{
 				if (stackInSlot.getItem() instanceof MetalNuggetItem)
 				{
@@ -123,6 +132,10 @@ public class VialMixingRecipe extends CustomRecipe
 					metalVial.addMetals(itemstack, Metals.MetalType.GOLD.getID(), 1);
 				}
 
+			}
+			else if (stackInSlot.is(metalVial))
+			{
+				metalVial.addMetals(itemstack, stackInSlot);
 			}
 		}
 		return itemstack;

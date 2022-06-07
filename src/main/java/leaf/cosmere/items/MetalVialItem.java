@@ -39,7 +39,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 {
 	private final String metal_ids = "metalIDs";
 	private final String metal_amounts = "metalAmounts";
-	private final int MAX_METALS_COUNT = 8;
+	private final int MAX_METALS_COUNT = 16;
 
 	private CompoundTag getContainedMetalsTag(ItemStack stack)
 	{
@@ -48,7 +48,14 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 
 	public boolean isFull(ItemStack stack)
 	{
-		return containedMetalCount(stack) >= MAX_METALS_COUNT;
+		return containedMetalCount(stack) >= getMaxFillCount(stack);
+	}
+
+	public int getMaxFillCount(ItemStack stack)
+	{
+		final CompoundTag stackTags = stack.getOrCreateTag();
+		final String max_count = "max_count";
+		return stackTags.contains(max_count) ? stackTags.getInt(max_count) : MAX_METALS_COUNT;
 	}
 
 	@Nonnull
@@ -239,5 +246,14 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	public Metals.MetalType getMetalType()
 	{
 		return Metals.MetalType.IRON;
+	}
+
+	public void addMetals(ItemStack newMetalVialStack, ItemStack oldMetalVialStack)
+	{
+		Map<Integer, Integer> sorted = getStoredMetalsMap(getContainedMetalsTag(oldMetalVialStack));
+		for (Integer metalID : sorted.keySet())
+		{
+			addMetals(newMetalVialStack, metalID, sorted.get(metalID));
+		}
 	}
 }
