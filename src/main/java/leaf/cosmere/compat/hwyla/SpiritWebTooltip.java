@@ -10,12 +10,14 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.manifestation.allomancy.AllomancyBronze;
+import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.TextHelper;
 import mcp.mobius.waila.api.EntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;
 import mcp.mobius.waila.api.ITooltip;
 import mcp.mobius.waila.api.config.IPluginConfig;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
 public class SpiritWebTooltip implements IEntityComponentProvider
@@ -37,10 +39,13 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 				//check the entity we are trying to
 				SpiritwebCapability.get((LivingEntity) accessor.getEntity()).ifPresent(targetSpiritweb ->
 				{
-					final AllomancyBase copperAllomancy = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.COPPER).get();
-					final double targetCopperStrength = copperAllomancy.getStrength(targetSpiritweb, false);
+					MobEffectInstance effect = targetSpiritweb.getLiving().getEffect(EffectsRegistry.ALLOMANTIC_COPPER.get());
 
-					if (!playerCreativeMode && (copperAllomancy.isMetalBurning(targetSpiritweb) && targetCopperStrength >= playerBronzeStrength))
+					final double copperCloudStrength =
+							effect!= null && effect.getDuration() > 0
+							? effect.getAmplifier() : 0;
+
+					if (!playerCreativeMode && (copperCloudStrength >= playerBronzeStrength))
 					{
 						return;
 					}

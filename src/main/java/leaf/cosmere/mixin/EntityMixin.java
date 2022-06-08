@@ -9,8 +9,10 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.manifestation.allomancy.AllomancyCopper;
+import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -51,10 +53,12 @@ public class EntityMixin
 			SpiritwebCapability.get(target).ifPresent(targetSpiritweb ->
 			{
 				//if target has copper and it's active, early exit
-				final AllomancyBase copperAllomancy = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.COPPER).get();
-				final double copperStrength = copperAllomancy.getStrength(targetSpiritweb, false);
+				MobEffectInstance effect = targetSpiritweb.getLiving().getEffect(EffectsRegistry.ALLOMANTIC_COPPER.get());
+				final double copperCloudStrength =
+						effect != null && effect.getDuration() > 0
+						? effect.getAmplifier() : 0;
 
-				if (copperAllomancy.isMetalBurning(targetSpiritweb) && copperStrength >= bronzeStrength)
+				if (copperCloudStrength >= bronzeStrength)
 				{
 					return;
 				}
