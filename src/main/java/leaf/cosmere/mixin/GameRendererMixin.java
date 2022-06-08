@@ -39,8 +39,10 @@ public class GameRendererMixin
 		if (tinTapEffect != null && tinTapEffect.getDuration() > 0)
 		{
 			int amplifier = tinTapEffect.getAmplifier();
-			double zoomedFov = fov / (amplifier + 2);
-			info.setReturnValue(zoomedFov);
+			final int i = amplifier + 1;
+			final double pow = Math.pow(2, i);
+			final double v = fov / pow;
+			info.setReturnValue(v);
 			return;
 		}
 
