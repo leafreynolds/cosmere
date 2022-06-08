@@ -19,6 +19,7 @@ import mcp.mobius.waila.api.ITooltip;
 import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class SpiritWebTooltip implements IEntityComponentProvider
 {
@@ -49,11 +50,12 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 					{
 						return;
 					}
+					final boolean targetIsPlayer = targetSpiritweb.getLiving() instanceof Player;
 
 					//show all manifestations, including hemalurgic based ones.
 					for (AManifestation manifestation : targetSpiritweb.getAvailableManifestations())
 					{
-						if (!manifestation.isActive(targetSpiritweb) && !playerCreativeMode)
+						if (!targetIsPlayer  || (!manifestation.isActive(targetSpiritweb)) && !playerCreativeMode)
 						{
 							continue;
 						}
