@@ -34,7 +34,7 @@ public class Network
 		NETWORK_CHANNEL.registerMessage(id++, SyncPlayerSpiritwebMessage.class, SyncPlayerSpiritwebMessage::encode, SyncPlayerSpiritwebMessage::decode, SyncPlayerSpiritwebMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, DeactivateCurrentManifestationsMessage.class, DeactivateCurrentManifestationsMessage::encode, DeactivateCurrentManifestationsMessage::new, DeactivateCurrentManifestationsMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, ChangeManifestationModeMessage.class, ChangeManifestationModeMessage::encode, ChangeManifestationModeMessage::decode, ChangeManifestationModeMessage::handle);
-		NETWORK_CHANNEL.registerMessage(id++, DeactivateAllManifestationsMessage.class, DeactivateAllManifestationsMessage::encode, DeactivateAllManifestationsMessage::new, DeactivateAllManifestationsMessage::handle);
+		//NETWORK_CHANNEL.registerMessage(id++, DeactivateAllManifestationsMessage.class, DeactivateAllManifestationsMessage::encode, DeactivateAllManifestationsMessage::new, DeactivateAllManifestationsMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, ChangeSelectedManifestationMessage.class, ChangeSelectedManifestationMessage::encode, ChangeSelectedManifestationMessage::decode, ChangeSelectedManifestationMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, SetSelectedManifestationMessage.class, SetSelectedManifestationMessage::encode, SetSelectedManifestationMessage::decode, SetSelectedManifestationMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, SyncPushPullMessage.class, SyncPushPullMessage::encode, SyncPushPullMessage::decode, SyncPushPullMessage::handle);

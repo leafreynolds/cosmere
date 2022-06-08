@@ -157,6 +157,7 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		hasBeenInitialized = nbt.getBoolean("assigned_powers");
 		CompoundTag modeNBT = nbt.getCompound("manifestation_modes");
+		MANIFESTATIONS_MODE.clear();
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			final String manifestationLoc = manifestation.getRegistryName().toString();
