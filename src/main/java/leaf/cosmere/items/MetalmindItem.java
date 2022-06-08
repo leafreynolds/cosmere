@@ -66,4 +66,16 @@ public class MetalmindItem extends ChargeableItemBase implements IHasMetalType, 
 
 		return attributeModifiers;
 	}
+
+	@Override
+	public boolean makesPiglinsNeutral(SlotContext slotContext, ItemStack stack)
+	{
+		return makesPiglinsNeutral(stack, slotContext.entity());
+	}
+
+	@Override
+	public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer)
+	{
+		return this.metalType == Metals.MetalType.GOLD;
+	}
 }
