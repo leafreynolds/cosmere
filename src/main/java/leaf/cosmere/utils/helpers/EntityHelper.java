@@ -124,10 +124,11 @@ public class EntityHelper
 				{
 					//todo translations
 					//todo grant random name
+					final String s = StringHelper.fixCapitalisation(isAllomancy
+					                 ? allomancyMetal.getMistingName()
+					                 : feruchemyMetal.getFerringName());
 					entity.setCustomName(TextHelper.createTranslatedText(
-							isAllomancy
-							? allomancyMetal.getMistingName()
-							: feruchemyMetal.getFerringName()));
+							s));
 				}
 			}
 		}
