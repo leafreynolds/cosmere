@@ -24,9 +24,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
-import javax.naming.Context;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class ManifestationCommand extends ModCommand
@@ -134,7 +131,8 @@ public class ManifestationCommand extends ModCommand
 			}
 			SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 			{
-				spiritweb.giveManifestation(manifestation);
+				//todo config ability strength
+				spiritweb.giveManifestation(manifestation, 10);
 				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 				spiritweb.syncToClients(null);
 			});

@@ -555,7 +555,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 
 	@Override
-	public void giveManifestation(AManifestation manifestation)
+	public void giveManifestation(AManifestation manifestation, int i)
 	{
 		String manifestationName = manifestation.getName();
 		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))

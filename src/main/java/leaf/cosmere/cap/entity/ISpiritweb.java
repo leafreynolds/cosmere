@@ -8,7 +8,6 @@
 
 package leaf.cosmere.cap.entity;
 
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
 import net.minecraft.nbt.CompoundTag;
@@ -30,7 +29,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	boolean hasManifestation(AManifestation aManifestation, boolean ignoreTemporaryPower);
 
-	void giveManifestation(AManifestation aManifestation);
+	void giveManifestation(AManifestation manifestation, int i);
 
 	void removeManifestation(AManifestation aManifestation);
 

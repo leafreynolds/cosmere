@@ -8,6 +8,7 @@ import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,11 +56,11 @@ public class EntityHelper
 		boolean isTwinborn = isPlayerEntity || MathHelper.randomInt(0, 16) < 3;
 
 		//randomise the given powers from allomancy and feruchemy
-		int allomancyPower = MathHelper.randomInt(0, 15);
-		int feruchemyPower = MathHelper.randomInt(0, 15);
+		int allomancyPowerID = MathHelper.randomInt(0, 15);
+		int feruchemyPowerID = MathHelper.randomInt(0, 15);
 
-		final Metals.MetalType allomancyMetal = Metals.MetalType.valueOf(allomancyPower).get();
-		final Metals.MetalType feruchemyMetal = Metals.MetalType.valueOf(feruchemyPower).get();
+		final Metals.MetalType allomancyMetal = Metals.MetalType.valueOf(allomancyPowerID).get();
+		final Metals.MetalType feruchemyMetal = Metals.MetalType.valueOf(feruchemyPowerID).get();
 
 		//if not twinborn, pick one power
 		boolean isAllomancy = MathHelper.randomBool();
@@ -75,7 +76,7 @@ public class EntityHelper
 				if ((isAllomancy && manifestationType == Manifestations.ManifestationTypes.ALLOMANCY)
 						|| (!isAllomancy && manifestationType == Manifestations.ManifestationTypes.FERUCHEMY))
 				{
-					spiritwebCapability.giveManifestation(manifestation);
+					spiritwebCapability.giveManifestation(manifestation, 8);
 				}
 			}
 
@@ -83,17 +84,22 @@ public class EntityHelper
 			{
 				//todo translations
 				//todo grant random name
-				entity.setCustomName(TextHelper.createTranslatedText(isAllomancy
-				                                                     ? "Mistborn"
-				                                                     : "Feruchemist"));
+				entity.setCustomName(
+						TextHelper.createTranslatedText(
+								isAllomancy
+								? "Mistborn"
+								: "Feruchemist")
+				);
 			}
 		}
 		else
 		{
+			final AllomancyBase allomancyPower = ManifestationRegistry.ALLOMANCY_POWERS.get(allomancyMetal).get();
+			final AManifestation feruchemyPower = ManifestationRegistry.FERUCHEMY_POWERS.get(feruchemyMetal).get();
 			if (isTwinborn)
 			{
-				spiritwebCapability.giveManifestation(ManifestationRegistry.ALLOMANCY_POWERS.get(allomancyMetal).get());
-				spiritwebCapability.giveManifestation(ManifestationRegistry.FERUCHEMY_POWERS.get(feruchemyMetal).get());
+				spiritwebCapability.giveManifestation(allomancyPower, 9);
+				spiritwebCapability.giveManifestation(feruchemyPower, 9);
 
 				if (!isPlayerEntity)
 				{
@@ -106,10 +112,10 @@ public class EntityHelper
 			{
 				AManifestation manifestation =
 						isAllomancy
-						? ManifestationRegistry.ALLOMANCY_POWERS.get(allomancyMetal).get()
-						: ManifestationRegistry.FERUCHEMY_POWERS.get(feruchemyMetal).get();
+						? allomancyPower
+						: feruchemyPower;
 
-				spiritwebCapability.giveManifestation(manifestation);
+				spiritwebCapability.giveManifestation(manifestation, 10);
 				//todo translations
 				//todo grant random name
 				//entity.setCustomName(powerType.getManifestation(powerID).translation());

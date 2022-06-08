@@ -32,7 +32,7 @@ public class Network
 	{
 		int id = 0;
 		NETWORK_CHANNEL.registerMessage(id++, SyncPlayerSpiritwebMessage.class, SyncPlayerSpiritwebMessage::encode, SyncPlayerSpiritwebMessage::decode, SyncPlayerSpiritwebMessage::handle);
-		NETWORK_CHANNEL.registerMessage(id++, DeactivateCurrentManifestationsMessage.class, DeactivateCurrentManifestationsMessage::encode, DeactivateCurrentManifestationsMessage::new, DeactivateCurrentManifestationsMessage::handle);
+		NETWORK_CHANNEL.registerMessage(id++, DeactivateManifestationsMessage.class, DeactivateManifestationsMessage::encode, DeactivateManifestationsMessage::new, DeactivateManifestationsMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, ChangeManifestationModeMessage.class, ChangeManifestationModeMessage::encode, ChangeManifestationModeMessage::decode, ChangeManifestationModeMessage::handle);
 		//NETWORK_CHANNEL.registerMessage(id++, DeactivateAllManifestationsMessage.class, DeactivateAllManifestationsMessage::encode, DeactivateAllManifestationsMessage::new, DeactivateAllManifestationsMessage::handle);
 		NETWORK_CHANNEL.registerMessage(id++, ChangeSelectedManifestationMessage.class, ChangeSelectedManifestationMessage::encode, ChangeSelectedManifestationMessage::decode, ChangeSelectedManifestationMessage::handle);

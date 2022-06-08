@@ -11,7 +11,7 @@ import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.network.packets.ChangeSelectedManifestationMessage;
-import leaf.cosmere.network.packets.DeactivateCurrentManifestationsMessage;
+import leaf.cosmere.network.packets.DeactivateManifestationsMessage;
 import leaf.cosmere.registry.KeybindingRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -65,12 +65,12 @@ public class ClientEvents
 
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
-			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_TOGGLE))
+			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_DEACTIVATE))
 			{
 				//if crouching, only turn off.
 				if (player.isCrouching() && spiritweb.canTickSelectedManifestation())
 				{
-					Network.sendToServer(new DeactivateCurrentManifestationsMessage());
+					Network.sendToServer(new DeactivateManifestationsMessage());
 				}
 				//otherwise do a normal toggle
 				else if (!player.isCrouching())

@@ -353,10 +353,33 @@ public interface IHemalurgicInfo
 
 	default double getHemalurgicStrength(ItemStack stack, String name)
 	{
-		return CompoundNBTHelper.getDouble(
+		double strength = CompoundNBTHelper.getDouble(
 				getHemalurgicInfo(stack),
 				name,
 				0);
+
+		HemalurgicSpikeItem spikeItem = (HemalurgicSpikeItem) stack.getItem();
+		switch (spikeItem.getMetalType())
+		{
+			case LERASATIUM ->
+			{
+				//lerasatium spikes can't give more than 5
+				//todo config max lerasatium spike strength amount
+				strength = Math.min(5, strength);
+			}
+			case IRON, TIN, COPPER, CHROMIUM, ZINC, NICROSIL ->
+			{
+				//nil
+			}
+			default ->
+			{
+				//other spikes can't give more than 7
+				//todo config max power spike strength amount
+				strength = Math.min(7, strength);
+			}
+		}
+
+		return strength;
 	}
 
 	default void setHemalurgicStrength(ItemStack stack, Metals.MetalType metalType, double val)

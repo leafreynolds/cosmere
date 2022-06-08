@@ -73,14 +73,16 @@ public class MetalNuggetItem extends MetalItem
 							//give allomancy
 							if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
 							{
-								spiritweb.giveManifestation(manifestation);
+								//todo config allomancy strength
+								spiritweb.giveManifestation(manifestation, 13);
 							}
 							break;
 						case LERASATIUM:
 							//give feruchemy
 							if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
 							{
-								spiritweb.giveManifestation(manifestation);
+								//todo config feruchemy strength
+								spiritweb.giveManifestation(manifestation, 13);
 							}
 							break;
 					}

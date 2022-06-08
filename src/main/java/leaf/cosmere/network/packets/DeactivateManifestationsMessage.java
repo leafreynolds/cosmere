@@ -16,18 +16,18 @@ import java.util.function.Supplier;
 
 import static leaf.cosmere.constants.Constants.Translations.POWER_INACTIVE;
 
-public class DeactivateCurrentManifestationsMessage
+public class DeactivateManifestationsMessage
 {
 
-	public DeactivateCurrentManifestationsMessage()
+	public DeactivateManifestationsMessage()
 	{
 	}
 
-	public DeactivateCurrentManifestationsMessage(FriendlyByteBuf buffer)
+	public DeactivateManifestationsMessage(FriendlyByteBuf buffer)
 	{
 	}
 
-	public static void handle(DeactivateCurrentManifestationsMessage message, Supplier<NetworkEvent.Context> ctx)
+	public static void handle(DeactivateManifestationsMessage message, Supplier<NetworkEvent.Context> ctx)
 	{
 		NetworkEvent.Context context = ctx.get();
 		ServerPlayer sender = context.getSender();

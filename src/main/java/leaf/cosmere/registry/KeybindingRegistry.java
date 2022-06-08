@@ -25,7 +25,7 @@ public class KeybindingRegistry
 {
 
 	public static KeyMapping MANIFESTATION_MENU;
-	public static KeyMapping MANIFESTATION_TOGGLE;
+	public static KeyMapping MANIFESTATION_DEACTIVATE;
 	public static KeyMapping MANIFESTATION_NEXT;
 	public static KeyMapping MANIFESTATION_PREVIOUS;
 
@@ -39,7 +39,7 @@ public class KeybindingRegistry
 	public static void register(FMLClientSetupEvent event)
 	{
 		ClientRegistry.registerKeyBinding(MANIFESTATION_MENU = new KeyMapping(KEY_MANIFESTATION_MENU, GLFW.GLFW_KEY_G, KEYS_CATEGORY));
-		ClientRegistry.registerKeyBinding(MANIFESTATION_TOGGLE = new KeyMapping(KEY_MANIFESTATION_TOGGLE, GLFW.GLFW_KEY_C, KEYS_CATEGORY));
+		ClientRegistry.registerKeyBinding(MANIFESTATION_DEACTIVATE = new KeyMapping(KEY_MANIFESTATION_TOGGLE, GLFW.GLFW_KEY_C, KEYS_CATEGORY));
 
 		ClientRegistry.registerKeyBinding(MANIFESTATION_NEXT = new KeyMapping(KEY_MANIFESTATION_NEXT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
 		ClientRegistry.registerKeyBinding(MANIFESTATION_PREVIOUS = createKeybinding(KEY_MANIFESTATION_PREVIOUS, KeyModifier.SHIFT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
