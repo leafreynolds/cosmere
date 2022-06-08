@@ -86,7 +86,7 @@ public class Constants
 		public static final String KEY_MANIFESTATION_NEXT = "key.cosmere.powers.next";
 		public static final String KEY_MANIFESTATION_PREVIOUS = "key.cosmere.powers.previous";
 
-		public static final String KEY_MANIFESTATION_TOGGLE = "key.cosmere.powers.toggle";
+		public static final String KEY_DEACTIVATE_ALL_POWERS = "key.cosmere.powers.toggle";
 		public static final String KEY_MANIFESTATION_MENU = "key.cosmere.powers.menu";
 
 		public static final String KEY_ALLOMANCY_PUSH = "key.cosmere.allomancy.push";

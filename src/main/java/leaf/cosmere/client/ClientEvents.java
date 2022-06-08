@@ -15,6 +15,7 @@ import leaf.cosmere.network.packets.DeactivateManifestationsMessage;
 import leaf.cosmere.registry.KeybindingRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -65,15 +66,15 @@ public class ClientEvents
 
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
-			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_DEACTIVATE))
+			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATIONS_DEACTIVATE))
 			{
 				//if crouching, only turn off.
-				if (player.isCrouching() && spiritweb.canTickSelectedManifestation())
+				if (Screen.hasShiftDown())
 				{
 					Network.sendToServer(new DeactivateManifestationsMessage());
 				}
 				//otherwise do a normal toggle
-				else if (!player.isCrouching())
+				else
 				{
 					//todo decide if there is an activation state?
 				}
@@ -89,16 +90,25 @@ public class ClientEvents
 				Network.sendToServer(new ChangeSelectedManifestationMessage(1));
 			}
 
+			final boolean modeIncreasePressed = isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_INCREASE);
+			final boolean modeDecreasedPressed = isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_DECREASE);
 
-			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_INCREASE))
+			if (modeIncreasePressed || modeDecreasedPressed)
 			{
-				int dir = (player.isCrouching() ? 3 : 1);
-				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), dir));
-			}
-			if (isKeyPressed(event, KeybindingRegistry.MANIFESTATION_MODE_DECREASE))
-			{
-				int dir = (player.isCrouching() ? -3 : -1);
-				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), dir));
+				int dir;
+				if (Screen.hasShiftDown())
+				{
+					dir = 5;
+				}
+				else if (Screen.hasControlDown())
+				{
+					dir = 10;
+				}
+				else
+				{
+					dir = 1;
+				}
+				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), dir * (modeIncreasePressed ? 1 : -1)));
 			}
 		});
 	}
