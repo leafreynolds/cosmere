@@ -1,5 +1,25 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B44
+
+Fix tapping gold only healing one hp regardless of tap amount
+Crafting filled vials now take into account how much metal was in the vial before.
+Copper/Bronze allomancy checks strength
+Fix nicrosil crash
+Tin store now affects render distance.
+Brass store has reduceable fire damage
+Fix some menu radial button icon overlap
+Lerasatium spikes get all powers at 50% of donors strength.
+Hide cosmere curios when invisible potion effect applied
+Fix F-Zinc being inverted.
+Spawned mob metalborn have ferring/misting names if they only have one power
+Fix deactivate manifestations not clearing modes on client
+Strength in metal dependent on how you got it. Misting/twinborn are slightly stronger than full feruchemist/mistborn. God metal granting powers grant 'ancient' strength.
+A-Bronze now competes against copper cloud effect in order to make entities and see information in hwyla.
+Mode increase/decrease affected by shift/ctrl.
+Wearing gold metalminds/spikes makes piglins neutral.
+
+
 B43
 
 Allomantic tin now has does incremental night vision improvement, rather than doing the potion effect.
