@@ -55,11 +55,13 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 					//show all manifestations, including hemalurgic based ones.
 					for (AManifestation manifestation : targetSpiritweb.getAvailableManifestations())
 					{
-						if (!targetIsPlayer  || (!manifestation.isActive(targetSpiritweb)) && !playerCreativeMode)
+						//if player is creative mode
+						//or target is a mob
+						//or player has this manifestation active
+						if (playerCreativeMode || !targetIsPlayer || manifestation.isActive(targetSpiritweb))
 						{
-							continue;
+							tooltip.add(manifestation.translation());
 						}
-						tooltip.add(manifestation.translation());
 					}
 				});
 			}
