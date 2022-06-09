@@ -215,13 +215,15 @@ public class CoinPouchItem extends ProjectileWeaponItem
 						//great, we fit it all.
 					}
 
-					//here's what we couldn't fit (if any)
-					entity.setItem(entityStack);
-					//do the take animation where the entity flies into the player
 					final int amountTaken = originalCount - entityStack.getCount();
-					player.take(entity, amountTaken);
-
-					return true;
+					if (amountTaken > 0)
+					{
+						//here's what we couldn't fit (if any)
+						entity.setItem(entityStack);
+						//do the take animation where the entity flies into the player
+						player.take(entity, amountTaken);
+						return true;
+					}
 				}
 			}
 		}
