@@ -23,6 +23,25 @@ public class FeruchemyBendalloy extends FeruchemyBase
 	}
 
 	@Override
+	public int getCost(ISpiritweb data)
+	{
+		int cost = super.getCost(data);
+
+		if (data.getLiving() instanceof Player player)
+		{
+			FoodData foodData = player.getFoodData();
+			if (isTapping(data) && !foodData.needsFood() && foodData.getSaturationLevel() < foodData.getFoodLevel())
+			{
+				//todo config
+				//currently double cost if only doing saturation
+				cost *= 2;
+			}
+		}
+
+		return cost;
+	}
+
+	@Override
 	public void tick(ISpiritweb data)
 	{
 		//don't check every tick.
@@ -33,18 +52,15 @@ public class FeruchemyBendalloy extends FeruchemyBase
 			return;
 		}
 
-		final boolean tapping = mode < 0;
-		final boolean storing = mode > 0;
-
 		if (livingEntity instanceof Player player)
 		{
 			FoodData foodData = player.getFoodData();
-			if (storing && foodData.getFoodLevel() <= 0)
+			if (isStoring(data) && foodData.getFoodLevel() <= 0)
 			{
 				//no food to store
 				return;
 			}
-			else if (tapping && !(foodData.needsFood() || foodData.getSaturationLevel() < foodData.getFoodLevel()))
+			else if (isTapping(data) && !(foodData.needsFood() || foodData.getSaturationLevel() < foodData.getFoodLevel()))
 			{
 				//already full
 				return;
