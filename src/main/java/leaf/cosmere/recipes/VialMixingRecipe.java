@@ -27,14 +27,6 @@ import javax.annotation.Nonnull;
 public class VialMixingRecipe extends CustomRecipe
 {
 	private static final Ingredient INGREDIENT_BOTTLE = Ingredient.of(Items.GLASS_BOTTLE, ItemsRegistry.METAL_VIAL.get());
-/*    private static final Ingredient INGREDIENT_NUGGET = Ingredient.fromItems(
-            ItemsRegistry.METAL_NUGGETS
-                    .values()
-                    .stream()
-                    .map(RegistryObject::get)
-                    .toArray(Item[]::new)
-    );*/
-
 
 	public VialMixingRecipe(ResourceLocation loc)
 	{
@@ -42,14 +34,14 @@ public class VialMixingRecipe extends CustomRecipe
 	}
 
 	@Override
-	public boolean matches(CraftingContainer inv, Level world)
+	public boolean matches(CraftingContainer inv, @Nonnull Level world)
 	{
 		boolean hasNugget = false;
 		ItemStack vialStack = null;
 		final Ingredient INGREDIENT_NUGGETS = Ingredient.of(Tags.Items.NUGGETS);
 		int bottleAmount = 0;
 		int nuggetTotal = 0;
-		MetalVialItem vialItem = null;
+		MetalVialItem metalVialItem = (MetalVialItem) ItemsRegistry.METAL_VIAL.get();
 
 		for (int i = 0; i < inv.getContainerSize(); i++)
 		{
@@ -68,8 +60,11 @@ public class VialMixingRecipe extends CustomRecipe
 				}
 
 				vialStack = stack;
-				vialItem = (MetalVialItem) vialStack.getItem();
-				bottleAmount = vialItem.containedMetalCount(vialStack);
+				//if is vial and not bottle, check it for contained metals.
+				if (vialStack.is(metalVialItem))
+				{
+					bottleAmount = metalVialItem.containedMetalCount(vialStack);
+				}
 			}
 			else if (INGREDIENT_NUGGETS.test(stack))
 			{
@@ -85,7 +80,7 @@ public class VialMixingRecipe extends CustomRecipe
 			return false;
 		}
 
-		if (bottleAmount + nuggetTotal > vialItem.getMaxFillCount(vialStack))
+		if (bottleAmount + nuggetTotal > metalVialItem.getMaxFillCount(vialStack))
 		{
 			return false;
 		}
@@ -94,7 +89,7 @@ public class VialMixingRecipe extends CustomRecipe
 		//minecraft bottles can be inherently empty
 		if (vialStack.getItem() == ItemsRegistry.METAL_VIAL.get())
 		{
-			return hasNugget && !vialItem.isFull(vialStack);
+			return hasNugget && !metalVialItem.isFull(vialStack);
 		}
 
 
@@ -149,13 +144,13 @@ public class VialMixingRecipe extends CustomRecipe
 	}
 
 	@Override
-	public ResourceLocation getId()
+	public @Nonnull ResourceLocation getId()
 	{
 		return ResourceLocationHelper.prefix("vial_mix");
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer()
+	public @Nonnull RecipeSerializer<?> getSerializer()
 	{
 		return RecipeRegistry.VIAL_RECIPE_SERIALIZER.get();
 	}
