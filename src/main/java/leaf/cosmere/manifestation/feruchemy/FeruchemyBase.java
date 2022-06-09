@@ -74,6 +74,29 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 		return getMode(data) < 0;
 	}
 
+	public boolean canAfford(ISpiritweb data, boolean simulate)
+	{
+		int cost = getCost(data);
+		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, !simulate, true);
+
+		if (metalmind != null)
+		{
+			return true;
+		}
+
+		if (!simulate)
+		{
+			final int mode = getMode(data);
+			if (mode < 0)
+			{
+				//move towards turning off feruchemy.
+				data.setMode(this, mode + 1);
+			}
+		}
+
+		return false;
+	}
+
 	public int getCost(ISpiritweb data)
 	{
 		int mode = data.getMode(this);
@@ -84,8 +107,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 		{
 			//wanting to tap
 			//get cost
-			return mode <= -3 ? mode : -(mode * mode);
-
+			return mode >= -3 ? mode : -(mode * mode);
 		}
 		//if we are storing
 		//check if there is space to store
@@ -96,49 +118,24 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 		return 0;
 	}
 
+
 	@Override
 	public void tick(ISpiritweb data)
 	{
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 
-		if (livingEntity.tickCount % 20 != 0)
-		{
-			return;
-		}
-
 		int mode = getMode(data);
 
-		int cost;
-
-		MobEffect effect = getEffect(mode);
-
-		// if we are tapping
-		//check if there is charges to tap
-		if (mode < 0)
+		if ((livingEntity.tickCount % 20 != 0) || mode == 0)
 		{
-			//wanting to tap
-			//get cost
-			cost = mode <= -3 ? -(mode * mode) : mode;
-
-		}
-		//if we are storing
-		//check if there is space to store
-		else if (mode > 0)
-		{
-			cost = mode;
-		}
-		//can't store or tap any more
-		else
-		{
-			//remove active effects.
-			//let the current effect run out.
+			//if not active tick, or mode is off
 			return;
 		}
 
-		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true);
-		if (metalmind != null)//success
+		if (canAfford(data, false))//success
 		{
+			MobEffect effect = getEffect(mode);
 			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 
 			if (effect == null)
@@ -148,15 +145,6 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 
 			livingEntity.addEffect(currentEffect);
 		}
-		else
-		{
-			if (mode < 0)
-			{
-				//move towards turning off feruchemy.
-				data.setMode(this, mode + 1);
-			}
-		}
-
 	}
 
 	protected MobEffect getEffect(int mode)
