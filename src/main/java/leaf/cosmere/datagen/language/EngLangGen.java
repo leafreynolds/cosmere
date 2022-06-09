@@ -130,9 +130,9 @@ public class EngLangGen extends LanguageProvider
 					add(String.format(titleFormat, tabName + "." + metalName), StringHelper.fixCapitalisation(name));
 					add(String.format(descriptionFormat, tabName + "." + metalName), "Test description: " + StringHelper.fixCapitalisation(name));
 					break;
-				case RADIANT:
-				case ELANTRIAN:
-				case AWAKENER:
+				case SURGEBINDING:
+				case AON_DOR:
+				case AWAKENING:
 				default:
 				case NONE:
 					description = "No Special Powers";

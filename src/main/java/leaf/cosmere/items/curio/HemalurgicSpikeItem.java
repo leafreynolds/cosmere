@@ -6,20 +6,15 @@ package leaf.cosmere.items.curio;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.MetalmindItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.LogHelper;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -45,11 +40,8 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.SlotTypePreset;
-import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -189,6 +181,12 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 				final UUID identity = UUID.randomUUID();
 				for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 				{
+					//lerasatium creative mode hide surge powers for now
+					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SURGEBINDING)
+					{
+						continue;
+					}
+
 					Invest(bound, manifestation, 5, identity);
 				}
 

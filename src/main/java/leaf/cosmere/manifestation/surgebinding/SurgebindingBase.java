@@ -12,6 +12,6 @@ public class SurgebindingBase extends ManifestationBase
 {
 	public SurgebindingBase(Roshar.Surges surge)
 	{
-		super(Manifestations.ManifestationTypes.RADIANT, surge.getColor());
+		super(Manifestations.ManifestationTypes.SURGEBINDING, surge.getColor());
 	}
 }

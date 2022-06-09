@@ -4,10 +4,8 @@
 
 package leaf.cosmere.constants;
 
-import leaf.cosmere.client.ClientHelper;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -17,9 +15,9 @@ public class Manifestations
 {
 	public final static int ALLOMANCY_ID = 1;
 	public final static int FERUCHEMY_ID = 2;
-	public final static int RADIANT_ID = 3;
-	public final static int ELANTRIAN_ID = 4;
-	public final static int AWAKENER_ID = 5;
+	public final static int SURGEBINDING_ID = 3;
+	public final static int AONDOR_ID = 4;
+	public final static int AWAKENING_ID = 5;
 
 	public enum ManifestationTypes
 	{
@@ -31,13 +29,13 @@ public class Manifestations
 		FERUCHEMY(FERUCHEMY_ID),
 
 		//Knight Radiant Section
-		RADIANT(RADIANT_ID),
+		SURGEBINDING(SURGEBINDING_ID),
 
 		// AonDor
-		ELANTRIAN(ELANTRIAN_ID),
+		AON_DOR(AONDOR_ID),
 
 		// AonDor
-		AWAKENER(AWAKENER_ID);
+		AWAKENING(AWAKENING_ID);
 
 
 		ManifestationTypes(int id)
@@ -77,11 +75,11 @@ public class Manifestations
 						return ManifestationRegistry.FERUCHEMY_POWERS.get(metalType.get()).get();
 					}
 					break;
-				case RADIANT:
+				case SURGEBINDING:
 					break;
-				case ELANTRIAN:
+				case AON_DOR:
 					break;
-				case AWAKENER:
+				case AWAKENING:
 					break;
 			}
 			return ManifestationRegistry.NONE.get();

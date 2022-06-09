@@ -16,7 +16,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientHelper;
 import leaf.cosmere.constants.Manifestations;
@@ -38,7 +37,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -522,11 +520,11 @@ public class SpiritwebMenu extends Screen
 					FeruchemyBase feruchemyBase = (FeruchemyBase) mani;
 					stringBuilder.append(feruchemyBase.getMetalType().getName());
 					break;
-				case RADIANT:
+				case SURGEBINDING:
 					break;
-				case ELANTRIAN:
+				case AON_DOR:
 					break;
-				case AWAKENER:
+				case AWAKENING:
 					break;
 			}
 
