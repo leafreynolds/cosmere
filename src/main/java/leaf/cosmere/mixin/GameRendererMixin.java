@@ -1,7 +1,10 @@
 package leaf.cosmere.mixin;
 
+import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.registry.EffectsRegistry;
+import leaf.cosmere.manifestation.allomancy.AllomancyBase;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
+import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -11,7 +14,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -35,18 +37,24 @@ public class GameRendererMixin
 	{
 		double fov = info.getReturnValue();
 		Player player = (Player) Minecraft.getInstance().getCameraEntity();
-		MobEffectInstance tinTapEffect = player.getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.TIN).get());
-		if (tinTapEffect != null && tinTapEffect.getDuration() > 0)
+
+		if (player == null)
 		{
-			int amplifier = tinTapEffect.getAmplifier();
-			final int i = amplifier + 1;
-			final double pow = Math.pow(2, i);
-			final double v = fov / pow;
-			info.setReturnValue(v);
 			return;
 		}
 
-		info.setReturnValue(fov);
+		SpiritwebCapability.get(player).ifPresent(playerSpiritweb ->
+		{
+			final FeruchemyBase tinF = (FeruchemyBase) ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.TIN).get();
+
+			if (tinF.isTapping(playerSpiritweb) && tinF.canAfford(playerSpiritweb, true))
+			{
+				final int i = Mth.abs(tinF.getMode(playerSpiritweb));
+				final double pow = Math.pow(2, i);
+				final double v = fov / pow;
+				info.setReturnValue(v);
+			}
+		});
 	}
 
 
@@ -56,23 +64,31 @@ public class GameRendererMixin
 	)
 	private void getRenderDistance(CallbackInfoReturnable<Float> info)
 	{
-		float renderDistance = info.getReturnValue();
 		Player player = (Player) Minecraft.getInstance().getCameraEntity();
-		MobEffectInstance tinTapEffect = null;
-		if (player != null)
-		{
-			tinTapEffect = player.getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.TIN).get());
-		}
-		if (tinTapEffect != null && tinTapEffect.getDuration() > 0)
-		{
-			int amplifier = tinTapEffect.getAmplifier();
-			final int i = amplifier + 1;
-			final double pow = Math.pow(2, i);
-			final int floor = Mth.fastFloor(pow);
-			final float v = renderDistance / floor;
 
-			info.setReturnValue(v);
+		if (player == null)
+		{
+			return;
 		}
+
+		SpiritwebCapability.get(player).ifPresent(playerSpiritweb ->
+		{
+			final FeruchemyBase feruchemy = (FeruchemyBase) ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.TIN).get();
+
+			if (feruchemy.isStoring(playerSpiritweb) && feruchemy.canAfford(playerSpiritweb, true))
+			{
+				float renderDistance = info.getReturnValue();
+
+				final int i = Mth.abs(feruchemy.getMode(playerSpiritweb));
+				final double pow = Math.pow(2, i);
+				final int floor = Mth.fastFloor(pow);
+				final float v = renderDistance / floor;
+
+				info.setReturnValue(v);
+			}
+
+		});
+
 
 	}
 }
