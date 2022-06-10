@@ -90,7 +90,10 @@ public class EntityEventHandler
 			{
 				//random 1/16
 				// only 1 in 16 will have the gene
-				if (MathHelper.randomInt(1, 16) % 16 == 0)
+
+
+				final int chance = eventEntity instanceof Raider ? 50 : 16;
+				if (MathHelper.randomInt(1, chance) % chance == 0)
 				{
 					giveEntityStartingManifestation(livingEntity, spiritweb);
 				}
