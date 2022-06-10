@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "If you entered this world with an feruchemical ability, you\u0027re called a $(6)ferring$().",
+      "text": "If you entered this world with an feruchemical ability, you\u0027re called a $(6)ferring$(). If you have access to all sixteen feruchemical abilities, you're called a $(6)Feruchemist$().",
       "title": "cosmere:copper_bracelet_metalmind"
     },
     {

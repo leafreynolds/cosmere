@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_zinc.description"
+      "text": "A ferring who can store mental speed is known as a \"$(thing)Sparker$()\""
+    },
+    {
+      "type": "text",
+      "text": "While storing zinc, a Sparker do not earn as much experience for performing certain actions. While tapping zinc, a Sparker will earn more experience for performing certain actions."
     },
     {
       "type": "patchouli:crafting",

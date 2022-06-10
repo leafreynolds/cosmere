@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_tin.description"
+      "text": "A ferring who can store senses is known as a \"$(thing)Windwhisperer$()\""
+    },
+    {
+      "type": "text",
+      "text": "While storing tin, a Windwhisperer's render distance decreases. While tapping tin, a Windwhisperer's sight zooms in, as if using binoculars."
     },
     {
       "type": "patchouli:crafting",

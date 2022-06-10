@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_brass.description"
+      "text": "A ferring who can store warmth is known as a |"$(thing)Firesoul$()\""
+    },
+    {
+      "type": "text",
+      "text": "While storing brass, a Firesoul gains fire resistance. While tapping brass, a Firesoul can cause entities to combust through physical contact. If they tap too much brass, they will combust."
     },
     {
       "type": "patchouli:crafting",

@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to telekinetically push against a metal object."
+      "text": "While burning steel, the allomancer is able to see blue lines pointing to nearby metals, and the ability to Push on various metal objects around them. Any blocks they target will push you away from them. Any items you target will pull be pushed away from you. Any players you target will cause you both to be pushed away from each other. Flaring increases the range of this ability."
     }
   ],
   "priority": false,

@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them."
+      "text": "While burning Bronze, a Seeker can detect both players using Allomancy or Feruchemy nearby, as well as certain mobs who possess Allomantic or Feruchemical abilities. Flaring increases the range of this ability."
     }
   ],
   "priority": false,

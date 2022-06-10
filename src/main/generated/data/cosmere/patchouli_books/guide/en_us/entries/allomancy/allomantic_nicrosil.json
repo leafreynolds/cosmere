@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "It allows the burner to, with physical contact with another allomancer, have an effect on them as if they were burning $(l:cosmere:allomancy/allomantic_duralumin)duralumin$() themselves."
+      "text": "While burning nicrosil, if the allomancer hits another player, their metals should burn faster, and provide a stronger effect. "
     }
   ],
   "priority": false,

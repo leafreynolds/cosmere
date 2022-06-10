@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "Cadmium allows the burner to pull on time in a bubble around them, making time pass slowly within the bubble."
+      "text": "While burning Cadmium, a space is created around you in which entities have a speed effect applied to them. Flaring increases this range."
     }
   ],
   "priority": false,

@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_bronze.description"
+      "text": "A ferring who can store wakefulness is known as a \"$(thing)Sentry$()\""
+    },
+    {
+      "type": "text",
+      "text": "While storing bronze, a sentry will go to sleep without needing a bed. While tapping bronze, a Sentry will reset their phantom timer."
     },
     {
       "type": "patchouli:crafting",

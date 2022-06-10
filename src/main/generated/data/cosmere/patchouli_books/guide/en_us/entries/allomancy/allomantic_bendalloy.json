@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "Bendalloy allows the burner to push on time in a bubble around them, making time pass quickly within the bubble. Expect to see your furnaces finish more quickly or crops grow faster!"
+      "text": "While burning bendalloy, a space is created around you in which entities have a slowness effect applied to them. Flaring increases this range."
     }
   ],
   "priority": false,

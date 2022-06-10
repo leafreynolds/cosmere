@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_steel.description"
+      "text": "A ferring who can store speed is known as a \"$(thing)Steelrunner$()\""
+    },
+    {
+      "type": "text",
+      "text": "While storing steel, a Steelrunner becomes slow. While tapping steel, a Steelrunner becomes fast. Tapping enough can allow you to run on water."
     },
     {
       "type": "patchouli:crafting",

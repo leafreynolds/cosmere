@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_copper.description"
+      "text": "A ferring who can store memories is known as a \"$(thing)Archivist$()\""
+    },
+    {
+      "type": "text",
+      "text": "While storing copper, an Archivist will lose levels. While tapping copper, an Archivist will gain levels."
     },
     {
       "type": "patchouli:crafting",

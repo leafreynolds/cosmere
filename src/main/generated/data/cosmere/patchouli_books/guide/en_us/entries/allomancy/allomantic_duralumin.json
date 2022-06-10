@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "An allomancer that burns duralumin causes an amazing burst of power from all currently burning metals, draining all of them rapidly."
+      "text": "While burning duralumin, an allomancer causes an burst of power from all currently burning metals, draining all of them rapidly. Flaring this metal increases the rate at which your other metals burn."
     }
   ],
   "priority": false,

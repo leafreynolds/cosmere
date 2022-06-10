@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_pewter.description"
+      "text": "A ferring who can store strength is known as a \"$(thing)Brute$()\""
+    },
+    {
+      "type": "text",
+      "text": "While storing pewter, a Brute deals less damage. While tapping pewter, a Brute deals more damage. Makes you wonder how they got their name, huh?"
     },
     {
       "type": "patchouli:crafting",

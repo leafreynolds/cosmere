@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "Iron is an Allomantic metal that, when burned, allows the user to Pull on various metal objects around them, pulling any of these objects towards them."
+      "text": "While burning iron, the allomancer is able to see blue lines pointing to nearby metals, and the ability to Pull on various metal objects around them. Any blocks they target will pull you toward them. Any items you target will pull them toward you. Any players you target will cause you both to be pulled toward each other. Flaring increases the range of this ability."
     }
   ],
   "priority": false,

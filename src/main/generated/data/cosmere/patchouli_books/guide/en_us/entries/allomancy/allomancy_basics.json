@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "If you entered this world with an allomantic ability, you\u0027re called a $(6)misting$().",
+      "text": "If you entered this world with a single allomantic ability, you\u0027re called a $(6)Misting$(). If you can burn all sixteen metals however, you are called a $(6)Mistborn$().",
       "title": "cosmere:pewter_nugget"
     },
     {

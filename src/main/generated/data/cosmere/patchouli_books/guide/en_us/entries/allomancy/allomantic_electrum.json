@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "$(#f00)(NYI)$()"
+      "text": "Currently, electrum is not implemented. It is said that Oracles are able to see brief glimpses into their own future."
     }
   ],
   "priority": false,

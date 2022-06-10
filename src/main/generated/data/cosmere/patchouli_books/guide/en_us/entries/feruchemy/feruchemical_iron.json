@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_iron.description"
+      "text": "A ferring who can store weight is known as a \"$(thing)Skimmer$()\" "
+    },
+    {
+      "type": "text",
+      "text": "While storing Iron, the Skimmer gains slow fall and jump boost. While tapping, a Skimmer will fall faster."
     },
     {
       "type": "patchouli:crafting",
