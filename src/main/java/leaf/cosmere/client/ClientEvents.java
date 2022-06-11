@@ -8,6 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.gui.SpiritwebMenu;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.network.packets.ChangeSelectedManifestationMessage;
@@ -20,12 +21,11 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -177,4 +177,88 @@ public class ClientEvents
 
 	}
 
+	@SubscribeEvent
+	public static void onRenderPlayerPre(RenderPlayerEvent.Pre event)
+	{
+		try
+		{
+			float scale = FeruchemyAtium.getScale(event.getEntityLiving());
+			if (scale > 1.01 || scale < 0.99)
+			{
+				event.getPoseStack().pushPose();
+				event.getPoseStack().scale(scale, scale, scale);
+				if (event.getEntity().isCrouching() && scale < 0.2F)
+				{
+					event.getPoseStack().translate(0, 1.0, 0);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@SubscribeEvent
+	public static void onRenderPlayerPost(RenderPlayerEvent.Post event)
+	{
+		try
+		{
+			float scale = FeruchemyAtium.getScale(event.getEntityLiving());
+			if (scale > 1.01 || scale < 0.99)
+			{
+				event.getPoseStack().popPose();
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLivingRenderPre(RenderLivingEvent.Pre event)
+	{
+		if (event.getEntity() instanceof Player)
+		{
+			return;
+		}
+
+		try
+		{
+			float scale = FeruchemyAtium.getScale(event.getEntity());
+			if (scale > 1.01 || scale < 0.99)
+			{
+				event.getPoseStack().pushPose();
+				event.getPoseStack().scale(scale, scale, scale);
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLivingRenderPost(RenderLivingEvent.Post event)
+	{
+		if (event.getEntity() instanceof Player)
+		{
+			return;
+		}
+
+		try
+		{
+			float scale = FeruchemyAtium.getScale(event.getEntity());
+			if (scale > 1.01 || scale < 0.99)
+			{
+				event.getPoseStack().popPose();
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }

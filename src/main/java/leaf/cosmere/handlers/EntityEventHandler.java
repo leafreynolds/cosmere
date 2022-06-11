@@ -12,6 +12,7 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.core.Direction;
@@ -35,6 +36,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -279,5 +281,18 @@ public class EntityEventHandler
 			}
 
 		});
+	}
+
+
+	@SubscribeEvent
+	public static void changeSize(EntityEvent.Size event)
+	{
+		if (event.getEntity() instanceof LivingEntity livingEntity)
+		{
+			float scale = FeruchemyAtium.getScale(livingEntity);
+			event.setNewSize(event.getNewSize().scale(scale));
+			event.setNewEyeHeight(event.getNewEyeHeight() * scale);
+
+		}
 	}
 }
