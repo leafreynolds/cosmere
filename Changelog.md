@@ -1,5 +1,31 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B47
+
+
+
+
+B46
+
+Fix servers not booting
+
+
+B45
+
+Fix misting/ferring names being lower case.
+Fix bronze allomancy hwyla tooltip show powers a mob has. Players still only show what's active.
+F-tin should no longer cutting out on laggy connections
+Double bendalloy tap cost if player full and only tapping for saturation
+Fix bottle to vial recipe
+Zero bonus rolls on injected loot
+Make pillager metalborn rarer
+Fix coin pouch 'take' animation, playing even when full.
+Fix clients not calling on mode change, when modes change.
+Fix potential crash in single player mode when trying to get player names.
+Cats now have decent night vision to steal.
+Very early implementation of feru atium, which stores 'smallness'. Expect it to change.
+
+
 B44
 
 Fix tapping gold only healing one hp regardless of tap amount
