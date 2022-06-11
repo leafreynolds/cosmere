@@ -676,6 +676,10 @@ public class Metals
 					{
 						strengthToAdd = 0.25;
 					}
+					else if (killedEntity instanceof Cat)
+					{
+						strengthToAdd = 0.5;
+					}
 					else
 					{
 						final AttributeInstance attribute = killedEntity.getAttribute(Attributes.FOLLOW_RANGE);
