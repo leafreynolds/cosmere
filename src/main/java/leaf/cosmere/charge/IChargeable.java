@@ -105,7 +105,7 @@ public interface IChargeable
 
 	default void setAttunedPlayerName(ItemStack itemStack, Player entity)
 	{
-		String playerName = PlayerHelper.getPlayerName(entity.getUUID(), entity.getServer());
+		String playerName = entity.getDisplayName().getString();
 		StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, playerName);
 	}
 

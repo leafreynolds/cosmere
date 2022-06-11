@@ -18,8 +18,15 @@ public class PlayerHelper
 {
 	public static String getPlayerName(UUID id, MinecraftServer server)
 	{
-		final Optional<GameProfile> gameProfile = server.getProfileCache().get(id);
-		return gameProfile.isPresent() ? gameProfile.get().getName() : "OFFLINE Player";
+		if (server != null)
+		{
+			final Optional<GameProfile> gameProfile = server.getProfileCache().get(id);
+			if (gameProfile.isPresent())
+			{
+				return gameProfile.get().getName();
+			}
+		}
+		return "OFFLINE Player";
 	}
 
 	//Basically a modified copy of the pick function in GameRenderer.java, but with the ability to set pick distance
