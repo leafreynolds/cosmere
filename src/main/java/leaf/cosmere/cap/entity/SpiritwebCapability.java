@@ -157,13 +157,27 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		hasBeenInitialized = nbt.getBoolean("assigned_powers");
 		CompoundTag modeNBT = nbt.getCompound("manifestation_modes");
-		MANIFESTATIONS_MODE.clear();
+
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			final String manifestationLoc = manifestation.getRegistryName().toString();
+
+			int oldManifestationMode = MANIFESTATIONS_MODE.getOrDefault(manifestation,0);
+			int newManifestationMode = 0;
+
 			if (modeNBT.contains(manifestationLoc))
 			{
-				MANIFESTATIONS_MODE.put(manifestation, modeNBT.getInt(manifestationLoc));
+				newManifestationMode = modeNBT.getInt(manifestationLoc);
+				MANIFESTATIONS_MODE.put(manifestation, newManifestationMode);
+			}
+			else
+			{
+				MANIFESTATIONS_MODE.remove(manifestation);
+			}
+
+			if (getLiving().level.isClientSide && oldManifestationMode != newManifestationMode)
+			{
+				manifestation.onModeChange(this);
 			}
 		}
 		selectedManifestation = ManifestationRegistry.fromID(nbt.getString("selected_power"));
