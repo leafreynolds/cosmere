@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,7 +58,7 @@ public final class LootHandler
 	{
 		return LootPool.lootPool()
 				.add(getInjectEntry(entryName, 1))
-				.setBonusRolls(UniformGenerator.between(0,1))
+				.setBonusRolls(ConstantValue.exactly(0))
 				.name("cosmere_inject")
 				.build();
 	}
