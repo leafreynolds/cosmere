@@ -43,7 +43,12 @@ public class SyncPlayerSpiritwebMessage
 			Entity result = Minecraft.getInstance().level.getEntity(mes.entityID);
 			if (result != null)
 			{
-				SpiritwebCapability.get((LivingEntity) result).ifPresent((c) -> c.deserializeNBT(mes.entityNBT));
+				SpiritwebCapability.get((LivingEntity) result).ifPresent((c) ->
+				{
+					c.deserializeNBT(mes.entityNBT);
+					c.getLiving().refreshDimensions();
+				});
+
 			}
 		});
 		cont.get().setPacketHandled(true);

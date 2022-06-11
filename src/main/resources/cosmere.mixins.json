@@ -5,10 +5,14 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "cosmere.refmap.json",
   "mixins": [
+    "IForgeEntityMixin",
+    "LivingEntityMixin",
+    "PlayerMixin"
   ],
   "client": [
     "EffectInstanceMixin",
     "EntityMixin",
+    "EntityRenderDispatcherMixin",
     "GameRendererMixin",
     "LightTextureMixin"
   ],
