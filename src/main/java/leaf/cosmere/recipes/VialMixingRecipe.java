@@ -5,13 +5,14 @@
 package leaf.cosmere.recipes;
 
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.MetalVialItem;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.RecipeRegistry;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CustomRecipe;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 //not to be confused with the vile mixing recipe,
 // where you just make gross things
@@ -38,7 +40,6 @@ public class VialMixingRecipe extends CustomRecipe
 	{
 		boolean hasNugget = false;
 		ItemStack vialStack = null;
-		final Ingredient INGREDIENT_NUGGETS = Ingredient.of(Tags.Items.NUGGETS);
 		int bottleAmount = 0;
 		int nuggetTotal = 0;
 		MetalVialItem metalVialItem = (MetalVialItem) ItemsRegistry.METAL_VIAL.get();
@@ -66,12 +67,12 @@ public class VialMixingRecipe extends CustomRecipe
 					bottleAmount = metalVialItem.containedMetalCount(vialStack);
 				}
 			}
-			else if (INGREDIENT_NUGGETS.test(stack))
-			{
-				//but multiple nuggets allowed
-				hasNugget = true;
-				nuggetTotal++;
-			}
+			else if (testForViableNugget(stack).isPresent())
+            {
+                //but multiple nuggets allowed
+                hasNugget = true;
+                nuggetTotal++;
+            }
 		}
 
 		if (vialStack == null)
@@ -96,6 +97,20 @@ public class VialMixingRecipe extends CustomRecipe
 		return hasNugget;
 	}
 
+	private Optional<TagKey<Item>> testForViableNugget(ItemStack stack)
+	{
+		for (Metals.MetalType value : Metals.MetalType.values())
+		{
+			TagKey<Item> metalNuggetTag = value.getMetalNuggetTag();
+			if (stack.is(metalNuggetTag))
+			{
+				return Optional.of(metalNuggetTag);
+			}
+		}
+
+		return Optional.empty();
+	}
+
 	@Override
 	@Nonnull
 	public ItemStack assemble(CraftingContainer inv)
@@ -113,20 +128,14 @@ public class VialMixingRecipe extends CustomRecipe
 
 			if (stackInSlot.is(Tags.Items.NUGGETS))
 			{
-				if (stackInSlot.getItem() instanceof MetalNuggetItem)
-				{
-					metalVial.addMetals(itemstack, ((MetalNuggetItem) stackInSlot.getItem()).getMetalType().getID(), 1);
+				for (Metals.MetalType metalType : Metals.MetalType.values())
+                {
+					if (stackInSlot.is(metalType.getMetalNuggetTag()))
+                    {
+                        metalVial.addMetals(itemstack, metalType.getID(), 1);
+                        break;
+                    }
 				}
-				//special vanilla logic since we don't create our own copies of iron/gold
-				else if (stackInSlot.getItem() == Items.IRON_NUGGET)
-				{
-					metalVial.addMetals(itemstack, Metals.MetalType.IRON.getID(), 1);
-				}
-				else if (stackInSlot.getItem() == Items.GOLD_NUGGET)
-				{
-					metalVial.addMetals(itemstack, Metals.MetalType.GOLD.getID(), 1);
-				}
-
 			}
 			else if (stackInSlot.is(metalVial))
 			{
