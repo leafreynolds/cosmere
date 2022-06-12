@@ -21,6 +21,7 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
@@ -748,26 +749,30 @@ public class Metals
 
 					if (killedEntity instanceof Rabbit)
 					{
-						strengthToAdd = 0.77;
+						strengthToAdd = 0.25;
 					}
 					else if (killedEntity instanceof WitherSkeleton)
 					{
-						strengthToAdd = -0.77;
+						strengthToAdd = -1;
+					}
+					else if (killedEntity instanceof WitherBoss)
+					{
+						strengthToAdd = -3;
 					}
 					else if (killedEntity instanceof Pufferfish)
 					{
-						strengthToAdd = -0.05;
+						strengthToAdd = -0.5;
 					}
 					else if (killedEntity instanceof Cat cat)
 					{
 						final int catType = cat.getCatType();
 						if (catType == 10)//all black
 						{
-							strengthToAdd = -1;
+							strengthToAdd = -5;
 						}
 						else if (catType == 8)//white
 						{
-							strengthToAdd = 0.35;
+							strengthToAdd = 1;
 						}
 					}
 					break;
