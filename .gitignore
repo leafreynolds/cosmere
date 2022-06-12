@@ -24,4 +24,3 @@ run
 # Files from Forge MDK
 forge*changelog.txt
 .run/_cosmere [incrementBuildNumber].run.xml
-src/main/resources/assets/cosmere/textures/item/metal_bracelet - Copy.png
