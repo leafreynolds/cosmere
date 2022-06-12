@@ -70,7 +70,7 @@ public class FeruchemyCopper extends FeruchemyBase
 			//store xp progress, if any.
 			if (playerEntity.experienceProgress > 0)
 			{
-				experiencePoints = playerEntity.experienceProgress;
+				experiencePoints = playerEntity.experienceProgress * playerEntity.getXpNeededForNextLevel();
 			}
 			//else store a level's worth of xp points.
 			else
@@ -78,16 +78,13 @@ public class FeruchemyCopper extends FeruchemyBase
 				experiencePoints = XPHelper.getXpNeededForNextLevel(playerEntity.experienceLevel - 1);
 			}
 		}
+		else if (tapping) // tapping storage
+		{
+			experiencePoints = XPHelper.getXpNeededForNextLevel(playerEntity.experienceLevel);
+		}
 		else
 		{
-			if (tapping) // tapping storage
-			{
-				experiencePoints = XPHelper.getXpNeededForNextLevel(playerEntity.experienceLevel);
-			}
-			else
-			{
-				return;
-			}
+			return;
 		}
 
 
@@ -99,7 +96,7 @@ public class FeruchemyCopper extends FeruchemyBase
 		final int xp = Mth.floor(experiencePoints);
 
 
-		if ((storing && playerEntity.totalExperience >= xp) || tapping)
+		if ((storing && xp <= playerEntity.totalExperience) || tapping)
 		{
 			final int adjustValue = storing ? -xp : xp;
 			final ItemStack itemStack =
