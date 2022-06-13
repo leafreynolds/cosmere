@@ -77,6 +77,9 @@ public class ItemModelsGen extends ItemModelProvider
 			else if (item instanceof HemalurgicSpikeItem)
 			{
 				simpleItem(path, "metal_spike");
+				this.getBuilder(path)
+						.parent(new ModelFile.UncheckedModelFile("cosmere:item/spike"))
+						.texture("layer0", modLoc("item/" + "metal_spike"));
 				continue;
 			}
 			else if (item instanceof ShardbladeItem)

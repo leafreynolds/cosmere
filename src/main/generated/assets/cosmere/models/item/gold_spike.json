@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "cosmere:item/spike",
   "textures": {
     "layer0": "cosmere:item/metal_spike"
   }
