@@ -2,7 +2,10 @@ The Cosmere Project - For 1.16 Minecraft
 
 B47
 
-
+New textures!
+Metalminds now able to be filled twice as much
+Copper, tin and chromium spikes found in loot chests properly invested
+stop nicrosilminds from loot chests being filled
 
 
 B46
