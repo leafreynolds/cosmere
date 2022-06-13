@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "cosmere:heliodor_broam",
-    "cosmere:heliodor_mark",
-    "cosmere:heliodor_chip"
+    "cosmere:heliodor_broam"
   ]
 }

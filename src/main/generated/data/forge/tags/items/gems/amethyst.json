@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "cosmere:amethyst_broam",
-    "cosmere:amethyst_mark",
-    "cosmere:amethyst_chip"
+    "cosmere:amethyst_broam"
   ]
 }

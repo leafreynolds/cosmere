@@ -102,8 +102,8 @@ public class ItemTagsGen extends ItemTagsProvider
 			{
 				final Item polestoneItem = polestone.getPolestoneItem(size);
 				add(Tags.Items.GEMS, polestoneItem);
-				add(TagsRegistry.Items.GEM_TAGS.get(polestone), polestoneItem);
 			}
+			add(TagsRegistry.Items.GEM_TAGS.get(polestone), polestone.getPolestoneItem(Roshar.GemSize.BROAM));
 		}
 	}
 

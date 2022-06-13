@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "cosmere:smokestone_broam",
-    "cosmere:smokestone_mark",
-    "cosmere:smokestone_chip"
+    "cosmere:smokestone_broam"
   ]
 }

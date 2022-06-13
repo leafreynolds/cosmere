@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "cosmere:emerald_broam",
-    "cosmere:emerald_mark",
-    "cosmere:emerald_chip"
+    "cosmere:emerald_broam"
   ]
 }

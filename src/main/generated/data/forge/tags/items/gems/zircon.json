@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "cosmere:zircon_broam",
-    "cosmere:zircon_mark",
-    "cosmere:zircon_chip"
+    "cosmere:zircon_broam"
   ]
 }
