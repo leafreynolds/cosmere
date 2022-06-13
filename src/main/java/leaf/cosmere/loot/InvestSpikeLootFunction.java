@@ -73,6 +73,17 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 				item.Invest(stack, spikeMetalType, strengthLevel, UUID.randomUUID());
 
 				break;
+			case TIN:
+			case COPPER:
+			{
+				item.Invest(stack,spikeMetalType, strengthLevel / 10,UUID.randomUUID() );
+			}
+			break;
+			case CHROMIUM:
+			{
+				item.Invest(stack,spikeMetalType, strengthLevel * ( 1 + Math.random()),UUID.randomUUID() );
+			}
+			break;
 			//steals allomantic abilities
 			case STEEL:
 			case BRONZE:
