@@ -44,7 +44,7 @@ public class InvestMetalmindLootFunction extends LootItemConditionalFunction
 		MetalmindItem item = (MetalmindItem) stack.getItem();
 		final Metals.MetalType metalType = item.getMetalType();
 
-		if (!metalType.hasFeruchemicalEffect())
+		if (!metalType.hasFeruchemicalEffect() || metalType == Metals.MetalType.NICROSIL)
 		{
 			return stack;
 		}
