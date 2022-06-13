@@ -76,7 +76,6 @@ public class ItemModelsGen extends ItemModelProvider
 			}
 			else if (item instanceof HemalurgicSpikeItem)
 			{
-				simpleItem(path, "metal_spike");
 				this.getBuilder(path)
 						.parent(new ModelFile.UncheckedModelFile("cosmere:item/spike"))
 						.texture("layer0", modLoc("item/" + "metal_spike"));
@@ -91,9 +90,9 @@ public class ItemModelsGen extends ItemModelProvider
 				simpleItem(path, rawItem.getMetalType().isAlloy() ? "metal_blend" : "metal_raw");
 				continue;
 			}
-			else if (item instanceof PolestoneItem)
+			else if (item instanceof PolestoneItem polestoneItem)
 			{
-				switch (((PolestoneItem) item).getSize())
+				switch (polestoneItem.getSize())
 				{
 					case BROAM:
 						simpleItem(path, "polestone_broam");

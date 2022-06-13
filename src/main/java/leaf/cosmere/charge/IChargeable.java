@@ -27,7 +27,8 @@ public interface IChargeable
 {
 	default int getMaxCharge(ItemStack itemStack)
 	{
-		return Mth.floor(9000 * getMaxChargeModifier());
+		//todo config max value
+		return Mth.floor(18000 * getMaxChargeModifier());
 	}
 
 	default float getMaxChargeModifier()
