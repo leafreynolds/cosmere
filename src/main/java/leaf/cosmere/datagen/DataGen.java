@@ -17,7 +17,7 @@ import leaf.cosmere.datagen.items.ItemModelsGen;
 import leaf.cosmere.datagen.items.ItemTagsGen;
 import leaf.cosmere.datagen.language.EngLangGen;
 import leaf.cosmere.datagen.loottables.LootTableGen;
-import leaf.cosmere.datagen.patchouli.PatchouliGen;
+import leaf.cosmere.datagen.compat.patchouli.PatchouliGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

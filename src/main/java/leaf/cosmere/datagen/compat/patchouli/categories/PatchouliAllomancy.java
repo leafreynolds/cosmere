@@ -1,12 +1,12 @@
 /*
- * File created ~ 14 - 7 - 2021 ~ Leaf
+ * File created ~ 13 - 6 - 2022 ~ Leaf
  */
 
-package leaf.cosmere.datagen.patchouli.categories;
+package leaf.cosmere.datagen.compat.patchouli.categories;
 
 import leaf.cosmere.constants.Metals;
-import leaf.cosmere.datagen.patchouli.BookStuff;
-import leaf.cosmere.datagen.patchouli.PatchouliTextFormat;
+import leaf.cosmere.datagen.compat.patchouli.PatchouliTextFormat;
+import leaf.cosmere.datagen.compat.patchouli.BookStuff;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.utils.helpers.StringHelper;

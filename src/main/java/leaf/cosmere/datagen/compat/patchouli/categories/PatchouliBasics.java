@@ -1,10 +1,10 @@
 /*
- * File created ~ 14 - 7 - 2021 ~ Leaf
+ * File created ~ 13 - 6 - 2022 ~ Leaf
  */
 
-package leaf.cosmere.datagen.patchouli.categories;
+package leaf.cosmere.datagen.compat.patchouli.categories;
 
-import leaf.cosmere.datagen.patchouli.BookStuff;
+import leaf.cosmere.datagen.compat.patchouli.BookStuff;
 
 import java.util.List;
 
