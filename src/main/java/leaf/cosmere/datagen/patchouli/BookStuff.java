@@ -1,8 +1,8 @@
 /*
- * File created ~ 13 - 6 - 2022 ~ Leaf
+ * File created ~ 14 - 7 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.datagen.compat.patchouli;
+package leaf.cosmere.datagen.patchouli;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

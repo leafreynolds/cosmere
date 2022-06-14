@@ -1,16 +1,16 @@
 /*
- * File created ~ 13 - 6 - 2022 ~ Leaf
+ * File created ~ 13 - 7 - 2021 ~ Leaf
  */
 
-package leaf.cosmere.datagen.compat.patchouli;
+package leaf.cosmere.datagen.patchouli;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import leaf.cosmere.datagen.compat.patchouli.categories.PatchouliAllomancy;
-import leaf.cosmere.datagen.compat.patchouli.categories.PatchouliFeruchemy;
-import leaf.cosmere.datagen.compat.patchouli.categories.PatchouliHemalurgy;
-import leaf.cosmere.datagen.compat.patchouli.categories.PatchouliBasics;
+import leaf.cosmere.datagen.patchouli.categories.PatchouliAllomancy;
+import leaf.cosmere.datagen.patchouli.categories.PatchouliBasics;
+import leaf.cosmere.datagen.patchouli.categories.PatchouliFeruchemy;
+import leaf.cosmere.datagen.patchouli.categories.PatchouliHemalurgy;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.utils.helpers.StringHelper;
 import net.minecraft.data.DataGenerator;
@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 public class PatchouliGen implements DataProvider
 {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final String GUIDE_NAME = "guide";
+	public static final String GUIDE_NAME = "guide";
 	private final DataGenerator generator;
 
 
