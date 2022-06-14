@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)pewter$() is known as a \"$(thing)Thug$()\"."
-    },
-    {
-      "type": "text",
-      "text": "Pewter is an allomantic metal that, when burnt, gives the user extreme strength, resistance and durability. Its uses include combat, moving quickly, surviving attacks and healing oneself."
+      "text": "A misting who burns $(thing)pewter$() is known as a \"$(thing)Thug$()\". While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment."
     }
   ],
   "priority": false,

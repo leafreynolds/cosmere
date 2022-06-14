@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)bronze$() is known as a \"$(thing)Seeker$()\"."
-    },
-    {
-      "type": "text",
-      "text": "When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them."
+      "text": "A misting who burns $(thing)bronze$() is known as a \"$(thing)Seeker$()\". A seeker burning bronze is able to detect the nearby use of allomancy or feruchemy. A skilled seeker is capable of detecting what specific abilities are being used. Keep in mind that a smoker can neutralise the ability for a seeker to track allomancy or feruchemy."
     }
   ],
   "priority": false,

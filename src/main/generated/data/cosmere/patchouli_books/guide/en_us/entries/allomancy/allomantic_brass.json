@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)brass$() is known as a \"$(thing)Soother$()\"."
-    },
-    {
-      "type": "text",
-      "text": "In allomancy, brass gives the ability to \"soothe\" the emotions of others."
+      "text": "A misting who burns $(thing)brass$() is known as a \"$(thing)Soother$()\". A creature being manipulated by a soother will act far more pacified, reducing their willingness to engage in combat."
     }
   ],
   "priority": false,

@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who can only burn $(thing)aluminum$() is known as a \"$(thing)Aluminum Gnat$()\" as they gain no discernible effect from burning their metal."
-    },
-    {
-      "type": "text",
-      "text": "Aluminum is an internal enhancement metal that, when burned, clears out all the metals inside the allomancer, including itself."
+      "text": "A misting who can only burn $(thing)aluminum$() is known as a \"$(thing)Aluminum Gnat$()\" as they gain no discernible effect from burning their metal. A mistborn burning aluminum will wipe all their metal reserves, including aluminum."
     }
   ],
   "priority": false,

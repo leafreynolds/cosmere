@@ -23,24 +23,36 @@ public class PatchouliAllomancy
 	{
 		BookStuff.Category allomancy = new BookStuff.Category(
 				"allomancy",
-				"This is the art of consuming a piece of metal related to your power, and then \"%s\" it for an effect.".formatted(PatchouliTextFormat.Thing("burning")),
+				"Despite first documentation only occurring approximately one thousand years before the Catacendre, Allomancy has been explored in far greater detail than it's older counterparts. The art requires consuming a piece of metal, then burning it for an effect.",
 				"cosmere:pewter_nugget");
 		allomancy.sortnum = 1;
 
 
+
+		// Start a page list
+		List<BookStuff.Page> pages = new ArrayList<>();
+		// Allomancy Basics Entry
+		BookStuff.Entry allomancyBasics = new BookStuff.Entry("allomancy_basics", allomancy, "allomancy.icon");
+		allomancy.sortnum=1;
+
+
 		categories.add(allomancy);
 
+		BookStuff.Page firstPage = new BookStuff.TextPage();
+		firstPage.setTitle("Allomancy (For Dummies)");
+		firstPage.setText(
+				"Here is where I shall explain Allomancy, a system of Investiture native to Scadrial. " +
+						"Despite first documentation only occurring approximately one thousand years before the Catacendre, Allomancy has been explored in much greater detail than it's two older counterparts. The art requires consuming a piece of metal, upon which time you can \"%s\" it. ".formatted(PatchouliTextFormat.Thing("Burn")) +
+				"Those who are genetically gifted with a singular allomantic ability are generally referred to as a \"%s\". ".formatted(PatchouliTextFormat.Thing("Misting")) +
+				"For someone who has access to all sixteen abilities, they are referred to as a \"%s\".".formatted(PatchouliTextFormat.Thing("Mistborn"))
+		);
+		pages.add(firstPage);
 
-		BookStuff.Entry allomancyBasics = new BookStuff.Entry("allomancy_basics", allomancy, allomancy.icon);
-		allomancyBasics.pages = new BookStuff.Page[]
-				{
-						new BookStuff.TextPage("If you entered this world with an allomantic ability, you're called a $(6)misting$().", allomancy.icon),
-						new BookStuff.CraftingPage("Metal vial", "cosmere:metal_vial"),
-				};
-		allomancyBasics.priority = true;
-		List<BookStuff.Page> pages = new ArrayList<>();
-
+		pages.add(new BookStuff.CraftingPage("", "cosmere:metal_vial", ""));
+		allomancyBasics.pages = pages.toArray(BookStuff.Page[]::new);
+		pages.clear();
 		entries.add(allomancyBasics);
+		allomancyBasics.priority = true;
 
 		//allomancy
 		for (RegistryObject<AllomancyBase> manifestation : ALLOMANCY_POWERS.values())
@@ -70,98 +82,80 @@ public class PatchouliAllomancy
 
 			switch (metalType)
 			{
-				default:
-					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\"."));
+				case IRON:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"Ironpulling is affected by the normal laws of physics. If a lurcher were to pull on something that weighs more than them, they'd be pulled towards it. If they pulled on something lighter, the object would move. If both were of similar weight, they'd both move."));
+					break;
+				case STEEL:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to push against nearby metal objects. Steelpushing is affected by the laws of physics. If a coinshot were to push on something that weighs more than them, they'd be pushed away. "));
+					pages.add(new BookStuff.TextPage("If they pushed on something lighter, the object would move. Clever use of Steelpushing can lead to a pseudo flight through use of small metal objects, such as coins or nuggets. Many coinshots generally carry around a pouch of coins, for ease of access."));
+					pages.add(new BookStuff.CraftingPage("", "cosmere:coin_pouch", ""));
+					break;
+				case TIN:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+					"In allomancy, Tin heightens the senses to super human levels. It allows you to see clearly in the dark, and- (the page appears to be smudged, the letters indecipherable.)"));
+					break;
+				case PEWTER:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment."));
+					//"The major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()";
+					break;
+				case ZINC:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"A creature being manipulated by a rioter will act far more aggressive, turning even the most pacified of animals into bloodthirsty beasts."));
+					break;
+				case BRASS:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"A creature being manipulated by a soother will act far more pacified, reducing their willingness to engage in combat."));
+					break;
+				case COPPER:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"A smoker burning copper generates a 'coppercloud,' which hides Allomancy from being detected by Bronze. Although I've never witnessed it, I've heard that a seeker of considerable strength could pierce a coppercloud. More research is required."));
+					break;
+				case BRONZE:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"A seeker burning bronze is able to detect the nearby use of allomancy or feruchemy. A skilled seeker is capable of detecting what specific abilities are being used. Keep in mind that a smoker can neutralise the ability for a seeker to track allomancy or feruchemy."));
+					//"Copper neutralises the ability for a Seeker to track allomancy by hiding it in a copper cloud, but extremely powerful Seekers or Mistborn, may still be able to pierce said shields.";
 					break;
 				case ALUMINUM:
+					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal. " +
+							"A mistborn burning aluminum will wipe all their metal reserves, including aluminum."));
+					break;
 				case DURALUMIN:
 					//add extra note so that these people will know of their shame.
-					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal."));
+					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal. " +
+							"The metal reserves of a mistborn burning duralumin will deplete faster, but will have a much more prominent effect."));
+					break;
+				case CHROMIUM:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"A leecher gazing upon an allomancer can deplete their metal reserves, as if they were burning aluminum themselves."));
+					break;
+				case NICROSIL:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"A nicroburst can empower the allomancy of another with physical contact, as if they were burning duralumin themselves."));
+					break;
+				case CADMIUM:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"a pulser creates a bubble around them in which everyone moves faster around them."));
+					break;
+				case BENDALLOY:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"A slider creates a bubble around them in which everyone moves slower around them."));
+					break;
+				case GOLD:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"(The rest of the page is scratched out.)"));
+					break;
+				case ELECTRUM:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"(The rest of the page is missing...)"));
+				case ATIUM:
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"(The rest of the page is blank...)"));
 					break;
 			}
-
-			pages.add(new BookStuff.TextPage(GetAllomancyDescription(metalType)));
-
 			entryForThisPower.pages = pages.toArray(BookStuff.Page[]::new);
 			entries.add(entryForThisPower);
 		}
-	}
-
-
-	public static String GetAllomancyDescription(Metals.MetalType metalType)
-	{
-		StringBuilder builder = new StringBuilder();
-		switch (metalType)
-		{
-			case IRON:
-				builder.append("Iron is an Allomantic metal that, when burned, allows the user to Pull on various metal objects around them, pulling any of these objects towards them.");//+
-			//"The burning of Iron is affected by normal laws of physics, so when the user pulls upon something with more weight, it will take more iron to move this, and if the user pulls upon something with more weight than themselves, they will be pulled through the air towards the aforementioned object. " +
-			//"The burning of Iron is used to fly, manipulate various objects, pull someone towards you (assuming that they have metal on their person), disarm somebody with a metal weapon, change the flight path of flying coins, and for a multitude of other things.";
-
-			break;
-			case STEEL:
-				builder.append("Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to telekinetically push against a metal object.");//+
-			//"Conservation of momentum still applies here, so if you trying to push against blocks, expect to be thrown back in the opposite direction." +
-			//"Clever Allomancers use steel to allow themselves to fly through the air.";
-
-			break;
-			case TIN:
-				builder.append("In allomancy, tin heightens the senses to super human levels. In this world, burning tin allows the allomancer to see clearly in the dark and detect where sounds are coming from.");
-
-			break;
-			case PEWTER:
-				builder.append("Pewter is an allomantic metal that, when burnt, gives the user extreme strength, resistance and durability. Its uses include combat, moving quickly, surviving attacks and healing oneself.");//+
-			//"The major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()";
-
-			break;
-			case ZINC:
-				builder.append("In allomancy, zinc gives the ability to intensify the emotions of others, an ability called \"rioting\"");
-
-			break;
-			case BRASS:
-				builder.append("In allomancy, brass gives the ability to \"soothe\" the emotions of others.");
-
-			break;
-			case COPPER:
-				builder.append("Copper is an elemental Allomantic metal that allows one to hide Allomancy. A misting or mistborn burning copper generates a 'coppercloud' which hides Allomancy from being detected by Bronze. ");//+
-			//"Copperclouds are generally not piercible but those with exceptional strength in Bronze may do so.";
-
-			break;
-			case BRONZE:
-				builder.append("When burning bronze, either Misting or Mistborn, the user can feel the uses of allomancy near them.");//+
-			//"Copper neutralises the ability for a Seeker to track allomancy by hiding it in a copper cloud, but extremely powerful Seekers or Mistborn, may still be able to pierce said shields.";
-
-			break;
-			case ALUMINUM:
-				builder.append("Aluminum is an internal enhancement metal that, when burned, clears out all the metals inside the allomancer, including itself.");
-
-			break;
-			case DURALUMIN:
-				builder.append("An allomancer that burns duralumin causes an amazing burst of power from all currently burning metals, draining all of them rapidly.");
-
-			break;
-			case CHROMIUM:
-				builder.append("Chromium allows the burner to, with physical contact, deplete the metals in another with an effect similar to that of $(l:cosmere:allomancy/allomantic_aluminum)aluminum$().");
-
-			break;
-			case NICROSIL:
-				builder.append("It allows the burner to, with physical contact with another allomancer, have an effect on them as if they were burning $(l:cosmere:allomancy/allomantic_duralumin)duralumin$() themselves.");
-
-			break;
-			case CADMIUM:
-				builder.append("Cadmium allows the burner to pull on time in a bubble around them, making time pass slowly within the bubble.");
-
-			break;
-			case BENDALLOY:
-				builder.append("Bendalloy allows the burner to push on time in a bubble around them, making time pass quickly within the bubble. Expect to see your furnaces finish more quickly or crops grow faster!");
-
-			break;
-			case GOLD:
-			case ELECTRUM:
-			default:
-				builder.append("$(#f00)(NYI)$()");
-				break;
-		}
-		return builder.toString();
 	}
 }

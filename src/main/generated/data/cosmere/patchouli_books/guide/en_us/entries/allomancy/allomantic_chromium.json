@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)chromium$() is known as a \"$(thing)Leecher$()\"."
-    },
-    {
-      "type": "text",
-      "text": "Chromium allows the burner to, with physical contact, deplete the metals in another with an effect similar to that of $(l:cosmere:allomancy/allomantic_aluminum)aluminum$()."
+      "text": "A misting who burns $(thing)chromium$() is known as a \"$(thing)Leecher$()\". A leecher gazing upon an allomancer can deplete their metal reserves, as if they were burning aluminum themselves."
     }
   ],
   "priority": false,

@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)cadmium$() is known as a \"$(thing)Pulser$()\"."
-    },
-    {
-      "type": "text",
-      "text": "Cadmium allows the burner to pull on time in a bubble around them, making time pass slowly within the bubble."
+      "text": "A misting who burns $(thing)cadmium$() is known as a \"$(thing)Pulser$()\". a pulser creates a bubble around them in which everyone moves faster around them."
     }
   ],
   "priority": false,

@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)gold$() is known as a \"$(thing)Augur$()\"."
-    },
-    {
-      "type": "text",
-      "text": "$(#f00)(NYI)$()"
+      "text": "A misting who burns $(thing)gold$() is known as a \"$(thing)Augur$()\". (The rest of the page is scratched out.)"
     }
   ],
   "priority": false,

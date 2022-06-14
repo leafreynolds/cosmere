@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)bendalloy$() is known as a \"$(thing)Slider$()\"."
-    },
-    {
-      "type": "text",
-      "text": "Bendalloy allows the burner to push on time in a bubble around them, making time pass quickly within the bubble. Expect to see your furnaces finish more quickly or crops grow faster!"
+      "text": "A misting who burns $(thing)bendalloy$() is known as a \"$(thing)Slider$()\". A slider creates a bubble around them in which everyone moves slower around them."
     }
   ],
   "priority": false,
