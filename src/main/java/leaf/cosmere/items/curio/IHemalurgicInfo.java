@@ -361,15 +361,20 @@ public interface IHemalurgicInfo
 		HemalurgicSpikeItem spikeItem = (HemalurgicSpikeItem) stack.getItem();
 		switch (spikeItem.getMetalType())
 		{
+			case IRON, TIN, COPPER, ZINC, NICROSIL ->
+			{
+				//nil
+			}
 			case LERASATIUM ->
 			{
 				//lerasatium spikes can't give more than 5
 				//todo config max lerasatium spike strength amount
 				strength = Math.min(5, strength);
 			}
-			case IRON, TIN, COPPER, CHROMIUM, ZINC, NICROSIL ->
+			case CHROMIUM ->
 			{
-				//nil
+				//todo config enforced max chromium spike luck amount
+				strength = Math.min(3, strength);
 			}
 			default ->
 			{
