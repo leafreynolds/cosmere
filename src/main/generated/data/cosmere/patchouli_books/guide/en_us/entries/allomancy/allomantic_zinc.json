@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)zinc$() is known as a \"$(thing)Rioter$()\"."
-    },
-    {
-      "type": "text",
-      "text": "In allomancy, zinc gives the ability to intensify the emotions of others, an ability called \"rioting\""
+      "text": "A misting who burns $(thing)zinc$() is known as a \"$(thing)Rioter$()\". A creature being manipulated by a rioter will act far more aggressive, turning even the most pacified of animals into bloodthirsty beasts."
     }
   ],
   "priority": false,

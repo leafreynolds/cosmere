@@ -177,7 +177,7 @@ public class PatchouliHemalurgy
 			case COPPER:
 				builder.append("Copper spikes steal mental fortitude, memory, and intelligence. $(p)");
 				builder.append("As a result, they can be used to increase base XP gain rate. $(p)");
-				builder.append("I wonder what would happen if you were to spike the Ender Dragon... Surely the first kill of such a beast would give a marvelous reward");
+				builder.append("I wonder what would happen if you were to spike the Ender Dragon... Surely the first kill of such a beast would give a marvelous reward.");
 				break;
 			case BRONZE://Zinc//Brass//Copper//Bronze
 			{
@@ -245,7 +245,7 @@ public class PatchouliHemalurgy
 								PatchouliTextFormat.LinkEntry(c, feruchemicalPageLink + c),
 								PatchouliTextFormat.LinkEntry(d, feruchemicalPageLink + d)
 						));
-				builder.append("Healing(take damage/regeneration), Determination(extra hearts), Breath(lose O2 outside water/reduce rate of O2 consumption), and Nutrition(Hunger/Saturation)");
+				builder.append("Healing(lose max health/regeneration), Determination(extra hearts), Breath(lose O2 outside water/reduce rate of O2 consumption), and Nutrition(Hunger/Saturation)");
 			}
 			break;
 			case BENDALLOY://Chromium//Nicrosil//Aluminum//Duralumin

@@ -5,11 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)copper$() is known as a \"$(thing)Smoker$()\"."
-    },
-    {
-      "type": "text",
-      "text": "Copper is an elemental Allomantic metal that allows one to hide Allomancy. A misting or mistborn burning copper generates a \u0027coppercloud\u0027 which hides Allomancy from being detected by Bronze. "
+      "text": "A misting who burns $(thing)copper$() is known as a \"$(thing)Smoker$()\". A smoker burning copper generates a \u0027coppercloud,\u0027 which hides Allomancy from being detected by Bronze. Although I\u0027ve never witnessed it, I\u0027ve heard that a seeker of considerable strength could pierce a coppercloud. More research is required."
     }
   ],
   "priority": false,

@@ -1,16 +1,15 @@
 {
   "name": "Allomancy Basics",
   "category": "cosmere:allomancy",
-  "icon": "cosmere:pewter_nugget",
+  "icon": "allomancy.icon",
   "pages": [
     {
       "type": "text",
-      "text": "If you entered this world with an allomantic ability, you\u0027re called a $(6)misting$().",
-      "title": "cosmere:pewter_nugget"
+      "text": "Here is where I shall explain Allomancy, a system of Investiture native to Scadrial. Despite first documentation only occurring approximately one thousand years before the Catacendre, Allomancy has been explored in much greater detail than it\u0027s two older counterparts. The art requires consuming a piece of metal, upon which time you can \"$(thing)Burn$()\" it. Those who are genetically gifted with a singular allomantic ability are generally referred to as a \"$(thing)Misting$()\". For someone who has access to all sixteen abilities, they are referred to as a \"$(thing)Mistborn$()\".",
+      "title": "Allomancy (For Dummies)"
     },
     {
       "type": "patchouli:crafting",
-      "text": "Metal vial",
       "recipe": "cosmere:metal_vial",
       "recipe2": ""
     }
