@@ -63,29 +63,29 @@ public class EffectsRegistry
 		switch (metalType)
 		{
 			case IRON:
-				return new IronStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new IronStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case STEEL:
-				return (new SteelStoreEffect(metalType, MobEffectCategory.BENEFICIAL));
+				return (new SteelStoreEffect(metalType, MobEffectCategory.NEUTRAL));
 			case PEWTER:
-				return new PewterStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new PewterStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case ZINC:
-				return new ZincStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new ZincStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case BRASS:
-				return new BrassStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new BrassStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case DURALUMIN:
-				return new DuraluminStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new DuraluminStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CHROMIUM:
-				return new ChromiumStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new ChromiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case GOLD:
-				return new GoldStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new GoldStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CADMIUM:
-				return new CadmiumStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new CadmiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case BENDALLOY:
-				return new BendalloyStoreEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new BendalloyStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			//todo atium
 			// handled as part of the manifestation or maybe a mixin
 			default:
-				return new FeruchemyEffectBase(metalType, MobEffectCategory.BENEFICIAL);
+				return new FeruchemyEffectBase(metalType, MobEffectCategory.NEUTRAL);
 		}
 	}
 
@@ -94,29 +94,29 @@ public class EffectsRegistry
 		switch (metalType)
 		{
 			case IRON:
-				return new IronTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new IronTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case STEEL:
-				return new SteelTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new SteelTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case PEWTER:
-				return new PewterTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new PewterTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case ZINC:
-				return new ZincTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new ZincTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case BRASS:
-				return new BrassTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new BrassTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case DURALUMIN:
-				return new DuraluminTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new DuraluminTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CHROMIUM:
-				return new ChromiumTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new ChromiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case GOLD:
-				return new GoldTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new GoldTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CADMIUM:
-				return new CadmiumTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new CadmiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case BENDALLOY:
-				return new BendalloyTapEffect(metalType, MobEffectCategory.BENEFICIAL);
+				return new BendalloyTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			//todo atium
 			// handled as part of the manifestation or maybe a mixin
 			default:
-				return new FeruchemyEffectBase(metalType, MobEffectCategory.BENEFICIAL);
+				return new FeruchemyEffectBase(metalType, MobEffectCategory.NEUTRAL);
 		}
 	}
 }
