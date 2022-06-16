@@ -17,7 +17,7 @@ public class EffectsHelper
 				effect,
 				21,
 				Math.max(0, amplifier),
-				false, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
+				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
 				false, // definitely don't want particles.
 				true); // show icon though
 
