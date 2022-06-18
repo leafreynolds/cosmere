@@ -436,8 +436,13 @@ public interface IHemalurgicInfo
 						}
 						double roundOff = (double) Math.round(hemalurgicStrength * 100) / 100;
 
+						String sign = roundOff > 0 ? "+" : "";
 
-						tooltip.add(TextHelper.createTranslatedText("tooltip.cosmere.attribute." + metalType.getName(), roundOff));
+						tooltip.add(TextHelper.createTranslatedText(
+								"tooltip.cosmere.attribute." + metalType.getName(),
+								sign,
+								roundOff
+						));
 					}
 					break;
 			}
