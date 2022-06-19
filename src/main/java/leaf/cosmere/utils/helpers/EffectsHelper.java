@@ -15,7 +15,7 @@ public class EffectsHelper
 	{
 		MobEffectInstance effectInstance = new MobEffectInstance(
 				effect,
-				21,
+				63,
 				Math.max(0, amplifier),
 				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
 				false, // definitely don't want particles.
