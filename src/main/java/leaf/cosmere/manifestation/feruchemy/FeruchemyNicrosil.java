@@ -126,7 +126,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
 		}
 	}
 
-	private void clearNicrosilPowers(ISpiritweb data)
+	public void clearNicrosilPowers(ISpiritweb data)
 	{
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
