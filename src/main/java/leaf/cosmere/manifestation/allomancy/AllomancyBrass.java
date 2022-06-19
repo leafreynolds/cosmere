@@ -22,7 +22,7 @@ public class AllomancyBrass extends AllomancyBase
 
 	//Dampens Emotions
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		int mode = getMode(data);
 

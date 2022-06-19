@@ -30,7 +30,7 @@ public class AllomancyBronze extends AllomancyBase
 	}
 
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		LivingEntity livingEntity = data.getLiving();
 		boolean isActiveTick = livingEntity.tickCount % 20 == 0;

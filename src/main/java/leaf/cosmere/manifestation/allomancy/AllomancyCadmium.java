@@ -25,7 +25,7 @@ public class AllomancyCadmium extends AllomancyBase
 	}
 
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		//Speeds Up Time for everything around the user, implying the user is slower
 		{

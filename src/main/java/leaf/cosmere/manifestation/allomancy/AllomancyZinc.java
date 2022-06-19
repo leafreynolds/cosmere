@@ -24,7 +24,7 @@ public class AllomancyZinc extends AllomancyBase
 	//Inflames Emotions
 	//make hostiles target you but also make non-hostiles target hostiles?
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		int mode = getMode(data);
 		int range = getRange(data);

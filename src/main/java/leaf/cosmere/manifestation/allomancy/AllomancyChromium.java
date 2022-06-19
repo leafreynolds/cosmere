@@ -23,7 +23,7 @@ public class AllomancyChromium extends AllomancyBase
 	}
 
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		//Wipes Allomantic Reserves of Target
 		{

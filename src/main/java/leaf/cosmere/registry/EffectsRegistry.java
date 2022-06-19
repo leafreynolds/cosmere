@@ -76,14 +76,16 @@ public class EffectsRegistry
 				return new DuraluminStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CHROMIUM:
 				return new ChromiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+			case NICROSIL:
+				return new NicrosilStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case GOLD:
 				return new GoldStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CADMIUM:
 				return new CadmiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			case BENDALLOY:
 				return new BendalloyStoreEffect(metalType, MobEffectCategory.NEUTRAL);
-			//todo atium
-			// handled as part of the manifestation or maybe a mixin
+			case ATIUM:
+				return new AtiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
 			default:
 				return new FeruchemyEffectBase(metalType, MobEffectCategory.NEUTRAL);
 		}
@@ -107,14 +109,16 @@ public class EffectsRegistry
 				return new DuraluminTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CHROMIUM:
 				return new ChromiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
+			case NICROSIL:
+				return new NicrosilTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case GOLD:
 				return new GoldTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case CADMIUM:
 				return new CadmiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			case BENDALLOY:
 				return new BendalloyTapEffect(metalType, MobEffectCategory.NEUTRAL);
-			//todo atium
-			// handled as part of the manifestation or maybe a mixin
+			case ATIUM:
+				return new AtiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
 			default:
 				return new FeruchemyEffectBase(metalType, MobEffectCategory.NEUTRAL);
 		}

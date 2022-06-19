@@ -55,7 +55,7 @@ public class AllomancyIronSteel extends AllomancyBase
 	}
 
 	@Override
-	public void performEffect(ISpiritweb data)
+	public void applyEffectTick(ISpiritweb data)
 	{
 		if (data.getLiving().level.isClientSide)
 		{

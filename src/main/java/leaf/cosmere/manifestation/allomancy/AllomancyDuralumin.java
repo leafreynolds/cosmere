@@ -21,7 +21,7 @@ public class AllomancyDuralumin extends AllomancyBase
 
 	//Enhances Current Metals Burned
 	@Override
-	public void performEffect(ISpiritweb data)
+	public void applyEffectTick(ISpiritweb data)
 	{
 		LivingEntity livingEntity = data.getLiving();
 		boolean isActiveTick = livingEntity.tickCount % 20 == 0;

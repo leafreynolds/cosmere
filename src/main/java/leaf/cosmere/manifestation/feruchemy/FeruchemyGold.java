@@ -21,6 +21,14 @@ public class FeruchemyGold extends FeruchemyBase
 	}
 
 	@Override
+	public int getCost(ISpiritweb data)
+	{
+		final int cost = super.getCost(data);
+		//todo config gold tap cost
+		return isTapping(data) ? cost * 10 : cost;
+	}
+
+	@Override
 	public void tick(ISpiritweb data)
 	{
 		//don't check every tick.
@@ -32,62 +40,25 @@ public class FeruchemyGold extends FeruchemyBase
 			return;
 		}
 
-		int mode = getMode(data);
-
-		int cost;
-
-		MobEffect effect = getEffect(mode);
-		final boolean tapping = mode < 0;
-		final boolean storing = mode > 0;
-
-		// if we are tapping
-		//check if there is charges to tap
-		if (tapping)
-		{
-			//wanting to tap
-			//get cost
-			cost = mode <= -3 ? -(mode * mode) : mode;
-
-		}
-		//if we are storing
-		//check if there is space to store
-		else
-		{
-			if (storing)
-			{
-				cost = mode;
-			}
-			//can't store or tap any more
-			else
-			{
-				//remove active effects.
-				//let the current effect run out.
-				return;
-			}
-		}
-
-		if (tapping && livingEntity.getHealth() >= livingEntity.getMaxHealth())
+		if (isTapping(data) && livingEntity.getHealth() >= livingEntity.getMaxHealth())
 			return;
 
-		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true);
-		if (metalmind != null)//success
-		{
-			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
+		super.tick(data);
+	}
 
-			if (effect == null)
-			{
-				return;
-			}
+	@Override
+	public void applyEffectTick(ISpiritweb data)
+	{
+		super.applyEffectTick(data);
+		final int mode = getMode(data);
+		MobEffect effect = getEffect(mode);
+		MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 
-			livingEntity.addEffect(currentEffect);
-		}
-		else
+		if (effect == null)
 		{
-			if (tapping)
-			{
-				//move towards turning off feruchemy.
-				data.setMode(this, mode + 1);
-			}
+			return;
 		}
+
+		data.getLiving().addEffect(currentEffect);
 	}
 }

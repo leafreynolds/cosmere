@@ -74,7 +74,7 @@ public class AttributesRegistry
 				attributeModifiers.put(ferringNamePath, ferringAttribute);
 			}
 
-			if (metalType != Metals.MetalType.COPPER && metalType != Metals.MetalType.TIN)
+			if (!metalType.hasAttribute())// != Metals.MetalType.COPPER && metalType != Metals.MetalType.TIN)
 			{
 				continue;
 			}
@@ -82,8 +82,8 @@ public class AttributesRegistry
 			final String metalName = metalType.getName();
 
 			int defaultVal = 0;
-			int min = 0;
-			int max = 0;
+			double min = 0;
+			double max = 0;
 
 
 			switch (metalType)
@@ -102,12 +102,19 @@ public class AttributesRegistry
 					max = 20;
 				}
 				break;
+				case ATIUM:
+				{
+					defaultVal = 1;
+					min = 0.1f;
+					max = 20;
+				}
+				break;
 			}
 
 			//requires effectively final values
-			int finalDefaultVal = defaultVal;
-			int finalMin = min;
-			int finalMax = max;
+			final int finalDefaultVal = defaultVal;
+			final double finalMin = min;
+			final double finalMax = max;
 			attributeModifiers.put(metalName, ATTRIBUTES.register(
 					metalName,
 					() -> (new RangedAttribute(

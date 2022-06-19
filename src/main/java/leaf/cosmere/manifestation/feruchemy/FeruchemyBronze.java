@@ -6,6 +6,7 @@ package leaf.cosmere.manifestation.feruchemy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Metals;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,18 +51,12 @@ public class FeruchemyBronze extends FeruchemyBase
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public void applyEffectTick(ISpiritweb data)
 	{
-		super.tick(data);
-		int mode = getMode(data);
-
-		if (mode == 0)
-		{
-			return;
-		}
+		super.applyEffectTick(data);
 
 		//can't store or tap any more
-		switch (mode)
+		switch (getMode(data))
 		{
 			case -1:
 				resetSleepTimers(data);
@@ -73,8 +69,6 @@ public class FeruchemyBronze extends FeruchemyBase
 				//let the current effect run out.
 				break;
 		}
-
-
 	}
 
 	private void resetSleepTimers(ISpiritweb data)
@@ -137,9 +131,9 @@ public class FeruchemyBronze extends FeruchemyBase
 			}
 		}
 
-		if (player.level instanceof ServerLevel)
+		if (player.level instanceof ServerLevel serverLevel)
 		{
-			((ServerLevel) player.level).updateSleepingPlayerList();
+			serverLevel.updateSleepingPlayerList();
 		}
 
 
@@ -203,7 +197,7 @@ public class FeruchemyBronze extends FeruchemyBase
 		{
 			SpiritwebCapability.get(event.getEntityLiving()).ifPresent(iSpiritweb ->
 			{
-				if (iSpiritweb.hasManifestation(this))
+				if (isActive(iSpiritweb))
 				{
 					event.setResult(Event.Result.ALLOW);
 				}

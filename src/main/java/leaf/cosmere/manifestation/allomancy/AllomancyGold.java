@@ -15,7 +15,7 @@ public class AllomancyGold extends AllomancyBase
 	}
 
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		//Reveals Your Past Self
 		{

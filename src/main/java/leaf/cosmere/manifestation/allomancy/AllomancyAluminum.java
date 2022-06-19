@@ -15,7 +15,7 @@ public class AllomancyAluminum extends AllomancyBase
 	}
 
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		//passive active ability, if any
 		{

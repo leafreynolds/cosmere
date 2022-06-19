@@ -34,6 +34,8 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
 
 	public abstract void tick(ISpiritweb data);
 
+	protected abstract void applyEffectTick(ISpiritweb data);
+
 	public abstract boolean isActive(ISpiritweb data);
 
 	public abstract double getStrength(ISpiritweb data, boolean getBaseStrength);

@@ -73,6 +73,12 @@ public class ManifestationBase extends AManifestation
 	}
 
 	@Override
+	protected void applyEffectTick(ISpiritweb data)
+	{
+
+	}
+
+	@Override
 	public boolean isActive(ISpiritweb data)
 	{
 		return data.canTickManifestation(this);

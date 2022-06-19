@@ -11,6 +11,7 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.registry.AttributesRegistry;
+import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
@@ -63,6 +64,16 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 	{
 		final double strength = getStrength(data, false);
 		return -(Mth.fastFloor(strength));
+	}
+
+	@Override
+	public void onModeChange(ISpiritweb data)
+	{
+		super.onModeChange(data);
+
+		//todo check if removing effects on mode change is wise. May be better to let them run out as they have already "paid" for them.
+		//data.getLiving().removeEffect(EffectsRegistry.STORING_EFFECTS.get(this.metalType).get());
+		//data.getLiving().removeEffect(EffectsRegistry.TAPPING_EFFECTS.get(this.metalType).get());
 	}
 
 	public boolean isStoring(ISpiritweb data)
@@ -135,16 +146,23 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 
 		if (canAfford(data, false))//success
 		{
-			MobEffect effect = getEffect(mode);
-			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
-
-			if (effect == null)
-			{
-				return;
-			}
-
-			livingEntity.addEffect(currentEffect);
+			applyEffectTick(data);
 		}
+	}
+
+	@Override
+	public void applyEffectTick(ISpiritweb data)
+	{
+		int mode = getMode(data);
+		MobEffect effect = getEffect(mode);
+		MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
+
+		if (effect == null)
+		{
+			return;
+		}
+		data.getLiving().removeEffect(effect);
+		data.getLiving().addEffect(currentEffect);
 	}
 
 	protected MobEffect getEffect(int mode)

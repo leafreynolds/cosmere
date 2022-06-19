@@ -101,12 +101,12 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 	@Override
 	public void tick(ISpiritweb data)
 	{
-		int mode = getMode(data);
-
 		if (!isActive(data))
 		{
 			return;
 		}
+
+		int mode = getMode(data);
 
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
@@ -136,11 +136,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 			}
 		}
 
-		performEffect(data);
-	}
-
-	protected void performEffect(ISpiritweb data)
-	{
+		applyEffectTick(data);
 	}
 
 	protected KeyMapping getKeyBinding()

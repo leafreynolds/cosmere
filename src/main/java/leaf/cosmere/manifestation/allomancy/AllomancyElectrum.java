@@ -15,7 +15,7 @@ public class AllomancyElectrum extends AllomancyBase
 	}
 
 	@Override
-	protected void performEffect(ISpiritweb data)
+	protected void applyEffectTick(ISpiritweb data)
 	{
 		//Reveals Your Future
 		{

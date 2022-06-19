@@ -271,7 +271,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 			if (ironActive)
 			{
-				((AllomancyIronSteel) iron).performEffect(this);
+				((AllomancyIronSteel) iron).applyEffectTick(this);
 			}
 
 			AManifestation steel = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
@@ -279,7 +279,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 			if (steelActive)
 			{
-				((AllomancyIronSteel) steel).performEffect(this);
+				((AllomancyIronSteel) steel).applyEffectTick(this);
 			}
 		}
 	}

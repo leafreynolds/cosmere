@@ -14,11 +14,6 @@ public class FeruchemyAluminum extends FeruchemyBase
 		super(metalType);
 	}
 
-	@Override
-	public int modeMin(ISpiritweb data)
-	{
-		return -10;
-	}
 
 	@Override
 	public int modeMax(ISpiritweb data)
