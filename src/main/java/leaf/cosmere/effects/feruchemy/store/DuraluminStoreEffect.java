@@ -35,21 +35,4 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 		}
 	}
 
-	public static void onRenderNameplateEvent(RenderNameplateEvent event)
-	{
-		if (!(event.getEntity() instanceof LivingEntity livingEntity))
-		{
-			return;
-		}
-
-		MobEffectInstance effectInstance = livingEntity.getEffect(Metals.MetalType.DURALUMIN.getStoringEffect());
-		if (effectInstance != null && effectInstance.getDuration() > 0)
-		{
-			if (effectInstance.getAmplifier() > 2)
-			{
-				event.setResult(Event.Result.DENY);
-			}
-
-		}
-	}
 }

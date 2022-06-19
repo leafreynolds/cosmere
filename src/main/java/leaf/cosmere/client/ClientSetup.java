@@ -13,6 +13,7 @@ import leaf.cosmere.client.render.curio.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.store.DuraluminStoreEffect;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
 import leaf.cosmere.registry.ContainersRegistry;
 import leaf.cosmere.registry.EntityRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
@@ -25,12 +26,16 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -55,7 +60,7 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
-		MinecraftForge.EVENT_BUS.addListener(DuraluminStoreEffect::onRenderNameplateEvent);
+		MinecraftForge.EVENT_BUS.addListener(ClientSetup::onRenderNameplateEvent);
 		event.enqueueWork(() ->
 		{
 			ContainersRegistry.registerGUIFactories();
@@ -77,6 +82,31 @@ public class ClientSetup
 		CurioRenderers.register();
 
 		LogHelper.info("Client setup complete!");
+	}
+
+	public static void onRenderNameplateEvent(RenderNameplateEvent event)
+	{
+		if (!(event.getEntity() instanceof LivingEntity livingEntity))
+		{
+			return;
+		}
+
+		MobEffectInstance effectInstance = livingEntity.getEffect(Metals.MetalType.DURALUMIN.getStoringEffect());
+		if (effectInstance != null && effectInstance.getDuration() > 0)
+		{
+			if (effectInstance.getAmplifier() > 2)
+			{
+				event.setResult(Event.Result.DENY);
+			}
+
+		}
+
+		final float atiumScale = FeruchemyAtium.getScale(livingEntity);
+		if (atiumScale < 1)
+		{
+			double scale = atiumScale;
+			event.getPoseStack().translate(0.0D, scale, 0.0D);
+		}
 	}
 
 	@SubscribeEvent
