@@ -928,6 +928,17 @@ public class Metals
 		{
 			return "feruchemical_" + this.getName();
 		}
+
+		public boolean hasAttribute()
+		{
+			switch (this)
+			{
+				case TIN, COPPER, ATIUM -> {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 
 	private static class MetalColor
