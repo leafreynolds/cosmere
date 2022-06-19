@@ -23,17 +23,17 @@ public class ModBusEvents
 			EntityType.PLAYER,
 
 			EntityType.VILLAGER,
+			EntityType.ZOMBIE_VILLAGER,
 			EntityType.WANDERING_TRADER,
 
-			EntityType.ZOMBIE_VILLAGER,
-			EntityType.WITCH,
-
-			EntityType.PILLAGER,
 			EntityType.EVOKER,
 			EntityType.ILLUSIONER,
+			EntityType.PILLAGER,
 			EntityType.VINDICATOR,
+			EntityType.WITCH,
 
 			EntityType.PIGLIN,
+			EntityType.PIGLIN_BRUTE,
 
 			EntityType.CAT,
 			EntityType.LLAMA,

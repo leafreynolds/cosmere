@@ -20,9 +20,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
@@ -85,10 +84,7 @@ public class EntityEventHandler
 					giveEntityStartingManifestation(livingEntity, spiritweb);
 				}
 			}
-			else if (eventEntity instanceof AbstractVillager
-					|| eventEntity instanceof ZombieVillager
-					|| (eventEntity instanceof Raider && !(eventEntity instanceof Ravager))
-					|| eventEntity instanceof AbstractPiglin)
+			else if (isValidSpiritWebEntity(eventEntity))
 			{
 				//random 1/16
 				// only 1 in 16 will have the gene
@@ -107,15 +103,23 @@ public class EntityEventHandler
 
 	}
 
+	public static boolean isValidSpiritWebEntity(Entity entity)
+	{
+		return entity instanceof Player
+			|| entity instanceof AbstractVillager
+			|| entity instanceof ZombieVillager
+			|| (entity instanceof Raider && !(entity instanceof Ravager))
+			|| entity instanceof AbstractPiglin
+			|| entity instanceof Llama
+			|| entity instanceof Cat;
+	}
+
 	@SubscribeEvent
 	public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
 	{
 		Entity eventEntity = event.getObject();
 
-		if (eventEntity instanceof Player
-				|| eventEntity instanceof Animal
-				|| eventEntity instanceof AbstractVillager
-				|| eventEntity instanceof Monster)
+		if (isValidSpiritWebEntity(eventEntity))
 		{
 			LivingEntity livingEntity = (LivingEntity) eventEntity;
 			event.addCapability(Constants.Resources.SPIRITWEB_CAP, new ICapabilitySerializable<CompoundTag>()
