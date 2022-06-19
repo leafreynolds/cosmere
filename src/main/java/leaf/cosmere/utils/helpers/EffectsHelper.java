@@ -9,8 +9,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 public class EffectsHelper
 {
-
-
 	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier)
 	{
 		MobEffectInstance effectInstance = new MobEffectInstance(

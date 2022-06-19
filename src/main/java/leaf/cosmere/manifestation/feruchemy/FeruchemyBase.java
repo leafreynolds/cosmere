@@ -71,15 +71,19 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 	{
 		super.onModeChange(data);
 
-		//todo check if removing effects on mode change is wise. May be better to let them run out as they have already "paid" for them.
-		//data.getLiving().removeEffect(EffectsRegistry.STORING_EFFECTS.get(this.metalType).get());
-		//data.getLiving().removeEffect(EffectsRegistry.TAPPING_EFFECTS.get(this.metalType).get());
+		if (getMode(data) == 0)
+		{
+			//todo check if removing effects on mode change is wise. May be better to let them run out as they have already "paid" for them.
+			data.getLiving().removeEffect(EffectsRegistry.STORING_EFFECTS.get(this.metalType).get());
+			data.getLiving().removeEffect(EffectsRegistry.TAPPING_EFFECTS.get(this.metalType).get());
+		}
 	}
 
 	public boolean isStoring(ISpiritweb data)
 	{
 		return getMode(data) > 0;
 	}
+
 	public boolean isTapping(ISpiritweb data)
 	{
 		return getMode(data) < 0;
