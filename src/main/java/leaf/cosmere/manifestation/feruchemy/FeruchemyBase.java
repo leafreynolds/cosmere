@@ -107,7 +107,7 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 		{
 			//wanting to tap
 			//get cost
-			return mode >= -3 ? mode : -(mode * mode);
+			return mode >= -modeMax(data) ? mode : -(Mth.absFloor(Math.pow(Mth.abs(mode), 1.5d)));
 		}
 		//if we are storing
 		//check if there is space to store
