@@ -33,11 +33,6 @@ public class FeruchemyAtium extends FeruchemyBase
 		data.getLiving().refreshDimensions();
 	}
 
-	public float getScale(ISpiritweb data)
-	{
-		return getScale(data.getLiving());
-	}
-
 	public static float getScale(LivingEntity living)
 	{
 		/*final int mode = getMode(data);
@@ -56,12 +51,22 @@ public class FeruchemyAtium extends FeruchemyBase
 		}
 		float scale = 1 + v;*/
 
+		//player is in a weird uninitialized state when logging in,
+		//so if it errors, I don't care, just return 1 in those cases.
+		try
+		{
 
+			final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.ATIUM.getName());
+			if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+			{
+				AttributeInstance attribute = living.getAttribute(metalRelatedAttribute.get());
+				//return modded val
+				final float v = attribute != null ? (float) attribute.getValue() : 1;
+				return v;
+			}
+		}
+		catch (Exception e)	{	}
 
-		final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.ATIUM.getName());
-		AttributeInstance attribute = living.getAttribute(attributeRegistryObject.get());
-		//return modded val
-		final float v = attribute != null ? (float) attribute.getValue() : 1;
-		return v;
+		return 1;
 	}
 }

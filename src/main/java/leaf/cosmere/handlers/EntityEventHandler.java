@@ -291,12 +291,17 @@ public class EntityEventHandler
 	@SubscribeEvent
 	public static void changeSize(EntityEvent.Size event)
 	{
-		if (event.getEntity() instanceof LivingEntity livingEntity)
+		final Entity entity = event.getEntity();
+		if (entity != null && entity instanceof LivingEntity livingEntity)
 		{
 			float scale = FeruchemyAtium.getScale(livingEntity);
-			event.setNewSize(event.getNewSize().scale(scale));
-			event.setNewEyeHeight(event.getNewEyeHeight() * scale);
 
+			//only change if scale not 1, else we let the change size event do it's thing unimpeded
+			if (scale != 1)
+			{
+				event.setNewSize(event.getNewSize().scale(scale));
+				event.setNewEyeHeight(event.getNewEyeHeight() * scale);
+			}
 		}
 	}
 }

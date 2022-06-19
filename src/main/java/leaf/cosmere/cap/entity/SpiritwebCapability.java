@@ -730,7 +730,9 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void setMode(AManifestation aManifestation, int mode)
 	{
-		mode = Mth.clamp(mode, aManifestation.modeMin(this), aManifestation.modeMax(this));
+		final int pMax = aManifestation.modeMax(this);
+		final int pMin = aManifestation.modeMin(this);
+		mode = Mth.clamp(mode, pMin, pMax);
 		MANIFESTATIONS_MODE.put(aManifestation, mode);
 		aManifestation.onModeChange(this);
 	}

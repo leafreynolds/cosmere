@@ -44,11 +44,11 @@ public class ModBusEvents
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
-		for (Metals.MetalType metalType : Metals.MetalType.values())
+		for (EntityType entityType : entityTypes)
 		{
-			if (metalType.hasAssociatedManifestation())
+			for (Metals.MetalType metalType : Metals.MetalType.values())
 			{
-				for (EntityType entityType : entityTypes)
+				if (metalType.hasAssociatedManifestation())
 				{
 					RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getAllomancyRegistryName());
 					RegistryObject<Attribute> ferringAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getFeruchemyRegistryName());
@@ -56,18 +56,19 @@ public class ModBusEvents
 					event.add(entityType, mistingAttribute.get());
 					event.add(entityType, ferringAttribute.get());
 				}
-			}
-
-			{
-				//check for others
-				final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
-				if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+				if (metalType.hasAttribute())
 				{
-					//player only, because it doesn't make sense for mobs to have them.
-					//eg xp gain rate,
-					event.add(EntityType.PLAYER, metalRelatedAttribute.get());
+					//check for others
+					final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
+					if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
+					{
+						//players get everything, all others get atium
+						if (entityType == EntityType.PLAYER || metalType == Metals.MetalType.ATIUM)
+						{
+							event.add(entityType, metalRelatedAttribute.get());
+						}
+					}
 				}
-
 			}
 		}
 	}

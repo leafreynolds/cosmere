@@ -112,24 +112,18 @@ public class EntityMixin
 
 		if(entity instanceof LivingEntity livingEntity)
 		{
-			SpiritwebCapability.get(livingEntity).ifPresent(data->
+			float scale = FeruchemyAtium.getScale(livingEntity);
+			if (scale > 0.01 || scale < -0.01)
 			{
-				FeruchemyAtium atiumF = (FeruchemyAtium) ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.ATIUM).get();
-				float scale = atiumF.getScale(data);
-				if (scale > 0.01 || scale < -0.01)
-				{
-					EntityDimensions entityDimensions = livingEntity.getDimensions(pose);
-					entityDimensions = entityDimensions.scale(scale);
-					double f = entityDimensions.width / 2.0F;
-					Vec3 vector3d = new Vec3(livingEntity.getX() - f, livingEntity.getY(), livingEntity.getZ() - f);
-					Vec3 vector3d1 = new Vec3(livingEntity.getX() + f, livingEntity.getY() + (double)entityDimensions.height, livingEntity.getZ() + f);
-					AABB box = new AABB(vector3d, vector3d1);
+				EntityDimensions entityDimensions = livingEntity.getDimensions(pose);
+				entityDimensions = entityDimensions.scale(scale);
+				double f = entityDimensions.width / 2.0F;
+				Vec3 vector3d = new Vec3(livingEntity.getX() - f, livingEntity.getY(), livingEntity.getZ() - f);
+				Vec3 vector3d1 = new Vec3(livingEntity.getX() + f, livingEntity.getY() + (double)entityDimensions.height, livingEntity.getZ() + f);
+				AABB box = new AABB(vector3d, vector3d1);
 
-
-
-					cir.setReturnValue(livingEntity.level.noCollision(livingEntity, box.deflate(1.0E-7D)));
-				}
-			});
+				cir.setReturnValue(livingEntity.level.noCollision(livingEntity, box.deflate(1.0E-7D)));
+			}
 		}
 	}
 }
