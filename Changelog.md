@@ -1,5 +1,17 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B48
+
+Updated patchouli documentation for allomancy.
+Fix chromium spikes having weird values from loot chests
+hide flashing icons in hud.
+Feruchemy effects are now 'neutral'. Should stop corail tombstone mod giving you "Storing Cadmium V" and making you suffocate.
+Change feruchemy tap cost to be mode^1.5 instead of mode^2. Shouldn't be so devastating to tap high amounts now.
+Stop spiritwebs being attached to creepers/skeletons and other such mobs. Things should run a little smoother now.
+Storing enough brass will extinguish yourself if you're on fire. Requires mode 4, or Store Brass IV effect.
+Feru nicrosil maybe sorta working? Though only if you actually have feru nicrosil, no medallions yet.
+
+
 B47
 
 New textures!
