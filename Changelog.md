@@ -10,6 +10,9 @@ Change feruchemy tap cost to be mode^1.5 instead of mode^2. Shouldn't be so deva
 Stop spiritwebs being attached to creepers/skeletons and other such mobs. Things should run a little smoother now.
 Storing enough brass will extinguish yourself if you're on fire. Requires mode 4, or Store Brass IV effect.
 Feru nicrosil maybe sorta working? Though only if you actually have feru nicrosil, no medallions yet.
+Hopefully fixing various effects stuttering that happens on slower connections
+Atium feruchemy inverted, so you store size, becoming smaller when storing, larger when tapping.
+Fix other people not seeing size changes from atium
 
 
 B47
