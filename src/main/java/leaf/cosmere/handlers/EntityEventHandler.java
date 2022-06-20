@@ -84,7 +84,7 @@ public class EntityEventHandler
 					giveEntityStartingManifestation(livingEntity, spiritweb);
 				}
 			}
-			else if (isValidSpiritWebEntity(eventEntity))
+			else if (canStartWithPowers(eventEntity))
 			{
 				//random 1/16
 				// only 1 in 16 will have the gene
@@ -106,12 +106,21 @@ public class EntityEventHandler
 	public static boolean isValidSpiritWebEntity(Entity entity)
 	{
 		return entity instanceof Player
-			|| entity instanceof AbstractVillager
-			|| entity instanceof ZombieVillager
-			|| (entity instanceof Raider && !(entity instanceof Ravager))
-			|| entity instanceof AbstractPiglin
-			|| entity instanceof Llama
-			|| entity instanceof Cat;
+				|| entity instanceof AbstractVillager
+				|| entity instanceof ZombieVillager
+				|| (entity instanceof Raider && !(entity instanceof Ravager))
+				|| entity instanceof AbstractPiglin
+				|| entity instanceof Llama
+				|| entity instanceof Cat;
+	}
+
+	public static boolean canStartWithPowers(Entity entity)
+	{
+		return entity instanceof Player
+				|| entity instanceof AbstractVillager
+				|| entity instanceof ZombieVillager
+				|| (entity instanceof Raider && !(entity instanceof Ravager))
+				|| entity instanceof AbstractPiglin;
 	}
 
 	@SubscribeEvent
