@@ -49,7 +49,7 @@ public class LightTextureMixin
 			}
 		}
 
-		final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.TIN.getName());
+		final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.NIGHT_VISION_ATTRIBUTE;
 		AttributeInstance attribute = clientPlayer.getAttribute(attributeRegistryObject.get());
 		//return modded val
 		final float v = attribute != null ? (float) attribute.getValue() : prev;

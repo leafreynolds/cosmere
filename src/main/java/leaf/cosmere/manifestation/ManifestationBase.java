@@ -11,6 +11,9 @@ package leaf.cosmere.manifestation;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Manifestations;
+import leaf.cosmere.registry.AttributesRegistry;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraftforge.registries.RegistryObject;
 
 //Manifestation of investiture
 public class ManifestationBase extends AManifestation
@@ -88,5 +91,17 @@ public class ManifestationBase extends AManifestation
 	public double getStrength(ISpiritweb data, boolean getBaseStrength)
 	{
 		return 0;
+	}
+
+	@Override
+	public RegistryObject<Attribute> getAttribute()
+	{
+		final String manifestationName = getName();
+		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
+		{
+			return null;
+		}
+
+		return AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName);
 	}
 }

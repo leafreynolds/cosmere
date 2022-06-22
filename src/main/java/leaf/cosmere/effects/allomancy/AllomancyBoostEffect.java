@@ -7,9 +7,9 @@ package leaf.cosmere.effects.allomancy;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.effects.MobEffectBase;
 import leaf.cosmere.registry.AttributesRegistry;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -20,18 +20,33 @@ public class AllomancyBoostEffect extends MobEffectBase
 	{
 		super(effectType, type.getColorValue());
 
-		AttributesRegistry.COSMERE_ATTRIBUTES.entrySet()
-				.forEach(attributeRegistered ->
-				{
-					//todo powers to NOT increase?
-					//skip duralumin and nicrosil?
+		for (Metals.MetalType metalType : Metals.MetalType.values())
+		{
+			if (metalType.hasAssociatedManifestation())
+			{
+				addAttributeModifier(
+						AttributesRegistry.ALLOMANCY_ATTRIBUTES.get(metalType).get(),
+						"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
+						0.334D,
+						AttributeModifier.Operation.MULTIPLY_TOTAL);
+				addAttributeModifier(
+						AttributesRegistry.FERUCHEMY_ATTRIBUTES.get(metalType).get(),
+						"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
+						0.334D,
+						AttributeModifier.Operation.MULTIPLY_TOTAL);
 
-					addAttributeModifier(
-							attributeRegistered.getValue().get(),
-							"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
-							1.334D,
-							AttributeModifier.Operation.MULTIPLY_TOTAL);
-				});
+			}
+		}
+
+		for (Roshar.Surges surges : Roshar.Surges.values())
+		{
+			addAttributeModifier(
+					AttributesRegistry.SURGEBINDING_ATTRIBUTES.get(surges).get(),
+					"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
+					0.334D,
+					AttributeModifier.Operation.MULTIPLY_TOTAL);
+		}
+
 	}
 
 	@Override

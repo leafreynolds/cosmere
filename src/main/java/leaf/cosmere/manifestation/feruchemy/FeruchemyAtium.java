@@ -5,18 +5,11 @@
 package leaf.cosmere.manifestation.feruchemy;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
-import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.AttributesRegistry;
-import leaf.cosmere.registry.EffectsRegistry;
-import leaf.cosmere.registry.ManifestationRegistry;
-import leaf.cosmere.utils.helpers.MathHelper;
-import leaf.cosmere.utils.math.Easing;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.RegistryObject;
 
 public class FeruchemyAtium extends FeruchemyBase
@@ -51,12 +44,10 @@ public class FeruchemyAtium extends FeruchemyBase
 		}
 		float scale = 1 + v;*/
 
-		//player is in a weird uninitialized state when logging in,
-		//so if it errors, I don't care, just return 1 in those cases.
 		try
 		{
 
-			final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.ATIUM.getName());
+			final RegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.SIZE_ATTRIBUTE;
 			if (metalRelatedAttribute != null && metalRelatedAttribute.isPresent())
 			{
 				AttributeInstance attribute = living.getAttribute(metalRelatedAttribute.get());
@@ -65,7 +56,11 @@ public class FeruchemyAtium extends FeruchemyBase
 				return v;
 			}
 		}
-		catch (Exception e)	{	}
+		catch (Exception e)
+		{
+			//player is in a weird uninitialized state when logging in,
+			//so if it errors, I don't care, just return 1 in those cases.
+		}
 
 		return 1;
 	}

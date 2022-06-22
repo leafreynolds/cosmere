@@ -155,8 +155,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 
 	public double getStrength(ISpiritweb data, boolean getBaseStrength)
 	{
-		RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getAllomancyRegistryName());
-		AttributeInstance attribute = data.getLiving().getAttribute(mistingAttribute.get());
+		AttributeInstance attribute = data.getLiving().getAttribute(getAttribute().get());
 		if (attribute != null)
 		{
 			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
@@ -176,5 +175,11 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		double allomanticStrength = getStrength(data, false);
 		return Mth.floor(allomanticStrength * getMode(data));
 
+	}
+
+	@Override
+	public RegistryObject<Attribute> getAttribute()
+	{
+		return AttributesRegistry.ALLOMANCY_ATTRIBUTES.get(metalType);
 	}
 }

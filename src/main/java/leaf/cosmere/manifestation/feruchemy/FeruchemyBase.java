@@ -188,12 +188,17 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 
 	public double getStrength(ISpiritweb cap, boolean getBaseStrength)
 	{
-		RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getFeruchemyRegistryName());
-		AttributeInstance attribute = cap.getLiving().getAttribute(attributeRegistryObject.get());
+		AttributeInstance attribute = cap.getLiving().getAttribute(getAttribute().get());
 		if (attribute != null)
 		{
 			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
 		}
 		return 0;
+	}
+
+	@Override
+	public RegistryObject<Attribute> getAttribute()
+	{
+		return AttributesRegistry.FERUCHEMY_ATTRIBUTES.get(metalType);
 	}
 }
