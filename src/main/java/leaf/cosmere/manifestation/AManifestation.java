@@ -8,10 +8,12 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Manifestations;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Locale;
 
@@ -61,4 +63,6 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
 	{
 		return this.getRegistryName().getPath().toLowerCase(Locale.ROOT);
 	}
+
+	public abstract RegistryObject<Attribute> getAttribute();
 }

@@ -89,11 +89,10 @@ public class Roshar
 			return 0;
 		}
 
-		public Attribute getAttribute()
+		public RegistryObject<Attribute> getAttribute()
 		{
-			final String registryName = getRegistryName();
-			final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(registryName);
-			return attributeRegistryObject.get();
+			final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.SURGEBINDING_ATTRIBUTES.get(this);
+			return attributeRegistryObject;
 		}
 
 		public String getRegistryName()
@@ -255,7 +254,7 @@ public class Roshar
 			return null;
 		}
 
-		public Attribute getFirstSurgeAttribute()
+		public RegistryObject<Attribute> getFirstSurgeAttribute()
 		{
 			switch (this)
 			{
@@ -283,7 +282,7 @@ public class Roshar
 			}
 		}
 
-		public Attribute getSecondSurgeAttribute()
+		public RegistryObject<Attribute> getSecondSurgeAttribute()
 		{
 			switch (this)
 			{

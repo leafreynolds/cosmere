@@ -6,6 +6,7 @@ package leaf.cosmere.handlers;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.registry.AttributesRegistry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -44,17 +45,19 @@ public class ModBusEvents
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
+		for (Roshar.Surges surge : Roshar.Surges.values())
+		{
+			event.add(EntityType.PLAYER, surge.getAttribute().get());
+		}
+
 		for (EntityType entityType : entityTypes)
 		{
 			for (Metals.MetalType metalType : Metals.MetalType.values())
 			{
 				if (metalType.hasAssociatedManifestation())
 				{
-					RegistryObject<Attribute> mistingAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getAllomancyRegistryName());
-					RegistryObject<Attribute> ferringAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getFeruchemyRegistryName());
-
-					event.add(entityType, mistingAttribute.get());
-					event.add(entityType, ferringAttribute.get());
+					event.add(entityType, AttributesRegistry.ALLOMANCY_ATTRIBUTES.get(metalType).get());
+					event.add(entityType, AttributesRegistry.FERUCHEMY_ATTRIBUTES.get(metalType).get());
 				}
 				if (metalType.hasAttribute())
 				{

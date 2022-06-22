@@ -17,7 +17,7 @@ public class ZincStoreEffect extends FeruchemyEffectBase
 	{
 		super(type, effectType);
 		addAttributeModifier(
-				AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.COPPER.getName()).get(),
+				AttributesRegistry.XP_RATE_ATTRIBUTE.get(),
 				"9d50ed05-06f4-4bc2-83bc-d870f93696bf",
 				-0.1D,
 				AttributeModifier.Operation.ADDITION);

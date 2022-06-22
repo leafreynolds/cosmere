@@ -19,7 +19,7 @@ public class ZincTapEffect extends FeruchemyEffectBase
 	{
 		super(type, effectType);
 		addAttributeModifier(
-				AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.COPPER.getName()).get(),
+				AttributesRegistry.XP_RATE_ATTRIBUTE.get(),
 				"1a7c0d6e-d206-4939-ae07-b47783656f2d",
 				0.1D,
 				AttributeModifier.Operation.ADDITION);

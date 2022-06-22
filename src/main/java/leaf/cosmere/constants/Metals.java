@@ -706,7 +706,7 @@ public class Metals
 
 					if (killedEntity instanceof Player)
 					{
-						final AttributeInstance attribute = killedEntity.getAttribute(AttributesRegistry.COSMERE_ATTRIBUTES.get(MetalType.COPPER.getName()).get());
+						final AttributeInstance attribute = killedEntity.getAttribute(AttributesRegistry.XP_RATE_ATTRIBUTE.get());
 						if (attribute != null)
 						{
 							//70% strength to spike

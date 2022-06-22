@@ -87,7 +87,7 @@ public class PlayerEventHandler
 			return;
 		}
 
-		RegistryObject<Attribute> xpGainRateAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.COPPER.getName());
+		RegistryObject<Attribute> xpGainRateAttribute = AttributesRegistry.XP_RATE_ATTRIBUTE;
 		if (xpGainRateAttribute != null && xpGainRateAttribute.isPresent())
 		{
 			AttributeInstance attribute = event.getPlayer().getAttribute(xpGainRateAttribute.get());
