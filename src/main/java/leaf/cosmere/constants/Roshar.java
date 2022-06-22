@@ -91,8 +91,7 @@ public class Roshar
 
 		public RegistryObject<Attribute> getAttribute()
 		{
-			final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.SURGEBINDING_ATTRIBUTES.get(this);
-			return attributeRegistryObject;
+			return AttributesRegistry.SURGEBINDING_ATTRIBUTES.get(this);
 		}
 
 		public String getRegistryName()
