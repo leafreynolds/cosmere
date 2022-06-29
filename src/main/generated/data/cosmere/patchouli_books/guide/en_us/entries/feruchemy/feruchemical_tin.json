@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_tin.description"
+      "text": "A ferring who taps $(thing)tin$() is known as a \"$(thing)Windwhisperer$()\", and stores Senses. While storing, the Windwhisperer will find themselves growing increasingly shortsighted. Tapping allows them to magnify their vision, as if looking through a spyglass."
     },
     {
       "type": "patchouli:crafting",

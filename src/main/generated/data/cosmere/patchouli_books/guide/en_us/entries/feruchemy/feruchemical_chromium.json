@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_chromium.description"
+      "text": "A ferring who taps $(thing)chromium$() is known as a \"$(thing)Spinner$()\", and stores Fortune. While storing, a Spinner will find that things left to chance generally end up against them. Ores they mine drop less usable chunks, Animals can\u0027t be harvested for as much usable meat, etc. Tapping seems to make fate bend in their favor."
     },
     {
       "type": "patchouli:crafting",

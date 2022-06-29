@@ -6,10 +6,6 @@
     {
       "type": "text",
       "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\". (The rest of the page is missing...)"
-    },
-    {
-      "type": "text",
-      "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\". (The rest of the page is blank...)"
     }
   ],
   "priority": false,

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_iron.description"
+      "text": "A ferring who taps $(thing)iron$() is known as a \"$(thing)Skimmer$()\", and stores Weight. While storing, the Skimmer will find themselves getting lighter, and falling slower. Tapping makes them fall far faster, and take less knockback."
     },
     {
       "type": "patchouli:crafting",

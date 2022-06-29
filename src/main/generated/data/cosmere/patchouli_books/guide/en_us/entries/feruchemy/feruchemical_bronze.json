@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_bronze.description"
+      "text": "A ferring who taps $(thing)bronze$() is known as a \"$(thing)Sentry$()\", and stores Wakefulness. While storing, the Sentry is able to fall asleep almost anywhere. Reports say that Tapping can keep away deadly creatures on this Shardworld called $(thing)Phantoms$(). More research is required."
     },
     {
       "type": "patchouli:crafting",

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_steel.description"
+      "text": "A ferring who taps $(thing)steel$() is known as a \"$(thing)Steelrunner$()\", and stores Speed. While storing, the Steelrunner will grow far slower. Tapping makes them move faster. Some reports say a Steelrunner can even run across water."
     },
     {
       "type": "patchouli:crafting",
