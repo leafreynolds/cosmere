@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_zinc.description"
+      "text": "A ferring who taps $(thing)zinc$() is known as a \"$(thing)Sparker$()\", and stores Mental Speed. While storing, the Sparker will find themselves learning less from their experiences. Tapping allows them to gain further insight into their experiences."
     },
     {
       "type": "patchouli:crafting",

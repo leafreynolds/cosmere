@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_pewter.description"
+      "text": "A ferring who taps $(thing)pewter$() is known as a \"$(thing)Brute$()\", and stores Strength. While storing, the Brute will find their attacks do little damage. Tapping allows them to gain increased damage on their attacks."
     },
     {
       "type": "patchouli:crafting",
