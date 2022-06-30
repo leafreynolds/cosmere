@@ -287,6 +287,7 @@ public class PatchouliHemalurgy
 				break;
 			case LERASIUM:
 				builder.append("Lerasium Spikes steals all Attributes from a donor.");
+				break;
 			default:
 				builder.append("Unknown...");
 				break;
