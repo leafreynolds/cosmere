@@ -58,7 +58,7 @@ public final class LootHandler
 	{
 		return LootPool.lootPool()
 				.add(getInjectEntry(entryName, 1))
-				.setBonusRolls(ConstantValue.exactly(0))
+				.setBonusRolls(UniformGenerator.between(0,1))
 				.name("cosmere_inject")
 				.build();
 	}
