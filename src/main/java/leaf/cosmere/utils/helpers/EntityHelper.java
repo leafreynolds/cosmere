@@ -82,6 +82,8 @@ public class EntityHelper
 
 			if (!isPlayerEntity)
 			{
+				/*//todo decide if we even want named entities
+
 				//todo translations
 				//todo grant random name
 				entity.setCustomName(
@@ -89,7 +91,7 @@ public class EntityHelper
 								isAllomancy
 								? "Mistborn"
 								: "Feruchemist")
-				);
+				);*/
 			}
 		}
 		else
@@ -103,9 +105,11 @@ public class EntityHelper
 
 				if (!isPlayerEntity)
 				{
+/*//todo decide if we even want named entities
 					//todo translations
 					//todo grant random name
 					entity.setCustomName(TextHelper.createTranslatedText("Twinborn"));
+*/
 				}
 			}
 			else
@@ -122,13 +126,14 @@ public class EntityHelper
 
 				if (!isPlayerEntity)
 				{
+/*//todo decide if we even want named entities
 					//todo translations
 					//todo grant random name
 					final String s = StringHelper.fixCapitalisation(isAllomancy
 					                 ? allomancyMetal.getMistingName()
 					                 : feruchemyMetal.getFerringName());
 					entity.setCustomName(TextHelper.createTranslatedText(
-							s));
+							s));*/
 				}
 			}
 		}
