@@ -123,6 +123,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
@@ -131,7 +132,8 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
-    implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
+    implementation fg.deobf("curse.maven:jade-324717:${jade_id_mod}")
+    //compileOnly fg.deobf("curse.maven:jade-324717:${jade_id_api}")
 
 
     //modname-modid:fileid?

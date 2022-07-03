@@ -27,7 +27,7 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 	@Override
 	public ResourceLocation getUid()
 	{
-		return ResourceLocationHelper.prefix("spirit_web");
+		return ResourceLocationHelper.prefix("spiritweb");
 	}
 
 	@Override

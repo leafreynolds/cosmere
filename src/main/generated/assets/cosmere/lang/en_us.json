@@ -146,6 +146,7 @@
   "command.cosmere.power.found": "Powers found for: %s \n",
   "command.cosmere.power.set.fail": "Failed to update power",
   "command.cosmere.power.set.success": "Successfully set power to: %s",
+  "config.jade.plugin_cosmere.spiritweb": "Spiritweb",
   "cosmere.aluminum_gnat": "Aluminum Gnat",
   "cosmere.archivist": "Archivist",
   "cosmere.augur": "Augur",

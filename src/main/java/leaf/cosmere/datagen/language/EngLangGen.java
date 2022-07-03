@@ -232,6 +232,8 @@ public class EngLangGen extends LanguageProvider
 		//Sound Schemes
 
 		//Configs
+		add("config.jade.plugin_cosmere.spiritweb", "Spiritweb");
+
 
 		//Commands
 		add(POWER_INVALID, "Invalid power");
