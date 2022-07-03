@@ -5,10 +5,7 @@
 package leaf.cosmere.datagen.items;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.items.MetalIngotItem;
-import leaf.cosmere.items.MetalNuggetItem;
-import leaf.cosmere.items.MetalRawOreItem;
-import leaf.cosmere.items.ShardbladeItem;
+import leaf.cosmere.items.*;
 import leaf.cosmere.items.curio.BraceletMetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.items.curio.NecklaceMetalmindItem;
@@ -84,6 +81,12 @@ public class ItemModelsGen extends ItemModelProvider
 			}
 			else if (item instanceof ShardbladeItem)
 			{
+				if (item instanceof HonorbladeItem honorbladeItem)
+				{
+					this.getBuilder(path)
+							.parent(new ModelFile.UncheckedModelFile("cosmere:item/test_blade"));
+				}
+
 				continue;
 			}
 			else if (item instanceof MetalRawOreItem rawItem)
