@@ -57,6 +57,7 @@ public class RandomiseMetalTypeLootFunction extends LootItemConditionalFunction
 			List<Metals.MetalType> metalTypes =
 					Arrays.stream(Metals.MetalType.values())
 							.filter(Metals.MetalType::hasHemalurgicEffect)
+							.filter(godMetalCheck -> godMetalCheck != Metals.MetalType.LERASIUM && godMetalCheck != Metals.MetalType.LERASATIUM)//todo decide about allowing god metal spikes to generate as loot
 							.collect(Collectors.toList());
 			Collections.shuffle(metalTypes);
 			Optional<Metals.MetalType> metalType = metalTypes.stream().findFirst();
