@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dust/cadmium"
+    },
+    {
+      "tag": "forge:dust/lead"
+    },
+    {
+      "tag": "forge:dust/lead"
+    },
+    {
+      "tag": "forge:dust/lead"
+    },
+    {
+      "tag": "forge:dust/lead"
+    },
+    {
+      "tag": "forge:dust/lead"
+    },
+    {
+      "tag": "forge:dust/lead"
+    },
+    {
+      "tag": "forge:dust/tin"
+    },
+    {
+      "tag": "forge:dust/tin"
+    }
+  ],
+  "result": {
+    "item": "cosmere:bendalloy_blend",
+    "count": 9
+  }
+}

@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:ingots/gold"
+      "tag": "forge:dust/zinc"
     },
     {
-      "tag": "forge:raw_materials/silver"
+      "tag": "forge:dust/copper"
     }
   ],
   "result": {
-    "item": "cosmere:electrum_blend",
+    "item": "cosmere:brass_blend",
     "count": 2
   }
 }

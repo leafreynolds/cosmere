@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/bendalloy"
+      "cosmere:alloying/dust_blend/bronze"
     ]
   },
   "criteria": {
@@ -12,7 +12,7 @@
         "items": [
           {
             "items": [
-              "cosmere:bendalloy_blend"
+              "cosmere:bronze_blend"
             ]
           }
         ]
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "cosmere:alloying/blend/bendalloy"
+        "recipe": "cosmere:alloying/dust_blend/bronze"
       }
     }
   },

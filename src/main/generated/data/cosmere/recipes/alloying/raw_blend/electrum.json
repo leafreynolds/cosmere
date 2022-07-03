@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:raw_materials/gold"
+    },
+    {
+      "tag": "forge:raw_materials/silver"
+    }
+  ],
+  "result": {
+    "item": "cosmere:electrum_blend",
+    "count": 2
+  }
+}

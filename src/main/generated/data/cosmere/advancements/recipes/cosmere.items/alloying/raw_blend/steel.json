@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/brass"
+      "cosmere:alloying/raw_blend/steel"
     ]
   },
   "criteria": {
@@ -12,7 +12,7 @@
         "items": [
           {
             "items": [
-              "cosmere:brass_blend"
+              "cosmere:steel_blend"
             ]
           }
         ]
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "cosmere:alloying/blend/brass"
+        "recipe": "cosmere:alloying/raw_blend/steel"
       }
     }
   },

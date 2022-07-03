@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dust/chromium"
+    },
+    {
+      "tag": "forge:dust/nickel"
+    },
+    {
+      "tag": "forge:dust/nickel"
+    },
+    {
+      "tag": "forge:dust/nickel"
+    }
+  ],
+  "result": {
+    "item": "cosmere:nicrosil_blend",
+    "count": 4
+  }
+}

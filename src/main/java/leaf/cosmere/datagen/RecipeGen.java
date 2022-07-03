@@ -104,7 +104,9 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
                 addAlloyRecipes(consumer, metalType, outputBlock, TagsRegistry.Items.METAL_BLOCK_ITEM_TAGS,"block");*/
 
 				Item outputBlend = metalType.getRawMetalItem();
-				addAlloyRecipes(consumer, metalType, outputBlend, TagsRegistry.Items.METAL_RAW_TAGS, "blend");
+				addAlloyRecipes(consumer, metalType, outputBlend, TagsRegistry.Items.METAL_RAW_TAGS, "raw_blend");
+				addAlloyRecipes(consumer, metalType, outputBlend, TagsRegistry.Items.METAL_DUST_TAGS, "dust_blend");
+				addAlloyRecipes(consumer, metalType, outputBlend, TagsRegistry.Items.METAL_INGOT_TAGS, "ingot_blend");
 
 				addOreSmeltingRecipes(consumer, outputBlend, metalType.getIngotItem(), 1.0f, 200);
 			}
@@ -117,14 +119,15 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 	private void addAlloyRecipes(Consumer<FinishedRecipe> consumer, Metals.MetalType metalType, Item output, Map<Metals.MetalType, TagKey<Item>> materialTag, String recipe)
 	{
 		String s = String.format("alloying/%s/", recipe);
+
 		switch (metalType)
 		{
 			case STEEL:
 				ShapelessRecipeBuilder.shapeless(output, 4)
 						.unlockedBy("has_item", has(output))
-						.requires(Ingredient.of(Tags.Items.INGOTS_IRON))
-						.requires(Ingredient.of(Tags.Items.INGOTS_IRON))
-						.requires(Ingredient.of(Tags.Items.INGOTS_IRON))
+						.requires(materialTag.get(Metals.MetalType.IRON))
+						.requires(materialTag.get(Metals.MetalType.IRON))
+						.requires(materialTag.get(Metals.MetalType.IRON))
 						.requires(Ingredient.of(Items.COAL, Items.CHARCOAL))
 						.save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
 				break;
@@ -190,7 +193,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 			case ELECTRUM:
 				ShapelessRecipeBuilder.shapeless(output, 2)
 						.unlockedBy("has_item", has(output))
-						.requires(Ingredient.of(Tags.Items.INGOTS_GOLD))
+						.requires(materialTag.get(Metals.MetalType.GOLD))
 						.requires(materialTag.get(Metals.MetalType.SILVER))
 						.save(consumer, ResourceLocationHelper.prefix(s + metalType.getName()));
 				break;

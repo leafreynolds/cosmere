@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/steel"
+      "cosmere:alloying/raw_blend/electrum"
     ]
   },
   "criteria": {
@@ -12,7 +12,7 @@
         "items": [
           {
             "items": [
-              "cosmere:steel_blend"
+              "cosmere:electrum_blend"
             ]
           }
         ]
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "cosmere:alloying/blend/steel"
+        "recipe": "cosmere:alloying/raw_blend/electrum"
       }
     }
   },

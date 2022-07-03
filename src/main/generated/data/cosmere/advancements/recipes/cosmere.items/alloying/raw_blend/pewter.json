@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/bronze"
+      "cosmere:alloying/raw_blend/pewter"
     ]
   },
   "criteria": {
@@ -12,7 +12,7 @@
         "items": [
           {
             "items": [
-              "cosmere:bronze_blend"
+              "cosmere:pewter_blend"
             ]
           }
         ]
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "cosmere:alloying/blend/bronze"
+        "recipe": "cosmere:alloying/raw_blend/pewter"
       }
     }
   },

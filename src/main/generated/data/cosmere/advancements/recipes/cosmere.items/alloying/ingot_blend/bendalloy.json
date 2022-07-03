@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/pewter"
+      "cosmere:alloying/ingot_blend/bendalloy"
     ]
   },
   "criteria": {
@@ -12,7 +12,7 @@
         "items": [
           {
             "items": [
-              "cosmere:pewter_blend"
+              "cosmere:bendalloy_blend"
             ]
           }
         ]
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "cosmere:alloying/blend/pewter"
+        "recipe": "cosmere:alloying/ingot_blend/bendalloy"
       }
     }
   },
