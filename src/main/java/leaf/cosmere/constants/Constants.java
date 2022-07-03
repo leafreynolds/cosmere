@@ -22,7 +22,7 @@ public class Constants
 		public static final ResourceLocation ALL = new ResourceLocation(Cosmere.MODID, "all");
 
 		public static final ResourceLocation JEI = new ResourceLocation(Cosmere.MODID, "jei");
-		public static final ResourceLocation SPIRITWEB_CAP = new ResourceLocation(Cosmere.MODID, "innate_investiture");
+		public static final ResourceLocation SPIRITWEB_CAP = new ResourceLocation(Cosmere.MODID, "spiritweb");
 	}
 
 	public static class Suffix
@@ -50,7 +50,7 @@ public class Constants
 		public static final String BLOCK = "_block";
 		public static final String RAW = "raw_";
 		public static final String ORE = "_ore";
-		public static final String DEEPSLATE_ORE = "_deepslate";
+		public static final String DEEPSLATE = "deepslate_";
 		public static final String BLEND = "_blend";
 
 		public static final String METALMIND = "_metalmind";
