@@ -12,7 +12,9 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
+import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
+import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.core.Direction;
@@ -20,6 +22,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.Ravager;
@@ -42,6 +48,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -242,7 +249,7 @@ public class EntityEventHandler
 			else if (stack.getItem() instanceof HemalurgicSpikeItem spike)
 			{
 				//https://www.theoryland.com/intvmain.php?i=977#43
-				if (!(event.getTarget() instanceof Cat))
+				if (!(event.getTarget() instanceof Cat cat))
 				{
 					return;
 				}
@@ -256,36 +263,38 @@ public class EntityEventHandler
 
 
 				//todo random list of catquisitor names
-				target.setCustomName(TextHelper.createTranslatedText("Catquisitor "));
+				target.setCustomName(TextHelper.createTranslatedText("Catquisitor"));
 
 				boolean spikeApplied = false;
 
-				//todo catquisitor
-                /*
-                switch (spike.getMetalType())
-                {
-                    case STEEL:
-                    case BRONZE:
-                    case CADMIUM:
-                    case ELECTRUM:
-                        cap.giveManifestation(Manifestations.ManifestationTypes.ALLOMANCY, spike.getMetalType().getID());
-                        spikeApplied = true;
-                        break;
-                    case PEWTER:
-                    case BRASS:
-                    case BENDALLOY:
-                    case GOLD:
-                        cap.giveManifestation(Manifestations.ManifestationTypes.FERUCHEMY, spike.getMetalType().getID());
-                        spikeApplied = true;
-                        break;
-                    case ATIUM:
-                        //Steals any power
-                        //todo decide if we just pick a random power
-                        break;
-                    case LERASIUM:
-                        //Steals all powers
-                        break;
-                }*/
+				try
+				{
+					for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
+					{
+						final double hemalurgicStrength = spike.getHemalurgicStrength(stack, manifestation);
+						if (hemalurgicStrength > 0)
+						{
+							final RegistryObject<Attribute> regAttribute = manifestation.getAttribute();
+							if (regAttribute == null || !regAttribute.isPresent())
+							{
+								continue;
+							}
+							spikeApplied = true;
+
+							final AttributeMap catAttributes = cat.getAttributes();
+							final AttributeInstance instance = catAttributes.getInstance(regAttribute.get());
+
+							if (instance != null)
+							{
+								instance.setBaseValue(hemalurgicStrength);
+							}
+						}
+					}
+				}
+				catch (Exception e)
+				{
+
+				}
 
 				if (spikeApplied && !event.getPlayer().isCreative())
 				{
