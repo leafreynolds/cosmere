@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cosmere:alloying/blend/bronze"
+        "recipe": "cosmere:alloying/raw_blend/bronze"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/bronze"
+      "cosmere:alloying/raw_blend/bronze"
     ]
   }
 }

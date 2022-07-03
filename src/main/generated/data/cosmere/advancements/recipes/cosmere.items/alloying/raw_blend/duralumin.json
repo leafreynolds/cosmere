@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cosmere:alloying/blend/duralumin"
+        "recipe": "cosmere:alloying/raw_blend/duralumin"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/duralumin"
+      "cosmere:alloying/raw_blend/duralumin"
     ]
   }
 }

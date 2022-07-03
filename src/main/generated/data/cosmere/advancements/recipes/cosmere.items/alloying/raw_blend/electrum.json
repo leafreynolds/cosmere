@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cosmere:alloying/blend/electrum"
+        "recipe": "cosmere:alloying/raw_blend/electrum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/electrum"
+      "cosmere:alloying/raw_blend/electrum"
     ]
   }
 }

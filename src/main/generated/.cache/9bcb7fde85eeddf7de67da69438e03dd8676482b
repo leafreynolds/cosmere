@@ -1,4 +1,4 @@
-// 1.19	2022-07-03T12:15:14.4363187	Item Models: cosmere
+// 1.19	2022-07-03T19:21:06.4434629	Item Models: cosmere
 78846538426f22e67a52877172b5da616e2dfd40 assets/cosmere/models/item/aluminum_bracelet_metalmind.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/aluminum_ingot.json
 83e307f08c00074dbdfbdafdad4542ddff47096a assets/cosmere/models/item/aluminum_necklace_metalmind.json
@@ -22,6 +22,7 @@ c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/bendalloy_in
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/bendalloy_nugget.json
 166a5f8478c0dda4ab870ff748d59eaa4a40c38d assets/cosmere/models/item/bendalloy_ring_metalmind.json
 71cf3c195b57072415aa2da22e08b045bf12acf5 assets/cosmere/models/item/bendalloy_spike.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/bondsmith_honorblade.json
 8325615b8496c2a0f9e32fa5abb910345fecab73 assets/cosmere/models/item/brass_blend.json
 78846538426f22e67a52877172b5da616e2dfd40 assets/cosmere/models/item/brass_bracelet_metalmind.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/brass_ingot.json
@@ -66,6 +67,8 @@ c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/duralumin_in
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/duralumin_nugget.json
 166a5f8478c0dda4ab870ff748d59eaa4a40c38d assets/cosmere/models/item/duralumin_ring_metalmind.json
 71cf3c195b57072415aa2da22e08b045bf12acf5 assets/cosmere/models/item/duralumin_spike.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/dustbringer_honorblade.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/edgedancer_honorblade.json
 8325615b8496c2a0f9e32fa5abb910345fecab73 assets/cosmere/models/item/electrum_blend.json
 78846538426f22e67a52877172b5da616e2dfd40 assets/cosmere/models/item/electrum_bracelet_metalmind.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/electrum_ingot.json
@@ -73,6 +76,7 @@ c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/electrum_ing
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/electrum_nugget.json
 166a5f8478c0dda4ab870ff748d59eaa4a40c38d assets/cosmere/models/item/electrum_ring_metalmind.json
 71cf3c195b57072415aa2da22e08b045bf12acf5 assets/cosmere/models/item/electrum_spike.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/elsecaller_honorblade.json
 0b26507ab0dab9c6e9bf9e1e709ccebee5f3008d assets/cosmere/models/item/emerald_broam.json
 156810ac39b62c86d465571811af3ded7a44d0ae assets/cosmere/models/item/emerald_chip.json
 2c6a26910542fa65d43711d443654486f542c8bd assets/cosmere/models/item/emerald_mark.json
@@ -102,6 +106,7 @@ c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/lerasatium_i
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/lerasium_ingot.json
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/lerasium_nugget.json
 71cf3c195b57072415aa2da22e08b045bf12acf5 assets/cosmere/models/item/lerasium_spike.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/lightweaver_honorblade.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/malatium_ingot.json
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/malatium_nugget.json
 274bfcccdefd25e6fd4df40bc70fc857db2daf06 assets/cosmere/models/item/metal_vial.json
@@ -137,6 +142,7 @@ d819803d18e98b518d65a0c0e996f55169180013 assets/cosmere/models/item/raw_zinc_ore
 2c6a26910542fa65d43711d443654486f542c8bd assets/cosmere/models/item/sapphire_mark.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/silver_ingot.json
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/silver_nugget.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/skybreaker_honorblade.json
 0b26507ab0dab9c6e9bf9e1e709ccebee5f3008d assets/cosmere/models/item/smokestone_broam.json
 156810ac39b62c86d465571811af3ded7a44d0ae assets/cosmere/models/item/smokestone_chip.json
 2c6a26910542fa65d43711d443654486f542c8bd assets/cosmere/models/item/smokestone_mark.json
@@ -147,6 +153,7 @@ c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/steel_ingot.
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/steel_nugget.json
 166a5f8478c0dda4ab870ff748d59eaa4a40c38d assets/cosmere/models/item/steel_ring_metalmind.json
 71cf3c195b57072415aa2da22e08b045bf12acf5 assets/cosmere/models/item/steel_spike.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/stoneward_honorblade.json
 78846538426f22e67a52877172b5da616e2dfd40 assets/cosmere/models/item/tin_bracelet_metalmind.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/tin_ingot.json
 83e307f08c00074dbdfbdafdad4542ddff47096a assets/cosmere/models/item/tin_necklace_metalmind.json
@@ -156,6 +163,9 @@ c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/tin_ingot.js
 0b26507ab0dab9c6e9bf9e1e709ccebee5f3008d assets/cosmere/models/item/topaz_broam.json
 156810ac39b62c86d465571811af3ded7a44d0ae assets/cosmere/models/item/topaz_chip.json
 2c6a26910542fa65d43711d443654486f542c8bd assets/cosmere/models/item/topaz_mark.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/truthwatcher_honorblade.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/willshaper_honorblade.json
+6a27bff2fccf92ff02a86316d099ea73dc29da58 assets/cosmere/models/item/windrunner_honorblade.json
 78846538426f22e67a52877172b5da616e2dfd40 assets/cosmere/models/item/zinc_bracelet_metalmind.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/zinc_ingot.json
 83e307f08c00074dbdfbdafdad4542ddff47096a assets/cosmere/models/item/zinc_necklace_metalmind.json

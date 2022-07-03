@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cosmere:alloying/blend/pewter"
+        "recipe": "cosmere:alloying/raw_blend/pewter"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cosmere:alloying/blend/pewter"
+      "cosmere:alloying/raw_blend/pewter"
     ]
   }
 }
