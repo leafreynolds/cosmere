@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "III",
-    "III",
-    "III"
-  ],
   "key": {
     "I": {
       "tag": "forge:nuggets/electrum"
     }
   },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
   "result": {
     "item": "cosmere:electrum_ingot"
   }

@@ -2,7 +2,6 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -25,25 +24,26 @@
                   }
                 }
               ],
-              "name": "cosmere:aluminum_ore_deepslate"
+              "name": "cosmere:deepslate_lead_ore"
             },
             {
               "type": "minecraft:item",
               "functions": [
                 {
-                  "function": "minecraft:apply_bonus",
                   "enchantment": "minecraft:fortune",
-                  "formula": "minecraft:ore_drops"
+                  "formula": "minecraft:ore_drops",
+                  "function": "minecraft:apply_bonus"
                 },
                 {
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "cosmere:raw_aluminum_ore"
+              "name": "cosmere:raw_lead_ore"
             }
           ]
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

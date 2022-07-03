@@ -1,7 +1,7 @@
 {
-  "name": "Allomancy",
-  "description": "Despite first documentation only occurring approximately one thousand years before the Catacendre, Allomancy has been explored in far greater detail than it\u0027s older counterparts. The art requires consuming a piece of metal, then burning it for an effect.",
+  "description": "Despite first documentation only occurring approximately one thousand years before the Catacendre, Allomancy has been explored in far greater detail than it's older counterparts. The art requires consuming a piece of metal, then burning it for an effect.",
   "icon": "cosmere:pewter_nugget",
-  "sortnum": 1,
-  "secret": false
+  "name": "Allomancy",
+  "secret": false,
+  "sortnum": 1
 }

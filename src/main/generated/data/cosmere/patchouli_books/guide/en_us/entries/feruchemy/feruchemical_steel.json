@@ -1,7 +1,7 @@
 {
-  "name": "Feruchemical Steel",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:steel_bracelet_metalmind",
+  "name": "Feruchemical Steel",
   "pages": [
     {
       "type": "text",
@@ -24,7 +24,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 1
 }

@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Zinc",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:zinc_spike",
+  "name": "Hemalurgic Zinc",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 4
 }

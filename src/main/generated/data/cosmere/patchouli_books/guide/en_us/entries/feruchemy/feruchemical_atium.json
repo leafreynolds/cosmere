@@ -1,7 +1,7 @@
 {
-  "name": "Feruchemical Atium",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:atium_bracelet_metalmind",
+  "name": "Feruchemical Atium",
   "pages": [
     {
       "type": "text",
@@ -24,7 +24,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 16
 }

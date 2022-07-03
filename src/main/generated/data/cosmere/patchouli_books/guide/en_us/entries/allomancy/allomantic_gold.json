@@ -1,7 +1,7 @@
 {
-  "name": "Allomantic Gold",
   "category": "cosmere:allomancy",
   "icon": "minecraft:gold_nugget",
+  "name": "Allomantic Gold",
   "pages": [
     {
       "type": "text",
@@ -9,7 +9,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 14
 }

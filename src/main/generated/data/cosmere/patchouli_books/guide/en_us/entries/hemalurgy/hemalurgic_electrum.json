@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Electrum",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:electrum_spike",
+  "name": "Hemalurgic Electrum",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 15
 }

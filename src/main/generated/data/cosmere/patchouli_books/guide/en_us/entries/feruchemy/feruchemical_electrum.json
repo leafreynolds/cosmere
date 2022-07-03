@@ -1,7 +1,7 @@
 {
-  "name": "Feruchemical Electrum",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:electrum_bracelet_metalmind",
+  "name": "Feruchemical Electrum",
   "pages": [
     {
       "type": "text",
@@ -24,7 +24,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 15
 }

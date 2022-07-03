@@ -1,11 +1,11 @@
 {
-  "name": "Allomantic Steel",
   "category": "cosmere:allomancy",
   "icon": "cosmere:steel_nugget",
+  "name": "Allomantic Steel",
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)steel$() is known as a \"$(thing)Coinshot$()\". Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to push against nearby metal objects. Steelpushing is affected by the laws of physics. If a coinshot were to push on something that weighs more than them, they\u0027d be pushed away. "
+      "text": "A misting who burns $(thing)steel$() is known as a \"$(thing)Coinshot$()\". Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to push against nearby metal objects. Steelpushing is affected by the laws of physics. If a coinshot were to push on something that weighs more than them, they'd be pushed away. "
     },
     {
       "type": "text",
@@ -18,7 +18,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 1
 }

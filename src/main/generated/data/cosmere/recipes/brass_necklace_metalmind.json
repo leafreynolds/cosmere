@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "necklace",
-  "pattern": [
-    "XXX",
-    "X X",
-    " X "
-  ],
   "key": {
     "X": {
       "tag": "forge:ingots/brass"
     }
   },
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
   "result": {
     "item": "cosmere:brass_necklace_metalmind"
   }

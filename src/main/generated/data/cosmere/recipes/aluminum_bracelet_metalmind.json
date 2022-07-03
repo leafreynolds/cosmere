@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "bracelet",
-  "pattern": [
-    " X ",
-    "X X",
-    "X X"
-  ],
   "key": {
     "X": {
       "tag": "forge:ingots/aluminum"
     }
   },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
   "result": {
     "item": "cosmere:aluminum_bracelet_metalmind"
   }

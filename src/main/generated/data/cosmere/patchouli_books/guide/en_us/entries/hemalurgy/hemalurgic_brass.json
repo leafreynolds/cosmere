@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Brass",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:brass_spike",
+  "name": "Hemalurgic Brass",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 5
 }

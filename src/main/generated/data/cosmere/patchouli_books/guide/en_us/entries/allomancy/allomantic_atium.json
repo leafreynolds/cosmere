@@ -1,7 +1,7 @@
 {
-  "name": "Allomantic Atium",
   "category": "cosmere:allomancy",
   "icon": "cosmere:atium_nugget",
+  "name": "Allomantic Atium",
   "pages": [
     {
       "type": "text",
@@ -9,7 +9,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 16
 }

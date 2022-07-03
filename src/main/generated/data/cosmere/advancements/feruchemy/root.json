@@ -1,24 +1,28 @@
 {
+  "criteria": {
+    "tick": {
+      "conditions": {
+        "items": [
+          null
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "cosmere:iron_ring_metalmind"
-    },
-    "title": {
-      "translate": "advancements.cosmere.feruchemy.title"
-    },
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
     "description": {
       "translate": "advancements.cosmere.feruchemy.description"
     },
     "frame": "task",
-    "show_toast": false,
-    "announce_to_chat": false,
     "hidden": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
-  },
-  "criteria": {
-    "tick": {
-      "trigger": "minecraft:tick",
-      "conditions": {}
+    "icon": {
+      "item": "cosmere:iron_ring_metalmind"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.cosmere.feruchemy.title"
     }
   },
   "requirements": [

@@ -1,7 +1,6 @@
 {
-  "replace": false,
   "values": [
     "cosmere:silver_ore",
-    "cosmere:silver_ore_deepslate"
+    "cosmere:deepslate_silver_ore"
   ]
 }

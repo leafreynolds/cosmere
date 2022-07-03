@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Nicrosil",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:nicrosil_spike",
+  "name": "Hemalurgic Nicrosil",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 11
 }

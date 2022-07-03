@@ -1,9 +1,9 @@
 {
   "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.0,
   "ingredient": {
     "item": "cosmere:raw_silver_ore"
   },
-  "result": "cosmere:silver_ingot",
-  "experience": 1.0,
-  "cookingtime": 100
+  "result": "cosmere:silver_ingot"
 }

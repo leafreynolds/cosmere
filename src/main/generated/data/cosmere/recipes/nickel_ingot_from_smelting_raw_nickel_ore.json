@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
   "ingredient": {
     "item": "cosmere:raw_nickel_ore"
   },
-  "result": "cosmere:nickel_ingot",
-  "experience": 1.0,
-  "cookingtime": 200
+  "result": "cosmere:nickel_ingot"
 }

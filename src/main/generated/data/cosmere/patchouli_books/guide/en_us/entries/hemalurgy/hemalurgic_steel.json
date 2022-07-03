@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Steel",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:steel_spike",
+  "name": "Hemalurgic Steel",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 1
 }

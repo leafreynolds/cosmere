@@ -1,7 +1,7 @@
 {
-  "name": "Feruchemical Cadmium",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:cadmium_bracelet_metalmind",
+  "name": "Feruchemical Cadmium",
   "pages": [
     {
       "type": "text",
@@ -24,7 +24,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 12
 }

@@ -1,22 +1,22 @@
 {
-  "name": "Feruchemy Basics",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:copper_bracelet_metalmind",
+  "name": "Feruchemy Basics",
   "pages": [
     {
       "type": "text",
-      "text": "If you entered this world with an feruchemical ability, you\u0027re called a $(6)ferring$().",
+      "text": "If you entered this world with an feruchemical ability, you're called a $(6)ferring$().",
       "title": "cosmere:copper_bracelet_metalmind"
     },
     {
       "type": "patchouli:crafting",
-      "text": "Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes.",
       "recipe": "cosmere:atium_bracelet_metalmind",
-      "recipe2": ""
+      "recipe2": "",
+      "text": "Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes."
     }
   ],
   "priority": true,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 0
 }

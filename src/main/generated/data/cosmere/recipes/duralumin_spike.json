@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "spike",
-  "pattern": [
-    "X",
-    "X"
-  ],
   "key": {
     "X": {
       "tag": "forge:ingots/duralumin"
     }
   },
+  "pattern": [
+    "X",
+    "X"
+  ],
   "result": {
     "item": "cosmere:duralumin_spike"
   }

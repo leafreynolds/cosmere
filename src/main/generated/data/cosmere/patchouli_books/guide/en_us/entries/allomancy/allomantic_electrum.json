@@ -1,7 +1,7 @@
 {
-  "name": "Allomantic Electrum",
   "category": "cosmere:allomancy",
   "icon": "cosmere:electrum_nugget",
+  "name": "Allomantic Electrum",
   "pages": [
     {
       "type": "text",
@@ -13,7 +13,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 15
 }

@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgy",
   "description": "The forbidden field of magic that takes from others so that you may get stronger.",
   "icon": "cosmere:atium_spike",
-  "sortnum": 3,
-  "secret": true
+  "name": "Hemalurgy",
+  "secret": true,
+  "sortnum": 3
 }

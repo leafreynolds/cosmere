@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "spike",
-  "pattern": [
-    "X",
-    "X"
-  ],
   "key": {
     "X": {
       "tag": "forge:ingots/electrum"
     }
   },
+  "pattern": [
+    "X",
+    "X"
+  ],
   "result": {
     "item": "cosmere:electrum_spike"
   }

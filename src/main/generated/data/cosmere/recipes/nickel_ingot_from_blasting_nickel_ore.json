@@ -1,9 +1,9 @@
 {
   "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.0,
   "ingredient": {
     "item": "cosmere:nickel_ore"
   },
-  "result": "cosmere:nickel_ingot",
-  "experience": 1.0,
-  "cookingtime": 100
+  "result": "cosmere:nickel_ingot"
 }

@@ -1,7 +1,7 @@
 {
-  "name": "Feruchemical Nicrosil",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:nicrosil_bracelet_metalmind",
+  "name": "Feruchemical Nicrosil",
   "pages": [
     {
       "type": "text",
@@ -24,7 +24,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 11
 }

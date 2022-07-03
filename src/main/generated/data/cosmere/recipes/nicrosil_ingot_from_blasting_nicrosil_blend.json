@@ -1,9 +1,9 @@
 {
   "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.0,
   "ingredient": {
     "item": "cosmere:nicrosil_blend"
   },
-  "result": "cosmere:nicrosil_ingot",
-  "experience": 1.0,
-  "cookingtime": 100
+  "result": "cosmere:nicrosil_ingot"
 }

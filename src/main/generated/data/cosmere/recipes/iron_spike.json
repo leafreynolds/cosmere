@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "spike",
-  "pattern": [
-    "X",
-    "X"
-  ],
   "key": {
     "X": {
       "tag": "forge:ingots/iron"
     }
   },
+  "pattern": [
+    "X",
+    "X"
+  ],
   "result": {
     "item": "cosmere:iron_spike"
   }

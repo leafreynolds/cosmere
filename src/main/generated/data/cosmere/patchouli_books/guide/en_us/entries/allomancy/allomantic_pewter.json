@@ -1,7 +1,7 @@
 {
-  "name": "Allomantic Pewter",
   "category": "cosmere:allomancy",
   "icon": "cosmere:pewter_nugget",
+  "name": "Allomantic Pewter",
   "pages": [
     {
       "type": "text",
@@ -9,7 +9,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 3
 }

@@ -1,7 +1,7 @@
 {
-  "name": "Feruchemical Aluminum",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:aluminum_bracelet_metalmind",
+  "name": "Feruchemical Aluminum",
   "pages": [
     {
       "type": "text",
@@ -24,7 +24,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 8
 }

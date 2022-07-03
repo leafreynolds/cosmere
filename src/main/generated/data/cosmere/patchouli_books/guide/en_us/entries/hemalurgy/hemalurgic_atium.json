@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Atium",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:atium_spike",
+  "name": "Hemalurgic Atium",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 16
 }

@@ -1,7 +1,7 @@
 {
-  "name": "Feruchemical Gold",
   "category": "cosmere:feruchemy",
   "icon": "cosmere:gold_bracelet_metalmind",
+  "name": "Feruchemical Gold",
   "pages": [
     {
       "type": "text",
@@ -24,7 +24,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 14
 }

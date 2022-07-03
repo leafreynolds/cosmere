@@ -1,24 +1,28 @@
 {
+  "criteria": {
+    "tick": {
+      "conditions": {
+        "items": [
+          null
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "cosmere:metal_vial"
-    },
-    "title": {
-      "translate": "advancements.cosmere.allomancy.title"
-    },
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
     "description": {
       "translate": "advancements.cosmere.allomancy.description"
     },
     "frame": "task",
-    "show_toast": false,
-    "announce_to_chat": false,
     "hidden": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
-  },
-  "criteria": {
-    "tick": {
-      "trigger": "minecraft:tick",
-      "conditions": {}
+    "icon": {
+      "item": "cosmere:metal_vial"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.cosmere.allomancy.title"
     }
   },
   "requirements": [

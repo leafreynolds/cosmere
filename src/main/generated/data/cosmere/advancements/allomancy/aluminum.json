@@ -1,26 +1,7 @@
 {
   "parent": "cosmere:allomancy/root",
-  "display": {
-    "icon": {
-      "item": "cosmere:aluminum_nugget"
-    },
-    "title": {
-      "translate": "advancements.cosmere.allomancy.aluminum.title"
-    },
-    "description": {
-      "translate": "advancements.cosmere.allomancy.aluminum.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "rewards": {
-    "experience": 50
-  },
   "criteria": {
     "has_item": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -29,12 +10,31 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.cosmere.allomancy.aluminum.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "cosmere:aluminum_nugget"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.cosmere.allomancy.aluminum.title"
     }
   },
   "requirements": [
     [
       "has_item"
     ]
-  ]
+  ],
+  "rewards": {
+    "experience": 50
+  }
 }

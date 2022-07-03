@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Copper",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:copper_spike",
+  "name": "Hemalurgic Copper",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 6
 }

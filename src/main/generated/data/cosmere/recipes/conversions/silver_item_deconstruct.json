@@ -6,7 +6,7 @@
     }
   ],
   "result": {
-    "item": "cosmere:silver_nugget",
-    "count": 9
+    "count": 9,
+    "item": "cosmere:silver_nugget"
   }
 }

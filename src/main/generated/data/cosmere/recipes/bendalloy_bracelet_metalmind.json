@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "bracelet",
-  "pattern": [
-    " X ",
-    "X X",
-    "X X"
-  ],
   "key": {
     "X": {
       "tag": "forge:ingots/bendalloy"
     }
   },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
   "result": {
     "item": "cosmere:bendalloy_bracelet_metalmind"
   }

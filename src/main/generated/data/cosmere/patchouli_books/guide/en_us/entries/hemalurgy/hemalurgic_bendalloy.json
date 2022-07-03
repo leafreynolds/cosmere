@@ -1,7 +1,7 @@
 {
-  "name": "Hemalurgic Bendalloy",
   "category": "cosmere:hemalurgy",
   "icon": "cosmere:bendalloy_spike",
+  "name": "Hemalurgic Bendalloy",
   "pages": [
     {
       "type": "text",
@@ -14,7 +14,7 @@
     }
   ],
   "priority": false,
-  "secret": false,
   "read_by_default": false,
+  "secret": false,
   "sortnum": 13
 }

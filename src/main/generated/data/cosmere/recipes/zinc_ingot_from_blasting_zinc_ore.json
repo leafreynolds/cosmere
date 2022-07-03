@@ -1,9 +1,9 @@
 {
   "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.0,
   "ingredient": {
     "item": "cosmere:zinc_ore"
   },
-  "result": "cosmere:zinc_ingot",
-  "experience": 1.0,
-  "cookingtime": 100
+  "result": "cosmere:zinc_ingot"
 }
