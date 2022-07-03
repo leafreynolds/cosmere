@@ -1,5 +1,25 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B49
+
+F-Atium - increase/decrease health, speed, damage, knockback etc based on tap amount. (needs testing)
+Zinc feruchemy multiplies current xp gain rate, rather than adds to it.
+Cleaned up attribute system, fixes bug where allomancy boost affect was changing size attribute directly
+Stop nicrosil disabling itself during feruchemical storage.
+Stop cats and llamas generating with powers (catquisitors and mistborn llamas are made, not born)
+Updated patchouli documentation (Thanks Luke! 🎉)
+Allow bonus rolls on cosmere loot tables again
+Don't rename mobs based on starting powers (because bronze allomancy should be valuable)
+Temporarily make honorblades use the test shardblade model (no more huge pink and black cube from missing model).
+Ability to make blend from raw, dust or ingots. No more having to keep raw materials around just in case. Temporary till we have fabrial machines.
+Electrum ingots can be used for piglin bartering (needs testing)
+Feru cadmium gets minor speed buff for highly oxygenated blood
+Fix menu not drawing single powers correctly (eg having all allomancy but only one feruchemical power)
+Stop god metal spikes from generating as loot in loot chests
+Catquisitors will reign supreme
+The mistborn llamas may be our only hope
+
+
 B48
 
 Updated patchouli documentation for allomancy.
