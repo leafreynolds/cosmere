@@ -575,7 +575,7 @@ public class SpiritwebMenu extends Screen
 			Vector2 innerEdge;
 			Vector2 outerEdge;
 
-			boolean smallMode = radialMenuButtons.size() == 2;
+			int drawMode = radialMenuButtons.size();
 
 			innerEdge = new Vector2(0, ring_inner_edge);
 			outerEdge = new Vector2(0, ring_outer_edge);
@@ -599,7 +599,25 @@ public class SpiritwebMenu extends Screen
 				double x2m2;
 				double y2m2;
 
-				if (smallMode)
+				if (drawMode == 1)
+				{
+					//1
+					x1m1 = outerEdge.x;
+					y1m1 = outerEdge.y;
+					outerEdge.Rotate(90);
+
+					//2
+					x2m1 = outerEdge.x;
+					y2m1 = outerEdge.y;
+					outerEdge.Rotate(90);
+
+					//3
+					x1m2 = outerEdge.x;
+					y1m2 = outerEdge.y;
+					outerEdge.Rotate(90);
+
+				}
+				else if (drawMode == 2)
 				{
 					//1
 					x1m1 = outerEdge.x;
@@ -650,17 +668,35 @@ public class SpiritwebMenu extends Screen
 				final float a = 0.5f;
 				float f = 0f;
 
-				final boolean showHighlight =
-						MathHelper.inTriangle(
-								x1m1, y1m1,
-								x2m2, y2m2,
-								x2m1, y2m1,
-								mouseVecX, mouseVecY)
-								|| MathHelper.inTriangle(
-								x1m1, y1m1,
-								x1m2, y1m2,
-								x2m2, y2m2,
-								mouseVecX, mouseVecY);
+				final boolean showHighlight;
+				if (drawMode <= 2)
+				{
+					showHighlight =
+							MathHelper.inTriangle(
+									x1m1, y1m1,
+									x2m1, y2m1,
+									x1m2, y1m2,
+									mouseVecX, mouseVecY)
+									|| MathHelper.inTriangle(
+									x1m2, y1m2,
+									x2m2, y2m2,
+									x1m1, y1m1,
+									mouseVecX, mouseVecY);
+				}
+				else
+				{
+					showHighlight =
+					MathHelper.inTriangle(
+							x1m1, y1m1,
+							x2m2, y2m2,
+							x2m1, y2m1,
+							mouseVecX, mouseVecY)
+							|| MathHelper.inTriangle(
+							x1m1, y1m1,
+							x1m2, y1m2,
+							x2m2, y2m2,
+							mouseVecX, mouseVecY);
+				}
 
 				//if mouse is within the region, as defined by the two triangles
 				//if (begin_rad <= mouseAngle && mouseAngle <= end_rad && showHighlight)
@@ -698,7 +734,7 @@ public class SpiritwebMenu extends Screen
 				float g = f;
 				float b = lerpNegative + f;
 
-				if (smallMode)
+				if (drawMode <= 2)
 				{
 					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, a).endVertex();
 					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, a).endVertex();
