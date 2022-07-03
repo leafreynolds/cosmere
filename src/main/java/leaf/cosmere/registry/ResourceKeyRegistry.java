@@ -8,8 +8,6 @@ import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.world.ForgeWorldPreset;
 
 public class ResourceKeyRegistry
 {

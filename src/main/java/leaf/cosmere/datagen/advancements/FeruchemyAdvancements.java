@@ -16,9 +16,9 @@ import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.TickTrigger;
 import net.minecraft.commands.CommandFunction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
@@ -43,14 +43,14 @@ public class FeruchemyAdvancements implements Consumer<Consumer<Advancement>>
 
 		Advancement root = Advancement.Builder.advancement()
 				.display(ItemsRegistry.METAL_RINGS.get(Metals.MetalType.IRON).get(),
-						new TranslatableComponent(String.format(titleFormat, tabName)),
-						new TranslatableComponent(String.format(descriptionFormat, tabName)),
+						Component.translatable(String.format(titleFormat, tabName)),
+						Component.translatable(String.format(descriptionFormat, tabName)),
 						new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
 						FrameType.TASK,
 						false,//showToast
 						false,//announceChat
 						false)//hidden
-				.addCriterion("tick", new TickTrigger.TriggerInstance(EntityPredicate.Composite.ANY))
+				.addCriterion("tick", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.ANY))
 				.save(advancementConsumer, String.format(achievementPathFormat, tabName, "root"));
 
 
@@ -67,8 +67,8 @@ public class FeruchemyAdvancements implements Consumer<Consumer<Advancement>>
 					.parent(root)
 					.display(
 							item,
-							new TranslatableComponent(String.format(titleFormat, tabName+"."+metalName)),
-							new TranslatableComponent(String.format(descriptionFormat, tabName+"."+metalName)),
+							Component.translatable(String.format(titleFormat, tabName+"."+metalName)),
+							Component.translatable(String.format(descriptionFormat, tabName+"."+metalName)),
 							(ResourceLocation) null,
 							FrameType.TASK,
 							true, //showToast

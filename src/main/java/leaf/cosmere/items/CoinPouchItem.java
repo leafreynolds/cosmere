@@ -15,6 +15,7 @@ import leaf.cosmere.network.packets.PlayerShootProjectileMessage;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.KeybindingRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -38,7 +39,7 @@ import java.util.function.Predicate;
 
 public class CoinPouchItem extends ProjectileWeaponItem
 {
-	public static final Predicate<ItemStack> SUPPORTED_PROJECTILES = (itemStack) -> itemStack.is(Tags.Items.NUGGETS) && AllomancyIronSteel.containsMetal(itemStack.getItem().getRegistryName().getPath());
+	public static final Predicate<ItemStack> SUPPORTED_PROJECTILES = (itemStack) -> itemStack.is(Tags.Items.NUGGETS) && AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(itemStack.getItem()).getPath());
 
 	public CoinPouchItem(Item.Properties p_40660_)
 	{

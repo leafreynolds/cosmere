@@ -34,7 +34,7 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 	@Override
 	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
 	{
-		if (allowdedIn(tab))
+		if (allowedIn(tab))
 		{
 			ItemStack fullPower = new ItemStack(this);
 			setCharge(fullPower, getMaxCharge(fullPower));

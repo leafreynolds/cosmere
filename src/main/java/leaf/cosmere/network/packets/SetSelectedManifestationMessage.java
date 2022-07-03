@@ -39,7 +39,7 @@ public class SetSelectedManifestationMessage
 
 	public static void encode(SetSelectedManifestationMessage mes, FriendlyByteBuf buf)
 	{
-		String namespace = mes.manifestation.getRegistryName().toString();
+		String namespace = mes.manifestation.getResourceLocation().toString();
 		buf.writeUtf(namespace);
 	}
 

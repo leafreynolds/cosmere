@@ -65,7 +65,7 @@ public class JEICompat implements IModPlugin
 		reg.addIngredientInfo(
 				new ItemStack(item),
 				VanillaTypes.ITEM_STACK,
-				TextHelper.createTranslatedText(String.format("item.cosmere.%s.tooltip", item.getRegistryName().getPath())
+				TextHelper.createTranslatedText(String.format("item.cosmere.%s.tooltip", item.toString())
 		));
 	}
 

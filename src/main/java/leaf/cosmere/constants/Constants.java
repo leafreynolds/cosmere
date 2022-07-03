@@ -6,9 +6,8 @@ package leaf.cosmere.constants;
 
 import leaf.cosmere.Cosmere;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.UUID;
@@ -28,8 +27,8 @@ public class Constants
 
 	public static class Suffix
 	{
-		public static final MutableComponent INVESTITURE_UNITS = new TextComponent(" IU").withStyle(ChatFormatting.RESET);
-		public static final MutableComponent STORMLIGHT_UNITS = new TextComponent(" SU").withStyle(ChatFormatting.RESET);
+		public static final MutableComponent INVESTITURE_UNITS = Component.literal(" IU").withStyle(ChatFormatting.RESET);
+		public static final MutableComponent STORMLIGHT_UNITS = Component.literal(" SU").withStyle(ChatFormatting.RESET);
 	}
 
 	public static class NBT
@@ -116,21 +115,21 @@ public class Constants
 
 	public static class Translations
 	{
-		public static final TranslatableComponent TOOLTIP_HOLD_SHIFT = new TranslatableComponent(Strings.TOOLTIP_ITEM_INFO + "shift");
-		public static final TranslatableComponent TOOLTIP_CONTROL = new TranslatableComponent(Strings.TOOLTIP_ITEM_INFO + "control");
-		public static final TranslatableComponent TOOLTIP_SHIFT_AND_CONTROL = new TranslatableComponent(Strings.TOOLTIP_ITEM_INFO + "shift_control");
+		public static final MutableComponent TOOLTIP_HOLD_SHIFT = Component.translatable(Strings.TOOLTIP_ITEM_INFO + "shift");
+		public static final MutableComponent TOOLTIP_CONTROL = Component.translatable(Strings.TOOLTIP_ITEM_INFO + "control");
+		public static final MutableComponent TOOLTIP_SHIFT_AND_CONTROL = Component.translatable(Strings.TOOLTIP_ITEM_INFO + "shift_control");
 
-		public static final TranslatableComponent GUI_NEXT = new TranslatableComponent(Strings.GUI + "next");
-		public static final TranslatableComponent GUI_PREV = new TranslatableComponent(Strings.GUI + "previous");
-		public static final TranslatableComponent GUI_SELECT = new TranslatableComponent(Strings.GUI + "select");
-		public static final TranslatableComponent GUI_CONFIRM = new TranslatableComponent(Strings.GUI + "confirm");
-		public static final TranslatableComponent GUI_SAVE = new TranslatableComponent(Strings.GUI + "save");
-		public static final TranslatableComponent GUI_CANCEL = new TranslatableComponent(Strings.GUI + "cancel");
+		public static final MutableComponent GUI_NEXT = Component.translatable(Strings.GUI + "next");
+		public static final MutableComponent GUI_PREV = Component.translatable(Strings.GUI + "previous");
+		public static final MutableComponent GUI_SELECT = Component.translatable(Strings.GUI + "select");
+		public static final MutableComponent GUI_CONFIRM = Component.translatable(Strings.GUI + "confirm");
+		public static final MutableComponent GUI_SAVE = Component.translatable(Strings.GUI + "save");
+		public static final MutableComponent GUI_CANCEL = Component.translatable(Strings.GUI + "cancel");
 
-		public static final TranslatableComponent GUI_BACK = new TranslatableComponent(Strings.GUI + "button.back");
+		public static final MutableComponent GUI_BACK = Component.translatable(Strings.GUI + "button.back");
 
 
-		public static final TranslatableComponent POWER_ACTIVE = new TranslatableComponent(Strings.POWER_ACTIVE);
-		public static final TranslatableComponent POWER_INACTIVE = new TranslatableComponent(Strings.POWER_INACTIVE);
+		public static final MutableComponent POWER_ACTIVE = Component.translatable(Strings.POWER_ACTIVE);
+		public static final MutableComponent POWER_INACTIVE = Component.translatable(Strings.POWER_INACTIVE);
 	}
 }

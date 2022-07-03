@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CoinPouchContainer extends AbstractContainerMenu
 {
-	@ObjectHolder(Cosmere.MODID + ":coin_pouch")
+	@ObjectHolder(registryName = "coin_pouch_container", value = (Cosmere.MODID + ":coin_pouch"))
 	public static MenuType<CoinPouchContainer> TYPE;
 
 	public static CoinPouchContainer fromNetwork(int windowId, Inventory inv, FriendlyByteBuf buf)

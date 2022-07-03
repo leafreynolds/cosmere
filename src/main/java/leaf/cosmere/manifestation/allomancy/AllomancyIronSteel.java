@@ -11,10 +11,7 @@ import leaf.cosmere.entities.CoinProjectile;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.SyncPushPullMessage;
-import leaf.cosmere.utils.helpers.CodecHelper;
-import leaf.cosmere.utils.helpers.LogHelper;
-import leaf.cosmere.utils.helpers.PlayerHelper;
-import leaf.cosmere.utils.helpers.VectorHelper;
+import leaf.cosmere.utils.helpers.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -105,7 +102,7 @@ public class AllomancyIronSteel extends AllomancyBase
 				BlockPos pos = ((BlockHitResult) ray).getBlockPos();
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
-				if (state.getBlock() instanceof IHasMetalType || containsMetal(state.getBlock().getRegistryName().getPath()))
+				if (state.getBlock() instanceof IHasMetalType || containsMetal(ResourceLocationHelper.get(state.getBlock()).getPath()))
 				{
 					blocks.add(pos.immutable());
 
@@ -342,7 +339,7 @@ public class AllomancyIronSteel extends AllomancyBase
 				.filter(blockPos ->
 				{
 					Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-					return block instanceof IHasMetalType || AllomancyIronSteel.containsMetal(block.getRegistryName().getPath());
+					return block instanceof IHasMetalType || AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
 				})
 				.forEach(blockPos -> found.add(new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5)));
 
@@ -368,23 +365,23 @@ public class AllomancyIronSteel extends AllomancyBase
 		if (entity instanceof LivingEntity livingEntity)
 		{
 			//metal entities like iron golems
-			if (containsMetal(entity.getType().getRegistryName().getPath()))
+			if (containsMetal(ResourceLocationHelper.get(entity).getPath()))
 			{
 				return true;
 			}
 
-			if (containsMetal(livingEntity.getMainHandItem().getItem().getRegistryName().getPath()))
+			if (containsMetal(ResourceLocationHelper.get(livingEntity.getMainHandItem().getItem()).getPath()))
 			{
 				return true;
 			}
-			if (containsMetal(livingEntity.getOffhandItem().getItem().getRegistryName().getPath()))
+			if (containsMetal(ResourceLocationHelper.get(livingEntity.getOffhandItem().getItem()).getPath()))
 			{
 				return true;
 			}
 
 			for (ItemStack itemStack : livingEntity.getArmorSlots())
 			{
-				if (containsMetal(itemStack.getItem().getRegistryName().getPath()))
+				if (containsMetal(ResourceLocationHelper.get(itemStack.getItem()).getPath()))
 				{
 					return true;
 				}
@@ -409,11 +406,11 @@ public class AllomancyIronSteel extends AllomancyBase
 			ItemStack stack = (itemEntity).getItem();
 			Item item = stack.getItem();
 
-			if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof IHasMetalType || containsMetal(item.getRegistryName().getPath()))
+			if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof IHasMetalType || containsMetal(ResourceLocationHelper.get(item).getPath()))
 			{
 				return true;
 			}
-			if (item instanceof IHasMetalType || containsMetal(item.getRegistryName().getPath()))
+			if (item instanceof IHasMetalType || containsMetal(ResourceLocationHelper.get(item).getPath()))
 			{
 				return true;
 			}
@@ -459,16 +456,16 @@ public class AllomancyIronSteel extends AllomancyBase
 		//requires testing.
 		ForgeRegistries.ITEMS.getValues()
 				.stream()
-				.filter(test -> testPath(test.getRegistryName(), metalNames))
-				.forEach(match -> s_whiteList.add(match.getRegistryName().getPath()));
+				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
+				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));
 		ForgeRegistries.BLOCKS.getValues()
 				.stream()
-				.filter(test -> testPath(test.getRegistryName(), metalNames))
-				.forEach(match -> s_whiteList.add(match.getRegistryName().getPath()));
+				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
+				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));
 		ForgeRegistries.ENTITIES.getValues()
 				.stream()
-				.filter(test -> testPath(test.getRegistryName(), metalNames))
-				.forEach(match -> s_whiteList.add(match.getRegistryName().getPath()));
+				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
+				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));
 
 		for (String s : s_whiteList)
 		{

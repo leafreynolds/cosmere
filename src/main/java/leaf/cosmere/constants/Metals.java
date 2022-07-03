@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -30,7 +31,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 
 import java.awt.*;
 import java.util.*;
@@ -304,12 +305,12 @@ public class Metals
 			return BlocksRegistry.METAL_BLOCKS.get(this).get();
 		}
 
-		public OreBlock getOreBlock()
+		public DropExperienceBlock getOreBlock()
 		{
 			return BlocksRegistry.METAL_ORE.get(this).get();
 		}
 
-		public OreBlock getDeepslateOreBlock()
+		public DropExperienceBlock getDeepslateOreBlock()
 		{
 			return BlocksRegistry.METAL_ORE_DEEPSLATE.get(this).get();
 		}
@@ -702,7 +703,7 @@ public class Metals
 				case COPPER:
 					//Steals mental fortitude, memory, and intelligence
 					//increase base xp gain rate
-					final float potentialRewardRate = killedEntity.getExperienceReward(playerEntity) / 150f;
+					final float potentialRewardRate = killedEntity.getExperienceReward() / 150f;
 
 					if (killedEntity instanceof Player)
 					{
@@ -765,12 +766,12 @@ public class Metals
 					}
 					else if (killedEntity instanceof Cat cat)
 					{
-						final int catType = cat.getCatType();
-						if (catType == 10)//all black
+						final CatVariant catType = cat.getCatVariant();
+						if (catType == CatVariant.BLACK)//all black
 						{
 							strengthToAdd = -5;
 						}
-						else if (catType == 8)//white
+						else if (catType == CatVariant.WHITE)//white
 						{
 							strengthToAdd = 1;
 						}

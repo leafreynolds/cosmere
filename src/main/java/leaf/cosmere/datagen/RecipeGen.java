@@ -23,6 +23,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -254,15 +255,16 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 
 	protected static void addOreSmeltingRecipes(Consumer<FinishedRecipe> consumer, ItemLike ore, Item result, float experience, int time)
 	{
-		String name = result.getRegistryName().getPath();
-		String path = ore.asItem().getRegistryName().getPath();
+
+		String name = ResourceLocationHelper.get(result).getPath();
+		String path = ResourceLocationHelper.get(ore.asItem()).getPath();
 		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting_" + path));
 		SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_blasting_" + path));
 	}
 
 	protected static void addCookingRecipes(Consumer<FinishedRecipe> consumer, ItemLike inputItem, Item result, float experience, int time)
 	{
-		String name = result.getRegistryName().getPath();
+		String name = ResourceLocationHelper.get(result).getPath();
 		SimpleCookingRecipeBuilder.smelting(Ingredient.of(inputItem), result, experience, time).unlockedBy("has_item", has(inputItem)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smelting"));
 		SimpleCookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time / 2, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_smoking"));
 		SimpleCookingRecipeBuilder.cooking(Ingredient.of(inputItem), result, experience, time, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_item", has(inputItem)).save(consumer, new ResourceLocation(Cosmere.MODID, name + "_from_campfire"));

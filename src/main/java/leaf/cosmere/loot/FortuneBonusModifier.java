@@ -5,6 +5,7 @@
 package leaf.cosmere.loot;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.utils.helpers.LogHelper;
@@ -25,9 +26,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Map;
 
 
@@ -41,8 +41,8 @@ public class FortuneBonusModifier extends LootModifier
 		super(conditions);
 	}
 
-	@Nonnull
-	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context)
+	@Override
+	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context)
 	{
 		final String hasCosmereFortuneBonus = "HasCosmereFortuneBonus";
 
@@ -80,7 +80,7 @@ public class FortuneBonusModifier extends LootModifier
 					fakeTool.getOrCreateTag().putBoolean(hasCosmereFortuneBonus, true);
 
 					Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(fakeTool);
-					enchantments.put(Enchantments.BLOCK_FORTUNE, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, fakeTool) + totalFortuneBonus);
+					enchantments.put(Enchantments.BLOCK_FORTUNE, EnchantmentHelper.getTagEnchantmentLevel(Enchantments.BLOCK_FORTUNE, fakeTool) + totalFortuneBonus);
 
 					EnchantmentHelper.setEnchantments(enchantments, fakeTool);
 

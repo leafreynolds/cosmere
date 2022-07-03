@@ -19,7 +19,9 @@ import net.minecraftforge.registries.RegistryObject;
 public class ContainersRegistry
 {
 	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Cosmere.MODID);
-	public static final RegistryObject<MenuType<?>> COIN_POUCH = CONTAINERS.register("coin_pouch", IForgeMenuType.create(CoinPouchContainer::fromNetwork).delegate);
+	public static final RegistryObject<MenuType<?>> COIN_POUCH = CONTAINERS.register(
+			"coin_pouch",
+			() -> IForgeMenuType.create(CoinPouchContainer::fromNetwork));
 
 	@OnlyIn(Dist.CLIENT)
 	public static void registerGUIFactories()

@@ -8,29 +8,21 @@ package leaf.cosmere.handlers;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.blocks.MetalOreBlock;
 import leaf.cosmere.commands.CosmereCommand;
-import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.BlocksRegistry;
-import leaf.cosmere.registry.FeatureRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.VillagerProfessionRegistry;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonEvents
@@ -42,37 +34,6 @@ public class CommonEvents
 	}
 
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public static void onBiomeLoad(BiomeLoadingEvent event)
-	{
-		Biome.BiomeCategory biomeCategory = event.getCategory();
-
-		//whitelist only vanilla biomes.
-		//todo may have compatibility issues with mining dimension type mods
-		//don't really want to deprive people of easier access to ores if they want to play that way. something to look into.
-		List<Biome.BiomeCategory> whitelist =
-				Arrays.stream(Biome.BiomeCategory.values())
-						.filter(biomeType -> biomeType != Biome.BiomeCategory.NONE && biomeType != Biome.BiomeCategory.NETHER && biomeType != Biome.BiomeCategory.THEEND)
-						.collect(Collectors.toList());
-
-
-		if (whitelist.contains(biomeCategory))
-		{
-			for (Metals.MetalType metalType : Metals.MetalType.values())
-			{
-				if (metalType.hasOre())
-				{
-					event.getGeneration().addFeature(
-							GenerationStep.Decoration.UNDERGROUND_ORES,
-							FeatureRegistry.PlacedFeatures.PLACED_ORE_FEATURES.get(metalType)
-					);
-
-					//LogHelper.debug(String.format("Added %s to: %s", metalType.getName(), event.getName()));
-				}
-			}
-
-		}
-	}
 
 	@SubscribeEvent
 	public static void registerTrades(VillagerTradesEvent event)

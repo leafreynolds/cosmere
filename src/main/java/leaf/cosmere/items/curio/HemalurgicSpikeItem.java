@@ -99,7 +99,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
 	{
 		super.fillItemCategory(tab, stacks);
-		if (allowdedIn(tab))
+		if (allowedIn(tab))
 		{
 			if (getMetalType().hasFeruchemicalEffect())
 			{

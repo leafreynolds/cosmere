@@ -8,9 +8,9 @@ import leaf.cosmere.constants.Metals;
 import leaf.cosmere.items.IHasMetalType;
 import leaf.cosmere.properties.PropTypes;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 
-public class MetalOreBlock extends OreBlock implements IHasMetalType
+public class MetalOreBlock extends DropExperienceBlock implements IHasMetalType
 {
 	private final Metals.MetalType metalType;
 

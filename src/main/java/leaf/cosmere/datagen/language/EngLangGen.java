@@ -12,35 +12,27 @@ import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.MetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.registry.AttributesRegistry;
-import leaf.cosmere.registry.EffectsRegistry;
-import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.registry.*;
 import leaf.cosmere.utils.helpers.StringHelper;
-import net.minecraft.Util;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.nio.file.Path;
 import java.util.Locale;
 
 import static leaf.cosmere.constants.Constants.Strings.*;
 
 public class EngLangGen extends LanguageProvider
 {
-	private final DataGenerator generator;
 
 	public EngLangGen(DataGenerator gen)
 	{
 		super(gen, Cosmere.MODID, "en_us");
-		this.generator = gen;
 	}
 
 	@Override
@@ -48,9 +40,10 @@ public class EngLangGen extends LanguageProvider
 	{
 
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (RegistryObject<Item> itemRegistryObject : ItemsRegistry.ITEMS.getEntries())
 		{
-			final ResourceLocation registryName = item.getRegistryName();
+			final Item item = itemRegistryObject.get();
+			final ResourceLocation registryName = itemRegistryObject.getId();
 			if (registryName.getNamespace().contentEquals(Cosmere.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -81,11 +74,12 @@ public class EngLangGen extends LanguageProvider
 
 		//Entities
 		add("entity.minecraft.villager.cosmere.metal_trader", "Metal Trader");
-		for (EntityType<?> type : ForgeRegistries.ENTITIES)
+		for (RegistryObject<EntityType<?>> type : EntityRegistry.ENTITIES.getEntries())
 		{
-			if (type.getRegistryName().getNamespace().equals(Cosmere.MODID))
+			final ResourceLocation id = type.getId();
+			if (id.getNamespace().equals(Cosmere.MODID))
 			{
-				add(type.getDescriptionId(), StringHelper.fixCapitalisation(type.getRegistryName().getPath()));
+				add(type.get().getDescriptionId(), StringHelper.fixCapitalisation(id.getPath()));
 			}
 		}
 
@@ -104,7 +98,7 @@ public class EngLangGen extends LanguageProvider
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			//power type
-			String key = manifestation.translation().getKey();
+			String key = manifestation.translationKey();
 			String path = manifestation.getName();
 
 
@@ -143,7 +137,7 @@ public class EngLangGen extends LanguageProvider
 
 			//Name
 			add(key, StringHelper.fixCapitalisation(name));
-			add(manifestation.description().getKey(), description);
+			add(manifestation.descriptionKey(), description);
 		}
 
 		//Attributes
@@ -226,7 +220,7 @@ public class EngLangGen extends LanguageProvider
 		//effects
 		for (RegistryObject<MobEffect> effect : EffectsRegistry.EFFECTS.getEntries())
 		{
-			add(effect.get().getDescriptionId(), StringHelper.fixCapitalisation(effect.get().getRegistryName().getPath()));
+			add(effect.get().getDescriptionId(), StringHelper.fixCapitalisation(effect.getId().getPath()));
 		}
 
 		//curios
@@ -294,21 +288,5 @@ public class EngLangGen extends LanguageProvider
 
 
 	}
-
-	public Path getSoundPath(Path path, String modid)
-	{
-		return path.resolve("data/" + modid + "/sounds/" + "sounds.json");
-	}
-
-	public String getTranslationKey(SoundEvent sound)
-	{
-		String subtitleTranslationKey = "";
-		if (subtitleTranslationKey.isEmpty() || subtitleTranslationKey == null)
-		{
-			subtitleTranslationKey = Util.makeDescriptionId("subtitle", sound.getRegistryName());
-		}
-		return subtitleTranslationKey;
-	}
-
 
 }

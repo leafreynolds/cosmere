@@ -5,17 +5,16 @@
 package leaf.cosmere.datagen.patchouli;
 
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import leaf.cosmere.datagen.patchouli.categories.PatchouliAllomancy;
 import leaf.cosmere.datagen.patchouli.categories.PatchouliBasics;
 import leaf.cosmere.datagen.patchouli.categories.PatchouliFeruchemy;
 import leaf.cosmere.datagen.patchouli.categories.PatchouliHemalurgy;
 import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.utils.helpers.StringHelper;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -29,7 +28,6 @@ import java.util.function.Consumer;
 //
 public class PatchouliGen implements DataProvider
 {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	public static final String GUIDE_NAME = "guide";
 	private final DataGenerator generator;
 
@@ -45,7 +43,7 @@ public class PatchouliGen implements DataProvider
 	/**
 	 * Performs this provider's action.
 	 */
-	public void run(HashCache cache) throws IOException
+	public void run(@NotNull CachedOutput cache) throws IOException
 	{
 		Path path = this.generator.getOutputFolder();
 		Set<String> entryIDs = Sets.newHashSet();
@@ -97,7 +95,7 @@ public class PatchouliGen implements DataProvider
 
 	}
 
-	private Consumer<BookStuff.Category> getCategoryConsumer(HashCache cache, Path path, Set<String> categoryIDs)
+	private Consumer<BookStuff.Category> getCategoryConsumer(@NotNull CachedOutput cache, Path path, Set<String> categoryIDs)
 	{
 		return category ->
 		{
@@ -111,7 +109,7 @@ public class PatchouliGen implements DataProvider
 
 				try
 				{
-					DataProvider.save(GSON, cache, category.serialize(), path1);
+					DataProvider.saveStable(cache, category.serialize(), path1);
 				}
 				catch (IOException ioexception)
 				{
@@ -122,7 +120,7 @@ public class PatchouliGen implements DataProvider
 		};
 	}
 
-	private Consumer<BookStuff.Entry> getEntryConsumer(HashCache cache, Path path, Set<String> entryIDs)
+	private Consumer<BookStuff.Entry> getEntryConsumer(@NotNull CachedOutput cache, Path path, Set<String> entryIDs)
 	{
 		return entry ->
 		{
@@ -136,7 +134,7 @@ public class PatchouliGen implements DataProvider
 
 				try
 				{
-					DataProvider.save(GSON, cache, entry.serialize(), path1);
+					DataProvider.saveStable(cache, entry.serialize(), path1);
 				}
 				catch (IOException ioexception)
 				{

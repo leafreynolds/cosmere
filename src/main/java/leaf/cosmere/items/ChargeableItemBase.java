@@ -32,7 +32,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 	@Override
 	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
 	{
-		if (allowdedIn(tab))
+		if (allowedIn(tab))
 		{
 			stacks.add(new ItemStack(this));
 

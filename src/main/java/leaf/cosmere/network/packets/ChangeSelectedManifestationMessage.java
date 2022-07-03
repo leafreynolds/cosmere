@@ -9,7 +9,7 @@ import leaf.cosmere.constants.Constants;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -32,14 +32,15 @@ public class ChangeSelectedManifestationMessage
 		MinecraftServer server = sender.getServer();
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
 		{
-			BaseComponent manifestationText;
+			MutableComponent manifestationText;
 			String manifestation;
 
 			manifestation = cap.changeManifestation(message.dir);
 
-			manifestationText = TextHelper.createTranslatedText(Constants.Strings.POWER_SET_SUCCESS, TextHelper.createTranslatedText(manifestation));
 
-			sender.sendMessage(manifestationText, Util.NIL_UUID);
+			//todo config to tell person their mode has changed?
+			//manifestationText = TextHelper.createTranslatedText(Constants.Strings.POWER_SET_SUCCESS, TextHelper.createTranslatedText(manifestation));
+			//sender.sendChatMessage(manifestationText, Util.NIL_UUID);
 			cap.syncToClients(null);
 		}));
 		context.setPacketHandled(true);

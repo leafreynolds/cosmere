@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.datagen.advancements.AdvancementGen;
+import leaf.cosmere.datagen.biome.BiomeModifierGen;
 import leaf.cosmere.datagen.blocks.BlockModelsGen;
 import leaf.cosmere.datagen.blocks.BlockTagsGen;
 import leaf.cosmere.datagen.items.ItemModelsGen;
@@ -37,25 +38,22 @@ public class DataGen
 		DataGenerator generator = event.getGenerator();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(new EngLangGen(generator));
+		generator.addProvider(true, new EngLangGen(generator));
 
 		BlockTagsGen blockTags = new BlockTagsGen(generator, existingFileHelper);
-		generator.addProvider(blockTags);
-		generator.addProvider(new ItemTagsGen(generator, blockTags, existingFileHelper));
+		generator.addProvider(true, blockTags);
+		generator.addProvider(true, new ItemTagsGen(generator, blockTags, existingFileHelper));
 
-		if (!event.includeClient())
-		{
-			return;
-		}
+		generator.addProvider(true, new ItemModelsGen(generator, existingFileHelper));
+		generator.addProvider(true, new BlockModelsGen(generator, existingFileHelper));
+		generator.addProvider(true, new LootTableGen(generator));
+		generator.addProvider(true, new RecipeGen(generator));
 
-		generator.addProvider(new ItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(new BlockModelsGen(generator, existingFileHelper));
-		generator.addProvider(new LootTableGen(generator));
-		generator.addProvider(new RecipeGen(generator));
+		generator.addProvider(true, new AdvancementGen(generator));
 
-		generator.addProvider(new AdvancementGen(generator));
+		generator.addProvider(true, new PatchouliGen(generator));
 
-		generator.addProvider(new PatchouliGen(generator));
+		generator.addProvider(true, new BiomeModifierGen(generator));
 
 	}
 

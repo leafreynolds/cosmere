@@ -30,7 +30,8 @@ import java.util.stream.Collectors;
 public class ManifestationRegistry
 {
 	public static final DeferredRegister<AManifestation> MANIFESTATIONS = DeferredRegister.create(ResourceKeyRegistry.MANIFESTATION_TYPES, Cosmere.MODID);
-	public static Supplier<IForgeRegistry<AManifestation>> MANIFESTATION_REGISTRY = MANIFESTATIONS.makeRegistry(AManifestation.class, () -> new RegistryBuilder<AManifestation>().setMaxID(Integer.MAX_VALUE - 1));
+	public static Supplier<IForgeRegistry<AManifestation>> MANIFESTATION_REGISTRY = MANIFESTATIONS.makeRegistry(() -> new RegistryBuilder<AManifestation>().setMaxID(Integer.MAX_VALUE - 1));
+
 
 	public static final RegistryObject<AManifestation> NONE = MANIFESTATIONS.register("none", () -> new ManifestationBase(Manifestations.ManifestationTypes.NONE, Color.WHITE.getRGB()));
 
@@ -200,7 +201,7 @@ public class ManifestationRegistry
 
 		for (AManifestation data : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			map.put(data.getRegistryName(), data.description().getKey());
+			map.put(data.getResourceLocation(), data.descriptionKey());
 		}
 		return map;
 	}

@@ -254,7 +254,7 @@ public interface IHemalurgicInfo
 						AttributesRegistry.COSMERE_ATTRIBUTES.get(path).get(),
 						new AttributeModifier(
 								Constants.NBT.ALUMINUM_UUID,
-								manifestation.translation().getKey(),
+								manifestation.translationKey(),
 								-100,
 								AttributeModifier.Operation.ADDITION));
 			}

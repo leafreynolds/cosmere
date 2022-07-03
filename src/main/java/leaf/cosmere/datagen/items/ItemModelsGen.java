@@ -15,6 +15,7 @@ import leaf.cosmere.items.curio.NecklaceMetalmindItem;
 import leaf.cosmere.items.curio.RingMetalmindItem;
 import leaf.cosmere.items.gems.PolestoneItem;
 import leaf.cosmere.registry.ItemsRegistry;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -115,7 +116,7 @@ public class ItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = itemSupplier.get().getRegistryName();
+		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

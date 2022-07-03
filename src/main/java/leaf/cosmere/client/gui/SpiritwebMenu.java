@@ -17,7 +17,6 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.client.ClientHelper;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
@@ -35,7 +34,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +64,7 @@ public class SpiritwebMenu extends Screen
 
 	protected SpiritwebMenu()
 	{
-		super(new TextComponent("Menu"));
+		super(Component.literal("Menu"));
 	}
 
 	@Override
@@ -391,7 +390,7 @@ public class SpiritwebMenu extends Screen
 		y[0] = (int) middle_y / 2;
 		int rightSideX = middle_x + 35;
 
-		font.drawShadow(matrixStack, I18n.get(selectedManifestation.translation().getKey()), rightSideX, y[0], 0xffffffff);
+		font.drawShadow(matrixStack, I18n.get(selectedManifestation.translationKey()), rightSideX, y[0], 0xffffffff);
 		//todo mode translation
 		font.drawShadow(matrixStack, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
 
@@ -440,7 +439,7 @@ public class SpiritwebMenu extends Screen
 				final int fixed_y = (int) y;//(y + TEXT_DISTANCE);
 
 				//todo localisation check
-				final String text = I18n.get(button.manifestation.translation().getKey());
+				final String text = I18n.get(button.manifestation.translationKey());
 
 				fixed_x = (int) (x < 0
 				                 ? fixed_x - (font.width(text) + TEXT_DISTANCE)
@@ -483,25 +482,10 @@ public class SpiritwebMenu extends Screen
 			final double x = menuRegion.centerX;
 			final double y = menuRegion.centerY;
 
-			final SpriteIconPositioning sip = ClientHelper.instance.getIconForManifestation(menuRegion.manifestation);
-
-			final double scalex = 15 * sip.width * 0.5;
-			final double scaley = 15 * sip.height * 0.5;
+			final double scalex = 15 * 0.5;
+			final double scaley = 15 * 0.5;
 			final double x1 = x - scalex;
-			final double x2 = x + scalex;
 			final double y1 = y - scaley;
-			final double y2 = y + scaley;
-
-			final TextureAtlasSprite sprite = sip.sprite;
-
-			final float f = 1.0f;
-			final float a = 1.0f;
-
-			final double u1 = sip.left * 16.0;
-			final double u2 = (sip.left + sip.width) * 16.0;
-			final double v1 = sip.top * 16.0;
-			final double v2 = (sip.top + sip.height) * 16.0;
-
 
 			AManifestation mani = menuRegion.manifestation;
 			final Manifestations.ManifestationTypes manifestationType = mani.getManifestationType();

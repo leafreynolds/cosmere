@@ -12,7 +12,6 @@ import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -91,7 +90,7 @@ public class GuideItem extends Item
 			}
 			catch (IllegalArgumentException e)
 			{
-				return new TextComponent("");
+				return Component.empty();
 			}
 		}
 		else
@@ -108,7 +107,7 @@ public class GuideItem extends Item
 
 		if (!PatchouliCompat.PatchouliIsPresent())
 		{
-			playerIn.sendMessage(TextHelper.createTranslatedText(Constants.Strings.PATCHOULI_NOT_INSTALLED), Util.NIL_UUID);
+			playerIn.sendSystemMessage(TextHelper.createTranslatedText(Constants.Strings.PATCHOULI_NOT_INSTALLED));
 		}
 		else if (playerIn instanceof ServerPlayer player)
 		{

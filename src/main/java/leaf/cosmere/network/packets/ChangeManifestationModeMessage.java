@@ -5,7 +5,6 @@
 package leaf.cosmere.network.packets;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -55,7 +54,7 @@ public class ChangeManifestationModeMessage
 
 	public static void encode(ChangeManifestationModeMessage mes, FriendlyByteBuf buf)
 	{
-		String namespace = mes.manifestation.getRegistryName().toString();
+		String namespace = mes.manifestation.getResourceLocation().toString();
 		buf.writeUtf(namespace);
 		buf.writeInt(mes.dir);
 	}

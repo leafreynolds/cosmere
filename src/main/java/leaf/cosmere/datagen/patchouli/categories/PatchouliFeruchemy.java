@@ -63,7 +63,7 @@ public class PatchouliFeruchemy
 
 			final String itemLoc = String.format("cosmere:%s", metalName);
 
-			pages.add(new BookStuff.TextPage(feruchemyManifestation.description().getKey()));
+			pages.add(new BookStuff.TextPage(feruchemyManifestation.descriptionKey()));
 			pages.add(new BookStuff.CraftingPage(itemLoc + Constants.RegNameStubs.BRACELET + Constants.RegNameStubs.METALMIND));
 			pages.add(new BookStuff.CraftingPage(itemLoc + Constants.RegNameStubs.RING + Constants.RegNameStubs.METALMIND));
 			pages.add(new BookStuff.CraftingPage(itemLoc + Constants.RegNameStubs.NECKLACE + Constants.RegNameStubs.METALMIND));

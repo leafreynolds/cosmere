@@ -42,7 +42,7 @@ public class SteelTapEffect extends FeruchemyEffectBase
 	public void onFOVUpdate(FOVModifierEvent event)
 	{
 		//todo remember to make this better? clamp isn't necessarily the best way to stop it going over the top
-		event.setNewfov(Mth.clamp(event.getNewfov(), 0.8f, 1.2f));
+		event.setNewFov(Mth.clamp(event.getNewFov(), 0.8f, 1.2f));
 	}
 
 	@Override

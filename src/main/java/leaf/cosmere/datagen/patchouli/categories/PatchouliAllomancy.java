@@ -7,8 +7,8 @@ package leaf.cosmere.datagen.patchouli.categories;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.datagen.patchouli.BookStuff;
 import leaf.cosmere.datagen.patchouli.PatchouliTextFormat;
-import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import leaf.cosmere.utils.helpers.StringHelper;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -57,8 +57,7 @@ public class PatchouliAllomancy
 		//allomancy
 		for (RegistryObject<AllomancyBase> manifestation : ALLOMANCY_POWERS.values())
 		{
-			AManifestation aManifestation = manifestation.get();
-			AllomancyBase allomancyManifestation = (AllomancyBase) aManifestation;
+			AllomancyBase allomancyManifestation = manifestation.get();
 			Metals.MetalType metalType = allomancyManifestation.getMetalType();
 
 			if (!metalType.hasFeruchemicalEffect())
@@ -68,7 +67,7 @@ public class PatchouliAllomancy
 
 			String metalName = metalType.getName();
 
-			String itemFullName = metalType.getNuggetItem().getRegistryName().toString();
+			String itemFullName = ResourceLocationHelper.get(metalType.getNuggetItem()).toString();
 
 			BookStuff.Entry entryForThisPower = new BookStuff.Entry(
 					"allomantic_" + metalName,

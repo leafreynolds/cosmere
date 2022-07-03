@@ -5,19 +5,17 @@
 package leaf.cosmere;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
-import leaf.cosmere.client.ClientSetup;
 import leaf.cosmere.commands.CosmereCommand;
 import leaf.cosmere.compat.curios.CuriosCompat;
 import leaf.cosmere.compat.patchouli.PatchouliCompat;
+import leaf.cosmere.datagen.biome.BiomeFeatureModifier;
 import leaf.cosmere.handlers.ColorHandler;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.registry.*;
 import leaf.cosmere.utils.helpers.LogHelper;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -56,6 +54,8 @@ public class Cosmere
 		PointOfInterestRegistry.POINT_OF_INTERESTS.register(modBus);
 		VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
 		ContainersRegistry.CONTAINERS.register(modBus);
+		BiomeRegistry.BIOME_MODIFIERS.register(modBus);
+		BiomeRegistry.BIOME_MODIFIERS.register(BiomeFeatureModifier.ADD_FEATURE.getPath(), BiomeFeatureModifier::makeCodec);
 
 		FeatureRegistry.FEATURES.register(modBus);
 		RecipeRegistry.SPECIAL_RECIPES.register(modBus);

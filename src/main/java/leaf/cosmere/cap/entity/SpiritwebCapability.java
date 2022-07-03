@@ -123,7 +123,7 @@ public class SpiritwebCapability implements ISpiritweb
 		CompoundTag nbt = new CompoundTag();
 
 		nbt.putBoolean("assigned_powers", hasBeenInitialized);
-		nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
+		nbt.putString("selected_power", selectedManifestation.getResourceLocation().toString());
 		nbt.putInt("stored_breaths", biochromaticBreathStored);
 		nbt.putInt("stored_stormlight", stormlightStored);
 		nbt.putInt("eye_height", eyeHeight);
@@ -133,7 +133,7 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			if (MANIFESTATIONS_MODE.containsKey(manifestation))
 			{
-				modeNBT.putInt(manifestation.getRegistryName().toString(), MANIFESTATIONS_MODE.get(manifestation));
+				modeNBT.putInt(manifestation.getResourceLocation().toString(), MANIFESTATIONS_MODE.get(manifestation));
 			}
 		}
 		nbt.put("manifestation_modes", modeNBT);
@@ -160,7 +160,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			final String manifestationLoc = manifestation.getRegistryName().toString();
+			final String manifestationLoc = manifestation.getResourceLocation().toString();
 
 			int oldManifestationMode = MANIFESTATIONS_MODE.getOrDefault(manifestation,0);
 			int newManifestationMode = 0;
@@ -724,7 +724,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 			}
 		}
-		return selectedManifestation.translation().getKey();
+		return selectedManifestation.translationKey();
 	}
 
 	@Override

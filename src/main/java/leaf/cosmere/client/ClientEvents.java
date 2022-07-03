@@ -169,7 +169,7 @@ public class ClientEvents
 
 			//if (!SpiritwebMenu.instance.isVisible())
 			{
-				spiritweb.renderSelectedHUD(event.getMatrixStack());
+				spiritweb.renderSelectedHUD(event.getPoseStack());
 			}
 
 			SpiritwebMenu.instance.postRender(event, spiritweb);

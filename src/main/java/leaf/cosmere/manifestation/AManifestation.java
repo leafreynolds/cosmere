@@ -6,16 +6,18 @@ package leaf.cosmere.manifestation;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.constants.Manifestations;
-import net.minecraft.network.chat.TranslatableComponent;
+import leaf.cosmere.registry.ManifestationRegistry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
-public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
+public abstract class AManifestation
 {
 
 	public abstract Manifestations.ManifestationTypes getManifestationType();
@@ -40,16 +42,31 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
 
 	public abstract double getStrength(ISpiritweb data, boolean getBaseStrength);
 
-	public TranslatableComponent translation()
+	public ResourceLocation getResourceLocation()
 	{
-		ResourceLocation regName = getRegistryName();
-		return new TranslatableComponent("manifestation." + regName.getNamespace() + "." + regName.getPath());
+		return ManifestationRegistry.MANIFESTATION_REGISTRY.get().getKey(this);
 	}
 
-	public TranslatableComponent description()
+	public String translationKey()
 	{
-		ResourceLocation regName = getRegistryName();
-		return new TranslatableComponent("manifestation." + regName.getNamespace() + "." + regName.getPath() + ".description");
+		ResourceLocation regName = getResourceLocation();
+		return "manifestation." + regName.getNamespace() + "." + regName.getPath();
+	}
+
+	public MutableComponent translation()
+	{
+		return Component.translatable(translationKey());
+	}
+
+	public String descriptionKey()
+	{
+		ResourceLocation regName = getResourceLocation();
+		return "manifestation." + regName.getNamespace() + "." + regName.getPath() + ".description";
+	}
+
+	public MutableComponent description()
+	{
+		return Component.translatable(descriptionKey());
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -59,6 +76,8 @@ public abstract class AManifestation extends ForgeRegistryEntry<AManifestation>
 
 	public String getName()
 	{
-		return this.getRegistryName().getPath().toLowerCase(Locale.ROOT);
+		ResourceLocation regName = ManifestationRegistry.MANIFESTATION_REGISTRY.get().getKey(this);
+
+		return regName.getPath().toLowerCase(Locale.ROOT);
 	}
 }

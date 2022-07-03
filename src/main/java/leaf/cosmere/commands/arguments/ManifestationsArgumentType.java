@@ -17,7 +17,7 @@ import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;
@@ -41,7 +41,7 @@ public class ManifestationsArgumentType implements ArgumentType<AManifestation>
 
 	public static final DynamicCommandExceptionType INVALID_MANIFESTATION_EXCEPTION =
 			new DynamicCommandExceptionType((manifestation) ->
-					new TranslatableComponent(Constants.Strings.POWER_INVALID, manifestation));
+					Component.translatable(Constants.Strings.POWER_INVALID, manifestation));
 
 	public static ManifestationsArgumentType createArgument()
 	{
@@ -73,7 +73,7 @@ public class ManifestationsArgumentType implements ArgumentType<AManifestation>
 		Map<ResourceLocation, String> map = ManifestationRegistry.getManifestations();
 		if (!map.isEmpty())
 		{
-			map.forEach((key, value) -> builder.suggest(key.toString(), new TranslatableComponent(value).withStyle((style) -> style.withColor(ChatFormatting.GREEN))));
+			map.forEach((key, value) -> builder.suggest(key.toString(), Component.translatable(value).withStyle((style) -> style.withColor(ChatFormatting.GREEN))));
 		}
 		builder.buildFuture();
 		return builder;

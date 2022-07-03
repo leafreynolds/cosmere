@@ -5,26 +5,30 @@
 package leaf.cosmere.compat.hwyla;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.manifestation.allomancy.AllomancyBronze;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
-import leaf.cosmere.utils.helpers.TextHelper;
-import mcp.mobius.waila.api.EntityAccessor;
-import mcp.mobius.waila.api.IEntityComponentProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IEntityComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
 public class SpiritWebTooltip implements IEntityComponentProvider
 {
 	static final SpiritWebTooltip INSTANCE = new SpiritWebTooltip();
 
+	@Override
+	public ResourceLocation getUid()
+	{
+		return ResourceLocationHelper.prefix("spirit_web");
+	}
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig iPluginConfig)
@@ -67,4 +71,5 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 			}
 		});
 	}
+
 }
