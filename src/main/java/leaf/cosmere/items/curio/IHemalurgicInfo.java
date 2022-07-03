@@ -243,15 +243,14 @@ public interface IHemalurgicInfo
 		{
 			for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 			{
-				String path = manifestation.getName();
-
-				if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
+				final RegistryObject<Attribute> attribute = manifestation.getAttribute();
+				if (attribute == null || !attribute.isPresent())
 				{
 					continue;
 				}
 
 				attributeModifiers.put(
-						AttributesRegistry.COSMERE_ATTRIBUTES.get(path).get(),
+						attribute.get(),
 						new AttributeModifier(
 								Constants.NBT.ALUMINUM_UUID,
 								manifestation.translationKey(),
@@ -267,31 +266,32 @@ public interface IHemalurgicInfo
 
 		final double strength = getHemalurgicStrength(stack, metalType);
 
-		Attribute attribute = null;
-		AttributeModifier.Operation attributeModifier = AttributeModifier.Operation.ADDITION;
-
-		switch (metalType)
 		{
-			case IRON:
-				attribute = Attributes.ATTACK_DAMAGE;
-				break;
-			case CHROMIUM:
-				attribute = Attributes.LUCK;
-				break;
-			default:
-				//TIN:
-				//Steals senses
-				//a type of night vision
+			Attribute attribute = null;
+			AttributeModifier.Operation attributeModifier = AttributeModifier.Operation.ADDITION;
 
-				//Copper:
-				//Steals mental fortitude, memory, and intelligence
+			switch (metalType)
+			{
+				case IRON:
+					attribute = Attributes.ATTACK_DAMAGE;
+					break;
+				case CHROMIUM:
+					attribute = Attributes.LUCK;
+					break;
+				default:
+					//TIN:
+					//Steals senses
+					//a type of night vision
 
-				final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
-				if (attributeRegistryObject != null && attributeRegistryObject.isPresent())
-				{
-					attribute = attributeRegistryObject.get();
-				}
-				break;
+					//Copper:
+					//Steals mental fortitude, memory, and intelligence
+
+					final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(metalType.getName());
+					if (attributeRegistryObject != null && attributeRegistryObject.isPresent())
+					{
+						attribute = attributeRegistryObject.get();
+					}
+					break;
             /*
             case ZINC:
                 //Steals emotional fortitude
@@ -301,17 +301,18 @@ public interface IHemalurgicInfo
                 //Steals Investiture
                 //todo figure out what that means
                 break;*/
-		}
+			}
 
-		if (attribute != null)
-		{
-			attributeModifiers.put(
-					attribute,
-					new AttributeModifier(
-							hemalurgicIdentity,
-							"Hemalurgic " + metalType.getName(),
-							strength,
-							attributeModifier));
+			if (attribute != null)
+			{
+				attributeModifiers.put(
+						attribute,
+						new AttributeModifier(
+								hemalurgicIdentity,
+								"Hemalurgic " + metalType.getName(),
+								strength,
+								attributeModifier));
+			}
 		}
 
 
@@ -322,13 +323,14 @@ public interface IHemalurgicInfo
 			final double hemalurgicStrength = getHemalurgicStrength(stack, manifestation);
 			if (hemalurgicStrength > 0)
 			{
-				if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
+				final RegistryObject<Attribute> regAttribute = manifestation.getAttribute();
+				if (regAttribute == null || !regAttribute.isPresent())
 				{
 					continue;
 				}
 
 				attributeModifiers.put(
-						AttributesRegistry.COSMERE_ATTRIBUTES.get(path).get(),
+						regAttribute.get(),
 						new AttributeModifier(
 								hemalurgicIdentity,
 								String.format("Hemalurgic-%s: %s", path, hemalurgicIdentity.toString()),

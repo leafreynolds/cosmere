@@ -4,12 +4,10 @@
 
 package leaf.cosmere.items.curio;
 
-import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import net.minecraft.core.NonNullList;
@@ -18,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.RegistryObject;
 import top.theillusivec4.curios.api.SlotContext;
 
 import javax.annotation.Nonnull;
@@ -81,13 +80,14 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			String manifestationName = manifestation.getName();
-			if (!CompoundNBTHelper.verifyExistance(nbt, manifestationName) || !AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
+			RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
+			if (!CompoundNBTHelper.verifyExistance(nbt, manifestationName) || attributeRegistryObject == null)
 			{
 				continue;
 			}
 
 			attributeModifiers.put(
-					AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get(),
+					attributeRegistryObject.get(),
 					new AttributeModifier(
 							Constants.NBT.UNKEYED_UUID,
 							manifestationName,

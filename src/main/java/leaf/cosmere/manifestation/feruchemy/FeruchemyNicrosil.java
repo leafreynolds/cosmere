@@ -6,13 +6,11 @@ package leaf.cosmere.manifestation.feruchemy;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import com.mojang.blaze3d.shaders.Effect;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
@@ -20,13 +18,12 @@ import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.RegistryObject;
 
 
 //storing all the available powers on the user individually
@@ -130,13 +127,13 @@ public class FeruchemyNicrosil extends FeruchemyBase
 	{
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			String manifestationName = manifestation.getName();
-			if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
+			RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
+			if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
 			{
 				continue;
 			}
 
-			final Attribute pAttribute = AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get();
+			final Attribute pAttribute = manifestation.getAttribute().get();
 			final AttributeInstance attribute = data.getLiving().getAttribute(pAttribute);
 			if (attribute != null)
 			{
@@ -198,13 +195,14 @@ public class FeruchemyNicrosil extends FeruchemyBase
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			String manifestationName = manifestation.getName();
-			if (!CompoundNBTHelper.verifyExistance(nbt, manifestationName) || !AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
+			RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
+			if (!CompoundNBTHelper.verifyExistance(nbt, manifestationName) || attributeRegistryObject == null || !attributeRegistryObject.isPresent())
 			{
 				continue;
 			}
 
 			attributeModifiers.put(
-					AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName).get(),
+					attributeRegistryObject.get(),
 					new AttributeModifier(
 							nbt.hasUUID("identity") ? nbt.getUUID("identity") : Constants.NBT.UNKEYED_UUID,
 							manifestationName,

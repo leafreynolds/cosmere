@@ -506,14 +506,11 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
-			String path = manifestation.getName();
-
-			if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
+			final RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
+			if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
 			{
 				continue;
 			}
-
-			RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(path);
 			Attribute attribute = attributeRegistryObject.get();
 
 			AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
@@ -542,26 +539,21 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public boolean hasManifestation(AManifestation manifestation, boolean ignoreTemporaryPower)
 	{
-		String manifestationName = manifestation.getName();
-		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
+		final RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
+		if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
 		{
 			return false;
 		}
 
-		final RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName);
-
-		if (attributeRegistryObject.isPresent())
+		AttributeMap attributeManager = livingEntity.getAttributes();
+		Attribute attribute = attributeRegistryObject.get();
+		if (attributeManager.hasAttribute(attribute))
 		{
-			AttributeMap attributeManager = livingEntity.getAttributes();
-			Attribute attribute = attributeRegistryObject.get();
-			if (attributeManager.hasAttribute(attribute))
-			{
-				double manifestationStrength =
-						ignoreTemporaryPower
-						? attributeManager.getBaseValue(attribute)
-						: attributeManager.getValue(attribute);
-				return manifestationStrength > 3;
-			}
+			double manifestationStrength =
+					ignoreTemporaryPower
+					? attributeManager.getBaseValue(attribute)
+					: attributeManager.getValue(attribute);
+			return manifestationStrength > 3;
 		}
 
 		return false;
@@ -571,24 +563,17 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void giveManifestation(AManifestation manifestation, int i)
 	{
-		String manifestationName = manifestation.getName();
-		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(manifestationName))
+		final RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
+		if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
 		{
 			return;
 		}
-		RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(manifestationName);
-
 		Attribute attribute = attributeRegistryObject.get();
 		AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
 
 		if (manifestationAttribute != null)
 		{
 			manifestationAttribute.setBaseValue(10);
-
-                /*AttributeModifier attributeModifier = AttributeHelper.makeAttribute(manifestationName, "inherent ", 10, AttributeModifier.Operation.ADDITION);
-                manifestationAttribute.removeModifier(attributeModifier);
-                manifestationAttribute.applyNonPersistentModifier(attributeModifier);*/
-
 		}
 
 		hasBeenInitialized = true;
@@ -597,14 +582,11 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void removeManifestation(AManifestation manifestation)
 	{
-		String path = manifestation.getName();
-
-		if (!AttributesRegistry.COSMERE_ATTRIBUTES.containsKey(path))
+		final RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
+		if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
 		{
 			return;
 		}
-
-		RegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.COSMERE_ATTRIBUTES.get(path);
 
 		Attribute attribute = attributeRegistryObject.get();
 		AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);

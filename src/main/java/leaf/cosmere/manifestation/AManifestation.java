@@ -10,10 +10,12 @@ import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import org.jetbrains.annotations.Nullable;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Locale;
 
@@ -80,4 +82,6 @@ public abstract class AManifestation
 
 		return regName.getPath().toLowerCase(Locale.ROOT);
 	}
+
+	public abstract RegistryObject<Attribute> getAttribute();
 }

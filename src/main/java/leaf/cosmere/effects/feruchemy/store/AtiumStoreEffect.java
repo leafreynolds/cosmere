@@ -22,7 +22,7 @@ public class AtiumStoreEffect extends FeruchemyEffectBase
 
 		//atium attribute, size
 		addAttributeModifier(
-				AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.ATIUM.getName()).get(),
+				AttributesRegistry.SIZE_ATTRIBUTE.get(),
 				atiumStoreAttributeUUID,
 				-0.15D,
 				AttributeModifier.Operation.ADDITION);
