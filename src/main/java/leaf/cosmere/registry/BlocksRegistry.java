@@ -62,7 +62,7 @@ public class BlocksRegistry
 					.collect(Collectors.toMap(
 							Function.identity(),
 							metalType -> register(
-									metalType.getName() + Constants.RegNameStubs.ORE + Constants.RegNameStubs.DEEPSLATE_ORE,
+									Constants.RegNameStubs.DEEPSLATE + metalType.getName() + Constants.RegNameStubs.ORE,
 									() -> new MetalOreBlock(metalType),
 									metalType.getRarity())));
 

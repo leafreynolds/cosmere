@@ -28,7 +28,15 @@ public record BiomeFeatureModifier(HolderSet<Biome> biomes, GenerationStep.Decor
 
 	private static final RegistryObject<Codec<? extends BiomeModifier>> SERIALIZER = RegistryObject.create(ADD_FEATURE, ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, Cosmere.MODID);
 
-	public static Codec<BiomeFeatureModifier> makeCodec() {
+
+	@Override
+	public Codec<? extends BiomeModifier> codec()
+	{
+		return SERIALIZER.get();
+	}
+
+	public static Codec<BiomeFeatureModifier> makeCodec()
+	{
 		return RecordCodecBuilder.create(builder -> builder.group(
 				Biome.LIST_CODEC.fieldOf("biomes").forGetter(BiomeFeatureModifier::biomes),
 				Codec.STRING.comapFlatMap(BiomeFeatureModifier::generationStageFromString, GenerationStep.Decoration::toString).fieldOf("generation_stage").forGetter(BiomeFeatureModifier::generationStage),
@@ -36,24 +44,25 @@ public record BiomeFeatureModifier(HolderSet<Biome> biomes, GenerationStep.Decor
 		).apply(builder, BiomeFeatureModifier::new));
 	}
 
-	private static DataResult<GenerationStep.Decoration> generationStageFromString(String name) {
-		try {
+	private static DataResult<GenerationStep.Decoration> generationStageFromString(String name)
+	{
+		try
+		{
 			return DataResult.success(GenerationStep.Decoration.valueOf(name));
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			return DataResult.error("Not a decoration stage: " + name);
 		}
 	}
 
 	@Override
-	public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-		if (phase == Phase.ADD && this.biomes.contains(biome)) {
+	public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder)
+	{
+		if (phase == Phase.ADD && this.biomes.contains(biome))
+		{
 			BiomeGenerationSettingsBuilder generation = builder.getGenerationSettings();
 			this.features.forEach(holder -> generation.addFeature(this.generationStage, holder));
 		}
-	}
-
-	@Override
-	public Codec<? extends BiomeModifier> codec() {
-		return SERIALIZER.get();
 	}
 }

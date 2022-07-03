@@ -33,26 +33,15 @@ import java.nio.file.Path;
 
 public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvider
 {
-	public static void generate(RegistryOps<JsonElement> ops, BiomeModifier modifier, Path outputFolder, String saveName, CachedOutput cache) {
-		final String directory = PackType.SERVER_DATA.getDirectory();
-		final ResourceLocation biomeModifiersRegistryID = ForgeRegistries.Keys.BIOME_MODIFIERS.location();
-
-		final String biomeModifierPathString = String.join("/", directory, Cosmere.MODID, biomeModifiersRegistryID.getNamespace(), biomeModifiersRegistryID.getPath(), saveName + ".json");
-
-		BiomeModifier.DIRECT_CODEC.encodeStart(ops, modifier).resultOrPartial(msg -> LogHelper.LOGGER.error("Failed to encode {}: {}", biomeModifierPathString, msg)).ifPresent(json ->
-		{
-			try {
-				final Path biomeModifierPath = outputFolder.resolve(biomeModifierPathString);
-				DataProvider.saveStable(cache, json, biomeModifierPath);
-			} catch (
-					IOException e) {
-				LogHelper.LOGGER.error("Failed to save " + biomeModifierPathString, e);
-			}
-		});
+	@Override
+	public @NotNull String getName()
+	{
+		return Cosmere.MODID + " Biome Modifiers";
 	}
 
 	@Override
-	public void run(@NotNull CachedOutput cachedOutput) {
+	public void run(@NotNull CachedOutput cachedOutput)
+	{
 
 		RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.BUILTIN.get());
 		final Path outputFolder = this.dataGenerator.getOutputFolder();
@@ -67,18 +56,18 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 			}
 
 			// Biome Modifiers
-			BiomeFeatureModifier oreModifer = new BiomeFeatureModifier(
+			BiomeFeatureModifier oreModifier = new BiomeFeatureModifier(
 					new HolderSet.Named<>(
 							ops.registry(Registry.BIOME_REGISTRY).get(),
 							BiomeTags.IS_OVERWORLD),
 					GenerationStep.Decoration.UNDERGROUND_ORES,
-					HolderSet.direct(Holder.direct(FeatureRegistry.PlacedFeatures.PLACED_ORE_FEATURES.get(metalType).get()))
+					HolderSet.direct(Holder.direct(FeatureRegistry.PLACED_ORE_FEATURES.get(metalType).get()))
 			);
 
 
 			// Generate BiomeModiers
 			generate(ops,
-					oreModifer,
+					oreModifier,
 					outputFolder,
 					metalType.getName() + Constants.RegNameStubs.ORE,
 					cachedOutput);
@@ -86,9 +75,27 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 		}
 	}
 
-	@Override
-	public @NotNull String getName() {
-		return Cosmere.MODID + " Biome Modifiers";
+	public static void generate(RegistryOps<JsonElement> ops, BiomeModifier modifier, Path outputFolder, String saveName, CachedOutput cache)
+	{
+		final String directory = PackType.SERVER_DATA.getDirectory();
+		final ResourceLocation biomeModifiersRegistryID = ForgeRegistries.Keys.BIOME_MODIFIERS.location();
+
+		final String biomeModifierPathString = String.join("/", directory, Cosmere.MODID, biomeModifiersRegistryID.getNamespace(), biomeModifiersRegistryID.getPath(), saveName + ".json");
+
+		BiomeModifier.DIRECT_CODEC.encodeStart(ops, modifier)
+				.resultOrPartial(msg -> LogHelper.LOGGER.error("Failed to encode {}: {}", biomeModifierPathString, msg))
+				.ifPresent(json ->
+				{
+					try
+					{
+						final Path biomeModifierPath = outputFolder.resolve(biomeModifierPathString);
+						DataProvider.saveStable(cache, json, biomeModifierPath);
+					}
+					catch (IOException e)
+					{
+						LogHelper.LOGGER.error("Failed to save " + biomeModifierPathString, e);
+					}
+				});
 	}
 
 }

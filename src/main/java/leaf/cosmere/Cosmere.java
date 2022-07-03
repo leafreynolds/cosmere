@@ -57,7 +57,9 @@ public class Cosmere
 		BiomeRegistry.BIOME_MODIFIERS.register(modBus);
 		BiomeRegistry.BIOME_MODIFIERS.register(BiomeFeatureModifier.ADD_FEATURE.getPath(), BiomeFeatureModifier::makeCodec);
 
-		FeatureRegistry.FEATURES.register(modBus);
+		FeatureRegistry.CONFIGURED_FEATURES.register(modBus);
+		FeatureRegistry.PLACED_FEATURES.register(modBus);
+
 		RecipeRegistry.SPECIAL_RECIPES.register(modBus);
 
 		AdvancementTriggerRegistry.init();
@@ -74,8 +76,6 @@ public class Cosmere
 		event.enqueueWork(() ->
 		{
 			CosmereCommand.registerCustomArgumentTypes();
-			FeatureRegistry.ConfiguredFeatures.registerConfiguredFeatures();
-			FeatureRegistry.PlacedFeatures.registerPlacedFeatures();
 			EntityRegistry.PrepareEntityAttributes();
 			LootFunctionRegistry.Register();
 		});
