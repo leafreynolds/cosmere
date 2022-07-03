@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dust/copper"
+    },
+    {
+      "tag": "forge:dust/copper"
+    },
+    {
+      "tag": "forge:dust/copper"
+    },
+    {
+      "tag": "forge:dust/tin"
+    }
+  ],
+  "result": {
+    "item": "cosmere:bronze_blend",
+    "count": 4
+  }
+}

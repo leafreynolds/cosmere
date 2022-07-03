@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dust/aluminum"
+    },
+    {
+      "tag": "forge:dust/aluminum"
+    },
+    {
+      "tag": "forge:dust/aluminum"
+    },
+    {
+      "tag": "forge:dust/aluminum"
+    },
+    {
+      "tag": "forge:dust/copper"
+    }
+  ],
+  "result": {
+    "item": "cosmere:duralumin_blend",
+    "count": 5
+  }
+}
