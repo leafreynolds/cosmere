@@ -46,7 +46,7 @@ public class MetalNuggetItem extends MetalItem
 
 	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, ItemStack itemstack)
 	{
-		if (metalType == null)
+		if (metalType == null || livingEntity.level.isClientSide)
 		{
 			return;
 		}
