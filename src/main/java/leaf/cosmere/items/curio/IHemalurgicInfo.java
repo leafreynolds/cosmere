@@ -10,6 +10,8 @@ import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.allomancy.AllomancyBase;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
@@ -134,13 +136,30 @@ public interface IHemalurgicInfo
 					case ATIUM:
 					{
 						//Steals any one power
-						//todo decide if we just pick a random power
-						AManifestation manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
-						if (manifestation == null)
+						AManifestation manifestation;
+
+						AManifestation atiumAllomancy = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.ATIUM).get();
+						AManifestation atiumFeruchemy = ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.ATIUM).get();
+
+						if (manifestationsFound.contains(atiumFeruchemy))
 						{
-							//todo decide if prefer allomancy over feruchemy?
-							manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
+							manifestation = atiumFeruchemy;
 						}
+						else if (manifestationsFound.contains(atiumAllomancy))
+						{
+							manifestation = atiumAllomancy;
+						}
+						else
+						{
+							//todo decide if we just pick a random power
+							manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
+							if (manifestation == null)
+							{
+								//todo decide if prefer allomancy over feruchemy? the only source of both would be a player though, so who cares
+								manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
+							}
+						}
+
 
 						//then try steal it
 						if (manifestation != null)
