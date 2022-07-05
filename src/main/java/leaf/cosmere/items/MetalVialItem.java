@@ -90,32 +90,18 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving)
 	{
-
 		Player playerentity = entityLiving instanceof Player ? (Player) entityLiving : null;
 
 		if (!worldIn.isClientSide)
 		{
-			SpiritwebCapability.get(entityLiving).ifPresent(iSpiritweb ->
+			//for each metal in the vial
+			Map<Integer, Integer> metalsInVial = getStoredMetalsMap(getContainedMetalsTag(stack));
+
+			metalsInVial.entrySet().forEach(metalInfo ->
 			{
-				SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
-
-				//for each metal in the vial
-
-				Map<Integer, Integer> metalsInVial = getStoredMetalsMap(getContainedMetalsTag(stack));
-
-				metalsInVial.entrySet().stream().forEach(metalInfo ->
-				{
-					// MetalName x Value
-					Metals.MetalType metalType = Metals.MetalType.valueOf(metalInfo.getKey()).get();
-
-					//reference ConsumeNugget from metalNuggetItem
-					int secondsPerNugget = metalInfo.getValue() * metalType.getAllomancyBurnTimeSeconds();
-
-					//add to metal stored
-					spiritweb.METALS_INGESTED.put(metalType, spiritweb.METALS_INGESTED.get(metalType) + secondsPerNugget);
-				});
-
-				iSpiritweb.syncToClients(null);
+				// MetalName x Value
+				Metals.MetalType metalType = Metals.MetalType.valueOf(metalInfo.getKey()).get();
+				MetalNuggetItem.consumeNugget(entityLiving, metalType, null);
 			});
 		}
 

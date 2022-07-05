@@ -95,7 +95,9 @@ public class MetalNuggetItem extends MetalItem
 				spiritweb.METALS_INGESTED.put(metalType, metalIngested + metalType.getAllomancyBurnTimeSeconds());
 			}
 
-			if (livingEntity instanceof Player && !((Player) livingEntity).isCreative())
+			spiritweb.syncToClients(null);
+
+			if (itemstack != null && livingEntity instanceof Player && !((Player) livingEntity).isCreative())
 			{
 				itemstack.shrink(1);
 			}
