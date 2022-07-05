@@ -7,7 +7,6 @@ package leaf.cosmere.effects.feruchemy.store;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
 import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -24,9 +23,12 @@ public class NicrosilStoreEffect extends FeruchemyEffectBase
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			final RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
-			if (attributeRegistryObject == null
-					|| !attributeRegistryObject.isPresent()
-					|| manifestation == ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.NICROSIL).get())
+
+			final boolean invalidMetalToDisable =
+					manifestation == ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.NICROSIL).get()
+							|| manifestation == ManifestationRegistry.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get();
+
+			if (attributeRegistryObject == null || !attributeRegistryObject.isPresent() || invalidMetalToDisable)
 			{
 				continue;
 			}
