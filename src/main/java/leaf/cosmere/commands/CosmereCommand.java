@@ -13,6 +13,7 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.commands.arguments.ManifestationsArgumentType;
 import leaf.cosmere.commands.subcommands.EyeCommand;
 import leaf.cosmere.commands.subcommands.ManifestationCommand;
+import leaf.cosmere.commands.subcommands.SummonCommand;
 import leaf.cosmere.commands.subcommands.TestCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -29,6 +30,7 @@ public class CosmereCommand
 				//.then(TestCommand.register(dispatcher))
 				.then(EyeCommand.register(dispatcher))
 				.then(ManifestationCommand.register(dispatcher))
+				.then(SummonCommand.register(dispatcher))
 		);
 	}
 	public static void registerCustomArgumentTypes() {
