@@ -4,13 +4,11 @@
 
 package leaf.cosmere.items;
 
-import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.charge.IChargeable;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
-import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -18,6 +16,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
@@ -40,6 +39,22 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	private final String metal_ids = "metalIDs";
 	private final String metal_amounts = "metalAmounts";
 	private final int MAX_METALS_COUNT = 16;
+
+	@Override
+	public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems)
+	{
+		super.fillItemCategory(pCategory, pItems);
+
+		if (allowdedIn(pCategory))
+		{
+			final ItemStack filled = new ItemStack(this);
+			for (int i = 0; i < 16; i++)
+			{
+				addMetals(filled, i, 1);
+			}
+			pItems.add(filled);
+		}
+	}
 
 	private CompoundTag getContainedMetalsTag(ItemStack stack)
 	{
