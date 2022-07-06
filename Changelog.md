@@ -1,5 +1,11 @@
 The Cosmere Project - For 1.19 Minecraft
 
+B52
+
+BREAKING CHANGE: shortened power registry names, which will break saves by powers not loading correctly on players, mobs and hemalurgic spikes. 
+Ported 1.18 patchouli changes to 1.19
+
+
 1.18.2-B50/1.19-B51
 
 Atium spikes prefer stealing atium powers
