@@ -20,6 +20,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,31 +42,36 @@ public class ManifestationCommand extends ModCommand
 
 		for (ServerPlayer player : players)
 		{
-			SpiritwebCapability.get(player).ifPresent(spiritweb ->
-			{
-				CommandSourceStack source = context.getSource();
-
-				TranslatableComponent powersFound = new TranslatableComponent(Constants.Strings.POWERS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
-
-				final BaseComponent leftBracketTextComponent = new TextComponent("[");
-				final BaseComponent rightBracketTextComponent = new TextComponent("]");
-				final TextComponent space = new TextComponent(" ");
-
-				//figure out which manifestations a player has
-				for (AManifestation manifestation : spiritweb.getAvailableManifestations())
-				{
-					powersFound.append(leftBracketTextComponent);
-					powersFound.append(TextHelper.createTextWithTooltip(
-							manifestation.translation(),
-							manifestation.description()));
-					powersFound.append(rightBracketTextComponent);
-					powersFound.append(space);
-				}
-				source.sendSuccess(powersFound, true);
-			});
+			ReportPowersFoundOnPlayer(context, player);
 		}
 
 		return Command.SINGLE_SUCCESS;
+	}
+
+	private static void ReportPowersFoundOnPlayer(CommandContext<CommandSourceStack> context, ServerPlayer player)
+	{
+		SpiritwebCapability.get(player).ifPresent(spiritweb ->
+		{
+			CommandSourceStack source = context.getSource();
+
+			TranslatableComponent powersFound = new TranslatableComponent(Constants.Strings.POWERS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
+
+			final BaseComponent leftBracketTextComponent = new TextComponent("[");
+			final BaseComponent rightBracketTextComponent = new TextComponent("]");
+			final TextComponent space = new TextComponent(" ");
+
+			//figure out which manifestations a player has
+			for (AManifestation manifestation : spiritweb.getAvailableManifestations())
+			{
+				powersFound.append(leftBracketTextComponent);
+				powersFound.append(TextHelper.createTextWithTooltip(
+						manifestation.translation(),
+						new TranslatableComponent(Constants.Strings.POWER_STRENGTH, manifestation.getStrength(spiritweb,true), manifestation.getStrength(spiritweb,false))));
+				powersFound.append(rightBracketTextComponent);
+				powersFound.append(space);
+			}
+			source.sendSuccess(powersFound, true);
+		});
 	}
 
 	private static int clear(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
@@ -103,6 +109,7 @@ public class ManifestationCommand extends ModCommand
 				iSpiritweb.syncToClients(null);
 				BaseComponent playerTextObject = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
 				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
+				ReportPowersFoundOnPlayer(context, player);
 			});
 		}
 
@@ -122,7 +129,7 @@ public class ManifestationCommand extends ModCommand
 
 			BaseComponent playerText = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
 
-			BaseComponent manifestationText = TextHelper.createTextWithTooltip(manifestation.translation(), manifestation.description());
+			MutableComponent manifestationText = TextHelper.createTextWithTooltip(manifestation.translation(), manifestation.description());
 
 			if (manifestation == null)
 			{
@@ -134,6 +141,7 @@ public class ManifestationCommand extends ModCommand
 				//todo config ability strength
 				spiritweb.giveManifestation(manifestation, 10);
 				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
+				ReportPowersFoundOnPlayer(context, player);
 				spiritweb.syncToClients(null);
 			});
 		}
@@ -151,7 +159,7 @@ public class ManifestationCommand extends ModCommand
 
 			BaseComponent playerText = TextHelper.getPlayerTextObject(source.getLevel(), player.getUUID());
 
-			BaseComponent manifestationText = TextHelper.createTextWithTooltip(manifestation.translation(), manifestation.description());
+			MutableComponent manifestationText = TextHelper.createTextWithTooltip(manifestation.translation(), manifestation.description());
 
 			if (manifestation == null)
 			{
@@ -163,6 +171,7 @@ public class ManifestationCommand extends ModCommand
 				spiritweb.removeManifestation(manifestation);
 				spiritweb.syncToClients(null);
 				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
+				ReportPowersFoundOnPlayer(context, player);
 			});
 		}
 		return Command.SINGLE_SUCCESS;
@@ -171,25 +180,29 @@ public class ManifestationCommand extends ModCommand
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		return Commands.literal("powers")
-				.requires(context -> context.hasPermission(2))
 				.then(Commands.literal("check")
 						.executes(ManifestationCommand::check)
 						.then(Commands.argument("target", EntityArgument.players())
+								.requires(context -> context.hasPermission(2))
 								.executes(ManifestationCommand::check)))
                 .then(Commands.literal("clear")
+		                .requires(context -> context.hasPermission(2))
                         .executes(ManifestationCommand::clear)
 		                .then(Commands.argument("target", EntityArgument.players())
 				                .executes(ManifestationCommand::clear)))
 				.then(Commands.literal("reroll")
+						.requires(context -> context.hasPermission(2))
 						.executes(ManifestationCommand::reroll)
 						.then(Commands.argument("target", EntityArgument.players())
 								.executes(ManifestationCommand::reroll)))
 				.then(Commands.literal("give")
+						.requires(context -> context.hasPermission(2))
 						.then(Commands.argument("manifestation", ManifestationsArgumentType.createArgument())
 								.executes(ManifestationCommand::give)
 								.then(Commands.argument("target", EntityArgument.players())
 										.executes(ManifestationCommand::give))))
 				.then(Commands.literal("remove")
+						.requires(context -> context.hasPermission(2))
 						.then(Commands.argument("manifestation", ManifestationsArgumentType.createArgument())
 								.executes(ManifestationCommand::remove)
 								.then(Commands.argument("target", EntityArgument.players())

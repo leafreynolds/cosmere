@@ -36,13 +36,13 @@ public class TextHelper
 		return textComponent;
 	}
 
-	public static BaseComponent createTextWithTooltip(TranslatableComponent translation, TranslatableComponent description)
+	public static MutableComponent createTextWithTooltip(MutableComponent translation, MutableComponent description)
 	{
 		//Always surround tool tip items with brackets
 		translation.withStyle(style ->
 		{
 			return style.withColor(ChatFormatting.GREEN)//color tool tip items green
-					.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description)).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, translation.getKey()));
+					.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description)).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, description.getString()));
 		});
 		return translation;
 	}
