@@ -185,6 +185,8 @@
   "curios.identifier.feet": "Feet",
   "curios.identifier.legs": "Legs",
   "curios.identifier.linchpin": "Linch pin",
+  "death.attack.eat_metal": "%1$s shredded their throat while eating metal",
+  "death.attack.eat_metal.player": "%1$s tried to eat metal directly while fighting %2$s",
   "death.attack.spiked": "%1$s was not careful with their hemalurgic spike",
   "death.attack.spiked.player": "%1$s was not careful with their hemalurgic spike while fighting %2$s",
   "effect.cosmere.allomancy_boost": "Allomancy Boost",

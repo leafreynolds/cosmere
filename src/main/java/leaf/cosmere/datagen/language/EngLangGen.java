@@ -214,6 +214,8 @@ public class EngLangGen extends LanguageProvider
 		//Damage Sources
 		add("death.attack.spiked", "%1$s was not careful with their hemalurgic spike");
 		add("death.attack.spiked.player", "%1$s was not careful with their hemalurgic spike while fighting %2$s");
+		add("death.attack.eat_metal", "%1$s shredded their throat while eating metal");
+		add("death.attack.eat_metal.player", "%1$s tried to eat metal directly while fighting %2$s");
 
 		//Containers
 
