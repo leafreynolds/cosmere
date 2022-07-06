@@ -19,10 +19,8 @@ import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -54,11 +52,11 @@ public class ManifestationCommand extends ModCommand
 		{
 			CommandSourceStack source = context.getSource();
 
-			TranslatableComponent powersFound = new TranslatableComponent(Constants.Strings.POWERS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
+			MutableComponent powersFound = Component.translatable(Constants.Strings.POWERS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
 
-			final BaseComponent leftBracketTextComponent = new TextComponent("[");
-			final BaseComponent rightBracketTextComponent = new TextComponent("]");
-			final TextComponent space = new TextComponent(" ");
+			final MutableComponent leftBracketTextComponent = Component.literal("[");
+			final MutableComponent rightBracketTextComponent = Component.literal("]");
+			final MutableComponent space = Component.literal(" ");
 
 			//figure out which manifestations a player has
 			for (AManifestation manifestation : spiritweb.getAvailableManifestations())
@@ -66,7 +64,7 @@ public class ManifestationCommand extends ModCommand
 				powersFound.append(leftBracketTextComponent);
 				powersFound.append(TextHelper.createTextWithTooltip(
 						manifestation.translation(),
-						new TranslatableComponent(Constants.Strings.POWER_STRENGTH, manifestation.getStrength(spiritweb,true), manifestation.getStrength(spiritweb,false))));
+						manifestation.description()));
 				powersFound.append(rightBracketTextComponent);
 				powersFound.append(space);
 			}
@@ -85,8 +83,8 @@ public class ManifestationCommand extends ModCommand
 				CommandSourceStack source = context.getSource();
 				iSpiritweb.clearManifestations();
 				iSpiritweb.syncToClients(null);
-				BaseComponent playerTextObject = TextHelper.getPlayerTextObject(context.getSource().getLevel(), player.getUUID());
-				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
+				MutableComponent playerTextObject = TextHelper.getPlayerTextObject(context.getSource().getLevel(), player.getUUID());
+				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
 			});
 		}
 
@@ -107,8 +105,8 @@ public class ManifestationCommand extends ModCommand
 				//set to none so that it auto updates to the new available ones on sync
 				iSpiritweb.setSelectedManifestation(ManifestationRegistry.NONE.get());
 				iSpiritweb.syncToClients(null);
-				BaseComponent playerTextObject = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
-				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
+				MutableComponent playerTextObject = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
+				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
 				ReportPowersFoundOnPlayer(context, player);
 			});
 		}
@@ -127,20 +125,20 @@ public class ManifestationCommand extends ModCommand
 			CommandSourceStack source = context.getSource();
 			AManifestation manifestation = context.getArgument("manifestation", AManifestation.class);
 
-			BaseComponent playerText = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
+			MutableComponent playerText = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
 
 			MutableComponent manifestationText = TextHelper.createTextWithTooltip(manifestation.translation(), manifestation.description());
 
 			if (manifestation == null)
 			{
-				source.sendFailure(new TranslatableComponent(Constants.Strings.POWER_SET_FAIL, playerText, manifestationText));
+				source.sendFailure(Component.translatable(Constants.Strings.POWER_SET_FAIL, playerText, manifestationText));
 				return 0;
 			}
 			SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 			{
 				//todo config ability strength
 				spiritweb.giveManifestation(manifestation, 10);
-				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
+				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 				ReportPowersFoundOnPlayer(context, player);
 				spiritweb.syncToClients(null);
 			});
@@ -157,20 +155,20 @@ public class ManifestationCommand extends ModCommand
 			CommandSourceStack source = context.getSource();
 			AManifestation manifestation = context.getArgument("manifestation", AManifestation.class);
 
-			BaseComponent playerText = TextHelper.getPlayerTextObject(source.getLevel(), player.getUUID());
+			MutableComponent playerText = TextHelper.getPlayerTextObject(source.getLevel(), player.getUUID());
 
 			MutableComponent manifestationText = TextHelper.createTextWithTooltip(manifestation.translation(), manifestation.description());
 
 			if (manifestation == null)
 			{
-				source.sendFailure(new TranslatableComponent(Constants.Strings.POWER_SET_FAIL, playerText, manifestationText));
+				source.sendFailure(Component.translatable(Constants.Strings.POWER_SET_FAIL, playerText, manifestationText));
 				return 0;
 			}
 			SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 			{
 				spiritweb.removeManifestation(manifestation);
 				spiritweb.syncToClients(null);
-				source.sendSuccess(new TranslatableComponent(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
+				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 				ReportPowersFoundOnPlayer(context, player);
 			});
 		}

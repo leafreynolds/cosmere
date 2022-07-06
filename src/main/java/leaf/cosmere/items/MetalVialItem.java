@@ -45,7 +45,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	{
 		super.fillItemCategory(pCategory, pItems);
 
-		if (allowdedIn(pCategory))
+		if (allowedIn(pCategory))
 		{
 			final ItemStack filled = new ItemStack(this);
 			for (int i = 0; i < 16; i++)

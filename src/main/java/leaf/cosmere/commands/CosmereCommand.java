@@ -14,11 +14,10 @@ import leaf.cosmere.commands.arguments.ManifestationsArgumentType;
 import leaf.cosmere.commands.subcommands.EyeCommand;
 import leaf.cosmere.commands.subcommands.ManifestationCommand;
 import leaf.cosmere.commands.subcommands.SummonCommand;
-import leaf.cosmere.commands.subcommands.TestCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 
 
 public class CosmereCommand
@@ -27,13 +26,14 @@ public class CosmereCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal(Cosmere.MODID)
-				//.then(TestCommand.register(dispatcher))
 				.then(EyeCommand.register(dispatcher))
 				.then(ManifestationCommand.register(dispatcher))
 				.then(SummonCommand.register(dispatcher))
 		);
 	}
 	public static void registerCustomArgumentTypes() {
-		ArgumentTypes.register("cosmere:manifestations_argument", ManifestationsArgumentType.class, new EmptyArgumentSerializer<>(ManifestationsArgumentType::createArgument));
+		ArgumentTypeInfos.registerByClass(
+				ManifestationsArgumentType.class,
+				SingletonArgumentInfo.contextFree(ManifestationsArgumentType::createArgument));
 	}
 }
