@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_brass.description"
+      "text": "A ferring who taps $(thing)brass$() is known as a \"$(thing)Firesoul$()\", and stores Warmth. While storing, the Firesoul will find themselves gaining a resistant to intense heat. Some reports say they can swim in lava. Tapping allows them to inflict burns onto others."
     },
     {
       "type": "patchouli:crafting",

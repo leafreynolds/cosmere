@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_electrum.description"
+      "text": "A ferring who taps $(thing)electrum$() is known as a \"$(thing)Pinnacle$()\", and stores Determination. While storing, a Pinnacle will find themselves growing more unsure. Tapping fills them with determination. Reports say that they can shrug off greater injury while tapping Determination. More research is required."
     },
     {
       "type": "patchouli:crafting",

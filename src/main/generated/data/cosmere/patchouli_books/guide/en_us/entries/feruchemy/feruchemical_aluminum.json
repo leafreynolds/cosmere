@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_aluminum.description"
+      "text": "A ferring who taps $(thing)aluminum$() is known as a \"$(thing)Trueself$()\", and stores Identity. A trueself is somewhat redundant by itself. Reports say that a feruchemist with access to both Feruchmical Aluminum and any other Feruchemical ability can store their identity before storing another attribute, creating what is called an Unkeyed Metalmind."
+    },
+    {
+      "type": "text",
+      "text": "This would allow others to access the reserves stored in this metalmind. More research is required."
     },
     {
       "type": "patchouli:crafting",

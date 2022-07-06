@@ -7,6 +7,7 @@ package leaf.cosmere.datagen.patchouli.categories;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.datagen.patchouli.BookStuff;
 import leaf.cosmere.datagen.patchouli.PatchouliTextFormat;
+import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import leaf.cosmere.utils.helpers.StringHelper;
@@ -42,11 +43,15 @@ public class PatchouliAllomancy
 		firstPage.setTitle("Allomancy (For Dummies)");
 		firstPage.setText(
 				"Here is where I shall explain Allomancy, a system of Investiture native to Scadrial. " +
-						"Despite first documentation only occurring approximately one thousand years before the Catacendre, Allomancy has been explored in much greater detail than it's two older counterparts. The art requires consuming a piece of metal, upon which time you can \"%s\" it. ".formatted(PatchouliTextFormat.Thing("Burn")) +
-				"Those who are genetically gifted with a singular allomantic ability are generally referred to as a \"%s\". ".formatted(PatchouliTextFormat.Thing("Misting")) +
-				"For someone who has access to all sixteen abilities, they are referred to as a \"%s\".".formatted(PatchouliTextFormat.Thing("Mistborn"))
-		);
+						"Despite first documentation only occurring approximately one thousand years before the Catacendre, Allomancy has been explored in much greater detail than it's two older counterparts.");
 		pages.add(firstPage);
+		BookStuff.Page secondPage = new BookStuff.TextPage();
+		secondPage.setTitle("Allomancy (For Dummies)");
+		secondPage.setText(
+				"The art requires consuming a piece of metal, upon which time you can \"%s\" it. ".formatted(PatchouliTextFormat.Thing("Burn")) +
+						"Those who are genetically gifted with a singular allomantic ability are generally referred to as a \"%s\". ".formatted(PatchouliTextFormat.Thing("Misting")) +
+						"For someone who has access to all sixteen abilities, they are referred to as a \"%s\".".formatted(PatchouliTextFormat.Thing("Mistborn")));
+		pages.add(secondPage);
 
 		pages.add(new BookStuff.CraftingPage("", "cosmere:metal_vial", ""));
 		allomancyBasics.pages = pages.toArray(BookStuff.Page[]::new);
@@ -57,7 +62,8 @@ public class PatchouliAllomancy
 		//allomancy
 		for (RegistryObject<AllomancyBase> manifestation : ALLOMANCY_POWERS.values())
 		{
-			AllomancyBase allomancyManifestation = manifestation.get();
+			AManifestation aManifestation = manifestation.get();
+			AllomancyBase allomancyManifestation = (AllomancyBase) aManifestation;
 			Metals.MetalType metalType = allomancyManifestation.getMetalType();
 
 			if (!metalType.hasFeruchemicalEffect())
@@ -92,7 +98,7 @@ public class PatchouliAllomancy
 					break;
 				case TIN:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-					"In allomancy, Tin heightens the senses to super human levels. It allows you to see clearly in the dark, and- (the page appears to be smudged, the letters indecipherable.)"));
+							"In allomancy, Tin heightens the senses to super human levels. It allows you to see clearly in the dark, and- (the page appears to be smudged, the letters indecipherable.)"));
 					break;
 				case PEWTER:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
@@ -148,6 +154,7 @@ public class PatchouliAllomancy
 				case ELECTRUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"(The rest of the page is missing...)"));
+					break;
 				case ATIUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"(The rest of the page is blank...)"));

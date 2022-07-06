@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_gold.description"
+      "text": "A ferring who taps $(thing)gold$() is known as a \"$(thing)Bloodmaker$()\", and stores Health. While storing, a Bloodmaker is able to store away health, growing frail and weak. Tapping allows them to recover from injuries with ease."
     },
     {
       "type": "patchouli:crafting",

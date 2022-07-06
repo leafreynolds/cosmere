@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_atium.description"
+      "text": "A ferring who taps $(thing)atium$() is known as a \"$(thing)Elderling$()\", and stores Age. While storing age, the ferring will decrease in size. Tapping allows them to grow in size."
     },
     {
       "type": "patchouli:crafting",

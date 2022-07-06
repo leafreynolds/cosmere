@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "Steals an Allomantic or Feruchemical power."
+      "text": "Atium Spikes can steal any one Allomantic or Feruchemical power. For example, if a twinborn were spiked with an atium spike, that spike would only grant one of their powers."
     },
     {
       "type": "patchouli:crafting",

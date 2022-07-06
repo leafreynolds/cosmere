@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_bendalloy.description"
+      "text": "A ferring who taps $(thing)bendalloy$() is known as a \"$(thing)Subsumer$()\", and stores Saturation. While storing, a Subsumer is able to store away calories, which can be tapped at a later time."
     },
     {
       "type": "patchouli:crafting",

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_copper.description"
+      "text": "A ferring who taps $(thing)copper$() is known as a \"$(thing)Archivist$()\", and stores Memories. While storing, the Archivist is able to store their memories and experiences away. Tapping allows them to regain their stored knowledge."
     },
     {
       "type": "patchouli:crafting",

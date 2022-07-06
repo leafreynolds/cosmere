@@ -283,10 +283,11 @@ public class PatchouliHemalurgy
 			}
 			break;
 			case ATIUM:
-				builder.append("Steals an Allomantic or Feruchemical power.");
+				builder.append("Atium Spikes can steal any one Allomantic or Feruchemical power. For example, if a twinborn were spiked with an atium spike, that spike would only grant one of their powers.");
 				break;
 			case LERASIUM:
-				builder.append("Steals all powers...");
+				builder.append("Lerasium Spikes steals all Attributes from a donor.");
+				break;
 			default:
 				builder.append("Unknown...");
 				break;

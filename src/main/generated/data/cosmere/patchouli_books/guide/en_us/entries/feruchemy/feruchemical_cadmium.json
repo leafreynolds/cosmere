@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "manifestation.cosmere.feruchemical_cadmium.description"
+      "text": "A ferring who taps $(thing)cadmium$() is known as a \"$(thing)Gasper$()\", and stores Breaths. While storing, a Gasper will find it difficult to breath. Storing too much may make them suffocate. tapping allows them to hold their breath for far longer periods of time."
     },
     {
       "type": "patchouli:crafting",

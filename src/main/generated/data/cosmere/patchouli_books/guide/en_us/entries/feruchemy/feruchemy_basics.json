@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "cosmere:atium_bracelet_metalmind",
+      "recipe": "cosmere:brass_bracelet_metalmind",
       "recipe2": "",
       "text": "Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes."
     }
