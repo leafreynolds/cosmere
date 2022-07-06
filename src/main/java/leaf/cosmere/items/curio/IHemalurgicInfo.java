@@ -369,7 +369,7 @@ public interface IHemalurgicInfo
 
 	default double getHemalurgicStrength(ItemStack stack, AManifestation manifestation)
 	{
-		return getHemalurgicStrength(stack, "power_" + manifestation.getName());
+		return getHemalurgicStrength(stack, manifestation.getName());
 	}
 
 	default double getHemalurgicStrength(ItemStack stack, String name)
@@ -415,7 +415,7 @@ public interface IHemalurgicInfo
 
 	default void setHemalurgicStrength(ItemStack stack, AManifestation manifestation, double val)
 	{
-		setHemalurgicStrength(stack, "power_" + manifestation.getName(), val);
+		setHemalurgicStrength(stack, manifestation.getName(), val);
 	}
 
 	default void setHemalurgicStrength(ItemStack stack, String name, double val)

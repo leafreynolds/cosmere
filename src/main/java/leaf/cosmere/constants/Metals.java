@@ -922,12 +922,12 @@ public class Metals
 
 		public String getAllomancyRegistryName()
 		{
-			return "allomantic_" + this.getName();
+			return "allo_" + this.getName();
 		}
 
 		public String getFeruchemyRegistryName()
 		{
-			return "feruchemical_" + this.getName();
+			return "feru_" + this.getName();
 		}
 
 		public boolean hasAttribute()
