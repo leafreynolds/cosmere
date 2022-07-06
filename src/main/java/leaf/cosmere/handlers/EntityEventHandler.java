@@ -15,6 +15,7 @@ import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.registry.TagsRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.core.Direction;
@@ -25,7 +26,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.Ravager;
@@ -195,31 +195,22 @@ public class EntityEventHandler
 		final Player player = event.getPlayer();
 		ItemStack itemInHand = player.getItemInHand(event.getHand());
 
-		final Item[] allowedItems = {Items.IRON_NUGGET, Items.GOLD_NUGGET/*,Items.COPPER_NUGGET*/};
+		final Item[] allowedItems = {Items.IRON_NUGGET, Items.GOLD_NUGGET};
 
 		final Item handItem = itemInHand.getItem();
 
 		if (!itemInHand.isEmpty() && Arrays.asList(allowedItems).contains(handItem))
 		{
-			Metals.MetalType metalType = null;
-
-			if (handItem == Items.IRON_NUGGET)
+			for (Metals.MetalType metalType : Metals.MetalType.values())
 			{
-				metalType = Metals.MetalType.IRON;
+				if (itemInHand.is(TagsRegistry.Items.METAL_NUGGET_TAGS.get(metalType)))
+				{
+					player.startUsingItem(event.getHand());
+					MetalNuggetItem.consumeNugget(player, metalType, itemInHand);
+					break;
+				}
 			}
-			else if (handItem == Items.GOLD_NUGGET)
-			{
-				metalType = Metals.MetalType.GOLD;
-			}
-            /*else if (handItem == Items.COPPER_NUGGET)//todo if copper ever has nuggets
-            {
-                metalType = Metals.MetalType.COPPER;
-            }*/
-			player.startUsingItem(event.getHand());
-
-			MetalNuggetItem.consumeNugget(player, metalType, itemInHand);
 		}
-
 	}
 
 

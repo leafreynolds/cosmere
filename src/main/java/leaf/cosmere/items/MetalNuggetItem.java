@@ -12,36 +12,48 @@ import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.Level;
 
 public class MetalNuggetItem extends MetalItem
 {
+	public static final DamageSource EAT_METAL = (new DamageSource("eat_metal")).bypassArmor().bypassMagic();
+
+
 	public MetalNuggetItem(Metals.MetalType metalType)
 	{
 		super(metalType);
 	}
 
 	@Override
-	public int getUseDuration(ItemStack stack)
+	public boolean isEdible()
 	{
-		//be annoying enough that people prefer metal vials
-		return 64;
+		return true;
 	}
 
 	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
 	{
-		ItemStack itemstack = playerIn.getItemInHand(handIn);
-		playerIn.startUsingItem(handIn);
+		return ItemUtils.startUsingInstantly(worldIn, playerIn, handIn);
+	}
 
-		//todo convert to shavings
+	@Override
+	public int getUseDuration(ItemStack stack)
+	{
+		//be annoying enough that people prefer metal vials
+		return 16;
+	}
 
-		consumeNugget(playerIn, getMetalType(), itemstack);
-
-		return InteractionResultHolder.consume(itemstack);
+	@Override
+	public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity)
+	{
+		consumeNugget(pLivingEntity, this.getMetalType(), pStack);
+		pLivingEntity.hurt(EAT_METAL,1);
+		return pStack;
 	}
 
 	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, ItemStack itemstack)
