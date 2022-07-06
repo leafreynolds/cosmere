@@ -1,4 +1,4 @@
-The Cosmere Project - For 1.16 Minecraft
+The Cosmere Project - For 1.18.2 Minecraft
 
 1.18.2-B50/1.19-B51
 
