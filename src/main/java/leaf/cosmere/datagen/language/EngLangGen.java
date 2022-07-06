@@ -239,11 +239,13 @@ public class EngLangGen extends LanguageProvider
 
 		//Commands
 		add(POWER_INVALID, "Invalid power");
+		add(POWER_CLEAR_SUCCESS, "Cleared powers on player: %s");
 		add(POWER_SET_SUCCESS, "Successfully set power to: %s");
 		add(POWER_SET_FAIL, "Failed to update power");
 		add(POWER_MODE_SET, "Mode set to: %s");
 		add(POWER_ACTIVE, "Power now active: %s");
 		add(POWER_INACTIVE, "Power now inactive: %s");
+		add(POWER_STRENGTH, "Base Strength: %s \nTotal Strength: %s");
 
 		add(POWERS_FOUND, "Powers found for: %s \n");
 		add(Constants.Strings.SET_EYE_HEIGHT_SUCCESS, "Set eye height to %s");

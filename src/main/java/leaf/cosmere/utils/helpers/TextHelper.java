@@ -13,24 +13,26 @@ import java.util.UUID;
 
 public class TextHelper
 {
-	public static MutableComponent getPlayerTextObject(ServerLevel world, UUID id)
+	public static BaseComponent getPlayerTextObject(ServerLevel world, UUID id)
 	{
 		return getPlayerTextObject(world.getServer(), id);
 	}
 
-	public static MutableComponent getPlayerTextObject(MinecraftServer server, UUID id)
+	public static BaseComponent getPlayerTextObject(MinecraftServer server, UUID id)
 	{
 		String playerName = PlayerHelper.getPlayerName(id, server);
 		return createTextComponentWithTip(playerName, id.toString());
 	}
 
-	public static MutableComponent createTextComponentWithTip(String text, String tooltipText)
+	public static BaseComponent createTextComponentWithTip(String text, String tooltipText)
 	{
 		//Always surround tool tip items with brackets
-		MutableComponent textComponent = Component.literal("[" + text + "]");
-		textComponent.withStyle(style -> style.applyFormat(ChatFormatting.GREEN)//color tool tip items green
-				.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(tooltipText)))
-				.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tooltipText)));
+		BaseComponent textComponent = new TextComponent("[" + text + "]");
+		textComponent.withStyle(style ->
+		{
+			return style.withColor(ChatFormatting.GREEN)//color tool tip items green
+					.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(tooltipText))).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, tooltipText));
+		});
 		return textComponent;
 	}
 
@@ -40,18 +42,18 @@ public class TextHelper
 		translation.withStyle(style ->
 		{
 			return style.withColor(ChatFormatting.GREEN)//color tool tip items green
-					.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description));
+					.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, description)).withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, description.getString()));
 		});
 		return translation;
 	}
 
-	public static MutableComponent createTranslatedText(String s, Object... a)
+	public static BaseComponent createTranslatedText(String s, Object... a)
 	{
-		return Component.translatable(s, a);
+		return new TranslatableComponent(s, a);
 	}
 
-	public static MutableComponent createText(Object s)
+	public static BaseComponent createText(Object s)
 	{
-		return Component.literal(s.toString());
+		return new TextComponent(s.toString());
 	}
 }

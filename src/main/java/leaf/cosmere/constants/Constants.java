@@ -97,6 +97,7 @@ public class Constants
 
 		public static final String POWER_INVALID = "argument.cosmere.power.invalid";
 		public static final String POWER_SET_SUCCESS = "command.cosmere.power.set.success";
+		public static final String POWER_CLEAR_SUCCESS = "command.cosmere.power.clear.success";
 		public static final String POWER_SET_FAIL = "command.cosmere.power.set.fail";
 		public static final String POWER_MODE_SET = "power.cosmere.mode.set";
 		public static final String POWER_ACTIVE = "power.cosmere.toggle.active";
@@ -104,6 +105,7 @@ public class Constants
 
 
 		public static final String POWERS_FOUND = "command.cosmere.power.found";
+		public static final String POWER_STRENGTH = "command.cosmere.power.strength";
 		public static final String SET_EYE_HEIGHT_SUCCESS = "command.cosmere.eyeheight.set.success";
 
 
