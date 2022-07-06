@@ -1,8 +1,22 @@
 The Cosmere Project - For 1.16 Minecraft
 
+B50
+
+Atium spikes prefer stealing atium powers
+Fix consuming lerasium/lerasatium via vial not granting powers.
+Fix feru-nicrosil preventing the player from storing identity. 
+Fixed crash related to consuming nuggets directly
+Fix being able to spam nuggets directly, rather than consuming via vial.
+Creative menu has vials filled with the 16 metals
+Menu listed ingested metals in correct order
+Check powers can be used on self w/o admin perm
+Mousing over results from commands can list base and total strength of powers.
+Added summon_metalborn cheat command
+
+
 B49
 
-F-Atium - increase/decrease health, speed, damage, knockback etc based on tap amount. (needs testing)
+F-Atium - increase/decrease health, speed, damage, knockback etc. based on tap amount. (needs testing)
 Zinc feruchemy multiplies current xp gain rate, rather than adds to it.
 Cleaned up attribute system, fixes bug where allomancy boost affect was changing size attribute directly
 Stop nicrosil disabling itself during feruchemical storage.
