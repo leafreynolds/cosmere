@@ -19,6 +19,7 @@ import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.client.ClientHelper;
 import leaf.cosmere.constants.Manifestations;
+import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyBase;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
@@ -372,16 +373,18 @@ public class SpiritwebMenu extends Screen
 		int leftSideX = 10;
 		final int[] y = {(int) middle_y / 2};
 
-		spiritweb.METALS_INGESTED.forEach((key, value) ->
+		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
+			int value = spiritweb.METALS_INGESTED.get(metalType);
+
 			if (value > 0)
 			{
 				//todo localisation check
-				final String text = key.getName() + ": " + value;
+				final String text = metalType.getName() + ": " + value;
 				font.drawShadow(matrixStack, text, leftSideX, y[0], 0xffffffff);
 				y[0] += 10;
 			}
-		});
+		}
 
 		if (selectedManifestation == null)
 		{
