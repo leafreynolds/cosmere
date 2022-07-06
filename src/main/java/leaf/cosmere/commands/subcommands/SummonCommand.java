@@ -9,36 +9,17 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.commands.arguments.ManifestationsArgumentType;
-import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.RegistryObject;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SummonCommand extends ModCommand
 {

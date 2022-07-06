@@ -27,7 +27,6 @@ public class CosmereCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal(Cosmere.MODID)
-				//.then(TestCommand.register(dispatcher))
 				.then(EyeCommand.register(dispatcher))
 				.then(ManifestationCommand.register(dispatcher))
 				.then(SummonCommand.register(dispatcher))
