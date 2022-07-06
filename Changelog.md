@@ -1,6 +1,6 @@
 The Cosmere Project - For 1.16 Minecraft
 
-B50
+1.18.2-B50/1.19-B51
 
 Atium spikes prefer stealing atium powers
 Fix consuming lerasium/lerasatium via vial not granting powers.
