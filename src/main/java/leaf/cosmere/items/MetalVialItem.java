@@ -105,20 +105,20 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving)
 	{
+		if (worldIn.isClientSide)
+			return stack;
+
 		Player playerentity = entityLiving instanceof Player ? (Player) entityLiving : null;
 
-		if (!worldIn.isClientSide)
-		{
-			//for each metal in the vial
-			Map<Integer, Integer> metalsInVial = getStoredMetalsMap(getContainedMetalsTag(stack));
+		//for each metal in the vial
+		Map<Integer, Integer> metalsInVial = getStoredMetalsMap(getContainedMetalsTag(stack));
 
-			metalsInVial.entrySet().forEach(metalInfo ->
-			{
-				// MetalName x Value
-				Metals.MetalType metalType = Metals.MetalType.valueOf(metalInfo.getKey()).get();
-				MetalNuggetItem.consumeNugget(entityLiving, metalType, null);
-			});
-		}
+		metalsInVial.entrySet().forEach(metalInfo ->
+		{
+			// MetalName x Value
+			Metals.MetalType metalType = Metals.MetalType.valueOf(metalInfo.getKey()).get();
+			MetalNuggetItem.consumeNugget(entityLiving, metalType, null, metalInfo.getValue());
+		});
 
 
 		if (playerentity == null || !playerentity.getAbilities().instabuild)

@@ -51,12 +51,12 @@ public class MetalNuggetItem extends MetalItem
 	@Override
 	public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity)
 	{
-		consumeNugget(pLivingEntity, this.getMetalType(), pStack);
+		consumeNugget(pLivingEntity, this.getMetalType(), pStack, 1);
 		pLivingEntity.hurt(EAT_METAL,1);
 		return pStack;
 	}
 
-	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, ItemStack itemstack)
+	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, ItemStack itemstack, int amount)
 	{
 		if (metalType == null || livingEntity.level.isClientSide)
 		{
@@ -104,7 +104,7 @@ public class MetalNuggetItem extends MetalItem
 			{
 				//add to metal stored
 				Integer metalIngested = spiritweb.METALS_INGESTED.get(metalType);
-				spiritweb.METALS_INGESTED.put(metalType, metalIngested + metalType.getAllomancyBurnTimeSeconds());
+				spiritweb.METALS_INGESTED.put(metalType, metalIngested + (metalType.getAllomancyBurnTimeSeconds() * amount));
 			}
 
 			spiritweb.syncToClients(null);

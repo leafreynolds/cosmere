@@ -189,7 +189,7 @@ public class EntityEventHandler
         }*/
 	}
 
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
 	{
 		final Player player = event.getPlayer();
@@ -206,12 +206,12 @@ public class EntityEventHandler
 				if (itemInHand.is(TagsRegistry.Items.METAL_NUGGET_TAGS.get(metalType)))
 				{
 					player.startUsingItem(event.getHand());
-					MetalNuggetItem.consumeNugget(player, metalType, itemInHand);
+					MetalNuggetItem.consumeNugget(player, metalType, itemInHand, 1);
 					break;
 				}
 			}
 		}
-	}
+	}*/
 
 
 	@SubscribeEvent
@@ -235,7 +235,7 @@ public class EntityEventHandler
 					return;
 				}
 
-				MetalNuggetItem.consumeNugget(target, metalType, stack);
+				MetalNuggetItem.consumeNugget(target, metalType, stack, 1);
 			}
 			else if (stack.getItem() instanceof HemalurgicSpikeItem spike)
 			{
