@@ -79,7 +79,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 								{
 									if (ingestedMetalAmount > 27)
 									{
-										data.adjustIngestedMetal(metalType, 27, true);
+										data.adjustIngestedMetal(metalType, ingestedMetalAmount / 2, true);
 									}
 									else
 									{
