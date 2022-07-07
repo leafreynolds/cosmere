@@ -12,7 +12,9 @@ import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.items.curio.NecklaceMetalmindItem;
 import leaf.cosmere.items.curio.RingMetalmindItem;
 import leaf.cosmere.registry.*;
+import leaf.cosmere.utils.helpers.TimeHelper;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -602,49 +604,69 @@ public class Metals
 
 		public int getAllomancyBurnTimeSeconds()
 		{
-			//todo decide burn rate of metals
 			//todo convert to config item
-			int burnTimeInSeconds = 99;
+			double burnTimeInSeconds;
 			switch (this)
 			{
 				case IRON:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(5);
 					break;
 				case STEEL:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(5);
 					break;
 				case TIN:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(15);
 					break;
 				case PEWTER:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(2.5);
 					break;
 				case ZINC:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(5);
 					break;
 				case BRASS:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(5);
 					break;
 				case COPPER:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(10);
 					break;
 				case BRONZE:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(7.5);
 					break;
 				case ALUMINUM:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(0.5);//aluminum has special rules that makes it burn out fast
 					break;
 				case DURALUMIN:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(0.5);//duralumin has special rules that makes it burn out fast
 					break;
 				case CHROMIUM:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(0.5);//chromium has special rules that makes it burn out fast
 					break;
 				case NICROSIL:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(0.5);//nicrosil has special rules that makes it burn out fast
 					break;
 				case CADMIUM:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(7.5);
 					break;
 				case BENDALLOY:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(2.5);
 					break;
 				case GOLD:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(2.5);
 					break;
 				case ELECTRUM:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(2.5);
 					break;
 				case ATIUM:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(0.5f);
 					break;
 				case MALATIUM:
+					burnTimeInSeconds = TimeHelper.MinutesToSeconds(1);
+					break;
+				default:
+					burnTimeInSeconds = 99;
 					break;
 			}
-			return burnTimeInSeconds;
+			return Mth.floor(burnTimeInSeconds);
 		}
 
 		public double getEntityAbilityStrength(LivingEntity killedEntity, Player playerEntity)
