@@ -84,7 +84,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	public int getUseDuration(ItemStack stack)
 	{
 		//same drink time as normal potions
-		return 32;
+		return 16;
 	}
 
 
