@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[40,)" #mandatory
+loaderVersion="[41,)" #mandatory
 license="https://en.wikipedia.org/wiki/MIT_License"
 [[mods]] #mandatory
 modId="cosmere" #mandatory
@@ -13,22 +13,22 @@ Bringing The Cosmere to Minecraft!
 '''
 
 [[dependencies.cosmere]]
-  modId="forge"
-  mandatory=true
-  versionRange="[40.1.0,)"
-  ordering="NONE"
-  side="BOTH"
+modId="forge"
+mandatory=true
+versionRange="[41.0.64,)"
+ordering="NONE"
+side="BOTH"
 
 [[dependencies.cosmere]]
-  modId="minecraft"
-  mandatory=true
-  versionRange="[1.18.2,)"
-  ordering="NONE"
-  side="BOTH"
+modId="minecraft"
+mandatory=true
+versionRange="[1.19,1.20)"
+ordering="NONE"
+side="BOTH"
 
 [[dependencies.cosmere]]
-  modId="curios"
-  mandatory=true
-  versionRange="[1.18.2-5.0.7.0,)"
-  ordering="NONE"
-  side="BOTH"
+modId="curios"
+mandatory=true
+versionRange="[1.19-5.1.0.3,)"
+ordering="NONE"
+side="BOTH"
