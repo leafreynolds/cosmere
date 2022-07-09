@@ -1,5 +1,14 @@
 The Cosmere Project - For 1.18.2 Minecraft
 
+B52
+
+Halve vial drinking time
+Fix bug where amount of metal from vial is not calculated properly
+Fix allomancy boost effect not draining metals properly.
+Burn time is now based on metal type, so some burn longer than others.
+Burn time stat tracking per metal.
+
+
 1.18.2-B50/1.19-B51
 
 Atium spikes prefer stealing atium powers
