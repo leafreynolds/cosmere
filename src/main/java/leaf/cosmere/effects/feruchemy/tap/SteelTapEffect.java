@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.FOVModifierEvent;
+import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 
@@ -39,10 +39,10 @@ public class SteelTapEffect extends FeruchemyEffectBase
 
 	}
 
-	public void onFOVUpdate(FOVModifierEvent event)
+	public void onFOVUpdate(ComputeFovModifierEvent event)
 	{
 		//todo remember to make this better? clamp isn't necessarily the best way to stop it going over the top
-		event.setNewFov(Mth.clamp(event.getNewFov(), 0.8f, 1.2f));
+		event.setNewFovModifier(Mth.clamp(event.getNewFovModifier(), 0.8f, 1.2f));
 	}
 
 	@Override

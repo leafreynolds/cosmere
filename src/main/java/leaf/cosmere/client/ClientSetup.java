@@ -24,7 +24,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RenderNameplateEvent;
+import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
@@ -74,7 +74,7 @@ public class ClientSetup
 		LogHelper.info("Client setup complete!");
 	}
 
-	public static void onRenderNameplateEvent(RenderNameplateEvent event)
+	public static void onRenderNameplateEvent(RenderNameTagEvent event)
 	{
 		if (!(event.getEntity() instanceof LivingEntity livingEntity))
 		{

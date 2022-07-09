@@ -25,7 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
+import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -34,7 +34,7 @@ public class ClientEvents
 {
 
 	@SubscribeEvent
-	public static void handleScroll(MouseScrollEvent event)
+	public static void handleScroll(MouseScrollingEvent event)
 	{
 		final LocalPlayer player = Minecraft.getInstance().player;
 		final ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
@@ -55,7 +55,7 @@ public class ClientEvents
 	}
 
 	@SubscribeEvent
-	public static void onKey(InputEvent.KeyInputEvent event)
+	public static void onKey(InputEvent.Key event)
 	{
 		final LocalPlayer player = Minecraft.getInstance().player;
 
@@ -113,13 +113,13 @@ public class ClientEvents
 		});
 	}
 
-	private static boolean isKeyPressed(InputEvent.KeyInputEvent event, KeyMapping keyBinding)
+	private static boolean isKeyPressed(InputEvent.Key event, KeyMapping keyBinding)
 	{
 		return event.getKey() == keyBinding.getKey().getValue() && keyBinding.consumeClick();
 	}
 
 	@SubscribeEvent
-	public static void onRenderGUI(final RenderGameOverlayEvent.Post event)
+	public static void onRenderGUI(final RenderGuiOverlayEvent.Post event)
 	{
 		renderSpiritwebHUD(event);
 	}
@@ -155,23 +155,16 @@ public class ClientEvents
 
 	}
 
-	public static void renderSpiritwebHUD(final RenderGameOverlayEvent.Post event)
+	public static void renderSpiritwebHUD(final RenderGuiOverlayEvent.Post event)
 	{
-		final RenderGameOverlayEvent.ElementType type = event.getType();
-		if (type != RenderGameOverlayEvent.ElementType.ALL)
-		{
-			return;
-		}
-
 		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(cap ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
 
-			//if (!SpiritwebMenu.instance.isVisible())
-			{
-				spiritweb.renderSelectedHUD(event.getPoseStack());
-			}
+			//normal hud stuff
+			spiritweb.renderSelectedHUD(event.getPoseStack());
 
+			//actual menu stuff
 			SpiritwebMenu.instance.postRender(event, spiritweb);
 		});
 

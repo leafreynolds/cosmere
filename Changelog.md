@@ -1,8 +1,18 @@
 The Cosmere Project - For 1.19 Minecraft
 
+B52 - BREAKING CHANGES!
+
+Updated forge version to `1.19-41.0.64`, which has many breaking changes across 
+Shortened power registry names (would break former saves, if forge was not already breaking those)
+
+
 B52
 
-BREAKING CHANGE: shortened power registry names, which will break saves by powers not loading correctly on players, mobs and hemalurgic spikes. 
+Halve vial drinking time
+Fix bug where amount of metal from vial is not calculated properly
+Fix allomancy boost effect not draining metals properly.
+Burn time is now based on metal type, so some burn longer than others.
+Burn time stat tracking per metal.
 Ported 1.18 patchouli changes to 1.19
 
 

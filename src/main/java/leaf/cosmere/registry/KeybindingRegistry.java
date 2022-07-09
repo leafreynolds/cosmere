@@ -9,7 +9,7 @@ import leaf.cosmere.Cosmere;
 import leaf.cosmere.client.settings.KeyConflictContext;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,7 +19,6 @@ import org.lwjgl.glfw.GLFW;
 
 import static leaf.cosmere.constants.Constants.Strings.*;
 
-@SuppressWarnings("deprecation")
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Cosmere.MODID, bus = Bus.MOD)
 public class KeybindingRegistry
 {
@@ -36,19 +35,19 @@ public class KeybindingRegistry
 	public static KeyMapping ALLOMANCY_PULL;
 
 	@SubscribeEvent
-	public static void register(FMLClientSetupEvent event)
+	public static void register(RegisterKeyMappingsEvent event)
 	{
-		ClientRegistry.registerKeyBinding(MANIFESTATION_MENU = new KeyMapping(KEY_MANIFESTATION_MENU, GLFW.GLFW_KEY_G, KEYS_CATEGORY));
-		ClientRegistry.registerKeyBinding(MANIFESTATIONS_DEACTIVATE = new KeyMapping(KEY_DEACTIVATE_ALL_POWERS, GLFW.GLFW_KEY_C, KEYS_CATEGORY));
+		event.register((MANIFESTATION_MENU = new KeyMapping(KEY_MANIFESTATION_MENU, GLFW.GLFW_KEY_G, KEYS_CATEGORY)));
+		event.register(MANIFESTATIONS_DEACTIVATE = new KeyMapping(KEY_DEACTIVATE_ALL_POWERS, GLFW.GLFW_KEY_C, KEYS_CATEGORY));
 
-		ClientRegistry.registerKeyBinding(MANIFESTATION_NEXT = new KeyMapping(KEY_MANIFESTATION_NEXT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
-		ClientRegistry.registerKeyBinding(MANIFESTATION_PREVIOUS = createKeybinding(KEY_MANIFESTATION_PREVIOUS, KeyModifier.SHIFT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
+		event.register(MANIFESTATION_NEXT = new KeyMapping(KEY_MANIFESTATION_NEXT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
+		event.register(MANIFESTATION_PREVIOUS = createKeybinding(KEY_MANIFESTATION_PREVIOUS, KeyModifier.SHIFT, GLFW.GLFW_KEY_V, KEYS_CATEGORY));
 
-		ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_INCREASE = new KeyMapping(KEY_MANIFESTATION_MODE_INCREASE, GLFW.GLFW_KEY_KP_ADD, KEYS_CATEGORY));
-		ClientRegistry.registerKeyBinding(MANIFESTATION_MODE_DECREASE = new KeyMapping(KEY_MANIFESTATION_MODE_DECREASE, GLFW.GLFW_KEY_KP_SUBTRACT, KEYS_CATEGORY));
+		event.register(MANIFESTATION_MODE_INCREASE = new KeyMapping(KEY_MANIFESTATION_MODE_INCREASE, GLFW.GLFW_KEY_KP_ADD, KEYS_CATEGORY));
+		event.register(MANIFESTATION_MODE_DECREASE = new KeyMapping(KEY_MANIFESTATION_MODE_DECREASE, GLFW.GLFW_KEY_KP_SUBTRACT, KEYS_CATEGORY));
 
-		ClientRegistry.registerKeyBinding(ALLOMANCY_PUSH = new KeyMapping(KEY_ALLOMANCY_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
-		ClientRegistry.registerKeyBinding(ALLOMANCY_PULL = new KeyMapping(KEY_ALLOMANCY_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
+		event.register(ALLOMANCY_PUSH = new KeyMapping(KEY_ALLOMANCY_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
+		event.register(ALLOMANCY_PULL = new KeyMapping(KEY_ALLOMANCY_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
 	}
 
 	public static KeyMapping createKeybinding(String description, KeyModifier keyModifier, int keyCode, String category)

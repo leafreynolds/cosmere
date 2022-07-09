@@ -37,7 +37,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
@@ -94,7 +94,7 @@ public class SpiritwebMenu extends Screen
 	}
 
 
-	public void postRender(RenderGameOverlayEvent.Post event, SpiritwebCapability spiritweb)
+	public void postRender(RenderGuiOverlayEvent.Post event, SpiritwebCapability spiritweb)
 	{
 		if (KeybindingRegistry.MANIFESTATION_MENU.consumeClick())
 		{
