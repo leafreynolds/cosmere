@@ -27,7 +27,7 @@ public class LootFunctionRegistry
 		return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Cosmere.MODID, name), new LootItemFunctionType(serializer));
 	}
 
-	public static void Register()
+	public static void register()
 	{
 		//static finals get initialized on class being referenced
 		LogHelper.info("Registering Loot Functions");

@@ -77,7 +77,8 @@ public class Cosmere
 		{
 			CosmereCommand.registerCustomArgumentTypes();
 			EntityRegistry.PrepareEntityAttributes();
-			LootFunctionRegistry.Register();
+			LootFunctionRegistry.register();
+			StatsRegistry.register();
 		});
 
 		DataSerializersRegistry.register();
