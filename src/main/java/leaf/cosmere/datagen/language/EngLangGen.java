@@ -15,6 +15,7 @@ import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.registry.StatsRegistry;
 import leaf.cosmere.utils.helpers.StringHelper;
 import net.minecraft.Util;
 import net.minecraft.data.DataGenerator;
@@ -29,6 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Locale;
 
 import static leaf.cosmere.constants.Constants.Strings.*;
@@ -296,6 +298,12 @@ public class EngLangGen extends LanguageProvider
 		//powers
 		add(CONTAINED_POWERS_FOUND, "Hemalurgic Charge:");
 
+		//stats
+		Arrays.stream(Metals.MetalType.values())
+				.filter(Metals.MetalType::hasAssociatedManifestation).forEach(metalType ->
+				{
+					add("stat.minecraft.time_since_started_burning_" + metalType.getName(), "Time since started burning " + metalType.getName());
+				});
 
 	}
 

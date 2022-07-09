@@ -14,7 +14,11 @@ import leaf.cosmere.manifestation.ManifestationBase;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.KeybindingRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.registry.StatsRegistry;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -57,6 +61,23 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		//1 for burning
 		//2 for flaring
 		return 2;
+	}
+
+	@Override
+	public void onModeChange(ISpiritweb data)
+	{
+		super.onModeChange(data);
+
+		if (getMode(data) > 0)
+		{
+			//don't reset stats while burning
+			return;
+		}
+
+		if (data.getLiving() instanceof ServerPlayer serverPlayer)
+		{
+			serverPlayer.resetStat(Stats.CUSTOM.get(getBurnTimeStat()));
+		}
 	}
 
 	@Override
@@ -113,6 +134,12 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 		data.adjustIngestedMetal(metalType, mode, isActiveTick);
 
+		if (livingEntity instanceof ServerPlayer serverPlayer)
+		{
+			serverPlayer.awardStat(getBurnTimeStat());
+		}
+
+
 		//if we get to this point, we are in an active burn state.
 		//check for compound.
 		final AManifestation feruchemyManifestation = ManifestationRegistry.FERUCHEMY_POWERS.get(metalType).get();
@@ -137,6 +164,11 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 		}
 
 		applyEffectTick(data);
+	}
+
+	private ResourceLocation getBurnTimeStat()
+	{
+		return StatsRegistry.ALLOMANCY_BURN_TIME.get(this.metalType);
 	}
 
 	protected KeyMapping getKeyBinding()
