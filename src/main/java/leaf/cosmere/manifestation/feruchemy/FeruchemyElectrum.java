@@ -7,7 +7,6 @@ package leaf.cosmere.manifestation.feruchemy;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class FeruchemyElectrum extends FeruchemyBase
@@ -15,13 +14,17 @@ public class FeruchemyElectrum extends FeruchemyBase
 	public FeruchemyElectrum(Metals.MetalType metalType)
 	{
 		super(metalType);
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingHurtEvent);
 	}
 
-	public void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
-		MobEffectInstance tapEffect = event.getEntityLiving().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(getMetalType()).get());
-		MobEffectInstance storeEffect = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(getMetalType()).get());
+		if (event.isCanceled())
+		{
+			return;
+		}
+
+		MobEffectInstance tapEffect = event.getEntityLiving().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ELECTRUM).get());
+		MobEffectInstance storeEffect = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ELECTRUM).get());
 
 		//take less damage when tapping
 		if (tapEffect != null && tapEffect.getDuration() > 0)

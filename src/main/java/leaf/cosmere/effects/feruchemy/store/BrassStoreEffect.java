@@ -6,6 +6,7 @@ package leaf.cosmere.effects.feruchemy.store;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
+import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,18 +19,16 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 	public BrassStoreEffect(Metals.MetalType type, MobEffectCategory effectType)
 	{
 		super(type, effectType);
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingHurtEvent);
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingAttackEvent);
 	}
 
-	public void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
-		if (!event.getSource().isFire())
+		if (!event.getSource().isFire() || event.isCanceled())
 		{
 			return;
 		}
 
-		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(this);
+		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
 		if (effectInstance != null && effectInstance.getDuration() > 0)
 		{
 			final float amount;
@@ -51,14 +50,14 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 	}
 
 
-	public void onLivingAttackEvent(LivingAttackEvent event)
+	public static void onLivingAttackEvent(LivingAttackEvent event)
 	{
-		if (!event.getSource().isFire())
+		if (!event.getSource().isFire() || event.isCanceled())
 		{
 			return;
 		}
 
-		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(this);
+		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
 		if (effectInstance != null && effectInstance.getDuration() > 0)
 		{
 			switch (effectInstance.getAmplifier())

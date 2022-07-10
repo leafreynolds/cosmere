@@ -8,6 +8,7 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.EffectsRegistry;
+import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,7 +25,6 @@ public class AllomancyNicrosil extends AllomancyBase
 	public AllomancyNicrosil(Metals.MetalType metalType)
 	{
 		super(metalType);
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingHurtEvent);
 	}
 
 	//active or not active
@@ -47,8 +47,7 @@ public class AllomancyNicrosil extends AllomancyBase
 	}
 
 	//Enhances Allomantic Burn of Target
-	@SubscribeEvent
-	public void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
 		Entity trueSource = event.getSource().getEntity();
 		if (trueSource instanceof Player)
@@ -59,13 +58,15 @@ public class AllomancyNicrosil extends AllomancyBase
 
 				if (itemInHand.isEmpty())
 				{
+					AllomancyNicrosil alloNicrosil = (AllomancyNicrosil) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.NICROSIL).get();
+
 					//if manifestation is active and has nicrosil metal to burn
-					if (isActive(iSpiritweb))
+					if (alloNicrosil.isActive(iSpiritweb))
 					{
 						//valid set up found.
 						MobEffectInstance newEffect = EffectsHelper.getNewEffect(
 								EffectsRegistry.ALLOMANCY_BOOST.get(),
-								Mth.floor(getStrength(iSpiritweb,false))
+								Mth.floor(alloNicrosil.getStrength(iSpiritweb,false))
 						);
 
 						//apply to the hit entity

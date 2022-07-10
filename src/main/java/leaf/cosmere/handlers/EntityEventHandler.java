@@ -9,11 +9,15 @@ import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.effects.feruchemy.store.BrassStoreEffect;
 import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.manifestation.AManifestation;
+import leaf.cosmere.manifestation.allomancy.AllomancyAtium;
+import leaf.cosmere.manifestation.allomancy.AllomancyNicrosil;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyElectrum;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
@@ -21,6 +25,7 @@ import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -43,7 +48,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -313,4 +320,23 @@ public class EntityEventHandler
 			}
 		}
 	}
+
+	//Attack event happens first
+	@SubscribeEvent
+	public static void onLivingAttackEvent(LivingAttackEvent event)
+	{
+		BrassStoreEffect.onLivingAttackEvent(event);
+		AllomancyAtium.onLivingAttackEvent(event);
+	}
+
+	//then living hurt event
+	@SubscribeEvent
+	public static void onLivingHurtEvent(LivingHurtEvent event)
+	{
+		BrassStoreEffect.onLivingHurtEvent(event);
+		FeruchemyElectrum.onLivingHurtEvent(event);
+		AllomancyNicrosil.onLivingHurtEvent(event);
+	}
+
+
 }

@@ -102,10 +102,10 @@ public class ManifestationRegistry
 	{
 		switch (metalType)
 		{
-			case IRON://todo pull and iron sight
-			case STEEL://todo push and steel sight
+			case IRON:
+			case STEEL:
 				return new AllomancyIronSteel(metalType);
-			case TIN://todo more than just night vision?
+			case TIN:
 				return new AllomancyTin(metalType);
 			case PEWTER://done?
 				return new AllomancyPewter(metalType);
@@ -119,13 +119,13 @@ public class ManifestationRegistry
 				return new AllomancyBronze(metalType);
 			case ALUMINUM:// done?
 				return new AllomancyAluminum(metalType);
-			case DURALUMIN://todo decide how to enhance other metals
+			case DURALUMIN:
 				return new AllomancyDuralumin(metalType);
 			case CHROMIUM://done?
 				return new AllomancyChromium(metalType);
-			case NICROSIL://todo decide how to enhance other metals
+			case NICROSIL:
 				return new AllomancyNicrosil(metalType);
-			case CADMIUM://todo decide how to slow down time
+			case CADMIUM:
 				return new AllomancyCadmium(metalType);
 			case BENDALLOY://done?
 				return new AllomancyBendalloy(metalType);
@@ -133,6 +133,10 @@ public class ManifestationRegistry
 				return new AllomancyGold(metalType);
 			case ELECTRUM://shows your future // todo
 				return new AllomancyElectrum(metalType);
+			case ATIUM://prevents taking damage from others
+				return new AllomancyAtium(metalType);
+			case MALATIUM://shows other's past // todo
+				return new AllomancyMalatium(metalType);
 		}
 
 		//others aren't valid allomancy manifestations... for now.

@@ -50,8 +50,7 @@ public class EntityMixin
 		{
 			final AllomancyBase bronzeAllomancyManifestation = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
 			//if the player does not have bronze, early exit
-			if (!playerSpiritweb.hasManifestation(bronzeAllomancyManifestation)
-					|| !playerSpiritweb.canTickManifestation(bronzeAllomancyManifestation))
+			if (!bronzeAllomancyManifestation.isActive(playerSpiritweb))
 			{
 				return;
 			}
