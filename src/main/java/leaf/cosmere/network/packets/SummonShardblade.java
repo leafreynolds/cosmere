@@ -6,6 +6,7 @@ package leaf.cosmere.network.packets;
 
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.items.ShardbladeItem;
+import leaf.cosmere.utils.helpers.CompoundNBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -38,7 +39,7 @@ public class SummonShardblade
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
 		{
 			var nbt = cap.getNBT();
-			var doot = nbt.getCompound("shardblades");
+			var doot = CompoundNBTHelper.getOrCreate(nbt, "shardblades");
 
 			final LivingEntity livingEntity = cap.getLiving();
 			final ItemStack itemInHand = livingEntity.getItemInHand(InteractionHand.MAIN_HAND);
