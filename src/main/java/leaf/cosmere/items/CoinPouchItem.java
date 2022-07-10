@@ -148,7 +148,9 @@ public class CoinPouchItem extends ProjectileWeaponItem
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt)
 	{
-		return new CoinPouchInventory();
+		final CoinPouchInventory coinPouchInventory = new CoinPouchInventory();
+		//coinPouchInventory.deserializeNBT(oldCapNbt); // todo check if this breaks things?
+		return coinPouchInventory;
 	}
 
 

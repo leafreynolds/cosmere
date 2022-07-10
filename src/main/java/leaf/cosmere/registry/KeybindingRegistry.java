@@ -34,6 +34,8 @@ public class KeybindingRegistry
 	public static KeyMapping ALLOMANCY_PUSH;
 	public static KeyMapping ALLOMANCY_PULL;
 
+	public static KeyMapping SHARDBLADE;
+
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
@@ -48,6 +50,7 @@ public class KeybindingRegistry
 
 		event.register(ALLOMANCY_PUSH = new KeyMapping(KEY_ALLOMANCY_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
 		event.register(ALLOMANCY_PULL = new KeyMapping(KEY_ALLOMANCY_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
+		event.register(SHARDBLADE = new KeyMapping(KEY_SHARDBLADE, GLFW.GLFW_KEY_X, KEYS_CATEGORY));
 	}
 
 	public static KeyMapping createKeybinding(String description, KeyModifier keyModifier, int keyCode, String category)
