@@ -245,4 +245,16 @@ public final class CompoundNBTHelper
 			nbt.put(newName, tag);
 		}
 	}
+
+	public static CompoundTag getOrCreate(CompoundTag nbt, String key)
+	{
+		if (verifyExistance(nbt,key))
+		{
+			return nbt.getCompound(key);
+		}
+		final CompoundTag pValue = new CompoundTag();
+		nbt.put(key, pValue);
+		return pValue;
+
+	}
 }

@@ -369,31 +369,7 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 		}
 
-		stormlightStored += oldWeb.stormlightStored;
-		biochromaticBreathStored += oldWeb.biochromaticBreathStored;
-		for (Metals.MetalType metalType : oldWeb.METALS_INGESTED.keySet())
-		{
-			METALS_INGESTED.put(metalType, oldWeb.METALS_INGESTED.get(metalType));
-		}
-
-		selectedManifestation = oldWeb.manifestation();
-
-		eyeHeight = oldWeb.getEyeHeight();
-
-		//todo client config? not sure that's possible on a server side function
-		for (AManifestation manifestation : oldWeb.getAvailableManifestations())
-		{
-			int mode = oldWeb.getMode(manifestation);
-			if (mode != 0)
-			{
-				setMode(manifestation, mode);
-			}
-		}
-
-		if (oldWeb.hasBeenInitialized)
-		{
-			setHasBeenInitialized();
-		}
+		deserializeNBT(oldWeb.nbt.copy());
 	}
 
 	@Override

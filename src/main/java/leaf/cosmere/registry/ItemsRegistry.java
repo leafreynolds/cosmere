@@ -37,11 +37,13 @@ public class ItemsRegistry
 	public static final RegistryObject<Item> GUIDE = ITEMS.register("guide", () -> createItem(new GuideItem()));
 	//public static final RegistryObject<Item> INVESTITURE = ITEMS.register("investiture", () -> createItem(new BaseItem()));
 
+	public static final ShardbladeItemTier SHARDBLADE_ITEM_TIER = new ShardbladeItemTier(10);
+
 	//public static final RegistryObject<Item> MIST_CLOAK = ITEMS.register("mist_cloak", () -> createItem(new ElytraItem(PropTypes.Items.ONE.get())));
 	//public static final RegistryObject<Item> OBSIDIAN_DAGGER = ITEMS.register("obsidian_dagger", () -> createItem(new SwordItem(ItemTier.DIAMOND, 2, -1.4F, PropTypes.Items.ONE.get().rarity(Rarity.UNCOMMON))));
-	public static final RegistryObject<Item> NIGHT_BLOOD = ITEMS.register("night_blood", () -> createItem(new ShardbladeItem(Tiers.NETHERITE, 24, -1.4F, PropTypes.Items.SHARDBLADE.get())));
-	public static final RegistryObject<Item> TEST_BLADE = ITEMS.register("test_blade", () -> createItem(new ShardbladeItem(Tiers.NETHERITE, 10, -1.4F, PropTypes.Items.SHARDBLADE.get())));
-	public static final RegistryObject<Item> MASTER_SWORD = ITEMS.register("master_sword", () -> createItem(new ShardbladeItem(Tiers.NETHERITE, 10, -1.4F, PropTypes.Items.SHARDBLADE.get())));
+	public static final RegistryObject<Item> NIGHT_BLOOD = ITEMS.register("night_blood", () -> createItem(new ShardbladeItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get())));
+	public static final RegistryObject<Item> TEST_BLADE = ITEMS.register("test_blade", () -> createItem(new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get())));
+	public static final RegistryObject<Item> MASTER_SWORD = ITEMS.register("master_sword", () -> createItem(new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get())));
 
 
 	public static final RegistryObject<Item> BANDS_OF_MOURNING = ITEMS.register("bands_of_mourning", () -> createItem(new BandsOfMourningItem()));
@@ -187,7 +189,7 @@ public class ItemsRegistry
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getAssociatedOrder() + "_honorblade",
-									() -> createItem(new HonorbladeItem(type, Tiers.NETHERITE, 24, -1.4F, PropTypes.Items.SHARDBLADE.get()))
+									() -> createItem(new HonorbladeItem(type, SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get()))
 							)));
 
 
