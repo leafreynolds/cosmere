@@ -73,4 +73,6 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	int getEyeHeight();
 	void setEyeHeight(int eyeHeight);
+
+	CompoundTag getNBT();
 }

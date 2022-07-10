@@ -34,7 +34,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -62,16 +61,14 @@ import java.util.stream.Collectors;
 public class SpiritwebCapability implements ISpiritweb
 {
 	//region Render stuff.
-	final static ItemStack positiveActiveStack = new ItemStack(Blocks.SOUL_TORCH);
-	final static ItemStack negativeActiveStack = new ItemStack(Blocks.REDSTONE_TORCH);
-	final static ItemStack inactiveStack = new ItemStack(Items.STICK);
+	final static ItemStack positiveActiveStack = Items.SOUL_TORCH.getDefaultInstance();
+	final static ItemStack negativeActiveStack = Items.REDSTONE_TORCH.getDefaultInstance();
+	final static ItemStack inactiveStack = Items.STICK.getDefaultInstance();
 	//endregion
 
 
 	//Injection
-	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<ISpiritweb>()
-	{
-	});
+	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() { });
 
 	//detect if capability has been set up yet
 	private boolean didSetup = false;
@@ -102,6 +99,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 	public List<BlockPos> pullBlocks = new ArrayList<>(4);
 	public List<Integer> pullEntities = new ArrayList<>(4);
+	private CompoundTag nbt;
 
 
 	public SpiritwebCapability(LivingEntity ent)
@@ -120,7 +118,10 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public CompoundTag serializeNBT()
 	{
-		CompoundTag nbt = new CompoundTag();
+		if (this.nbt == null)
+		{
+			this.nbt = new CompoundTag();
+		}
 
 		nbt.putBoolean("assigned_powers", hasBeenInitialized);
 		nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
@@ -155,6 +156,8 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void deserializeNBT(CompoundTag nbt)
 	{
+		this.nbt = nbt;
+
 		hasBeenInitialized = nbt.getBoolean("assigned_powers");
 		CompoundTag modeNBT = nbt.getCompound("manifestation_modes");
 
@@ -200,6 +203,12 @@ public class SpiritwebCapability implements ISpiritweb
 				METALS_INGESTED.put(metalType, 0);
 			}
 		}
+	}
+
+	@Override
+	public CompoundTag getNBT()
+	{
+		return nbt;
 	}
 
 	@Override
@@ -266,21 +275,28 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 		else//if client
 		{
-			AManifestation iron = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
-			final boolean ironActive = iron.isActive(this);
-
-			if (ironActive)
+			//Iron allomancy
 			{
-				((AllomancyIronSteel) iron).applyEffectTick(this);
+				AllomancyIronSteel iron = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
+				final boolean ironActive = iron.isActive(this);
+
+				if (ironActive)
+				{
+					iron.applyEffectTick(this);
+				}
 			}
 
-			AManifestation steel = ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
-			final boolean steelActive = steel.isActive(this);
-
-			if (steelActive)
+			//steel allomancy
 			{
-				((AllomancyIronSteel) steel).applyEffectTick(this);
+				AllomancyIronSteel steel = (AllomancyIronSteel) ManifestationRegistry.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
+				final boolean steelActive = steel.isActive(this);
+
+				if (steelActive)
+				{
+					steel.applyEffectTick(this);
+				}
 			}
+
 		}
 	}
 

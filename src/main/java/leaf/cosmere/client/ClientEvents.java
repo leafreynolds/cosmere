@@ -13,6 +13,7 @@ import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.network.packets.ChangeSelectedManifestationMessage;
 import leaf.cosmere.network.packets.DeactivateManifestationsMessage;
+import leaf.cosmere.network.packets.SummonShardblade;
 import leaf.cosmere.registry.KeybindingRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -109,6 +110,12 @@ public class ClientEvents
 					dir = 1;
 				}
 				Network.sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), dir * (modeIncreasePressed ? 1 : -1)));
+			}
+
+
+			if (isKeyPressed(event,KeybindingRegistry.SHARDBLADE))
+			{
+				Network.sendToServer(new SummonShardblade());
 			}
 		});
 	}
