@@ -172,9 +172,10 @@ public class FeruchemyNicrosil extends FeruchemyBase
 			//even if it's granted from hemalurgy/temporary
 			//update the nbt.
 			//this will add/remove powers based on what the user currently has.
-			if (data.hasManifestation(manifestation))
+			final double baseStrength = manifestation.getStrength(data, true);
+			if (baseStrength > 0)
 			{
-				nbt.putDouble(manifestation.getName(), manifestation.getStrength(data, false));
+				nbt.putDouble(manifestation.getName(), baseStrength);
 			}
 			//remove if not available
 			else if (nbt.contains(manifestation.getName()))
