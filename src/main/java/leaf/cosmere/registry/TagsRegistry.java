@@ -52,7 +52,7 @@ public class TagsRegistry
 				Arrays.stream(Metals.MetalType.values())
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("dust/" + type.getName())));
+								type -> forgeItemTag("dusts/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_NUGGET_TAGS =
 				Arrays.stream(Metals.MetalType.values())

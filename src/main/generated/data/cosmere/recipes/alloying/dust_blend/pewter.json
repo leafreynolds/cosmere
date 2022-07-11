@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:dust/tin"
+      "tag": "forge:dusts/tin"
     },
     {
-      "tag": "forge:dust/tin"
+      "tag": "forge:dusts/tin"
     },
     {
-      "tag": "forge:dust/tin"
+      "tag": "forge:dusts/tin"
     },
     {
-      "tag": "forge:dust/tin"
+      "tag": "forge:dusts/tin"
     },
     {
-      "tag": "forge:dust/lead"
+      "tag": "forge:dusts/lead"
     }
   ],
   "result": {
