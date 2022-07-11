@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:dust/zinc"
+      "tag": "forge:dusts/zinc"
     },
     {
-      "tag": "forge:dust/copper"
+      "tag": "forge:dusts/copper"
     }
   ],
   "result": {

@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:dust/aluminum"
+      "tag": "forge:dusts/aluminum"
     },
     {
-      "tag": "forge:dust/aluminum"
+      "tag": "forge:dusts/aluminum"
     },
     {
-      "tag": "forge:dust/aluminum"
+      "tag": "forge:dusts/aluminum"
     },
     {
-      "tag": "forge:dust/aluminum"
+      "tag": "forge:dusts/aluminum"
     },
     {
-      "tag": "forge:dust/copper"
+      "tag": "forge:dusts/copper"
     }
   ],
   "result": {
