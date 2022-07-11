@@ -318,7 +318,7 @@ public class SpiritwebCapability implements ISpiritweb
 		int ingestedMetal = getIngestedMetal(metalType);
 		boolean addingToInternalMetals = amountToAdjust < 0;
 
-		if (addingToInternalMetals || ingestedMetal > amountToAdjust)
+		if (addingToInternalMetals || ingestedMetal >= amountToAdjust)
 		{
 			if (doAdjust)
 			{
