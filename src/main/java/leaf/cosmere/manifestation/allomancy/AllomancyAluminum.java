@@ -35,6 +35,7 @@ public class AllomancyAluminum extends AllomancyBase
 					drainedCount++;
 				}
 			}
+
 			if (drainedCount <= 0)
 			{
 				drainMetal(data, Metals.MetalType.ALUMINUM);
