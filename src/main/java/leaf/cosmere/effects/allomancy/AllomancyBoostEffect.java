@@ -4,6 +4,7 @@
 
 package leaf.cosmere.effects.allomancy;
 
+import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Manifestations;
 import leaf.cosmere.constants.Metals;
@@ -53,47 +54,45 @@ public class AllomancyBoostEffect extends MobEffectBase
 	public void applyEffectTick(LivingEntity livingEntity, int amplifier)
 	{
 		//todo boost metal drain balancing
-		//4 times a second?
-		boolean isActiveTick = livingEntity.tickCount % 5 == 0;
 
-		if (isActiveTick)
+		if (isActiveTick(livingEntity))
 		{
-			//todo change the allomancy boost effect to be the one that drains the metals.
-			//just run the duralumin effect on the other entity
 			SpiritwebCapability.get(livingEntity).ifPresent(data ->
+			{
+				for (Metals.MetalType metalType : Metals.MetalType.values())
+				{
+					if (!metalType.hasAssociatedManifestation())
+					{
+						continue;
+					}
+
+					int ingestedMetalAmount = data.getIngestedMetal(metalType);
+
+					//if metal exists
+					if (ingestedMetalAmount > 0)
 					{
 						//drain metals that are actively being burned
-						for (Metals.MetalType metalType : Metals.MetalType.values())
+						if (data.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID())))
 						{
-							if (!metalType.hasAssociatedManifestation())
-							{
-								continue;
-							}
-
-							//if metal is active
-							if (data.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID())))
-							{
-								int ingestedMetalAmount = data.getIngestedMetal(metalType);
-
-								if (ingestedMetalAmount > 0)
-								{
-									if (ingestedMetalAmount > 27)
-									{
-										data.adjustIngestedMetal(metalType, ingestedMetalAmount / 2, true);
-									}
-									else
-									{
-										data.adjustIngestedMetal(metalType, ingestedMetalAmount, true);
-									}
-								}
-							}
+							drainMetal(data, metalType);
 						}
-
 					}
-			);
+				}
+			});
+		}
+	}
 
+	private boolean drainMetal(ISpiritweb data, Metals.MetalType metalType)
+	{
+		int ingestedMetalAmount = data.getIngestedMetal(metalType);
 
+		if (ingestedMetalAmount > 0)
+		{
+			data.adjustIngestedMetal(metalType,
+					ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount, true);
+			return true;
 		}
 
+		return false;
 	}
 }
