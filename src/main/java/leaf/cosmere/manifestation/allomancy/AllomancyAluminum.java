@@ -18,22 +18,46 @@ public class AllomancyAluminum extends AllomancyBase
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		//passive active ability, if any
+		if (data.getLiving().tickCount % 20 == 0)
 		{
+			int drainedCount = 0;
+
 			//drain all metals
 			for (Metals.MetalType metalType : Metals.MetalType.values())
 			{
-				int ingestedMetalAmount = data.getIngestedMetal(metalType);
-				if (ingestedMetalAmount > 5)
+				if (metalType == Metals.MetalType.ALUMINUM)
 				{
-					data.adjustIngestedMetal(metalType, ingestedMetalAmount / 2, true);
+					continue;
 				}
-				else
+
+				if (drainMetal(data, metalType))
 				{
-					data.adjustIngestedMetal(metalType, ingestedMetalAmount, true);
+					drainedCount++;
 				}
 			}
+			if (drainedCount <= 0)
+			{
+				drainMetal(data, Metals.MetalType.ALUMINUM);
+			}
 
+			data.syncToClients(null);
 		}
+	}
+
+	private boolean drainMetal(ISpiritweb data, Metals.MetalType metalType)
+	{
+		int ingestedMetalAmount = data.getIngestedMetal(metalType);
+
+		if (ingestedMetalAmount > 0)
+		{
+			data.adjustIngestedMetal(
+					metalType,
+					ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount,
+					true);
+			return true;
+		}
+
+		return false;
 	}
 
 
