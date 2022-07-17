@@ -7,6 +7,7 @@ package leaf.cosmere.handlers;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.cap.entity.SpiritwebCapability;
+import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.store.BrassStoreEffect;
@@ -18,8 +19,8 @@ import leaf.cosmere.manifestation.allomancy.AllomancyAtium;
 import leaf.cosmere.manifestation.allomancy.AllomancyNicrosil;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyElectrum;
+import leaf.cosmere.manifestation.surgebinding.SurgeProgression;
 import leaf.cosmere.registry.ManifestationRegistry;
-import leaf.cosmere.registry.TagsRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.core.Direction;
@@ -39,9 +40,7 @@ import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -58,7 +57,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 
 import static leaf.cosmere.utils.helpers.EntityHelper.giveEntityStartingManifestation;
 
@@ -186,14 +184,8 @@ public class EntityEventHandler
 		{
 			event.setCanceled(true);
 		}
-		//seriously, get item three times is stupid, I know it.
-		//but entity item, itemstack and then the actual item is needed.
-/*      else if (event.getItem().getItem().getItem() == ItemsRegistry.INVESTITURE.get())
-        {
-            event.getItem().getItem().shrink(1);
 
-            ItemChargeHelper.dispatchCharge(event.getPlayer(), 1000, true);
-        }*/
+		//stormlight
 	}
 
 	/*@SubscribeEvent
@@ -230,77 +222,83 @@ public class EntityEventHandler
 		}
 
 		ItemStack stack = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
-
-		SpiritwebCapability.get(target).ifPresent(cap ->
+		if (!stack.isEmpty())
 		{
-			if (stack.getItem() instanceof MetalNuggetItem beadItem)
+			interactEntityWithItem(event, target, stack);
+		}
+		else
+		{
+			//hand empty, check surge?
+			SurgeProgression.onEntityInteract(event);
+		}
+	}
+
+	private static void interactEntityWithItem(PlayerInteractEvent.EntityInteract event, LivingEntity target, ItemStack stack)
+	{
+		if (stack.getItem() instanceof MetalNuggetItem beadItem)
+		{
+			Metals.MetalType metalType = beadItem.getMetalType();
+
+			if (metalType != Metals.MetalType.LERASATIUM && metalType != Metals.MetalType.LERASIUM)
 			{
-				Metals.MetalType metalType = beadItem.getMetalType();
-
-				if (metalType != Metals.MetalType.LERASATIUM && metalType != Metals.MetalType.LERASIUM)
-				{
-					return;
-				}
-
-				MetalNuggetItem.consumeNugget(target, metalType, stack, 1);
+				return;
 			}
-			else if (stack.getItem() instanceof HemalurgicSpikeItem spike)
+
+			MetalNuggetItem.consumeNugget(target, metalType, stack, 1);
+		}
+		else if (stack.getItem() instanceof HemalurgicSpikeItem spike)
+		{
+			//https://www.theoryland.com/intvmain.php?i=977#43
+			if (!(event.getTarget() instanceof Cat cat))
 			{
-				//https://www.theoryland.com/intvmain.php?i=977#43
-				if (!(event.getTarget() instanceof Cat cat))
+				return;
+			}
+
+			//only apply spike if it has a power
+			//no accidentally losing spikes
+			if (!spike.hemalurgicIdentityExists(stack))
+			{
+				return;
+			}
+
+
+			//todo random list of catquisitor names
+			target.setCustomName(TextHelper.createTranslatedText("Catquisitor"));
+
+			boolean spikeApplied = false;
+
+			try
+			{
+				for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 				{
-					return;
-				}
-
-				//only apply spike if it has a power
-				//no accidentally losing spikes
-				if (!spike.hemalurgicIdentityExists(stack))
-				{
-					return;
-				}
-
-
-				//todo random list of catquisitor names
-				target.setCustomName(TextHelper.createTranslatedText("Catquisitor"));
-
-				boolean spikeApplied = false;
-
-				try
-				{
-					for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
+					final double hemalurgicStrength = spike.getHemalurgicStrength(stack, manifestation);
+					if (hemalurgicStrength > 0)
 					{
-						final double hemalurgicStrength = spike.getHemalurgicStrength(stack, manifestation);
-						if (hemalurgicStrength > 0)
+						final RegistryObject<Attribute> regAttribute = manifestation.getAttribute();
+						if (regAttribute == null || !regAttribute.isPresent())
 						{
-							final RegistryObject<Attribute> regAttribute = manifestation.getAttribute();
-							if (regAttribute == null || !regAttribute.isPresent())
-							{
-								continue;
-							}
-							spikeApplied = true;
+							continue;
+						}
+						spikeApplied = true;
 
-							final AttributeMap catAttributes = cat.getAttributes();
-							final AttributeInstance instance = catAttributes.getInstance(regAttribute.get());
+						final AttributeMap catAttributes = cat.getAttributes();
+						final AttributeInstance instance = catAttributes.getInstance(regAttribute.get());
 
-							if (instance != null)
-							{
-								instance.setBaseValue(hemalurgicStrength);
-							}
+						if (instance != null)
+						{
+							instance.setBaseValue(hemalurgicStrength);
 						}
 					}
 				}
-				catch (Exception e)
-				{
-
-				}
-
-				if (spikeApplied && !event.getPlayer().isCreative())
-				{
-					stack.shrink(1);
-				}
 			}
+			catch (Exception ignored){	}
 
-		});
+			if (spikeApplied && !event.getPlayer().isCreative())
+			{
+				stack.shrink(1);
+			}
+		}
+
 	}
 
 
@@ -308,7 +306,7 @@ public class EntityEventHandler
 	public static void changeSize(EntityEvent.Size event)
 	{
 		final Entity entity = event.getEntity();
-		if (entity != null && entity instanceof LivingEntity livingEntity)
+		if (entity instanceof LivingEntity livingEntity)
 		{
 			float scale = FeruchemyAtium.getScale(livingEntity);
 
