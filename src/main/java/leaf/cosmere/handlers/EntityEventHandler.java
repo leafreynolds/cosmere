@@ -87,10 +87,10 @@ public class EntityEventHandler
 				return;
 			}
 
-			//if player or villager
+			//players always start with powers
 			if (eventEntity instanceof Player)
 			{
-				//from random powertype
+				//todo from random powertype?
 				{
 					//give random power
 					giveEntityStartingManifestation(livingEntity, spiritweb);
