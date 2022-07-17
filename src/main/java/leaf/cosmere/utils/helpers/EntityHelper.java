@@ -77,6 +77,11 @@ public class EntityHelper
 						|| (!isAllomancy && manifestationType == Manifestations.ManifestationTypes.FERUCHEMY))
 				{
 					spiritwebCapability.giveManifestation(manifestation, 8);
+
+					if (spiritwebCapability.getLiving() instanceof  Player player)
+					{
+						PlayerHelper.GiveStartingItems(player, manifestation);
+					}
 				}
 			}
 
@@ -103,13 +108,10 @@ public class EntityHelper
 				spiritwebCapability.giveManifestation(allomancyPower, 9);
 				spiritwebCapability.giveManifestation(feruchemyPower, 9);
 
-				if (!isPlayerEntity)
+				if (spiritwebCapability.getLiving() instanceof  Player player)
 				{
-/*//todo decide if we even want named entities
-					//todo translations
-					//todo grant random name
-					entity.setCustomName(TextHelper.createTranslatedText("Twinborn"));
-*/
+					PlayerHelper.GiveStartingItems(player, allomancyPower);
+					PlayerHelper.GiveStartingItems(player, feruchemyPower);
 				}
 			}
 			else
@@ -120,20 +122,10 @@ public class EntityHelper
 						: feruchemyPower;
 
 				spiritwebCapability.giveManifestation(manifestation, 10);
-				//todo translations
-				//todo grant random name
-				//entity.setCustomName(powerType.getManifestation(powerID).translation());
 
-				if (!isPlayerEntity)
+				if (spiritwebCapability.getLiving() instanceof  Player player)
 				{
-/*//todo decide if we even want named entities
-					//todo translations
-					//todo grant random name
-					final String s = StringHelper.fixCapitalisation(isAllomancy
-					                 ? allomancyMetal.getMistingName()
-					                 : feruchemyMetal.getFerringName());
-					entity.setCustomName(TextHelper.createTranslatedText(
-							s));*/
+					PlayerHelper.GiveStartingItems(player, manifestation);
 				}
 			}
 		}

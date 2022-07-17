@@ -7,6 +7,7 @@ package leaf.cosmere.items;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.CompoundNBTHelper;
+import leaf.cosmere.utils.helpers.PlayerHelper;
 import leaf.cosmere.utils.helpers.TextHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -36,9 +36,9 @@ import static leaf.cosmere.constants.Constants.Strings.CONTAINED_METALS;
 
 public class MetalVialItem extends BaseItem implements IHasMetalType
 {
-	private final String metal_ids = "metalIDs";
-	private final String metal_amounts = "metalAmounts";
-	private final int MAX_METALS_COUNT = 16;
+	private static final String metal_ids = "metalIDs";
+	private static final String metal_amounts = "metalAmounts";
+	private static final int MAX_METALS_COUNT = 16;
 
 	@Override
 	public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems)
@@ -56,17 +56,17 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 		}
 	}
 
-	private CompoundTag getContainedMetalsTag(ItemStack stack)
+	private static CompoundTag getContainedMetalsTag(ItemStack stack)
 	{
 		return stack.getOrCreateTagElement("metals_contained");
 	}
 
-	public boolean isFull(ItemStack stack)
+	public static boolean isFull(ItemStack stack)
 	{
 		return containedMetalCount(stack) >= getMaxFillCount(stack);
 	}
 
-	public int getMaxFillCount(ItemStack stack)
+	public static int getMaxFillCount(ItemStack stack)
 	{
 		final CompoundTag stackTags = stack.getOrCreateTag();
 		final String max_count = "max_count";
@@ -137,11 +137,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 					ItemStack splitStack = stack.split(1);
 					emptyMetals(splitStack);
 
-					if (!playerentity.addItem(splitStack) && !playerentity.level.isClientSide)
-					{
-						ItemEntity entity = new ItemEntity(playerentity.getCommandSenderWorld(), playerentity.position().x(), playerentity.position().y(), playerentity.position().z(), splitStack);
-						playerentity.getCommandSenderWorld().addFreshEntity(entity);
-					}
+					PlayerHelper.addItem(playerentity, splitStack);
 				}
 				else
 				{
@@ -153,7 +149,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 		return stack;
 	}
 
-	public int containedMetalCount(ItemStack stack)
+	public static int containedMetalCount(ItemStack stack)
 	{
 		int count = 0;
 		int[] metalAmounts = CompoundNBTHelper.getIntArray(getContainedMetalsTag(stack), metal_amounts);
@@ -164,8 +160,13 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 		return count;
 	}
 
-	public void addMetals(ItemStack stack, int metalID, int count)
+	public static void addMetals(ItemStack stack, int metalID, int count)
 	{
+		if (!(stack.getItem() instanceof MetalVialItem))
+		{
+			return;
+		}
+
 		//todo refactor this? seems so convoluted compared to what I'm used to
 
 		//get and add
@@ -186,7 +187,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 		CompoundNBTHelper.setIntArray(nbt, metal_amounts, values);
 	}
 
-	private Map<Integer, Integer> getStoredMetalsMap(CompoundTag nbt)
+	private static Map<Integer, Integer> getStoredMetalsMap(CompoundTag nbt)
 	{
 		int[] metalIDs = CompoundNBTHelper.getIntArray(nbt, metal_ids);
 		int[] metalAmounts = CompoundNBTHelper.getIntArray(nbt, metal_amounts);
@@ -249,7 +250,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 		return Metals.MetalType.IRON;
 	}
 
-	public void addMetals(ItemStack newMetalVialStack, ItemStack oldMetalVialStack)
+	public static void addMetals(ItemStack newMetalVialStack, ItemStack oldMetalVialStack)
 	{
 		Map<Integer, Integer> sorted = getStoredMetalsMap(getContainedMetalsTag(oldMetalVialStack));
 		for (Integer metalID : sorted.keySet())
