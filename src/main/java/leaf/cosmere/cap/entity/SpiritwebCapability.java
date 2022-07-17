@@ -553,7 +553,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 
 	@Override
-	public void giveManifestation(AManifestation manifestation, int i)
+	public void giveManifestation(AManifestation manifestation, int baseValue)
 	{
 		final RegistryObject<Attribute> attributeRegistryObject = manifestation.getAttribute();
 		if (attributeRegistryObject == null || !attributeRegistryObject.isPresent())
@@ -565,7 +565,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		if (manifestationAttribute != null)
 		{
-			manifestationAttribute.setBaseValue(10);
+			manifestationAttribute.setBaseValue(baseValue);
 		}
 
 		hasBeenInitialized = true;
