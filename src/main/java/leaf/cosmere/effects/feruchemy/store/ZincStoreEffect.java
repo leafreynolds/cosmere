@@ -19,8 +19,8 @@ public class ZincStoreEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				AttributesRegistry.XP_RATE_ATTRIBUTE.get(),
 				"9d50ed05-06f4-4bc2-83bc-d870f93696bf",
-				-0.1D,
-				AttributeModifier.Operation.ADDITION);
+				-0.15D,
+				AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}
 
 }
