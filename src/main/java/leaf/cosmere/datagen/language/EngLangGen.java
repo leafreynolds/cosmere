@@ -210,7 +210,7 @@ public class EngLangGen extends LanguageProvider
 		add("tooltip.cosmere.attribute.copper", "%s%s%% XP");
 		add("tooltip.cosmere.attribute.zinc", "%s%s%% Emotional Fortitude");
 		add("tooltip.cosmere.attribute.duralumin", "");//todo hemalurgic connection/identity
-		add("tooltip.cosmere.attribute.chromium", "%s%s%% Luck");
+		add("tooltip.cosmere.attribute.chromium", "%s%s Luck");
 		add("tooltip.cosmere.attribute.nicrosil", "");//todo hemalurgic investiture
 
 		//ItemGroups/Tabs

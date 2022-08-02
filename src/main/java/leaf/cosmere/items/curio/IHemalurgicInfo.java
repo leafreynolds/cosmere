@@ -436,7 +436,7 @@ public interface IHemalurgicInfo
 	}
 
 
-	default void addInvestitureInformation(ItemStack stack, HemalurgicSpikeItem hemalurgicSpikeItem, List<Component> tooltip)
+	default void addInvestitureInformation(ItemStack stack, List<Component> tooltip)
 	{
 		if (!hemalurgicIdentityExists(stack))
 		{
@@ -463,9 +463,17 @@ public interface IHemalurgicInfo
 					{
 						double hemalurgicStrength = getHemalurgicStrength(stack, metalType);
 
-						if (metalType != Metals.MetalType.IRON)
+						switch (metalType)
 						{
-							hemalurgicStrength = hemalurgicStrength * 100;
+							case IRON, CHROMIUM ->
+							{
+								// don't display as percentage
+							}
+							default ->
+							{
+								//but everything else does
+								hemalurgicStrength = hemalurgicStrength * 100;
+							}
 						}
 						double roundOff = (double) Math.round(hemalurgicStrength * 100) / 100;
 

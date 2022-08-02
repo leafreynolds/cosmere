@@ -243,7 +243,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 		//stolen identities listed?
 
 		//extra investiture powers added
-		addInvestitureInformation(stack, this, tooltip);
+		addInvestitureInformation(stack, tooltip);
 
 		//etc?
 
