@@ -293,6 +293,18 @@ public interface IHemalurgicInfo
 			{
 				case IRON:
 					attribute = Attributes.ATTACK_DAMAGE;
+
+					final RegistryObject<Attribute> xpGainRate = AttributesRegistry.COSMERE_ATTRIBUTES.get(Metals.MetalType.COPPER.getName());
+					if (xpGainRate != null && xpGainRate.isPresent())
+					{
+						attributeModifiers.put(
+								xpGainRate.get(),
+								new AttributeModifier(
+										hemalurgicIdentity,
+										"Kolossification",
+										-0.15,
+										AttributeModifier.Operation.ADDITION));
+					}
 					break;
 				case CHROMIUM:
 					attribute = Attributes.LUCK;
