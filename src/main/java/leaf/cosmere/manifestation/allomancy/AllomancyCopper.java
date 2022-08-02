@@ -24,6 +24,39 @@ public class AllomancyCopper extends AllomancyBase
 	}
 
 	@Override
+	public int modeMax(ISpiritweb data)
+	{
+		//1 for affecting self
+		//2 for cloud effect
+		//3 for flaring
+
+		return 3;
+	}
+
+	@Override
+	public int getRange(ISpiritweb data)
+	{
+		if (!isActive(data))
+		{
+			return 0;
+		}
+
+		//get allomantic strength
+		double allomanticStrength = getStrength(data, false);
+
+		//mode minus one, because copper has special mode stuff.
+		final int mode = getMode(data);
+		int i = switch (mode)
+				{
+					case 1, 2 -> 1;
+					case 3 -> 2;
+					default -> 0;
+				};
+
+		return Mth.floor(allomanticStrength * i);
+	}
+
+	@Override
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		LivingEntity livingEntity = data.getLiving();
@@ -39,12 +72,22 @@ public class AllomancyCopper extends AllomancyBase
 					)
 			);
 
-			List<LivingEntity> entitiesToApplyEffect = getLivingEntitiesInRange(livingEntity, getRange(data), true);
-
-			for (LivingEntity e : entitiesToApplyEffect)
+			switch (getMode(data))
 			{
-				e.addEffect(newEffect);
+				case 1:
+					data.getLiving().addEffect(newEffect);
+					break;
+				case 2:
+				case 3:
+					List<LivingEntity> entitiesToApplyEffect = getLivingEntitiesInRange(livingEntity, getRange(data), true);
+
+					for (LivingEntity e : entitiesToApplyEffect)
+					{
+						e.addEffect(newEffect);
+					}
+					break;
 			}
+
 		}
 	}
 }
