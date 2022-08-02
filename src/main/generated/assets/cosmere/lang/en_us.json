@@ -691,7 +691,7 @@
   "stat.minecraft.time_since_started_burning_steel": "Time since started burning steel",
   "stat.minecraft.time_since_started_burning_tin": "Time since started burning tin",
   "stat.minecraft.time_since_started_burning_zinc": "Time since started burning zinc",
-  "tooltip.cosmere.attribute.chromium": "%s%s%% Luck",
+  "tooltip.cosmere.attribute.chromium": "%s%s Luck",
   "tooltip.cosmere.attribute.copper": "%s%s%% XP",
   "tooltip.cosmere.attribute.duralumin": "",
   "tooltip.cosmere.attribute.iron": "%s%s Attack Damage",
