@@ -81,11 +81,11 @@ public class ItemModelsGen extends ItemModelProvider
 			}
 			else if (item instanceof ShardbladeItem)
 			{
-				if (item instanceof HonorbladeItem honorbladeItem)
+				/*if (item instanceof HonorbladeItem honorbladeItem)
 				{
 					this.getBuilder(path)
 							.parent(new ModelFile.UncheckedModelFile("cosmere:item/test_blade"));
-				}
+				}*/
 
 				continue;
 			}
