@@ -6,6 +6,22 @@ Updated forge version to `1.19-41.0.64`, which has many breaking changes across
 Shortened power registry names (would break former saves, if forge was not already breaking those)
 
 
+B53 - 1.18.2
+
+Some very basic shardblade summon/dismiss. Creative mode only.
+Some partial fixes for f-nicrosil again. No it's not really fixed and isn't really ready for public use.
+A-Aluminum drains all metals and then itself.
+A-Boost effect acts similar to a-aluminum for draining metals.
+Fix for dust tag recipes, I'd written 'dust' instead of 'dusts'
+Fixed starting base values not actually being applied properly. Applies to new players only.
+New players start with a vial full of their allomantic metal and a ring of their feruchemical metal.
+Buffed f-zinc. Was 1.1 per tap/store, now is 1.15.
+Iron spikes reduce xp gain rate.
+Stopped luck spikes displaying as percentage. No more '-300% luck' visuals when it means -3.
+A-Copper can choose to affect self only if they're at Mode1. Mode2 will start copper cloud, mode 3 will flare cloud for range.
+Many new honorblade models, courtesy of Hawktrav
+
+
 B52
 
 Halve vial drinking time
