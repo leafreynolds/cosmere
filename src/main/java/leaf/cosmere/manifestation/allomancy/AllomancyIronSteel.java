@@ -480,7 +480,14 @@ public class AllomancyIronSteel extends AllomancyBase
 	{
 		final String path = test.getPath();
 		//No twisting vines, paintings, crafting tables or silverfish. Lead by itself is also incorrect.
-		boolean misMatch = path.contains("ting") || path.contains("tint") || path.contains("silverfish") || path.equals("lead");
+		//also no pushing on aluminum, ya dang fool
+		boolean misMatch =
+				path.contains("ting")
+						|| path.contains("tint")
+						|| path.contains("silverfish")
+						|| path.contains("aluminum")
+						|| path.equals("lead");
+
 		return !misMatch && Arrays.stream(metalNames).anyMatch(path::contains);
 	}
 }
