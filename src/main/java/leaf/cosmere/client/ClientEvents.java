@@ -182,7 +182,7 @@ public class ClientEvents
 	{
 		try
 		{
-			float scale = FeruchemyAtium.getScale(event.getEntityLiving());
+			float scale = FeruchemyAtium.getScale(event.getEntity());
 			if (scale > 1.01 || scale < 0.99)
 			{
 				event.getPoseStack().pushPose();
@@ -204,7 +204,7 @@ public class ClientEvents
 	{
 		try
 		{
-			float scale = FeruchemyAtium.getScale(event.getEntityLiving());
+			float scale = FeruchemyAtium.getScale(event.getEntity());
 			if (scale > 1.01 || scale < 0.99)
 			{
 				event.getPoseStack().popPose();

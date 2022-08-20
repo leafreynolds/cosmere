@@ -54,7 +54,7 @@ public class BrassTapEffect extends FeruchemyEffectBase
 
 			if (effectInstance != null && effectInstance.getDuration() > 0 && effectInstance.getAmplifier() > 3)
 			{
-				event.getEntityLiving().setSecondsOnFire(effectInstance.getAmplifier());
+				event.getEntity().setSecondsOnFire(effectInstance.getAmplifier());
 			}
 		}
 	}

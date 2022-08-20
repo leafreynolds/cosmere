@@ -32,7 +32,7 @@ public class PlayerEventHandler
 		event.getOriginal().revive();
 
 		SpiritwebCapability.get(event.getOriginal()).ifPresent((oldSpiritWeb) ->
-				SpiritwebCapability.get(event.getPlayer()).ifPresent((newSpiritWeb) ->
+				SpiritwebCapability.get(event.getEntity()).ifPresent((newSpiritWeb) ->
 				{
 					//copy across anything from the old player if needed
 					//Metals ingested?
@@ -45,7 +45,7 @@ public class PlayerEventHandler
 	@SubscribeEvent
 	public static void onTrackPlayer(PlayerEvent.StartTracking startTracking)
 	{
-		SpiritwebCapability.get(startTracking.getPlayer()).ifPresent(cap ->
+		SpiritwebCapability.get(startTracking.getEntity()).ifPresent(cap ->
 		{
 			cap.syncToClients(null);
 		});
@@ -81,7 +81,7 @@ public class PlayerEventHandler
 	@SubscribeEvent
 	public void onXPChange(PlayerXpEvent.XpChange event)
 	{
-		boolean isRemote = event.getEntityLiving().level.isClientSide;
+		boolean isRemote = event.getEntity().level.isClientSide;
 		if (isRemote)
 		{
 			return;
@@ -90,7 +90,7 @@ public class PlayerEventHandler
 		RegistryObject<Attribute> xpGainRateAttribute = AttributesRegistry.XP_RATE_ATTRIBUTE;
 		if (xpGainRateAttribute != null && xpGainRateAttribute.isPresent())
 		{
-			AttributeInstance attribute = event.getPlayer().getAttribute(xpGainRateAttribute.get());
+			AttributeInstance attribute = event.getEntity().getAttribute(xpGainRateAttribute.get());
 			if (attribute != null)
 			{
 				event.setAmount((int) (event.getAmount() * attribute.getValue()));

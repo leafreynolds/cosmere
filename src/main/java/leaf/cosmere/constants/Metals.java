@@ -902,7 +902,7 @@ public class Metals
 				case BENDALLOY:
 					return "Stores Energy. A Subsumer Ferring using this can consume large quantities of food and store the calories in the metalmind, in exchange for the ability to forgo eating later.";
 				case ATIUM:
-					return "Not yet implemented.";
+					return "Stores Height. Atium ferrings become smaller during active storage, and can tap it later to be come larger.";
 			}
 
 			return "Unknown...";

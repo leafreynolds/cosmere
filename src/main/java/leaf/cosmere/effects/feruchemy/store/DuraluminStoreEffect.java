@@ -24,7 +24,7 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 
 	public void onLivingVisibilityEvent(LivingEvent.LivingVisibilityEvent event)
 	{
-		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(this);
+		MobEffectInstance effectInstance = event.getEntity().getEffect(this);
 		if (effectInstance != null && effectInstance.getDuration() > 0)
 		{
 			//at max strength and wearing no armor, you could stand a block or two away from a creeper and it wont see you.

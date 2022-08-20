@@ -462,7 +462,7 @@ public class AllomancyIronSteel extends AllomancyBase
 				.stream()
 				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
 				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));
-		ForgeRegistries.ENTITIES.getValues()
+		ForgeRegistries.ENTITY_TYPES.getValues()
 				.stream()
 				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
 				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));

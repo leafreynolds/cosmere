@@ -38,7 +38,7 @@ public class ChromiumStoreEffect extends FeruchemyEffectBase
 			return;
 		}
 
-		boolean isRemote = event.getEntityLiving().level.isClientSide;
+		boolean isRemote = event.getEntity().level.isClientSide;
 		boolean entityNotLiving = !(event.getDamageSource().getEntity() instanceof LivingEntity);
 
 		if (isRemote || entityNotLiving)

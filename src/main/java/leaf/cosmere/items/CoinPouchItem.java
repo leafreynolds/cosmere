@@ -29,8 +29,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +75,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 			if (!player.level.isClientSide && player instanceof ServerPlayer)
 			{
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyr) -> new CoinPouchContainer(windowID, playerInv, coinPouchStack), coinPouchStack.getHoverName());
-				NetworkHooks.openGui((ServerPlayer) player, container, buf -> buf.writeBoolean(interactionHand == InteractionHand.MAIN_HAND));
+				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(interactionHand == InteractionHand.MAIN_HAND));
 			}
 		}
 		else if (player.level.isClientSide && KeybindingRegistry.ALLOMANCY_PUSH.isDown())
@@ -183,10 +183,9 @@ public class CoinPouchItem extends ProjectileWeaponItem
 		}
 	}
 
-	@NotNull
 	private static IItemHandlerModifiable getBagInv(ItemStack coinPouchStack)
 	{
-		return (IItemHandlerModifiable) coinPouchStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		return (IItemHandlerModifiable) coinPouchStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 	}
 
 	public static boolean onPickupItem(ItemEntity entity, Player player)

@@ -193,9 +193,9 @@ public class FeruchemyBronze extends FeruchemyBase
 
 	public void sleepCheck(SleepingLocationCheckEvent event)
 	{
-		if (event.getEntityLiving() instanceof Player)
+		if (event.getEntity() instanceof Player)
 		{
-			SpiritwebCapability.get(event.getEntityLiving()).ifPresent(iSpiritweb ->
+			SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 			{
 				if (isActive(iSpiritweb))
 				{

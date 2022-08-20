@@ -23,8 +23,8 @@ public class FeruchemyElectrum extends FeruchemyBase
 			return;
 		}
 
-		MobEffectInstance tapEffect = event.getEntityLiving().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ELECTRUM).get());
-		MobEffectInstance storeEffect = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ELECTRUM).get());
+		MobEffectInstance tapEffect = event.getEntity().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.ELECTRUM).get());
+		MobEffectInstance storeEffect = event.getEntity().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.ELECTRUM).get());
 
 		//take less damage when tapping
 		if (tapEffect != null && tapEffect.getDuration() > 0)

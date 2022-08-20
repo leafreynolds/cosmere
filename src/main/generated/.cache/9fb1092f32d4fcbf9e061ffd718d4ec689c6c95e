@@ -1,4 +1,4 @@
-// 1.19	2022-07-03T19:21:06.4364502	Recipes
+// 1.19.2	2022-08-21T11:00:28.9744772	Recipes
 77a0eac808078676e15eb82c1b3b7d89dbd6304e data/cosmere/advancements/recipes/cosmere.blocks/aluminum_block.json
 bcde6240066289f4e54c7ec9944611bd118a7530 data/cosmere/advancements/recipes/cosmere.blocks/atium_block.json
 0774becab0613f8e15e06d5af31b8d51b8e0f111 data/cosmere/advancements/recipes/cosmere.blocks/bendalloy_block.json
@@ -234,14 +234,14 @@ bc063cda6e5c5b1e209c27924da93b33374b709a data/cosmere/advancements/recipes/cosme
 34321712e4aec5f1202260d391cafc3ad895eb68 data/cosmere/advancements/recipes/cosmere.spikes/steel_spike.json
 5c4aec6df9b3a19aef8149b16049e36a97472065 data/cosmere/advancements/recipes/cosmere.spikes/tin_spike.json
 355e8dcdc88c10e8c203e60654b7b6c1232ed204 data/cosmere/advancements/recipes/cosmere.spikes/zinc_spike.json
-f416b9f336046498d4d696b3b8633be1c3252a13 data/cosmere/recipes/alloying/dust_blend/bendalloy.json
-e08cc32f629c719df097c9d1da29c9db16eba943 data/cosmere/recipes/alloying/dust_blend/brass.json
-8d3d79b56da70171a07b659cdb212233cb6f6abd data/cosmere/recipes/alloying/dust_blend/bronze.json
-b350bae0dc1c5d0a3e87d30235f3829420c1391c data/cosmere/recipes/alloying/dust_blend/duralumin.json
-0bf466df197d4316c71f80708e952fa66803c191 data/cosmere/recipes/alloying/dust_blend/electrum.json
-737200b65524e75897da93b39a50483b3b9d893e data/cosmere/recipes/alloying/dust_blend/nicrosil.json
-eccd0c8a1638434f221a690cc0606dd960bb95f0 data/cosmere/recipes/alloying/dust_blend/pewter.json
-5ab20e5a758d20fa9a2304456b6630f64ea683cc data/cosmere/recipes/alloying/dust_blend/steel.json
+aed8ba6f40c41ebe5b6097d8f5a7799192e0b26f data/cosmere/recipes/alloying/dust_blend/bendalloy.json
+715767eac5fca634180d66a588530678109554a3 data/cosmere/recipes/alloying/dust_blend/brass.json
+f599d83f0b9abf0c62f26301a19ba4faed5e5f09 data/cosmere/recipes/alloying/dust_blend/bronze.json
+e47f636d4d09f047725405e231bea09ee1b911c1 data/cosmere/recipes/alloying/dust_blend/duralumin.json
+80ed4a47a2ee5217cc4e42fc2eb511042cb8623f data/cosmere/recipes/alloying/dust_blend/electrum.json
+d646ab12491913235775c0fa15f75391f64d9e4b data/cosmere/recipes/alloying/dust_blend/nicrosil.json
+b8a11f33dbcf022cb19669a24549f144f5981b12 data/cosmere/recipes/alloying/dust_blend/pewter.json
+c461cedf3c89e02e27f7d0eadc0e3b9dd1edae22 data/cosmere/recipes/alloying/dust_blend/steel.json
 35e69bb132bc565b63a9fbff6f1bcf6049eae916 data/cosmere/recipes/alloying/ingot_blend/bendalloy.json
 1c6cf7cdd0abdea612ab2013444f7a026cda8c82 data/cosmere/recipes/alloying/ingot_blend/brass.json
 cbf644117a540a81242cfe95b679932277c3ec59 data/cosmere/recipes/alloying/ingot_blend/bronze.json

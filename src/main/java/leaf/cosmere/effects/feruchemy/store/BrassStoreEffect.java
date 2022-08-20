@@ -28,7 +28,7 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 			return;
 		}
 
-		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
+		MobEffectInstance effectInstance = event.getEntity().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
 		if (effectInstance != null && effectInstance.getDuration() > 0)
 		{
 			final float amount;
@@ -57,7 +57,7 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 			return;
 		}
 
-		MobEffectInstance effectInstance = event.getEntityLiving().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
+		MobEffectInstance effectInstance = event.getEntity().getEffect(EffectsRegistry.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
 		if (effectInstance != null && effectInstance.getDuration() > 0)
 		{
 			switch (effectInstance.getAmplifier())
@@ -68,9 +68,9 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 					break;
 				default:
 				case 3:
-					if (event.getEntityLiving().isOnFire())
+					if (event.getEntity().isOnFire())
 					{
-						event.getEntityLiving().clearFire();
+						event.getEntity().clearFire();
 					}
 					event.setCanceled(true);
 			}

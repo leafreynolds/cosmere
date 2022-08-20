@@ -33,7 +33,7 @@ public class ChromiumTapEffect extends FeruchemyEffectBase
 
 	public void onLootingLevelEvent(LootingLevelEvent event)
 	{
-		boolean isRemote = event.getEntityLiving().level.isClientSide;
+		boolean isRemote = event.getEntity().level.isClientSide;
 		boolean entityNotLiving = event.getDamageSource() == null || !(event.getDamageSource().getEntity() instanceof LivingEntity);
 
 		if (isRemote || entityNotLiving)

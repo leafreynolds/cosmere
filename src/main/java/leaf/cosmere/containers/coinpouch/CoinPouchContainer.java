@@ -15,7 +15,7 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ObjectHolder;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public class CoinPouchContainer extends AbstractContainerMenu
 		int i;
 		int j;
 
-		IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 
 		CompoundTag nbt = playerInv.getSelected().getOrCreateTag();
 

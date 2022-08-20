@@ -253,7 +253,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 	@SubscribeEvent
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		if (event.getEntityLiving().level.isClientSide())
+		if (event.getEntity().level.isClientSide())
 			return;
 
 		if (event.getSource().getEntity() instanceof Player playerEntity)
@@ -265,7 +265,7 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 				{
 					//entity was killed by a spike
 					//pass in killed entity for the item to figure out what to do
-					spikeItem.killedEntity(itemstack, playerEntity, event.getEntityLiving());
+					spikeItem.killedEntity(itemstack, playerEntity, event.getEntity());
 				}
 
 			});

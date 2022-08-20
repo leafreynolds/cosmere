@@ -26,7 +26,7 @@ public class SurgeGravitation extends SurgebindingBase
 	{
 		if (event.getSource().getEntity() instanceof Player player)
 		{
-			LogHelper.info(player.getName() + " has attacked a " + event.getEntityLiving().getName());
+			LogHelper.info(player.getName() + " has attacked a " + event.getEntity().getName());
 			//ISurgeState SState = player.getCapability(CosmereCapabilities.SURGE_STATE, null);
 
 			//String activeSurges = SState.getActiveSurgeName();
@@ -35,11 +35,11 @@ public class SurgeGravitation extends SurgebindingBase
 			//windrunners like Szeth could launch enemies into the air to die cruelly by fall damage
 			if (false)//activeSurges.equals(Names.KnightOrders.WINDRUNNER) && itemInHand == null)
 			{
-				event.getEntityLiving().setPos(event.getEntityLiving().getX(), event.getEntityLiving().getY() + 0.1d, event.getEntityLiving().getZ());
-				event.getEntityLiving().setOnGround(false);
-				event.getEntityLiving().setJumping(true);
+				event.getEntity().setPos(event.getEntity().getX(), event.getEntity().getY() + 0.1d, event.getEntity().getZ());
+				event.getEntity().setOnGround(false);
+				event.getEntity().setJumping(true);
 
-				event.getEntityLiving().setDeltaMovement(0, 5, 0);
+				event.getEntity().setDeltaMovement(0, 5, 0);
 
 				//IPlayerStats PS = player.getCapability(CosmereCapabilities.PLAYER_STATS, null);
 				//PS.remSL(100);//remove some stormlight as if it costs to hit

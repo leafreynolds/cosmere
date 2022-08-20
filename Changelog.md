@@ -1,14 +1,15 @@
 The Cosmere Project - For 1.19 Minecraft
 
-B52 - BREAKING CHANGES!
 
-Updated forge version to `1.19-41.0.64`, which has many breaking changes across 
-Shortened power registry names (would break former saves, if forge was not already breaking those)
+B56 - 1.19.2 - More breaking changed~!
+
+Updated to the newer forge version which has breaking changes with earlier versions of 1.19 forge.
 
 
-B54 - 1.18.2
+B55 - 1.18.2
 
 Fix exception error that happens when iron spiking mob that doesn't have an attack attribute.
+
 
 B53 - 1.18.2
 
@@ -25,8 +26,13 @@ Stopped luck spikes displaying as percentage. No more '-300% luck' visuals when 
 A-Copper can choose to affect self only if they're at Mode1. Mode2 will start copper cloud, mode 3 will flare cloud for range.
 Many new honorblade models, courtesy of Hawktrav
 
+B52 - 1.19 - BREAKING CHANGES!
 
-B52
+Updated forge version to `1.19-41.0.64`, which has many breaking changes across
+Shortened power registry names (would break former saves, if forge was not already breaking those)
+
+
+B52 - 1.18.2
 
 Halve vial drinking time
 Fix bug where amount of metal from vial is not calculated properly

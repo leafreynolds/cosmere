@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 public class VillagerProfessionRegistry
 {
-	public static DeferredRegister<VillagerProfession> VILLAGE_PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, Cosmere.MODID);
+	public static DeferredRegister<VillagerProfession> VILLAGE_PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, Cosmere.MODID);
 
 	public static final RegistryObject<VillagerProfession> METAL_TRADER = VILLAGE_PROFESSIONS.register(
 			"metal_trader",

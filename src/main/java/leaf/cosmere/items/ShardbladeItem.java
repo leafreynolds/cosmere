@@ -30,7 +30,7 @@ public class ShardbladeItem extends SwordItem
 	}
 
 	@Override
-	public int getItemEnchantability(ItemStack stack)
+	public int getEnchantmentValue(ItemStack stack)
 	{
 		return 20;
 	}

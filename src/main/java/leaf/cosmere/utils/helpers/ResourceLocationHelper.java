@@ -30,7 +30,7 @@ public class ResourceLocationHelper
 
 	public static ResourceLocation get(Entity entity)
 	{
-		return ForgeRegistries.ENTITIES.getKey(entity.getType());
+		return ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
 	}
 
 
@@ -41,6 +41,6 @@ public class ResourceLocationHelper
 
 	public static ResourceLocation get(EntityType<?> test)
 	{
-		return ForgeRegistries.ENTITIES.getKey(test);
+		return ForgeRegistries.ENTITY_TYPES.getKey(test);
 	}
 }

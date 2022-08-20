@@ -70,7 +70,7 @@ public class AllomancyNicrosil extends AllomancyBase
 						);
 
 						//apply to the hit entity
-						event.getEntityLiving().addEffect(newEffect);
+						event.getEntity().addEffect(newEffect);
 					}
 				}
 			});

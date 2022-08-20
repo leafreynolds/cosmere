@@ -9,7 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class EntityRegistry
 {
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, leaf.cosmere.Cosmere.MODID);
+	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, leaf.cosmere.Cosmere.MODID);
 
 	/*public static final RegistryObject<EntityType<SprenFlameEntity>> SPREN_FIRE =
 			ENTITIES.register(

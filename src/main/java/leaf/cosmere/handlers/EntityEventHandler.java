@@ -46,7 +46,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -65,7 +65,7 @@ public class EntityEventHandler
 {
 
 	@SubscribeEvent
-	public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event)
+	public static void onEntityJoinWorldEvent(EntityJoinLevelEvent event)
 	{
 		Entity eventEntity = event.getEntity();
 
@@ -172,15 +172,15 @@ public class EntityEventHandler
 	}
 
 	@SubscribeEvent
-	public static void onLivingTick(LivingEvent.LivingUpdateEvent event)
+	public static void onLivingTick(LivingEvent.LivingTickEvent event)
 	{
-		SpiritwebCapability.get(event.getEntityLiving()).ifPresent(ISpiritweb::tick);
+		SpiritwebCapability.get(event.getEntity()).ifPresent(ISpiritweb::tick);
 	}
 
 	@SubscribeEvent
 	public static void onEntityItemPickUp(EntityItemPickupEvent event)
 	{
-		if (CoinPouchItem.onPickupItem(event.getItem(), event.getPlayer()))
+		if (CoinPouchItem.onPickupItem(event.getItem(), event.getEntity()))
 		{
 			event.setCanceled(true);
 		}
@@ -221,7 +221,7 @@ public class EntityEventHandler
 			return;
 		}
 
-		ItemStack stack = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
+		ItemStack stack = event.getEntity().getMainHandItem();
 		if (!stack.isEmpty())
 		{
 			interactEntityWithItem(event, target, stack);
@@ -293,7 +293,7 @@ public class EntityEventHandler
 			}
 			catch (Exception ignored){	}
 
-			if (spikeApplied && !event.getPlayer().isCreative())
+			if (spikeApplied && !event.getEntity().isCreative())
 			{
 				stack.shrink(1);
 			}

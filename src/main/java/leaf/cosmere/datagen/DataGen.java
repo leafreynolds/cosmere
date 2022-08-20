@@ -21,10 +21,10 @@ import leaf.cosmere.datagen.loottables.LootTableGen;
 import leaf.cosmere.datagen.patchouli.PatchouliGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Bus.MOD)
 public class DataGen

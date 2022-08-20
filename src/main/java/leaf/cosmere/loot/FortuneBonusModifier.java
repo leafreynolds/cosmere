@@ -4,12 +4,12 @@
 
 package leaf.cosmere.loot;
 
-import com.google.gson.JsonObject;
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.registry.EffectsRegistry;
-import leaf.cosmere.utils.helpers.LogHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,11 +24,12 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 
 //Thank you Curios for the example !
@@ -39,6 +40,14 @@ public class FortuneBonusModifier extends LootModifier
 	protected FortuneBonusModifier(LootItemCondition[] conditions)
 	{
 		super(conditions);
+	}
+
+	public static final Supplier<Codec<FortuneBonusModifier>> CODEC = Suppliers.memoize(() ->
+			RecordCodecBuilder.create(inst -> codecStart(inst).apply(inst, FortuneBonusModifier::new)));
+
+	@Override
+	public Codec<? extends IGlobalLootModifier> codec() {
+		return CODEC.get();
 	}
 
 	@Override
@@ -97,23 +106,5 @@ public class FortuneBonusModifier extends LootModifier
 
 		//otherwise return the context that was passed in. no modification needed.
 		return generatedLoot;
-	}
-
-	public static class Serializer extends GlobalLootModifierSerializer<FortuneBonusModifier>
-	{
-		public Serializer()
-		{
-			LogHelper.info("Fortune bonus modifier setting up");
-		}
-
-		public FortuneBonusModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] conditions)
-		{
-			return new FortuneBonusModifier(conditions);
-		}
-
-		public JsonObject write(FortuneBonusModifier instance)
-		{
-			return this.makeConditions(instance.conditions);
-		}
 	}
 }
