@@ -18,6 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -680,8 +681,11 @@ public class Metals
 					//don't steal modified values, only base value
 					//todo decide how much strength is reasonable to steal and how much goes to waste
 					//currently will try 70%
-					strengthToAdd = killedEntity.getAttributes().getBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
-
+					final AttributeMap attributes = killedEntity.getAttributes();
+					if (attributes.hasAttribute(Attributes.ATTACK_DAMAGE))
+					{
+						strengthToAdd = attributes.getBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
+					}
 					break;
 				case TIN:
 					//Steals senses
