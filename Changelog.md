@@ -1,5 +1,9 @@
 The Cosmere Project - For 1.18.2 Minecraft
 
+B54 - 1.18.2
+
+Fix exception error that happens when iron spiking mob that doesn't have an attack attribute.
+
 B53 - 1.18.2
 
 Some very basic shardblade summon/dismiss. Creative mode only.
