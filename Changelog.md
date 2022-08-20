@@ -6,6 +6,10 @@ Updated forge version to `1.19-41.0.64`, which has many breaking changes across
 Shortened power registry names (would break former saves, if forge was not already breaking those)
 
 
+B54 - 1.18.2
+
+Fix exception error that happens when iron spiking mob that doesn't have an attack attribute.
+
 B53 - 1.18.2
 
 Some very basic shardblade summon/dismiss. Creative mode only.
