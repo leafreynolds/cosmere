@@ -1,6 +1,6 @@
 {
-  "sea_level": 63,
-  "disable_mob_generation": false,
+  "sea_level": 0,
+  "disable_mob_generation": true,
   "aquifers_enabled": true,
   "ore_veins_enabled": true,
   "legacy_random_source": false,
@@ -8,10 +8,7 @@
     "Name": "minecraft:water"
   },
   "default_fluid": {
-    "Name": "minecraft:obsidian",
-    "Properties": {
-      "level": "0"
-    }
+    "Name": "minecraft:obsidian"
   },
   "noise": {
     "min_y": -64,
