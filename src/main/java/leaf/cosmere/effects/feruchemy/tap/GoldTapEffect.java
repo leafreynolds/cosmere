@@ -6,10 +6,12 @@ package leaf.cosmere.effects.feruchemy.tap;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.FeruchemyEffectBase;
+import leaf.cosmere.registry.EffectsRegistry;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 
 public class GoldTapEffect extends FeruchemyEffectBase
@@ -49,6 +51,25 @@ public class GoldTapEffect extends FeruchemyEffectBase
 						activeEffect.showIcon());
 				entityLivingBaseIn.removeEffectNoUpdate(activeEffect.getEffect());
 				entityLivingBaseIn.addEffect(effectInstance);
+			}
+		}
+	}
+
+	public static void onLivingHurtEvent(LivingHurtEvent event)
+	{
+		if (event.isCanceled())
+		{
+			return;
+		}
+
+		if (event.getAmount() > event.getEntity().getHealth())
+		{
+			MobEffectInstance tapEffect = event.getEntity().getEffect(EffectsRegistry.TAPPING_EFFECTS.get(Metals.MetalType.GOLD).get());
+
+			//take less damage when tapping
+			if (tapEffect != null && tapEffect.getDuration() > 0 && tapEffect.getAmplifier() > 6)
+			{
+				event.setAmount(event.getEntity().getHealth() - 1);
 			}
 		}
 	}

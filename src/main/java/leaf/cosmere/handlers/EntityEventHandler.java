@@ -11,6 +11,7 @@ import leaf.cosmere.charge.ItemChargeHelper;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.effects.feruchemy.store.BrassStoreEffect;
+import leaf.cosmere.effects.feruchemy.tap.GoldTapEffect;
 import leaf.cosmere.items.CoinPouchItem;
 import leaf.cosmere.items.MetalNuggetItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
@@ -19,6 +20,7 @@ import leaf.cosmere.manifestation.allomancy.AllomancyAtium;
 import leaf.cosmere.manifestation.allomancy.AllomancyNicrosil;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyElectrum;
+import leaf.cosmere.manifestation.feruchemy.FeruchemyGold;
 import leaf.cosmere.manifestation.surgebinding.SurgeProgression;
 import leaf.cosmere.registry.ManifestationRegistry;
 import leaf.cosmere.utils.helpers.MathHelper;
@@ -323,8 +325,8 @@ public class EntityEventHandler
 	@SubscribeEvent
 	public static void onLivingAttackEvent(LivingAttackEvent event)
 	{
-		BrassStoreEffect.onLivingAttackEvent(event);
 		AllomancyAtium.onLivingAttackEvent(event);
+		BrassStoreEffect.onLivingAttackEvent(event);
 	}
 
 	//then living hurt event
@@ -334,6 +336,7 @@ public class EntityEventHandler
 		BrassStoreEffect.onLivingHurtEvent(event);
 		FeruchemyElectrum.onLivingHurtEvent(event);
 		AllomancyNicrosil.onLivingHurtEvent(event);
+		GoldTapEffect.onLivingHurtEvent(event);
 	}
 
 
