@@ -13,6 +13,17 @@ import net.minecraft.world.level.dimension.DimensionType;
 
 public class DimensionRegistry
 {
+	public static final ResourceKey<Level> ROSHAR_DIM_KEY =
+			ResourceKey.create(
+					Registry.DIMENSION_REGISTRY,
+					ResourceLocationHelper.prefix("roshar_dimension")
+			);
+
+	public static final ResourceKey<DimensionType> ROSHAR_DIM_TYPE =
+			ResourceKey.create(
+					Registry.DIMENSION_TYPE_REGISTRY,
+					ROSHAR_DIM_KEY.registry()
+			);
 	public static final ResourceKey<Level> SHADESMAR_DIM_KEY =
 			ResourceKey.create(
 					Registry.DIMENSION_REGISTRY,

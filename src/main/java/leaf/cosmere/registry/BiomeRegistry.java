@@ -25,10 +25,13 @@ public class BiomeRegistry
 
 	public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Cosmere.MODID);
 
+	public static final ResourceKey<Biome> ROSHAR_BIOME_KEY = ResourceKey.create(Registry.BIOME_REGISTRY, ResourceLocationHelper.prefix("roshar_biome"));
+	public static final RegistryObject<Biome> ROSHAR_BIOME = BIOMES.register("roshar_biome", OverworldBiomes::stonyPeaks);
 
 	public static final ResourceKey<Biome> SHADESMAR_BIOME_KEY = ResourceKey.create(Registry.BIOME_REGISTRY, ResourceLocationHelper.prefix("shadesmar_biome"));
 	public static final RegistryObject<Biome> SHADESMAR_BIOME = BIOMES.register("shadesmar_biome", OverworldBiomes::stonyPeaks);
 
+	public static final ResourceKey<NoiseGeneratorSettings> ROSHAR_NOISE_SETTINGS = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, ResourceLocationHelper.prefix("roshar_biome"));
 	public static final ResourceKey<NoiseGeneratorSettings> SHADESMAR_NOISE_SETTINGS = ResourceKey.create(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, ResourceLocationHelper.prefix("shadesmar_biome"));
 
 
