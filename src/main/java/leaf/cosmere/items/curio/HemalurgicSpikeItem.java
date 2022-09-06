@@ -325,6 +325,9 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 		{
 			final UUID stackWeWantToEquipUUID = getHemalurgicIdentity(stack);
 
+			HemalurgicSpikeItem item = (HemalurgicSpikeItem) stack.getItem();
+			Metals.MetalType stackMetal = item.getMetalType();
+
 			if (stackWeWantToEquipUUID != null)
 			{
 				Predicate<ItemStack> spikePredicate = stackToFind ->
@@ -336,14 +339,20 @@ public class HemalurgicSpikeItem extends MetalmindItem implements IHemalurgicInf
 						return false;
 					}
 
-					final HemalurgicSpikeItem hemalurgicSpikeItem = (HemalurgicSpikeItem) stackToFind.getItem();
+					final HemalurgicSpikeItem foundSpikeItem = (HemalurgicSpikeItem) stackToFind.getItem();
 					final UUID foundSpikeUUID = getHemalurgicIdentity(stackToFind);
-					return hemalurgicSpikeItem.getMetalType() == getMetalType()
+
+					final boolean matchingSpikeIdentity = foundSpikeItem.getMetalType() == getMetalType()
 							&& foundSpikeUUID != null
 							&& foundSpikeUUID.compareTo(stackWeWantToEquipUUID) == 0;
+
+					Metals.MetalType testStackMetal = foundSpikeItem.getMetalType();
+					final boolean onlyOneIronAllowed = stackMetal == Metals.MetalType.IRON && stackMetal == testStackMetal;
+
+					return matchingSpikeIdentity || onlyOneIronAllowed;
 				};
 				final Optional<ImmutableTriple<String, Integer, ItemStack>> curioSpike = CuriosApi.getCuriosHelper().findEquippedCurio(spikePredicate, player);
-				return !curioSpike.isPresent();
+				return curioSpike.isEmpty();
 			}
 		}
 		return true;
