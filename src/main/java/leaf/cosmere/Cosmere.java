@@ -60,6 +60,9 @@ public class Cosmere
 		FeatureRegistry.CONFIGURED_FEATURES.register(modBus);
 		FeatureRegistry.PLACED_FEATURES.register(modBus);
 
+		BiomeRegistry.register();
+		DimensionRegistry.register();
+
 		RecipeRegistry.SPECIAL_RECIPES.register(modBus);
 
 		AdvancementTriggerRegistry.init();
