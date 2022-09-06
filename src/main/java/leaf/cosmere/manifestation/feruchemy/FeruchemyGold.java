@@ -7,11 +7,13 @@ package leaf.cosmere.manifestation.feruchemy;
 import leaf.cosmere.cap.entity.ISpiritweb;
 import leaf.cosmere.charge.MetalmindChargeHelper;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.registry.EffectsRegistry;
 import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class FeruchemyGold extends FeruchemyBase
 {
@@ -43,7 +45,15 @@ public class FeruchemyGold extends FeruchemyBase
 		if (isTapping(data) && livingEntity.getHealth() >= livingEntity.getMaxHealth())
 			return;
 
-		super.tick(data);
+		// we charge them for tapping,
+		// or if storing, we only want to add to their metalmind every so often. Otherwise gold is too strong.
+		final boolean spend = isTapping(data) || livingEntity.tickCount % 100 == 0;
+
+		//if we are simulating, spend == false
+		if (canAfford(data, !spend))//success
+		{
+			applyEffectTick(data);
+		}
 	}
 
 	@Override
