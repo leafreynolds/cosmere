@@ -23,6 +23,7 @@ public class Constants
 
 		public static final ResourceLocation JEI = new ResourceLocation(Cosmere.MODID, "jei");
 		public static final ResourceLocation SPIRITWEB_CAP = new ResourceLocation(Cosmere.MODID, "spiritweb");
+		public static final ResourceLocation ROSHAR_CAP = new ResourceLocation(Cosmere.MODID, "roshar");
 	}
 
 	public static class Suffix

@@ -5,6 +5,7 @@
 package leaf.cosmere;
 
 import leaf.cosmere.cap.entity.ISpiritweb;
+import leaf.cosmere.cap.world.IRoshar;
 import leaf.cosmere.commands.CosmereCommand;
 import leaf.cosmere.compat.curios.CuriosCompat;
 import leaf.cosmere.compat.patchouli.PatchouliCompat;
@@ -92,6 +93,7 @@ public class Cosmere
 	private void onAddCaps(RegisterCapabilitiesEvent capabilitiesEvent)
 	{
 		capabilitiesEvent.register(ISpiritweb.class);
+		capabilitiesEvent.register(IRoshar.class);
 	}
 
 	private void loadComplete(FMLLoadCompleteEvent event)

@@ -117,17 +117,6 @@ public class EntityEventHandler
 
 	}
 
-	public static boolean isValidSpiritWebEntity(Entity entity)
-	{
-		return entity instanceof Player
-				|| entity instanceof AbstractVillager
-				|| entity instanceof ZombieVillager
-				|| (entity instanceof Raider && !(entity instanceof Ravager))
-				|| entity instanceof AbstractPiglin
-				|| entity instanceof Llama
-				|| entity instanceof Cat;
-	}
-
 	public static boolean canStartWithPowers(Entity entity)
 	{
 		return entity instanceof Player
@@ -135,42 +124,6 @@ public class EntityEventHandler
 				|| entity instanceof ZombieVillager
 				|| (entity instanceof Raider && !(entity instanceof Ravager))
 				|| entity instanceof AbstractPiglin;
-	}
-
-	@SubscribeEvent
-	public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event)
-	{
-		Entity eventEntity = event.getObject();
-
-		if (isValidSpiritWebEntity(eventEntity))
-		{
-			LivingEntity livingEntity = (LivingEntity) eventEntity;
-			event.addCapability(Constants.Resources.SPIRITWEB_CAP, new ICapabilitySerializable<CompoundTag>()
-			{
-				final SpiritwebCapability spiritweb = new SpiritwebCapability(livingEntity);
-				final LazyOptional<ISpiritweb> spiritwebInstance = LazyOptional.of(() -> spiritweb);
-
-				@Nonnull
-				@Override
-				public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @javax.annotation.Nullable Direction side)
-				{
-					return cap == SpiritwebCapability.CAPABILITY ? (LazyOptional<T>) spiritwebInstance
-					                                             : LazyOptional.empty();
-				}
-
-				@Override
-				public CompoundTag serializeNBT()
-				{
-					return spiritweb.serializeNBT();
-				}
-
-				@Override
-				public void deserializeNBT(CompoundTag nbt)
-				{
-					spiritweb.deserializeNBT(nbt);
-				}
-			});
-		}
 	}
 
 	@SubscribeEvent
