@@ -28,7 +28,6 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.holdersets.OrHolderSet;
 import org.jetbrains.annotations.NotNull;
@@ -55,20 +54,20 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 		RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.BUILTIN.get());
 		final Path outputFolder = this.dataGenerator.getOutputFolder();
 
+		// Biome Modifiers
+		final HolderSet.Named<Biome> overworld = new HolderSet.Named<>(
+				ops.registry(Registry.BIOME_REGISTRY).get(),
+				BiomeTags.IS_OVERWORLD);
+		final HolderSet.Named<Biome> roshar = new HolderSet.Named<>(
+				ops.registry(Registry.BIOME_REGISTRY).get(),
+				TagsRegistry.Biomes.IS_ROSHAR);
+
 		for (Metals.MetalType type : Metals.MetalType.values())
 		{
 			if (!type.hasOre())
 			{
 				continue;
 			}
-
-			// Biome Modifiers
-			final HolderSet.Named<Biome> overworld = new HolderSet.Named<>(
-					ops.registry(Registry.BIOME_REGISTRY).get(),
-					BiomeTags.IS_OVERWORLD);
-			final HolderSet.Named<Biome> roshar = new HolderSet.Named<>(
-					ops.registry(Registry.BIOME_REGISTRY).get(),
-					TagsRegistry.Biomes.IS_ROSHAR);
 
 			BiomeFeatureModifier oreModifier = new BiomeFeatureModifier(
 					or(overworld, roshar),
@@ -88,9 +87,7 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 		{
 			// Biome Modifiers
 			BiomeFeatureModifier oreModifier = new BiomeFeatureModifier(
-					new HolderSet.Named<>(
-							ops.registry(Registry.BIOME_REGISTRY).get(),
-							TagsRegistry.Biomes.IS_ROSHAR),
+					roshar,
 					GenerationStep.Decoration.UNDERGROUND_ORES,
 					HolderSet.direct(Holder.direct(FeatureRegistry.PLACED_GEM_ORE_FEATURES.get(type).get()))
 			);
