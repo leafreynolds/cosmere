@@ -6,11 +6,14 @@ package leaf.cosmere.registry;
 
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.constants.Roshar;
+import leaf.cosmere.utils.helpers.ResourceLocationHelper;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -72,6 +75,12 @@ public class TagsRegistry
 								Function.identity(),
 								type -> forgeItemTag("storage_blocks/" + type.getName())));
 
+		public static final Map<Roshar.Polestone, TagKey<Item>> GEM_BLOCK_ITEM_TAGS =
+				Arrays.stream(Roshar.Polestone.values())
+						.collect(Collectors.toMap(
+								Function.identity(),
+								type -> forgeItemTag("storage_blocks/" + type.getName())));
+
 
 		public static final Map<Roshar.Polestone, TagKey<Item>> GEM_TAGS =
 				Arrays.stream(Roshar.Polestone.values())
@@ -116,6 +125,18 @@ public class TagsRegistry
 								Function.identity(),
 								type -> forgeTag("storage_blocks/" + type.getName())));
 
+		public static final Map<Roshar.Polestone, TagKey<Block>> GEM_ORE_BLOCK_TAGS =
+				Arrays.stream(Roshar.Polestone.values())
+						.collect(Collectors.toMap(
+								Function.identity(),
+								type -> forgeTag("ores/" + type.getName())));
+
+		public static final Map<Roshar.Polestone, TagKey<Block>> GEM_BLOCK_TAGS =
+				Arrays.stream(Roshar.Polestone.values())
+						.collect(Collectors.toMap(
+								Function.identity(),
+								type -> forgeTag("storage_blocks/" + type.getName())));
+
 		public static TagKey<Block> makeBlock(String domain, String path)
 		{
 			return BlockTags.create(new ResourceLocation(domain, path));
@@ -134,4 +155,15 @@ public class TagsRegistry
 
 	}
 
+
+	public static class Biomes
+	{
+		public static final TagKey<Biome> IS_ROSHAR = create("is_roshar");
+		public static final TagKey<Biome> IS_SHADESMAR = create("is_shadesmar");
+
+		private static TagKey<Biome> create(String pName)
+		{
+			return TagKey.create(Registry.BIOME_REGISTRY, ResourceLocationHelper.prefix(pName));
+		}
+	}
 }

@@ -8,19 +8,15 @@
 package leaf.cosmere.registry;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.blocks.BaseBlock;
-import leaf.cosmere.blocks.MetalBlock;
-import leaf.cosmere.blocks.MetalOreBlock;
-import leaf.cosmere.blocks.MetalworkingTableBlock;
+import leaf.cosmere.blocks.*;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
-import leaf.cosmere.properties.PropTypes;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -34,7 +30,7 @@ import java.util.stream.Collectors;
 public class BlocksRegistry
 {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Cosmere.MODID);
-	public static final RegistryObject<Block> GEM_BLOCK = register("gem_block", () -> (new BaseBlock(PropTypes.Blocks.EXAMPLE.get(), SoundType.STONE, 1F, 2F)), Rarity.COMMON);
+
 	public static final RegistryObject<Block> METALWORKING_TABLE = register("metalworking_table", () -> (new MetalworkingTableBlock()), Rarity.COMMON);
 
 	public static final Map<Metals.MetalType, RegistryObject<MetalBlock>> METAL_BLOCKS =
@@ -45,6 +41,14 @@ public class BlocksRegistry
 							metalType -> register(
 									metalType.getName() + Constants.RegNameStubs.BLOCK,
 									() -> new MetalBlock(metalType), metalType.getRarity())));
+
+	public static final Map<Roshar.Polestone, RegistryObject<GemBlock>> GEM_BLOCKS =
+			Arrays.stream(Roshar.Polestone.values())
+					.collect(Collectors.toMap(
+							Function.identity(),
+							polestone -> register(
+									polestone.getName() + Constants.RegNameStubs.BLOCK,
+									() -> new GemBlock(polestone), Rarity.UNCOMMON)));
 
 	public static final Map<Metals.MetalType, RegistryObject<MetalOreBlock>> METAL_ORE =
 			Arrays.stream(Metals.MetalType.values())
@@ -65,6 +69,24 @@ public class BlocksRegistry
 									Constants.RegNameStubs.DEEPSLATE + metalType.getName() + Constants.RegNameStubs.ORE,
 									() -> new MetalOreBlock(metalType),
 									metalType.getRarity())));
+
+	public static final Map<Roshar.Polestone, RegistryObject<GemOreBlock>> GEM_ORE =
+			Arrays.stream(Roshar.Polestone.values())
+					.collect(Collectors.toMap(
+							Function.identity(),
+							polestone -> register(
+									polestone.getName() + Constants.RegNameStubs.ORE,
+									() -> new GemOreBlock(polestone),
+									Rarity.UNCOMMON)));
+
+	public static final Map<Roshar.Polestone, RegistryObject<GemOreBlock>> GEM_ORE_DEEPSLATE =
+			Arrays.stream(Roshar.Polestone.values())
+					.collect(Collectors.toMap(
+							Function.identity(),
+							polestone -> register(
+									Constants.RegNameStubs.DEEPSLATE + polestone.getName() + Constants.RegNameStubs.ORE,
+									() -> new GemOreBlock(polestone),
+									Rarity.UNCOMMON)));
 
 
 	private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, Rarity itemRarity)

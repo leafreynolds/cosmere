@@ -1,6 +1,15 @@
 {
   "values": [
-    "cosmere:gem_block",
+    "cosmere:sapphire_block",
+    "cosmere:smokestone_block",
+    "cosmere:ruby_block",
+    "cosmere:diamond_block",
+    "cosmere:emerald_block",
+    "cosmere:garnet_block",
+    "cosmere:zircon_block",
+    "cosmere:amethyst_block",
+    "cosmere:topaz_block",
+    "cosmere:heliodor_block",
     "cosmere:steel_block",
     "cosmere:tin_block",
     "cosmere:pewter_block",

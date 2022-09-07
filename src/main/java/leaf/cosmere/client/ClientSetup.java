@@ -10,7 +10,9 @@ import leaf.cosmere.client.render.curio.CuriosLayerDefinitions;
 import leaf.cosmere.client.render.curio.model.BraceletModel;
 import leaf.cosmere.client.render.curio.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.manifestation.feruchemy.FeruchemyAtium;
+import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.ContainersRegistry;
 import leaf.cosmere.registry.EntityRegistry;
 import leaf.cosmere.utils.helpers.LogHelper;
@@ -57,6 +59,7 @@ public class ClientSetup
 		});
 
 		//special thank you to @Random on the forge discord who told me that you have to tell the block it has transparency
+		RenderType cutoutMipped = RenderType.cutoutMipped();
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
 			if (!metalType.hasOre())
@@ -64,9 +67,13 @@ public class ClientSetup
 				continue;
 			}
 
-			RenderType cutoutMipped = RenderType.cutoutMipped();
 			ItemBlockRenderTypes.setRenderLayer(metalType.getOreBlock(), cutoutMipped);
 			ItemBlockRenderTypes.setRenderLayer(metalType.getDeepslateOreBlock(), cutoutMipped);
+		}
+		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		{
+			ItemBlockRenderTypes.setRenderLayer(BlocksRegistry.GEM_ORE.get(polestone).get(), cutoutMipped);
+			ItemBlockRenderTypes.setRenderLayer(BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get(), cutoutMipped);
 		}
 
 		CurioRenderers.register();

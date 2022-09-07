@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "cosmere:deepslate_tin_ore"
+  },
+  "result": "cosmere:tin_ingot"
+}

@@ -10,7 +10,9 @@ import com.mojang.serialization.JsonOps;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Constants;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.registry.FeatureRegistry;
+import leaf.cosmere.registry.TagsRegistry;
 import leaf.cosmere.utils.helpers.LogHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -42,15 +44,12 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 	@Override
 	public void run(@NotNull CachedOutput cachedOutput)
 	{
-
 		RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.BUILTIN.get());
 		final Path outputFolder = this.dataGenerator.getOutputFolder();
 
-
-		for (Metals.MetalType metalType : Metals.MetalType.values())
+		for (Metals.MetalType type : Metals.MetalType.values())
 		{
-
-			if (!metalType.hasOre())
+			if (!type.hasOre())
 			{
 				continue;
 			}
@@ -61,15 +60,33 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 							ops.registry(Registry.BIOME_REGISTRY).get(),
 							BiomeTags.IS_OVERWORLD),
 					GenerationStep.Decoration.UNDERGROUND_ORES,
-					HolderSet.direct(Holder.direct(FeatureRegistry.PLACED_ORE_FEATURES.get(metalType).get()))
+					HolderSet.direct(Holder.direct(FeatureRegistry.PLACED_METAL_ORE_FEATURES.get(type).get()))
 			);
-
 
 			// Generate BiomeModiers
 			generate(ops,
 					oreModifier,
 					outputFolder,
-					metalType.getName() + Constants.RegNameStubs.ORE,
+					type.getName() + Constants.RegNameStubs.ORE,
+					cachedOutput);
+		}
+
+		for (Roshar.Polestone type : Roshar.Polestone.values())
+		{
+			// Biome Modifiers
+			BiomeFeatureModifier oreModifier = new BiomeFeatureModifier(
+					new HolderSet.Named<>(
+							ops.registry(Registry.BIOME_REGISTRY).get(),
+							TagsRegistry.Biomes.IS_ROSHAR),
+					GenerationStep.Decoration.UNDERGROUND_ORES,
+					HolderSet.direct(Holder.direct(FeatureRegistry.PLACED_GEM_ORE_FEATURES.get(type).get()))
+			);
+
+			// Generate BiomeModiers
+			generate(ops,
+					oreModifier,
+					outputFolder,
+					type.getName() + Constants.RegNameStubs.ORE,
 					cachedOutput);
 
 		}

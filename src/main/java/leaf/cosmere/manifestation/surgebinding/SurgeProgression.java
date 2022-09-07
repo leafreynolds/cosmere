@@ -16,6 +16,7 @@ public class SurgeProgression extends SurgebindingBase
 
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
 	{
+		
 
 	}
 

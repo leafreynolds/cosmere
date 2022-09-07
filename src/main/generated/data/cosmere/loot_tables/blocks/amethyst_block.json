@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmere:gem_block"
+          "name": "cosmere:amethyst_block"
         }
       ],
       "rolls": 1.0

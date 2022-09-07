@@ -4,8 +4,10 @@
 
 package leaf.cosmere.datagen.loottables;
 
+import leaf.cosmere.blocks.GemOreBlock;
 import leaf.cosmere.blocks.MetalOreBlock;
 import leaf.cosmere.registry.BlocksRegistry;
+import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
@@ -21,7 +23,8 @@ public class BlockLootTableGen extends BlockLoot
 
 		for (RegistryObject<Block> itemRegistryObject : BlocksRegistry.BLOCKS.getEntries())
 		{
-			if ((itemRegistryObject.get() instanceof MetalOreBlock oreBlock))
+			final Block block = itemRegistryObject.get();
+			if (block instanceof MetalOreBlock oreBlock)
 			{
 
 				this.add(oreBlock, (ore) ->
@@ -29,9 +32,17 @@ public class BlockLootTableGen extends BlockLoot
 					return createOreDrop(ore, oreBlock.getMetalType().getRawMetalItem());
 				});
 			}
+			else if (block instanceof GemOreBlock oreBlock)
+			{
+
+				this.add(oreBlock, (ore) ->
+				{
+					return createOreDrop(ore, ItemsRegistry.POLESTONE_CHIPS.get(oreBlock.getGemType()).get());
+				});
+			}
 			else
 			{
-				this.dropSelf(itemRegistryObject.get());
+				this.dropSelf(block);
 			}
 		}
 	}

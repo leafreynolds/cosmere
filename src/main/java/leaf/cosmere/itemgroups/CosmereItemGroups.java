@@ -5,6 +5,7 @@
 package leaf.cosmere.itemgroups;
 
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.world.item.CreativeModeTab;
@@ -45,7 +46,7 @@ public class CosmereItemGroups
 		@Override
 		public ItemStack makeIcon()
 		{
-			return new ItemStack(BlocksRegistry.GEM_BLOCK.get());
+			return new ItemStack(BlocksRegistry.GEM_BLOCKS.entrySet().stream().findAny().get().getValue().get());
 		}
 	};
 

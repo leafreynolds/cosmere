@@ -1,9 +1,19 @@
-// 1.19.2	2022-08-21T11:00:28.9794822	cosmere Biome Modifiers
+// 1.19.2	2022-09-07T15:19:45.0141919	cosmere Biome Modifiers
 87145500e934a45da2900dcc8d0492e5e84f12d3 data/cosmere/forge/biome_modifier/aluminum_ore.json
+1b0d8723ce972c67cbe1cb306225c72022f1fbff data/cosmere/forge/biome_modifier/amethyst_ore.json
 3c671d754a91917c1b6a9fee240a522b31f8ccca data/cosmere/forge/biome_modifier/cadmium_ore.json
 01f17cc2c4aa69151966178792568f149f6dccb5 data/cosmere/forge/biome_modifier/chromium_ore.json
+14750a6659005870705ad855e0f48b20cc09c7a8 data/cosmere/forge/biome_modifier/diamond_ore.json
+bdee04129f1c49366bf5837a5a2339c763597c12 data/cosmere/forge/biome_modifier/emerald_ore.json
+9624f3dbaec6121b568e72197dc1f092d1105ac3 data/cosmere/forge/biome_modifier/garnet_ore.json
+937afb8565d96eda1fe0be93a2451ef13d849d07 data/cosmere/forge/biome_modifier/heliodor_ore.json
 341aa7a76520ea8555fd0c831e450089dcda4d17 data/cosmere/forge/biome_modifier/lead_ore.json
 32b59827a7cc9fef3d514cfa8e18567f92610c38 data/cosmere/forge/biome_modifier/nickel_ore.json
+891a2de602e4d01f0bdf027d2e14ddf53868f0a8 data/cosmere/forge/biome_modifier/ruby_ore.json
+4574d50f5bbf14bde2b873d68be9980154af65b1 data/cosmere/forge/biome_modifier/sapphire_ore.json
 cc04b625a6c3b3a90754af90cebafc255179184e data/cosmere/forge/biome_modifier/silver_ore.json
+e96a5834a96e5513721b47cd3a97fb269bf022da data/cosmere/forge/biome_modifier/smokestone_ore.json
 aa81ef9e8ad563103f09a41de0f9920d3b2d7769 data/cosmere/forge/biome_modifier/tin_ore.json
+e2d657a6dfd0ece8faf75193c449a3bc2b9d2f9d data/cosmere/forge/biome_modifier/topaz_ore.json
 d36de3d9dfe153e8f364ff1516284e475a178a11 data/cosmere/forge/biome_modifier/zinc_ore.json
+52140b045b661a589e1ea76fec788693c54b402e data/cosmere/forge/biome_modifier/zircon_ore.json

@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.datagen.advancements.AdvancementGen;
 import leaf.cosmere.datagen.biome.BiomeModifierGen;
+import leaf.cosmere.datagen.biome.BiomeTagsProvider;
 import leaf.cosmere.datagen.blocks.BlockModelsGen;
 import leaf.cosmere.datagen.blocks.BlockTagsGen;
 import leaf.cosmere.datagen.items.ItemModelsGen;
@@ -54,6 +55,7 @@ public class DataGen
 		generator.addProvider(true, new PatchouliGen(generator));
 
 		generator.addProvider(true, new BiomeModifierGen(generator));
+		generator.addProvider(true, new BiomeTagsProvider(generator,existingFileHelper));
 
 	}
 

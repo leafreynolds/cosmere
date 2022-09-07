@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 500,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "cosmere:sapphire_ore"
+  },
+  "result": "cosmere:sapphire_mark"
+}

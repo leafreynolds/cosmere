@@ -1,0 +1,7 @@
+{
+  "parent": "cosmere:block/shapes/cube_with_tint_overlay",
+  "textures": {
+    "all": "cosmere:block/gem_ore_block_deepslate",
+    "overlay": "cosmere:block/gem_ore_block_tint_overlay"
+  }
+}

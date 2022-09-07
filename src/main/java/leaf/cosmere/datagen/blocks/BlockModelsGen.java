@@ -5,9 +5,7 @@
 package leaf.cosmere.datagen.blocks;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.blocks.MetalBlock;
-import leaf.cosmere.blocks.MetalOreBlock;
-import leaf.cosmere.blocks.MetalworkingTableBlock;
+import leaf.cosmere.blocks.*;
 import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.data.DataGenerator;
@@ -44,6 +42,14 @@ public class BlockModelsGen extends BlockStateProvider
 				simpleBlock(block, blockModel);
 				continue;
 			}
+			else if (block instanceof GemBlock)
+			{
+				ModelFile blockModel = models().withExistingParent("gem_block", ResourceLocationHelper.prefix("block/shapes/cube_all_tinted"))
+						.texture("all", ResourceLocationHelper.prefix("block/gem_block"));
+
+				simpleBlock(block, blockModel);
+				continue;
+			}
 			else if (block instanceof MetalworkingTableBlock)
 			{
 				ModelFile blockModel = models().withExistingParent("metalworking_table", new ResourceLocation("block/cube"))
@@ -69,6 +75,22 @@ public class BlockModelsGen extends BlockStateProvider
 				ModelFile blockModel = models().withExistingParent(stoneFileName, ResourceLocationHelper.prefix("block/shapes/cube_with_tint_overlay"))
 						.texture("all", ResourceLocationHelper.prefix(stoneType))
 						.texture("overlay", ResourceLocationHelper.prefix("block/ore_block_tint_overlay"));
+
+				simpleBlock(block, blockModel);
+				continue;
+			}
+			else if (block instanceof GemOreBlock)
+			{
+				//Special thanks to @Random & @sciwhiz12  on discord who helped me get these running
+				//To get the overlay working, you need to tell the blocks they have transparency, which I've donne in the ClientSetup script.
+				final boolean deepslate = ResourceLocationHelper.get(block).getPath().contains("deepslate");
+
+				final String stoneType = deepslate ? "block/gem_ore_block_deepslate" : "block/gem_ore_block";
+				final String stoneFileName = deepslate ? "gem_ore_block_deepslate" : "gem_ore_block";
+
+				ModelFile blockModel = models().withExistingParent(stoneFileName, ResourceLocationHelper.prefix("block/shapes/cube_with_tint_overlay"))
+						.texture("all", ResourceLocationHelper.prefix(stoneType))
+						.texture("overlay", ResourceLocationHelper.prefix("block/gem_ore_block_tint_overlay"));
 
 				simpleBlock(block, blockModel);
 				continue;

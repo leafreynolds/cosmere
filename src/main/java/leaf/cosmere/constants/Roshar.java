@@ -180,25 +180,25 @@ public class Roshar
 			{
 				default:
 				case SAPPHIRE:
-					return GemColours.WINDRUNNER;
+					return GemColours.SAPPHIRE;
 				case SMOKESTONE:
-					return GemColours.SKYBREAKER;
+					return GemColours.SMOKESTONE;
 				case RUBY:
-					return GemColours.DUSTBRINGER;
+					return GemColours.RUBY;
 				case DIAMOND:
-					return GemColours.EDGEDANCER;
+					return GemColours.DIAMOND;
 				case EMERALD:
-					return GemColours.TRUTHWATCHER;
+					return GemColours.EMERALD;
 				case GARNET:
-					return GemColours.LIGHTWEAVER;
+					return GemColours.GARNET;
 				case ZIRCON:
-					return GemColours.ELSECALLER;
+					return GemColours.ZIRCON;
 				case AMETHYST:
-					return GemColours.WILLSHAPER;
+					return GemColours.AMETHYST;
 				case TOPAZ:
-					return GemColours.STONEWARD;
+					return GemColours.TOPAZ;
 				case HELIODOR:
-					return GemColours.BONDSMITH;
+					return GemColours.HELIODOR;
 			}
 		}
 
@@ -314,15 +314,15 @@ public class Roshar
 
 	private static class GemColours
 	{
-		public static final Color WINDRUNNER = Color.decode("#4a6682");
-		public static final Color SKYBREAKER = Color.decode("#716b79");
-		public static final Color DUSTBRINGER = Color.decode("#8c4f49");
-		public static final Color EDGEDANCER = Color.decode("#8d8e92");
-		public static final Color TRUTHWATCHER = Color.decode("#4d7661");
-		public static final Color LIGHTWEAVER = Color.decode("#7c515b");
-		public static final Color ELSECALLER = Color.decode("#4f5b6d");
-		public static final Color WILLSHAPER = Color.decode("#6b4b66");
-		public static final Color STONEWARD = Color.decode("#807158");
-		public static final Color BONDSMITH = Color.decode("#aeac79");
+		public static final Color SAPPHIRE = Color.decode("#3991f3");
+		public static final Color SMOKESTONE = Color.decode("#c0a6b3");
+		public static final Color RUBY = Color.decode("#b40502");
+		public static final Color DIAMOND = Color.decode("#f5faf3");
+		public static final Color EMERALD = Color.decode("#52b984");
+		public static final Color GARNET = Color.decode("#e03935");
+		public static final Color ZIRCON = Color.decode("#3ab7bb");
+		public static final Color AMETHYST = Color.decode("#c975e4");
+		public static final Color TOPAZ = Color.decode("#e3681a");
+		public static final Color HELIODOR = Color.decode("#f3dd25");
 	}
 }

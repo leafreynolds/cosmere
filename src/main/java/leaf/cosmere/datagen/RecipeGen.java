@@ -6,6 +6,7 @@ package leaf.cosmere.datagen;
 
 import leaf.cosmere.Cosmere;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.registry.RecipeRegistry;
@@ -92,6 +93,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 			if (metalType.hasOre())
 			{
 				addOreSmeltingRecipes(consumer, metalType.getOreBlock(), metalType.getIngotItem(), 1.0f, 200);
+				addOreSmeltingRecipes(consumer, metalType.getDeepslateOreBlock(), metalType.getIngotItem(), 1.0f, 200);
 				addOreSmeltingRecipes(consumer, metalType.getRawMetalItem(), metalType.getIngotItem(), 1.0f, 200);
 			}
 
@@ -112,6 +114,16 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 				addOreSmeltingRecipes(consumer, outputBlend, metalType.getIngotItem(), 1.0f, 200);
 			}
 
+		}
+
+
+		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		{
+			compressRecipe(BlocksRegistry.GEM_BLOCKS.get(polestone).get(), TagsRegistry.Items.GEM_TAGS.get(polestone)).save(consumer);
+			decompressRecipe(consumer, ItemsRegistry.POLESTONE_BROAMS.get(polestone).get(), TagsRegistry.Items.GEM_BLOCK_ITEM_TAGS.get(polestone), polestone.getName() + "_block_deconstruct");
+
+			addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_ORE.get(polestone).get(), ItemsRegistry.POLESTONE_MARKS.get(polestone).get(), 1.0f, 1000);
+			addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get(), ItemsRegistry.POLESTONE_BROAMS.get(polestone).get(), 1.0f, 1000);
 		}
 	}
 

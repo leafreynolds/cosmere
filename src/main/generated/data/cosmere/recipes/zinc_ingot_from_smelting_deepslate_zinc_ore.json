@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "cosmere:deepslate_zinc_ore"
+  },
+  "result": "cosmere:zinc_ingot"
+}

@@ -9,6 +9,7 @@ package leaf.cosmere.handlers;
 import leaf.cosmere.constants.Metals;
 import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.items.IHasColour;
+import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.ItemsRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
@@ -91,6 +92,14 @@ public final class ColorHandler
 			{
 				itemColors.register(cosmereColourHandler, polestone.getPolestoneItem(size));
 			}
+
+			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_BLOCKS.get(polestone).get());
+			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_ORE.get(polestone).get());
+			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get());
+
+			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_BLOCKS.get(polestone).get());
+			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_ORE.get(polestone).get());
+			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get());
 		}
 	}
 }

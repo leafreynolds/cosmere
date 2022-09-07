@@ -4,9 +4,13 @@
 
 package leaf.cosmere.datagen.blocks;
 
+import com.google.common.collect.ImmutableList;
 import leaf.cosmere.Cosmere;
+import leaf.cosmere.blocks.GemBlock;
+import leaf.cosmere.blocks.GemOreBlock;
 import leaf.cosmere.blocks.MetalBlock;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.registry.BlocksRegistry;
 import leaf.cosmere.registry.TagsRegistry;
 import net.minecraft.data.DataGenerator;
@@ -28,9 +32,34 @@ public class BlockTagsGen extends BlockTagsProvider
 	@Override
 	protected void addTags()
 	{
-		add(TagsRegistry.Blocks.DRAGON_PROOF, BlocksRegistry.GEM_BLOCK.get());
-		add(TagsRegistry.Blocks.WITHER_PROOF, BlocksRegistry.GEM_BLOCK.get());
-		add(BlockTags.BEACON_BASE_BLOCKS, BlocksRegistry.GEM_BLOCK.get());
+
+		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		{
+			final GemBlock gemBlock = BlocksRegistry.GEM_BLOCKS.get(polestone).get();
+			final GemOreBlock gemOre = BlocksRegistry.GEM_ORE.get(polestone).get();
+			final GemOreBlock gemOreDeepslate = BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get();
+
+			var list = ImmutableList.of(gemBlock, gemOre, gemOreDeepslate);
+
+			for (Block block : list)
+			{
+				add(TagsRegistry.Blocks.DRAGON_PROOF, block);
+				//add(TagsRegistry.Blocks.WITHER_PROOF, BlocksRegistry.GEM_BLOCKS.get(polestone).get());
+
+				add(BlockTags.MINEABLE_WITH_PICKAXE, block);
+				add(BlockTags.NEEDS_IRON_TOOL, block);
+			}
+
+
+			add(BlockTags.BEACON_BASE_BLOCKS, gemBlock);
+			add(Tags.Blocks.STORAGE_BLOCKS, gemBlock);
+
+
+			add(TagsRegistry.Blocks.GEM_ORE_BLOCK_TAGS.get(polestone), gemOre);
+			add(TagsRegistry.Blocks.GEM_ORE_BLOCK_TAGS.get(polestone), gemOreDeepslate);
+
+			add(TagsRegistry.Blocks.GEM_BLOCK_TAGS.get(polestone), gemBlock);
+		}
 
 		add(BlockTags.NEEDS_STONE_TOOL,BlocksRegistry.METALWORKING_TABLE.get());
 		add(BlockTags.MINEABLE_WITH_AXE,BlocksRegistry.METALWORKING_TABLE.get());

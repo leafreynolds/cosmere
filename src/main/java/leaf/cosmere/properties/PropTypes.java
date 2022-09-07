@@ -17,6 +17,12 @@ public class PropTypes
 	public static class Blocks
 	{
 		public static final Supplier<Block.Properties> EXAMPLE = () -> Block.Properties.of(Material.GLASS).strength(2.0F, 6.0F);
+		public static final Supplier<Block.Properties> ORE = () ->
+				Block.Properties
+						.of(Material.STONE)
+						.strength(2.0F, 6.0F)
+						.requiresCorrectToolForDrops();
+
 		public static final Supplier<Block.Properties> METAL = () ->
 				Block.Properties
 						.of(Material.METAL)
@@ -29,9 +35,6 @@ public class PropTypes
 		public static final Supplier<Item.Properties> SHARDBLADE = () -> new Item.Properties()
 				.tab(CosmereItemGroups.ITEMS)
 				.stacksTo(1)
-				//.defaultDurability(0)
-				//.durability(0)
-				//.setNoRepair()
 				.fireResistant()
 				.rarity(Rarity.EPIC);
 

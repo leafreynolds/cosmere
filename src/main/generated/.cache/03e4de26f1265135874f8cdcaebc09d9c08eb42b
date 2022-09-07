@@ -1,4 +1,4 @@
-// 1.19.2	2022-08-21T11:00:28.9784818	Tags for minecraft:item
+// 1.19.2	2022-09-07T16:52:24.7722229	Tags for minecraft:item
 aab782eb150f809e3d7c178d04d9f070fee6cafe data/cosmere/tags/items/spike.json
 aab782eb150f809e3d7c178d04d9f070fee6cafe data/curios/tags/items/back.json
 aab782eb150f809e3d7c178d04d9f070fee6cafe data/curios/tags/items/body.json
@@ -83,7 +83,7 @@ a8ecda7d56fa1b838d47ed4d0c0423b85e8e81ce data/forge/tags/items/raw_materials/nic
 f225195803f1415a4b6ba68ff770bb67fa1e53d0 data/forge/tags/items/raw_materials/steel.json
 5399d4dc7d03dadbc0ff52718d2d1a53fcb27d0a data/forge/tags/items/raw_materials/tin.json
 ed48136c06f3a6a200f954e99ccef4dcece821b0 data/forge/tags/items/raw_materials/zinc.json
-1b31fd34bbe16f0c93d028e70bf4fe399d7619ef data/forge/tags/items/storage_blocks.json
+21bb686c4c84d944d3d5ba9382134c6d7fba06cc data/forge/tags/items/storage_blocks.json
 9079d45393bba22e2b2061d1f6eb588c46ee7346 data/forge/tags/items/storage_blocks/aluminum.json
 8fe1f17a4eb16ada9285bedf30fb598edf113e5f data/forge/tags/items/storage_blocks/atium.json
 1eccb19f0c1fe5f19a6bdeaa14037aa8e7eeb959 data/forge/tags/items/storage_blocks/bendalloy.json
