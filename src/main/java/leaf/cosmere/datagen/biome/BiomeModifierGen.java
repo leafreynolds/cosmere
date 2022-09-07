@@ -25,13 +25,17 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.holdersets.OrHolderSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvider
 {
@@ -39,6 +43,10 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 	public @NotNull String getName()
 	{
 		return Cosmere.MODID + " Biome Modifiers";
+	}
+
+	private static HolderSet<Biome> or(HolderSet<Biome>... holders) {
+		return new OrHolderSet<>(Arrays.asList(holders));
 	}
 
 	@Override
@@ -55,10 +63,15 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 			}
 
 			// Biome Modifiers
+			final HolderSet.Named<Biome> overworld = new HolderSet.Named<>(
+					ops.registry(Registry.BIOME_REGISTRY).get(),
+					BiomeTags.IS_OVERWORLD);
+			final HolderSet.Named<Biome> roshar = new HolderSet.Named<>(
+					ops.registry(Registry.BIOME_REGISTRY).get(),
+					TagsRegistry.Biomes.IS_ROSHAR);
+
 			BiomeFeatureModifier oreModifier = new BiomeFeatureModifier(
-					new HolderSet.Named<>(
-							ops.registry(Registry.BIOME_REGISTRY).get(),
-							BiomeTags.IS_OVERWORLD),
+					or(overworld, roshar),
 					GenerationStep.Decoration.UNDERGROUND_ORES,
 					HolderSet.direct(Holder.direct(FeatureRegistry.PLACED_METAL_ORE_FEATURES.get(type).get()))
 			);
