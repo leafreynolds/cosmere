@@ -16,7 +16,7 @@ public class DimensionRegistry
 	public static final ResourceKey<Level> ROSHAR_DIM_KEY =
 			ResourceKey.create(
 					Registry.DIMENSION_REGISTRY,
-					ResourceLocationHelper.prefix("roshar_dimension")
+					ResourceLocationHelper.prefix("roshar")
 			);
 
 	public static final ResourceKey<DimensionType> ROSHAR_DIM_TYPE =
@@ -27,7 +27,7 @@ public class DimensionRegistry
 	public static final ResourceKey<Level> SHADESMAR_DIM_KEY =
 			ResourceKey.create(
 					Registry.DIMENSION_REGISTRY,
-					ResourceLocationHelper.prefix("shadesmar_dimension")
+					ResourceLocationHelper.prefix("shadesmar")
 			);
 
 	public static final ResourceKey<DimensionType> SHADESMAR_DIM_TYPE =

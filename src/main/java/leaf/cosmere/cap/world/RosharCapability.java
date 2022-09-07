@@ -20,7 +20,7 @@ public class RosharCapability implements IRoshar
 
 	Level m_level;
 
-	CompoundTag m_nbt;
+	CompoundTag m_nbt = null;
 
 	public RosharCapability(Level level)
 	{
@@ -38,6 +38,10 @@ public class RosharCapability implements IRoshar
 	@Override
 	public CompoundTag serializeNBT()
 	{
+		if (m_nbt == null)
+		{
+			m_nbt = new CompoundTag();
+		}
 
 		return m_nbt;
 	}
