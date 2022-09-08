@@ -10,7 +10,7 @@ import java.awt.*;
 
 public interface IHasGemType extends IHasColour
 {
-	Roshar.Polestone getGemType();
+	Roshar.Gemstone getGemType();
 
 	default Color getColour()
 	{

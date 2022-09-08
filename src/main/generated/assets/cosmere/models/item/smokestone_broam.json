@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmere:item/polestone_broam"
+    "layer0": "cosmere:item/gemstone_broam"
   }
 }

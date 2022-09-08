@@ -9,13 +9,13 @@ import leaf.cosmere.items.IHasColour;
 
 import java.awt.*;
 
-public interface IHasPolestoneType extends IHasColour
+public interface IHasGemstoneType extends IHasColour
 {
-	Roshar.Polestone getPolestoneType();
+	Roshar.Gemstone getType();
 
 	default Color getColour()
 	{
-		return getPolestoneType().getColor();
+		return getType().getColor();
 	}
 
 	default int getColourValue()

@@ -12,16 +12,16 @@ import net.minecraft.world.level.block.DropExperienceBlock;
 
 public class GemOreBlock extends DropExperienceBlock implements IHasGemType
 {
-	private final Roshar.Polestone gemType;
+	private final Roshar.Gemstone gemType;
 
-	public GemOreBlock(Roshar.Polestone gemType)
+	public GemOreBlock(Roshar.Gemstone gemType)
 	{
 		super(PropTypes.Blocks.ORE.get().strength(3f, 3f).requiresCorrectToolForDrops(), UniformInt.of(0, 2));
 		this.gemType = gemType;
 	}
 
 	@Override
-	public Roshar.Polestone getGemType()
+	public Roshar.Gemstone getGemType()
 	{
 		return gemType;
 	}

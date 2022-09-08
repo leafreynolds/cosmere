@@ -37,7 +37,7 @@ public class BlockLootTableGen extends BlockLoot
 
 				this.add(oreBlock, (ore) ->
 				{
-					return createOreDrop(ore, ItemsRegistry.POLESTONE_CHIPS.get(oreBlock.getGemType()).get());
+					return createOreDrop(ore, ItemsRegistry.GEMSTONE_CHIPS.get(oreBlock.getGemType()).get());
 				});
 			}
 			else

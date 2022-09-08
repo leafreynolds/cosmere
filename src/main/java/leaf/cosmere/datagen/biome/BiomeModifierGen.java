@@ -83,7 +83,7 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 					cachedOutput);
 		}
 
-		for (Roshar.Polestone type : Roshar.Polestone.values())
+		for (Roshar.Gemstone type : Roshar.Gemstone.values())
 		{
 			// Biome Modifiers
 			BiomeFeatureModifier oreModifier = new BiomeFeatureModifier(

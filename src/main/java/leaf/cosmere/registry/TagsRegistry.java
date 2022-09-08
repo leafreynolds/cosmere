@@ -75,15 +75,15 @@ public class TagsRegistry
 								Function.identity(),
 								type -> forgeItemTag("storage_blocks/" + type.getName())));
 
-		public static final Map<Roshar.Polestone, TagKey<Item>> GEM_BLOCK_ITEM_TAGS =
-				Arrays.stream(Roshar.Polestone.values())
+		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_BLOCK_ITEM_TAGS =
+				Arrays.stream(Roshar.Gemstone.values())
 						.collect(Collectors.toMap(
 								Function.identity(),
 								type -> forgeItemTag("storage_blocks/" + type.getName())));
 
 
-		public static final Map<Roshar.Polestone, TagKey<Item>> GEM_TAGS =
-				Arrays.stream(Roshar.Polestone.values())
+		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_TAGS =
+				Arrays.stream(Roshar.Gemstone.values())
 						.collect(Collectors.toMap(
 								Function.identity(),
 								type -> forgeItemTag("gems/" + type.getName())));
@@ -125,14 +125,14 @@ public class TagsRegistry
 								Function.identity(),
 								type -> forgeTag("storage_blocks/" + type.getName())));
 
-		public static final Map<Roshar.Polestone, TagKey<Block>> GEM_ORE_BLOCK_TAGS =
-				Arrays.stream(Roshar.Polestone.values())
+		public static final Map<Roshar.Gemstone, TagKey<Block>> GEM_ORE_BLOCK_TAGS =
+				Arrays.stream(Roshar.Gemstone.values())
 						.collect(Collectors.toMap(
 								Function.identity(),
 								type -> forgeTag("ores/" + type.getName())));
 
-		public static final Map<Roshar.Polestone, TagKey<Block>> GEM_BLOCK_TAGS =
-				Arrays.stream(Roshar.Polestone.values())
+		public static final Map<Roshar.Gemstone, TagKey<Block>> GEM_BLOCK_TAGS =
+				Arrays.stream(Roshar.Gemstone.values())
 						.collect(Collectors.toMap(
 								Function.identity(),
 								type -> forgeTag("storage_blocks/" + type.getName())));

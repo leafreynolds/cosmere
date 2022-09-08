@@ -10,7 +10,7 @@ import leaf.cosmere.items.curio.BraceletMetalmindItem;
 import leaf.cosmere.items.curio.HemalurgicSpikeItem;
 import leaf.cosmere.items.curio.NecklaceMetalmindItem;
 import leaf.cosmere.items.curio.RingMetalmindItem;
-import leaf.cosmere.items.gems.PolestoneItem;
+import leaf.cosmere.items.gems.GemstoneItem;
 import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.data.DataGenerator;
@@ -94,18 +94,18 @@ public class ItemModelsGen extends ItemModelProvider
 				simpleItem(path, rawItem.getMetalType().isAlloy() ? "metal_blend" : "metal_raw");
 				continue;
 			}
-			else if (item instanceof PolestoneItem polestoneItem)
+			else if (item instanceof GemstoneItem gemstoneItem)
 			{
-				switch (polestoneItem.getSize())
+				switch (gemstoneItem.getSize())
 				{
 					case BROAM:
-						simpleItem(path, "polestone_broam");
+						simpleItem(path, "gemstone_broam");
 						break;
 					case MARK:
-						simpleItem(path, "polestone_mark");
+						simpleItem(path, "gemstone_mark");
 						break;
 					case CHIP:
-						simpleItem(path, "polestone_chip");
+						simpleItem(path, "gemstone_chip");
 						break;
 				}
 				continue;

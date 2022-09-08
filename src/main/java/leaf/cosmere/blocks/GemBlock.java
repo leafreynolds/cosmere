@@ -11,16 +11,16 @@ import net.minecraft.world.level.block.SoundType;
 
 public class GemBlock extends BaseBlock implements IHasGemType
 {
-	private final Roshar.Polestone gemType;
+	private final Roshar.Gemstone gemType;
 
-	public GemBlock(Roshar.Polestone gemType)
+	public GemBlock(Roshar.Gemstone gemType)
 	{
 		super(PropTypes.Blocks.METAL.get(), SoundType.METAL, 3F, 3F);
 		this.gemType = gemType;
 	}
 
 	@Override
-	public Roshar.Polestone getGemType()
+	public Roshar.Gemstone getGemType()
 	{
 		return gemType;
 	}

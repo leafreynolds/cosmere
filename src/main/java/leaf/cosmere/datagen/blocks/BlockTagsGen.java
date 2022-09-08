@@ -33,18 +33,18 @@ public class BlockTagsGen extends BlockTagsProvider
 	protected void addTags()
 	{
 
-		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
-			final GemBlock gemBlock = BlocksRegistry.GEM_BLOCKS.get(polestone).get();
-			final GemOreBlock gemOre = BlocksRegistry.GEM_ORE.get(polestone).get();
-			final GemOreBlock gemOreDeepslate = BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get();
+			final GemBlock gemBlock = BlocksRegistry.GEM_BLOCKS.get(gemstone).get();
+			final GemOreBlock gemOre = BlocksRegistry.GEM_ORE.get(gemstone).get();
+			final GemOreBlock gemOreDeepslate = BlocksRegistry.GEM_ORE_DEEPSLATE.get(gemstone).get();
 
 			var list = ImmutableList.of(gemBlock, gemOre, gemOreDeepslate);
 
 			for (Block block : list)
 			{
 				add(TagsRegistry.Blocks.DRAGON_PROOF, block);
-				//add(TagsRegistry.Blocks.WITHER_PROOF, BlocksRegistry.GEM_BLOCKS.get(polestone).get());
+				//add(TagsRegistry.Blocks.WITHER_PROOF, BlocksRegistry.GEM_BLOCKS.get(gemstone).get());
 
 				add(BlockTags.MINEABLE_WITH_PICKAXE, block);
 				add(BlockTags.NEEDS_IRON_TOOL, block);
@@ -55,10 +55,10 @@ public class BlockTagsGen extends BlockTagsProvider
 			add(Tags.Blocks.STORAGE_BLOCKS, gemBlock);
 
 
-			add(TagsRegistry.Blocks.GEM_ORE_BLOCK_TAGS.get(polestone), gemOre);
-			add(TagsRegistry.Blocks.GEM_ORE_BLOCK_TAGS.get(polestone), gemOreDeepslate);
+			add(TagsRegistry.Blocks.GEM_ORE_BLOCK_TAGS.get(gemstone), gemOre);
+			add(TagsRegistry.Blocks.GEM_ORE_BLOCK_TAGS.get(gemstone), gemOreDeepslate);
 
-			add(TagsRegistry.Blocks.GEM_BLOCK_TAGS.get(polestone), gemBlock);
+			add(TagsRegistry.Blocks.GEM_BLOCK_TAGS.get(gemstone), gemBlock);
 		}
 
 		add(BlockTags.NEEDS_STONE_TOOL,BlocksRegistry.METALWORKING_TABLE.get());

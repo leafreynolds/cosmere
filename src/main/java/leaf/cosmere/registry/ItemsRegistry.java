@@ -14,11 +14,9 @@ import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.*;
 import leaf.cosmere.items.curio.*;
-import leaf.cosmere.items.gems.PolestoneItem;
+import leaf.cosmere.items.gems.GemstoneItem;
 import leaf.cosmere.properties.PropTypes;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -154,37 +152,37 @@ public class ItemsRegistry
 							)));
 
 
-	public static final Map<Roshar.Polestone, RegistryObject<Item>> POLESTONE_CHIPS =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<Item>> GEMSTONE_CHIPS =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + RegNameStubs.CHIP,
-									() -> createItem(new PolestoneItem(type, Roshar.GemSize.CHIP))
+									() -> createItem(new GemstoneItem(type, Roshar.GemSize.CHIP))
 							)));
 
 
-	public static final Map<Roshar.Polestone, RegistryObject<Item>> POLESTONE_MARKS =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<Item>> GEMSTONE_MARKS =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + RegNameStubs.MARK,
-									() -> createItem(new PolestoneItem(type, Roshar.GemSize.MARK))
+									() -> createItem(new GemstoneItem(type, Roshar.GemSize.MARK))
 							)));
 
 
-	public static final Map<Roshar.Polestone, RegistryObject<Item>> POLESTONE_BROAMS =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<Item>> GEMSTONE_BROAMS =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + RegNameStubs.BROAM,
-									() -> createItem(new PolestoneItem(type, Roshar.GemSize.BROAM))
+									() -> createItem(new GemstoneItem(type, Roshar.GemSize.BROAM))
 							)));
 
-	public static final Map<Roshar.Polestone, RegistryObject<Item>> HONORBLADES =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<Item>> HONORBLADES =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(

@@ -85,21 +85,21 @@ public final class ColorHandler
 			}
 		}
 
-		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
 			//blockColors.register(cosmereBlockColorHandler, metalType.getOreBlock());
 			for (Roshar.GemSize size : Roshar.GemSize.values())
 			{
-				itemColors.register(cosmereColourHandler, polestone.getPolestoneItem(size));
+				itemColors.register(cosmereColourHandler, gemstone.getGemstoneItem(size));
 			}
 
-			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_BLOCKS.get(polestone).get());
-			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_ORE.get(polestone).get());
-			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get());
+			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_BLOCKS.get(gemstone).get());
+			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_ORE.get(gemstone).get());
+			itemColors.register(blockItemColorHandler, BlocksRegistry.GEM_ORE_DEEPSLATE.get(gemstone).get());
 
-			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_BLOCKS.get(polestone).get());
-			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_ORE.get(polestone).get());
-			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get());
+			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_BLOCKS.get(gemstone).get());
+			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_ORE.get(gemstone).get());
+			blockColors.register(cosmereBlockColorHandler, BlocksRegistry.GEM_ORE_DEEPSLATE.get(gemstone).get());
 		}
 	}
 }

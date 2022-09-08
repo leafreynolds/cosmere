@@ -96,14 +96,14 @@ public class ItemTagsGen extends ItemTagsProvider
 			}
 		}
 
-		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
 			for (Roshar.GemSize size : Roshar.GemSize.values())
 			{
-				final Item polestoneItem = polestone.getPolestoneItem(size);
-				add(Tags.Items.GEMS, polestoneItem);
+				final Item gemstoneItem = gemstone.getGemstoneItem(size);
+				add(Tags.Items.GEMS, gemstoneItem);
 			}
-			add(TagsRegistry.Items.GEM_TAGS.get(polestone), polestone.getPolestoneItem(Roshar.GemSize.BROAM));
+			add(TagsRegistry.Items.GEM_TAGS.get(gemstone), gemstone.getGemstoneItem(Roshar.GemSize.BROAM));
 		}
 	}
 

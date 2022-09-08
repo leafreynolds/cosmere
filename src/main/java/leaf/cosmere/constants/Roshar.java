@@ -101,8 +101,8 @@ public class Roshar
 		}
 	}
 
-	//https://coppermind.net/wiki/Polestone
-	public enum Polestone implements Tier
+	//https://coppermind.net/wiki/Gemstone
+	public enum Gemstone implements Tier
 	{
 		SAPPHIRE(0),
 		SMOKESTONE(1),
@@ -118,12 +118,12 @@ public class Roshar
 
 		private final int id;
 
-		Polestone(int id)
+		Gemstone(int id)
 		{
 			this.id = id;
 		}
 
-		public static Optional<Polestone> valueOf(int value)
+		public static Optional<Gemstone> valueOf(int value)
 		{
 			return Arrays.stream(values())
 					.filter(gemType -> gemType.id == value)
@@ -202,16 +202,16 @@ public class Roshar
 			}
 		}
 
-		public Item getPolestoneItem(GemSize size)
+		public Item getGemstoneItem(GemSize size)
 		{
 			switch (size)
 			{
 				case BROAM:
-					return ItemsRegistry.POLESTONE_BROAMS.get(this).get();
+					return ItemsRegistry.GEMSTONE_BROAMS.get(this).get();
 				case MARK:
-					return ItemsRegistry.POLESTONE_MARKS.get(this).get();
+					return ItemsRegistry.GEMSTONE_MARKS.get(this).get();
 				case CHIP:
-					return ItemsRegistry.POLESTONE_CHIPS.get(this).get();
+					return ItemsRegistry.GEMSTONE_CHIPS.get(this).get();
 			}
 
 			return null;

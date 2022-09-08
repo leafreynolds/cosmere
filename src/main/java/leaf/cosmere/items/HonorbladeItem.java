@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class HonorbladeItem extends ShardbladeItem
 {
-	Roshar.Polestone polestone;
+	Roshar.Gemstone gemstone;
 	private final int attackDamageIn;
 	private final float attackSpeedIn;
 
@@ -32,10 +32,10 @@ public class HonorbladeItem extends ShardbladeItem
 	protected static final UUID PRIMARY_HONORBLADE_SURGE_UUID = UUID.fromString("CB3F55D3-4865-4180-A497-9C13A33DB5CF");
 	protected static final UUID SECONDARY_HONORBLADE_SURGE_UUID = UUID.fromString("FA233E1C-4180-4865-A497-BCCE9785ACA3");
 
-	public HonorbladeItem(Roshar.Polestone polestone, Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
+	public HonorbladeItem(Roshar.Gemstone gemstone, Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, builderIn);
-		this.polestone = polestone;
+		this.gemstone = gemstone;
 		this.attackDamageIn = attackDamageIn;
 		this.attackSpeedIn = attackSpeedIn;
 	}
@@ -52,8 +52,8 @@ public class HonorbladeItem extends ShardbladeItem
 			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", attackDamageIn, AttributeModifier.Operation.ADDITION));
 			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeedIn, AttributeModifier.Operation.ADDITION));
-			builder.put(polestone.getFirstSurgeAttribute().get(),new AttributeModifier(PRIMARY_HONORBLADE_SURGE_UUID, "SurgeAttribute", 5, AttributeModifier.Operation.ADDITION));
-			builder.put(polestone.getSecondSurgeAttribute().get(),new AttributeModifier(SECONDARY_HONORBLADE_SURGE_UUID, "SurgeAttribute", 5, AttributeModifier.Operation.ADDITION));
+			builder.put(gemstone.getFirstSurgeAttribute().get(),new AttributeModifier(PRIMARY_HONORBLADE_SURGE_UUID, "SurgeAttribute", 5, AttributeModifier.Operation.ADDITION));
+			builder.put(gemstone.getSecondSurgeAttribute().get(),new AttributeModifier(SECONDARY_HONORBLADE_SURGE_UUID, "SurgeAttribute", 5, AttributeModifier.Operation.ADDITION));
 			this.attributeModifiers = builder.build();
 		}
 

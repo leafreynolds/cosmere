@@ -24,7 +24,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -117,13 +116,13 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 		}
 
 
-		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
-			compressRecipe(BlocksRegistry.GEM_BLOCKS.get(polestone).get(), TagsRegistry.Items.GEM_TAGS.get(polestone)).save(consumer);
-			decompressRecipe(consumer, ItemsRegistry.POLESTONE_BROAMS.get(polestone).get(), TagsRegistry.Items.GEM_BLOCK_ITEM_TAGS.get(polestone), polestone.getName() + "_block_deconstruct");
+			compressRecipe(BlocksRegistry.GEM_BLOCKS.get(gemstone).get(), TagsRegistry.Items.GEM_TAGS.get(gemstone)).save(consumer);
+			decompressRecipe(consumer, ItemsRegistry.GEMSTONE_BROAMS.get(gemstone).get(), TagsRegistry.Items.GEM_BLOCK_ITEM_TAGS.get(gemstone), gemstone.getName() + "_block_deconstruct");
 
-			addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_ORE.get(polestone).get(), ItemsRegistry.POLESTONE_MARKS.get(polestone).get(), 1.0f, 1000);
-			addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get(), ItemsRegistry.POLESTONE_BROAMS.get(polestone).get(), 1.0f, 1000);
+			addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_ORE.get(gemstone).get(), ItemsRegistry.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
+			addOreSmeltingRecipes(consumer, BlocksRegistry.GEM_ORE_DEEPSLATE.get(gemstone).get(), ItemsRegistry.GEMSTONE_BROAMS.get(gemstone).get(), 1.0f, 1000);
 		}
 	}
 

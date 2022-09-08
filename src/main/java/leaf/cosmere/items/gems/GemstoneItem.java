@@ -1,7 +1,7 @@
 /*
  * File created ~ 9 - 4 - 2022 ~ Leaf
  * The Gemstones of Roshar
- * https://coppermind.net/wiki/Polestone
+ * https://coppermind.net/wiki/Gemstone
  */
 
 package leaf.cosmere.items.gems;
@@ -17,15 +17,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 
-public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneType
+public class GemstoneItem extends ChargeableItemBase implements IHasGemstoneType
 {
-	private final Roshar.Polestone polestone;
+	private final Roshar.Gemstone gemstone;
 	private final Roshar.GemSize gemSize;
 
-	public PolestoneItem(Roshar.Polestone polestone, Roshar.GemSize gemSize)
+	public GemstoneItem(Roshar.Gemstone gemstone, Roshar.GemSize gemSize)
 	{
 		super(PropTypes.Items.SIXTY_FOUR.get().tab(CosmereItemGroups.ITEMS).rarity(Rarity.UNCOMMON));
-		this.polestone = polestone;
+		this.gemstone = gemstone;
 		this.gemSize = gemSize;
 	}
 
@@ -42,9 +42,9 @@ public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneTy
 	}
 
 	@Override
-	public Roshar.Polestone getPolestoneType()
+	public Roshar.Gemstone getType()
 	{
-		return polestone;
+		return gemstone;
 	}
 
 	public Roshar.GemSize getSize()
@@ -71,9 +71,9 @@ public class PolestoneItem extends ChargeableItemBase implements IHasPolestoneTy
 	{
 		if (pLevel.isRainingAt(pEntity.blockPosition()) && pLevel.isThundering())
 		{
-			if (pStack.getItem() instanceof PolestoneItem polestoneItem)
+			if (pStack.getItem() instanceof GemstoneItem gemstoneItem)
 			{
-				polestoneItem.increaseCurrentCharge(pStack);
+				gemstoneItem.increaseCurrentCharge(pStack);
 			}
 		}
 

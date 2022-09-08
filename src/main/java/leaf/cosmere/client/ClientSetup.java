@@ -70,10 +70,10 @@ public class ClientSetup
 			ItemBlockRenderTypes.setRenderLayer(metalType.getOreBlock(), cutoutMipped);
 			ItemBlockRenderTypes.setRenderLayer(metalType.getDeepslateOreBlock(), cutoutMipped);
 		}
-		for (Roshar.Polestone polestone : Roshar.Polestone.values())
+		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
-			ItemBlockRenderTypes.setRenderLayer(BlocksRegistry.GEM_ORE.get(polestone).get(), cutoutMipped);
-			ItemBlockRenderTypes.setRenderLayer(BlocksRegistry.GEM_ORE_DEEPSLATE.get(polestone).get(), cutoutMipped);
+			ItemBlockRenderTypes.setRenderLayer(BlocksRegistry.GEM_ORE.get(gemstone).get(), cutoutMipped);
+			ItemBlockRenderTypes.setRenderLayer(BlocksRegistry.GEM_ORE_DEEPSLATE.get(gemstone).get(), cutoutMipped);
 		}
 
 		CurioRenderers.register();

@@ -64,8 +64,8 @@ public class FeatureRegistry
 											)
 									)
 					));
-	public static final Map<Roshar.Polestone, RegistryObject<ConfiguredFeature<?, ?>>> CONFIGURED_GEM_ORE_FEATURES =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<ConfiguredFeature<?, ?>>> CONFIGURED_GEM_ORE_FEATURES =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> CONFIGURED_FEATURES.register(
@@ -77,8 +77,8 @@ public class FeatureRegistry
 													9)))
 					));
 
-	public static final Map<Roshar.Polestone, RegistryObject<PlacedFeature>> PLACED_GEM_ORE_FEATURES =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<PlacedFeature>> PLACED_GEM_ORE_FEATURES =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type ->
@@ -107,7 +107,7 @@ public class FeatureRegistry
 						BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType).get().defaultBlockState())
 		);
 	}
-	private static List<OreConfiguration.TargetBlockState> makeTarget(Roshar.Polestone type)
+	private static List<OreConfiguration.TargetBlockState> makeTarget(Roshar.Gemstone type)
 	{
 		return ImmutableList.of(
 				OreConfiguration.target(

@@ -42,13 +42,13 @@ public class BlocksRegistry
 									metalType.getName() + Constants.RegNameStubs.BLOCK,
 									() -> new MetalBlock(metalType), metalType.getRarity())));
 
-	public static final Map<Roshar.Polestone, RegistryObject<GemBlock>> GEM_BLOCKS =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<GemBlock>> GEM_BLOCKS =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
-							polestone -> register(
-									polestone.getName() + Constants.RegNameStubs.BLOCK,
-									() -> new GemBlock(polestone), Rarity.UNCOMMON)));
+							gemstone -> register(
+									gemstone.getName() + Constants.RegNameStubs.BLOCK,
+									() -> new GemBlock(gemstone), Rarity.UNCOMMON)));
 
 	public static final Map<Metals.MetalType, RegistryObject<MetalOreBlock>> METAL_ORE =
 			Arrays.stream(Metals.MetalType.values())
@@ -70,22 +70,22 @@ public class BlocksRegistry
 									() -> new MetalOreBlock(metalType),
 									metalType.getRarity())));
 
-	public static final Map<Roshar.Polestone, RegistryObject<GemOreBlock>> GEM_ORE =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<GemOreBlock>> GEM_ORE =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
-							polestone -> register(
-									polestone.getName() + Constants.RegNameStubs.ORE,
-									() -> new GemOreBlock(polestone),
+							gemstone -> register(
+									gemstone.getName() + Constants.RegNameStubs.ORE,
+									() -> new GemOreBlock(gemstone),
 									Rarity.UNCOMMON)));
 
-	public static final Map<Roshar.Polestone, RegistryObject<GemOreBlock>> GEM_ORE_DEEPSLATE =
-			Arrays.stream(Roshar.Polestone.values())
+	public static final Map<Roshar.Gemstone, RegistryObject<GemOreBlock>> GEM_ORE_DEEPSLATE =
+			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
-							polestone -> register(
-									Constants.RegNameStubs.DEEPSLATE + polestone.getName() + Constants.RegNameStubs.ORE,
-									() -> new GemOreBlock(polestone),
+							gemstone -> register(
+									Constants.RegNameStubs.DEEPSLATE + gemstone.getName() + Constants.RegNameStubs.ORE,
+									() -> new GemOreBlock(gemstone),
 									Rarity.UNCOMMON)));
 
 
