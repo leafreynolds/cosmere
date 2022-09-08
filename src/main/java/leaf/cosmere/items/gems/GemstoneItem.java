@@ -6,13 +6,17 @@
 
 package leaf.cosmere.items.gems;
 
+import leaf.cosmere.cap.entity.SpiritwebCapability;
 import leaf.cosmere.constants.Roshar;
 import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.ChargeableItemBase;
 import leaf.cosmere.properties.PropTypes;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
@@ -78,5 +82,60 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemstoneType
 		}
 
 		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
+	}
+
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+	{
+		ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
+
+		if (pLevel.isClientSide)
+		{
+			return InteractionResultHolder.pass(itemStack);
+		}
+
+		SpiritwebCapability.get(pPlayer).ifPresent(spiritweb ->
+		{
+			SpiritwebCapability data = (SpiritwebCapability) spiritweb;
+
+			final int charge = getCharge(itemStack);
+			int playerStormlight = data.getStormlight();
+			final int maxPlayerStormlight = 1000;
+
+			//Get stormlight from gems
+			if (!pPlayer.isCrouching())
+			{
+				if (charge + playerStormlight > maxPlayerStormlight)
+				{
+					data.adjustStormlight(-(maxPlayerStormlight - playerStormlight), true);
+					setCharge(itemStack, ((charge + playerStormlight) - maxPlayerStormlight));
+				}
+				else
+				{
+					data.adjustStormlight(-charge, true);
+					setCharge(itemStack, 0);
+				}
+			}
+			//put remaining stormlight into gem.
+			else
+			{
+				if (playerStormlight > 0)
+				{
+					if ((charge + playerStormlight) > getMaxCharge(itemStack))
+					{
+						data.adjustStormlight(getMaxCharge(itemStack) - charge, true);
+						setCharge(itemStack, getMaxCharge(itemStack));
+					}
+					else
+					{
+						data.adjustStormlight(playerStormlight, true);
+						setCharge(itemStack, (short) (playerStormlight + charge));
+					}
+				}
+			}
+		});
+
+
+		return InteractionResultHolder.consume(itemStack);
 	}
 }

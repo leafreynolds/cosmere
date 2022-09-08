@@ -68,7 +68,9 @@ public class SpiritwebCapability implements ISpiritweb
 
 
 	//Injection
-	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() { });
+	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
+	{
+	});
 
 	//detect if capability has been set up yet
 	private boolean didSetup = false;
@@ -165,7 +167,7 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			final String manifestationLoc = manifestation.getResourceLocation().toString();
 
-			int oldManifestationMode = MANIFESTATIONS_MODE.getOrDefault(manifestation,0);
+			int oldManifestationMode = MANIFESTATIONS_MODE.getOrDefault(manifestation, 0);
 			int newManifestationMode = 0;
 
 			if (modeNBT.contains(manifestationLoc))
@@ -331,6 +333,31 @@ public class SpiritwebCapability implements ISpiritweb
 		return false;
 	}
 
+	@Override
+	public int getStormlight()
+	{
+		return stormlightStored;
+	}
+
+	@Override
+	public boolean adjustStormlight(int amountToAdjust, boolean doAdjust)
+	{
+		int stormlight = getStormlight();
+		boolean addingToStormlight = amountToAdjust < 0;
+
+		if (addingToStormlight || stormlight >= amountToAdjust)
+		{
+			if (doAdjust)
+			{
+				stormlightStored = stormlight - amountToAdjust;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
 	//Copy things from an old spiritweb into the new one.
 	//Eg a player has died and we need to make sure they get their stormlight and breaths back.
 	@Override
@@ -409,7 +436,7 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			Vec3 originPoint = getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 			PoseStack matrixStack = event.getPoseStack();
-			DrawUtils.drawLinesFromPoint(matrixStack,originPoint,linesToDrawByColor);
+			DrawUtils.drawLinesFromPoint(matrixStack, originPoint, linesToDrawByColor);
 		}
 	}
 
@@ -436,7 +463,7 @@ public class SpiritwebCapability implements ISpiritweb
 		else if (selectedManifestation.getManifestationType() == ManifestationTypes.ALLOMANCY)
 		{
 			String rate;
-			if (mode <=0)
+			if (mode <= 0)
 			{
 				rate = "Off";
 			}
@@ -653,7 +680,9 @@ public class SpiritwebCapability implements ISpiritweb
 		for (AManifestation manifestation : ManifestationRegistry.MANIFESTATION_REGISTRY.get())
 		{
 			if (manifestation == ManifestationRegistry.NONE.get())
+			{
 				continue;
+			}
 
 			if (hasManifestation(manifestation, ignoreTemporaryPower))
 			{
