@@ -107,12 +107,12 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemstoneType
 			{
 				if (charge + playerStormlight > maxPlayerStormlight)
 				{
-					data.adjustStormlight(-(maxPlayerStormlight - playerStormlight), true);
+					data.adjustStormlight((maxPlayerStormlight - playerStormlight), true);
 					setCharge(itemStack, ((charge + playerStormlight) - maxPlayerStormlight));
 				}
 				else
 				{
-					data.adjustStormlight(-charge, true);
+					data.adjustStormlight(charge, true);
 					setCharge(itemStack, 0);
 				}
 			}
@@ -123,12 +123,12 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemstoneType
 				{
 					if ((charge + playerStormlight) > getMaxCharge(itemStack))
 					{
-						data.adjustStormlight(getMaxCharge(itemStack) - charge, true);
+						data.adjustStormlight(-(getMaxCharge(itemStack) - charge), true);
 						setCharge(itemStack, getMaxCharge(itemStack));
 					}
 					else
 					{
-						data.adjustStormlight(playerStormlight, true);
+						data.adjustStormlight(-playerStormlight, true);
 						setCharge(itemStack, (short) (playerStormlight + charge));
 					}
 				}

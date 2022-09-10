@@ -343,13 +343,13 @@ public class SpiritwebCapability implements ISpiritweb
 	public boolean adjustStormlight(int amountToAdjust, boolean doAdjust)
 	{
 		int stormlight = getStormlight();
-		boolean addingToStormlight = amountToAdjust < 0;
 
-		if (addingToStormlight || stormlight >= amountToAdjust)
+		final int newSLValue = stormlight + amountToAdjust;
+		if (newSLValue >= 0)
 		{
 			if (doAdjust)
 			{
-				stormlightStored = stormlight - amountToAdjust;
+				stormlightStored = newSLValue;
 			}
 
 			return true;
