@@ -88,8 +88,11 @@ public class AllomancyBoostEffect extends MobEffectBase
 
 		if (ingestedMetalAmount > 0)
 		{
-			data.adjustIngestedMetal(metalType,
-					ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount, true);
+			final int amountToAdjust = ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount;
+			data.adjustIngestedMetal(
+					metalType,
+					-amountToAdjust, //take amount away
+					true);
 			return true;
 		}
 

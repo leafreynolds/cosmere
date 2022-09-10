@@ -51,9 +51,10 @@ public class AllomancyAluminum extends AllomancyBase
 
 		if (ingestedMetalAmount > 0)
 		{
+			final int amountToAdjust = ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount;
 			data.adjustIngestedMetal(
 					metalType,
-					ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount,
+					-amountToAdjust, //take the amount away
 					true);
 			return true;
 		}

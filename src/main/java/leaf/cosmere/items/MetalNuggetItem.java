@@ -103,8 +103,8 @@ public class MetalNuggetItem extends MetalItem
 			else
 			{
 				//add to metal stored
-				Integer metalIngested = spiritweb.METALS_INGESTED.get(metalType);
-				spiritweb.METALS_INGESTED.put(metalType, metalIngested + (metalType.getAllomancyBurnTimeSeconds() * amount));
+				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;
+				spiritweb.adjustIngestedMetal(metalType, addAmount, true);
 			}
 
 			spiritweb.syncToClients(null);

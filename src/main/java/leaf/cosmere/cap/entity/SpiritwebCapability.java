@@ -318,13 +318,13 @@ public class SpiritwebCapability implements ISpiritweb
 	public boolean adjustIngestedMetal(Metals.MetalType metalType, int amountToAdjust, boolean doAdjust)
 	{
 		int ingestedMetal = getIngestedMetal(metalType);
-		boolean addingToInternalMetals = amountToAdjust < 0;
 
-		if (addingToInternalMetals || ingestedMetal >= amountToAdjust)
+		final int newValue = ingestedMetal + amountToAdjust;
+		if (newValue >= 0)
 		{
 			if (doAdjust)
 			{
-				METALS_INGESTED.put(metalType, ingestedMetal - amountToAdjust);
+				METALS_INGESTED.put(metalType, newValue);
 			}
 
 			return true;

@@ -91,7 +91,7 @@ public class AllomancyChromium extends AllomancyBase
 						{
 							for (Metals.MetalType metalType : Metals.MetalType.values())
 							{
-								iSpiritweb.adjustIngestedMetal(metalType, 9, true);
+								iSpiritweb.adjustIngestedMetal(metalType, -9, true);
 							}
 						}
 					});
