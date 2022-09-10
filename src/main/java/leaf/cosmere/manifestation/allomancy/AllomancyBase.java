@@ -157,7 +157,7 @@ public class AllomancyBase extends ManifestationBase implements IHasMetalType
 			//max should be around 30. 50 was way too much
 
 			int secondsOfFeruchemyToAdd = (int) Math.floor(getRange(data)) - 5;
-			if (null != MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (-secondsOfFeruchemyToAdd) * (mode), true, true))
+			if (null != MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (secondsOfFeruchemyToAdd * mode), true, true))
 			{
 				//compound successful
 			}

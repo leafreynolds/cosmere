@@ -15,14 +15,15 @@ import java.util.function.Predicate;
 
 public class MetalmindChargeHelper
 {
-	public static ItemStack adjustMetalmindChargeExact(ISpiritweb data, Metals.MetalType metalType, int chargeToGet, boolean remove, boolean checkPlayer)
+	public static ItemStack adjustMetalmindChargeExact(ISpiritweb data, Metals.MetalType metalType, int adjustAmount, boolean remove, boolean checkPlayer)
 	{
 		if (data.getLiving() instanceof Player player)
 		{
-			return adjustMetalmindChargeExact(player, metalType, chargeToGet, remove, checkPlayer);
+			return adjustMetalmindChargeExact(player, metalType, adjustAmount, remove, checkPlayer);
 		}
 		else
 		{
+			//todo ??
 			return null;
 		}
 	}

@@ -144,7 +144,7 @@ public class ItemChargeHelper
 		for (ItemStack stackInSlot : Iterables.concat(items, acc))
 		{
 			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
-			boolean storing = adjustValue < 0;
+			boolean storing = adjustValue > 0;
 
 			int slotCharge = chargeItemSlot.getCharge(stackInSlot);
 			int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
@@ -165,12 +165,12 @@ public class ItemChargeHelper
 			}
 
 
-			if ((storing && (slotCharge + (-adjustValue)) <= slotMaxCharge)//storing and can fit in this item
-					|| !storing && slotCharge >= adjustValue)
+			if ((storing && (slotCharge + adjustValue) <= slotMaxCharge)//storing and can fit in this item
+					|| !storing && slotCharge >= (-adjustValue))
 			{
 				if (doAdjust)
 				{
-					chargeItemSlot.adjustCharge(stackInSlot, -adjustValue);
+					chargeItemSlot.adjustCharge(stackInSlot, adjustValue);
 				}
 
 				return stackInSlot;

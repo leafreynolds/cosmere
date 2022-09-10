@@ -91,8 +91,8 @@ public class FeruchemyBase extends ManifestationBase implements IHasMetalType
 
 	public boolean canAfford(ISpiritweb data, boolean simulate)
 	{
-		int cost = getCost(data);
-		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, !simulate, true);
+		int adjustAmount = getCost(data);
+		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, adjustAmount, !simulate, true);
 
 		if (metalmind != null)
 		{

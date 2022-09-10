@@ -59,7 +59,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
 
 		int mode = getMode(data);
 
-		int cost;
+		int adjustAmount;
 
 		MobEffect effect = getEffect(mode);
 
@@ -68,15 +68,15 @@ public class FeruchemyNicrosil extends FeruchemyBase
 		if (mode < 0)
 		{
 			//wanting to tap
-			//get cost
-			cost = mode <= -3 ? -(mode * mode) : mode;
+			//get adjustAmount
+			adjustAmount = mode <= -3 ? -(mode * mode) : mode;
 
 		}
 		//if we are storing
 		//check if there is space to store
 		else if (mode > 0)
 		{
-			cost = mode;
+			adjustAmount = mode;
 		}
 		//can't store or tap any more
 		else
@@ -86,7 +86,7 @@ public class FeruchemyNicrosil extends FeruchemyBase
 			return;
 		}
 
-		final ItemStack itemStack = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, -cost, true, true);
+		final ItemStack itemStack = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, adjustAmount, true, true);
 		if (itemStack != null)
 		{
 			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
