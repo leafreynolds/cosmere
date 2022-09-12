@@ -1,4 +1,4 @@
-// 1.19.2	2022-09-08T12:49:26.357803	Item Models: cosmere
+// 1.19.2	2022-09-12T14:07:23.7089279	Item Models: cosmere
 78846538426f22e67a52877172b5da616e2dfd40 assets/cosmere/models/item/aluminum_bracelet_metalmind.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/aluminum_ingot.json
 83e307f08c00074dbdfbdafdad4542ddff47096a assets/cosmere/models/item/aluminum_necklace_metalmind.json
@@ -135,6 +135,10 @@ e22e51502316780d05aa646ae20cf5a5cb6eda6e assets/cosmere/models/item/ruby_broam.j
 e22e51502316780d05aa646ae20cf5a5cb6eda6e assets/cosmere/models/item/sapphire_broam.json
 83fc315f8866cfb3d1218654943e13980bf433ed assets/cosmere/models/item/sapphire_chip.json
 6094c5f16188fcafdd6a8284cfaece4c693097b7 assets/cosmere/models/item/sapphire_mark.json
+f8f4c09de4e9b8d47a31ef588fb26504e83670d9 assets/cosmere/models/item/shardplate_boots.json
+628e82a369821a58ad6e38548a4b05481e521572 assets/cosmere/models/item/shardplate_chest.json
+b92e66fa8045d60d5e01ab52b3579b18e42e8c95 assets/cosmere/models/item/shardplate_helmet.json
+f63f4f021600966759c05a474f915634b4986ac5 assets/cosmere/models/item/shardplate_leggings.json
 c53339be6912e7d509624d7f73722bc76ea92beb assets/cosmere/models/item/silver_ingot.json
 8b69f9e5c9ea89a6fbd04f62f05a7cf3b0c09e88 assets/cosmere/models/item/silver_nugget.json
 e22e51502316780d05aa646ae20cf5a5cb6eda6e assets/cosmere/models/item/smokestone_broam.json

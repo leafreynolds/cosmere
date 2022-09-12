@@ -1,8 +1,11 @@
-package leaf.cosmere.client.render.curio.renderer;
+/*
+ * File created ~ 12 - 9 - 2022 ~ Leaf
+ */
+
+package leaf.cosmere.client.render.armor;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.client.render.curio.LayerDefinitions;
-import leaf.cosmere.client.render.curio.model.BraceletModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,14 +18,14 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
-public class BraceletRenderer implements ICurioRenderer
+public class ArmorRenderer implements ICurioRenderer
 {
-	BraceletModel model;
+	ShardplateModel model;
 
-	public BraceletRenderer()
+	public ArmorRenderer()
 	{
-		final ModelPart modelPart = Minecraft.getInstance().getEntityModels().bakeLayer(LayerDefinitions.BRACELET);
-		model = new BraceletModel(modelPart);
+		final ModelPart modelPart = Minecraft.getInstance().getEntityModels().bakeLayer(LayerDefinitions.SHARDPLATE);
+		model = new ShardplateModel(modelPart);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 /*
- * File created ~ 10 - 7 - 2022 ~ Leaf
+ * File created ~ 12 - 9 - 2022 ~ Leaf
  */
 
-package leaf.cosmere.items;
+package leaf.cosmere.items.tiers;
 
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;

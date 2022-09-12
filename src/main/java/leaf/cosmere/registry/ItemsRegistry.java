@@ -15,7 +15,11 @@ import leaf.cosmere.itemgroups.CosmereItemGroups;
 import leaf.cosmere.items.*;
 import leaf.cosmere.items.curio.*;
 import leaf.cosmere.items.gems.GemstoneItem;
+import leaf.cosmere.items.tiers.ShardbladeItemTier;
+import leaf.cosmere.items.tiers.ShardplateArmorMaterial;
 import leaf.cosmere.properties.PropTypes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.DyeableArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -42,6 +46,11 @@ public class ItemsRegistry
 	public static final RegistryObject<Item> NIGHT_BLOOD = ITEMS.register("night_blood", () -> createItem(new ShardbladeItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get())));
 	public static final RegistryObject<Item> TEST_BLADE = ITEMS.register("test_blade", () -> createItem(new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get())));
 	public static final RegistryObject<Item> MASTER_SWORD = ITEMS.register("master_sword", () -> createItem(new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get())));
+
+	public static final RegistryObject<Item> SHARDPLATE_HELMET = ITEMS.register("shardplate_helmet", () -> createItem(new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, EquipmentSlot.HEAD, PropTypes.Items.SHARDBLADE.get())));
+	public static final RegistryObject<Item> SHARDPLATE_CHEST = ITEMS.register("shardplate_chest", () -> createItem(new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, EquipmentSlot.CHEST, PropTypes.Items.SHARDBLADE.get())));
+	public static final RegistryObject<Item> SHARDPLATE_LEGGINGS = ITEMS.register("shardplate_leggings", () -> createItem(new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, EquipmentSlot.LEGS, PropTypes.Items.SHARDBLADE.get())));
+	public static final RegistryObject<Item> SHARDPLATE_BOOTS = ITEMS.register("shardplate_boots", () -> createItem(new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, EquipmentSlot.FEET, PropTypes.Items.SHARDBLADE.get())));
 
 
 	public static final RegistryObject<Item> BANDS_OF_MOURNING = ITEMS.register("bands_of_mourning", () -> createItem(new BandsOfMourningItem()));

@@ -1,7 +1,7 @@
 package leaf.cosmere.client.render.curio.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import leaf.cosmere.client.render.curio.CuriosLayerDefinitions;
+import leaf.cosmere.client.render.curio.LayerDefinitions;
 import leaf.cosmere.client.render.curio.model.SpikeModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -21,7 +21,7 @@ public class SpikeRenderer implements ICurioRenderer
 
 	public SpikeRenderer()
 	{
-		final ModelPart modelPart = Minecraft.getInstance().getEntityModels().bakeLayer(CuriosLayerDefinitions.SPIKE);
+		final ModelPart modelPart = Minecraft.getInstance().getEntityModels().bakeLayer(LayerDefinitions.SPIKE);
 		model = new SpikeModel(modelPart);
 	}
 

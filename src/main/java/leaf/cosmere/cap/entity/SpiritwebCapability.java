@@ -15,12 +15,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.client.gui.DrawUtils;
 import leaf.cosmere.constants.Manifestations.ManifestationTypes;
 import leaf.cosmere.constants.Metals;
+import leaf.cosmere.items.tiers.ShardplateArmorMaterial;
 import leaf.cosmere.manifestation.AManifestation;
 import leaf.cosmere.manifestation.allomancy.AllomancyIronSteel;
 import leaf.cosmere.network.Network;
 import leaf.cosmere.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.registry.AttributesRegistry;
 import leaf.cosmere.registry.ManifestationRegistry;
+import leaf.cosmere.utils.helpers.EffectsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -28,10 +30,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -51,6 +56,7 @@ import java.util.List;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
     "The actual outlet of the power is not chosen by the practitioner, but instead is hardwritten into their Spiritweb"
@@ -262,16 +268,47 @@ public class SpiritwebCapability implements ISpiritweb
 						METALS_INGESTED.put(metalType, metalIngestAmount - 1);
 					}
 				}
-
-
 			}
 
 			//tick stormlight
-			if (stormlightStored > 0 && livingEntity.tickCount % 100 == 0)
+			if (stormlightStored > 0)
 			{
-				//todo decide what's appropriate for reducing stormlight
-				//maybe reducing cost based on how many ideals they have sworn?
-				stormlightStored--;
+				if (livingEntity.tickCount % 100 == 0)
+				{
+					//todo decide what's appropriate for reducing stormlight
+					//maybe reducing cost based on how many ideals they have sworn?
+					stormlightStored--;
+				}
+
+				//special effects for wearing shardplate.
+				if (livingEntity.tickCount % 20 == 0)
+				{
+					ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
+					ItemStack breastplate = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
+					ItemStack leggings = livingEntity.getItemBySlot(EquipmentSlot.LEGS);
+					ItemStack boots = livingEntity.getItemBySlot(EquipmentSlot.FEET);
+
+					//check wearing full suit of armor
+					if (Stream.of(helmet, breastplate, leggings, boots).allMatch(armorStack -> !armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem))
+					{
+						//check armor matches same material
+						for (ShardplateArmorMaterial material : ShardplateArmorMaterial.values())
+						{
+							if (Stream.of(helmet, breastplate, leggings, boots).allMatch((armorStack -> ((ArmorItem) armorStack.getItem()).getMaterial() == material)))
+							{
+								int amplifier = material == ShardplateArmorMaterial.DEADPLATE ? 0 : 1;
+
+								livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, amplifier));
+								livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DIG_SPEED, amplifier));
+								livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, amplifier));
+								livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, amplifier));
+
+								stormlightStored--;
+								break;
+							}
+						}
+					}
+				}
 			}
 
 		}

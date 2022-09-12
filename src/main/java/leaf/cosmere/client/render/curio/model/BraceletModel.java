@@ -40,10 +40,10 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 	//region model parts
 	private final ModelPart root;
 	private final ModelPart rightArmUpper;
-	private final ModelPart rightArmLower;
+	private final ModelPart rightArmMiddle;
 	private final ModelPart rightHand;
 	private final ModelPart leftArmUpper;
-	private final ModelPart leftArmLower;
+	private final ModelPart leftArmMiddle;
 	private final ModelPart leftHand;
 //endregion
 
@@ -52,13 +52,13 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 		super(part, RenderType::entityCutoutNoCull);
 		this.root = part;
 		ModelPart find = part.getChild(rightArmID);
-		rightArmUpper = find.getChild("upper_spike");
-		rightArmLower = find.getChild("lower_spike");
+		rightArmUpper = find.getChild("upper");
+		rightArmMiddle = find.getChild("middle");
 		rightHand = find.getChild("hand");
 
 		find = part.getChild(leftArmID);
-		leftArmUpper = find.getChild("upper_spike");
-		leftArmLower = find.getChild("lower_spike");
+		leftArmUpper = find.getChild("upper");
+		leftArmMiddle = find.getChild("middle");
 		leftHand = find.getChild("hand");
 	}
 
@@ -74,13 +74,13 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
-		rightArm.addOrReplaceChild("upper_spike",
+		rightArm.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.addBox(-3.5f, 0, -2.5F, 2, 1, 5, cube),
 				PartPose.ZERO);
 
-		rightArm.addOrReplaceChild("lower_spike",
+		rightArm.addOrReplaceChild("middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.addBox(-3.5f, 3, -2.5F, 2, 1, 5, cube),
@@ -99,13 +99,13 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
-		leftArm.addOrReplaceChild("upper_spike",
+		leftArm.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.addBox(1.5f, 0, -2.5F, 2, 1, 5, cube),
 				PartPose.ZERO);
 
-		leftArm.addOrReplaceChild("lower_spike",
+		leftArm.addOrReplaceChild("middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.addBox(1.5f, 3, -2.5F, 2, 1, 5, cube),
@@ -155,10 +155,10 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 						modelPartToRender = rightArmUpper;
 						break;
 					case 2:
-						modelPartToRender = leftArmLower;
+						modelPartToRender = leftArmMiddle;
 						break;
 					case 3:
-						modelPartToRender = rightArmLower;
+						modelPartToRender = rightArmMiddle;
 						break;
 				}
 

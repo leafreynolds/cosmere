@@ -5,8 +5,10 @@
 package leaf.cosmere.client;
 
 import leaf.cosmere.Cosmere;
-import leaf.cosmere.client.render.curio.CurioRenderers;
-import leaf.cosmere.client.render.curio.CuriosLayerDefinitions;
+import leaf.cosmere.client.render.CosmereLayer;
+import leaf.cosmere.client.render.armor.ShardplateModel;
+import leaf.cosmere.client.render.curio.CosmereRenderers;
+import leaf.cosmere.client.render.curio.LayerDefinitions;
 import leaf.cosmere.client.render.curio.model.BraceletModel;
 import leaf.cosmere.client.render.curio.model.SpikeModel;
 import leaf.cosmere.constants.Metals;
@@ -19,10 +21,13 @@ import leaf.cosmere.utils.helpers.LogHelper;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -43,11 +48,31 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void registerLayers(final EntityRenderersEvent.RegisterLayerDefinitions evt)
 	{
-		evt.registerLayerDefinition(CuriosLayerDefinitions.SPIKE, SpikeModel::createLayer);
-		evt.registerLayerDefinition(CuriosLayerDefinitions.BRACELET, BraceletModel::createLayer);
+		evt.registerLayerDefinition(LayerDefinitions.SPIKE, SpikeModel::createLayer);
+		evt.registerLayerDefinition(LayerDefinitions.BRACELET, BraceletModel::createLayer);
 		//evt.registerLayerDefinition(CuriosLayerDefinitions.NECKLACE, NecklaceModel::createLayer);
+
+		//shardplate
+		evt.registerLayerDefinition(LayerDefinitions.SHARDPLATE, ShardplateModel::createBodyLayer);
 	}
 
+
+	@SubscribeEvent
+	public static void addLayers(EntityRenderersEvent.AddLayers evt)
+	{
+		addPlayerLayer(evt, "default");
+		addPlayerLayer(evt, "slim");
+		CosmereRenderers.load();
+	}
+
+	private static void addPlayerLayer(EntityRenderersEvent.AddLayers evt, String skin) {
+		EntityRenderer<? extends Player> renderer = evt.getSkin(skin);
+
+		if (renderer instanceof LivingEntityRenderer livingRenderer)
+		{
+			livingRenderer.addLayer(new CosmereLayer<>(livingRenderer));
+		}
+	}
 
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
@@ -76,7 +101,7 @@ public class ClientSetup
 			ItemBlockRenderTypes.setRenderLayer(BlocksRegistry.GEM_ORE_DEEPSLATE.get(gemstone).get(), cutoutMipped);
 		}
 
-		CurioRenderers.register();
+		CosmereRenderers.register();
 
 		LogHelper.info("Client setup complete!");
 	}
