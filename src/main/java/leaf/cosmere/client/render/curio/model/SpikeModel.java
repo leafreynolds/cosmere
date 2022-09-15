@@ -296,14 +296,14 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 					eyeRoot.y = data.getEyeHeight();
 				});
 
-				//we can call render on the head directly, since we have made other spike not visible.
+				//we can call render on the head directly since we have made other spike not visible.
 				//we do this so that we can use the eye height and have it follow proper head rotations
 				modelPartToRender = head;
 
 				break;
 			case linchpinID:
 				modelPartToRender = linchpin;
-				modelPartToRender.copyFrom(this.root.getChild(bodyID));
+				modelPartToRender.copyFrom(this.root.getChild(headID));
 
 				modelPartToRender.y = -1;
 				break;

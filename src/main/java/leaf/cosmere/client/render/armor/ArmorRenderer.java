@@ -20,7 +20,7 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class ArmorRenderer implements ICurioRenderer
 {
-	ShardplateModel model;
+	public ShardplateModel model;
 
 	public ArmorRenderer()
 	{
@@ -56,7 +56,7 @@ public class ArmorRenderer implements ICurioRenderer
 
 		ICurioRenderer.followBodyRotations(entity, this.model);
 
-		this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
+		//this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
 
 	}
 }

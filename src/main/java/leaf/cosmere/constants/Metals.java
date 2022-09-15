@@ -1005,7 +1005,7 @@ public class Metals
 		public static final Color HARMONIUM = Color.decode("#88b9d9");
 
 		// made up
-		public static final Color LERASATIUM = new Color(0.560f, 0.570f, 0.580f);
+		public static final Color LERASATIUM = Color.decode("#8e9194");
 
 		//non-special
 		public static final Color NICKEL = Color.decode("#eeedcb");

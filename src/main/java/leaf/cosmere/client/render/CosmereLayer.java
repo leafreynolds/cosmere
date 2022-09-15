@@ -39,11 +39,10 @@ public class CosmereLayer<T extends LivingEntity, M extends EntityModel<T>> exte
 		{
 			if (!armorSlot.isEmpty() && armorSlot.getItem() instanceof ShardplateItem armorItem)
 			{
-				ItemStack finalStack = armorSlot;
 				SlotContext slotContext = new SlotContext(armorItem.getSlot().getName(), livingEntity, armorItem.getSlot().getIndex(), false, true);
 				CosmereRenderers.getRenderer(armorItem).ifPresent(
 						renderer -> renderer
-								.render(finalStack, slotContext, matrixStack, renderLayerParent,
+								.render(armorSlot, slotContext, matrixStack, renderLayerParent,
 										renderTypeBuffer, light, limbSwing, limbSwingAmount, partialTicks,
 										ageInTicks, netHeadYaw, headPitch));
 			}

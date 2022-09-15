@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -48,22 +49,38 @@ public class ShardplateModel extends HumanoidModel<LivingEntity>
 		MeshDefinition mesh = HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F);
 		PartDefinition partdefinition = mesh.getRoot();
 
-		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition cube_r1 = head.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(4, 24).addBox(7.0F, -6.0F, -1.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F))
-				.texOffs(4, 24).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, -8.1481F, 0.3266F, -0.2182F, 0.0F, 0.0F));
+		PartDefinition Helmet = head.addOrReplaceChild("Helmet", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.6F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.6F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition cube_r1 = Helmet.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(8, 5).mirror().addBox(3.0F, -16.0F, -1.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false)
+				.texOffs(8, 5).addBox(-5.0F, -16.0F, -1.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.3927F, 0.0F, 0.0F));
 
-		PartDefinition rightArm = partdefinition.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.6F)), PartPose.offset(-5.0F, 2.0F, 0.0F));
+		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition leftArm = partdefinition.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.6F)), PartPose.offset(5.0F, 2.0F, 0.0F));
+		PartDefinition chestplate = body.addOrReplaceChild("chestplate", CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.75F)), PartPose.offset(0.0F, 6.0F, 0.0F));
 
-		PartDefinition rightLeg = partdefinition.addOrReplaceChild("rightLeg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.6F))
-				.texOffs(18, 28).addBox(-2.1F, 10.6F, -4.7F, 4.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.9F, 12.0F, 0.0F));
+		PartDefinition rightArm = partdefinition.addOrReplaceChild("rightArm", CubeListBuilder.create(), PartPose.offset(-5.0F, 2.0F, 0.0F));
 
-		PartDefinition leftLeg = partdefinition.addOrReplaceChild("leftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.6F))
-				.texOffs(18, 28).addBox(-1.9F, 10.6F, -4.7F, 4.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(1.9F, 12.0F, 0.0F));
+		PartDefinition chestplateRightArm = rightArm.addOrReplaceChild("chestplateRightArm", CubeListBuilder.create().texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.7F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition leftArm = partdefinition.addOrReplaceChild("leftArm", CubeListBuilder.create(), PartPose.offset(5.0F, 2.0F, 0.0F));
+
+		PartDefinition chestplateLeftArm = leftArm.addOrReplaceChild("chestplateLeftArm", CubeListBuilder.create().texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.7F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition rightLeg = partdefinition.addOrReplaceChild("rightLeg", CubeListBuilder.create(), PartPose.offset(-1.9F, 12.0F, 0.0F));
+
+		PartDefinition greavesRightLeg = rightLeg.addOrReplaceChild("greavesRightLeg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.4F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition bootsRightLeg = rightLeg.addOrReplaceChild("bootsRightLeg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 9.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.5F))
+				.texOffs(2, 27).addBox(-1.6F, 10.0F, -4.4F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition leftLeg = partdefinition.addOrReplaceChild("leftLeg", CubeListBuilder.create(), PartPose.offset(1.9F, 12.0F, 0.0F));
+
+		PartDefinition greavesLeftLeg = leftLeg.addOrReplaceChild("greavesLeftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.4F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition bootsLeftLeg = leftLeg.addOrReplaceChild("bootsLeftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 9.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.5F))
+				.texOffs(2, 27).mirror().addBox(-1.9F, 10.0F, -4.4F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.5F)).mirror(false), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 
 		return LayerDefinition.create(mesh, 64, 64);
@@ -73,51 +90,24 @@ public class ShardplateModel extends HumanoidModel<LivingEntity>
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
 	{
-		//we handle rendering our own way
+		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		rightArm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		leftArm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		rightLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		leftLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
-
-	public void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, MultiBufferSource buffer, int light)
+	@Override
+	public void setupAnim(LivingEntity entity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch)
 	{
-		Color color = stack.getItem() instanceof IHasColour hasColour ? hasColour.getColour() : Color.white;
-		VertexConsumer vertexBuilder = ItemRenderer.getFoilBuffer(
-				buffer,
-				renderType(TEXTURE),
-				false,
-				stack.getItem() == ItemsRegistry.BANDS_OF_MOURNING.get());
-
-		switch (LivingEntity.getEquipmentSlotForItem(stack))
+		if (entity instanceof ArmorStand)
 		{
-			case FEET:
-				//ImmutableList.of(this.leftLeg,this.rightLeg)
-				//		.forEach(x -> renderPart(matrixStack, vertexBuilder, light, color, x));
-				break;
-			case LEGS:
-				ImmutableList.of(this.leftLeg,this.rightLeg)
-						.forEach(x -> renderPart(matrixStack, vertexBuilder, light, color, x));
-				break;
-			case CHEST:
-				ImmutableList.of(this.leftArm,this.rightArm, this.body)
-						.forEach(x -> renderPart(matrixStack, vertexBuilder, light, color, x));
-				break;
-			case HEAD:
-				ImmutableList.of(this.head)
-						.forEach(x -> renderPart(matrixStack, vertexBuilder, light, color, x));
-				break;
+			super.setupAnim(entity, 0, 0, 0, 0, 0);
 		}
-
-	}
-
-	private void renderPart(PoseStack matrixStack, VertexConsumer vertexBuilder, int light, Color color, ModelPart root)
-	{
-		root.render(
-				matrixStack,
-				vertexBuilder,
-				light,
-				OverlayTexture.NO_OVERLAY,
-				color.getRed() / 255f,
-				color.getGreen() / 255f,
-				color.getBlue() / 255f,
-				1);
+		else
+		{
+			super.setupAnim(entity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+		}
 	}
 }

@@ -60,12 +60,13 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void addLayers(EntityRenderersEvent.AddLayers evt)
 	{
-		addPlayerLayer(evt, "default");
-		addPlayerLayer(evt, "slim");
+		//addPlayerLayer(evt, "default");
+		//addPlayerLayer(evt, "slim");
 		CosmereRenderers.load();
 	}
 
-	private static void addPlayerLayer(EntityRenderersEvent.AddLayers evt, String skin) {
+	private static void addPlayerLayer(EntityRenderersEvent.AddLayers evt, String skin)
+	{
 		EntityRenderer<? extends Player> renderer = evt.getSkin(skin);
 
 		if (renderer instanceof LivingEntityRenderer livingRenderer)
