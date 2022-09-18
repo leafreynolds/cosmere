@@ -57,9 +57,11 @@ public class ShardplateItem extends ArmorItem
 					var model = armorRenderer.model;
 					model.head.visible = equipmentSlot == EquipmentSlot.HEAD;
 					model.hat.visible = false;
+
 					model.body.visible = equipmentSlot == EquipmentSlot.CHEST;
 					model.rightArm.visible = equipmentSlot == EquipmentSlot.CHEST;
 					model.leftArm.visible = equipmentSlot == EquipmentSlot.CHEST;
+
 					model.rightLeg.visible = equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET;
 					model.leftLeg.visible = equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET;
 

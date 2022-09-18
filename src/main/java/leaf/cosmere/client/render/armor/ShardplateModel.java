@@ -9,27 +9,17 @@ package leaf.cosmere.client.render.armor;
 // Paste this class into your mod and generate all required imports
 
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import leaf.cosmere.items.IHasColour;
-import leaf.cosmere.registry.ItemsRegistry;
 import leaf.cosmere.utils.helpers.ResourceLocationHelper;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.item.ItemStack;
-import top.theillusivec4.curios.api.SlotContext;
-
-import java.awt.*;
 
 public class ShardplateModel extends HumanoidModel<LivingEntity>
 {
@@ -46,7 +36,7 @@ public class ShardplateModel extends HumanoidModel<LivingEntity>
 
 	public static LayerDefinition createBodyLayer()
 	{
-		MeshDefinition mesh = HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F);
+		MeshDefinition mesh = HumanoidModel.createMesh(new CubeDeformation(0.5F), 0);
 		PartDefinition partdefinition = mesh.getRoot();
 
 		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
@@ -70,14 +60,15 @@ public class ShardplateModel extends HumanoidModel<LivingEntity>
 
 		PartDefinition rightLeg = partdefinition.addOrReplaceChild("rightLeg", CubeListBuilder.create(), PartPose.offset(-1.9F, 12.0F, 0.0F));
 
-		PartDefinition greavesRightLeg = rightLeg.addOrReplaceChild("greavesRightLeg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.4F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition greavesRightLeg = rightLeg.addOrReplaceChild("greavesRightLeg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition bootsRightLeg = rightLeg.addOrReplaceChild("bootsRightLeg", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 9.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.5F))
+		PartDefinition bootsRightLeg = rightLeg.addOrReplaceChild("bootsRightLeg", CubeListBuilder.create().texOffs(0, 16)
+				.addBox(-2.0F, 9.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.5F))
 				.texOffs(2, 27).addBox(-1.6F, 10.0F, -4.4F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition leftLeg = partdefinition.addOrReplaceChild("leftLeg", CubeListBuilder.create(), PartPose.offset(1.9F, 12.0F, 0.0F));
 
-		PartDefinition greavesLeftLeg = leftLeg.addOrReplaceChild("greavesLeftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.4F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition greavesLeftLeg = leftLeg.addOrReplaceChild("greavesLeftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition bootsLeftLeg = leftLeg.addOrReplaceChild("bootsLeftLeg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 9.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.5F))
 				.texOffs(2, 27).mirror().addBox(-1.9F, 10.0F, -4.4F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.5F)).mirror(false), PartPose.offset(0.0F, 0.0F, 0.0F));
@@ -85,7 +76,6 @@ public class ShardplateModel extends HumanoidModel<LivingEntity>
 
 		return LayerDefinition.create(mesh, 64, 64);
 	}
-
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
