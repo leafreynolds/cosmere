@@ -21,7 +21,7 @@ apply plugin: 'maven-publish'
 ext.configFile = file('gradle.properties')
 ext.config = parseConfig(configFile)
 
-version = "${forge_version}-b${build_number}"
+version = "${forge_version}-b" + System.env.BUILD_NUMBER
 group = 'leaf.cosmere' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${project.jar_name}"
 
