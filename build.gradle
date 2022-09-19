@@ -21,7 +21,9 @@ apply plugin: 'maven-publish'
 ext.configFile = file('gradle.properties')
 ext.config = parseConfig(configFile)
 
-version = "${forge_version}-b${build_number}"
+def build_number = System.env.BUILD_NUMBER ?: "Local"
+version = "${forge_version}-b" + build_number
+
 group = 'leaf.cosmere' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${project.jar_name}"
 
@@ -165,7 +167,7 @@ processResources {
 
     filesMatching('data/cosmere/patchouli_books/guide/book.json') {
         filter {
-            it.replaceAll("buildNumber", config.build_number)
+            it.replaceAll("buildNumber", build_number)
         }
     }
 }
