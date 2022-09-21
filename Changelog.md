@@ -1,6 +1,14 @@
 The Cosmere Project - For 1.19 Minecraft
 
 
+B57 - 1.19.2
+
+Shadesmar dimension
+Roshar dimension
+Mod split into sub-modules, Allomancy, Feruchemy, Hemalurgy, Surgebinding, with Cosmere serving as the core mod that ties everything together
+
+
+
 B56 - 1.19.2 - More breaking changed~!
 
 Updated to the newer forge version which has breaking changes with earlier versions of 1.19 forge.
