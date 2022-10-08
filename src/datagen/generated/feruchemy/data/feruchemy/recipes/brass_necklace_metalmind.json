@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "necklace",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/brass"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "item": "feruchemy:brass_necklace_metalmind"
+  }
+}

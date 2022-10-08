@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bracelet",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/bendalloy"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "result": {
+    "item": "feruchemy:bendalloy_bracelet_metalmind"
+  }
+}

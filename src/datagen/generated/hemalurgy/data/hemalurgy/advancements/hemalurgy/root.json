@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "spike": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "cosmere:spike"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.cosmere.hemalurgy.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "hemalurgy:iron_spike"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.cosmere.hemalurgy.title"
+    }
+  },
+  "requirements": [
+    [
+      "spike"
+    ]
+  ]
+}

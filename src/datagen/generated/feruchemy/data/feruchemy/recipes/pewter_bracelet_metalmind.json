@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bracelet",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/pewter"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "result": {
+    "item": "feruchemy:pewter_bracelet_metalmind"
+  }
+}

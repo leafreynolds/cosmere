@@ -1,0 +1,12 @@
+// 1.19.2	2022-10-05T15:27:17.7630131	Tags for minecraft:item
+0f13c3563b211b2c3182edb98369e780f7605b13 data/forge/tags/items/gems.json
+0d4577d583c0237e53fe8a14823bbd91670d7f0d data/forge/tags/items/gems/amethyst.json
+82c86c79901f94132496df461e7419cff4713658 data/forge/tags/items/gems/diamond.json
+ab989faac6b18c126f89ccd6f152333423899951 data/forge/tags/items/gems/emerald.json
+2465834f90446d90a8a252dfa35ef3c61e0f5e2d data/forge/tags/items/gems/garnet.json
+8536a5b0d634ff0ed005c318895b7edaa9b15fb1 data/forge/tags/items/gems/heliodor.json
+1770c44506842d42681be6a6983a6899957f0d4f data/forge/tags/items/gems/ruby.json
+f58d2b77e2265fdc6a9b6494edfa535a010e4642 data/forge/tags/items/gems/sapphire.json
+6e099fad348f678acfa44e1f13a6027ae3728dba data/forge/tags/items/gems/smokestone.json
+fc84a391a0e3ffb5e5ac99b518ffcbc14afddd75 data/forge/tags/items/gems/topaz.json
+fe7b195585c756f640f64873613cafc30e5957de data/forge/tags/items/gems/zircon.json

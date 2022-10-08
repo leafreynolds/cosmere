@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "ring",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/chromium"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "item": "feruchemy:chromium_ring_metalmind"
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "cookingtime": 1000,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "cosmere:deepslate_garnet_ore"
-  },
-  "result": "cosmere:garnet_broam"
-}

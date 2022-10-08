@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "necklace",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/chromium"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "item": "feruchemy:chromium_necklace_metalmind"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "parent": "feruchemy:feruchemy/root",
+  "criteria": {
+    "has_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "feruchemy:iron_ring_metalmind"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.feruchemy.feruchemy.iron.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "feruchemy:iron_ring_metalmind"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.feruchemy.feruchemy.iron.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "rewards": {
+    "experience": 50
+  }
+}

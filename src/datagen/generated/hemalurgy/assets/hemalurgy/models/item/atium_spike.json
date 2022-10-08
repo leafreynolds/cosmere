@@ -1,0 +1,6 @@
+{
+  "parent": "hemalurgy:item/spike",
+  "textures": {
+    "layer0": "hemalurgy:item/metal_spike"
+  }
+}

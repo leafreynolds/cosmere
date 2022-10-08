@@ -2,48 +2,48 @@
   "__comment": "This table is injected as its own pool into minecraft:chests/woodland_mansion",
   "pools": [
     {
-    "name": "main",
-    "rolls": 1,
-    "entries": [
-      {
-        "type": "minecraft:item",
-        "__comment": "with randomise metal type function, only tin doesn't matter here.",
-        "name": "cosmere:tin_spike",
-        "functions": [
-          {
-            "function": "cosmere:randomise_metaltype"
-          },
-          {
-            "function": "cosmere:invest_spike"
-          },
-          {
-            "function": "cosmere:invest_metalmind"
-          }
-        ]
-      },
-      {
-        "type": "minecraft:item",
-        "name": "cosmere:lerasium_nugget"
-      },
-      {
-        "type": "minecraft:item",
-        "name": "cosmere:atium_nugget",
-        "functions": [
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "__comment": "with randomise metal type function, only tin doesn't matter here.",
+          "name": "hemalurgy:tin_spike",
+          "functions": [
+            {
+              "function": "cosmere:randomise_metaltype"
+            },
+            {
+              "function": "hemalurgy:invest_spike"
+            },
+            {
+              "function": "feruchemy:invest_metalmind"
             }
-          }
-        ]
-      },
-      {
-        "type": "minecraft:empty",
-        "weight": 33
-      }
-    ]
-  }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cosmere:lerasium_nugget"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "cosmere:atium_nugget",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 33
+        }
+      ]
+    }
   ]
 }

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Cosmere Discord
+    url: https://discord.gg/VjAGzeJvAu
+    about: The best place to receive quick answers to any questions you may have
+  - name: Feature Request
+    url: https://github.com/leafreynolds/cosmere/issues/new?template=feature_request.yml
+    about: Redirects you to creating an issue on Cosmere's issue tracker.

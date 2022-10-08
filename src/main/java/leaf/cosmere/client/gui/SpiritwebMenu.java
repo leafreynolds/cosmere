@@ -1,5 +1,5 @@
 /*
- * File created ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 24 - 4 - 2021 ~ Leaf
  *
  * Special thank you to the Chisels and Bits team for their example of rendering a dynamic menu based on given elements!
  * https://github.com/ChiselsAndBits/Chisels-and-Bits
@@ -16,23 +16,20 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import leaf.cosmere.cap.entity.SpiritwebCapability;
-import leaf.cosmere.constants.Manifestations;
-import leaf.cosmere.constants.Metals;
-import leaf.cosmere.manifestation.AManifestation;
-import leaf.cosmere.manifestation.allomancy.AllomancyBase;
-import leaf.cosmere.manifestation.feruchemy.FeruchemyBase;
-import leaf.cosmere.network.Network;
-import leaf.cosmere.network.packets.ChangeManifestationModeMessage;
-import leaf.cosmere.network.packets.SetSelectedManifestationMessage;
-import leaf.cosmere.registry.KeybindingRegistry;
-import leaf.cosmere.utils.helpers.MathHelper;
-import leaf.cosmere.utils.helpers.ResourceLocationHelper;
-import leaf.cosmere.utils.math.Vector2;
+import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.api.math.MathHelper;
+import leaf.cosmere.api.math.Vector2;
+import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
+import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -56,12 +53,14 @@ public class SpiritwebMenu extends Screen
 
 	private float visibility = 0.0f;
 	private Stopwatch lastChange = Stopwatch.createStarted();
-	public AManifestation selectedManifestation = null;
+	public Manifestation selectedManifestation = null;
 	public SidedMenuButton doAction = null;
 	private Manifestations.ManifestationTypes selectedPowerType = Manifestations.ManifestationTypes.ALLOMANCY;
 
 	protected ArrayList<RadialMenuButton> radialMenuButtons = new ArrayList<>();
 	protected ArrayList<SidedMenuButton> sidedMenuButtons = new ArrayList<>();
+
+	private final List<String> m_infoText = new ArrayList<>();
 
 	protected SpiritwebMenu()
 	{
@@ -96,7 +95,7 @@ public class SpiritwebMenu extends Screen
 
 	public void postRender(RenderGuiOverlayEvent.Post event, SpiritwebCapability spiritweb)
 	{
-		if (KeybindingRegistry.MANIFESTATION_MENU.consumeClick())
+		if (Keybindings.MANIFESTATION_MENU.consumeClick())
 		{
 			final Window window = event.getWindow();
 			init(Minecraft.getInstance(), window.getGuiScaledWidth(), window.getGuiScaledHeight());
@@ -111,7 +110,7 @@ public class SpiritwebMenu extends Screen
 
 			SetupButtons();
 		}
-		if (KeybindingRegistry.MANIFESTATION_MENU.isDown())
+		if (Keybindings.MANIFESTATION_MENU.isDown())
 		{
 			raiseVisibility();
 		}
@@ -120,13 +119,13 @@ public class SpiritwebMenu extends Screen
 	@Override
 	public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers)
 	{
-		if (KeybindingRegistry.MANIFESTATION_MENU.matches(pKeyCode, pScanCode))
+		if (Keybindings.MANIFESTATION_MENU.matches(pKeyCode, pScanCode))
 		{
 			for (RadialMenuButton radialMenuButton : radialMenuButtons)
 			{
 				if (radialMenuButton.highlighted)
 				{
-					Network.sendToServer(new SetSelectedManifestationMessage(radialMenuButton.manifestation));
+					Cosmere.packetHandler().sendToServer(new SetSelectedManifestationMessage(radialMenuButton.manifestation));
 					break;
 				}
 			}
@@ -145,11 +144,11 @@ public class SpiritwebMenu extends Screen
 			{
 				if (button == 0)
 				{
-					Network.sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, 1));
+					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, 1));
 				}
 				else
 				{
-					Network.sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, -1));
+					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, -1));
 				}
 				return true;
 			}
@@ -239,12 +238,12 @@ public class SpiritwebMenu extends Screen
 	static class RadialMenuButton
 	{
 
-		public final AManifestation manifestation;
+		public final Manifestation manifestation;
 		public double centerX;
 		public double centerY;
 		public boolean highlighted;
 
-		public RadialMenuButton(final AManifestation manifestation)
+		public RadialMenuButton(final Manifestation manifestation)
 		{
 			this.manifestation = manifestation;
 		}
@@ -256,11 +255,11 @@ public class SpiritwebMenu extends Screen
 		radialMenuButtons.clear();
 		sidedMenuButtons.clear();
 
-		final List<AManifestation> availableManifestations = spiritweb.getAvailableManifestations();
+		final List<Manifestation> availableManifestations = spiritweb.getAvailableManifestations();
 
 		if (availableManifestations.size() <= 16)
 		{
-			for (AManifestation manifestation : availableManifestations)
+			for (Manifestation manifestation : availableManifestations)
 			{
 				radialMenuButtons.add(new RadialMenuButton(manifestation));
 			}
@@ -269,7 +268,7 @@ public class SpiritwebMenu extends Screen
 		{
 			Set<Manifestations.ManifestationTypes> foundPowerTypes = new HashSet<>();
 
-			for (AManifestation manifestation : availableManifestations)
+			for (Manifestation manifestation : availableManifestations)
 			{
 				if (manifestation.getManifestationType() == selectedPowerType)
 				{
@@ -371,18 +370,17 @@ public class SpiritwebMenu extends Screen
 	{
 		int leftSideX = 10;
 		final int[] y = {(int) middle_y / 2};
+		m_infoText.clear();
 
-		for (Metals.MetalType metalType : Metals.MetalType.values())
+		for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.spiritwebSubmodules.values())
 		{
-			int value = spiritweb.METALS_INGESTED.get(metalType);
+			spiritwebSubmodule.collectMenuInfo(m_infoText);
+		}
 
-			if (value > 0)
-			{
-				//todo localisation check
-				final String text = metalType.getName() + ": " + value;
-				font.drawShadow(matrixStack, text, leftSideX, y[0], 0xffffffff);
-				y[0] += 10;
-			}
+		for (String s : m_infoText)
+		{
+			font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
+			y[0] += 10;
 		}
 
 		if (selectedManifestation == null)
@@ -393,7 +391,7 @@ public class SpiritwebMenu extends Screen
 		y[0] = (int) middle_y / 2;
 		int rightSideX = middle_x + 35;
 
-		font.drawShadow(matrixStack, I18n.get(selectedManifestation.translationKey()), rightSideX, y[0], 0xffffffff);
+		font.drawShadow(matrixStack, I18n.get(selectedManifestation.getTranslationKey()), rightSideX, y[0], 0xffffffff);
 		//todo mode translation
 		font.drawShadow(matrixStack, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
 
@@ -442,7 +440,7 @@ public class SpiritwebMenu extends Screen
 				final int fixed_y = (int) y;//(y + TEXT_DISTANCE);
 
 				//todo localisation check
-				final String text = I18n.get(button.manifestation.translationKey());
+				final String text = I18n.get(button.manifestation.getTranslationKey());
 
 				fixed_x = (int) (x < 0
 				                 ? fixed_x - (font.width(text) + TEXT_DISTANCE)
@@ -470,7 +468,7 @@ public class SpiritwebMenu extends Screen
 					.append(button.name)
 					.append(".png");
 
-			RenderSystem.setShaderTexture(0, ResourceLocationHelper.prefix(stringBuilder.toString()));
+			RenderSystem.setShaderTexture(0, Cosmere.rl(stringBuilder.toString()));
 			blit(matrixStack, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
 
 		}
@@ -490,24 +488,25 @@ public class SpiritwebMenu extends Screen
 			final double x1 = x - scalex;
 			final double y1 = y - scaley;
 
-			AManifestation mani = menuRegion.manifestation;
+			Manifestation mani = menuRegion.manifestation;
 			final Manifestations.ManifestationTypes manifestationType = mani.getManifestationType();
+			String manifestationTypeName = manifestationType.getName();
 			stringBuilder
 					.append("textures/icon/")
-					.append(manifestationType.getName())
+					.append(manifestationTypeName)
 					.append("/");
 
 			switch (manifestationType)
 			{
 				case ALLOMANCY:
-					AllomancyBase allomancyBase = (AllomancyBase) mani;
-					stringBuilder.append(allomancyBase.getMetalType().getName());
-					break;
 				case FERUCHEMY:
-					FeruchemyBase feruchemyBase = (FeruchemyBase) mani;
-					stringBuilder.append(feruchemyBase.getMetalType().getName());
+					if (mani instanceof IHasMetalType metalType)
+					{
+						stringBuilder.append(metalType.getMetalType().getName());
+					}
 					break;
 				case SURGEBINDING:
+					stringBuilder.append(mani.getName());
 					break;
 				case AON_DOR:
 					break;
@@ -516,7 +515,7 @@ public class SpiritwebMenu extends Screen
 			}
 
 			stringBuilder.append(".png");
-			final ResourceLocation textureLocation = ResourceLocationHelper.prefix(stringBuilder.toString());
+			final ResourceLocation textureLocation = new ResourceLocation(mani.getRegistryName().getNamespace(), stringBuilder.toString());
 			RenderSystem.setShaderTexture(0, textureLocation);
 			blit(matrixStack,
 					(int) (middleX + x1),
@@ -689,16 +688,16 @@ public class SpiritwebMenu extends Screen
 				else
 				{
 					showHighlight =
-					MathHelper.inTriangle(
-							x1m1, y1m1,
-							x2m2, y2m2,
-							x2m1, y2m1,
-							mouseVecX, mouseVecY)
-							|| MathHelper.inTriangle(
-							x1m1, y1m1,
-							x1m2, y1m2,
-							x2m2, y2m2,
-							mouseVecX, mouseVecY);
+							MathHelper.inTriangle(
+									x1m1, y1m1,
+									x2m2, y2m2,
+									x2m1, y2m1,
+									mouseVecX, mouseVecY)
+									|| MathHelper.inTriangle(
+									x1m1, y1m1,
+									x1m2, y1m2,
+									x2m2, y2m2,
+									mouseVecX, mouseVecY);
 				}
 
 				//if mouse is within the region, as defined by the two triangles

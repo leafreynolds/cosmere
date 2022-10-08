@@ -1,0 +1,38 @@
+{
+  "parent": "allomancy:allomancy/root",
+  "criteria": {
+    "has_item": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:nuggets/gold"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.allomancy.allomancy.gold.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:gold_nugget"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.allomancy.allomancy.gold.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ],
+  "rewards": {
+    "experience": 50
+  }
+}

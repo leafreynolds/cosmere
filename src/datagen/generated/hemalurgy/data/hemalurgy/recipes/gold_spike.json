@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "spike",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "pattern": [
+    "X",
+    "X"
+  ],
+  "result": {
+    "item": "hemalurgy:gold_spike"
+  }
+}

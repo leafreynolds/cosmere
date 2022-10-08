@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "forge:gems/smokestone"
+    }
+  },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "result": {
+    "item": "surgebinding:smokestone_block"
+  }
+}

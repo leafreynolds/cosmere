@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "necklace",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "item": "feruchemy:copper_necklace_metalmind"
+  }
+}

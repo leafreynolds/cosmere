@@ -7,17 +7,17 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmere:steel_spike",
+          "name": "hemalurgy:steel_spike",
           "weight": 50,
           "functions": [
             {
               "function": "cosmere:randomise_metaltype"
             },
             {
-              "function": "cosmere:invest_spike"
+              "function": "hemalurgy:invest_spike"
             },
             {
-              "function": "cosmere:invest_metalmind"
+              "function": "feruchemy:invest_metalmind"
             }
           ]
         },

@@ -1,0 +1,26 @@
+{
+  "values": [
+    "#forge:ingots/steel",
+    "#forge:ingots/tin",
+    "#forge:ingots/pewter",
+    "#forge:ingots/zinc",
+    "#forge:ingots/brass",
+    "#forge:ingots/copper",
+    "#forge:ingots/bronze",
+    "#forge:ingots/aluminum",
+    "#forge:ingots/duralumin",
+    "#forge:ingots/chromium",
+    "#forge:ingots/nicrosil",
+    "#forge:ingots/cadmium",
+    "#forge:ingots/bendalloy",
+    "#forge:ingots/electrum",
+    "#forge:ingots/atium",
+    "#forge:ingots/lerasium",
+    "#forge:ingots/harmonium",
+    "#forge:ingots/malatium",
+    "#forge:ingots/lerasatium",
+    "#forge:ingots/nickel",
+    "#forge:ingots/lead",
+    "#forge:ingots/silver"
+  ]
+}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 500,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "cosmere:emerald_ore"
-  },
-  "result": "cosmere:emerald_mark"
-}

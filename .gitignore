@@ -1,26 +1,26 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
-
-# idea
-out
+build
+output
+.idea
+*.iml
 *.ipr
 *.iws
-*.iml
-.idea
+out
 
-# gradle
-build
-.gradle
+Cosmere*.jar
+MDK.zip
+/run
+/.gradle
+*.classpath
+*.project
+.settings
+/eclipse
+*.txt
+*.launch
+docs/changelog*.txt
 
-# other
-eclipse
-run
-
-# Files from Forge MDK
-forge*changelog.txt
-.run/_cosmere [incrementBuildNumber].run.xml
+*.blend1
+*.blend2
+/bin
+/logs
+/src/datagen/*/resources
+libs/

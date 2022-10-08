@@ -1,0 +1,19 @@
+{
+  "category": "hemalurgy:hemalurgy",
+  "icon": "hemalurgy:bronze_spike",
+  "name": "Hemalurgic Bronze",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Bronze spikes steal the mental allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_zinc)Zinc$(), $(l:cosmere:allomancy/allomantic_brass)Brass$(), $(l:cosmere:allomancy/allomantic_copper)Copper$() and $(l:cosmere:allomancy/allomantic_bronze)Bronze$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hemalurgy:bronze_spike"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 7
+}

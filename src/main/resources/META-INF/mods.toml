@@ -1,34 +1,49 @@
-modLoader="javafml" #mandatory
-loaderVersion="[41,)" #mandatory
-license="https://en.wikipedia.org/wiki/MIT_License"
-[[mods]] #mandatory
-modId="cosmere" #mandatory
-version="${file.jarVersion}" #mandatory
-displayName="The Cosmere" #mandatory
-logoFile="cosmere_icon.png"
-credits="Special thanks to 50ap5ud5, Suff, Spectre0987, Vazkii, the Chisels and Bits team and so many more. \nThey all either helped me (directly or indirectly via their open source repos) understand working with the minecraft and the forge API better <3\nSeriously. Thank you!" #optional
-authors="Leaf Reynolds" #optional
-description='''
-Bringing The Cosmere to Minecraft!
-'''
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/cosmere/Cosmere/issues"
+license = "Custom"
+
+[[mods]]
+modId = "cosmere"
+version = "${version}"
+displayName = "Cosmere"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere/"
+authors = "Leafy"
+credits = "Ridanisaurus, Arkamis13, Luke13234, Hawktrav and many others"
+logoFile = "logo.png"
+description = '''Cosmere is a library mod, meant to be used with it's modules that add features from Brandon Sanderson's Cosmere universe.'''
 
 [[dependencies.cosmere]]
-modId="forge"
-mandatory=true
-versionRange="[43.1.1,)"
-ordering="NONE"
-side="BOTH"
-
+modId = "minecraft"
+mandatory = true
+versionRange = "${mc_version}"
+side = "BOTH"
 [[dependencies.cosmere]]
-modId="minecraft"
-mandatory=true
-versionRange="[1.19.2,)"
-ordering="NONE"
-side="BOTH"
-
+modId = "forge"
+mandatory = true
+versionRange = "${forge_version}"
+side = "BOTH"
 [[dependencies.cosmere]]
-modId="curios"
-mandatory=true
-versionRange="[1.19.2-5.1.1.0,)"
-ordering="NONE"
-side="BOTH"
+modId = "curios"
+mandatory = true
+versionRange = "${curios_version}"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.cosmere]]
+modId = "patchouli"
+mandatory = false
+versionRange = "${patchouli_version}"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.cosmere]]
+modId = "jei"
+mandatory = false
+versionRange = "${jei_version}"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.cosmere]]
+modId = "jade"
+mandatory = false
+versionRange = "${jade_version}"
+ordering = "AFTER"
+side = "BOTH"

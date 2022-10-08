@@ -1,0 +1,26 @@
+{
+  "values": [
+    "#forge:storage_blocks/steel",
+    "#forge:storage_blocks/tin",
+    "#forge:storage_blocks/pewter",
+    "#forge:storage_blocks/zinc",
+    "#forge:storage_blocks/brass",
+    "#forge:storage_blocks/copper",
+    "#forge:storage_blocks/bronze",
+    "#forge:storage_blocks/aluminum",
+    "#forge:storage_blocks/duralumin",
+    "#forge:storage_blocks/chromium",
+    "#forge:storage_blocks/nicrosil",
+    "#forge:storage_blocks/cadmium",
+    "#forge:storage_blocks/bendalloy",
+    "#forge:storage_blocks/electrum",
+    "#forge:storage_blocks/atium",
+    "#forge:storage_blocks/lerasium",
+    "#forge:storage_blocks/harmonium",
+    "#forge:storage_blocks/malatium",
+    "#forge:storage_blocks/lerasatium",
+    "#forge:storage_blocks/nickel",
+    "#forge:storage_blocks/lead",
+    "#forge:storage_blocks/silver"
+  ]
+}

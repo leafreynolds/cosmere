@@ -1,0 +1,26 @@
+{
+  "values": [
+    "cosmere:steel_block",
+    "cosmere:tin_block",
+    "cosmere:pewter_block",
+    "cosmere:zinc_block",
+    "cosmere:brass_block",
+    "cosmere:copper_block",
+    "cosmere:bronze_block",
+    "cosmere:aluminum_block",
+    "cosmere:duralumin_block",
+    "cosmere:chromium_block",
+    "cosmere:nicrosil_block",
+    "cosmere:cadmium_block",
+    "cosmere:bendalloy_block",
+    "cosmere:electrum_block",
+    "cosmere:atium_block",
+    "cosmere:lerasium_block",
+    "cosmere:harmonium_block",
+    "cosmere:malatium_block",
+    "cosmere:lerasatium_block",
+    "cosmere:nickel_block",
+    "cosmere:lead_block",
+    "cosmere:silver_block"
+  ]
+}

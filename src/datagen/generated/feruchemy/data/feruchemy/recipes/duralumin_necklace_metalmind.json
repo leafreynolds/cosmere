@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "necklace",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/duralumin"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "item": "feruchemy:duralumin_necklace_metalmind"
+  }
+}

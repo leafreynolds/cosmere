@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "cookingtime": 1000,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "cosmere:deepslate_amethyst_ore"
-  },
-  "result": "cosmere:amethyst_broam"
-}

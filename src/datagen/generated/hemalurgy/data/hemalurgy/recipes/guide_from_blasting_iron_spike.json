@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 100,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "hemalurgy:iron_spike"
+  },
+  "result": "cosmere:guide"
+}

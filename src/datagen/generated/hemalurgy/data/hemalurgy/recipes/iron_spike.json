@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "spike",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "X",
+    "X"
+  ],
+  "result": {
+    "item": "hemalurgy:iron_spike"
+  }
+}

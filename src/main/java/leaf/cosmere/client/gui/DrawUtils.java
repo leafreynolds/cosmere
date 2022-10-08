@@ -1,18 +1,17 @@
 /*
- * File created ~ 5 - 5 - 2021 ~ Leaf
+ * File updated ~ 5 - 5 - 2021 ~ Leaf
  */
 
 package leaf.cosmere.client.gui;
 
 import com.google.common.collect.Multimap;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
-import leaf.cosmere.Cosmere;
+import leaf.cosmere.common.Cosmere;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -92,7 +91,7 @@ public class DrawUtils
 					256,
 					false,
 					false,
-					RenderType.CompositeState.builder()
+					CompositeState.builder()
 							.setShaderState(RENDERTYPE_LINES_SHADER)
 							.setLineState(new LineStateShard(OptionalDouble.of(2.5d)))
 							.setLayeringState(VIEW_OFFSET_Z_LAYERING)

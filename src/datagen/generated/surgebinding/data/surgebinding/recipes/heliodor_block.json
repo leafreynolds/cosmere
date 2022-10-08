@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "forge:gems/heliodor"
+    }
+  },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "result": {
+    "item": "surgebinding:heliodor_block"
+  }
+}

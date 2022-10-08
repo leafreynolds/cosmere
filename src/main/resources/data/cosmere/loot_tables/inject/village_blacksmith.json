@@ -2,44 +2,44 @@
   "__comment": "This table is injected as its own pool into minecraft:chests/village_blacksmith",
   "pools": [
     {
-    "name": "main",
-    "rolls": 1,
-    "entries": [
-      {
-        "type": "minecraft:empty"
-      },
-      {
-        "type": "minecraft:item",
-        "__comment": "with randomise metal type function, only tin doesn't matter here.",
-        "name": "cosmere:tin_ring_metalmind",
-        "functions": [
-          {
-            "function": "cosmere:randomise_metaltype"
-          },
-          {
-            "function": "cosmere:invest_metalmind"
-          }
-        ]
-      },
-      {
-        "type": "minecraft:item",
-        "functions": [
-          {
-            "function": "cosmere:randomise_metaltype"
-          },
-          {
-            "function": "minecraft:set_count",
-            "count": {
-              "min": 3.0,
-              "max": 7.0,
-              "type": "minecraft:uniform"
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty"
+        },
+        {
+          "type": "minecraft:item",
+          "__comment": "with randomise metal type function, only tin doesn't matter here.",
+          "name": "feruchemy:tin_ring_metalmind",
+          "functions": [
+            {
+              "function": "cosmere:randomise_metaltype"
+            },
+            {
+              "function": "feruchemy:invest_metalmind"
             }
-          }
-        ],
-        "name": "cosmere:raw_tin_ore",
-        "__comment": "with randomise metal type function, only tin doesn't matter here."
-      }
-    ]
-  }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "cosmere:randomise_metaltype"
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 7.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "cosmere:raw_tin_ore",
+          "__comment": "with randomise metal type function, only tin doesn't matter here."
+        }
+      ]
+    }
   ]
 }

@@ -1,0 +1,5 @@
+{
+  "type": "feruchemy:fortune_bonus",
+  "conditions": [],
+  "function": "feruchemy:fortune_bonus"
+}

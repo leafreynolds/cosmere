@@ -1,0 +1,21 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "Custom"
+
+[[mods]]
+modId = "hemalurgy"
+version = "${version}"
+displayName = "Cosmere: Hemalurgy"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+authors = "Leafy"
+credits = "Ridanisaurus, Arkamis13, Luke13234, Hawktrav and many others"
+logoFile = "logo.png"
+description = '''Hemalurgy module for Cosmere.'''
+
+[[dependencies.hemalurgy]]
+modId = "cosmere"
+mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"

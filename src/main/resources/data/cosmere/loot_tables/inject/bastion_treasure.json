@@ -7,16 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmere:atium_spike",
+          "name": "hemalurgy:atium_spike",
           "functions": [
             {
               "function": "cosmere:randomise_metaltype"
             },
             {
-              "function": "cosmere:invest_spike"
+              "function": "hemalurgy:invest_spike"
             },
             {
-              "function": "cosmere:invest_metalmind"
+              "function": "feruchemy:invest_metalmind"
             }
           ]
         },

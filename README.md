@@ -22,7 +22,7 @@ The place where the powers of [allomancy and feruchemy](https://coppermind.net/w
 
 
 **Still not enough for you?**  
-  Well there's always the [third](https://coppermind.net/wiki/Hemalurgy) metallic art of Scadrial...
+Well there's always the [third](https://coppermind.net/wiki/Hemalurgy) metallic art of Scadrial...
 
 
 
@@ -41,7 +41,7 @@ The art of combining color, Biochromatic Breath and an awakening command in orde
 
 
 **New Dimensions**  
-  Perhaps the cognitive realm may interest you... Better find the nearest perpendicularity!
+Perhaps the cognitive realm may interest you... Better find the nearest perpendicularity!
 
 ## Inter-Mod Compatibilities
 **(Required!) CuriosAPI**  - because there's always another secret™

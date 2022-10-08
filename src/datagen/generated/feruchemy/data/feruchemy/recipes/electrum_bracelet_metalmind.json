@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bracelet",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/electrum"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "result": {
+    "item": "feruchemy:electrum_bracelet_metalmind"
+  }
+}

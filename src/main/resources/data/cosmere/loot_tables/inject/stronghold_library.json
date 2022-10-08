@@ -2,33 +2,33 @@
   "__comment": "This table is injected as its own pool into minecraft:chests/stronghold_library",
   "pools": [
     {
-    "name": "main",
-    "rolls": 1,
-    "entries": [
-      {
-        "type": "minecraft:item",
-        "name": "cosmere:lerasium_nugget",
-        "weight": 10
-      },
-      {
-        "type": "minecraft:item",
-        "__comment": "with randomise metal type function, only tin doesn't matter here.",
-        "name": "cosmere:tin_ring_metalmind",
-        "weight": 50,
-        "functions": [
-          {
-            "function": "cosmere:randomise_metaltype"
-          },
-          {
-            "function": "cosmere:invest_metalmind"
-          }
-        ]
-      },
-      {
-        "type": "minecraft:empty",
-        "weight": 40
-      }
-    ]
-  }
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cosmere:lerasium_nugget",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "__comment": "with randomise metal type function, only tin doesn't matter here.",
+          "name": "feruchemy:tin_ring_metalmind",
+          "weight": 50,
+          "functions": [
+            {
+              "function": "cosmere:randomise_metaltype"
+            },
+            {
+              "function": "feruchemy:invest_metalmind"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 40
+        }
+      ]
+    }
   ]
 }

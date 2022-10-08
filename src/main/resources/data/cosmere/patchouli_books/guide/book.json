@@ -1,23 +1,18 @@
 {
   "name": "item.cosmere.guide",
-
   "landing_text": "cosmere.landing",
   "version": "buildNumber",
-
   "book_texture": "patchouli:textures/gui/book_gray.png",
   "model": "cosmere:guide",
-
   "creative_tab": "cosmere.items",
   "pause_game": false,
-
   "dont_generate_book": true,
   "custom_book_item": "cosmere:guide",
-
   "advancements_tab": "cosmere:main/root",
-  "advancement_namespaces": ["cosmere"],
-
+  "advancement_namespaces": [
+    "cosmere"
+  ],
   "i18n": true,
-
   "macros": {
     "$(item)": "$(1)",
     "$(thing)": "$(4)"

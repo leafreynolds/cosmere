@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bracelet",
+  "key": {
+    "X": {
+      "tag": "forge:ingots/zinc"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "result": {
+    "item": "feruchemy:zinc_bracelet_metalmind"
+  }
+}

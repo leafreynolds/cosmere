@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "forge:gems/garnet"
+    }
+  },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "result": {
+    "item": "surgebinding:garnet_block"
+  }
+}

@@ -1,7 +1,8 @@
 {
-    "pack": {
-        "description": "Cosmere Mod Resources",
-        "pack_format": 6,
-        "_comment": "Default Resources for Cosmere"
-    }
+  "pack": {
+    "description": "Resources used for Cosmere",
+    "pack_format": 9,
+    "forge:resource_pack_format": 9,
+    "forge:data_pack_format": 10
+  }
 }
