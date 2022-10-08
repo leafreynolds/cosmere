@@ -64,10 +64,6 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 
 	public static final DamageSource SPIKED = (new DamageSource("spiked")).bypassArmor().bypassMagic();
 
-	//todo move
-	private static final ResourceLocation SPIKE_TEXTURE = new ResourceLocation("cosmere", "textures/block/metal_block.png");
-	private Object model;
-
 	public HemalurgicSpikeItem(Metals.MetalType metalType)
 	{
 		super(metalType, HemalurgyItemGroups.HEMALURGIC_SPIKES);

@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "${loader_version}"
 issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
-license = "Custom"
+license = "MIT"
 
 [[mods]]
 modId = "surgebinding"
@@ -18,4 +18,11 @@ modId = "cosmere"
 mandatory = true
 versionRange = "[${version}]"
 ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.surgebinding]]
+modId = "hemalurgy"
+mandatory = false
+versionRange = "[${version}]"
+ordering = "BEFORE"
 side = "BOTH"

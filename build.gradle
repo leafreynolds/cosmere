@@ -13,6 +13,7 @@
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import net.minecraftforge.gradle.common.util.RunConfig
+import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 
 buildscript {
 	repositories {
@@ -31,9 +32,9 @@ plugins {
 	id 'maven-publish'
 	id 'net.minecraftforge.gradle' version '5.1.+'
 	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+	id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-apply plugin: 'org.spongepowered.mixin'
 
 tasks.named('wrapper', Wrapper).configure {
 	//Define wrapper values here so as to not have to always do so when updating gradlew.properties
@@ -372,6 +373,7 @@ repositories {
 		url = "https://maven.theillusivec4.top/"
 	}
 	maven {
+		//curios
 		url 'https://modmaven.dev/'
 	}
 	maven {
@@ -513,13 +515,25 @@ for (def name : secondaryModules) {
 
 def createReobf(SourceSet sourceSet)
 {
-	tasks.named(sourceSet.getJarTaskName()).configure(task -> task.finalizedBy('reobfJar'))
+	def reobfTask = createReobf(sourceSet.getJarTaskName())
+	reobfTask.configure { classpath.from(sourceSet.compileClasspath) }
+	tasks.named(sourceSet.getJarTaskName()).configure(task -> task.finalizedBy(reobfTask))
+	return reobfTask
+}
+
+def createReobf(String name)
+{
+	def reobfExtension = (NamedDomainObjectContainer<RenameJarInPlace>) extensions.getByName("reobf")
+	return reobfExtension.register(name)
 }
 
 afterEvaluate {
-	tasks.named('jar', Jar).configure { finalizedBy(tasks.named('reobfJar')) }
+	tasks.named('jar', Jar).configure { finalizedBy(tasks.named('reobfJar', RenameJarInPlace)) }
 }
 
+tasks.withType(RenameJarInPlace).configureEach {
+	args.add('--stable')
+}
 
 tasks.withType(GenerateModuleMetadata) {
 	//Disable Gradle 7 module metadata generation as it does not play nicely with FG

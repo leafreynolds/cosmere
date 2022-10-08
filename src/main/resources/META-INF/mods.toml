@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "${loader_version}"
 issueTrackerURL = "https://github.com/cosmere/Cosmere/issues"
-license = "Custom"
+license = "MIT"
 
 [[mods]]
 modId = "cosmere"

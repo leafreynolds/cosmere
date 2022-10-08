@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "${loader_version}"
 issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
-license = "Custom"
+license = "MIT"
 
 [[mods]]
 modId = "hemalurgy"
@@ -16,6 +16,20 @@ description = '''Hemalurgy module for Cosmere.'''
 [[dependencies.hemalurgy]]
 modId = "cosmere"
 mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.hemalurgy]]
+modId = "allomancy"
+mandatory = false
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.hemalurgy]]
+modId = "feruchemy"
+mandatory = false
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
