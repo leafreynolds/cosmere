@@ -524,7 +524,8 @@ def createReobf(SourceSet sourceSet)
 def createReobf(String name)
 {
 	def reobfExtension = (NamedDomainObjectContainer<RenameJarInPlace>) extensions.getByName("reobf")
-	return reobfExtension.register(name)
+	//using maybeCreate instead of Register, as mixin environment gets confused.
+	return reobfExtension.maybeCreate(name)
 }
 
 afterEvaluate {
