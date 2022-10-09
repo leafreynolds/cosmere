@@ -1,0 +1,3 @@
+Cosmere successfully split into several submods!
+Allomancy, Feruchemy, Hemalurgy, Surgebinding
+They each have their own project page and are designed to be modular, with Cosmere mod serving to connect them together.

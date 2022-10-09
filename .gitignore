@@ -14,7 +14,6 @@ MDK.zip
 *.project
 .settings
 /eclipse
-*.txt
 *.launch
 docs/changelog*.txt
 
