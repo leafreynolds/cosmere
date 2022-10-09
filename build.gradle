@@ -608,10 +608,10 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					optionalDependency "jade"
 					optionalDependency "jei"
 					optionalDependency "patchouli"
-					//optionalDependency "allomancy-cosmere"
-					//optionalDependency "feruchemy-cosmere"
-					//optionalDependency "hemalurgy-cosmere"
-					//optionalDependency "surgebinding"
+					optionalDependency "allomancy-cosmere"
+					optionalDependency "feruchemy-cosmere"
+					optionalDependency "hemalurgy-cosmere"
+					optionalDependency "surgebinding"
 				}
 			}
 			addArtifact apiJar.get()
@@ -629,9 +629,9 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 				relations {
 					requiredDependency "cosmere"
 					optionalDependency "patchouli"
-					//optionalDependency "hemalurgy-cosmere"
-					//optionalDependency "feruchemy-cosmere"
-					//incompatible "allomancy"
+					optionalDependency "hemalurgy-cosmere"
+					optionalDependency "feruchemy-cosmere"
+					incompatible "allomancy"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -649,8 +649,8 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					requiredDependency "cosmere"
 					requiredDependency "curios"
 					optionalDependency "patchouli"
-					//optionalDependency "hemalurgy-cosmere"
-					//optionalDependency "allomancy-cosmere"
+					optionalDependency "hemalurgy-cosmere"
+					optionalDependency "allomancy-cosmere"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -668,8 +668,8 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					requiredDependency "cosmere"
 					requiredDependency "curios"
 					optionalDependency "patchouli"
-					//requiredDependency "feruchemy-cosmere"
-					//requiredDependency "allomancy-cosmere"
+					requiredDependency "feruchemy-cosmere"
+					requiredDependency "allomancy-cosmere"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -686,7 +686,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 				relations {
 					requiredDependency "cosmere"
 					optionalDependency "patchouli"
-					//optionalDependency "hemalurgy-cosmere"
+					optionalDependency "hemalurgy-cosmere"
 				}
 			}
 			addGameVersion "Java ${java_version}"
