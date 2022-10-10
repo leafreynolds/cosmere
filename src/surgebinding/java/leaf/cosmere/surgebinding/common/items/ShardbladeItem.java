@@ -1,9 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
@@ -46,5 +47,11 @@ public class ShardbladeItem extends SwordItem
 	{
 		//no shiny.
 		return false;
+	}
+
+	public boolean canSummonDismiss(Player player)
+	{
+		//todo check a value on sword for whether player has held the shardblade for long enough
+		return true;
 	}
 }

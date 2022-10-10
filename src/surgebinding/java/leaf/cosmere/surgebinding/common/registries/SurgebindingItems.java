@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.registries;
@@ -10,10 +10,7 @@ import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.common.registration.impl.ItemDeferredRegister;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.items.GemstoneItem;
-import leaf.cosmere.surgebinding.common.items.HonorbladeItem;
-import leaf.cosmere.surgebinding.common.items.ShardbladeItem;
-import leaf.cosmere.surgebinding.common.items.ShardplateItem;
+import leaf.cosmere.surgebinding.common.items.*;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardbladeItemTier;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -34,7 +31,7 @@ public class SurgebindingItems
 
 	public static final ShardbladeItemTier SHARDBLADE_ITEM_TIER = new ShardbladeItemTier(10);
 
-	public static final ItemRegistryObject<ShardbladeItem> NIGHT_BLOOD = ITEMS.register("night_blood", () -> new ShardbladeItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get()));
+	public static final ItemRegistryObject<ShardbladeItem> NIGHT_BLOOD = ITEMS.register("night_blood", () -> new NightbloodItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardbladeItem> TEST_BLADE = ITEMS.register("test_blade", () -> new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardbladeItem> MASTER_SWORD = ITEMS.register("master_sword", () -> new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 

@@ -40,6 +40,7 @@ public class SummonShardblade implements ICosmerePacket
 			final LivingEntity livingEntity = cap.getLiving();
 			final ItemStack itemInHand = livingEntity.getItemInHand(InteractionHand.MAIN_HAND);
 
+
 			//todo config value
 			final int maxShardblades = 10;
 
@@ -61,19 +62,23 @@ public class SummonShardblade implements ICosmerePacket
 					}
 				}
 			}
-			else if (itemInHand.getItem() instanceof ShardbladeItem)
+			else if (itemInHand.getItem() instanceof ShardbladeItem shardbladeItem)
 			{
-				for (int i = 0; i < maxShardblades; i++)
+				if (shardbladeItem.canSummonDismiss(sender))
 				{
-					final String pKey = String.valueOf(i);
-					if (!shardblades.contains(pKey))
-					{
-						shardblades.put(pKey, itemInHand.serializeNBT());
-						livingEntity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 
-						//todo do we actually need to tell the player about changes to their spiritweb here?
-						//cap.syncToClients(sender);
-						break;
+					for (int i = 0; i < maxShardblades; i++)
+					{
+						final String pKey = String.valueOf(i);
+						if (!shardblades.contains(pKey))
+						{
+							shardblades.put(pKey, itemInHand.serializeNBT());
+							livingEntity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+
+							//todo do we actually need to tell the player about changes to their spiritweb here?
+							//cap.syncToClients(sender);
+							break;
+						}
 					}
 				}
 			}
