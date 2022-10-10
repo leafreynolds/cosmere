@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.utils;
@@ -11,6 +11,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.horse.Llama;
 
@@ -48,15 +49,17 @@ public class MiscHelper
 				}
 			}
 			else
-			{//add to metal stored
-				//todo add metal to reserves
+			{
+				//add to metal stored
 				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;
 				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
 				allo.adjustIngestedMetal(metalType, addAmount, true);
 			}
 
-			spiritweb.syncToClients(null);
-
+			if (livingEntity instanceof ServerPlayer serverPlayer)
+			{
+				spiritweb.syncToClients(serverPlayer);
+			}
 		});
 	}
 

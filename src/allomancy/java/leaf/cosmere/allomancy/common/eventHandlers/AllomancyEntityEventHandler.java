@@ -75,10 +75,10 @@ public class AllomancyEntityEventHandler
 		}
 
 		final LivingEntity livingEntity = event.getEntity();
-		if (event.getItem().getItem() instanceof MetalNuggetItem item && item.getMetalType() == Metals.MetalType.LERASIUM)
+		if (event.getItem().getItem() instanceof MetalNuggetItem item)
 		{
 			//no need to shrink item count as it's already done as part of nugget use item finish
-			MiscHelper.consumeNugget(livingEntity, Metals.MetalType.LERASIUM, 1);
+			MiscHelper.consumeNugget(livingEntity, item.getMetalType(), 1);
 		}
 	}
 

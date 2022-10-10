@@ -39,7 +39,10 @@ public class MiscHelper
 				}
 			}
 
-			spiritweb.syncToClients((ServerPlayer) livingEntity);
+			if (livingEntity instanceof ServerPlayer serverPlayer)
+			{
+				spiritweb.syncToClients(serverPlayer);
+			}
 
 		});
 	}

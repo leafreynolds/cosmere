@@ -65,7 +65,6 @@ public class FeruchemyEntityEventHandler
 		}
 
 		final LivingEntity livingEntity = event.getEntity();
-		ItemStack stack = livingEntity.getMainHandItem();
 		if (event.getItem().getItem() instanceof MetalNuggetItem item && item.getMetalType() == Metals.MetalType.LERASATIUM)
 		{
 			//no need to shrink item count as it's already done as part of nugget use item finish
