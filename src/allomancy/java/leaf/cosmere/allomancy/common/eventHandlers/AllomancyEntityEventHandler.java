@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.eventHandlers;
@@ -54,10 +54,9 @@ public class AllomancyEntityEventHandler
 				switch (metalType)
 				{
 					//only care about god metal when trying to give others powers
-					case LERASATIUM:
 					case LERASIUM:
 						MiscHelper.consumeNugget(target, metalType, 1);
-						//need to shrink, because metal nugget only shrinks on item use finish from eating
+						//need to shrink, because metal nugget only shrinks on item use finish from eating, which is not part of entity interact with item
 						stack.shrink(1);
 						break;
 				}
@@ -76,14 +75,10 @@ public class AllomancyEntityEventHandler
 		}
 
 		final LivingEntity livingEntity = event.getEntity();
-		ItemStack stack = livingEntity.getMainHandItem();
-		if (!stack.isEmpty())
+		if (event.getItem().getItem() instanceof MetalNuggetItem item && item.getMetalType() == Metals.MetalType.LERASIUM)
 		{
-			if (stack.getItem() instanceof MetalNuggetItem beadItem)
-			{
-				MiscHelper.consumeNugget(livingEntity, beadItem.getMetalType(), 1);
-				//no need to shrink item count, as the item itself does that on finish using item
-			}
+			//no need to shrink item count as it's already done as part of nugget use item finish
+			MiscHelper.consumeNugget(livingEntity, Metals.MetalType.LERASIUM, 1);
 		}
 	}
 

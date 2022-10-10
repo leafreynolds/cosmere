@@ -1,25 +1,23 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.eventHandlers;
 
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.MetalNuggetItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.effects.store.BrassStoreEffect;
 import leaf.cosmere.feruchemy.common.effects.tap.GoldTapEffect;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyElectrum;
+import leaf.cosmere.feruchemy.common.utils.MiscHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,29 +41,38 @@ public class FeruchemyEntityEventHandler
 			{
 				Metals.MetalType metalType = beadItem.getMetalType();
 
-				if (metalType == Metals.MetalType.LERASATIUM)
+				switch (metalType)
 				{
-					SpiritwebCapability.get(target).ifPresent(iSpiritweb ->
-					{
-						SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
-
-						for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
-						{
-							//give feruchemy
-							if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
-							{
-								//todo config feruchemy strength
-								spiritweb.giveManifestation(manifestation, 13);
-							}
-						}
-
-						spiritweb.syncToClients(null);
-
-					});
+					//only care about god metal when trying to give others powers
+					case LERASATIUM:
+						MiscHelper.consumeNugget(target, metalType);
+						//need to shrink, because metal nugget only shrinks on item use finish from eating
+						stack.shrink(1);
+						break;
 				}
+
 			}
 		}
 	}
+
+
+	@SubscribeEvent
+	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
+	{
+		if (event.isCanceled())
+		{
+			return;
+		}
+
+		final LivingEntity livingEntity = event.getEntity();
+		ItemStack stack = livingEntity.getMainHandItem();
+		if (event.getItem().getItem() instanceof MetalNuggetItem item && item.getMetalType() == Metals.MetalType.LERASATIUM)
+		{
+			//no need to shrink item count as it's already done as part of nugget use item finish
+			MiscHelper.consumeNugget(livingEntity, Metals.MetalType.LERASATIUM);
+		}
+	}
+
 
 	@SubscribeEvent
 	public static void changeSize(EntityEvent.Size event)
