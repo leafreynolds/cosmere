@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -78,13 +78,14 @@ public class CoinPouchItem extends ProjectileWeaponItem
 	{
 		ItemStack coinPouchStack = player.getItemInHand(interactionHand);
 
-		if (player.isCrouching())
+		//only allow opening pouch when it's in the main hand.
+		if (interactionHand == InteractionHand.MAIN_HAND && player.isCrouching())
 		{
 			//open inventory
 			if (!player.level.isClientSide && player instanceof ServerPlayer)
 			{
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyr) -> new CoinPouchContainerMenu(windowID, playerInv, coinPouchStack), coinPouchStack.getHoverName());
-				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(interactionHand == InteractionHand.MAIN_HAND));
+				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
 			}
 		}
 		else if (player.level.isClientSide && AllomancyKeybindings.ALLOMANCY_PUSH.isDown())

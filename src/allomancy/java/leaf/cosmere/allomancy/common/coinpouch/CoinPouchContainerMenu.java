@@ -1,11 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.coinpouch;
 
 import leaf.cosmere.allomancy.common.registries.AllomancyMenuTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
@@ -37,8 +36,6 @@ public class CoinPouchContainerMenu extends AbstractContainerMenu
 		int j;
 
 		IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
-
-		CompoundTag nbt = playerInv.getSelected().getOrCreateTag();
 
 		int invStart = 0;
 
@@ -81,7 +78,6 @@ public class CoinPouchContainerMenu extends AbstractContainerMenu
 	public ItemStack quickMoveStack(@NotNull Player playerIn, int index)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		CompoundTag nbt = pouch.getOrCreateTag();
 		int maxSlots = 18;
 
 		Slot slot = this.slots.get(index);
