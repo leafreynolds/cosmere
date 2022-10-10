@@ -1,10 +1,9 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
 
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.network.packets.SummonShardblade;
@@ -34,7 +33,7 @@ public class SurgebindingClientEvents
 
 			if (isKeyPressed(event, SurgebindingKeybindings.SHARDBLADE))
 			{
-				Cosmere.packetHandler().sendToServer(new SummonShardblade());
+				Surgebinding.packetHandler().sendToServer(new SummonShardblade());
 			}
 		});
 	}

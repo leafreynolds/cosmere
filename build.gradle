@@ -581,12 +581,13 @@ def changeLogResolver = { ->
 	if (releaseNotesFile.exists()) {
 		//Add any version specific changelog stuff
 		def releaseNotes = releaseNotesFile.getText()
-		generatedChangelog = "$releaseNotes<br> $generatedChangelog"
+		generatedChangelog = "$releaseNotes<br>-<br> $generatedChangelog"
 	}
+
 
 	generatedChangelog =
 			"Cosmere and related sub module mods are considered to be in an alpha state! You have been warned :)" +
-					"<br> $generatedChangelog"
+					"<br><br> $generatedChangelog"
 	resolvedChangelog = generatedChangelog
 	return generatedChangelog
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.network;
@@ -22,7 +22,7 @@ public class SurgebindingPacketHandler extends BasePacketHandler
 	@Override
 	public void initialize()
 	{
-		registerServerToClient(SummonShardblade.class, SummonShardblade::new);
+		registerClientToServer(SummonShardblade.class, SummonShardblade::new);
 	}
 
 

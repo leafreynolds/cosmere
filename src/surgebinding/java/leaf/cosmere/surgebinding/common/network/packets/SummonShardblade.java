@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.network.packets;
@@ -34,30 +34,48 @@ public class SummonShardblade implements ICosmerePacket
 		MinecraftServer server = sender.getServer();
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
 		{
-			var nbt = cap.getCompoundTag();
-			var doot = CompoundNBTHelper.getOrCreate(nbt, "shardblades");
+			var spiritwebTags = cap.getCompoundTag();
+			var shardblades = CompoundNBTHelper.getOrCreate(spiritwebTags, "shardblades");
 
 			final LivingEntity livingEntity = cap.getLiving();
 			final ItemStack itemInHand = livingEntity.getItemInHand(InteractionHand.MAIN_HAND);
+
+			//todo config value
+			final int maxShardblades = 10;
+
 			if (itemInHand.isEmpty())
 			{
-				if (doot.contains("1"))
+				for (int i = 0; i < maxShardblades; i++)
 				{
-					final CompoundTag test = doot.getCompound("1");
-					ItemStack stack = ItemStack.of(test);
+					final String pKey = String.valueOf(i);
+					if (shardblades.contains(pKey))
+					{
+						final CompoundTag test = shardblades.getCompound(pKey);
+						ItemStack stack = ItemStack.of(test);
+						livingEntity.setItemInHand(InteractionHand.MAIN_HAND, stack);
+						shardblades.remove(pKey);
 
-					livingEntity.setItemInHand(InteractionHand.MAIN_HAND, stack);
-
-					doot.remove("1");
-
-					cap.syncToClients(null);
+						//todo do we actually need to tell the player about changes to their spiritweb here?
+						//cap.syncToClients(sender);
+						break;
+					}
 				}
 			}
 			else if (itemInHand.getItem() instanceof ShardbladeItem)
 			{
-				doot.put("1", itemInHand.serializeNBT());
-				livingEntity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-				cap.syncToClients(null);
+				for (int i = 0; i < maxShardblades; i++)
+				{
+					final String pKey = String.valueOf(i);
+					if (!shardblades.contains(pKey))
+					{
+						shardblades.put(pKey, itemInHand.serializeNBT());
+						livingEntity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+
+						//todo do we actually need to tell the player about changes to their spiritweb here?
+						//cap.syncToClients(sender);
+						break;
+					}
+				}
 			}
 
 		}));

@@ -1,9 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
- *
- * Special thank you to the Suff and their mod Regeneration.
- * That mod taught me how to add ticking capabilities to entities and have them sync
- * https://github.com/WhoCraft/Regeneration
+ * File updated ~ 10 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -240,6 +236,8 @@ public class SpiritwebCapability implements ISpiritweb
 		// So if we've set a base value for an attribute on the player, copy it to the new one.
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
+			//attribute registry name is now the same as the manifestation registry name, so this function
+			//doesn't need to be able to access the attribute registries of sub mods :)
 			Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(manifestation.getRegistryName());
 			if (attribute != null)
 			{
