@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
+ */
+
 package leaf.cosmere.common;
 
 import leaf.cosmere.api.*;
@@ -18,7 +22,6 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegisterEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +66,7 @@ public class Cosmere
 		BiomeModifierRegistry.BIOME_MODIFIER_SERIALIZERS.register(modBus);
 		LootFunctionRegistry.LOOT_FUNCTIONS.register(modBus);
 
+		BiomeRegistry.BIOMES.register(modBus);
 		FeatureRegistry.CONFIGURED_FEATURES.register(modBus);
 		FeatureRegistry.PLACED_FEATURES.register(modBus);
 

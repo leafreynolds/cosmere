@@ -2,10 +2,10 @@
   "type": "minecraft:overworld",
   "generator": {
     "type": "minecraft:noise",
-    "settings": "cosmere:roshar_biome",
+    "settings": "surgebinding:roshar_biome",
     "biome_source": {
       "type": "minecraft:fixed",
-      "biome": "cosmere:roshar_biome"
+      "biome": "surgebinding:roshar_biome"
     }
   }
 }

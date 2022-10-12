@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -20,7 +20,7 @@ public class Constants
 		public static final ResourceLocation JEI_FERUCHEMY = new ResourceLocation("feruchemy", "jei");
 		public static final ResourceLocation JEI_HEMALURGY = new ResourceLocation("hemalurgy", "jei");
 		public static final ResourceLocation SPIRITWEB_CAP = new ResourceLocation(CosmereAPI.COSMERE_MODID, "spiritweb");
-		public static final ResourceLocation ROSHAR_CAP = new ResourceLocation(CosmereAPI.COSMERE_MODID, "roshar");
+		public static final ResourceLocation ROSHAR_CAP = new ResourceLocation("surgebinding", "roshar");
 	}
 
 	public static class Suffix

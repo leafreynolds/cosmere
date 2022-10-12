@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
@@ -27,26 +27,13 @@ public class AllomancyBoostEffect extends MobEffectBase
 				addAttributeModifier(
 						AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get(),
 						"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
-						0.334D,
+						0.334D,//todo config boost amount
 						AttributeModifier.Operation.MULTIPLY_TOTAL);
-				/* //todo boost other manifestation types
-				addAttributeModifier(
-						AttributesRegistry.FERUCHEMY_ATTRIBUTES.get(metalType).get(),
-						"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
-						0.334D,
-						AttributeModifier.Operation.MULTIPLY_TOTAL);*/
+				//todo boost other manifestation types
 
 			}
 		}
 		//todo boost other manifestation types
-		/*for (Roshar.Surges surges : Roshar.Surges.values())
-		{
-			addAttributeModifier(
-					AttributesRegistry.SURGEBINDING_ATTRIBUTES.get(surges).get(),
-					"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
-					0.334D,
-					AttributeModifier.Operation.MULTIPLY_TOTAL);
-		}*/
 
 	}
 
