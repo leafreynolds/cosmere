@@ -1,22 +1,22 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
 
+import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
-import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static leaf.cosmere.api.Constants.Strings.KEY_SHARDBLADE;
 
@@ -55,10 +55,9 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (IItemProvider itemRegistryObject : SurgebindingItems.ITEMS.getAllItems())
+		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final Item item = itemRegistryObject.asItem();
-			final ResourceLocation registryName = itemRegistryObject.getRegistryName();
+			final ResourceLocation registryName = ResourceLocationHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Surgebinding.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

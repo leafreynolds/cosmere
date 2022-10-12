@@ -1,17 +1,20 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
-import leaf.cosmere.allomancy.common.registries.*;
+import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
+import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
+import leaf.cosmere.allomancy.common.registries.AllomancyEntityTypes;
+import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
-import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
@@ -19,6 +22,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -61,10 +65,9 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (IItemProvider itemRegistryObject : AllomancyItems.ITEMS.getAllItems())
+		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final Item item = itemRegistryObject.asItem();
-			final ResourceLocation registryName = itemRegistryObject.getRegistryName();
+			final ResourceLocation registryName = ResourceLocationHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Allomancy.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

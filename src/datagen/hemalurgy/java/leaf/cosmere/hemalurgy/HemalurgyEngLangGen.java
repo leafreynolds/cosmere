@@ -1,21 +1,21 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.providers.IItemProvider;
+import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.itemgroups.HemalurgyItemGroups;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
-import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static leaf.cosmere.api.Constants.Strings.CONTAINED_POWERS_FOUND;
 
@@ -51,10 +51,9 @@ public class HemalurgyEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (IItemProvider itemRegistryObject : HemalurgyItems.ITEMS.getAllItems())
+		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final Item item = itemRegistryObject.asItem();
-			final ResourceLocation registryName = itemRegistryObject.getRegistryName();
+			final ResourceLocation registryName = ResourceLocationHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Hemalurgy.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

@@ -1,23 +1,23 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
-import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.EntityTypeRegistry;
-import leaf.cosmere.common.registry.ItemsRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static leaf.cosmere.api.Constants.Strings.*;
 
@@ -56,10 +56,9 @@ public class EngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (IItemProvider itemRegistryObject : ItemsRegistry.ITEMS.getAllItems())
+		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final Item item = itemRegistryObject.asItem();
-			final ResourceLocation registryName = itemRegistryObject.getRegistryName();
+			final ResourceLocation registryName = ResourceLocationHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Cosmere.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

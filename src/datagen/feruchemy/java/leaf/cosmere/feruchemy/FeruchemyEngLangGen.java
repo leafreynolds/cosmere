@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -7,9 +7,9 @@ package leaf.cosmere.feruchemy;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
-import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
@@ -17,7 +17,6 @@ import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.itemgroups.FeruchemyItemGroups;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
-import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -64,10 +63,9 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (IItemProvider itemRegistryObject : FeruchemyItems.ITEMS.getAllItems())
+		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final Item item = itemRegistryObject.asItem();
-			final ResourceLocation registryName = itemRegistryObject.getRegistryName();
+			final ResourceLocation registryName = ResourceLocationHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Feruchemy.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
