@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.api.math;
@@ -45,6 +45,7 @@ public class XPHelper
 
 
 	/**
+	 * A way to see xp needed for a specific level
 	 * see {@link Player#getXpNeededForNextLevel}#()
 	 */
 	public static int getXpNeededForNextLevel(int playerLevel)
@@ -61,18 +62,5 @@ public class XPHelper
 		{
 			return 7 + playerLevel * 2;
 		}
-	}
-
-	public static int getLevelForTotalExperience(int experience)
-	{
-		int i = 0;
-		int xp = 0;
-		while (xp <= experience)
-		{
-			xp += getXpNeededForNextLevel(i);
-
-			i++;
-		}
-		return i - 1;
 	}
 }

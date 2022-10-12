@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -68,13 +68,11 @@ public class FeruchemyCopper extends FeruchemyManifestation
 		if (storing) // active storage
 		{
 			//store xp progress, if any.
-			if (playerEntity.experienceProgress > 0)
+			experiencePoints = playerEntity.experienceProgress * playerEntity.getXpNeededForNextLevel();
+
+			if (experiencePoints < 1)
 			{
-				experiencePoints = playerEntity.experienceProgress * playerEntity.getXpNeededForNextLevel();
-			}
-			//else store a level's worth of xp points.
-			else
-			{
+				//else store a level's worth of xp points.
 				experiencePoints = XPHelper.getXpNeededForNextLevel(playerEntity.experienceLevel - 1);
 			}
 		}
@@ -98,7 +96,7 @@ public class FeruchemyCopper extends FeruchemyManifestation
 
 		if ((storing && xp <= playerEntity.totalExperience) || tapping)
 		{
-			final int adjustValue = storing ? -xp : xp;
+			final int adjustValue = storing ? xp : -xp;
 			final ItemStack itemStack =
 					MetalmindChargeHelper.adjustMetalmindChargeExact(
 							playerEntity,
@@ -106,27 +104,12 @@ public class FeruchemyCopper extends FeruchemyManifestation
 							adjustValue,
 							true,
 							true);
+
 			if (itemStack != null)
 			{
 				//adjust player xp
-
-				if (storing) // active storage
-				{
-					decreasePlayerLevel(playerEntity, xp);
-				}
-				else // tapping storage
-				{
-					XPHelper.giveExperiencePoints(playerEntity, xp);
-				}
+				XPHelper.giveExperiencePoints(playerEntity, storing ? -xp : xp);
 			}
 		}
 	}
-
-	private static void decreasePlayerLevel(Player player, int pointsToRemove)
-	{
-		player.totalExperience = Math.max(player.totalExperience - pointsToRemove, 0);
-		player.experienceLevel = XPHelper.getLevelForTotalExperience(player.totalExperience);
-		player.experienceProgress = 0;
-	}
-
 }
