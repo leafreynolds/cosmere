@@ -1,7 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
- * Special thank you to Vazkii and Botania!
- * for the easier to understand example of hooking into color tints
+ * File updated ~ 13 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -48,9 +46,9 @@ public final class ColorHandler
 		{
 			if (item instanceof BlockItem blockItem)
 			{
-				if (item instanceof IHasColour)
+				final Block block = blockItem.getBlock();
+				if (block instanceof IHasColour)
 				{
-					final Block block = blockItem.getBlock();
 					itemColors.register(blockItemColorHandler, block);
 					blockColors.register(cosmereBlockColorHandler, block);
 				}
