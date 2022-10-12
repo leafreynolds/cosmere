@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -281,7 +281,6 @@ public class SpiritwebCapability implements ISpiritweb
 		int x = 10;
 		int y = mainWindow.getGuiScaledHeight() / 5;
 
-		//todo translations
 		String stringToDraw = I18n.get(selectedManifestation.getTextComponent().getString());
 		mc.font.drawShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
 
@@ -289,8 +288,10 @@ public class SpiritwebCapability implements ISpiritweb
 
 		String stringToDraw2 = "";
 
+		//todo migrate drawing text to manifestation, this shouldn't be in main module.
 		if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
 		{
+			//todo translations
 			stringToDraw2 = "Mode: " + (mode < 0 ? "Tapping " : "Storing ") + mode;
 		}
 		else if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
@@ -316,6 +317,7 @@ public class SpiritwebCapability implements ISpiritweb
 			stringToDraw2 = "Mode: " + mode;
 		}
 
+		//todo translations
 		mc.font.drawShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
 	}
 

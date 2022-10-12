@@ -1,11 +1,10 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -90,6 +89,7 @@ public class EntityEventHandler
 				|| entity instanceof AbstractPiglin;
 	}
 
+	//todo eventually we want to replace this. Maybe an origins style menu that lets you choose a randomised power by world type
 	public static void giveEntityStartingManifestation(LivingEntity entity, SpiritwebCapability spiritwebCapability)
 	{
 		boolean isPlayerEntity = entity instanceof Player;
@@ -114,20 +114,22 @@ public class EntityEventHandler
 		if (isFullPowersFromOneType)
 		{
 			//ooh full powers
+			final Manifestations.ManifestationTypes manifestationType =
+					isAllomancy
+					? Manifestations.ManifestationTypes.ALLOMANCY
+					: Manifestations.ManifestationTypes.FERUCHEMY;
 
 			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 			{
-				final Manifestations.ManifestationTypes manifestationType = manifestation.getManifestationType();
-				if ((isAllomancy && manifestationType == Manifestations.ManifestationTypes.ALLOMANCY)
-						|| (!isAllomancy && manifestationType == Manifestations.ManifestationTypes.FERUCHEMY))
+				if (manifestation.getManifestationType() == manifestationType)
 				{
 					spiritwebCapability.giveManifestation(manifestation, 8);
 
-					if (spiritwebCapability.getLiving() instanceof Player player)
-					{
-						GiveStartingItems(player, manifestation);
-					}
 				}
+			}
+			if (spiritwebCapability.getLiving() instanceof Player player)
+			{
+				spiritwebCapability.spiritwebSubmodules.get(manifestationType).GiveStartingItem(player);
 			}
 		}
 		else
@@ -141,8 +143,8 @@ public class EntityEventHandler
 
 				if (spiritwebCapability.getLiving() instanceof Player player)
 				{
-					GiveStartingItems(player, allomancyPower);
-					GiveStartingItems(player, feruchemyPower);
+					spiritwebCapability.spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY).GiveStartingItem(player, allomancyPower);
+					spiritwebCapability.spiritwebSubmodules.get(Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, feruchemyPower);
 				}
 			}
 			else
@@ -154,33 +156,8 @@ public class EntityEventHandler
 
 				spiritwebCapability.giveManifestation(manifestation, 10);
 
-				if (spiritwebCapability.getLiving() instanceof Player player)
-				{
-					GiveStartingItems(player, manifestation);
-				}
+				//at this time, players are twin-born minimum, so no need to try give powers here
 			}
-		}
-	}
-
-
-	public static void GiveStartingItems(Player player, Manifestation manifestation)
-	{
-		if (manifestation instanceof IHasMetalType iHasMetalType)
-		{
-			//todo starting items :(
-			/*
-			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
-			{
-				ItemStack itemStack = new ItemStack(ItemsRegistry.METAL_VIAL.get());
-				MetalVialItem.addMetals(itemStack, iHasMetalType.getMetalType().getID(), 16);
-				PlayerHelper.addItem(player, itemStack);
-			}
-			else if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
-			{
-				final Metals.MetalType metalType = iHasMetalType.getMetalType();
-				ItemStack itemStack = new ItemStack(ItemsRegistry.METAL_RINGS.get(metalType).get());
-				PlayerHelper.addItem(player, itemStack);
-			}*/
 		}
 	}
 

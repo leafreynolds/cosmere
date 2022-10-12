@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities;
@@ -7,14 +7,21 @@ package leaf.cosmere.allomancy.common.capabilities;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.PoseStack;
+import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
+import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.DrawHelper;
+import leaf.cosmere.api.helpers.PlayerHelper;
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.client.gui.DrawUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -143,7 +150,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 		{
 			Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 			PoseStack matrixStack = event.getPoseStack();
-			DrawUtils.drawLinesFromPoint(matrixStack, originPoint, linesToDrawByColor);
+			DrawHelper.drawLinesFromPoint(matrixStack, originPoint, linesToDrawByColor);
 		}
 	}
 
@@ -164,6 +171,27 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 	}
 
+	@Override
+	public void GiveStartingItem(Player player)
+	{
+		ItemStack itemStack = new ItemStack(AllomancyItems.METAL_VIAL.get());
+		for (int i = 0; i < 16; i++)
+		{
+			MetalVialItem.addMetals(itemStack, i, 1);
+		}
+		PlayerHelper.addItem(player, itemStack);
+	}
+
+	@Override
+	public void GiveStartingItem(Player player, Manifestation manifestation)
+	{
+		if (manifestation instanceof AllomancyManifestation allomancyManifestation)
+		{
+			ItemStack itemStack = new ItemStack(AllomancyItems.METAL_VIAL.get());
+			MetalVialItem.addMetals(itemStack, allomancyManifestation.getMetalType().getID(), 16);
+			PlayerHelper.addItem(player, itemStack);
+		}
+	}
 
 	public int getIngestedMetal(Metals.MetalType metalType)
 	{

@@ -1,8 +1,8 @@
 /*
- * File updated ~ 5 - 5 - 2021 ~ Leaf
+ * File updated ~ 12 - 10 - 2022 ~ Leaf
  */
 
-package leaf.cosmere.client.gui;
+package leaf.cosmere.api.helpers;
 
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -11,7 +11,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
-import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.api.CosmereAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.function.Supplier;
 
-public class DrawUtils
+public class DrawHelper
 {
 
 	//Draw our allomancy lines
@@ -85,7 +85,7 @@ public class DrawUtils
 
 		private static class Internal extends RenderType
 		{
-			private static final RenderType MEASUREMENT_LINES = RenderType.create(Cosmere.MODID + ":lines",
+			private static final RenderType MEASUREMENT_LINES = RenderType.create(CosmereAPI.COSMERE_MODID + ":lines",
 					DefaultVertexFormat.POSITION_COLOR_NORMAL,
 					VertexFormat.Mode.LINES,
 					256,
