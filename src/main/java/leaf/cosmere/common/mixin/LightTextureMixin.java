@@ -1,5 +1,5 @@
 /*
- * File updated ~ 31 - 3 - 2022 ~ Leaf
+ * File updated ~ 14 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.mixin;
@@ -41,8 +41,8 @@ public class LightTextureMixin
 		if (iSpiritwebLazyOptional.isPresent())
 		{
 			var spiritweb = iSpiritwebLazyOptional.resolve();
-			final Manifestation tinAllomancy = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation(Metals.MetalType.TIN.getName()));
-			if (spiritweb.isPresent() && tinAllomancy.isActive(spiritweb.get()))
+			final Manifestation tinAllomancy = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", Metals.MetalType.TIN.getName()));
+			if (spiritweb.isPresent() && tinAllomancy != null && tinAllomancy.isActive(spiritweb.get()))
 			{
 				tinAlloVal = spiritweb.get().getMode(tinAllomancy) == 1 ? 0.25f : 0.75f;
 			}
