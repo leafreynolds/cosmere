@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 13 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.patchouli;
@@ -104,8 +104,8 @@ public class PatchouliHemalurgyCategory
 	private static String getHemalurgicUse(Metals.MetalType metalType)
 	{
 		StringBuilder builder = new StringBuilder();
-		final String allomanticPageLink = "cosmere:allomancy/allomantic_";
-		final String feruchemicalPageLink = "cosmere:feruchemy/feruchemical_";
+		final String allomanticPageLink = "allomancy:allomancy/allomantic_";
+		final String feruchemicalPageLink = "feruchemy:feruchemy/feruchemical_";
 
 		switch (metalType)
 		{

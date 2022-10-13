@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "Electrum spikes steal the enhancement allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_aluminum)Aluminum$(), $(l:cosmere:allomancy/allomantic_duralumin)Duralumin$(), $(l:cosmere:allomancy/allomantic_chromium)Chromium$() and $(l:cosmere:allomancy/allomantic_nicrosil)Nicrosil$()."
+      "text": "Electrum spikes steal the enhancement allomantic powers: $(p)Allomantically burning $(l:allomancy:allomancy/allomantic_aluminum)Aluminum$(), $(l:allomancy:allomancy/allomantic_duralumin)Duralumin$(), $(l:allomancy:allomancy/allomantic_chromium)Chromium$() and $(l:allomancy:allomancy/allomantic_nicrosil)Nicrosil$()."
     },
     {
       "type": "patchouli:crafting",

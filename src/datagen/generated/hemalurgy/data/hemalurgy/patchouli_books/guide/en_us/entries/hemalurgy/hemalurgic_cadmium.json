@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "Cadmium spikes steal the temporal allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_gold)Gold$(), $(l:cosmere:allomancy/allomantic_electrum)Electrum$(), $(l:cosmere:allomancy/allomantic_cadmium)Cadmium$() and $(l:cosmere:allomancy/allomantic_bendalloy)Bendalloy$()."
+      "text": "Cadmium spikes steal the temporal allomantic powers: $(p)Allomantically burning $(l:allomancy:allomancy/allomantic_gold)Gold$(), $(l:allomancy:allomancy/allomantic_electrum)Electrum$(), $(l:allomancy:allomancy/allomantic_cadmium)Cadmium$() and $(l:allomancy:allomancy/allomantic_bendalloy)Bendalloy$()."
     },
     {
       "type": "patchouli:crafting",

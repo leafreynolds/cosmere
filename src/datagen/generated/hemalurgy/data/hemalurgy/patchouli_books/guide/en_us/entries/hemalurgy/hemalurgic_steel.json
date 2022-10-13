@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "Steel spikes steal the physical allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_iron)Iron$(), $(l:cosmere:allomancy/allomantic_steel)Steel$(), $(l:cosmere:allomancy/allomantic_tin)Tin$() and $(l:cosmere:allomancy/allomantic_pewter)Pewter$()."
+      "text": "Steel spikes steal the physical allomantic powers: $(p)Allomantically burning $(l:allomancy:allomancy/allomantic_iron)Iron$(), $(l:allomancy:allomancy/allomantic_steel)Steel$(), $(l:allomancy:allomancy/allomantic_tin)Tin$() and $(l:allomancy:allomancy/allomantic_pewter)Pewter$()."
     },
     {
       "type": "patchouli:crafting",

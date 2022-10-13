@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "Bronze spikes steal the mental allomantic powers: $(p)Allomantically burning $(l:cosmere:allomancy/allomantic_zinc)Zinc$(), $(l:cosmere:allomancy/allomantic_brass)Brass$(), $(l:cosmere:allomancy/allomantic_copper)Copper$() and $(l:cosmere:allomancy/allomantic_bronze)Bronze$()."
+      "text": "Bronze spikes steal the mental allomantic powers: $(p)Allomantically burning $(l:allomancy:allomancy/allomantic_zinc)Zinc$(), $(l:allomancy:allomancy/allomantic_brass)Brass$(), $(l:allomancy:allomancy/allomantic_copper)Copper$() and $(l:allomancy:allomancy/allomantic_bronze)Bronze$()."
     },
     {
       "type": "patchouli:crafting",
