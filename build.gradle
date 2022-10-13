@@ -197,6 +197,18 @@ SourceSet getExtraSourceSet(SourceSet base, String name)
 	return project.sourceSets.getByName(base.getTaskName(name, null))
 }
 
+//Update book build number
+processResources {
+	// Exclude datagenerator .cache directory
+	exclude '.cache'
+
+	filesMatching('data/cosmere/patchouli_books/guide/book.json') {
+		filter {
+			it.replaceAll("buildNumber", "${build_number}")
+		}
+	}
+}
+
 setupTasks(sourceSets.main)
 for (def name : secondaryModules) {
 	setupTasks(sourceSets.getByName(name))
