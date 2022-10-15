@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -179,9 +179,9 @@ public class SpiritwebCapability implements ISpiritweb
 			if (selectedManifestation != ManifestationRegistry.NONE.get() && !hasManifestation(selectedManifestation))
 			{
 				selectedManifestation = ManifestationRegistry.NONE.get();
-				if (getLiving() instanceof ServerPlayer)
+				if (getLiving() instanceof ServerPlayer serverPlayer)
 				{
-					syncToClients((ServerPlayer) getLiving());
+					syncToClients(serverPlayer);
 				}
 			}
 

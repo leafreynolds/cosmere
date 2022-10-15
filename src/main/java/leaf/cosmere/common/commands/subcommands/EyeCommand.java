@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 15 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.commands.subcommands;
@@ -22,7 +22,7 @@ import java.util.Collection;
 
 public class EyeCommand extends ModCommand
 {
-
+	//todo move this to hemalurgy?
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
