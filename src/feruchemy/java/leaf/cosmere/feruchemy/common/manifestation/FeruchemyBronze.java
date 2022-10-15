@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -78,6 +78,12 @@ public class FeruchemyBronze extends FeruchemyManifestation
 	{
 		ServerPlayer player = (ServerPlayer) data.getLiving();
 
+		if (player.isSleeping())
+		{
+			return;
+		}
+
+
 		boolean canSleep = canSleep(player);
 
 		if (!canSleep)
@@ -112,7 +118,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 		try
 		{
 			//sleepCounter
-			ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "field_71076_b");
+			ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "f_36110_");
 		}
 		catch (ObfuscationReflectionHelper.UnableToFindFieldException e)
 		{
@@ -134,9 +140,6 @@ public class FeruchemyBronze extends FeruchemyManifestation
 
 		player.awardStat(Stats.SLEEP_IN_BED);
 		CriteriaTriggers.SLEPT_IN_BED.trigger(player);
-
-		data.setMode(this, 0);
-
 	}
 
 	private boolean canSleep(Player player)

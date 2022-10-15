@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.eventHandlers;
@@ -13,8 +13,26 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Surgebinding.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class SurgebindingEntityEventHandler
+public class SurgebindingEventsHandler
 {
+/*
+	//todo fix roshar not respecting sleep ??
+	@SubscribeEvent
+	public static void onSleepFinished(final SleepFinishedTimeEvent evt)
+	{
+		LevelAccessor levelAccessor = evt.getLevel();
+
+		if (levelAccessor instanceof ServerLevel serverLevel)
+		{
+			long newTime = evt.getNewTime();
+
+			ServerLevel level = serverLevel.getServer().getLevel(SurgebindingDimensions.ROSHAR_DIM_KEY);
+			if (level != null)
+			{
+				evt.setTimeAddition(600);
+			}
+		}
+	}*/
 
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
