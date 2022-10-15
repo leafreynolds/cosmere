@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.items;
@@ -7,6 +7,7 @@ package leaf.cosmere.feruchemy.common.items;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -19,7 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 import java.util.UUID;
 
 public class BandsOfMourningItem extends BraceletMetalmindItem
@@ -38,18 +38,14 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 			setCharge(fullPower, getMaxCharge(fullPower));
 
 			CompoundTag nbt = fullPower.getOrCreateTagElement("StoredInvestiture");
-			//for each power the user has access to
-			for (int i = 0; i < 16; i++)
+
+			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 			{
-				//even if it's granted from hemalurgy/temporary
-				//update the nbt.
-				//this will add/remove powers based on what the user currently has.
-				//todo, come back to this later when more sleep. bugs me about losing potential stored powers
-				final Optional<Metals.MetalType> metalType = Metals.MetalType.valueOf(i);
-				if (metalType.isPresent())
+				final String attributeRegistryName = manifestation.getRegistryName().toString();
+
+				if (manifestation instanceof IHasMetalType)
 				{
-					nbt.putDouble("allomancy:" + metalType.get().getName(), 20);
-					nbt.putDouble("feruchemy:" + metalType.get().getName(), 20);
+					nbt.putDouble(attributeRegistryName, 20);
 				}
 			}
 
@@ -78,21 +74,21 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
-			String manifestationName = manifestation.getName();
-			Attribute attributeRegistryObject = manifestation.getAttribute();
-			if (!CompoundNBTHelper.verifyExistance(nbt, manifestationName) || attributeRegistryObject == null)
+			Attribute attribute = manifestation.getAttribute();
+			final String attributeRegistryName = manifestation.getRegistryName().toString();
+			if (!CompoundNBTHelper.verifyExistance(nbt, attributeRegistryName) || attribute == null)
 			{
 				continue;
 			}
 
 			attributeModifiers.put(
-					attributeRegistryObject,
+					attribute,
 					new AttributeModifier(
 							Constants.NBT.UNKEYED_UUID,
-							manifestationName,
+							attributeRegistryName,
 							CompoundNBTHelper.getDouble(
 									nbt,
-									manifestationName,
+									attributeRegistryName,
 									0),
 							AttributeModifier.Operation.ADDITION));
 
