@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.api.helpers;
@@ -100,7 +100,7 @@ public final class CompoundNBTHelper
 
 	public static boolean verifyExistance(CompoundTag compoundTag, String tag)
 	{
-		return compoundTag.contains(tag);
+		return compoundTag != null && compoundTag.contains(tag);
 	}
 
 	@Nullable
