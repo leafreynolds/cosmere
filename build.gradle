@@ -492,7 +492,7 @@ def secondaryJar(SourceSet sourceSet, String title)
 		archiveClassifier.set(sourceSet.name)
 		from sourceSet.output
 		if (!title.isEmpty()) {
-			archiveFileName.set("${title}-${project.version}.jar")
+			archiveFileName.set("Cosmere${title}-${project.version}.jar")
 		}
 		manifest.attributes(getManifestAttributes(title.isEmpty() ? "Cosmere" : title))
 	})
