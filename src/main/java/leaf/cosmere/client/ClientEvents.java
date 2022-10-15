@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 15 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.client;
@@ -126,7 +126,7 @@ public class ClientEvents
 	@SubscribeEvent
 	public static void onRenderLevelLastEvent(final RenderLevelStageEvent event)
 	{
-		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS)
+		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
 		{
 			return;
 		}
