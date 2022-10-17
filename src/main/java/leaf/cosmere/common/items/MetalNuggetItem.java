@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 18 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.items;
@@ -11,29 +11,28 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
 
 public class MetalNuggetItem extends MetalItem
 {
 	public static final DamageSource EAT_METAL = (new DamageSource("eat_metal")).bypassArmor().bypassMagic();
-
 
 	public MetalNuggetItem(Metals.MetalType metalType)
 	{
 		super(metalType);
 	}
 
+
+	@Nonnull
 	@Override
-	public boolean isEdible()
+	public UseAnim getUseAnimation(ItemStack stack)
 	{
-		return true;
+		return UseAnim.EAT;
 	}
 
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
-	{
-		return ItemUtils.startUsingInstantly(worldIn, playerIn, handIn);
-	}
 
 	@Override
 	public int getUseDuration(ItemStack stack)
@@ -42,9 +41,27 @@ public class MetalNuggetItem extends MetalItem
 		return 16;
 	}
 
+	@Nonnull
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand)
+	{
+		ItemStack stack = player.getItemInHand(hand);
+		if (player.canEat(true))
+		{
+			player.startUsingItem(hand);
+			return InteractionResultHolder.consume(stack);
+		}
+		return InteractionResultHolder.pass(stack);
+	}
+
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level pLevel, LivingEntity pLivingEntity)
 	{
+		if (pLevel.isClientSide)
+		{
+			return itemstack;
+		}
+
 		if (pLivingEntity instanceof Player player && !player.isCreative())
 		{
 			itemstack.shrink(1);
