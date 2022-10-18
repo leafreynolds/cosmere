@@ -1,0 +1,21 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "MIT"
+
+[[mods]]
+modId = "sandmastery"
+version = "${version}"
+displayName = "Cosmere: Sand Mastery"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+authors = "MoonlitJolty"
+credits = "Leafy"
+logoFile = "logo.png"
+description = '''Sand Mastery module for Cosmere.'''
+
+[[dependencies.sandmastery]]
+modId = "cosmere"
+mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
