@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:gems/garnet"
+    },
+    "J": {
+      "item": "surgebinding:garnet_broam"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

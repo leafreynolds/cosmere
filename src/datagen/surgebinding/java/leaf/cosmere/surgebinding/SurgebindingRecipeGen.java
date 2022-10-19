@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 19 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -39,7 +39,7 @@ public class SurgebindingRecipeGen extends RecipeProvider implements IConditionB
 	{
 		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
-			compressRecipe(SurgebindingBlocks.GEM_BLOCKS.get(gemstone).getBlock(), CosmereTags.Items.GEM_TAGS.get(gemstone)).save(consumer);
+			compressRecipe(SurgebindingBlocks.GEM_BLOCKS.get(gemstone).getBlock(), CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone)).save(consumer);
 			decompressRecipe(consumer, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), CosmereTags.Items.GEM_BLOCK_ITEM_TAGS.get(gemstone), gemstone.getName() + "_block_deconstruct");
 
 			addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
@@ -168,6 +168,17 @@ public class SurgebindingRecipeGen extends RecipeProvider implements IConditionB
 				.define('I', input)
 				.pattern("III")
 				.pattern("III")
+				.pattern("III")
+				.unlockedBy("has_item", has(input));
+	}
+
+	private ShapedRecipeBuilder compressRecipe(ItemLike output, TagKey<Item> input, ItemLike center)
+	{
+		return ShapedRecipeBuilder.shaped(output)
+				.define('I', input)
+				.define('J', center)
+				.pattern("III")
+				.pattern("IJI")
 				.pattern("III")
 				.unlockedBy("has_item", has(input));
 	}

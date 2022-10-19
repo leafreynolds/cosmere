@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 19 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.items;
@@ -40,6 +40,12 @@ public class SurgebindingItemTagsGen extends ItemTagsProvider
 
 			//and let our full sized gems be usable for other recipes
 			add(CosmereTags.Items.GEM_TAGS.get(gemstone), broamItem);
+
+
+			//associate block tags with their item counterparts
+			final TagKey<Item> storageBlockTag = CosmereTags.Items.GEM_BLOCK_ITEM_TAGS.get(gemstone);
+			this.copy(CosmereTags.Blocks.GEM_BLOCK_TAGS.get(gemstone), storageBlockTag);
+			this.tag(Tags.Items.STORAGE_BLOCKS).addTag(storageBlockTag);
 		}
 	}
 
