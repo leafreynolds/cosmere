@@ -2,7 +2,7 @@
  * File updated ~ 8 - 10 - 2022 ~ Leaf
  */
 
-package leaf.cosmere.surgebinding.common.capabilities;
+package leaf.cosmere.surgebinding.common.registries.capabilities;
 
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.helpers.EffectsHelper;
