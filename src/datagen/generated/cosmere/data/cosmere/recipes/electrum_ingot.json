@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/electrum"
+    },
+    "J": {
+      "item": "cosmere:electrum_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

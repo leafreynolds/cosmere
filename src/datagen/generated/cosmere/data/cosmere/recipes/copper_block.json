@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/copper"
+    },
+    "J": {
+      "item": "cosmere:copper_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

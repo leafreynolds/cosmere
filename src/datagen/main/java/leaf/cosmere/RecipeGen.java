@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 19 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -59,10 +59,10 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 				continue;
 			}
 
-			compressRecipe(BlocksRegistry.METAL_BLOCKS.get(metalType).getBlock(), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType)).save(consumer);
-			decompressRecipe(consumer, ItemsRegistry.METAL_INGOTS.get(metalType).get(), CosmereTags.Items.METAL_BLOCK_ITEM_TAGS.get(metalType), metalType.getName() + "_block_deconstruct");
+			compressRecipe(BlocksRegistry.METAL_BLOCKS.get(metalType).getBlock(), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType), ItemsRegistry.METAL_INGOTS.get(metalType)).save(consumer);
+			decompressRecipe(consumer, ItemsRegistry.METAL_INGOTS.get(metalType).get(), BlocksRegistry.METAL_BLOCKS.get(metalType), metalType.getName() + "_block_deconstruct");
 
-			compressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), CosmereTags.Items.METAL_NUGGET_TAGS.get(metalType)).save(consumer);
+			compressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), CosmereTags.Items.METAL_NUGGET_TAGS.get(metalType), ItemsRegistry.METAL_NUGGETS.get(metalType)).save(consumer);
 			decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType), metalType.getName() + "_item_deconstruct");
 
 			if (metalType.hasOre())
@@ -193,6 +193,15 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 	}
 
 
+	private void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, ItemLike input, String name)
+	{
+		ShapelessRecipeBuilder.shapeless(output, 9)
+				.unlockedBy("has_item", has(output))
+				.requires(input)
+				.save(consumer, Cosmere.rl("conversions/" + name));
+	}
+
+
 	private void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, TagKey<Item> input, String name)
 	{
 		ShapelessRecipeBuilder.shapeless(output, 9)
@@ -207,6 +216,17 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 				.define('I', input)
 				.pattern("III")
 				.pattern("III")
+				.pattern("III")
+				.unlockedBy("has_item", has(input));
+	}
+
+	private ShapedRecipeBuilder compressRecipe(ItemLike output, TagKey<Item> input, ItemLike center)
+	{
+		return ShapedRecipeBuilder.shaped(output)
+				.define('I', input)
+				.define('J', center)
+				.pattern("III")
+				.pattern("IJI")
 				.pattern("III")
 				.unlockedBy("has_item", has(input));
 	}

@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/tin"
+    },
+    "J": {
+      "item": "cosmere:tin_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

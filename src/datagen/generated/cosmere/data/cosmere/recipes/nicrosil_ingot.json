@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/nicrosil"
+    },
+    "J": {
+      "item": "cosmere:nicrosil_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

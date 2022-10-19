@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/harmonium"
+    },
+    "J": {
+      "item": "cosmere:harmonium_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

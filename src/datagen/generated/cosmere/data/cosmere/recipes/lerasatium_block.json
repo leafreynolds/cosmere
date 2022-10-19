@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/lerasatium"
+    },
+    "J": {
+      "item": "cosmere:lerasatium_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

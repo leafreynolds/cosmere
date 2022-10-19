@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/silver"
+    },
+    "J": {
+      "item": "cosmere:silver_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

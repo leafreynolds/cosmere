@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/duralumin"
+    },
+    "J": {
+      "item": "cosmere:duralumin_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

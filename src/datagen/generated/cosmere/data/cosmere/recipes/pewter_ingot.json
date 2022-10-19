@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/pewter"
+    },
+    "J": {
+      "item": "cosmere:pewter_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

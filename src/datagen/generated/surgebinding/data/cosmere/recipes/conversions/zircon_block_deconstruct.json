@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:storage_blocks/zircon"
+      "item": "surgebinding:zircon_block"
     }
   ],
   "result": {

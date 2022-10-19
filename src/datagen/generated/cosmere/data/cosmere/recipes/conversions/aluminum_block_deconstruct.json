@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:storage_blocks/aluminum"
+      "item": "cosmere:aluminum_block"
     }
   ],
   "result": {

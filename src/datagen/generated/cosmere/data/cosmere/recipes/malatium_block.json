@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/malatium"
+    },
+    "J": {
+      "item": "cosmere:malatium_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/brass"
+    },
+    "J": {
+      "item": "cosmere:brass_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

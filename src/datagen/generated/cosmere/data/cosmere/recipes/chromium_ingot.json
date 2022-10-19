@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/chromium"
+    },
+    "J": {
+      "item": "cosmere:chromium_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {
