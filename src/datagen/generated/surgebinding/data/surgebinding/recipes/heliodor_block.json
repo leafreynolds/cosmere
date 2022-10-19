@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:gems/heliodor"
+    },
+    "J": {
+      "item": "surgebinding:heliodor_broam"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {
