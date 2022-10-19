@@ -40,7 +40,7 @@ public class SurgebindingRecipeGen extends RecipeProvider implements IConditionB
 		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
 			compressRecipe(SurgebindingBlocks.GEM_BLOCKS.get(gemstone).getBlock(), CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone)).save(consumer);
-			decompressRecipe(consumer, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), CosmereTags.Items.GEM_BLOCK_ITEM_TAGS.get(gemstone), gemstone.getName() + "_block_deconstruct");
+			decompressRecipe(consumer, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), SurgebindingBlocks.GEM_BLOCKS.get(gemstone), gemstone.getName() + "_block_deconstruct");
 
 			addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
 			addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), 1.0f, 1000);
@@ -153,6 +153,16 @@ public class SurgebindingRecipeGen extends RecipeProvider implements IConditionB
 			ShapedRecipeBuilder.shaped(feet).define('X', inputMaterial).pattern("X X").pattern("X X").group("boots").unlockedBy("has_material", has(inputMaterial)).save(consumer);
 		}
 	}
+
+
+	private void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, ItemLike input, String name)
+	{
+		ShapelessRecipeBuilder.shapeless(output, 9)
+				.unlockedBy("has_item", has(output))
+				.requires(input)
+				.save(consumer, Cosmere.rl("conversions/" + name));
+	}
+
 
 	private void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, TagKey<Item> input, String name)
 	{

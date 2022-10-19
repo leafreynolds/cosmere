@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/nickel"
+    },
+    "J": {
+      "item": "cosmere:nickel_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

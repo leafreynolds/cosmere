@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/electrum"
+    },
+    "J": {
+      "item": "cosmere:electrum_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

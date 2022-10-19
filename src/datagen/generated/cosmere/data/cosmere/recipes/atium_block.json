@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/atium"
+    },
+    "J": {
+      "item": "cosmere:atium_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

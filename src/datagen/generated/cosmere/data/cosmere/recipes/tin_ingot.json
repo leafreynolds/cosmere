@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/tin"
+    },
+    "J": {
+      "item": "cosmere:tin_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

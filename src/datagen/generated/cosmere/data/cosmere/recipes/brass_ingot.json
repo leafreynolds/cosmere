@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/brass"
+    },
+    "J": {
+      "item": "cosmere:brass_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

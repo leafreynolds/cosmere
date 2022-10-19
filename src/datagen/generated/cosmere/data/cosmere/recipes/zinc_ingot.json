@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/zinc"
+    },
+    "J": {
+      "item": "cosmere:zinc_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

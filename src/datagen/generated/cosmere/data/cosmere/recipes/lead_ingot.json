@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/lead"
+    },
+    "J": {
+      "item": "cosmere:lead_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

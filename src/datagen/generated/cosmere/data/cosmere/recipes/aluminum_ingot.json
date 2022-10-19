@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/aluminum"
+    },
+    "J": {
+      "item": "cosmere:aluminum_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

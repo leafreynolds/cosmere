@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/nicrosil"
+    },
+    "J": {
+      "item": "cosmere:nicrosil_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

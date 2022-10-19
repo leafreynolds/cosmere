@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:nuggets/lerasium"
+    },
+    "J": {
+      "item": "cosmere:lerasium_nugget"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

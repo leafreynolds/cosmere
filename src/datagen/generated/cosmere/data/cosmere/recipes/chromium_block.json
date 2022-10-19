@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/chromium"
+    },
+    "J": {
+      "item": "cosmere:chromium_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

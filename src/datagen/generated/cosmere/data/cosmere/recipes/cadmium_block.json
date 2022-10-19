@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/cadmium"
+    },
+    "J": {
+      "item": "cosmere:cadmium_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

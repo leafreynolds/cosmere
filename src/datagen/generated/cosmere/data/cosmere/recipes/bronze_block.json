@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/bronze"
+    },
+    "J": {
+      "item": "cosmere:bronze_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/zinc"
+    },
+    "J": {
+      "item": "cosmere:zinc_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {

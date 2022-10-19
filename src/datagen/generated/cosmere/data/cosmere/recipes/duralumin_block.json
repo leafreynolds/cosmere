@@ -3,11 +3,14 @@
   "key": {
     "I": {
       "tag": "forge:ingots/duralumin"
+    },
+    "J": {
+      "item": "cosmere:duralumin_ingot"
     }
   },
   "pattern": [
     "III",
-    "III",
+    "IJI",
     "III"
   ],
   "result": {
