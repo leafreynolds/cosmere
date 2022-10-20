@@ -12,12 +12,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 
 public class SandmasteryManifestation extends Manifestation
 {
-	protected final Taldain.Investiture investiture;
+	protected final Taldain.Mastery mastery;
 
-	public SandmasteryManifestation(Taldain.Investiture investiture)
+	public SandmasteryManifestation(Taldain.Mastery mastery)
 	{
 		super(Manifestations.ManifestationTypes.SANDMASTERY);
-		this.investiture = investiture;
+		this.mastery = mastery;
 	}
 
 	@Override

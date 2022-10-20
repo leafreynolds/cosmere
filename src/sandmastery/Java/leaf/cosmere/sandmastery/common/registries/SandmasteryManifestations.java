@@ -20,8 +20,8 @@ public class SandmasteryManifestations
 {
 	public static final ManifestationDeferredRegister MANIFESTATIONS = new ManifestationDeferredRegister(Sandmastery.MODID);
 
-	public static final Map<Taldain.Investiture, ManifestationRegistryObject<Manifestation>> SANDMASTERY_POWERS =
-			Arrays.stream(Taldain.Investiture.values())
+	public static final Map<Taldain.Mastery, ManifestationRegistryObject<SandmasteryManifestation>> SANDMASTERY_POWERS =
+			Arrays.stream(Taldain.Mastery.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							investiture ->
@@ -31,8 +31,8 @@ public class SandmasteryManifestations
 					));
 
 
-	private static SandmasteryManifestation makeSandmasteryManifestation(Taldain.Investiture investiture)
+	private static SandmasteryManifestation makeSandmasteryManifestation(Taldain.Mastery mastery)
 	{
-		return new SandmasteryManifestation(investiture);
+		return new SandmasteryManifestation(mastery);
 	}
 }

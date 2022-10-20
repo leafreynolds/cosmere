@@ -1,6 +1,5 @@
 package leaf.cosmere.sandmastery.common.registries;
 
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.common.registration.impl.AttributeDeferredRegister;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
@@ -15,8 +14,8 @@ import java.util.stream.Collectors;
 public class SandmasteryAttributes {
     public static final AttributeDeferredRegister ATTRIBUTES = new AttributeDeferredRegister(Sandmastery.MODID);
 
-    public static final Map<Taldain.Investiture, AttributeRegistryObject<Attribute>> SANDMASTER_ATTRIBUTES =
-            Arrays.stream(Taldain.Investiture.values())
+    public static final Map<Taldain.Mastery, AttributeRegistryObject<Attribute>> SANDMASTER_ATTRIBUTES =
+            Arrays.stream(Taldain.Mastery.values())
                     .collect(Collectors.toMap(
                             Function.identity(),
                             surge ->

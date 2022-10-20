@@ -10,18 +10,23 @@ import java.util.Optional;
 
 public class Taldain
 {
-	public enum Investiture
+	public enum Mastery
 	{
-		MASTERY(0);
+		ELEVATE(0),
+		PLATFORM(1),
+		STAIR(2),
+		LAUNCH(3),
+		PROJECTILE(4),
+		WALL(5),
+		SHIELD(6),
+		BUILDING(7),
+		DECOY(8);
 
 		private final int id;
 
-		Investiture(int id)
-		{
-			this.id = id;
-		}
+		Mastery(int id) { this.id = id; }
 
-		public static Optional<Investiture> valueOf(int value)
+		public static Optional<Mastery> valueOf(int value)
 		{
 			return Arrays.stream(values())
 					.filter(investiture -> investiture.id == value)

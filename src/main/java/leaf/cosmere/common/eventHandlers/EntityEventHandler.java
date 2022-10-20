@@ -165,8 +165,7 @@ public class EntityEventHandler
 		{
 			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
 			{
-				System.out.println("WHY U NO WORKUUU");
-				spiritwebCapability.giveManifestation(manifestation, 8);
+				spiritwebCapability.giveManifestation(manifestation, MathHelper.randomInt(1, 24));
 
 			}
 		}
