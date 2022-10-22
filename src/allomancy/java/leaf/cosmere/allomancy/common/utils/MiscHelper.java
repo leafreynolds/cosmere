@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.utils;
@@ -43,8 +43,8 @@ public class MiscHelper
 					//give allomancy
 					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
 					{
-						//todo config allomancy strength
-						spiritweb.giveManifestation(manifestation, 13);
+						final double strength = manifestation.getStrength(iSpiritweb, true);
+						spiritweb.giveManifestation(manifestation, strength < 1 ? 13 : (int) (strength + 1));
 					}
 				}
 			}

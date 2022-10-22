@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.api.manifestation;
@@ -10,6 +10,7 @@ import leaf.cosmere.api.providers.IManifestationProvider;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -77,8 +78,13 @@ public class Manifestation implements IManifestationProvider
 		return data.canTickManifestation(this);
 	}
 
-	public double getStrength(ISpiritweb data, boolean getBaseStrength)
+	public double getStrength(ISpiritweb cap, boolean getBaseStrength)
 	{
+		AttributeInstance attribute = cap.getLiving().getAttribute(getAttribute());
+		if (attribute != null)
+		{
+			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
+		}
 		return 0;
 	}
 
