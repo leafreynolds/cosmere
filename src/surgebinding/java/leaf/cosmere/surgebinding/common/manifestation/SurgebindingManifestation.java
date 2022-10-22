@@ -17,4 +17,12 @@ public class SurgebindingManifestation extends Manifestation
 		super(Manifestations.ManifestationTypes.SURGEBINDING);
 		this.surge = surge;
 	}
+
+	@Override
+	public int getPowerID()
+	{
+		return surge.getID();
+	}
+
+
 }
