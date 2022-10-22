@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 22 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.registries;
@@ -20,10 +20,10 @@ public class AllomancyEffects
 
 	public static final MobEffectRegistryObject<AllomancyEffectBase> ALLOMANTIC_COPPER = EFFECTS.register(
 			"copper_cloud",
-			() -> new AllomancyEffectBase(Metals.MetalType.COPPER, MobEffectCategory.BENEFICIAL));
+			() -> new AllomancyEffectBase(Metals.MetalType.COPPER, MobEffectCategory.NEUTRAL));
 
 	public static final MobEffectRegistryObject<MobEffect> ALLOMANCY_BOOST = EFFECTS.register(
 			"allomancy_boost",
-			() -> new AllomancyBoostEffect(Metals.MetalType.DURALUMIN, MobEffectCategory.BENEFICIAL));
+			() -> new AllomancyBoostEffect(Metals.MetalType.DURALUMIN, MobEffectCategory.NEUTRAL));
 
 }
