@@ -28,11 +28,19 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void tickServer(ISpiritweb spiritweb)
 	{
+		final LivingEntity livingEntity = spiritweb.getLiving();
+		if (livingEntity.level.isThundering() && livingEntity.level.isRainingAt(livingEntity.blockPosition()))
+		{
+			//todo how much stormlight per tick?
+			//if player has max of 1000, it will take just under a minute to
+			stormlightStored += 1;
+		}
+
+
 		//tick stormlight
 		if (stormlightStored > 0)
 		{
-			final LivingEntity livingEntity = spiritweb.getLiving();
-			if (livingEntity.tickCount % 20 == 0 && getStormlight() > 0)
+			if (livingEntity.tickCount % 20 == 0)
 			{
 				//being hurt takes priority
 				if (livingEntity.getHealth() < livingEntity.getMaxHealth())
@@ -46,9 +54,32 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 						SurgeProgression.heal(livingEntity, livingEntity.getHealth() + 1);
 					}
 				}
+				//otherwise conditional effects
 				else
 				{
-
+					if (livingEntity.getCombatTracker().isInCombat())
+					{
+						//todo combat effect cost
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
+						adjustStormlight(-30, true);
+					}
+					else if (livingEntity.isUnderWater())
+					{
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.WATER_BREATHING, 0));
+						//todo waterbreathing stormlight cost
+						adjustStormlight(-10, true);
+					}
+					else
+					{
+						//todo detect better based on what the player is doing? mining means haste,
+						//travelling means movement etc. Not sure if that's really feasible though
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DIG_SPEED, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
+						adjustStormlight(-30, true);
+					}
 				}
 
 				//todo decide what's appropriate for reducing stormlight
