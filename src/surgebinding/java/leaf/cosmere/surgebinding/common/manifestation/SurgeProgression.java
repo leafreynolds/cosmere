@@ -8,6 +8,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -36,27 +37,29 @@ public class SurgeProgression extends SurgebindingManifestation
 			{
 				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
-					SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
-					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()))
+					{
+						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
+						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
 
-					//todo config
-					final int stormlightHealingCostMultiplier = 20;
-					if (submodule.adjustStormlight(-(healthMissing * stormlightHealingCostMultiplier), true))
-					{
-						heal(eventTarget, eventTargetMaxHealth);
-					}
-					else
-					{
-						final int affordableHealth = submodule.getStormlight() / stormlightHealingCostMultiplier;
-						if (submodule.adjustStormlight(-submodule.getStormlight(), true))
+						//todo config
+						final int stormlightHealingCostMultiplier = 20;
+						if (submodule.adjustStormlight(-(healthMissing * stormlightHealingCostMultiplier), true))
 						{
-							heal(eventTarget, eventTargetHealth + affordableHealth);
+							heal(eventTarget, eventTargetMaxHealth);
+						}
+						else
+						{
+							final int affordableHealth = submodule.getStormlight() / stormlightHealingCostMultiplier;
+							if (submodule.adjustStormlight(-submodule.getStormlight(), true))
+							{
+								heal(eventTarget, eventTargetHealth + affordableHealth);
+							}
 						}
 					}
 				});
 			}
 		}
-
 	}
 
 	public static void heal(LivingEntity livingEntity, float setHealthTo)
