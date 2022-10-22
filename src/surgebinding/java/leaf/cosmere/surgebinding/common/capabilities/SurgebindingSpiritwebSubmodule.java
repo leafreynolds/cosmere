@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities;
@@ -8,6 +8,7 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
+import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -31,8 +32,25 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		if (stormlightStored > 0)
 		{
 			final LivingEntity livingEntity = spiritweb.getLiving();
-			if (livingEntity.tickCount % 100 == 0)
+			if (livingEntity.tickCount % 20 == 0 && getStormlight() > 0)
 			{
+				//being hurt takes priority
+				if (livingEntity.getHealth() < livingEntity.getMaxHealth())
+				{
+					//todo healing stormlight config
+					final int stormlightHealingCostMultiplier = 20;
+
+					if (adjustStormlight(-stormlightHealingCostMultiplier, true))
+					{
+						//todo stormlight healing better
+						SurgeProgression.heal(livingEntity, livingEntity.getHealth() + 1);
+					}
+				}
+				else
+				{
+
+				}
+
 				//todo decide what's appropriate for reducing stormlight
 				//maybe reducing cost based on how many ideals they have sworn?
 				//todo config drain rate

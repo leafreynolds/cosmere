@@ -41,14 +41,14 @@ public class SurgeProgression extends SurgebindingManifestation
 
 					//todo config
 					final int stormlightHealingCostMultiplier = 20;
-					if (submodule.adjustStormlight(healthMissing * stormlightHealingCostMultiplier, true))
+					if (submodule.adjustStormlight(-(healthMissing * stormlightHealingCostMultiplier), true))
 					{
 						heal(eventTarget, eventTargetMaxHealth);
 					}
 					else
 					{
 						final int affordableHealth = submodule.getStormlight() / stormlightHealingCostMultiplier;
-						if (submodule.adjustStormlight(submodule.getStormlight(), true))
+						if (submodule.adjustStormlight(-submodule.getStormlight(), true))
 						{
 							heal(eventTarget, eventTargetHealth + affordableHealth);
 						}
@@ -85,7 +85,7 @@ public class SurgeProgression extends SurgebindingManifestation
 				livingEntity.getZ(),
 				SoundEvents.PLAYER_LEVELUP,
 				livingEntity.getSoundSource(),
-				0.75F,
+				0.25F,
 				1.0F);
 	}
 
