@@ -28,8 +28,8 @@ import java.util.Locale;
 
 public class SandmasteryEngLangGen extends LanguageProvider
 {
-//	final String advancementTitleFormat = "advancements.allomancy.%s.title";
-//	final String advancementDescriptionFormat = "advancements.allomancy.%s.description";
+	final String advancementTitleFormat = "advancements.sandmastery.%s.title";
+	final String advancementDescriptionFormat = "advancements.sandmastery.%s.description";
 
 	public SandmasteryEngLangGen(DataGenerator gen)
 	{
@@ -75,22 +75,10 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addEntities()
 	{
-		//Entities
-//		for (IEntityTypeProvider type : AllomancyEntityTypes.ENTITY_TYPES.getAllEntityTypes())
-//		{
-//			final ResourceLocation id = type.getRegistryName();
-//			add(type.getEntityType().getDescriptionId(), StringHelper.fixCapitalisation(id.getPath()));
-//		}
 	}
 
 	private void addAdvancements()
 	{
-		//innate
-		for (Manifestations.ManifestationTypes value : Manifestations.ManifestationTypes.values())
-		{
-//			add(String.format(advancementTitleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
-//			add(String.format(advancementDescriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));
-		}
 	}
 
 	private void addManifestations()
@@ -102,19 +90,16 @@ public class SandmasteryEngLangGen extends LanguageProvider
 			//power type
 			String key = manifestation.getTranslationKey();
 
-
 			//description
 			String name;
 			String description;
 
-
-//			String tabName = manifestation.getManifestationType().getName();
 			String abilityName = Taldain.Mastery.valueOf(manifestation.getPowerID()).get().toString().toLowerCase(Locale.ROOT);
 
 			name = "Sand Mastery " + abilityName;
 			description = "Masters can use " + abilityName;
-//			add(String.format(advancementTitleFormat, tabName + "." + abilityName), StringHelper.fixCapitalisation(name));
-//			add(String.format(advancementDescriptionFormat, tabName + "." + abilityName), "Test description: " + StringHelper.fixCapitalisation(name));
+
+			System.out.println(name);
 
 			//Name
 			add(key, StringHelper.fixCapitalisation(name));

@@ -21,17 +21,17 @@ public class PatchouliSandmasteryCategory
 	public static void collect(List<BookStuff.Category> categories, List<BookStuff.Entry> entries)
 	{
 		// TODO
-		BookStuff.Category allomancyCategory = new BookStuff.Category(
-				"sandmastery",
+		BookStuff.Category sandmasteryCategory = new BookStuff.Category(
+				"sand mastery",
 				"TODO",
-				"cosmere:pewter_nugget");
-		categories.add(allomancyCategory);
-		allomancyCategory.sortnum = 1;
+				"sandmastery:qido");
+		categories.add(sandmasteryCategory);
+		sandmasteryCategory.sortnum = 4;
 
 		// Start a page list
 		List<BookStuff.Page> pages = new ArrayList<>();
-		// Allomancy Basics Entry
-		BookStuff.Entry allomancyBasics = new BookStuff.Entry("allomancy_basics", allomancyCategory, "allomancy:metal_vial");
+		// Sandmastery Basics Entry
+		BookStuff.Entry sandmasteryBasics = new BookStuff.Entry("sandmastery_basics", sandmasteryCategory, "sandmastery:qido");
 
 
 		BookStuff.Page firstPage = new BookStuff.TextPage();
@@ -46,10 +46,9 @@ public class PatchouliSandmasteryCategory
 		secondPage.setText(
 				"TODO");
 		pages.add(secondPage);
-		// TODO Change icon
-		pages.add(new BookStuff.CraftingPage("allomancy:metal_vial"));
-		allomancyBasics.pages = pages.toArray(BookStuff.Page[]::new);
+		pages.add(new BookStuff.CraftingPage("sandmastery:qido"));
+		sandmasteryBasics.pages = pages.toArray(BookStuff.Page[]::new);
 		pages.clear();
-		entries.add(allomancyBasics);
+		entries.add(sandmasteryBasics);
 	}
 }

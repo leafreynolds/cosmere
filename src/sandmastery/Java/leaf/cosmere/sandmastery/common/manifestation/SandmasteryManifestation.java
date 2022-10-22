@@ -30,4 +30,10 @@ public class SandmasteryManifestation extends Manifestation
 		}
 		return 0;
 	}
+
+	@Override
+	public int getPowerID()
+	{
+		return mastery.getID();
+	}
 }

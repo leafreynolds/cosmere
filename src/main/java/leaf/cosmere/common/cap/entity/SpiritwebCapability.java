@@ -288,33 +288,34 @@ public class SpiritwebCapability implements ISpiritweb
 
 		String stringToDraw2 = "";
 
+
 		//todo migrate drawing text to manifestation, this shouldn't be in main module.
-		if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
-		{
-			//todo translations
-			stringToDraw2 = "Mode: " + (mode < 0 ? "Tapping " : "Storing ") + mode;
-		}
-		else if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
-		{
-			String rate;
-			if (mode <= 0)
-			{
-				rate = "Off";
+		switch(selectedManifestation.getManifestationType()) {
+			case ALLOMANCY -> {
+				String rate;
+				if (mode <= 0)
+				{
+					rate = "Off";
+				}
+				else if (mode == 1)
+				{
+					rate = "Burning";
+				}
+				else// if (mode >= 3)
+				{
+					rate = "Flared!";
+				}
+
+				stringToDraw2 = "Mode: " + rate;
 			}
-			else if (mode == 1)
-			{
-				rate = "Burning";
+			case FERUCHEMY -> {
+				//todo translations
+				stringToDraw2 = "Mode: " + (mode < 0 ? "Tapping " : "Storing ") + mode;
 			}
-			else// if (mode >= 3)
-			{
-				rate = "Flared!";
+			default -> {
+				stringToDraw2 = "Mode: " + mode;
 			}
 
-			stringToDraw2 = "Mode: " + rate;
-		}
-		else
-		{
-			stringToDraw2 = "Mode: " + mode;
 		}
 
 		//todo translations
