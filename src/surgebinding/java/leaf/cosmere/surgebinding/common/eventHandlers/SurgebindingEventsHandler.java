@@ -5,8 +5,10 @@
 package leaf.cosmere.surgebinding.common.eventHandlers;
 
 import leaf.cosmere.surgebinding.common.Surgebinding;
+import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -42,6 +44,19 @@ public class SurgebindingEventsHandler
 		}
 
 		SurgeProgression.onEntityInteract(event);
+	}
+
+
+	//Attack event happens first
+	@SubscribeEvent
+	public static void onLivingAttackEvent(LivingAttackEvent event)
+	{
+		if (event.isCanceled())
+		{
+			return;
+		}
+
+		SurgeGravitation.onLivingAttackEvent(event);
 	}
 
 }

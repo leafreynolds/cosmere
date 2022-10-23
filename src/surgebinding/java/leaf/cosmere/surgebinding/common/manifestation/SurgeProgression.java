@@ -10,10 +10,8 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 public class SurgeProgression extends SurgebindingManifestation
@@ -81,7 +79,8 @@ public class SurgeProgression extends SurgebindingManifestation
 					zSpeed);
 		}
 
-		livingEntity.level.playSound(
+		//this gets very annoying quick
+		/*livingEntity.level.playSound(
 				(Player) null,
 				livingEntity.getX(),
 				livingEntity.getY(),
@@ -89,7 +88,7 @@ public class SurgeProgression extends SurgebindingManifestation
 				SoundEvents.PLAYER_LEVELUP,
 				livingEntity.getSoundSource(),
 				0.25F,
-				1.0F);
+				1.0F);*/
 	}
 
 }
