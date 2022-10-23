@@ -12,6 +12,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -66,6 +67,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void collectMenuInfo(List<String> m_infoText)
 	{
+		final String text = "Hydration: " + getHydrationLevel();
+		m_infoText.add(text);
 	}
 
 	@Override

@@ -36,4 +36,23 @@ public class SandmasteryManifestation extends Manifestation
 	{
 		return mastery.getID();
 	}
+
+	@Override
+	public int modeMin(ISpiritweb data) {
+		return 0;
+	};
+
+	@Override
+	public int modeMax(ISpiritweb data) {
+		return 1; // TODO Decide max power
+	};
+
+	@Override
+	public void tick(ISpiritweb data) {
+		if(!isActive(data)) return;
+		int mode = getMode(data);
+		//TODO do something other than debug messages
+
+		System.out.println(getManifestation().getName() + " at mode " + mode);
+	}
 }
