@@ -456,8 +456,8 @@ mixin {
 	config 'allomancy.mixins.json'
 	config 'feruchemy.mixins.json'
 	//config 'hemalurgy.mixins.json'
-	//config 'surgebinding.mixins.json'
 	//config 'sandmastery.mixins.json'
+	config 'surgebinding.mixins.json'
 }
 
 def getManifestAttributes(String title)

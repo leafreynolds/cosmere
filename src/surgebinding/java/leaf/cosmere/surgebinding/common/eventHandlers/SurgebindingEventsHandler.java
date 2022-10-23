@@ -1,13 +1,14 @@
 /*
- * File updated ~ 15 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.eventHandlers;
 
 import leaf.cosmere.surgebinding.common.Surgebinding;
+import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -42,12 +43,20 @@ public class SurgebindingEventsHandler
 			return;
 		}
 
-		ItemStack stack = event.getEntity().getMainHandItem();
-		if (stack.isEmpty())
+		SurgeProgression.onEntityInteract(event);
+	}
+
+
+	//Attack event happens first
+	@SubscribeEvent
+	public static void onLivingAttackEvent(LivingAttackEvent event)
+	{
+		if (event.isCanceled())
 		{
-			//hand empty, check surge?
-			SurgeProgression.onEntityInteract(event);
+			return;
 		}
+
+		SurgeGravitation.onLivingAttackEvent(event);
 	}
 
 }

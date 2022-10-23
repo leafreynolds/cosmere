@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -83,12 +83,9 @@ public class SurgebindingEngLangGen extends LanguageProvider
 
 			//power type
 			String key = manifestation.getTranslationKey();
-			String path = manifestation.getName();
-
+			String name = manifestation.getName();
 
 			//description
-			//can't auto generate the descriptions ya dingleberry
-			String name = path;
 			String description = "Needs description";
 
 			String tabName = manifestation.getManifestationType().getName();

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -16,7 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.item.ItemStack;
 
 public class FeruchemyManifestation extends Manifestation implements IHasMetalType
@@ -191,16 +190,6 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 			return getStoringEffect();
 		}
 
-	}
-
-	public double getStrength(ISpiritweb cap, boolean getBaseStrength)
-	{
-		AttributeInstance attribute = cap.getLiving().getAttribute(getAttribute());
-		if (attribute != null)
-		{
-			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
-		}
-		return 0;
 	}
 
 }

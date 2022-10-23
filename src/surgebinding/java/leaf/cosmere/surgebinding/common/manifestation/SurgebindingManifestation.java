@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -8,7 +8,8 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 
 public class SurgebindingManifestation extends Manifestation
 {
@@ -21,13 +22,18 @@ public class SurgebindingManifestation extends Manifestation
 	}
 
 	@Override
-	public double getStrength(ISpiritweb data, boolean getBaseStrength)
+	public int getPowerID()
 	{
-		AttributeInstance attribute = data.getLiving().getAttribute(getAttribute());
-		if (attribute != null)
-		{
-			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
-		}
-		return 0;
+		return surge.getID();
+	}
+
+	@Override
+	public boolean isActive(ISpiritweb data)
+	{
+		//surgebinding is different to most powers.
+
+		final SpiritwebCapability spiritwebCapability = (SpiritwebCapability) data;
+		SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) spiritwebCapability.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+		return data.hasManifestation(this) && sb.getStormlight() > 0;
 	}
 }

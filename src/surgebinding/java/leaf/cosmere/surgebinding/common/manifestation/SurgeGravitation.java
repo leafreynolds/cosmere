@@ -1,14 +1,18 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 
 public class SurgeGravitation extends SurgebindingManifestation
 {
@@ -20,32 +24,76 @@ public class SurgeGravitation extends SurgebindingManifestation
 	//gravitational attraction
 
 
-	//@SubscribeEvent
-	public void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingAttackEvent(LivingAttackEvent event)
 	{
-		if (event.getSource().getEntity() instanceof Player player)
+		if (event.getSource().getEntity() instanceof Player player && !event.getSource().isProjectile() && player.getMainHandItem().isEmpty())
 		{
-			CosmereAPI.logger.info(player.getName() + " has attacked a " + event.getEntity().getName());
-			//ISurgeState SState = player.getCapability(CosmereCapabilities.SURGE_STATE, null);
-
-			//String activeSurges = SState.getActiveSurgeName();
-			ItemStack itemInHand = player.getMainHandItem();
-
-			//windrunners like Szeth could launch enemies into the air to die cruelly by fall damage
-			if (false)//activeSurges.equals(Names.KnightOrders.WINDRUNNER) && itemInHand == null)
+			SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
 			{
-				event.getEntity().setPos(event.getEntity().getX(), event.getEntity().getY() + 0.1d, event.getEntity().getZ());
-				event.getEntity().setOnGround(false);
-				event.getEntity().setJumping(true);
+				//windrunners like Szeth could launch enemies into the air to die cruelly by fall damage
+				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get()))
+				{
+					final LivingEntity entity = event.getEntity();
+					CosmereAPI.logger.info("%s has launched %s into the sky".formatted(player.getName().getString(), entity.getName().getString()));
 
-				event.getEntity().setDeltaMovement(0, 5, 0);
 
-				//IPlayerStats PS = player.getCapability(CosmereCapabilities.PLAYER_STATS, null);
-				//PS.remSL(100);//remove some stormlight as if it costs to hit
-				//PacketDispatcher.sendTo(new SyncSurgeData(player.getCapability(CosmereCapabilities.SURGE_STATE, null), player.getCapability(CosmereCapabilities.PLAYER_STATS, null)), (PlayerEntityMP) player);
-			}
+					entity.stopRiding();
+					entity.setPos(event.getEntity().getX(), event.getEntity().getY() + 0.1d, event.getEntity().getZ());
+					entity.setOnGround(false);
+					entity.setJumping(true);
+
+					entity.setDeltaMovement(0, 50, 0);
+
+
+					entity.hurtMarked = true;
+				}
+			});
 		}
 
 
+	}
+
+	public static boolean canFly(LivingEntity entity)
+	{
+		boolean canFly = false;
+		var spiritwebCapability = SpiritwebCapability.get(entity);
+		if (spiritwebCapability.isPresent() && spiritwebCapability.resolve().get() instanceof SpiritwebCapability data)
+		{
+
+			canFly = SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get().isActive(data);
+		}
+
+		if (entity instanceof Player player)
+		{
+			player.getAbilities().mayfly = canFly;
+		}
+
+		return canFly;
+	}
+
+
+	/**
+	 * gravitation version of {@link FireworkRocketEntity#tick()}.
+	 */
+	public static boolean flyTick(LivingEntity entity)
+	{
+		if (!entity.isFallFlying() || !canFly(entity))
+		{
+			//if we aren't flying, everything else is irrelevant
+			return false;
+		}
+		else
+		{
+			var spiritwebCapability = SpiritwebCapability.get(entity);
+			if (spiritwebCapability.isPresent() && spiritwebCapability.resolve().get() instanceof SpiritwebCapability data)
+			{
+				Vec3 lookAngle = entity.getLookAngle();
+				Vec3 deltaMovement = entity.getDeltaMovement();
+				entity.setDeltaMovement(deltaMovement.add(lookAngle.x * 0.1D + (lookAngle.x * 1.5D - deltaMovement.x) * 0.5D, lookAngle.y * 0.1D + (lookAngle.y * 1.5D - deltaMovement.y) * 0.5D, lookAngle.z * 0.1D + (lookAngle.z * 1.5D - deltaMovement.z) * 0.5D));
+				return true;
+			}
+		}
+
+		return true;
 	}
 }

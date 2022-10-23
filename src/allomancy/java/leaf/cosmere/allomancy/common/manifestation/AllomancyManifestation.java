@@ -1,12 +1,11 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.client.AllomancyKeybindings;
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.allomancy.common.registries.AllomancyStats;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
@@ -16,7 +15,6 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
-import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,8 +23,6 @@ import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 
 public class AllomancyManifestation extends Manifestation implements IHasMetalType
 {
@@ -193,17 +189,6 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		}
 
 		return null;
-	}
-
-	public double getStrength(ISpiritweb data, boolean getBaseStrength)
-	{
-		AttributeRegistryObject<Attribute> mistingAttribute = AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType);
-		AttributeInstance attribute = data.getLiving().getAttribute(mistingAttribute.getAttribute());
-		if (attribute != null)
-		{
-			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
-		}
-		return 0;
 	}
 
 

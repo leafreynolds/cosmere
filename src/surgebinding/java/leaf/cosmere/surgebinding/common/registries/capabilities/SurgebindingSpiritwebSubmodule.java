@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.registries.capabilities;
@@ -8,6 +8,7 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
+import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -27,12 +28,60 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void tickServer(ISpiritweb spiritweb)
 	{
+		final LivingEntity livingEntity = spiritweb.getLiving();
+		if (livingEntity.level.isThundering() && livingEntity.level.isRainingAt(livingEntity.blockPosition()))
+		{
+			//todo how much stormlight per tick?
+			//if player has max of 1000, it will take just under a minute to
+			stormlightStored += 1;
+		}
+
+
 		//tick stormlight
 		if (stormlightStored > 0)
 		{
-			final LivingEntity livingEntity = spiritweb.getLiving();
-			if (livingEntity.tickCount % 100 == 0)
+			if (livingEntity.tickCount % 20 == 0)
 			{
+				//being hurt takes priority
+				if (livingEntity.getHealth() < livingEntity.getMaxHealth())
+				{
+					//todo healing stormlight config
+					final int stormlightHealingCostMultiplier = 20;
+
+					if (adjustStormlight(-stormlightHealingCostMultiplier, true))
+					{
+						//todo stormlight healing better
+						SurgeProgression.heal(livingEntity, livingEntity.getHealth() + 1);
+					}
+				}
+				//otherwise conditional effects
+				else
+				{
+					if (livingEntity.getCombatTracker().isInCombat())
+					{
+						//todo combat effect cost
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
+						adjustStormlight(-30, true);
+					}
+					else if (livingEntity.isUnderWater())
+					{
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.WATER_BREATHING, 0));
+						//todo waterbreathing stormlight cost
+						adjustStormlight(-10, true);
+					}
+					else
+					{
+						//todo detect better based on what the player is doing? mining means haste,
+						//travelling means movement etc. Not sure if that's really feasible though
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DIG_SPEED, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
+						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
+						adjustStormlight(-30, true);
+					}
+				}
+
 				//todo decide what's appropriate for reducing stormlight
 				//maybe reducing cost based on how many ideals they have sworn?
 				//todo config drain rate
