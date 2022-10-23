@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -386,7 +386,7 @@ public class SpiritwebCapability implements ISpiritweb
 					ignoreTemporaryPower
 					? attributeManager.getBaseValue(attribute)
 					: attributeManager.getValue(attribute);
-			return manifestationStrength > 3;
+			return manifestationStrength > 2;
 		}
 
 		return false;

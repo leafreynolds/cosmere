@@ -7,6 +7,9 @@ package leaf.cosmere.surgebinding.common.manifestation;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 
 public class SurgebindingManifestation extends Manifestation
 {
@@ -24,5 +27,13 @@ public class SurgebindingManifestation extends Manifestation
 		return surge.getID();
 	}
 
+	@Override
+	public boolean isActive(ISpiritweb data)
+	{
+		//surgebinding is different to most powers.
 
+		final SpiritwebCapability spiritwebCapability = (SpiritwebCapability) data;
+		SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) spiritwebCapability.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+		return data.hasManifestation(this) && sb.getStormlight() > 0;
+	}
 }
