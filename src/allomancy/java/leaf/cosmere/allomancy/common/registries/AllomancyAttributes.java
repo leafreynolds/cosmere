@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.registries;
@@ -30,7 +30,7 @@ public class AllomancyAttributes
 											Allomancy.MODID,
 											0,
 											0,
-											10
+											20
 									)));
 
 
