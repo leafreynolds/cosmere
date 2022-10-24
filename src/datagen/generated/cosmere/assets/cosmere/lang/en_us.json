@@ -123,6 +123,7 @@
   "key.cosmere.powers.previous": "Previous Power",
   "key.cosmere.powers.toggle": "Deactivate All Powers",
   "keys.cosmere.main": "Cosmere",
+  "manifestation.cosmere.none": "None",
   "power.cosmere.mode.set": "Mode set to: %s",
   "power.cosmere.toggle.active": "Power now active: %s",
   "power.cosmere.toggle.inactive": "Power now inactive: %s",
