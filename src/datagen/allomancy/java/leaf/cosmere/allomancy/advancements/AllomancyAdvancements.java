@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.advancements;
@@ -67,7 +67,7 @@ public class AllomancyAdvancements implements Consumer<Consumer<Advancement>>
 							(ResourceLocation) null,
 							FrameType.TASK,
 							true, //showToast
-							true, //announce
+							false, //announce
 							false)//hidden
 					.addCriterion("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(itemPredicate))
 					.rewards(new AdvancementRewards(50, new ResourceLocation[0], new ResourceLocation[0], CommandFunction.CacheableFunction.NONE))
