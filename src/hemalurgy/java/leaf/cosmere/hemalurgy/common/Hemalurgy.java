@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common;
@@ -9,6 +9,8 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.hemalurgy.common.capabilities.HemalurgySpiritwebSubmodule;
+import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyLootFunctions;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +40,7 @@ public class Hemalurgy implements IModModule
 		modBus.addListener(this::onConfigLoad);
 		modBus.addListener(this::imcQueue);
 
+		HemalurgyAttributes.ATTRIBUTES.register(modBus);
 		HemalurgyItems.ITEMS.register(modBus);
 		HemalurgyLootFunctions.LOOT_FUNCTIONS.register(modBus);
 
@@ -73,8 +76,7 @@ public class Hemalurgy implements IModModule
 	@Override
 	public ISpiritwebSubmodule makeSubmodule()
 	{
-		//hemalurgy does not have a sub module
-		return null;
+		return new HemalurgySpiritwebSubmodule();
 	}
 
 
