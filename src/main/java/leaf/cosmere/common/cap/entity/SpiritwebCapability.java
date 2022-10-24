@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -292,22 +292,31 @@ public class SpiritwebCapability implements ISpiritweb
 		if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
 		{
 			//todo translations
-			stringToDraw2 = "Mode: " + (mode < 0 ? "Tapping " : "Storing ") + mode;
+			if (mode < 0)
+			{
+				stringToDraw2 = "Mode: " + "Tapping " + mode;
+			}
+			else if (mode > 0)
+			{
+				stringToDraw2 = "Mode: " + "Storing " + mode;
+			}
+			else
+			{
+				//don't draw
+				//stringToDraw2 = "";
+			}
 		}
 		else if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
 		{
 			String rate;
-			if (mode <= 0)
+
+			switch (mode)
 			{
-				rate = "Off";
-			}
-			else if (mode == 1)
-			{
-				rate = "Burning";
-			}
-			else// if (mode >= 3)
-			{
-				rate = "Flared!";
+				case -2 -> rate = "Flared Compounding!";
+				case -1 -> rate = "Compounding";
+				default -> rate = "Off";
+				case 1 -> rate = "Burning";
+				case 2, 3 -> rate = "Flared!";//copper has a 3rd mode for only smoking self
 			}
 
 			stringToDraw2 = "Mode: " + rate;
@@ -318,7 +327,10 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 
 		//todo translations
-		mc.font.drawShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
+		if (!stringToDraw2.isEmpty())
+		{
+			mc.font.drawShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
+		}
 	}
 
 	@Override

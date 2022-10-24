@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -100,7 +100,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		int adjustAmount = getCost(data);
 		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, adjustAmount, !simulate, true);
 
-		if (metalmind != null)
+		if (!metalmind.isEmpty())
 		{
 			return true;
 		}

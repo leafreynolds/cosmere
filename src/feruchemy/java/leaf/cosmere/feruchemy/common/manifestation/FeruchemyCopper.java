@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -105,7 +105,7 @@ public class FeruchemyCopper extends FeruchemyManifestation
 							true,
 							true);
 
-			if (itemStack != null)
+			if (!itemStack.isEmpty())
 			{
 				//adjust player xp
 				XPHelper.giveExperiencePoints(playerEntity, storing ? -xp : xp);

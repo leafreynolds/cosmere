@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 4 - 2021 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.charge;
@@ -24,7 +24,7 @@ public class MetalmindChargeHelper
 		else
 		{
 			//todo ??
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -53,7 +53,7 @@ public class MetalmindChargeHelper
 
 		if (items.isEmpty() && acc.isEmpty())
 		{
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		return ItemChargeHelper.adjustChargeExact(player, adjustValue, remove, checkPlayer, items, acc);

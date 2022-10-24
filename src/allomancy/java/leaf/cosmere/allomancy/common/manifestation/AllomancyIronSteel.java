@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -195,7 +195,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			pushpullEntities(data);
 		}
-
 	}
 
 	private void pushpullEntities(SpiritwebCapability data)
@@ -204,32 +203,33 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		for (int i = entities.size() - 1; i >= 0; i--)
 		{
 			int entityID = entities.get(i);
-			Entity entity = data.getLiving().level.getEntity(entityID);
-			if (entity != null)
+			final LivingEntity dataLiving = data.getLiving();
+			Entity targetEntity = dataLiving.level.getEntity(entityID);
+			if (targetEntity != null)
 			{
-				if (entity.blockPosition().closerThan(data.getLiving().blockPosition(), getRange(data)))
+				if (targetEntity.blockPosition().closerThan(dataLiving.blockPosition(), getRange(data)))
 				{
 					//move small things
-					if (entity instanceof ItemEntity itemEntity)
+					if (targetEntity instanceof ItemEntity itemEntity)
 					{
-						moveEntityTowards(itemEntity, data.getLiving().blockPosition());
+						moveEntityTowards(itemEntity, dataLiving.blockPosition());
 					}
 					//affect both entities
-					else if (entity instanceof LivingEntity livingEntity)
+					else if (targetEntity instanceof LivingEntity livingEntity)
 					{
-						moveEntityTowards(livingEntity, data.getLiving().blockPosition());
-						moveEntityTowards(data.getLiving(), livingEntity.blockPosition());
-						data.getLiving().hurtMarked = true;
+						moveEntityTowards(livingEntity, dataLiving.blockPosition());
+						moveEntityTowards(dataLiving, livingEntity.blockPosition());
+						dataLiving.hurtMarked = true;
 					}
 					//affect entity who is doing the push/pull
 					else
 					{
 						if (isPush)
 						{
-							moveEntityTowards(data.getLiving(), entity.blockPosition());
+							moveEntityTowards(dataLiving, targetEntity.blockPosition());
 						}
 						//if not push, then check if we should pull coin projectiles back to player
-						else if (data.getLiving() instanceof Player player && entity instanceof CoinProjectile coinProjectile)
+						else if (dataLiving instanceof Player player && targetEntity instanceof CoinProjectile coinProjectile)
 						{
 							//technically we could do this with item entities, but I like how those currently work
 							//Doing this with projectiles meansa I don't have to mess with the physics of un-sticking

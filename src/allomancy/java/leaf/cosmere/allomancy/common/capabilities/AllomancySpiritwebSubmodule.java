@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities;
@@ -51,7 +51,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			AllomancyIronSteel iron = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
 			final boolean ironActive = iron.isActive(spiritweb);
 
-			if (ironActive)
+			if (ironActive && !iron.isCompounding(spiritweb))
 			{
 				iron.applyEffectTick(spiritweb);
 			}
@@ -62,7 +62,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			AllomancyIronSteel steel = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
 			final boolean steelActive = steel.isActive(spiritweb);
 
-			if (steelActive)
+			if (steelActive && !steel.isCompounding(spiritweb))
 			{
 				steel.applyEffectTick(spiritweb);
 			}
