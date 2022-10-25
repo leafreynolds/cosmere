@@ -15,7 +15,7 @@
     "announce_to_chat": false,
     "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
     "description": {
-      "translate": "advancements.cosmere.hemalurgy.description"
+      "translate": "advancements.hemalurgy.hemalurgy.description"
     },
     "frame": "task",
     "hidden": false,
@@ -24,7 +24,7 @@
     },
     "show_toast": false,
     "title": {
-      "translate": "advancements.cosmere.hemalurgy.title"
+      "translate": "advancements.hemalurgy.hemalurgy.title"
     }
   },
   "requirements": [

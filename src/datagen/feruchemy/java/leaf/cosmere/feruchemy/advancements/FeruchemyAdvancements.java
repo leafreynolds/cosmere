@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.advancements;
@@ -67,7 +67,7 @@ public class FeruchemyAdvancements implements Consumer<Consumer<Advancement>>
 							(ResourceLocation) null,
 							FrameType.TASK,
 							true, //showToast
-							true, //announce
+							false, //announce
 							false)//hidden
 					.addCriterion(
 							"has_item",

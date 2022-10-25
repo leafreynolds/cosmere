@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -23,6 +23,7 @@ import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 public class AllomancyManifestation extends Manifestation implements IHasMetalType
 {
@@ -67,7 +68,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	{
 		super.onModeChange(data);
 
-		if (getMode(data) > 0)
+		if (Mth.abs(getMode(data)) != 0)
 		{
 			//don't reset stats while burning
 			return;
@@ -82,7 +83,14 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
-		//Allmancy doesn't have a negative, so 0 as 'off'
+		final ResourceLocation feruchemyRL = new ResourceLocation("feruchemy", getRegistryName().getPath());
+		final Manifestation feruchemy = CosmereAPI.manifestationRegistry().getValue(feruchemyRL);
+		if (data.hasManifestation(feruchemy))
+		{
+			//compounding
+			return -2;
+		}
+
 		return 0;
 	}
 
@@ -92,12 +100,17 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		return super.isActive(data) && isMetalBurning(data);
 	}
 
+	public boolean isCompounding(ISpiritweb data)
+	{
+		return isMetalBurning(data) && getMode(data) < 0;
+	}
+
 	//A metal is considered burning if the user has the power and can afford the next tick of burning.
 	public boolean isMetalBurning(ISpiritweb data)
 	{
-		int mode = getMode(data);
+		//absolute value, because compounding uses negative modes.
+		int mode = Mth.abs(getMode(data));
 		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
-
 
 		//make sure the user can afford the cost of burning this metal
 		while (mode > 0)
@@ -129,29 +142,41 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		}
 
 		int mode = getMode(data);
-		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+		final int cost = Mth.abs(mode);
 
+		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
 
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
-		allo.adjustIngestedMetal(metalType, -mode, isActiveTick);
+		allo.adjustIngestedMetal(metalType, -cost, isActiveTick);
 
-		if (livingEntity instanceof ServerPlayer serverPlayer)
+		if (isActiveTick && livingEntity instanceof ServerPlayer serverPlayer)
 		{
 			serverPlayer.awardStat(getBurnTimeStat());
 		}
 
+		//if burning normally, do allomancy
+		if (mode > 0)
+		{
+			applyEffectTick(data);
+		}
+		//else funnel all that power to feruchemy attribute
+		//but only if active tick
+		else if (isActiveTick)
+		{
+			tickCompounding(data, cost);
+		}
+	}
 
+	private void tickCompounding(ISpiritweb data, int allomanticSecondsUsed)
+	{
 		//if we get to this point, we are in an active burn state.
 		//check for compound.
-		final Manifestation feruchemyManifestation = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", metalType.getName()));
-		int feruchemyMode = data.hasManifestation(feruchemyManifestation)
-		                    ? feruchemyManifestation.getMode(data)
-		                    : 0;
+		final Manifestation feruchemyManifestation = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", getRegistryName().getPath()));
 
-		//feruchemy power exists and is active
-		if (feruchemyMode != 0 && isActiveTick)
+		//player has feruchemy in same metal
+		if (data.hasManifestation(feruchemyManifestation))
 		{
 			//todo config variable
 			//eg 10 base, * 2 for flaring mode = 20
@@ -159,14 +184,25 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 			//then add the config value
 			//max should be around 30. 50 was way too much
 
-			int secondsOfFeruchemyToAdd = (int) Math.floor(getRange(data)) - 5;
-			if (null != MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, (secondsOfFeruchemyToAdd * mode), true, true))
+			final double compoundStrength = getStrength(data, false) * Mth.abs(allomanticSecondsUsed);
+			int secondsOfFeruchemyToAdd = Mth.absFloor(compoundStrength) - 5;
+
+			if (secondsOfFeruchemyToAdd > 0)
 			{
-				//compound successful
+				final ItemStack metalmindStack =
+						MetalmindChargeHelper.adjustMetalmindChargeExact(
+								data,
+								metalType,
+								secondsOfFeruchemyToAdd,
+								true,
+								true);
+
+				if (!metalmindStack.isEmpty())
+				{
+					//compound successful
+				}
 			}
 		}
-
-		applyEffectTick(data);
 	}
 
 	private ResourceLocation getBurnTimeStat()
@@ -201,8 +237,10 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 
 		//get allomantic strength
 		double allomanticStrength = getStrength(data, false);
-		return Mth.floor(allomanticStrength * getMode(data));
 
+		//no range if compounding.
+		final int mode = Math.max(getMode(data), 0);
+		return Mth.floor(allomanticStrength * mode);
 	}
 
 }

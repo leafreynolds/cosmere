@@ -290,6 +290,32 @@ public class SpiritwebCapability implements ISpiritweb
 
 
 		//todo migrate drawing text to manifestation, this shouldn't be in main module.
+<<<<<<< HEAD
+		switch(selectedManifestation.getManifestationType()) {
+			case ALLOMANCY -> {
+				String rate;
+				if (mode <= 0)
+				{
+					rate = "Off";
+				}
+				else if (mode == 1)
+				{
+					rate = "Burning";
+				}
+				else// if (mode >= 3)
+				{
+					rate = "Flared!";
+				}
+
+				stringToDraw2 = "Mode: " + rate;
+			}
+			case FERUCHEMY -> {
+				//todo translations
+				stringToDraw2 = "Mode: " + (mode < 0 ? "Tapping " : "Storing ") + mode;
+			}
+			default -> {
+				stringToDraw2 = "Mode: " + mode;
+=======
 		if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
 		{
 			//todo translations
@@ -318,6 +344,7 @@ public class SpiritwebCapability implements ISpiritweb
 				default -> rate = "Off";
 				case 1 -> rate = "Burning";
 				case 2, 3 -> rate = "Flared!";//copper has a 3rd mode for only smoking self
+>>>>>>> 51392c8c23b0d4bc8b61c7c5e42b293117553d54
 			}
 
 		}

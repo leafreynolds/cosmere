@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.advancements;
@@ -26,9 +26,9 @@ public class HemalurgyAdvancements implements Consumer<Consumer<Advancement>>
 	{
 		String tabName = "hemalurgy";
 
-		final String titleFormat = "advancements.cosmere.%s.title";
-		final String descriptionFormat = "advancements.cosmere.%s.description";
-		final String achievementPathFormat = "cosmere:%s/%s";
+		final String titleFormat = "advancements.hemalurgy.%s.title";
+		final String descriptionFormat = "advancements.hemalurgy.%s.description";
+		final String achievementPathFormat = "hemalurgy:%s/%s";
 
 		Advancement root = Advancement.Builder.advancement()
 				.display(HemalurgyItems.METAL_SPIKE.get(Metals.MetalType.IRON).get(),

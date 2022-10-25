@@ -1,10 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
- *
- * Special thank you to Vazkii and their Mod Botania for providing the itemstack NBT interaction example!
- * https://github.com/Vazkii/Botania
- * I've used their example of storing mana as the basis for storing different types of feruchemical attributes.
- * In future, will also be doing it for gems and stormlight.
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.common.charge;
@@ -188,7 +183,7 @@ public class ItemChargeHelper
 			}
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 

@@ -15,7 +15,7 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
+    "announce_to_chat": false,
     "description": {
       "translate": "advancements.feruchemy.feruchemy.tin.description"
     },

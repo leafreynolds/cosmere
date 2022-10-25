@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -13,6 +13,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.EntityTypeRegistry;
+import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -111,6 +112,7 @@ public class EngLangGen extends LanguageProvider
 
 	private void addManifestations()
 	{
+		add(ManifestationRegistry.NONE.getTranslationKey(), "None");
 	}
 
 	private void addAttributes()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -85,7 +85,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		}
 
 		final ItemStack itemStack = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, adjustAmount, true, true);
-		if (itemStack != null)
+		if (!itemStack.isEmpty())
 		{
 			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
 			livingEntity.addEffect(currentEffect);
