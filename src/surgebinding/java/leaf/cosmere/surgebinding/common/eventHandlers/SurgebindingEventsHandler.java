@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.eventHandlers;
@@ -34,6 +34,17 @@ public class SurgebindingEventsHandler
 			}
 		}
 	}*/
+
+	@SubscribeEvent
+	public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event)
+	{
+		if (event.isCanceled())
+		{
+			return;
+		}
+
+		SurgeProgression.onBlockInteract(event);
+	}
 
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
