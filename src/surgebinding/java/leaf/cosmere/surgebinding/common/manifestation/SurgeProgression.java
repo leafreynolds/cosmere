@@ -99,6 +99,11 @@ public class SurgeProgression extends SurgebindingManifestation
 	//bonemeal crops
 	public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event)
 	{
+		if (!event.getEntity().getMainHandItem().isEmpty())
+		{
+			return;
+		}
+
 		final BlockPos blockPos = event.getHitVec().getBlockPos();
 		final BlockState blockState = event.getLevel().getBlockState(blockPos);
 		if (blockState.getBlock() instanceof BonemealableBlock bonemealableBlock)
