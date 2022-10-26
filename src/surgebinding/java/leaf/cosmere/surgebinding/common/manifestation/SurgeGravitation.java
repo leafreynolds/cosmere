@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -65,7 +65,7 @@ public class SurgeGravitation extends SurgebindingManifestation
 
 		if (entity instanceof Player player)
 		{
-			player.getAbilities().mayfly = canFly;
+			player.getAbilities().mayfly = player.isCreative() || canFly;
 		}
 
 		return canFly;
