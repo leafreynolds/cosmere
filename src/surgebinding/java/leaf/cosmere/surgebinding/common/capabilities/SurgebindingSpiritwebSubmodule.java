@@ -9,6 +9,7 @@ import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffects;
@@ -38,7 +39,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		//tick stormlight
 		if (anySurges)
 		{
-			if (livingEntity.level.isThundering() && livingEntity.level.isRainingAt(livingEntity.blockPosition()))
+			if (livingEntity.level.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY) && livingEntity.level.isThundering() && livingEntity.level.isRainingAt(livingEntity.blockPosition()))
 			{
 				//todo how much stormlight per tick?
 				//if player has max of 1000, it will take just under a minute to
