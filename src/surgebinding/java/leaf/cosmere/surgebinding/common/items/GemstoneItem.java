@@ -12,6 +12,7 @@ import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -62,6 +63,11 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entityItem)
 	{
+		if (!entityItem.level.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
+		{
+			return true;
+		}
+
 		if (entityItem.level.isRainingAt(entityItem.blockPosition()) && entityItem.level.isThundering())
 		{
 			if (getCharge(stack) < getMaxCharge(stack))
@@ -76,6 +82,11 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
 	{
+		if (!pLevel.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
+		{
+			return;
+		}
+
 		if (pLevel.isRainingAt(pEntity.blockPosition()) && pLevel.isThundering())
 		{
 			if (pStack.getItem() instanceof GemstoneItem gemstoneItem)
