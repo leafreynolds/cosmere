@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client.render.armor;
@@ -11,20 +11,16 @@ package leaf.cosmere.surgebinding.client.render.armor;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 
 public class ShardplateModel extends HumanoidModel<LivingEntity>
 {
-	private static final ResourceLocation TEXTURE = Surgebinding.rl("textures/item/models/shardplate.png");
-
 	private final ModelPart Root;
 
 	public ShardplateModel(ModelPart root)
