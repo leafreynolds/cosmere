@@ -9,7 +9,7 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.surgebinding.common.registries.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.capability.world.IRoshar;
 import leaf.cosmere.surgebinding.common.network.SurgebindingPacketHandler;
 import leaf.cosmere.surgebinding.common.registries.*;

@@ -117,6 +117,9 @@ public class Cosmere
 					case "Surgebinding":
 						maniType = Manifestations.ManifestationTypes.SURGEBINDING;
 						break;
+					case "sandmastery":
+						maniType = Manifestations.ManifestationTypes.SANDMASTERY;
+						break;
 				}
 
 				spiritwebSubmoduleMap.put(maniType, iSpiritwebSubmodule);

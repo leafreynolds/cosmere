@@ -7,7 +7,9 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -31,6 +33,7 @@ public class Sandmastery implements IModModule
         modBus.addListener(this::onConfigLoad);
         modBus.addListener(this::commonSetup);
 
+        SandmasteryItems.ITEMS.register(modBus);
         SandmasteryAttributes.ATTRIBUTES.register(modBus);
         SandmasteryManifestations.MANIFESTATIONS.register(modBus);
 
@@ -38,11 +41,22 @@ public class Sandmastery implements IModModule
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
     }
 
+    public static ResourceLocation rl(String path) {
+        return new ResourceLocation(Sandmastery.MODID, path);
+    }
+
     @Override
     public Version getVersion() { return versionNumber; }
 
     @Override
     public String getName() { return MODID; }
+
+    @Nullable
+    @Override
+    public ISpiritwebSubmodule makeSubmodule()
+    {
+        return new SandmasterySpiritwebSubmodule();
+    }
 
     private void onConfigLoad(ModConfigEvent configEvent)
     {
@@ -62,8 +76,4 @@ public class Sandmastery implements IModModule
         {
         });
     }
-
-    @Nullable
-    @Override
-    public ISpiritwebSubmodule makeSubmodule() { return new SandmasterySpiritwebSubmodule(); }
 }

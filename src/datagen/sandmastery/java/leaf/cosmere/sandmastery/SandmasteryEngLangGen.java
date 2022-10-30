@@ -99,8 +99,6 @@ public class SandmasteryEngLangGen extends LanguageProvider
 			name = "Sand Mastery " + abilityName;
 			description = "Masters can use " + abilityName;
 
-			System.out.println(name);
-
 			//Name
 			add(key, StringHelper.fixCapitalisation(name));
 

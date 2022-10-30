@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
-	private int hydrationLevel = 1000;
+	private int hydrationLevel = 1000000;
 
 	@Override
 	public void tickClient(ISpiritweb spiritweb)
@@ -56,11 +56,6 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		final CompoundTag compoundTag = spiritweb.getCompoundTag();
 
 		compoundTag.putInt("hydration_level", hydrationLevel);
-	}
-
-	@Override
-	public void renderWorldEffects(ISpiritweb spiritweb, RenderLevelStageEvent event)
-	{
 	}
 
 	@Override

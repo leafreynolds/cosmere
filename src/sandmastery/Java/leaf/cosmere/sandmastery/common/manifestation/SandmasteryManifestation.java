@@ -52,7 +52,5 @@ public class SandmasteryManifestation extends Manifestation
 		if(!isActive(data)) return;
 		int mode = getMode(data);
 		//TODO do something other than debug messages
-
-		System.out.println(getManifestation().getName() + " at mode " + mode);
 	}
 }

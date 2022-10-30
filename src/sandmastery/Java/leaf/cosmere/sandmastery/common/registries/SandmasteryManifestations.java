@@ -9,6 +9,7 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.registration.impl.ManifestationDeferredRegister;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.manifestation.MasteryLaunch;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 
 import java.util.Arrays;
@@ -33,6 +34,11 @@ public class SandmasteryManifestations
 
 	private static SandmasteryManifestation makeSandmasteryManifestation(Taldain.Mastery mastery)
 	{
-		return new SandmasteryManifestation(mastery);
+		switch(mastery) {
+			case LAUNCH:
+				return new MasteryLaunch(mastery);
+			default:
+				return new SandmasteryManifestation(mastery);
+		}
 	}
 }
