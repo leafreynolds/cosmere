@@ -1,12 +1,14 @@
 /*
- * File updated ~ 27 - 10 - 2022 ~ Leaf
+ * File updated ~ 28 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -33,19 +35,24 @@ public class SurgeGravitation extends SurgebindingManifestation
 				//windrunners like Szeth could launch enemies into the air to die cruelly by fall damage
 				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get()))
 				{
-					final LivingEntity entity = event.getEntity();
-					CosmereAPI.logger.info("%s has launched %s into the sky".formatted(player.getName().getString(), entity.getName().getString()));
+
+					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) ((SpiritwebCapability) iSpiritweb).spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+
+					if (submodule.adjustStormlight(20, true))
+					{
+						final LivingEntity entity = event.getEntity();
+						CosmereAPI.logger.info("%s has launched %s into the sky".formatted(player.getName().getString(), entity.getName().getString()));
+						
+						entity.stopRiding();
+						entity.setPos(event.getEntity().getX(), event.getEntity().getY() + 0.1d, event.getEntity().getZ());
+						entity.setOnGround(false);
+						entity.setJumping(true);
+
+						entity.setDeltaMovement(0, 50, 0);
 
 
-					entity.stopRiding();
-					entity.setPos(event.getEntity().getX(), event.getEntity().getY() + 0.1d, event.getEntity().getZ());
-					entity.setOnGround(false);
-					entity.setJumping(true);
-
-					entity.setDeltaMovement(0, 50, 0);
-
-
-					entity.hurtMarked = true;
+						entity.hurtMarked = true;
+					}
 				}
 			});
 		}

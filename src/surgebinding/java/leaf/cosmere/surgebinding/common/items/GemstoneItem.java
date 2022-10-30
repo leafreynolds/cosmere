@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 28 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -7,13 +7,12 @@ package leaf.cosmere.surgebinding.common.items;
 import leaf.cosmere.api.IHasGemType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
-import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -64,6 +63,11 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entityItem)
 	{
+		if (!entityItem.level.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
+		{
+			return true;
+		}
+
 		if (entityItem.level.isRainingAt(entityItem.blockPosition()) && entityItem.level.isThundering())
 		{
 			if (getCharge(stack) < getMaxCharge(stack))
@@ -78,6 +82,11 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
 	{
+		if (!pLevel.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
+		{
+			return;
+		}
+
 		if (pLevel.isRainingAt(pEntity.blockPosition()) && pLevel.isThundering())
 		{
 			if (pStack.getItem() instanceof GemstoneItem gemstoneItem)
@@ -103,18 +112,12 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 		{
 			SpiritwebCapability data = (SpiritwebCapability) spiritweb;
 
-			boolean hasAnySurgebinding = false;
-			for (ManifestationRegistryObject<Manifestation> value : SurgebindingManifestations.SURGEBINDING_POWERS.values())
-			{
-				if (data.hasManifestation(value.getManifestation()))
-				{
-					hasAnySurgebinding = true;
-					break;
-				}
-			}
+			boolean hasAnySurgebinding = SurgebindingManifestations.SURGEBINDING_POWERS.values().stream().anyMatch((manifestation -> spiritweb.hasManifestation(manifestation.getManifestation())));
 
 			if (!hasAnySurgebinding)
+			{
 				return;
+			}
 
 			final int charge = getCharge(itemStack);
 
