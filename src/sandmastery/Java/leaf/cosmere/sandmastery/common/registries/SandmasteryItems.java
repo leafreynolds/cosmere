@@ -8,5 +8,5 @@ import leaf.cosmere.sandmastery.common.items.QidoItem;
 
 public class SandmasteryItems {
     public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(Sandmastery.MODID);
-    public static final ItemRegistryObject<QidoItem> METAL_VIAL = ITEMS.register("qido", QidoItem::new);
+    public static final ItemRegistryObject<QidoItem> QIDO_ITEM = ITEMS.register("qido", QidoItem::new);
 }

@@ -9,7 +9,6 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 public class MasteryLaunch extends SandmasteryManifestation{
@@ -27,11 +26,6 @@ public class MasteryLaunch extends SandmasteryManifestation{
     }
 
     @Override
-    public int modeMax(ISpiritweb data) {
-        return 25; // TODO Decide max power
-    };
-
-    @Override
     public void applyEffectTick(ISpiritweb data)
     {
         performEffectServer(data);
@@ -39,6 +33,11 @@ public class MasteryLaunch extends SandmasteryManifestation{
 
     private void performEffectServer(ISpiritweb data)
     {
+        SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
+        SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
+
+        if(!submodule.adjustHydration(-10, false)) return;
+
         LivingEntity living = data.getLiving();
         Vec3 direction = living.getForward();
 
@@ -49,11 +48,8 @@ public class MasteryLaunch extends SandmasteryManifestation{
 
         data.setMode(this, getMode(data)-1);
 
-        SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-        SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
-
         CosmereAPI.logger.info("%s has a hydration level of %s".formatted(living.getName().getString(), submodule.getHydrationLevel()));
 
-
+        submodule.adjustHydration(-10, true);
     }
 }

@@ -18,6 +18,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegisterEvent;
 
+import java.util.Locale;
+
 @Mod.EventBusSubscriber(modid = Sandmastery.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SandmasteryClientSetup
 {
@@ -64,7 +66,8 @@ public class SandmasteryClientSetup
 				continue;
 			}
 
-			event.addSprite(Sandmastery.rl("icon/sandmastery"));
+			String abilityToLower = manifestation.toString().toLowerCase(Locale.ROOT);
+			event.addSprite(Sandmastery.rl("icon/sandmastery/"+abilityToLower));
 		}
 	}
 

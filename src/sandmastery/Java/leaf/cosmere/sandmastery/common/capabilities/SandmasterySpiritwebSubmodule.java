@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	private int hydrationLevel = 1000000;
+	public final int maxHydration = 1000000;
 
 	@Override
 	public void tickClient(ISpiritweb spiritweb)
