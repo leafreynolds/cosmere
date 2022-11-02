@@ -5,8 +5,10 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.resources.ResourceLocation;
@@ -34,6 +36,7 @@ public class Sandmastery implements IModModule
         modBus.addListener(this::commonSetup);
 
         SandmasteryItems.ITEMS.register(modBus);
+        SandmasteryBlocksRegistry.BLOCKS.register(modBus);
         SandmasteryAttributes.ATTRIBUTES.register(modBus);
         SandmasteryManifestations.MANIFESTATIONS.register(modBus);
 

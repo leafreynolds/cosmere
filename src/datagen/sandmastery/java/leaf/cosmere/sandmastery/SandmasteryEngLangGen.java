@@ -26,6 +26,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
+import static leaf.cosmere.api.Constants.Strings.KEY_SANDMASTERY_USE;
+
 public class SandmasteryEngLangGen extends LanguageProvider
 {
 	final String advancementTitleFormat = "advancements.sandmastery.%s.title";
@@ -126,21 +128,10 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addPatchouli()
 	{
-		//work through each metal and generate localisation for related things.
-		for (Metals.MetalType metalType : Metals.MetalType.values())
-		{
-			final String name = metalType.getName();
-			final String mistingName = metalType.getMistingName();
-			String a = name + " - " + mistingName;
-			String aKey = metalType.getName();
-			String allomancyGuide = "entry." + aKey;
-			add(allomancyGuide, StringHelper.fixCapitalisation(a));
-		}
 	}
 
 	private void addTooltips()
 	{
-//		add("tooltip.cosmere.metals.contained", "Contained Metals:");
 	}
 
 	private void addItemGroups()
@@ -151,16 +142,10 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	private void addDamageSources()
 	{
 		//Damage Sources
-//		add("death.attack.eat_metal", "%1$s shredded their throat while eating metal");
-//		add("death.attack.eat_metal.player", "%1$s tried to eat metal directly while fighting %2$s");
 	}
 
 	private void addMobEffects()
 	{
-//		for (IMobEffectProvider effect : AllomancyEffects.EFFECTS.getAllMobEffects())
-//		{
-//			add(effect.getMobEffect().getDescriptionId(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
-//		}
 	}
 
 	private void addCurioIdentifiers()
@@ -179,18 +164,11 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	private void addKeybindings()
 	{
 		//KeyBindings
-//		add(KEY_ALLOMANCY_PUSH, "Push");
-//		add(KEY_ALLOMANCY_PULL, "Pull");
+		add(KEY_SANDMASTERY_USE, "Use Mastery Ability");
 	}
 
 	private void addStats()
 	{
 		//stats
-//		Arrays.stream(Metals.MetalType.values())
-//				.filter(Metals.MetalType::hasAssociatedManifestation).forEach(metalType ->
-//						add(
-//								"stat.minecraft.time_since_started_burning_" + metalType.getName(),
-//								"Time since started burning " + metalType.getName()
-//						));
 	}
 }

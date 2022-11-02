@@ -8,6 +8,7 @@ import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -30,7 +31,7 @@ public class SandmasteryItemModelsGen extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
-		for (IItemProvider itemRegistryObject : ItemsRegistry.ITEMS.getAllItems())
+		for (IItemProvider itemRegistryObject : SandmasteryItems.ITEMS.getAllItems())
 		{
 			String path = itemRegistryObject.getRegistryName().getPath();
 			Item item = itemRegistryObject.asItem();
