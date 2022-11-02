@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 10 - 2022 ~ Leaf
+ * File updated ~ 3 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -8,6 +8,7 @@ import leaf.cosmere.api.IHasGemType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.charge.ItemChargeHelper;
 import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
@@ -124,6 +125,7 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 			SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) data.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
 
 			int playerStormlight = sb.getStormlight();
+			//todo config
 			final int maxPlayerStormlight = 1000;
 
 			//Get stormlight from gems
@@ -132,12 +134,12 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 				if (charge + playerStormlight > maxPlayerStormlight)
 				{
 					sb.adjustStormlight((maxPlayerStormlight - playerStormlight), true);
-					setCharge(itemStack, ((charge + playerStormlight) - maxPlayerStormlight));
+					ItemChargeHelper.requestChargeExact(itemStack, pPlayer, ((charge + playerStormlight) - maxPlayerStormlight), true);
 				}
 				else
 				{
 					sb.adjustStormlight(charge, true);
-					setCharge(itemStack, 0);
+					ItemChargeHelper.requestChargeExact(itemStack, pPlayer, 0, true);
 				}
 			}
 			//put remaining stormlight into gem.

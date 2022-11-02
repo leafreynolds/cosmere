@@ -29,7 +29,7 @@ public interface IChargeable
 	default int getMaxCharge(ItemStack itemStack)
 	{
 		//todo config max value
-		return Mth.floor(18000 * getMaxChargeModifier());
+		return Mth.floor(18000 * getMaxChargeModifier()) * itemStack.getCount();
 	}
 
 	default float getMaxChargeModifier()
@@ -39,7 +39,7 @@ public interface IChargeable
 
 	default int getCharge(ItemStack itemStack)
 	{
-		return StackNBTHelper.getInt(itemStack, Constants.NBT.CHARGE_LEVEL, 0);
+		return StackNBTHelper.getInt(itemStack, Constants.NBT.CHARGE_LEVEL, 0) * itemStack.getCount();
 	}
 
 	default void setCharge(ItemStack itemStack, int chargeLevel)
