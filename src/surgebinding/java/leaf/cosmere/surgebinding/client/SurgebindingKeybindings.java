@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -16,6 +16,8 @@ import org.lwjgl.glfw.GLFW;
 import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
 import static leaf.cosmere.api.Constants.Strings.KEY_SHARDBLADE;
 
+// Really only has its own file to more nicely reference keybindings.
+// Otherwise, could have lived in mod client events
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Surgebinding.MODID, bus = Bus.MOD)
 public class SurgebindingKeybindings
 {
