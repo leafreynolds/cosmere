@@ -5,7 +5,6 @@
 package leaf.cosmere.sandmastery.common.registries;
 
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.registration.impl.ManifestationDeferredRegister;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;

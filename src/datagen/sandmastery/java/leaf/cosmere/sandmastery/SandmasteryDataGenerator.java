@@ -4,7 +4,7 @@
 
 package leaf.cosmere.sandmastery;
 
-import leaf.cosmere.sandmastery.items.ItemModelsGen;
+import leaf.cosmere.sandmastery.items.SandmasteryItemModelsGen;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.patchouli.SandmasteryPatchouliGen;
 import net.minecraft.data.DataGenerator;
@@ -25,7 +25,7 @@ public class SandmasteryDataGenerator
 
 		generator.addProvider(true, new SandmasteryEngLangGen(generator));
 
-		generator.addProvider(true, new ItemModelsGen(generator, existingFileHelper));
+		generator.addProvider(true, new SandmasteryItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new SandmasteryPatchouliGen(generator));
 	}
 

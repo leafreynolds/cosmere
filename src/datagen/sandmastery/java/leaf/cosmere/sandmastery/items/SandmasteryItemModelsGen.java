@@ -19,10 +19,10 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
 
-public class ItemModelsGen extends ItemModelProvider
+public class SandmasteryItemModelsGen extends ItemModelProvider
 {
 
-	public ItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public SandmasteryItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Sandmastery.MODID, existingFileHelper);
 	}
