@@ -32,6 +32,7 @@ public interface IChargeable
 		return Mth.floor(18000 * getMaxChargeModifier()) * itemStack.getCount();
 	}
 
+	//todo itemstack specific charge modification
 	default float getMaxChargeModifier()
 	{
 		return 1;

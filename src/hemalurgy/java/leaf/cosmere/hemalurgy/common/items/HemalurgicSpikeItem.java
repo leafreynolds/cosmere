@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 25 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.items;
@@ -104,7 +104,10 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 	@Override
 	public float getMaxChargeModifier()
 	{
-		return (2f / 9f);
+		//spikes are only about a quarter as effective at holding charges.
+		//really we should change how much power a spike can steal as well,
+		//todo power stolen is adjusted by attribute stored in metal.
+		return (0.5f / 9f);
 	}
 
 	@Override
