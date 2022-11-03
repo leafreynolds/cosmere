@@ -18,8 +18,7 @@ public class SandmasteryBlocksRegistry
 {
 	public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(Sandmastery.MODID);
 	public static final BlockRegistryObject<SandLayerBlock, BlockItem> WHITE_SAND_LAYER = BLOCKS.register("white_sand", SandLayerBlock::new);
-	public static final BlockRegistryObject<TaldainSandBlock, BlockItem> WHITE_SAND = BLOCKS.register("white_sand_block", TaldainSandBlock::new);
+	public static final BlockRegistryObject<TaldainSandBlock, BlockItem> TALDAIN_SAND = BLOCKS.register("taldain_sand_block", TaldainSandBlock::new);
 	public static final BlockRegistryObject<SandLayerBlock, BlockItem> BLACK_SAND_LAYER = BLOCKS.register("black_sand", SandLayerBlock::new);
-	public static final BlockRegistryObject<TaldainSandBlock, BlockItem> BLACK_SAND = BLOCKS.register("black_sand_block", TaldainSandBlock::new);
 
 }

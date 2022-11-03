@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "invested=false": {
+      "model": "sandmastery:block/black_sand_block"
+    },
+    "invested=true": {
+      "model": "sandmastery:block/white_sand_block"
+    }
+  }
+}
