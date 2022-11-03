@@ -1,21 +1,19 @@
 package leaf.cosmere.sandmastery.common.blocks;
 
 import leaf.cosmere.common.blocks.BaseBlock;
+import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -27,14 +25,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class SandLayerBlock extends BaseBlock {
+public class SandLayerBlock extends BaseFallingBlock {
     public SandLayerBlock() {
         super(PropTypes.Blocks.SAND.get(), SoundType.SAND, 1F, 2F);
     }
-    public static final int MAX_HEIGHT = 8;
+
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
     protected static final VoxelShape[] SHAPE_BY_LAYER = new VoxelShape[]{Shapes.empty(), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
-    public static final int HEIGHT_IMPASSABLE = 5;
 
     @Override
     public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
@@ -80,12 +77,6 @@ public class SandLayerBlock extends BaseBlock {
         return pState.getValue(LAYERS) == 8 ? 0.2F : 1.0F;
     }
 
-    @Override
-    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
-        BlockState blockstate = pLevel.getBlockState(pPos.below());
-        return Block.isFaceFull(blockstate.getCollisionShape(pLevel, pPos.below()), Direction.UP) || blockstate.is(this) && blockstate.getValue(LAYERS) == 8;
-    }
-
     /**
      * Update the provided state given the provided neighbor direction and neighbor state, returning a new state.
      * For example, fences make their connections to the passed in state if possible, and wet concrete powder immediately
@@ -125,5 +116,4 @@ public class SandLayerBlock extends BaseBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(LAYERS);
     }
-
 }

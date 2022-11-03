@@ -1,6 +1,8 @@
 {
   "block.sandmastery.black_sand": "Black Sand",
+  "block.sandmastery.black_sand_block": "Black Sand Block",
   "block.sandmastery.white_sand": "White Sand",
+  "block.sandmastery.white_sand_block": "White Sand Block",
   "item.sandmastery.qido": "Qido",
   "key.cosmere.sandmastery.use": "Use Mastery Ability",
   "manifestation.sandmastery.building": "Sand Mastery Building",
