@@ -4,23 +4,19 @@
 
 package leaf.cosmere.sandmastery.common.blocks;
 
+//import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
-
-import javax.annotation.Nullable;
 
 public class TaldainSandBlock extends BaseFallingBlock
 {
@@ -48,9 +44,15 @@ public class TaldainSandBlock extends BaseFallingBlock
 	@Override
 	public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		if (!pLevel.isAreaLoaded(pPos, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
-		if(!pLevel.canSeeSky(pPos.above())) return;
 		BlockState state = this.defaultBlockState();
+
+		if(MiscHelper.checkIfNearbyInvestiture(pLevel, pPos)) {
+			pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
+		}
+
+		if(!pLevel.canSeeSky(pPos.above())) return;
 		pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
+
 		for(int i = 0; i < 2; ++i) {
 			BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
 			if (pLevel.getBlockState(blockpos).is(Blocks.SAND)) {

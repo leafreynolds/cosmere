@@ -4,36 +4,20 @@
 
 package leaf.cosmere.sandmastery.common.capabilities;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
-import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.ISpiritwebSubmodule;
-import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.DrawHelper;
-import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
 
-import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	private int hydrationLevel = 1000000;
-	public final int maxHydration = 1000000;
+	public final int MAX_HYDRATION = 1000000;
 
 	@Override
 	public void tickClient(ISpiritweb spiritweb)

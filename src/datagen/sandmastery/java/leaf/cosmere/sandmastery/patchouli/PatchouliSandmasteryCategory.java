@@ -22,7 +22,7 @@ public class PatchouliSandmasteryCategory
 	{
 		// TODO
 		BookStuff.Category sandmasteryCategory = new BookStuff.Category(
-				"sand mastery",
+				"sandmastery",
 				"TODO",
 				"sandmastery:qido");
 		categories.add(sandmasteryCategory);

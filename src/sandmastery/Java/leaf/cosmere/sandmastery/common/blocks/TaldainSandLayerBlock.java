@@ -2,6 +2,7 @@ package leaf.cosmere.sandmastery.common.blocks;
 
 import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -127,8 +128,13 @@ public class TaldainSandLayerBlock extends BaseFallingBlock {
     @Override
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         if (!pLevel.isAreaLoaded(pPos, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
-        if(!pLevel.canSeeSky(pPos.above())) return;
         BlockState state = this.defaultBlockState();
+
+        if(MiscHelper.checkIfNearbyInvestiture(pLevel, pPos)) {
+            pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
+        }
+
+        if(!pLevel.canSeeSky(pPos.above())) return;
         pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true).setValue(LAYERS, pState.getValue(LAYERS)));
     }
 }
