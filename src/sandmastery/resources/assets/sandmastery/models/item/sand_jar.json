@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sandmastery:item/black_sand_jar"
+  },
+  "overrides": [
+    {
+      "__comment": "built up investiture >= 1000",
+      "predicate": {
+        "cosmere:charge_level": 500
+      },
+      "model": "sandmastery:item/grey_sand_jar"
+    },
+    {
+      "__comment": "built up investiture >= 2000",
+      "predicate": {
+        "cosmere:charge_level": 1000
+      },
+      "model": "sandmastery:item/white_sand_jar"
+    }
+  ]
+}

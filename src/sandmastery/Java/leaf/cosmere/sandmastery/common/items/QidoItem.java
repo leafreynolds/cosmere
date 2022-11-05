@@ -2,10 +2,10 @@ package leaf.cosmere.sandmastery.common.items;
 
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class QidoItem extends ChargeableItemBase {
     public QidoItem() {
-        super(PropTypes.Items.ONE.get().tab(CosmereItemGroups.ITEMS));
+        super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
     }
 
     @Override

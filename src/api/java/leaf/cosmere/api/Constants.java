@@ -37,7 +37,6 @@ public class Constants
 		public static final String ATTUNED_PLAYER = "attuned_player";
 		public static final String ATTUNED_PLAYER_NAME = "attuned_player_name";
 
-
 		public static final UUID UNKEYED_UUID = UUID.fromString("422fc419-1e39-4eac-ac01-6fc98512c122");
 		public static final UUID ALUMINUM_UUID = UUID.fromString("8da98b83-be5e-4b34-b51e-5fdd79700893");
 	}
