@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -15,8 +15,8 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT)
-public class SurgebindingClientEvents
+@Mod.EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class SurgebindingClientEventsForge
 {
 	@SubscribeEvent
 	public static void onKey(InputEvent.Key event)

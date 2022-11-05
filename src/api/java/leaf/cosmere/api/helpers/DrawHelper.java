@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.api.helpers;
@@ -37,7 +37,7 @@ public class DrawHelper
 
 		//Tell the render system we're about to draw our lines
 		//Use our line settings, special thanks to chisels and bits showing how that works.
-		final VertexConsumer bufferIn = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(ModRenderTypes.MEASUREMENT_LINES.get());
+		final VertexConsumer bufferIn = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(CosmereAPIRenderTypes.MEASUREMENT_LINES.get());
 
 		//For all found things, draw the line
 		for (Map.Entry<Color, List<Vec3>> entry : linesToDrawByColor.entries())
@@ -61,19 +61,20 @@ public class DrawHelper
 			}
 		}
 
-		Minecraft.getInstance().renderBuffers().bufferSource().endBatch(ModRenderTypes.MEASUREMENT_LINES.get());
+		Minecraft.getInstance().renderBuffers().bufferSource().endBatch(CosmereAPIRenderTypes.MEASUREMENT_LINES.get());
 		matrixStack.popPose();
 	}
 
 
 	//Special thanks to Chisels and Bits for showing how this works
-	public enum ModRenderTypes
+	public enum CosmereAPIRenderTypes
 	{
 		MEASUREMENT_LINES(() -> Internal.MEASUREMENT_LINES);
+		//todo replace hardcoded places everywhere in the suite with more render types, it will be tidier
 
 		private final Supplier<RenderType> typeSupplier;
 
-		ModRenderTypes(final Supplier<RenderType> typeSupplier)
+		CosmereAPIRenderTypes(final Supplier<RenderType> typeSupplier)
 		{
 			this.typeSupplier = typeSupplier;
 		}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -14,7 +14,9 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -22,8 +24,18 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import java.util.Locale;
 
 @Mod.EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class SurgebindingClientSetup
+public class SurgebindingClientEventsMod
 {
+
+	@SubscribeEvent
+	public static void registerGuiOverlays(RegisterGuiOverlaysEvent guiOverlaysEvent)
+	{
+		guiOverlaysEvent.registerAbove(
+				VanillaGuiOverlay.EXPERIENCE_BAR.id(),
+				"hud",
+				(gui, poseStack, partialTick, width, height) -> HUDHandler.onDrawScreenPost(poseStack)
+		);
+	}
 
 	@SubscribeEvent
 	public static void registerLayers(final EntityRenderersEvent.RegisterLayerDefinitions evt)
