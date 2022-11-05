@@ -2,17 +2,20 @@ package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
+import net.minecraft.core.Direction;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-public class MasteryLaunch extends SandmasteryManifestation{
-    public MasteryLaunch(Taldain.Mastery mastery) {
+
+public class MasteryElevate extends SandmasteryManifestation{
+    public MasteryElevate(Taldain.Mastery mastery) {
         super(mastery);
     }
 
@@ -36,17 +39,19 @@ public class MasteryLaunch extends SandmasteryManifestation{
         SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
 
-        if(!submodule.adjustHydration(-10, false)) return;
+        if(getMode(data) < 3) return; // It's shown in White Sand that one can't lift themselves with fewer than 3 ribbons
+        if(!submodule.adjustHydration(-10, false)) return; // Too dehydrated to use sand mastery
 
         LivingEntity living = data.getLiving();
-        Vec3 direction = living.getForward();
+        int distFromGround = MiscHelper.distanceFromGround(living);
+        int maxLift = getMode(data)*4;
+        if(distFromGround > maxLift) return;
 
-        int scaleFactor = getMode(data);
-        Vec3 add = living.getDeltaMovement().add(direction.multiply(scaleFactor, scaleFactor, scaleFactor));
-        living.setDeltaMovement(VectorHelper.ClampMagnitude(add, 10));
+
+        Vec3 direction = (maxLift - distFromGround) > 3 ? new Vec3(0, 0.75, 0) : new Vec3(0, 0.15, 0);;
+        living.setDeltaMovement(direction);
         living.hurtMarked = true; // Allow the game to move the player
-
-        data.setMode(this, getMode(data)-1);
+        living.resetFallDistance();
 
         submodule.adjustHydration(-10, true);
     }

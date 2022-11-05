@@ -8,6 +8,7 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.common.registration.impl.ManifestationDeferredRegister;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.manifestation.MasteryElevate;
 import leaf.cosmere.sandmastery.common.manifestation.MasteryLaunch;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 
@@ -36,6 +37,8 @@ public class SandmasteryManifestations
 		switch(mastery) {
 			case LAUNCH:
 				return new MasteryLaunch(mastery);
+			case ELEVATE:
+				return new MasteryElevate(mastery);
 			default:
 				return new SandmasteryManifestation(mastery);
 		}

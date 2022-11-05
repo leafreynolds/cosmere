@@ -1,5 +1,6 @@
 package leaf.cosmere.sandmastery.common.utils;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.Roshar;
@@ -9,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -58,5 +61,18 @@ public class MiscHelper {
             });
         }
         return foundSomething.get();
+    }
+
+    public static int distanceFromGround(LivingEntity e) {
+        BlockPos pos = e.blockPosition();
+        double y = pos.getY();
+        int dist = 0;
+        for (double i = y; i >= e.level.getMinBuildHeight(); i--) {
+            BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
+            if (!block.isAir()) return dist;
+            dist++;
+        }
+
+        return -1;
     }
 }
