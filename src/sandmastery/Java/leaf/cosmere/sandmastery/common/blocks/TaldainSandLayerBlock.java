@@ -1,9 +1,7 @@
 package leaf.cosmere.sandmastery.common.blocks;
 
-import leaf.cosmere.common.blocks.BaseBlock;
 import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +15,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -25,12 +24,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class SandLayerBlock extends BaseFallingBlock {
-    public SandLayerBlock() {
+public class TaldainSandLayerBlock extends BaseFallingBlock {
+    public TaldainSandLayerBlock() {
         super(PropTypes.Blocks.SAND.get(), SoundType.SAND, 1F, 2F);
     }
 
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
+    public static final BooleanProperty INVESTED = BooleanProperty.create("invested");
     protected static final VoxelShape[] SHAPE_BY_LAYER = new VoxelShape[]{Shapes.empty(), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     @Override
@@ -107,13 +107,28 @@ public class SandLayerBlock extends BaseFallingBlock {
         BlockState blockstate = pContext.getLevel().getBlockState(pContext.getClickedPos());
         if (blockstate.is(this)) {
             int i = blockstate.getValue(LAYERS);
-            return blockstate.setValue(LAYERS, Integer.valueOf(Math.min(8, i + 1)));
+            return blockstate.setValue(LAYERS, Integer.valueOf(Math.min(8, i + 1))).setValue(INVESTED, false);
         } else {
             return super.getStateForPlacement(pContext);
         }
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(LAYERS);
+        pBuilder
+                .add(LAYERS)
+                .add(INVESTED);
+    }
+
+    @Override
+    public boolean isRandomlyTicking(BlockState pState) {
+        return !pState.getValue(INVESTED);
+    }
+
+    @Override
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+        if (!pLevel.isAreaLoaded(pPos, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
+        if(!pLevel.canSeeSky(pPos.above())) return;
+        BlockState state = this.defaultBlockState();
+        pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true).setValue(LAYERS, pState.getValue(LAYERS)));
     }
 }
