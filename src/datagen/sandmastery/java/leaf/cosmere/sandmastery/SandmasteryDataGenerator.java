@@ -24,8 +24,8 @@ public class SandmasteryDataGenerator
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		generator.addProvider(true, new SandmasteryEngLangGen(generator));
-
 		generator.addProvider(true, new SandmasteryItemModelsGen(generator, existingFileHelper));
+		generator.addProvider(true, new SandmasteryRecipeGen(generator));
 		generator.addProvider(true, new SandmasteryPatchouliGen(generator));
 	}
 

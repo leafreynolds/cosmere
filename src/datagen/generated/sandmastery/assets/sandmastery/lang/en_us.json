@@ -1,6 +1,7 @@
 {
   "block.sandmastery.taldain_sand": "Taldain Sand",
-  "block.sandmastery.taldain_sand_block": "Taldain Sand Block",
+  "block.sandmastery.taldain_sand_layer": "Taldain Sand Layer",
+  "item.sandmastery.jar": "Jar",
   "item.sandmastery.qido": "Qido",
   "item.sandmastery.sand_jar": "Sand Jar",
   "key.cosmere.sandmastery.use": "Use Mastery Ability",

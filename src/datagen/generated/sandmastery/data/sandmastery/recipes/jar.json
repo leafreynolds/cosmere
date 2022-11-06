@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    }
+  },
+  "pattern": [
+    "G G",
+    "G G",
+    " G "
+  ],
+  "result": {
+    "item": "sandmastery:jar"
+  }
+}

@@ -17,7 +17,7 @@ import net.minecraft.world.item.BlockItem;
 public class SandmasteryBlocksRegistry
 {
 	public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(Sandmastery.MODID);
-	public static final BlockRegistryObject<TaldainSandLayerBlock, BlockItem> TALDAIN_SAND_LAYER = BLOCKS.register("taldain_sand", TaldainSandLayerBlock::new);
-	public static final BlockRegistryObject<TaldainSandBlock, BlockItem> TALDAIN_SAND = BLOCKS.register("taldain_sand_block", TaldainSandBlock::new);
+	public static final BlockRegistryObject<TaldainSandLayerBlock, BlockItem> TALDAIN_SAND_LAYER = BLOCKS.register("taldain_sand_layer", TaldainSandLayerBlock::new);
+	public static final BlockRegistryObject<TaldainSandBlock, BlockItem> TALDAIN_SAND = BLOCKS.register("taldain_sand", TaldainSandBlock::new);
 
 }

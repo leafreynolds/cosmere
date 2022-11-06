@@ -1,52 +1,10 @@
 {
   "variants": {
-    "layers=1,invested=true": {
-      "model": "sandmastery:block/white_sand_height2"
-    },
-    "layers=2,invested=true": {
-      "model": "sandmastery:block/white_sand_height4"
-    },
-    "layers=3,invested=true": {
-      "model": "sandmastery:block/white_sand_height6"
-    },
-    "layers=4,invested=true": {
-      "model": "sandmastery:block/white_sand_height8"
-    },
-    "layers=5,invested=true": {
-      "model": "sandmastery:block/white_sand_height10"
-    },
-    "layers=6,invested=true": {
-      "model": "sandmastery:block/white_sand_height12"
-    },
-    "layers=7,invested=true": {
-      "model": "sandmastery:block/white_sand_height14"
-    },
-    "layers=8,invested=true": {
-      "model": "sandmastery:block/white_sand_block"
-    },
-    "layers=1,invested=false": {
-      "model": "sandmastery:block/black_sand_height2"
-    },
-    "layers=2,invested=false": {
-      "model": "sandmastery:block/black_sand_height4"
-    },
-    "layers=3,invested=false": {
-      "model": "sandmastery:block/black_sand_height6"
-    },
-    "layers=4,invested=false": {
-      "model": "sandmastery:block/black_sand_height8"
-    },
-    "layers=5,invested=false": {
-      "model": "sandmastery:block/black_sand_height10"
-    },
-    "layers=6,invested=false": {
-      "model": "sandmastery:block/black_sand_height12"
-    },
-    "layers=7,invested=false": {
-      "model": "sandmastery:block/black_sand_height14"
-    },
-    "layers=8,invested=false": {
+    "invested=false": {
       "model": "sandmastery:block/black_sand_block"
+    },
+    "invested=true": {
+      "model": "sandmastery:block/white_sand_block"
     }
   }
 }
