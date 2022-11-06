@@ -1,5 +1,7 @@
 package leaf.cosmere.sandmastery.common.items;
 
+import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.TaldainSandLayerBlock;
@@ -82,14 +84,23 @@ public class SandJarItem extends ChargeableItemBase {
         BlockState state = pLevel.getBlockState(pos);
         Inventory inv = pPlayer.getInventory();
 
+        boolean wasCharged = StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0) > 0;
         inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected : -106, new ItemStack(SandmasteryItems.JAR_ITEM));
-
         if(state.is(SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock()) && state.getValue(TaldainSandLayerBlock.LAYERS) < 8) {
             int layers = state.getValue(TaldainSandLayerBlock.LAYERS);
-            pLevel.setBlockAndUpdate(pos, state.setValue(TaldainSandLayerBlock.LAYERS, layers+1));
+            pLevel.setBlockAndUpdate(pos,
+                    state
+                            .setValue(TaldainSandLayerBlock.LAYERS, layers+1)
+                            .setValue(TaldainSandLayerBlock.INVESTED, wasCharged)
+            );
         } else {
             BlockPos pos2 = pos.offset(dir.getNormal());
-            pLevel.setBlockAndUpdate(pos2, SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock().defaultBlockState().setValue(TaldainSandLayerBlock.LAYERS, 1));
+            pLevel.setBlockAndUpdate(pos2,
+                    SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock()
+                            .defaultBlockState()
+                            .setValue(TaldainSandLayerBlock.LAYERS, 1)
+                            .setValue(TaldainSandLayerBlock.INVESTED, wasCharged)
+            );
         }
 
         return InteractionResultHolder.consume(usedItem);

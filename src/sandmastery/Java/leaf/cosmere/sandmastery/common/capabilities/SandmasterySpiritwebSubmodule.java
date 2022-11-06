@@ -7,17 +7,22 @@ package leaf.cosmere.sandmastery.common.capabilities;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	private int hydrationLevel = 1000000;
 	public final int MAX_HYDRATION = 1000000;
+	private Map<SandmasteryManifestation, Integer> ribbons = new HashMap<>();
 
 	@Override
 	public void tickClient(ISpiritweb spiritweb)
@@ -77,5 +82,24 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		return false;
+	}
+
+	public void checkRibbons(ISpiritweb data, SandmasteryManifestation manifestation) {
+		var inUse = ribbons.get(manifestation);
+		int mode = data.getMode(manifestation);
+		if(inUse == null) {
+			data.setMode(manifestation, mode);
+			ribbons.put(manifestation, mode);
+		}
+		int totalInUse = 0;
+		for(int i : ribbons.values()) {
+			totalInUse += i;
+		}
+		int maxRibbons = (int) manifestation.getStrength(data, false);
+		if(totalInUse > maxRibbons) {
+			data.setMode(manifestation, data.getMode(manifestation)-1);
+		};
+
+		ribbons.replace(manifestation, data.getMode(manifestation));
 	}
 }
