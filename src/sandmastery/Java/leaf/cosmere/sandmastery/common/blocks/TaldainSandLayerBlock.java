@@ -136,5 +136,12 @@ public class TaldainSandLayerBlock extends BaseFallingBlock {
 
         if(!pLevel.canSeeSky(pPos.above())) return;
         pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true).setValue(LAYERS, pState.getValue(LAYERS)));
+
+        for(int i = 0; i < 2; ++i) {
+            BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
+            if (pLevel.getBlockState(blockpos).is(Blocks.SAND)) {
+                pLevel.setBlockAndUpdate(blockpos, state.setValue(INVESTED, true));
+            }
+        }
     }
 }
