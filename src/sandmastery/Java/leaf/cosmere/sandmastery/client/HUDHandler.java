@@ -68,7 +68,7 @@ public class HUDHandler {
         int barStartingX = (mc.getWindow().getGuiScaledWidth() / 2 - fullBarWidth / 2) + 50;
 
         //todo hydration bar height config
-        final int offsetFromBottom = 39;
+        final int offsetFromBottom = 28;
         final int hydrationBarHeight = 11;
 
         int barStartingY = mc.getWindow().getGuiScaledHeight() - (hydrationBarHeight + offsetFromBottom);

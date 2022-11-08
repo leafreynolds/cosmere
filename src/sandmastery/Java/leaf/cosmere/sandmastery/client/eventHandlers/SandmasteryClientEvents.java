@@ -22,7 +22,7 @@ public class SandmasteryClientEvents
     public static void registerGuiOverlays(RegisterGuiOverlaysEvent guiOverlaysEvent)
     {
         guiOverlaysEvent.registerBelow(
-                VanillaGuiOverlay.AIR_LEVEL.id(),
+                VanillaGuiOverlay.FOOD_LEVEL.id(),
                 "hud",
                 (gui, poseStack, partialTick, width, height) -> HUDHandler.onDrawScreenPost(poseStack)
         );
