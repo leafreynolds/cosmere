@@ -20,8 +20,8 @@ import java.util.Map;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
-	private int hydrationLevel = 1000000;
-	public final int MAX_HYDRATION = 1000000;
+	private int hydrationLevel = 10000;
+	public final int MAX_HYDRATION = 10000;
 	private Map<SandmasteryManifestation, Integer> ribbons = new HashMap<>();
 
 	@Override

@@ -24,7 +24,7 @@ public class MasteryCushion extends SandmasteryManifestation{
         submodule.checkRibbons(data, this);
 
         int mode = getMode(data);
-        if (mode > 3) {
+        if (mode > 0) {
             applyEffectTick(data);
         }
     }
