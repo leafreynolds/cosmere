@@ -101,5 +101,6 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		};
 
 		ribbons.replace(manifestation, data.getMode(manifestation));
+		data.syncToClients(null);
 	}
 }

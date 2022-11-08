@@ -5,17 +5,12 @@
 package leaf.cosmere.sandmastery;
 
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
-import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
-import leaf.cosmere.api.providers.IEntityTypeProvider;
-import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import net.minecraft.data.DataGenerator;
@@ -26,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
-import static leaf.cosmere.api.Constants.Strings.KEY_SANDMASTERY_USE;
+import static leaf.cosmere.api.Constants.Strings.KEY_MANIFESTATION_USE_ACTIVE;
 
 public class SandmasteryEngLangGen extends LanguageProvider
 {
@@ -164,7 +159,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	private void addKeybindings()
 	{
 		//KeyBindings
-		add(KEY_SANDMASTERY_USE, "Use Mastery Ability");
+		add(KEY_MANIFESTATION_USE_ACTIVE, "Use Mastery Ability");
 	}
 
 	private void addStats()

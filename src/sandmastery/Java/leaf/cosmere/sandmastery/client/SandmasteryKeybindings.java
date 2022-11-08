@@ -13,11 +13,9 @@ import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SandmasteryKeybindings {
-    public static KeyMapping SANDMASTERY_USE;
 
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event)
     {
-        event.register(SANDMASTERY_USE = new KeyMapping(KEY_SANDMASTERY_USE, GLFW.GLFW_KEY_RIGHT_CONTROL, KEYS_CATEGORY));
     }
 }

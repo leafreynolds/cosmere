@@ -6,6 +6,7 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
@@ -24,7 +25,7 @@ public class MasteryLaunch extends SandmasteryManifestation{
         submodule.checkRibbons(data, this);
 
         int mode = getMode(data);
-        if (mode > 0 && SandmasteryKeybindings.SANDMASTERY_USE.isDown()) {
+        if (mode > 0 && Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) {
             applyEffectTick(data);
         }
     }
@@ -51,6 +52,7 @@ public class MasteryLaunch extends SandmasteryManifestation{
         living.hurtMarked = true; // Allow the game to move the player
 
         data.setMode(this, getMode(data)-1);
+        data.syncToClients(null);
 
         submodule.adjustHydration(-10, true);
     }
