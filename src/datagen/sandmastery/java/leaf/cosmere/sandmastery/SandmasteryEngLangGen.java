@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
-import static leaf.cosmere.api.Constants.Strings.KEY_MANIFESTATION_USE_ACTIVE;
+import static leaf.cosmere.api.Constants.Strings.*;
 
 public class SandmasteryEngLangGen extends LanguageProvider
 {
@@ -159,7 +159,8 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	private void addKeybindings()
 	{
 		//KeyBindings
-		add(KEY_MANIFESTATION_USE_ACTIVE, "Use Mastery Ability");
+		add(KEY_SANDMASTERY_LAUNCH, "Use Launch Mastery");
+		add(KEY_SANDMASTERY_ELEVATE, "Use Elevate Mastery");
 	}
 
 	private void addStats()

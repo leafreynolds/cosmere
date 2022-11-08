@@ -46,7 +46,7 @@ public class SandmasteryManifestation extends Manifestation
 
 	@Override
 	public int modeMax(ISpiritweb data) {
-		return (int) data.manifestation().getStrength(data, false);
+		return (int) data.getSelectedManifestation().getStrength(data, false);
 	};
 
 	@Override

@@ -82,13 +82,16 @@ public class Constants
 		public static final String KEY_MANIFESTATION_NEXT = "key.cosmere.powers.next";
 		public static final String KEY_MANIFESTATION_PREVIOUS = "key.cosmere.powers.previous";
 
-		public static final String KEY_MANIFESTATION_USE_ACTIVE = "key.cosmere.sandmastery.use";
+		public static final String KEY_MANIFESTATION_USE_ACTIVE = "key.cosmere.powers.use";
 
 		public static final String KEY_DEACTIVATE_ALL_POWERS = "key.cosmere.powers.toggle";
 		public static final String KEY_MANIFESTATION_MENU = "key.cosmere.powers.menu";
 
 		public static final String KEY_ALLOMANCY_PUSH = "key.cosmere.allomancy.push";
 		public static final String KEY_ALLOMANCY_PULL = "key.cosmere.allomancy.pull";
+
+		public static final String KEY_SANDMASTERY_LAUNCH = "key.cosmere.sandmastery.launch";
+		public static final String KEY_SANDMASTERY_ELEVATE = "key.cosmere.sandmastery.elevate";
 
 		public static final String KEY_SHARDBLADE = "key.cosmere.stormlight.shardblade";
 		public static final String TOOLTIP_ITEM_INFO = "tooltip.item.info.";

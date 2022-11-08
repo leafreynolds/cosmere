@@ -335,6 +335,12 @@ public class SpiritwebCapability implements ISpiritweb
 		selectedManifestation = manifestation;
 	}
 
+	@Override
+	public Manifestation getSelectedManifestation()
+	{
+		return selectedManifestation;
+	};
+
 	public boolean hasBeenInitialized()
 	{
 		return hasBeenInitialized;
@@ -503,12 +509,6 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public Manifestation manifestation()
-	{
-		return selectedManifestation;
-	}
-
-	@Override
 	public String changeManifestation(int dir)
 	{
 		List<Manifestation> unlockedManifestations = getAvailableManifestations();
@@ -598,7 +598,7 @@ public class SpiritwebCapability implements ISpiritweb
 			throw new IllegalStateException("Don't sync client -> server");
 		}
 
-		if (manifestation() == ManifestationRegistry.NONE.get())
+		if (getSelectedManifestation() == ManifestationRegistry.NONE.get())
 		{
 			//find first power
 			Optional<Manifestation> first = getAvailableManifestations().stream().findFirst();

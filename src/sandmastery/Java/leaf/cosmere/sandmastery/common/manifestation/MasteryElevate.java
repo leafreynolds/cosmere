@@ -5,6 +5,7 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +23,7 @@ public class MasteryElevate extends SandmasteryManifestation{
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
         submodule.checkRibbons(data, this);
         int mode = getMode(data);
-        if (mode > 0 && Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) {
+        if (mode > 0 && (MiscHelper.isActivatedAndActive(data, this) || SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown())) {
             applyEffectTick(data);
         }
     }
