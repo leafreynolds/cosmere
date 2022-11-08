@@ -1,20 +1,18 @@
 package leaf.cosmere.sandmastery.common.manifestation;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-public class MasteryLaunch extends SandmasteryManifestation{
-    public MasteryLaunch(Taldain.Mastery mastery) {
+
+public class MasteryCushion extends SandmasteryManifestation{
+    public MasteryCushion(Taldain.Mastery mastery) {
         super(mastery);
     }
 
@@ -26,7 +24,7 @@ public class MasteryLaunch extends SandmasteryManifestation{
         submodule.checkRibbons(data, this);
 
         int mode = getMode(data);
-        if (mode > 0 && (MiscHelper.isActivatedAndActive(data, this) || SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown())) {
+        if (mode > 3) {
             applyEffectTick(data);
         }
     }
@@ -42,20 +40,13 @@ public class MasteryLaunch extends SandmasteryManifestation{
         SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
 
-        if(!submodule.adjustHydration(-10, false)) return;
-
         LivingEntity living = data.getLiving();
-        Vec3 direction = living.getForward();
-
-        int scaleFactor = getMode(data);
-        Vec3 add = living.getDeltaMovement().add(direction.multiply(scaleFactor, scaleFactor, scaleFactor));
-        living.setDeltaMovement(VectorHelper.ClampMagnitude(add, 10));
-        living.hurtMarked = true; // Allow the game to move the player
+        double distFromGround = MiscHelper.distanceFromGround(living);
+        if(!(distFromGround > 1 && distFromGround < 10)) return;
+        if(!submodule.adjustHydration(-10, false)) return;
+        living.setDeltaMovement(living.getDeltaMovement().multiply(1, 0.05, 1));
+        living.hurtMarked = true;
         living.resetFallDistance();
-
-        data.setMode(this, getMode(data)-1);
-        data.syncToClients(null);
-
         submodule.adjustHydration(-10, true);
     }
 }

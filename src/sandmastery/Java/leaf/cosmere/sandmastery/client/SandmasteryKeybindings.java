@@ -20,7 +20,7 @@ public class SandmasteryKeybindings {
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event)
     {
-        event.register(SANDMASTERY_LAUNCH = new KeyMapping(KEY_SANDMASTERY_LAUNCH, GLFW.GLFW_INVALID_VALUE, KEYS_CATEGORY));
-        event.register(SANDMASTERY_ELEVATE = new KeyMapping(KEY_SANDMASTERY_ELEVATE, GLFW.GLFW_INVALID_VALUE, KEYS_CATEGORY));
+        event.register(SANDMASTERY_LAUNCH = new KeyMapping(KEY_SANDMASTERY_LAUNCH, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+        event.register(SANDMASTERY_ELEVATE = new KeyMapping(KEY_SANDMASTERY_ELEVATE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
     }
 }

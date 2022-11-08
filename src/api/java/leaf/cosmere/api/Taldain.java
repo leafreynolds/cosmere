@@ -20,7 +20,8 @@ public class Taldain
 		WALL(5),
 		SHIELD(6),
 		BUILDING(7),
-		DECOY(8);
+		DECOY(8),
+		CUSHION(9);
 
 		private final int id;
 
