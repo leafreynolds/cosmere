@@ -5,7 +5,7 @@
 package leaf.cosmere.sandmastery.client.eventHandlers;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.sandmastery.client.HUDHandler;
+import leaf.cosmere.sandmastery.client.gui.HUDHandler;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;

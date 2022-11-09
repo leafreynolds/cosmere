@@ -7,10 +7,7 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
+import leaf.cosmere.sandmastery.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -39,6 +36,7 @@ public class Sandmastery implements IModModule
         SandmasteryBlocksRegistry.BLOCKS.register(modBus);
         SandmasteryAttributes.ATTRIBUTES.register(modBus);
         SandmasteryManifestations.MANIFESTATIONS.register(modBus);
+        SandmasteryMenuTypes.MENU_TYPES.register(modBus);
 
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());

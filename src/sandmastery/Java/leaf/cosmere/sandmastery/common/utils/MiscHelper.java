@@ -1,19 +1,22 @@
 package leaf.cosmere.sandmastery.common.utils;
 
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.*;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -66,6 +69,12 @@ public class MiscHelper {
         return foundSomething.get();
     }
 
+    public static void chargeItemFromInvestiture(ItemStack stack, Level level, Entity pEntity, int maxCharge) {
+        if(level.isClientSide()) return;
+        int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+        if(checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition())) StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
+    }
+
     public static int distanceFromGround(LivingEntity e) {
         BlockPos pos = e.blockPosition();
         double y = pos.getY();
@@ -81,5 +90,12 @@ public class MiscHelper {
 
     public static boolean isActivatedAndActive(ISpiritweb data, Manifestation manifestation) {
         return (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation() == manifestation);
+    }
+
+    public static int getChargeFromItemStack(ItemStack stack) {
+        if(stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem()) return stack.getCount()*100;
+        if(stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem()) return stack.getCount()*800;
+        if(stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem()) return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+        else return 0;
     }
 }

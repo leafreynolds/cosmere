@@ -6,9 +6,15 @@ package leaf.cosmere.sandmastery.client.eventHandlers;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Taldain;
+import leaf.cosmere.sandmastery.client.gui.SandPouchContainerScreen;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
+import leaf.cosmere.sandmastery.common.sandpouch.SandPouchContainerMenu;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -40,6 +46,11 @@ public class SandmasteryClientSetup
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void registerContainers(RegisterEvent event)
 	{
+		event.register(Registry.MENU_REGISTRY, helper ->
+		{
+			MenuScreens.register((MenuType<SandPouchContainerMenu>) SandmasteryMenuTypes.SAND_POUCH.get(), SandPouchContainerScreen::new);
+			CosmereAPI.logger.info("Sandmastery registered menutypes!");
+		});
 	}
 
 	@SubscribeEvent

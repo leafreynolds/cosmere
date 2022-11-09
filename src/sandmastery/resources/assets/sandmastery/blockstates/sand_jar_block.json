@@ -1,0 +1,307 @@
+{
+  "variants": {
+    "investiture=0": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=1": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=2": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=3": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=4": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=5": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=6": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=7": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=8": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=9": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=10": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=11": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=12": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=13": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=14": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=15": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=16": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=17": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=18": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=19": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=20": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=21": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=22": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=23": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=24": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=25": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=26": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=27": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=28": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=29": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=30": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=31": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=32": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=33": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=34": {
+      "model": "sandmastery:block/black_sand_jar"
+    },
+    "investiture=35": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=36": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=37": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=38": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=39": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=40": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=41": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=42": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=43": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=44": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=45": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=46": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=47": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=48": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=49": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=50": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=51": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=52": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=53": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=54": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=55": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=56": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=57": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=58": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=59": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=60": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=61": {
+      "model": "sandmastery:block/gret_sand_jar"
+    },
+    "investiture=62": {
+      "model": "sandmastery:block/gret_sand_jar"
+    },
+    "investiture=63": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=64": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=65": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=66": {
+      "model": "sandmastery:block/grey_sand_jar"
+    },
+    "investiture=67": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=68": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=69": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=70": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=71": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=72": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=73": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=74": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=75": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=76": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=77": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=78": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=79": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=80": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=81": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=82": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=83": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=84": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=85": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=86": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=87": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=88": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=89": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=90": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=91": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=92": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=93": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=94": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=95": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=96": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=97": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=98": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=99": {
+      "model": "sandmastery:block/white_sand_jar"
+    },
+    "investiture=100": {
+      "model": "sandmastery:block/white_sand_jar"
+    }
+  }
+}
