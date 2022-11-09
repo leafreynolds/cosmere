@@ -28,6 +28,11 @@ import javax.annotation.Nullable;
 public class TaldainSandLayerBlock extends BaseFallingBlock {
     public TaldainSandLayerBlock() {
         super(PropTypes.Blocks.SAND.get(), SoundType.SAND, 1F, 2F);
+        this.registerDefaultState(
+                this.stateDefinition.any()
+                        .setValue(INVESTED, false)
+                        .setValue(LAYERS, 1)
+        );
     }
 
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
@@ -86,9 +91,10 @@ public class TaldainSandLayerBlock extends BaseFallingBlock {
      */
     @Override
     public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
-        return !pState.canSurvive(pLevel, pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+        if(!pState.canSurvive(pLevel, pCurrentPos)) return Blocks.AIR.defaultBlockState();
+        if(touchesLiquid(pLevel, pCurrentPos, pState)) return this.defaultBlockState().setValue(LAYERS, pState.getValue(LAYERS));
+        return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
     }
-
 
     @Override
     public boolean canBeReplaced(BlockState pState, BlockPlaceContext pUseContext) {
@@ -143,5 +149,22 @@ public class TaldainSandLayerBlock extends BaseFallingBlock {
                 pLevel.setBlockAndUpdate(blockpos, state.setValue(INVESTED, true));
             }
         }
+    }
+
+    private static boolean touchesLiquid(BlockGetter pLevel, BlockPos pPos, BlockState state) {
+        boolean touching = false;
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = pPos.mutable();
+        for(Direction direction : Direction.values()) {
+            BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+            if (direction != Direction.DOWN || state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos)) {
+                blockpos$mutableblockpos.setWithOffset(pPos, direction);
+                blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+                if (state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos) && !blockstate.isFaceSturdy(pLevel, pPos, direction.getOpposite())) {
+                    touching = true;
+                    break;
+                }
+            }
+        }
+        return touching;
     }
 }

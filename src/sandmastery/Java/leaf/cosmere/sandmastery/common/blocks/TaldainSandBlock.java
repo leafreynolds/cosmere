@@ -9,8 +9,12 @@ import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -59,5 +63,29 @@ public class TaldainSandBlock extends BaseFallingBlock
 				pLevel.setBlockAndUpdate(blockpos, state.setValue(INVESTED, true));
 			}
 		}
+	}
+
+	private static boolean touchesLiquid(BlockGetter pLevel, BlockPos pPos, BlockState state) {
+		boolean touching = false;
+		BlockPos.MutableBlockPos blockpos$mutableblockpos = pPos.mutable();
+		for(Direction direction : Direction.values()) {
+			BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+			if (direction != Direction.DOWN || state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos)) {
+				blockpos$mutableblockpos.setWithOffset(pPos, direction);
+				blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+				if (state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos) && !blockstate.isFaceSturdy(pLevel, pPos, direction.getOpposite())) {
+					touching = true;
+					break;
+				}
+			}
+		}
+		return touching;
+	}
+
+	@Override
+	public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
+		return touchesLiquid(pLevel, pCurrentPos, pState) ?
+				this.defaultBlockState() :
+				super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
 	}
 }
