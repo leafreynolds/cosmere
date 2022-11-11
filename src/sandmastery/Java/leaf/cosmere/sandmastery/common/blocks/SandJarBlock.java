@@ -39,7 +39,6 @@ public class SandJarBlock extends BaseBlock {
     public int getAnalogOutputSignal(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos) {
         int investiture = pState.getValue(INVESTITURE);
         int res = Math.round((investiture / 100F) * 15);
-        pState.setValue(INVESTITURE, Math.max(investiture-5, 0));
         return res;
     }
 
@@ -52,9 +51,10 @@ public class SandJarBlock extends BaseBlock {
     public void randomTick(@NotNull BlockState pState, ServerLevel pLevel, BlockPos pPos, @NotNull RandomSource pRandom) {
         BlockState state = this.defaultBlockState();
         int investiture = pState.getValue(INVESTITURE);
-        if(MiscHelper.checkIfNearbyInvestiture(pLevel, pPos)) {
+        if(MiscHelper.checkIfNearbyInvestiture(pLevel, pPos))
             pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTITURE, Math.min(investiture+5, 100)));
-        }
+        else
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(INVESTITURE, Math.max(investiture-1, 0)));
     }
 
 }
