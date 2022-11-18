@@ -40,7 +40,7 @@ public class HUDHandler {
 
                 profiler.push("hydration-bar");
                 {
-                    if (!player.isSpectator())
+                    if (!player.isSpectator() && !player.isCreative())
                     {
                         var sbModule = (SandmasterySpiritwebSubmodule) data.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
 

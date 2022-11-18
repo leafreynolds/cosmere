@@ -21,7 +21,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
-import static leaf.cosmere.api.Constants.Strings.*;
+import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_ELEVATE;
+import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_LAUNCH;
+
 
 public class SandmasteryEngLangGen extends LanguageProvider
 {

@@ -43,9 +43,5 @@ public class Taldain
 		{
 			return name().toLowerCase(Locale.ROOT);
 		}
-
-		public boolean hasAssociatedManifestation() {
-			return true;
-		}
 	}
 }

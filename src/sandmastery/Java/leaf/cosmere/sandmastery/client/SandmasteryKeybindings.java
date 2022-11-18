@@ -8,8 +8,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
-import static leaf.cosmere.api.Constants.Strings.*;
 import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
+import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_ELEVATE;
+import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_LAUNCH;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SandmasteryKeybindings {
