@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 24 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.utils;
@@ -33,8 +33,9 @@ public class MiscHelper
 					//give allomancy
 					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
 					{
-						//todo config allomancy strength
-						spiritweb.giveManifestation(manifestation, 13);
+						//todo config feruchemy god metal strength
+						final double strength = manifestation.getStrength(iSpiritweb, true);
+						spiritweb.giveManifestation(manifestation, strength < 13 ? 13 : (int) (strength + 1));
 					}
 				}
 			}
