@@ -19,10 +19,6 @@ public class MasteryCushion extends SandmasteryManifestation{
     @Override
     public void tick(ISpiritweb data)
     {
-        SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-        SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
-        submodule.checkRibbons(data, this);
-
         int mode = getMode(data);
         if (mode > 0) {
             applyEffectTick(data);

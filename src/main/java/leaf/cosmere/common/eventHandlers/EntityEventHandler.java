@@ -161,6 +161,7 @@ public class EntityEventHandler
 			}
 		}
 
+		// TODO Change to only use one manifestation
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
 			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)

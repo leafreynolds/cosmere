@@ -19,9 +19,6 @@ public class MasteryElevate extends SandmasteryManifestation{
     @Override
     public void tick(ISpiritweb data)
     {
-        SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-        SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
-        submodule.checkRibbons(data, this);
         int mode = getMode(data);
         if (mode > 0 && (MiscHelper.isActivatedAndActive(data, this) || SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown())) {
             applyEffectTick(data);

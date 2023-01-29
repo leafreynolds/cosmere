@@ -72,11 +72,6 @@ public class SandmasteryClientSetup
 
 		for (final Taldain.Mastery manifestation : Taldain.Mastery.values())
 		{
-			if (!manifestation.hasAssociatedManifestation())
-			{
-				continue;
-			}
-
 			String abilityToLower = manifestation.toString().toLowerCase(Locale.ROOT);
 			event.addSprite(Sandmastery.rl("icon/sandmastery/"+abilityToLower));
 		}

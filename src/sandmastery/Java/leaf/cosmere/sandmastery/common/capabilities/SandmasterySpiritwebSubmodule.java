@@ -52,6 +52,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void collectMenuInfo(List<String> m_infoText)
 	{
+		//todo Localization
 		final String text = "Hydration: " + getHydrationLevel();
 		m_infoText.add(text);
 	}

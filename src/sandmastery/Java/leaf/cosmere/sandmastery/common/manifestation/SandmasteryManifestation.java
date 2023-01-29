@@ -50,11 +50,10 @@ public class SandmasteryManifestation extends Manifestation
 	};
 
 	@Override
-	public void tick(ISpiritweb data) {
+	public void onModeChange(ISpiritweb data) {
 		if(!isActive(data)) return;
 		int mode = getMode(data);
-		//TODO do something other than debug messages
-		 SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
+		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
 		submodule.checkRibbons(data, this);
 	}

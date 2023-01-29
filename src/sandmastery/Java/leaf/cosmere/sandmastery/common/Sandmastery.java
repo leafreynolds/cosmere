@@ -50,7 +50,7 @@ public class Sandmastery implements IModModule
     public Version getVersion() { return versionNumber; }
 
     @Override
-    public String getName() { return MODID; }
+    public String getName() { return "Sandmastery"; }
 
     @Nullable
     @Override

@@ -33,7 +33,7 @@ public class Cosmere
 {
 
 	public static final String MODID = CosmereAPI.COSMERE_MODID;
-	public static final List<IModModule> modulesLoaded = new ArrayList<>();
+	public static final Map<String, IModModule> modulesLoaded = new HashMap<>();
 
 	public static Cosmere instance;
 
@@ -83,7 +83,11 @@ public class Cosmere
 
 	public static synchronized void addModule(IModModule modModule)
 	{
-		modulesLoaded.add(modModule);
+		modulesLoaded.put(modModule.getName(), modModule);
+	}
+
+	public static boolean isModuleLoaded(String moduleName) {
+		return modulesLoaded.containsKey(moduleName);
 	}
 
 	public static NetworkPacketHandler packetHandler()
@@ -100,7 +104,7 @@ public class Cosmere
 	{
 		Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmoduleMap = new HashMap<>();
 
-		for (IModModule iModModule : modulesLoaded)
+		for (IModModule iModModule : modulesLoaded.values())
 		{
 			ISpiritwebSubmodule iSpiritwebSubmodule = iModModule.makeSubmodule();
 			if (iSpiritwebSubmodule != null)
@@ -117,7 +121,7 @@ public class Cosmere
 					case "Surgebinding":
 						maniType = Manifestations.ManifestationTypes.SURGEBINDING;
 						break;
-					case "sandmastery":
+					case "Sandmastery":
 						maniType = Manifestations.ManifestationTypes.SANDMASTERY;
 						break;
 				}

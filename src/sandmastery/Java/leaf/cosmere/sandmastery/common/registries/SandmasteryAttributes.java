@@ -24,6 +24,6 @@ public class SandmasteryAttributes {
                                             Sandmastery.MODID,
                                             0,
                                             0,
-                                            10
+                                            24
                                     )));
 }
