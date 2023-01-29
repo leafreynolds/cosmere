@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.eventHandlers;
@@ -46,7 +46,7 @@ public class FeruchemyModBusEventHandler
 		{
 			for (Metals.MetalType metalType : Metals.MetalType.values())
 			{
-				if (metalType.hasAssociatedManifestation())
+				if (metalType.hasAssociatedManifestation() && FeruchemyAttributes.FERUCHEMY_ATTRIBUTES.containsKey(metalType))
 				{
 					event.add(entityType, FeruchemyAttributes.FERUCHEMY_ATTRIBUTES.get(metalType).get());
 				}
