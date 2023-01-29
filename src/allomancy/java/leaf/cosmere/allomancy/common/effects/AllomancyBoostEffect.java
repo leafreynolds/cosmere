@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 1 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
@@ -22,7 +22,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-			if (metalType.hasAssociatedManifestation())
+			if (metalType.hasAssociatedManifestation() && AllomancyAttributes.ALLOMANCY_ATTRIBUTES.containsKey(metalType))
 			{
 				addAttributeModifier(
 						AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get(),
@@ -50,7 +50,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 
 				for (Metals.MetalType metalType : Metals.MetalType.values())
 				{
-					if (!metalType.hasAssociatedManifestation())
+					if (!metalType.hasAssociatedManifestation() || metalType == Metals.MetalType.DURALUMIN)
 					{
 						continue;
 					}
