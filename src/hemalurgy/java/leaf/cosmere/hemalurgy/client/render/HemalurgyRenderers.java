@@ -1,13 +1,16 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 30 - 1 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client.render;
 
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
+import leaf.cosmere.hemalurgy.client.render.renderer.KolossRenderer;
 import leaf.cosmere.hemalurgy.client.render.renderer.SpikeRenderer;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
+import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
@@ -23,6 +26,7 @@ public class HemalurgyRenderers
 			CuriosRendererRegistry.register(itemRegistryObject.get(), spikeRenderer);
 		}
 
+		EntityRenderers.register(HemalurgyEntityTypes.KOLOSS.get(), KolossRenderer::new);
 	}
 
 }
