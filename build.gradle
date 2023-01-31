@@ -651,7 +651,6 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					optionalDependency "patchouli"
 					optionalDependency "hemalurgy-cosmere"
 					optionalDependency "feruchemy-cosmere"
-					incompatible "allomancy"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -690,6 +689,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					optionalDependency "patchouli"
 					requiredDependency "feruchemy-cosmere"
 					requiredDependency "allomancy-cosmere"
+					incompatible "hemalurgy"
 				}
 			}
 			addGameVersion "Java ${java_version}"

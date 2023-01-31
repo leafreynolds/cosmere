@@ -1,11 +1,12 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 30 - 1 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client;
 
 import leaf.cosmere.hemalurgy.client.render.HemalurgyLayerDefinitions;
 import leaf.cosmere.hemalurgy.client.render.HemalurgyRenderers;
+import leaf.cosmere.hemalurgy.client.render.model.KolossModel;
 import leaf.cosmere.hemalurgy.client.render.model.SpikeModel;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,6 +22,7 @@ public class HemalurgyClientSetup
 	public static void registerLayers(final EntityRenderersEvent.RegisterLayerDefinitions evt)
 	{
 		evt.registerLayerDefinition(HemalurgyLayerDefinitions.SPIKE, SpikeModel::createLayer);
+		evt.registerLayerDefinition(HemalurgyLayerDefinitions.KOLOSS, KolossModel::createBodyLayer);
 	}
 
 	@SubscribeEvent
