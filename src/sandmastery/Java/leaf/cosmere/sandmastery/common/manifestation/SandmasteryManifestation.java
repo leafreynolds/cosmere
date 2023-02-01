@@ -10,6 +10,8 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 
 public class SandmasteryManifestation extends Manifestation
@@ -50,11 +52,19 @@ public class SandmasteryManifestation extends Manifestation
 	};
 
 	@Override
-	public void onModeChange(ISpiritweb data) {
-		if(!isActive(data)) return;
-		int mode = getMode(data);
+	public void onModeChange(ISpiritweb data, int lastMode) {
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
-		submodule.checkRibbons(data, this);
+		if(getMode(data) > lastMode) {
+			submodule.useRibbon(data, this);
+		} else if(getMode(data) < lastMode) {
+			submodule.releaseRibbon(data, this);
+		}
 	}
+
+	@Override
+	public Attribute getAttribute() {
+		return SandmasteryAttributes.RIBBONS.getAttribute();
+	}
+
 }

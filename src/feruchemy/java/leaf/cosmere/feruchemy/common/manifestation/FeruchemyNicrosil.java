@@ -110,9 +110,9 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 	}
 
 	@Override
-	public void onModeChange(ISpiritweb data)
+	public void onModeChange(ISpiritweb data, int lastMode)
 	{
-		super.onModeChange(data);
+		super.onModeChange(data, lastMode);
 
 		if (getMode(data) == 0)
 		{

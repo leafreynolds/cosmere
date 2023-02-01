@@ -143,7 +143,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 			if (getLiving().level.isClientSide && oldManifestationMode != newManifestationMode)
 			{
-				manifestation.onModeChange(this);
+				manifestation.onModeChange(this, oldManifestationMode);
 			}
 		}
 		selectedManifestation = ManifestationRegistry.fromID(nbt.getString("selected_power"));
@@ -545,8 +545,8 @@ public class SpiritwebCapability implements ISpiritweb
 		final int pMax = manifestation.modeMax(this);
 		final int pMin = manifestation.modeMin(this);
 		mode = Mth.clamp(mode, pMin, pMax);
-		MANIFESTATIONS_MODE.put(manifestation, mode);
-		manifestation.onModeChange(this);
+		int lastMode = MANIFESTATIONS_MODE.put(manifestation, mode);
+		manifestation.onModeChange(this, lastMode);
 	}
 
 	@Override

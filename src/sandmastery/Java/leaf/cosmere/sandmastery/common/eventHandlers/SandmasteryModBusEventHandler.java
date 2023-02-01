@@ -15,10 +15,7 @@ public class SandmasteryModBusEventHandler
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
     {
-        for (Taldain.Mastery mastery : Taldain.Mastery.values())
-        {
-            event.add(EntityType.PLAYER, SandmasteryAttributes.SANDMASTER_ATTRIBUTES.get(mastery).getAttribute());
-        }
+        event.add(EntityType.PLAYER, SandmasteryAttributes.RIBBONS.getAttribute());
     }
 }
 

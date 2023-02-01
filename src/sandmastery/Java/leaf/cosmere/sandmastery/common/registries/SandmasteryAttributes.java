@@ -13,17 +13,13 @@ import java.util.stream.Collectors;
 
 public class SandmasteryAttributes {
     public static final AttributeDeferredRegister ATTRIBUTES = new AttributeDeferredRegister(Sandmastery.MODID);
-
-    public static final Map<Taldain.Mastery, AttributeRegistryObject<Attribute>> SANDMASTER_ATTRIBUTES =
-            Arrays.stream(Taldain.Mastery.values())
-                    .collect(Collectors.toMap(
-                            Function.identity(),
-                            surge ->
-                                    ATTRIBUTES.register(
-                                            surge.getName(),
-                                            Sandmastery.MODID,
-                                            0,
-                                            0,
-                                            24
-                                    )));
+    
+    public static final AttributeRegistryObject<Attribute> RIBBONS =
+            ATTRIBUTES.register(
+                    "ribbons",
+                    Sandmastery.MODID,
+                    0,
+                    0,
+                    24
+            );
 }

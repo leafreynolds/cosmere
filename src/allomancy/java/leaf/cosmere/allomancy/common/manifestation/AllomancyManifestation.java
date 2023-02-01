@@ -64,9 +64,9 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	}
 
 	@Override
-	public void onModeChange(ISpiritweb data)
+	public void onModeChange(ISpiritweb data, int lastMode)
 	{
-		super.onModeChange(data);
+		super.onModeChange(data, lastMode);
 
 		if (Mth.abs(getMode(data)) != 0)
 		{

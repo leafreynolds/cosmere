@@ -68,9 +68,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 	@Override
-	public void onModeChange(ISpiritweb cap)
+	public void onModeChange(ISpiritweb cap, int lastMode)
 	{
-		super.onModeChange(cap);
+		super.onModeChange(cap, lastMode);
 
 		if (getMode(cap) != 0)
 		{

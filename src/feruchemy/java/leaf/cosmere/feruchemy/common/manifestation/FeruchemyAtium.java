@@ -20,9 +20,9 @@ public class FeruchemyAtium extends FeruchemyManifestation
 	}
 
 	@Override
-	public void onModeChange(ISpiritweb data)
+	public void onModeChange(ISpiritweb data, int lastMode)
 	{
-		super.onModeChange(data);
+		super.onModeChange(data, lastMode);
 		data.getLiving().refreshDimensions();
 	}
 

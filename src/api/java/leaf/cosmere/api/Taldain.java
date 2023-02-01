@@ -13,14 +13,14 @@ public class Taldain
 	public enum Mastery
 	{
 		ELEVATE(0),
-		PLATFORM(1),
-		STAIR(2),
+//		PLATFORM(1),
+//		STAIR(2),
 		LAUNCH(3),
-		PROJECTILE(4),
-		WALL(5),
-		SHIELD(6),
-		BUILDING(7),
-		DECOY(8),
+//		PROJECTILE(4),
+//		WALL(5),
+//		SHIELD(6),
+//		BUILDING(7),
+//		DECOY(8),
 		CUSHION(9);
 
 		private final int id;
