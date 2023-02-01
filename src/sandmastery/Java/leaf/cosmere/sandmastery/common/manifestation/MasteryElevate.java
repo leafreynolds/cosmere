@@ -38,7 +38,7 @@ public class MasteryElevate extends SandmasteryManifestation{
 
         if(getMode(data) < 3) return; // It's shown in White Sand that one can't lift themselves with fewer than 3 ribbons
         if(!submodule.adjustHydration(-10, false)) return; // Too dehydrated to use sand mastery
-        if(!enoughChargedSand(data, 10)) return;
+        if(!enoughChargedSand(data)) return;
 
         LivingEntity living = data.getLiving();
         int distFromGround = MiscHelper.distanceFromGround(living);
@@ -52,6 +52,6 @@ public class MasteryElevate extends SandmasteryManifestation{
         living.resetFallDistance();
 
         submodule.adjustHydration(-10, true);
-//        useChargedSand(data, 10);
+        useChargedSand(data);
     }
 }

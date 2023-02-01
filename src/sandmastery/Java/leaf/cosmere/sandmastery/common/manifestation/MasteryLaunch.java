@@ -40,7 +40,7 @@ public class MasteryLaunch extends SandmasteryManifestation{
 
         if(!submodule.adjustHydration(-10, false)) return;
         int scaleFactor = getMode(data);
-        if(!enoughChargedSand(data, 10 * scaleFactor)) return;
+        if(!enoughChargedSand(data)) return;
 
         LivingEntity living = data.getLiving();
         Vec3 direction = living.getForward();
@@ -53,6 +53,6 @@ public class MasteryLaunch extends SandmasteryManifestation{
         data.syncToClients(null);
 
         submodule.adjustHydration(-10, true);
-        useChargedSand(data, 10 * scaleFactor);
+        useChargedSand(data);
     }
 }
