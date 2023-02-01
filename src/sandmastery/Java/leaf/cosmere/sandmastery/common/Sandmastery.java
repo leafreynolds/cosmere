@@ -38,6 +38,8 @@ public class Sandmastery implements IModModule
         SandmasteryManifestations.MANIFESTATIONS.register(modBus);
         SandmasteryMenuTypes.MENU_TYPES.register(modBus);
 
+        SandmasteryDimensions.register();
+
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
     }

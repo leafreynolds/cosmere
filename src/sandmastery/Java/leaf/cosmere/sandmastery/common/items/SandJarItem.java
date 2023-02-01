@@ -8,6 +8,7 @@ import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainSandLayerBlock;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;

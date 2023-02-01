@@ -8,6 +8,7 @@ import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -81,6 +82,10 @@ public class MiscHelper {
         if(level.isClientSide()) return;
         int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
         if(checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition())) StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
+    }
+
+    public static boolean onTaldain(Level pLevel) {
+        return pLevel.dimension().equals(SandmasteryDimensions.DAYSIDE_TALDAIN_DIM_KEY);
     }
 
     public static int distanceFromGround(LivingEntity e) {

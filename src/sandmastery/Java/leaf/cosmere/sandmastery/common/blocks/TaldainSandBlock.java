@@ -54,7 +54,8 @@ public class TaldainSandBlock extends BaseFallingBlock
 			pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
 		}
 
-		if(!pLevel.canSeeSky(pPos.above())) return;
+		if (!MiscHelper.onTaldain(pLevel)) return; // Not on dayside taldain, so don't charge from the sun
+		if (!pLevel.canSeeSky(pPos.above())) return; // Can't see the sky, can't charge from it
 		pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
 
 		for(int i = 0; i < 2; ++i) {
