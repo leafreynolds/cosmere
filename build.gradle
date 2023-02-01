@@ -453,7 +453,7 @@ mixin {
 	//config 'cosmere.mixins.api.json'
 	config 'allomancy.mixins.json'
 	config 'feruchemy.mixins.json'
-	//config 'hemalurgy.mixins.json'
+	config 'hemalurgy.mixins.json'
 	config 'surgebinding.mixins.json'
 }
 
@@ -467,7 +467,8 @@ def getManifestAttributes(String title)
 			"Implementation-Version"  : "${project.ext.versionProperties["version"]}",
 			"Implementation-Vendor"   : "Cosmere",
 			"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-			"Automatic-Module-Name"   : title.toLowerCase(Locale.ROOT)
+			"Automatic-Module-Name"   : title.toLowerCase(Locale.ROOT),
+			"MixinConfigs"            : "${title.toLowerCase(Locale.ROOT)}.mixins.json"
 	]
 }
 
