@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 10 - 2022 ~ Leaf
+ * File updated ~ 1 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -38,11 +38,11 @@ public class SurgeGravitation extends SurgebindingManifestation
 
 					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) ((SpiritwebCapability) iSpiritweb).spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
 
-					if (submodule.adjustStormlight(20, true))
+					if (submodule.adjustStormlight(-20, true))
 					{
 						final LivingEntity entity = event.getEntity();
 						CosmereAPI.logger.info("%s has launched %s into the sky".formatted(player.getName().getString(), entity.getName().getString()));
-						
+
 						entity.stopRiding();
 						entity.setPos(event.getEntity().getX(), event.getEntity().getY() + 0.1d, event.getEntity().getZ());
 						entity.setOnGround(false);
