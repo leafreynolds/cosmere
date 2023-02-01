@@ -89,13 +89,15 @@ public class SandmasteryManifestation extends Manifestation
 			curios.removeIf(getIsItemInvalid());
 			items.removeIf(getIsItemInvalid());
 
+			List<ItemStack> allPouches = curios;
+			allPouches.addAll(items);
+
 			int required = getCost(data);
 
-			if (curios.isEmpty() && items.isEmpty()) return false;
+			if (allPouches.isEmpty()) return false;
 
 			int count = 0;
-			for(ItemStack curio : curios) {
-				ItemStack stack = curio;
+			for(ItemStack stack : allPouches) {
 				count += StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 				if(count > required) return true;
 			}
@@ -131,11 +133,6 @@ public class SandmasteryManifestation extends Manifestation
 		}
 	}
 
-		protected void useChargedSand(ISpiritweb data, int change) {
-		List<SlotResult> resultList = CuriosApi.getCuriosHelper().findCurios(data.getLiving(), SandmasteryItems.SAND_POUCH_ITEM.asItem());
-
-	}
-
 	public int getCost(ISpiritweb data)
 	{
 		int mode = data.getMode(this);
@@ -146,8 +143,8 @@ public class SandmasteryManifestation extends Manifestation
 	{
 		return obj ->
 		{
-			if (obj.getItem() instanceof SandPouchItem) return true;
-			return false;
+			if (obj.getItem() instanceof SandPouchItem) return false;
+			return true;
 		};
 	}
 
