@@ -39,11 +39,11 @@ public class MasteryLaunch extends SandmasteryManifestation{
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
 
         if(!submodule.adjustHydration(-10, false)) return;
+        int scaleFactor = getMode(data);
+        if(!enoughChargedSand(data, 10 * scaleFactor)) return;
 
         LivingEntity living = data.getLiving();
         Vec3 direction = living.getForward();
-
-        int scaleFactor = getMode(data);
         Vec3 add = living.getDeltaMovement().add(direction.multiply(scaleFactor, scaleFactor, scaleFactor));
         living.setDeltaMovement(VectorHelper.ClampMagnitude(add, 10));
         living.hurtMarked = true; // Allow the game to move the player
@@ -53,5 +53,6 @@ public class MasteryLaunch extends SandmasteryManifestation{
         data.syncToClients(null);
 
         submodule.adjustHydration(-10, true);
+        useChargedSand(data, 10 * scaleFactor);
     }
 }

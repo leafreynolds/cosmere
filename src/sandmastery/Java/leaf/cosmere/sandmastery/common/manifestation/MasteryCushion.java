@@ -41,10 +41,15 @@ public class MasteryCushion extends SandmasteryManifestation{
         if(movement.y > 0) return;
         double distFromGround = MiscHelper.distanceFromGround(living);
         if(!(distFromGround > 1 && distFromGround < 10)) return;
+
         if(!submodule.adjustHydration(-10, false)) return;
+        if(!enoughChargedSand(data, 10)) return;
+
+
         living.setDeltaMovement(movement.multiply(1, 0.05, 1));
         living.hurtMarked = true;
         living.resetFallDistance();
         submodule.adjustHydration(-10, true);
+        useChargedSand(data, 10);
     }
 }
