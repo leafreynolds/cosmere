@@ -25,6 +25,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.CuriosCapability;
@@ -83,15 +84,7 @@ public class SandmasteryManifestation extends Manifestation
 
 	protected boolean enoughChargedSand(ISpiritweb data) {
 		if(data.getLiving() instanceof Player player) {
-			List<ItemStack> curios = ItemChargeHelper.getChargeCurios(player);
-			List<ItemStack> items = ItemChargeHelper.getChargeItems(player);
-
-			curios.removeIf(getIsItemInvalid());
-			items.removeIf(getIsItemInvalid());
-
-			List<ItemStack> allPouches = curios;
-			allPouches.addAll(items);
-
+			List<ItemStack> allPouches = getSandPouches(player);
 			int required = getCost(data);
 
 			if (allPouches.isEmpty()) return false;
@@ -107,14 +100,7 @@ public class SandmasteryManifestation extends Manifestation
 
 	public void useChargedSand(ISpiritweb data) {
 		if(data.getLiving() instanceof Player player) {
-			List<ItemStack> curios = ItemChargeHelper.getChargeCurios(player);
-			List<ItemStack> items = ItemChargeHelper.getChargeItems(player);
-
-			curios.removeIf(getIsItemInvalid());
-			items.removeIf(getIsItemInvalid());
-
-			List<ItemStack> allPouches = curios;
-			allPouches.addAll(items);
+			List<ItemStack> allPouches = getSandPouches(player);
 
 			int change = getCost(data);
 
@@ -131,6 +117,19 @@ public class SandmasteryManifestation extends Manifestation
 				if(changeLeft <= 0) break;
 			}
 		}
+	}
+
+	protected List<ItemStack> getSandPouches(Player player) {
+		List<ItemStack> curios = ItemChargeHelper.getChargeCurios(player);
+		List<ItemStack> items = ItemChargeHelper.getChargeItems(player);
+
+		curios.removeIf(getIsItemInvalid());
+		items.removeIf(getIsItemInvalid());
+
+		List<ItemStack> allPouches = curios;
+		allPouches.addAll(items);
+
+		return allPouches;
 	}
 
 	public int getCost(ISpiritweb data)
