@@ -1,4 +1,4 @@
-// 1.19.2	2022-10-19T17:46:03.5959667	Recipes
+// 1.19.2	2023-02-03T08:36:26.8330328	Recipes
 77a0eac808078676e15eb82c1b3b7d89dbd6304e data/cosmere/advancements/recipes/cosmere.blocks/aluminum_block.json
 bcde6240066289f4e54c7ec9944611bd118a7530 data/cosmere/advancements/recipes/cosmere.blocks/atium_block.json
 0774becab0613f8e15e06d5af31b8d51b8e0f111 data/cosmere/advancements/recipes/cosmere.blocks/bendalloy_block.json
@@ -308,7 +308,7 @@ b5b7a4025d9ab461a76425af52514d5503de7c62 data/cosmere/recipes/lerasium_block.jso
 b434223e254dd0aad17e719a32afd07773be4219 data/cosmere/recipes/lerasium_ingot.json
 289d0080d8b0f494610e46c67d060c1d67b6535c data/cosmere/recipes/malatium_block.json
 54e286e81a5d9306754253e649eb56353e6fe99d data/cosmere/recipes/malatium_ingot.json
-0adf5fa95baad7c57c79c483a7a8f51db7d2b02c data/cosmere/recipes/metalworking_table.json
+000fe7f8c770b04c546968a78523ac7ceed72005 data/cosmere/recipes/metalworking_table.json
 64cc128ef12b5a3187bdb0418c6702de2cf2ddaa data/cosmere/recipes/nickel_block.json
 eaa3f7864374da91b56a328571ba1c19c454de9f data/cosmere/recipes/nickel_ingot.json
 2bf704215ea26579b50dcdd88f2ee123800fb330 data/cosmere/recipes/nickel_ingot_from_blasting_deepslate_nickel_ore.json

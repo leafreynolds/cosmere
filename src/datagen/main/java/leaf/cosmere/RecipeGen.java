@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 10 - 2022 ~ Leaf
+ * File updated ~ 3 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -41,7 +41,7 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 
 		ShapedRecipeBuilder
 				.shaped(BlocksRegistry.METALWORKING_TABLE.getBlock())
-				.define('X', Tags.Items.INGOTS)
+				.define('X', ItemsRegistry.METAL_INGOTS.get(Metals.MetalType.STEEL).asItem())
 				.define('Y', ItemTags.PLANKS)
 				.pattern("XX")
 				.pattern("YY")
