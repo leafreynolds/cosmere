@@ -11,15 +11,17 @@ import org.jetbrains.annotations.NotNull;
 public class SandPouchSlot extends SlotItemHandler {
 
     private final int index;
+    private final boolean input;
 
-    public SandPouchSlot(IItemHandlerModifiable inv, int index, int x, int y) {
-        super((IItemHandler) inv, index, x, y);
+    public SandPouchSlot(IItemHandlerModifiable inv, int index, int x, int y, boolean input) {
+        super(inv, index, x, y);
         this.index = index;
+        this.input = input;
     }
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        return SandPouchItem.SUPPORTED_ITEMS.test(stack);
+        return input ? SandPouchItem.SUPPORTED_ITEMS.test(stack) : false;
     }
 
     @Override

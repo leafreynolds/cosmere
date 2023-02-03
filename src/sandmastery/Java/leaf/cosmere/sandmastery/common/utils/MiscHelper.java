@@ -111,4 +111,12 @@ public class MiscHelper {
         if(stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem()) return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
         else return 0;
     }
+
+    public static String intToAbbreviatedStr(int num) {
+        if(num < 1e3) return String.valueOf(num);
+        if(num < 1e6) return String.valueOf(num/1000) + "k";
+        if(num < 1e9) return String.valueOf(num/1000000) + "m";
+        if(num < 1e12) return String.valueOf(num/1000000000) + "b";
+        return "";
+    }
 }

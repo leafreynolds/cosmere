@@ -30,12 +30,14 @@ public class SandPouchContainerMenu extends AbstractContainerMenu {
         int invStart = 0;
 
         // Pouch Slots
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < 1; ++i)
         {
-            for (int j = 0; j < 9; ++j)
+            for (int j = 0; j < 3; ++j)
             {
+                boolean input = i == 0 && j == 0;
+
                 int k = j + i * 9;
-                addSlot(new SandPouchSlot(pouchInv, k, 8 + j * 18, 18 + i * 18));
+                addSlot(new SandPouchSlot(pouchInv, k, 8 + j * 18, 18 + i * 18, input));
             }
         }
 
@@ -55,30 +57,32 @@ public class SandPouchContainerMenu extends AbstractContainerMenu {
     @Override
     public ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex) {
         ItemStack itemStack = ItemStack.EMPTY;
-        int maxSlots = SandPouchInventory.size;
 
-        Slot slot = this.slots.get(pIndex);
-        if(slot.hasItem()) {
-            ItemStack itemStack1 = slot.getItem();
-            itemStack = itemStack1.copy();
-
-            if(pIndex < maxSlots) {
-                if(!this.moveItemStackTo(itemStack1, maxSlots, this.slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                };
-            } else if(!this.moveItemStackTo(itemStack1, 0, maxSlots, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (itemStack1.isEmpty())
-            {
-                slot.set(ItemStack.EMPTY);
-            }
-            else
-            {
-                slot.setChanged();
-            }
-        }
+        // TODO: make shift clicking actually work.. right now it duplicates the crap out of the sand. Commented out in repo until fixed
+//        int maxSlots = SandPouchInventory.size;
+//
+//        Slot slot = this.slots.get(pIndex);
+//        if(slot.hasItem()) {
+//            ItemStack itemStack1 = slot.getItem();
+//            itemStack = itemStack1.copy();
+//
+//            if(pIndex < maxSlots) {
+//                if(!this.moveItemStackTo(itemStack1, maxSlots, this.slots.size(), true)) {
+//                    return ItemStack.EMPTY;
+//                };
+//            } else if(!this.moveItemStackTo(itemStack1, 0, maxSlots, false)) {
+//                return ItemStack.EMPTY;
+//            }
+//
+//            if (itemStack1.isEmpty())
+//            {
+//                slot.set(ItemStack.EMPTY);
+//            }
+//            else
+//            {
+//                slot.setChanged();
+//            }
+//        }
 
         return itemStack;
     }

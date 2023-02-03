@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.sandpouch.SandPouchContainerMenu;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -51,5 +52,6 @@ public class SandPouchContainerScreen extends AbstractContainerScreen<SandPouchC
     {
         //write the name of the itemstack
         this.font.draw(matrixStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
+        this.font.draw(matrixStack, "Number of layers available: " + MiscHelper.intToAbbreviatedStr(this.menu.slots.get(2).getItem().getCount()), this.titleLabelX, this.titleLabelY + 32, 4210752);
     }
 }
