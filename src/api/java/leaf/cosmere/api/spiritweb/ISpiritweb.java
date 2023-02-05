@@ -28,7 +28,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	void removeManifestation(Manifestation manifestation);
 
-	Manifestation manifestation();
+	Manifestation getSelectedManifestation();
 
 	boolean canTickManifestation(Manifestation manifestation);
 

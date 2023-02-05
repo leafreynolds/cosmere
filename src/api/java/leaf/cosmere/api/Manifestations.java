@@ -18,6 +18,7 @@ public class Manifestations
 	public final static int SURGEBINDING_ID = 3;
 	public final static int AONDOR_ID = 4;
 	public final static int AWAKENING_ID = 5;
+	public final static int SANDMASTERY_ID = 6;
 
 	public enum ManifestationTypes
 	{
@@ -35,7 +36,10 @@ public class Manifestations
 		AON_DOR(AONDOR_ID),
 
 		// AonDor
-		AWAKENING(AWAKENING_ID);
+		AWAKENING(AWAKENING_ID),
+
+		// Taldain's Sand Mastery
+		SANDMASTERY(SANDMASTERY_ID);
 
 
 		ManifestationTypes(int id)
@@ -86,6 +90,8 @@ public class Manifestations
 				case AON_DOR:
 					break;
 				case AWAKENING:
+					break;
+				case SANDMASTERY:
 					break;
 			}
 			return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("cosmere", "none"));

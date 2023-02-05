@@ -44,7 +44,7 @@ public class ClientEvents
 			{
 				final int delta = Mth.clamp((int) Math.round(event.getScrollDelta()), -1, 1);
 
-				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), delta));
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(spiritweb.getSelectedManifestation(), delta));
 
 				event.setCanceled(true);
 
@@ -106,7 +106,7 @@ public class ClientEvents
 				{
 					dir = 1;
 				}
-				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(spiritweb.manifestation(), dir * (
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(spiritweb.getSelectedManifestation(), dir * (
 						modeIncreasePressed ? 1 : -1)));
 			}
 		});
@@ -142,7 +142,7 @@ public class ClientEvents
 			{
 				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
 				{
-					profiler.push(spiritweb.manifestation().getName());
+					profiler.push(spiritweb.getSelectedManifestation().getName());
 					spiritweb.renderWorldEffects(event);
 					profiler.pop();
 

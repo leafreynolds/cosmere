@@ -5,7 +5,7 @@
 //  Changes involve:
 //  replacing mod and sub-mod names, and using different mod dependencies and versions
 //  Changelog scraping via teamcity powershell script
-//	Setting up gradle with the ability to use mixins in all sourcesets [main,allomancy,feruchemy,hemalurgy,surgebinding]
+//	Setting up gradle with the ability to use mixins in all sourcesets [main,allomancy,feruchemy,hemalurgy,sandmastery,surgebinding]
 //	Removed jar that contains all mods in one, as I couldn't make it play nicely with mixins.
 //	That meant I didn't need the groovy-script MergeJars
 //
@@ -58,7 +58,7 @@ def full_mod_version = mod_version + "." + build_number
 def release_type = System.env.TC_RELEASE_TYPE ?: "alpha"
 
 ext {
-	secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding']
+	secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding', 'sandmastery']
 	extraTypes = ['datagen', 'gameTest']
 	jsonPatterns = ["**/*.json", "**/*.mcmeta"]
 	//version properties here automatically update versions in all the mods.toml files
@@ -347,7 +347,7 @@ def setupRunConfig(RunConfig runConfig, boolean supportsGameTests, String direct
 	runConfig.property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 	if (supportsGameTests) {
 		//Specify all our mods as domains to look for game tests
-		runConfig.property 'forge.enabledGameTestNamespaces', 'cosmere,allomancy,feruchemy,hemalurgy,surgebinding'
+		runConfig.property 'forge.enabledGameTestNamespaces', 'cosmere,allomancy,feruchemy,hemalurgy,surgebinding,sandmastery'
 	}
 
 	if (project.hasProperty('forge_force_ansi')) {
@@ -424,6 +424,7 @@ dependencies {
 	feruchemyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	hemalurgyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	surgebindingAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	sandmasteryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -448,6 +449,7 @@ mixin {
 	add sourceSets.feruchemy, 'mixins.cosmere.feruchemy.refmap.json'
 	add sourceSets.hemalurgy, 'mixins.cosmere.hemalurgy.refmap.json'
 	add sourceSets.surgebinding, 'mixins.cosmere.surgebinding.refmap.json'
+	add sourceSets.sandmastery, 'mixins.cosmere.sandmastery.refmap.json'
 
 	config 'cosmere.mixins.json'
 	//config 'cosmere.mixins.api.json'
@@ -479,10 +481,10 @@ tasks.named('jar', Jar).configure {
 }
 
 tasks.named('sourcesJar', Jar).configure {
-	dependsOn(classes, apiClasses, allomancyClasses, feruchemyClasses, hemalurgyClasses, surgebindingClasses)
+	dependsOn(classes, apiClasses, allomancyClasses, feruchemyClasses, hemalurgyClasses, surgebindingClasses, sandmasteryClasses)
 	duplicatesStrategy(DuplicatesStrategy.FAIL)
 	//Note: Already contains main source set's sources by default
-	from(sourceSets.api.allJava, sourceSets.allomancy.allJava, sourceSets.feruchemy.allJava, sourceSets.hemalurgy.allJava, sourceSets.surgebinding.allJava)
+	from(sourceSets.api.allJava, sourceSets.allomancy.allJava, sourceSets.feruchemy.allJava, sourceSets.hemalurgy.allJava, sourceSets.surgebinding.allJava, sourceSets.sandmastery.allJava)
 	manifest.attributes(getManifestAttributes("Cosmere"))
 }
 
@@ -504,6 +506,7 @@ def allomancyJar = secondaryJar(sourceSets.allomancy, 'Allomancy')
 def feruchemyJar = secondaryJar(sourceSets.feruchemy, 'Feruchemy')
 def hemalurgyJar = secondaryJar(sourceSets.hemalurgy, 'Hemalurgy')
 def surgebindingJar = secondaryJar(sourceSets.surgebinding, 'Surgebinding')
+def sandmasteryJar = secondaryJar(sourceSets.sandmastery, 'Sandmastery')
 
 tasks.withType(JavaCompile).configureEach({
 	options.encoding = 'UTF-8'
@@ -517,6 +520,7 @@ artifacts {
 	archives hemalurgyJar
 	archives feruchemyJar
 	archives surgebindingJar
+	archives sandmasteryJar
 	archives sourcesJar
 }
 
@@ -608,7 +612,7 @@ def changeLogResolver = { ->
 
 if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('curseforge_api_token')) {
 	println "Enabling Curseforge config"
-	tasks.named('curseforge').configure { dependsOn(jar, allomancyJar, feruchemyJar, hemalurgyJar, surgebindingJar, apiJar) }
+	tasks.named('curseforge').configure { dependsOn(jar, allomancyJar, feruchemyJar, hemalurgyJar, surgebindingJar, sandmasteryJar, apiJar) }
 	curseforge {
 		//https://authors.curseforge.com/account/api-tokens
 		apiKey = System.getenv("CURSEFORGE_API_TOKEN") ?: project.findProperty("curseforge_api_token")

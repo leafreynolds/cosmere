@@ -106,7 +106,7 @@ public class SpiritwebMenu extends Screen
 			visibility = 0;
 			lastChange = Stopwatch.createStarted();
 
-			selectedManifestation = spiritweb.manifestation();
+			selectedManifestation = spiritweb.getSelectedManifestation();
 
 			SetupButtons();
 		}

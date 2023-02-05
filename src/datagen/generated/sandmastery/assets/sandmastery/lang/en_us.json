@@ -1,0 +1,19 @@
+{
+  "block.sandmastery.sand_jar_block": "Sand Jar Block",
+  "block.sandmastery.taldain_sand": "Taldain Sand",
+  "block.sandmastery.taldain_sand_layer": "Taldain Sand Layer",
+  "item.sandmastery.jar": "Jar",
+  "item.sandmastery.qido": "Qido",
+  "item.sandmastery.sand_jar": "Sand Jar",
+  "item.sandmastery.sand_pouch": "Sand Pouch",
+  "key.cosmere.sandmastery.elevate": "Use Elevate Mastery",
+  "key.cosmere.sandmastery.launch": "Use Launch Mastery",
+  "manifestation.sandmastery.cushion": "Sand Mastery Cushion",
+  "manifestation.sandmastery.cushion.description": "Masters can use cushion",
+  "manifestation.sandmastery.elevate": "Sand Mastery Elevate",
+  "manifestation.sandmastery.elevate.description": "Masters can use elevate",
+  "manifestation.sandmastery.launch": "Sand Mastery Launch",
+  "manifestation.sandmastery.launch.description": "Masters can use launch",
+  "manifestation.sandmastery.projectile": "Sand Mastery Projectile",
+  "manifestation.sandmastery.projectile.description": "Masters can use projectile"
+}

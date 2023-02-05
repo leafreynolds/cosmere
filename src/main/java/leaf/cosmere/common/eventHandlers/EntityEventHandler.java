@@ -7,6 +7,7 @@ package leaf.cosmere.common.eventHandlers;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
@@ -159,7 +160,18 @@ public class EntityEventHandler
 				//at this time, players are twin-born minimum, so no need to try give powers here
 			}
 		}
+
+		// TODO Change to only use one manifestation
+		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+		{
+			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
+			{
+				spiritwebCapability.giveManifestation(manifestation, MathHelper.randomInt(1, 24));
+
+			}
+		}
 	}
+
 
 	@SubscribeEvent
 	public static void onLivingTick(LivingEvent.LivingTickEvent event)

@@ -22,9 +22,9 @@ import java.util.stream.Stream;
 
 public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 {
-	//stormlight stored
+    //stormlight stored
 
-	private int stormlightStored = 0;
+    private int stormlightStored = 0;
 
 
 	@Override
@@ -54,39 +54,39 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 					//todo healing stormlight config
 					final int stormlightHealingCostMultiplier = 20;
 
-					if (adjustStormlight(-stormlightHealingCostMultiplier, true))
-					{
-						//todo stormlight healing better
-						SurgeProgression.heal(livingEntity, livingEntity.getHealth() + 1);
-					}
-				}
-				//otherwise conditional effects
-				else
-				{
-					if (livingEntity.getCombatTracker().isInCombat())
-					{
-						//todo combat effect cost
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, 0));
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
-						adjustStormlight(-30, true);
-					}
-					else if (livingEntity.isUnderWater())
-					{
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.WATER_BREATHING, 0));
-						//todo waterbreathing stormlight cost
-						adjustStormlight(-10, true);
-					}
-					else
-					{
-						//todo detect better based on what the player is doing? mining means haste,
-						//travelling means movement etc. Not sure if that's really feasible though
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DIG_SPEED, 0));
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
-						adjustStormlight(-30, true);
-					}
-				}
+                    if (adjustStormlight(-stormlightHealingCostMultiplier, true))
+                    {
+                        //todo stormlight healing better
+                        SurgeProgression.heal(livingEntity, livingEntity.getHealth() + 1);
+                    }
+                }
+                //otherwise conditional effects
+                else
+                {
+                    if (livingEntity.getCombatTracker().isInCombat())
+                    {
+                        //todo combat effect cost
+                        livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, 0));
+                        livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
+                        livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
+                        adjustStormlight(-30, true);
+                    }
+                    else if (livingEntity.isUnderWater())
+                    {
+                        livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.WATER_BREATHING, 0));
+                        //todo waterbreathing stormlight cost
+                        adjustStormlight(-10, true);
+                    }
+                    else
+                    {
+                        //todo detect better based on what the player is doing? mining means haste,
+                        //travelling means movement etc. Not sure if that's really feasible though
+                        livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DIG_SPEED, 0));
+                        livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
+                        livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
+                        adjustStormlight(-30, true);
+                    }
+                }
 
 				//todo decide what's appropriate for reducing stormlight
 				//maybe reducing cost based on how many ideals they have sworn?
@@ -126,40 +126,40 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 	}
 
-	@Override
-	public void deserialize(ISpiritweb spiritweb)
-	{
-		stormlightStored = spiritweb.getCompoundTag().getInt("stored_stormlight");
-	}
+    @Override
+    public void deserialize(ISpiritweb spiritweb)
+    {
+        stormlightStored = spiritweb.getCompoundTag().getInt("stored_stormlight");
+    }
 
-	@Override
-	public void serialize(ISpiritweb spiritweb)
-	{
-		final CompoundTag compoundTag = spiritweb.getCompoundTag();
+    @Override
+    public void serialize(ISpiritweb spiritweb)
+    {
+        final CompoundTag compoundTag = spiritweb.getCompoundTag();
 
-		compoundTag.putInt("stored_stormlight", stormlightStored);
-	}
+        compoundTag.putInt("stored_stormlight", stormlightStored);
+    }
 
-	public int getStormlight()
-	{
-		return stormlightStored;
-	}
+    public int getStormlight()
+    {
+        return stormlightStored;
+    }
 
-	public boolean adjustStormlight(int amountToAdjust, boolean doAdjust)
-	{
-		int stormlight = getStormlight();
+    public boolean adjustStormlight(int amountToAdjust, boolean doAdjust)
+    {
+        int stormlight = getStormlight();
 
-		final int newSLValue = stormlight + amountToAdjust;
-		if (newSLValue >= 0)
-		{
-			if (doAdjust)
-			{
-				stormlightStored = newSLValue;
-			}
+        final int newSLValue = stormlight + amountToAdjust;
+        if (newSLValue >= 0)
+        {
+            if (doAdjust)
+            {
+                stormlightStored = newSLValue;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

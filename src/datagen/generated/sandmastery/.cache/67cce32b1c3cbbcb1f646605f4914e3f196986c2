@@ -1,0 +1,4 @@
+// 1.19.2	2022-11-20T19:09:29.557282	LootTables
+944b73e118ce026fa2c2cfa9395bc9f4e80a843c data/sandmastery/loot_tables/blocks/sand_jar_block.json
+e8eb1066cde54d9eed9ad91650db67ed35f57948 data/sandmastery/loot_tables/blocks/taldain_sand.json
+45ff5f442258c2401938f71bde84f88abf38abe8 data/sandmastery/loot_tables/blocks/taldain_sand_layer.json

@@ -38,7 +38,7 @@ public class Manifestation implements IManifestationProvider
 		return 0;
 	}
 
-	public void onModeChange(ISpiritweb data)
+	public void onModeChange(ISpiritweb data, int lastMode)
 	{
 
 	}

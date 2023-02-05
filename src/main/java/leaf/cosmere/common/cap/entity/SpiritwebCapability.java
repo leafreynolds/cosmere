@@ -143,7 +143,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 			if (getLiving().level.isClientSide && oldManifestationMode != newManifestationMode)
 			{
-				manifestation.onModeChange(this);
+				manifestation.onModeChange(this, oldManifestationMode);
 			}
 		}
 		selectedManifestation = ManifestationRegistry.fromID(nbt.getString("selected_power"));
@@ -288,6 +288,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		String stringToDraw2 = "";
 
+
 		//todo migrate drawing text to manifestation, this shouldn't be in main module.
 		if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
 		{
@@ -319,11 +320,6 @@ public class SpiritwebCapability implements ISpiritweb
 				case 2, 3 -> rate = "Flared!";//copper has a 3rd mode for only smoking self
 			}
 
-			stringToDraw2 = "Mode: " + rate;
-		}
-		else
-		{
-			stringToDraw2 = "Mode: " + mode;
 		}
 
 		//todo translations
@@ -338,6 +334,12 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		selectedManifestation = manifestation;
 	}
+
+	@Override
+	public Manifestation getSelectedManifestation()
+	{
+		return selectedManifestation;
+	};
 
 	public boolean hasBeenInitialized()
 	{
@@ -507,12 +509,6 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public Manifestation manifestation()
-	{
-		return selectedManifestation;
-	}
-
-	@Override
 	public String changeManifestation(int dir)
 	{
 		List<Manifestation> unlockedManifestations = getAvailableManifestations();
@@ -549,8 +545,8 @@ public class SpiritwebCapability implements ISpiritweb
 		final int pMax = manifestation.modeMax(this);
 		final int pMin = manifestation.modeMin(this);
 		mode = Mth.clamp(mode, pMin, pMax);
-		MANIFESTATIONS_MODE.put(manifestation, mode);
-		manifestation.onModeChange(this);
+		int lastMode = MANIFESTATIONS_MODE.put(manifestation, mode);
+		manifestation.onModeChange(this, lastMode);
 	}
 
 	@Override
@@ -602,7 +598,7 @@ public class SpiritwebCapability implements ISpiritweb
 			throw new IllegalStateException("Don't sync client -> server");
 		}
 
-		if (manifestation() == ManifestationRegistry.NONE.get())
+		if (getSelectedManifestation() == ManifestationRegistry.NONE.get())
 		{
 			//find first power
 			Optional<Manifestation> first = getAvailableManifestations().stream().findFirst();

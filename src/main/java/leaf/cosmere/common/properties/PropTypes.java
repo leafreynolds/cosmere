@@ -8,7 +8,11 @@ import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SandBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 
 import java.util.function.Supplier;
 
@@ -27,6 +31,11 @@ public class PropTypes
 				Block.Properties
 						.of(Material.METAL)
 						.strength(2.0F, 6.0F)
+						.requiresCorrectToolForDrops();
+		public static final Supplier<BlockBehaviour.Properties> SAND = () ->
+				BlockBehaviour.Properties
+						.of(Material.SAND)
+						.strength(0.5f)
 						.requiresCorrectToolForDrops();
 	}
 
