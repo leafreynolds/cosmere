@@ -9,19 +9,20 @@ import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
 import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
-import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_ELEVATE;
-import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_LAUNCH;
+import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.*;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SandmasteryKeybindings {
 
     public static KeyMapping SANDMASTERY_LAUNCH;
     public static KeyMapping SANDMASTERY_ELEVATE;
+    public static KeyMapping SANDMASTERY_PROJECTILE;
 
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event)
     {
         event.register(SANDMASTERY_LAUNCH = new KeyMapping(KEY_SANDMASTERY_LAUNCH, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
         event.register(SANDMASTERY_ELEVATE = new KeyMapping(KEY_SANDMASTERY_ELEVATE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+        event.register(SANDMASTERY_PROJECTILE = new KeyMapping(KEY_SANDMASTERY_PROJECTILE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
     }
 }

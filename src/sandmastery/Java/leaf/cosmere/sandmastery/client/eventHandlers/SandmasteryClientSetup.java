@@ -8,9 +8,11 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.sandmastery.client.gui.SandPouchContainerScreen;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryEntityTypes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
 import leaf.cosmere.sandmastery.common.sandpouch.SandPouchContainerMenu;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -56,6 +58,7 @@ public class SandmasteryClientSetup
 	@SubscribeEvent
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
+		event.registerEntityRenderer(SandmasteryEntityTypes.SAND_PROJECTILE.get(), ThrownItemRenderer::new);
 	}
 
 	//special thank you to the chisels and bits team who have an example of how to register other sprites

@@ -8,10 +8,7 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.common.registration.impl.ManifestationDeferredRegister;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;
-import leaf.cosmere.sandmastery.common.manifestation.MasteryCushion;
-import leaf.cosmere.sandmastery.common.manifestation.MasteryElevate;
-import leaf.cosmere.sandmastery.common.manifestation.MasteryLaunch;
-import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
+import leaf.cosmere.sandmastery.common.manifestation.*;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -42,6 +39,8 @@ public class SandmasteryManifestations
 				return new MasteryElevate(mastery);
 			case CUSHION:
 				return new MasteryCushion(mastery);
+			case PROJECTILE:
+				return new MasteryProjectile(mastery);
 			default:
 				return new SandmasteryManifestation(mastery);
 		}

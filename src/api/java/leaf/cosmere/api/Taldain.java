@@ -16,7 +16,7 @@ public class Taldain
 //		PLATFORM(1),
 //		STAIR(2),
 		LAUNCH(3),
-//		PROJECTILE(4),
+		PROJECTILE(4),
 //		WALL(5),
 //		SHIELD(6),
 //		BUILDING(7),

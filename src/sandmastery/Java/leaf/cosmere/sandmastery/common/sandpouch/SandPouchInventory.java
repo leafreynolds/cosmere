@@ -200,6 +200,10 @@ public class SandPouchInventory  implements ICapabilityProvider, INBTSerializabl
         protected void setLayers(int layers) {
             this.layers = layers;
         }
+
+        public int getLayers() {
+            return this.layers;
+        }
     };
 
     private final LazyOptional<IItemHandler> opt = LazyOptional.of(() -> inv);

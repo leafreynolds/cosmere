@@ -19,6 +19,7 @@ import java.util.List;
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	private int hydrationLevel = 10000;
+	private int projectileCooldown = 0;
 	public final int MAX_HYDRATION = 10000;
 	private LinkedList<SandmasteryManifestation> ribbonsInUse= new LinkedList<>();
 
@@ -82,6 +83,19 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 		return false;
 	}
+
+	public void tickProjectileCooldown() {
+		this.projectileCooldown -= this.projectileCooldown > 0 ? 1 : 0;
+	}
+
+	public void setProjectileCooldown(int cooldown) {
+		this.projectileCooldown = cooldown;
+	}
+
+	public boolean projectileReady() {
+		return this.projectileCooldown == 0;
+	}
+
 
 	public void useRibbon(ISpiritweb data, SandmasteryManifestation manifestation) {
 		int maxRibbons = (int) manifestation.getStrength(data, false);

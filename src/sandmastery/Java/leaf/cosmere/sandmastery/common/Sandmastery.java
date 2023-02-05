@@ -7,6 +7,7 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.network.SandmasteryPacketHandler;
 import leaf.cosmere.sandmastery.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,6 +26,8 @@ public class Sandmastery implements IModModule
     public static Sandmastery instance;
     public final Version versionNumber;
 
+    private final SandmasteryPacketHandler packetHandler;
+
     public Sandmastery() {
         Cosmere.addModule(instance = this);
 
@@ -35,13 +38,15 @@ public class Sandmastery implements IModModule
         SandmasteryItems.ITEMS.register(modBus);
         SandmasteryBlocksRegistry.BLOCKS.register(modBus);
         SandmasteryAttributes.ATTRIBUTES.register(modBus);
+        SandmasteryEntityTypes.ENTITY_TYPES.register(modBus);
         SandmasteryManifestations.MANIFESTATIONS.register(modBus);
         SandmasteryMenuTypes.MENU_TYPES.register(modBus);
 
         SandmasteryDimensions.register();
 
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
-        versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+        this.versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+        this.packetHandler = new SandmasteryPacketHandler();
     }
 
     public static ResourceLocation rl(String path) {
@@ -50,6 +55,11 @@ public class Sandmastery implements IModModule
 
     @Override
     public Version getVersion() { return versionNumber; }
+
+    public static SandmasteryPacketHandler packetHandler()
+    {
+        return instance.packetHandler;
+    }
 
     @Override
     public String getName() { return "Sandmastery"; }
@@ -78,5 +88,7 @@ public class Sandmastery implements IModModule
         event.enqueueWork(() ->
         {
         });
+
+        this.packetHandler.initialize();
     }
 }

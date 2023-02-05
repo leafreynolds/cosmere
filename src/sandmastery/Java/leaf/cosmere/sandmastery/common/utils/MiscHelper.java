@@ -11,6 +11,7 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -18,6 +19,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -106,8 +108,8 @@ public class MiscHelper {
     }
 
     public static int getChargeFromItemStack(ItemStack stack) {
-        if(stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem()) return stack.getCount()*100;
-        if(stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem()) return stack.getCount()*800;
+        if(stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem()) return stack.getCount()*10;
+        if(stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem()) return stack.getCount()*80;
         if(stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem()) return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
         else return 0;
     }
@@ -118,5 +120,11 @@ public class MiscHelper {
         if(num < 1e9) return String.valueOf(num/1000000) + "m";
         if(num < 1e12) return String.valueOf(num/1000000000) + "b";
         return "";
+    }
+
+    public static void logToChat(ISpiritweb data, String msg) {
+        if (data.getLiving() instanceof Player player) {
+            player.sendSystemMessage(Component.literal(msg));
+        }
     }
 }
