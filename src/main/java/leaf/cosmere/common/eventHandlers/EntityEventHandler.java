@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 1 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -56,7 +56,7 @@ public class EntityEventHandler
 			//players always start with powers
 			if (eventEntity instanceof Player)
 			{
-				//todo from random powertype?
+				//todo choose based on planet? eg scadrial gets twinborn, roshar gets surgebinding etc?
 				{
 					//give random power
 					giveEntityStartingManifestation(livingEntity, spiritweb);
@@ -83,6 +83,9 @@ public class EntityEventHandler
 
 	public static boolean canStartWithPowers(Entity entity)
 	{
+		//thanks to type erasure, java neutered their generics system.
+		//No nice checking of parent types for us.
+
 		return entity instanceof Player
 				|| entity instanceof AbstractVillager
 				|| entity instanceof ZombieVillager
@@ -90,7 +93,9 @@ public class EntityEventHandler
 				|| entity instanceof AbstractPiglin;
 	}
 
-	//todo eventually we want to replace this. Maybe an origins style menu that lets you choose a randomised power by world type
+	//todo eventually we want to replace this.
+	// Maybe an origins style menu that lets you choose a randomised power by world type
+	// Each mod could report the available powers, and what other mods they're allowed to spawn powers with (allomancy/feruchemy)
 	public static void giveEntityStartingManifestation(LivingEntity entity, SpiritwebCapability spiritwebCapability)
 	{
 		boolean isPlayerEntity = entity instanceof Player;

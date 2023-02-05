@@ -712,6 +712,26 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 			addGameVersion "Java ${java_version}"
 			addGameVersion "${minecraft_version}"
 		}
+
+		//SandMastery
+		project {
+			id = '695387'
+			changelogType = "html"
+			changelog = changeLogResolver
+			releaseType = "${release_type}"
+			mainArtifact(surgebindingJar.get()) {
+				relations {
+					requiredDependency "cosmere"
+					optionalDependency "patchouli"
+					optionalDependency "allomancy-cosmere"
+					optionalDependency "feruchemy-cosmere"
+					optionalDependency "hemalurgy-cosmere"
+					optionalDependency "surgebinding"
+				}
+			}
+			addGameVersion "Java ${java_version}"
+			addGameVersion "${minecraft_version}"
+		}
 	}
 }
 
