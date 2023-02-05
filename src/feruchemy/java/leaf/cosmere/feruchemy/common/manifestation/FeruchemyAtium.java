@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 31 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -8,6 +8,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -17,6 +18,13 @@ public class FeruchemyAtium extends FeruchemyManifestation
 	public FeruchemyAtium(Metals.MetalType metalType)
 	{
 		super(metalType);
+	}
+
+
+	@Override
+	public Attribute getAttribute()
+	{
+		return FeruchemyAttributes.FERUCHEMY_ATTRIBUTES.get(Metals.MetalType.ELECTRUM).getAttribute();
 	}
 
 	@Override

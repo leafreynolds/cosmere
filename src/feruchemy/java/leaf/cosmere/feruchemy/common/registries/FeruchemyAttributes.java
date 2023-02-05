@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 31 - 10 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.registries;
@@ -21,7 +21,7 @@ public class FeruchemyAttributes
 
 	public static final Map<Metals.MetalType, AttributeRegistryObject<Attribute>> FERUCHEMY_ATTRIBUTES =
 			Arrays.stream(Metals.MetalType.values())
-					.filter(Metals.MetalType::hasAssociatedManifestation)
+					.filter(metalType -> metalType != Metals.MetalType.ATIUM && metalType.hasAssociatedManifestation())
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type ->

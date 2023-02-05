@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.eventHandlers;
@@ -46,7 +46,7 @@ public class AllomancyModBusEventHandler
 		{
 			for (Metals.MetalType metalType : Metals.MetalType.values())
 			{
-				if (metalType.hasAssociatedManifestation())
+				if (metalType.hasAssociatedManifestation() && AllomancyAttributes.ALLOMANCY_ATTRIBUTES.containsKey(metalType))
 				{
 					event.add(entityType, AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get());
 				}

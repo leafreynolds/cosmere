@@ -1,14 +1,16 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 1 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 
@@ -19,6 +21,12 @@ public class AllomancyAtium extends AllomancyManifestation
 		super(metalType);
 
 
+	}
+
+	@Override
+	public Attribute getAttribute()
+	{
+		return AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(Metals.MetalType.ELECTRUM).getAttribute();
 	}
 
 	@Override
