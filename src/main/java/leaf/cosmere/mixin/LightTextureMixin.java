@@ -1,8 +1,8 @@
 /*
- * File updated ~ 14 - 10 - 2022 ~ Leaf
+ * File updated ~ 6 - 2 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.common.mixin;
+package leaf.cosmere.mixin;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;

@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "leaf.cosmere.common.mixin",
+  "package": "leaf.cosmere.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "mixins.cosmere.refmap.json",
   "mixins": [

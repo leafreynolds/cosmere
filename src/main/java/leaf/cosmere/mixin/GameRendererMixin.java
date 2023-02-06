@@ -1,4 +1,8 @@
-package leaf.cosmere.common.mixin;
+/*
+ * File updated ~ 6 - 2 - 2023 ~ Leaf
+ */
+
+package leaf.cosmere.mixin;
 
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.effect.MobEffectInstance;
