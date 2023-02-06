@@ -722,6 +722,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 			mainArtifact(sandmasteryJar.get()) {
 				relations {
 					requiredDependency "cosmere"
+					requiredDependency "curios"
 					optionalDependency "patchouli"
 					optionalDependency "allomancy-cosmere"
 					optionalDependency "feruchemy-cosmere"
