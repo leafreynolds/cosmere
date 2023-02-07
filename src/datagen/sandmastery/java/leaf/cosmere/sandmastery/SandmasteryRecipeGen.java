@@ -4,6 +4,7 @@
 
 package leaf.cosmere.sandmastery;
 
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
@@ -47,6 +48,16 @@ public class SandmasteryRecipeGen extends RecipeProvider implements IConditionBu
 				.pattern("LJL")
 				.pattern("LLL")
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
+				.save(consumer);
+
+		ShapelessRecipeBuilder.shapeless(SandmasteryItems.SAND_JAR_ITEM.get())
+				.requires(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem())
+				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
+				.save(consumer);
+
+		ShapelessRecipeBuilder.shapeless(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem())
+				.requires(SandmasteryItems.SAND_JAR_ITEM)
+				.unlockedBy("has_material", has(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem()))
 				.save(consumer);
 	}
 }

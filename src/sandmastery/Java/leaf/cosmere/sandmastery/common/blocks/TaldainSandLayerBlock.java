@@ -2,6 +2,7 @@ package leaf.cosmere.sandmastery.common.blocks;
 
 import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -136,18 +137,14 @@ public class TaldainSandLayerBlock extends BaseFallingBlock {
         if (!pLevel.isAreaLoaded(pPos, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
         BlockState state = this.defaultBlockState();
 
-        if(MiscHelper.checkIfNearbyInvestiture(pLevel, pPos)) {
-            pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
-        }
 
-        if (!MiscHelper.onTaldain(pLevel)) return; // Not on dayside taldain, so don't charge from the sun
-        if (!pLevel.canSeeSky(pPos.above())) return; // Can't see the sky, can't charge from it
+        if ((!MiscHelper.onTaldain(pLevel) &&!pLevel.canSeeSky(pPos.above())) && !MiscHelper.checkIfNearbyInvestiture(pLevel, pPos)) return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
         pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true).setValue(LAYERS, pState.getValue(LAYERS)));
 
-        for(int i = 0; i < 2; ++i) {
+        for(int i = 0; i < 4; ++i) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
             if (pLevel.getBlockState(blockpos).is(Blocks.SAND)) {
-                pLevel.setBlockAndUpdate(blockpos, state.setValue(INVESTED, true));
+                pLevel.setBlockAndUpdate(blockpos, SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock().defaultBlockState().setValue(INVESTED, true));
             }
         }
     }

@@ -3,37 +3,22 @@ package leaf.cosmere.sandmastery.common.items;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.common.items.BaseItem;
-import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.TaldainSandBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainSandLayerBlock;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
-import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
 
 public class JarItem extends BaseItem {
     public JarItem() {
