@@ -5,16 +5,16 @@
   },
   "overrides": [
     {
-      "__comment": "built up investiture >= 1000",
+      "__comment": "built up investiture >= 50",
       "predicate": {
-        "cosmere:charge_level": 500
+        "cosmere:charge_level": 50
       },
       "model": "sandmastery:item/grey_sand_jar"
     },
     {
-      "__comment": "built up investiture >= 2000",
+      "__comment": "built up investiture >= 100",
       "predicate": {
-        "cosmere:charge_level": 1000
+        "cosmere:charge_level": 100
       },
       "model": "sandmastery:item/white_sand_jar"
     }

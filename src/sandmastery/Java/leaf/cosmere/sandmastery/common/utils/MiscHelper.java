@@ -104,7 +104,7 @@ public class MiscHelper {
     }
 
     public static boolean isActivatedAndActive(ISpiritweb data, Manifestation manifestation) {
-        return (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation() == manifestation);
+        return (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation().getManifestation() == manifestation.getManifestation());
     }
 
     public static int getChargeFromItemStack(ItemStack stack) {

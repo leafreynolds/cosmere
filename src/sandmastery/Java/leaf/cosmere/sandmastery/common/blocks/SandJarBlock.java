@@ -2,21 +2,29 @@ package leaf.cosmere.sandmastery.common.blocks;
 
 import leaf.cosmere.common.blocks.BaseBlock;
 import leaf.cosmere.common.properties.PropTypes;
+import leaf.cosmere.sandmastery.common.blockentities.SandJarBE;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class SandJarBlock extends BaseBlock {
+public class SandJarBlock extends BaseEntityBlock {
     public SandJarBlock() {
-        super(PropTypes.Blocks.SAND.get().noOcclusion(), SoundType.GLASS, 1F, 2F);
+        super(PropTypes.Blocks.SAND.get().noOcclusion());
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(INVESTITURE, 0)
@@ -43,18 +51,21 @@ public class SandJarBlock extends BaseBlock {
     }
 
     @Override
-    public boolean isRandomlyTicking(@NotNull BlockState pState) {
-        return true;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
+
+    @Nullable
     @Override
-    public void randomTick(@NotNull BlockState pState, ServerLevel pLevel, BlockPos pPos, @NotNull RandomSource pRandom) {
-        BlockState state = this.defaultBlockState();
-        int investiture = pState.getValue(INVESTITURE);
-        if(MiscHelper.checkIfNearbyInvestiture(pLevel, pPos))
-            pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTITURE, Math.min(investiture+5, 100)));
-        else
-            pLevel.setBlockAndUpdate(pPos, pState.setValue(INVESTITURE, Math.max(investiture-1, 0)));
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new SandJarBE(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return createTickerHelper(type, SandmasteryBlockEntitiesRegistry.SAND_JAR_BE.get(), SandJarBE::tick);
     }
 
 }

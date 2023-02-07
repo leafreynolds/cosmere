@@ -27,6 +27,7 @@ public class SandmasteryBlockTagsGen extends BlockTagsProvider
     {
         add(BlockTags.MINEABLE_WITH_SHOVEL, SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock());
         add(BlockTags.MINEABLE_WITH_SHOVEL, SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock());
+        add(BlockTags.MINEABLE_WITH_PICKAXE, SandmasteryBlocksRegistry.SAND_JAR_BLOCK.getBlock());
 
     }
 

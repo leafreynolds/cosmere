@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sandmastery:sand_jar"
+    }
+  ],
+  "result": {
+    "item": "sandmastery:sand_jar_block"
+  }
+}

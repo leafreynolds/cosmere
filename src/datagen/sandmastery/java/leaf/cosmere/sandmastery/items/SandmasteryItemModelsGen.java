@@ -4,10 +4,8 @@
 
 package leaf.cosmere.sandmastery.items;
 
-import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IItemProvider;
-import leaf.cosmere.common.registry.ItemsRegistry;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.items.SandJarItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
@@ -39,10 +37,8 @@ public class SandmasteryItemModelsGen extends ItemModelProvider
 			Item item = itemRegistryObject.asItem();
 
 			//blocks have their own model rules
-			if (item instanceof BlockItem)
-			{
-				continue;
-			}
+			if (item instanceof BlockItem) continue;
+			if (item instanceof SandJarItem) continue;
 			//else normal item texture rules apply
 			simpleItem(path, path);
 		}

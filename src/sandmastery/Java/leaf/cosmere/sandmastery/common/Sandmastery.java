@@ -5,7 +5,6 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.network.SandmasteryPacketHandler;
 import leaf.cosmere.sandmastery.common.registries.*;
@@ -37,6 +36,7 @@ public class Sandmastery implements IModModule
 
         SandmasteryItems.ITEMS.register(modBus);
         SandmasteryBlocksRegistry.BLOCKS.register(modBus);
+        SandmasteryBlockEntitiesRegistry.BLOCK_ENTITIES.register(modBus);
         SandmasteryAttributes.ATTRIBUTES.register(modBus);
         SandmasteryEntityTypes.ENTITY_TYPES.register(modBus);
         SandmasteryManifestations.MANIFESTATIONS.register(modBus);
