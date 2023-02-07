@@ -21,8 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
-import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_ELEVATE;
-import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.KEY_SANDMASTERY_LAUNCH;
+import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.*;
 
 
 public class SandmasteryEngLangGen extends LanguageProvider
@@ -133,7 +132,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addItemGroups()
 	{
-		//ItemGroups/Tabs
+		add("itemGroup.sandmastery", "Sandmastery Items");
 	}
 
 	private void addDamageSources()
@@ -163,6 +162,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 		//KeyBindings
 		add(KEY_SANDMASTERY_LAUNCH, "Use Launch Mastery");
 		add(KEY_SANDMASTERY_ELEVATE, "Use Elevate Mastery");
+		add(KEY_SANDMASTERY_PROJECTILE, "Use Projectile Mastery");
 	}
 
 	private void addStats()
