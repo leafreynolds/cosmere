@@ -130,8 +130,7 @@ public class MiscHelper {
     }
 
     public static boolean isClient(ISpiritweb data) {
-        boolean clientSide = data.getLiving().level.isClientSide();
-        System.out.println("Clientside: " + clientSide); // Always says false for some reason *scream*
+        boolean clientSide = data.getLiving().level.isClientSide;
         return clientSide;
     }
 }

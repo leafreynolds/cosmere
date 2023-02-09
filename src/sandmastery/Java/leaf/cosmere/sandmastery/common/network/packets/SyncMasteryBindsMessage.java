@@ -9,6 +9,8 @@ import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
+import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -49,6 +51,9 @@ public class SyncMasteryBindsMessage implements ICosmerePacket
 			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
 			CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(spiritweb.getCompoundTag(), "sandmastery");
 			sandmasteryTag.putInt("hotkey_flags", this.data.getInt("hotkeys"));
+
+			MiscHelper.logToChat(cap,"Packet flags: " + this.data.getInt("hotkeys"));
+
 		}));
 	}
 

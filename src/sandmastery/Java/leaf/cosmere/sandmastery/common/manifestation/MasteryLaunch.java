@@ -28,8 +28,6 @@ public class MasteryLaunch extends SandmasteryManifestation{
     @Override
     public void tick(ISpiritweb data)
     {
-        if(MiscHelper.isClient(data)) performEffectClient(data);
-
         int hotkeyFlags = CompoundNBTHelper.getOrCreate(data.getCompoundTag(), "sandmastery").getInt("hotkeys");
         boolean enabledViaHotkey = false;
         if((hotkeyFlags & SandmasteryConstants.launchFlagVal) != 0) enabledViaHotkey = true;

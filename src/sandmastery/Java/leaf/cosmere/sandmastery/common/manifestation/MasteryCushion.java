@@ -22,8 +22,11 @@ public class MasteryCushion extends SandmasteryManifestation {
     @Override
     public void tick(ISpiritweb data)
     {
-        int mode = getMode(data);
-        if(MiscHelper.isClient(data)) performEffectServer(data);
+        if(getMode(data) > 0) performEffectServer(data);
+    }
+
+    public void tickClient(ISpiritweb data) {
+        if(MiscHelper.isClient(data)) performEffectClient(data);
     }
 
     protected void performEffectServer(ISpiritweb data)

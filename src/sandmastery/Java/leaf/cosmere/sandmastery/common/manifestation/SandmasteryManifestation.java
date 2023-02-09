@@ -28,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.stringtemplate.v4.misc.Misc;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -40,6 +41,11 @@ public class SandmasteryManifestation extends Manifestation
 	{
 		super(Manifestations.ManifestationTypes.SANDMASTERY);
 		this.mastery = mastery;
+	}
+
+	@Override
+	public void tick(ISpiritweb data) {
+		if(MiscHelper.isClient(data)) performEffectClient(data);
 	}
 
 	@Override

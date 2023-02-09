@@ -36,8 +36,6 @@ public class MasteryProjectile extends SandmasteryManifestation
 		submodule.tickProjectileCooldown();
 		if (!submodule.projectileReady()) return;
 
-		if(MiscHelper.isClient(data)) performEffectClient(data);
-
 		int hotkeyFlags = CompoundNBTHelper.getOrCreate(data.getCompoundTag(), "sandmastery").getInt("hotkeys");
 		boolean enabledViaHotkey = false;
 		if((hotkeyFlags & SandmasteryConstants.launchFlagVal) != 0) enabledViaHotkey = true;

@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 
-public class MasteryElevate extends SandmasteryManifestation{
+public class MasteryElevate extends SandmasteryManifestation {
     public MasteryElevate(Taldain.Mastery mastery) {
         super(mastery);
     }
@@ -23,12 +23,13 @@ public class MasteryElevate extends SandmasteryManifestation{
     @Override
     public void tick(ISpiritweb data)
     {
-        if(MiscHelper.isClient(data)) performEffectClient(data);
-
         int hotkeyFlags = CompoundNBTHelper.getOrCreate(data.getCompoundTag(), "sandmastery").getInt("hotkeys");
         boolean enabledViaHotkey = false;
         if((hotkeyFlags & SandmasteryConstants.elevateFlagVal) != 0) enabledViaHotkey = true;
         if((hotkeyFlags & 1) != 0) enabledViaHotkey = true;
+
+        if(!MiscHelper.isClient(data)) MiscHelper.logToChat(data,"Serverside flags: " + hotkeyFlags);
+
         if(getMode(data) > 0 && enabledViaHotkey) performEffectServer(data);
     }
 
