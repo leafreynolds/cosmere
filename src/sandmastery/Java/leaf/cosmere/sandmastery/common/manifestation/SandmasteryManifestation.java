@@ -191,12 +191,13 @@ public class SandmasteryManifestation extends Manifestation
 				(SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown() ? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG : 0);
 
 		final CompoundTag dataTag = data.getCompoundTag();
-		final CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(dataTag, "sandmastery");
-		int savedFlags = sandmasteryTag.getInt("hotkeys");
+		if(dataTag == null) return;
+		final CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(dataTag, Sandmastery.MODID);
+		int savedFlags = sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
 
 		if (savedFlags != currentFlags)
 		{
-			sandmasteryTag.putInt("hotkeys", currentFlags);
+			sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, currentFlags);
 			Sandmastery.packetHandler().sendToServer(new SyncMasteryBindsMessage(currentFlags));
 		}
 	}
