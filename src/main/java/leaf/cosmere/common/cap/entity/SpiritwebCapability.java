@@ -238,7 +238,7 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			//attribute registry name is now the same as the manifestation registry name, so this function
 			//doesn't need to be able to access the attribute registries of sub mods :)
-			Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(manifestation.getRegistryName());
+			Attribute attribute = manifestation.getAttribute();
 			if (attribute != null)
 			{
 				AttributeInstance oldAttr = oldAttMap.getInstance(attribute);

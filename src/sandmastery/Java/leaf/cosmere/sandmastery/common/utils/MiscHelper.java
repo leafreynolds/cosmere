@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -126,5 +127,11 @@ public class MiscHelper {
         if (data.getLiving() instanceof Player player) {
             player.sendSystemMessage(Component.literal(msg));
         }
+    }
+
+    public static boolean isClient(ISpiritweb data) {
+        boolean clientSide = data.getLiving().level.isClientSide();
+        System.out.println("Clientside: " + clientSide); // Always says false for some reason *scream*
+        return clientSide;
     }
 }

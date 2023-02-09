@@ -12,14 +12,22 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.ItemChargeHelper;
+import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
+import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
+import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
+import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -139,4 +147,16 @@ public class SandmasteryManifestation extends Manifestation
 		return SandmasteryAttributes.RIBBONS.getAttribute();
 	}
 
+	protected void performEffectClient(ISpiritweb data)
+	{
+		CompoundTag nbt = new CompoundTag();
+		int flags = 0;
+		flags =
+				(MiscHelper.isActivatedAndActive(data, this) ? 1 : 0) +
+				(SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown() ? SandmasteryConstants.elevateFlagVal : 0) +
+				(SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown() ? SandmasteryConstants.launchFlagVal : 0) +
+				(SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown() ? SandmasteryConstants.projectileFlagVal : 0);
+		nbt.putInt("hotkeys", flags);
+		Sandmastery.packetHandler().sendToServer(new SyncMasteryBindsMessage(nbt));
+	}
 }

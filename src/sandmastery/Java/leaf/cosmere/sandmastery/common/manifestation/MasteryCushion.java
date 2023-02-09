@@ -10,8 +10,11 @@ import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodul
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 
-public class MasteryCushion extends SandmasteryManifestation{
+public class MasteryCushion extends SandmasteryManifestation {
     public MasteryCushion(Taldain.Mastery mastery) {
         super(mastery);
     }
@@ -20,18 +23,10 @@ public class MasteryCushion extends SandmasteryManifestation{
     public void tick(ISpiritweb data)
     {
         int mode = getMode(data);
-        if (mode > 0) {
-            applyEffectTick(data);
-        }
+        if(MiscHelper.isClient(data)) performEffectServer(data);
     }
 
-    @Override
-    public void applyEffectTick(ISpiritweb data)
-    {
-        performEffectServer(data);
-    }
-
-    private void performEffectServer(ISpiritweb data)
+    protected void performEffectServer(ISpiritweb data)
     {
         SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);

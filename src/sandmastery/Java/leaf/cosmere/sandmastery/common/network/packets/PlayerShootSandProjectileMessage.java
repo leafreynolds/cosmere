@@ -36,19 +36,7 @@ public class PlayerShootSandProjectileMessage implements ICosmerePacket
 	{
 		ServerPlayer player = context.getSender();
 		MinecraftServer server = player.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(player).ifPresent((cap) ->
-		{
-			for (int i = 0; i < player.getInventory().getContainerSize(); i++)
-			{
-				ItemStack pouch = player.getInventory().getItem(i);
-				if (!pouch.isEmpty() && pouch.is(SandmasteryItems.SAND_POUCH_ITEM.get()))
-				{
-					SandmasteryItems.SAND_POUCH_ITEM.get().shoot(pouch, player);
 
-					return;
-				}
-			}
-		}));
 	}
 
 }
