@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -8,6 +8,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.config.CosmereSurgebindingConfig;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -46,7 +47,7 @@ public class SurgeProgression extends SurgebindingManifestation
 						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
 
 						//todo config
-						final int stormlightHealingCostMultiplier = 20;
+						final int stormlightHealingCostMultiplier = CosmereSurgebindingConfig.SERVER.PROGRESSION_HEAL_COST.get();
 						if (submodule.adjustStormlight(-(healthMissing * stormlightHealingCostMultiplier), true))
 						{
 							heal(eventTarget, eventTargetMaxHealth);
@@ -115,8 +116,7 @@ public class SurgeProgression extends SurgebindingManifestation
 					SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
 					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
 
-					//todo config bonemeal cost
-					final int stormlightHealingCostMultiplier = 20;
+					final int stormlightHealingCostMultiplier = CosmereSurgebindingConfig.SERVER.PROGRESSION_BONEMEAL_COST.get();
 					if (submodule.adjustStormlight(-stormlightHealingCostMultiplier, true))
 					{
 						if (event.getLevel() instanceof ServerLevel serverLevel)

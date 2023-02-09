@@ -1,10 +1,12 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
+import leaf.cosmere.allomancy.common.config.CosmereAllomancyConfig;
 import leaf.cosmere.allomancy.common.network.AllomancyPacketHandler;
 import leaf.cosmere.allomancy.common.registries.*;
 import leaf.cosmere.api.CosmereAPI;
@@ -16,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -32,6 +35,7 @@ public class Allomancy implements IModModule
 	public Allomancy()
 	{
 		Cosmere.addModule(instance = this);
+		CosmereAllomancyConfig.registerConfigs(ModLoadingContext.get());
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::onConfigLoad);
@@ -86,6 +90,16 @@ public class Allomancy implements IModModule
 		if (config.getModId().equals(MODID))
 		{
 
+			if (configEvent.getConfig().getType() == ModConfig.Type.SERVER)
+			{
+				IConfigSpec<?> spec = configEvent.getConfig().getSpec();
+				CommentedConfig commentedConfig = configEvent.getConfig().getConfigData();
+
+				if (spec == CosmereAllomancyConfig.SERVER.getConfigSpec())
+				{
+					//??
+				}
+			}
 		}
 	}
 

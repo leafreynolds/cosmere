@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -178,7 +178,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		//player has feruchemy in same metal
 		if (data.hasManifestation(feruchemyManifestation))
 		{
-			//todo config variable
+			//TODO config variable
 			//eg 10 base, * 2 for flaring mode = 20
 			//or from spike 7 * 2 = 14
 			//then add the config value

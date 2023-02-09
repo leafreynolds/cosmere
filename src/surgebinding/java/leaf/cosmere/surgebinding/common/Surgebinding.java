@@ -1,9 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
@@ -11,6 +12,7 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.capability.world.IRoshar;
+import leaf.cosmere.surgebinding.common.config.CosmereSurgebindingConfig;
 import leaf.cosmere.surgebinding.common.network.SurgebindingPacketHandler;
 import leaf.cosmere.surgebinding.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +20,7 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -36,6 +39,7 @@ public class Surgebinding implements IModModule
 	public Surgebinding()
 	{
 		Cosmere.addModule(instance = this);
+		CosmereSurgebindingConfig.registerConfigs(ModLoadingContext.get());
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::commonSetup);
@@ -102,12 +106,21 @@ public class Surgebinding implements IModModule
 
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
-		//Note: We listen to both the initial load and the reload, to make sure that we fix any accidentally
-		// cached values from calls before the initial loading
 		ModConfig config = configEvent.getConfig();
-		//Make sure it is for the same modid as us
+
 		if (config.getModId().equals(MODID))
 		{
+
+			if (configEvent.getConfig().getType() == ModConfig.Type.SERVER)
+			{
+				IConfigSpec<?> spec = configEvent.getConfig().getSpec();
+				CommentedConfig commentedConfig = configEvent.getConfig().getConfigData();
+
+				if (spec == CosmereSurgebindingConfig.SERVER.getConfigSpec())
+				{
+					//??
+				}
+			}
 		}
 	}
 

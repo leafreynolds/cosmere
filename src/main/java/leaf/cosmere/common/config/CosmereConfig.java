@@ -1,55 +1,27 @@
 /*
- * File updated ~ 7 - 5 - 2022 ~ Leaf
+ * File updated ~ 6 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModLoadingContext;
 
 public class CosmereConfig
 {
-	public static Common COMMON;
-	public static ForgeConfigSpec COMMON_SPEC;
-	public static Client CLIENT;
-	public static ForgeConfigSpec CLIENT_SPEC;
-
-	static
+	private CosmereConfig()
 	{
-		Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
-		COMMON_SPEC = specPair.getRight();
-		COMMON = specPair.getLeft();
-
-		Pair<Client, ForgeConfigSpec> specClientPair = new ForgeConfigSpec.Builder().configure(Client::new);
-		CLIENT_SPEC = specClientPair.getRight();
-		CLIENT = specClientPair.getLeft();
-	}
-
-
-	public static class Client
-	{
-		public final ForgeConfigSpec.BooleanValue clientConfigTest;
-
-		Client(ForgeConfigSpec.Builder builder)
-		{
-			builder.comment("Client Cosmere Settings").push("client");
-			clientConfigTest = builder.comment("clientConfigTest").translation("config.cosmere.clientconfigtest").define("clientconfigtest", true);
-			builder.pop();
-		}
 
 	}
 
-	public static class Common
+	public static final ClientConfig client = new ClientConfig();
+	public static final CommonConfig common = new CommonConfig();
+
+	public static void registerConfigs(ModLoadingContext modLoadingContext)
 	{
-		public final ForgeConfigSpec.IntValue commonConfigTest;
-
-		Common(ForgeConfigSpec.Builder builder)
-		{
-			builder.comment("General Cosmere Settings").push("common");
-			commonConfigTest = builder.comment("commonConfigTest.").translation("config.cosmere.commonconfigtest").defineInRange("commonconfigtest", 5, 0, Integer.MAX_VALUE);
-			builder.pop();
-
-		}
+		ModContainer modContainer = modLoadingContext.getActiveContainer();
+		CosmereConfigHelper.registerConfig(modContainer, client);
+		CosmereConfigHelper.registerConfig(modContainer, common);
 	}
 
 }
