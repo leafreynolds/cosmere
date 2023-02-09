@@ -1,44 +1,37 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 9 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.network.packets;
 
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
-import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.List;
-
 public class SyncMasteryBindsMessage implements ICosmerePacket
 {
-	public CompoundTag data;
+	public int flags;
 
-	public SyncMasteryBindsMessage(CompoundTag data)
+	public SyncMasteryBindsMessage(int flags)
 	{
-		this.data = data;
+		this.flags = flags;
 	}
 
 	@Override
 	public void encode(FriendlyByteBuf buf)
 	{
-		buf.writeNbt(data);
+		buf.writeInt(flags);
 	}
 
 	public static SyncMasteryBindsMessage decode(FriendlyByteBuf buf)
 	{
-		return new SyncMasteryBindsMessage(buf.readNbt());
+		return new SyncMasteryBindsMessage(buf.readInt());
 	}
 
 	@Override
@@ -49,10 +42,13 @@ public class SyncMasteryBindsMessage implements ICosmerePacket
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
-			CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(spiritweb.getCompoundTag(), "sandmastery");
-			sandmasteryTag.putInt("hotkey_flags", this.data.getInt("hotkeys"));
 
-			MiscHelper.logToChat(cap,"Packet flags: " + this.data.getInt("hotkeys"));
+			final CompoundTag spiritwebCompoundTag = spiritweb.getCompoundTag();
+			CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(spiritwebCompoundTag, "sandmastery");
+
+			sandmasteryTag.putInt("hotkeys", this.flags);
+
+			MiscHelper.logToChat(cap, "Packet flags: " + flags);
 
 		}));
 	}
