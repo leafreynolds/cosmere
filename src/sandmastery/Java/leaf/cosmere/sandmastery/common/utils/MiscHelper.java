@@ -1,16 +1,19 @@
 package leaf.cosmere.sandmastery.common.utils;
 
 import leaf.cosmere.api.*;
+import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -24,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -126,5 +130,30 @@ public class MiscHelper {
         if (data.getLiving() instanceof Player player) {
             player.sendSystemMessage(Component.literal(msg));
         }
+    }
+
+    public static boolean isClient(ISpiritweb data) {
+        boolean clientSide = data.getLiving().level.isClientSide;
+        return clientSide;
+    }
+
+    public static int getHotkeyFlags(ISpiritweb data) {
+        final CompoundTag dataTag = data.getCompoundTag();
+        final CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(dataTag, Sandmastery.MODID);
+        return sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
+    }
+
+    public static boolean enabledViaHotkey(ISpiritweb data, int requiredFlag) {
+        int hotkeyFlags = getHotkeyFlags(data);
+        boolean enabledViaHotkey = false;
+        if ((hotkeyFlags & requiredFlag) != 0)
+        {
+            enabledViaHotkey = true;
+        }
+        if ((hotkeyFlags & 1) != 0)
+        {
+            enabledViaHotkey = true;
+        }
+        return enabledViaHotkey;
     }
 }

@@ -5,9 +5,13 @@
 package leaf.cosmere.sandmastery.common.capabilities;
 
 import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.sandmastery.common.manifestation.MasteryCushion;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,6 +30,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void tickClient(ISpiritweb spiritweb)
 	{
+		MasteryCushion cushion = (MasteryCushion) SandmasteryManifestations.SANDMASTERY_POWERS.get(Taldain.Mastery.CUSHION).get();
+		cushion.tickClient(spiritweb);
 	}
 
 	@Override
