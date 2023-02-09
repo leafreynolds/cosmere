@@ -1,17 +1,13 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.capabilities;
 
 import leaf.cosmere.api.ISpiritwebSubmodule;
-import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.sandmastery.common.manifestation.MasteryCushion;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,13 +21,11 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private int hydrationLevel = 10000;
 	private int projectileCooldown = 0;
 	public final int MAX_HYDRATION = 10000;
-	private LinkedList<SandmasteryManifestation> ribbonsInUse= new LinkedList<>();
+	private LinkedList<SandmasteryManifestation> ribbonsInUse = new LinkedList<>();
 
 	@Override
 	public void tickClient(ISpiritweb spiritweb)
 	{
-		MasteryCushion cushion = (MasteryCushion) SandmasteryManifestations.SANDMASTERY_POWERS.get(Taldain.Mastery.CUSHION).get();
-		cushion.tickClient(spiritweb);
 	}
 
 	@Override
@@ -72,7 +66,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	{
 	}
 
-	public int getHydrationLevel() { return hydrationLevel; }
+	public int getHydrationLevel()
+	{
+		return hydrationLevel;
+	}
 
 	public boolean adjustHydration(int amountToAdjust, boolean doAdjust)
 	{
@@ -90,22 +87,27 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		return false;
 	}
 
-	public void tickProjectileCooldown() {
+	public void tickProjectileCooldown()
+	{
 		this.projectileCooldown -= this.projectileCooldown > 0 ? 1 : 0;
 	}
 
-	public void setProjectileCooldown(int cooldown) {
+	public void setProjectileCooldown(int cooldown)
+	{
 		this.projectileCooldown = cooldown;
 	}
 
-	public boolean projectileReady() {
+	public boolean projectileReady()
+	{
 		return this.projectileCooldown == 0;
 	}
 
 
-	public void useRibbon(ISpiritweb data, SandmasteryManifestation manifestation) {
+	public void useRibbon(ISpiritweb data, SandmasteryManifestation manifestation)
+	{
 		int maxRibbons = (int) manifestation.getStrength(data, false);
-		if(ribbonsInUse.size() >= maxRibbons) {
+		if (ribbonsInUse.size() >= maxRibbons)
+		{
 			SandmasteryManifestation ribbon = ribbonsInUse.getLast();
 			data.setMode(ribbon, data.getMode(ribbon) - 1);
 		}
@@ -113,13 +115,18 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		data.syncToClients(null);
 	}
 
-	public void releaseRibbon(ISpiritweb data, SandmasteryManifestation manifestation) {
+	public void releaseRibbon(ISpiritweb data, SandmasteryManifestation manifestation)
+	{
 		int index = ribbonsInUse.indexOf(manifestation);
-		if(index > -1) ribbonsInUse.remove(index);
+		if (index > -1)
+		{
+			ribbonsInUse.remove(index);
+		}
 		data.syncToClients(null);
 	}
 
-	public void debugRibbonUsage() {
+	public void debugRibbonUsage()
+	{
 		System.out.print("Ribbons in use ");
 		System.out.println(ribbonsInUse);
 	}
