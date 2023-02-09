@@ -6,21 +6,14 @@ package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
-import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
-import leaf.cosmere.sandmastery.common.network.packets.PlayerShootSandProjectileMessage;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 
 public class MasteryProjectile extends SandmasteryManifestation
 {
@@ -36,10 +29,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 		submodule.tickProjectileCooldown();
 		if (!submodule.projectileReady()) return;
 
-		int hotkeyFlags = CompoundNBTHelper.getOrCreate(data.getCompoundTag(), "sandmastery").getInt("hotkeys");
-		boolean enabledViaHotkey = false;
-		if((hotkeyFlags & SandmasteryConstants.launchFlagVal) != 0) enabledViaHotkey = true;
-		if((hotkeyFlags & 1) != 0) enabledViaHotkey = true;
+		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PROJECTILE_HOTKEY_FLAG);
 		if(getMode(data) > 0 && enabledViaHotkey) performEffectServer(data);
 	}
 

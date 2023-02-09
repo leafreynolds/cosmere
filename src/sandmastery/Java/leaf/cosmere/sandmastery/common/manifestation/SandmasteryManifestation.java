@@ -186,9 +186,9 @@ public class SandmasteryManifestation extends Manifestation
 	protected void performEffectClient(ISpiritweb data)
 	{
 		int currentFlags = (MiscHelper.isActivatedAndActive(data, this) ? 1 : 0) +
-				(SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown() ? SandmasteryConstants.elevateFlagVal : 0) +
-				(SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown() ? SandmasteryConstants.launchFlagVal : 0) +
-				(SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown() ? SandmasteryConstants.projectileFlagVal : 0);
+				(SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown() ? SandmasteryConstants.ELEVATE_HOTKEY_FLAG : 0) +
+				(SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown() ? SandmasteryConstants.LAUNCH_HOTKEY_FLAG : 0) +
+				(SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown() ? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG : 0);
 
 		final CompoundTag dataTag = data.getCompoundTag();
 		final CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(dataTag, "sandmastery");

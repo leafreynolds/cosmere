@@ -6,13 +6,11 @@ package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -26,24 +24,7 @@ public class MasteryElevate extends SandmasteryManifestation
 	@Override
 	public void tick(ISpiritweb data)
 	{
-		final CompoundTag dataTag = data.getCompoundTag();
-		final CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(dataTag, "sandmastery");
-		int hotkeyFlags = sandmasteryTag.getInt("hotkeys");
-		boolean enabledViaHotkey = false;
-		if ((hotkeyFlags & SandmasteryConstants.elevateFlagVal) != 0)
-		{
-			enabledViaHotkey = true;
-		}
-		if ((hotkeyFlags & 1) != 0)
-		{
-			enabledViaHotkey = true;
-		}
-
-		if (!MiscHelper.isClient(data))
-		{
-			MiscHelper.logToChat(data, "Serverside flags: " + hotkeyFlags);
-		}
-
+		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.ELEVATE_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
 			performEffectServer(data);
