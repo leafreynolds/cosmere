@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -34,7 +34,7 @@ public class MasteryElevate extends SandmasteryManifestation
 	protected void performEffectServer(ISpiritweb data)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
+		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
 		if (getMode(data) < 3)
 		{

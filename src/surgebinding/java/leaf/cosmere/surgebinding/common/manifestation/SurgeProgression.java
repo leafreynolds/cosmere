@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -43,7 +43,7 @@ public class SurgeProgression extends SurgebindingManifestation
 					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()))
 					{
 						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
-						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
 						//todo config
 						final int stormlightHealingCostMultiplier = 20;
@@ -113,7 +113,7 @@ public class SurgeProgression extends SurgebindingManifestation
 				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()))
 				{
 					SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
-					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
 					//todo config bonemeal cost
 					final int stormlightHealingCostMultiplier = 20;

@@ -1,16 +1,13 @@
 /*
- * File updated ~ 9 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.network.packets;
 
-import leaf.cosmere.api.helpers.CompoundNBTHelper;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
-import leaf.cosmere.sandmastery.common.Sandmastery;
-import leaf.cosmere.sandmastery.common.utils.MiscHelper;
-import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
-import net.minecraft.nbt.CompoundTag;
+import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,12 +41,8 @@ public class SyncMasteryBindsMessage implements ICosmerePacket
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
-
-			final CompoundTag spiritwebCompoundTag = spiritweb.getCompoundTag();
-			CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(spiritwebCompoundTag, Sandmastery.MODID);
-
-			sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, this.flags);
-
+			SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+			sb.updateFlags(this.flags);
 		}));
 	}
 

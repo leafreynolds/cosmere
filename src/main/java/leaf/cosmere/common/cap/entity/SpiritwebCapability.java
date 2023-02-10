@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -9,7 +9,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
@@ -33,7 +32,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,7 +68,7 @@ public class SpiritwebCapability implements ISpiritweb
 	public List<Integer> pullEntities = new ArrayList<>(4);
 	private CompoundTag nbt;
 
-	public Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
+	private final Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
 
 
 	public SpiritwebCapability(LivingEntity ent)
@@ -162,6 +160,18 @@ public class SpiritwebCapability implements ISpiritweb
 	public CompoundTag getCompoundTag()
 	{
 		return nbt;
+	}
+
+	@Override
+	public ISpiritwebSubmodule getSubmodule(Manifestations.ManifestationTypes manifestationType)
+	{
+		return spiritwebSubmodules.get(manifestationType);
+	}
+
+	@Override
+	public Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> getSubmodules()
+	{
+		return spiritwebSubmodules;
 	}
 
 	@Override
@@ -340,7 +350,9 @@ public class SpiritwebCapability implements ISpiritweb
 	public Manifestation getSelectedManifestation()
 	{
 		return selectedManifestation;
-	};
+	}
+
+	;
 
 	public boolean hasBeenInitialized()
 	{

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -33,7 +33,7 @@ public class SurgebindingManifestation extends Manifestation
 		//surgebinding is different to most powers.
 
 		final SpiritwebCapability spiritwebCapability = (SpiritwebCapability) data;
-		SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) spiritwebCapability.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+		SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 		return data.hasManifestation(this) && sb.getStormlight() > 0;
 	}
 }

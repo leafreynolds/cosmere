@@ -1,5 +1,5 @@
 /*
- * File updated ~ 1 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -7,7 +7,6 @@ package leaf.cosmere.common.eventHandlers;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
@@ -135,7 +134,7 @@ public class EntityEventHandler
 			}
 			if (spiritwebCapability.getLiving() instanceof Player player)
 			{
-				spiritwebCapability.spiritwebSubmodules.get(manifestationType).GiveStartingItem(player);
+				spiritwebCapability.getSubmodule(manifestationType).GiveStartingItem(player);
 			}
 		}
 		else
@@ -149,8 +148,8 @@ public class EntityEventHandler
 
 				if (spiritwebCapability.getLiving() instanceof Player player)
 				{
-					spiritwebCapability.spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY).GiveStartingItem(player, allomancyPower);
-					spiritwebCapability.spiritwebSubmodules.get(Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, feruchemyPower);
+					spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY).GiveStartingItem(player, allomancyPower);
+					spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, feruchemyPower);
 				}
 			}
 			else

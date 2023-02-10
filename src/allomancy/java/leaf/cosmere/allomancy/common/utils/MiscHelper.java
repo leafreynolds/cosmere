@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 11 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.utils;
@@ -53,7 +53,7 @@ public class MiscHelper
 			{
 				//add to metal stored
 				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;
-				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 				allo.adjustIngestedMetal(metalType, addAmount, true);
 			}
 

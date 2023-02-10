@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -50,7 +50,7 @@ public class AllomancyAluminum extends AllomancyManifestation
 
 	private boolean drainMetal(ISpiritweb data, Metals.MetalType metalType)
 	{
-		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 
 		int ingestedMetalAmount = allo.getIngestedMetal(metalType);
 

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -159,7 +159,12 @@ public class CoinPouchItem extends ProjectileWeaponItem
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt)
 	{
 		final CoinPouchInventory coinPouchInventory = new CoinPouchInventory();
-		//coinPouchInventory.deserializeNBT(oldCapNbt); // todo check if this breaks things?
+
+		if (oldCapNbt != null)
+		{
+			coinPouchInventory.deserializeNBT(oldCapNbt); // todo check if this breaks things?
+		}
+
 		return coinPouchInventory;
 	}
 

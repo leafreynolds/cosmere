@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 1 - 2023 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
@@ -46,7 +46,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 		{
 			SpiritwebCapability.get(livingEntity).ifPresent(data ->
 			{
-				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 
 				for (Metals.MetalType metalType : Metals.MetalType.values())
 				{
