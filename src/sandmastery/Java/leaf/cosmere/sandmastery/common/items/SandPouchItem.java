@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 13 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.items;
@@ -51,10 +51,10 @@ public class SandPouchItem extends ChargeableItemBase
 
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
-        if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
-        {
-            return true;
-        }
+		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
+		{
+			return true;
+		}
 		return itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem();
 	};
 
@@ -69,10 +69,10 @@ public class SandPouchItem extends ChargeableItemBase
 	{
 		int res = 0;
 		IItemHandler inv = itemStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
-        if (inv == null)
-        {
-            return res;
-        }
+		if (inv == null)
+		{
+			return res;
+		}
 		for (int i = 0; i < SandPouchInventory.size; i++)
 		{
 			ItemStack stack = inv.getStackInSlot(i);
@@ -107,8 +107,6 @@ public class SandPouchItem extends ChargeableItemBase
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyer) ->
 						new SandPouchContainerMenu(windowID, playerInv, pouchStack), pouchStack.getHoverName());
 				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
-
-				System.out.println();
 			}
 		}
 		return InteractionResultHolder.consume(pouchStack);

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 13 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.items;
@@ -114,7 +114,7 @@ public class QidoItem extends ChargeableItemBase
 //            sb.adjustHydration(increasePerTick, true);
 //            setCharge(pStack, availableWater - increasePerTick);
 //
-//            System.out.println(increasePerTick);
+//            CosmereAPI.logger.info(increasePerTick);
 //        });
 //        super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 //    }
