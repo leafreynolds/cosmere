@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 13 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -124,6 +124,9 @@ public class EntityEventHandler
 					? Manifestations.ManifestationTypes.ALLOMANCY
 					: Manifestations.ManifestationTypes.FERUCHEMY;
 
+
+			CosmereAPI.logger.info("Entity {} has full powers! {}", spiritwebCapability.getLiving().getName(), manifestationType);
+
 			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 			{
 				if (manifestation.getManifestationType() == manifestationType)
@@ -151,6 +154,12 @@ public class EntityEventHandler
 					spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY).GiveStartingItem(player, allomancyPower);
 					spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, feruchemyPower);
 				}
+
+				CosmereAPI.logger.info(
+						"Entity {} has been granted allomantic {} and feruchemical {}!",
+						spiritwebCapability.getLiving().getName(),
+						allomancyMetal,
+						feruchemyMetal);
 			}
 			else
 			{
@@ -160,18 +169,29 @@ public class EntityEventHandler
 						: feruchemyPower;
 
 				spiritwebCapability.giveManifestation(manifestation, 10);
+				CosmereAPI.logger.info("Entity {} has been granted {}, with metal {}!",
+						spiritwebCapability.getLiving().getName(),
+						isAllomancy
+						? Manifestations.ManifestationTypes.ALLOMANCY.getName()
+						: Manifestations.ManifestationTypes.FERUCHEMY.getName(),
+						isAllomancy
+						? allomancyMetal
+						: feruchemyMetal);
 
 				//at this time, players are twin-born minimum, so no need to try give powers here
 			}
 		}
 
-		// TODO Change to only use one manifestation
+		// TODO We wanna change how powers are granted, as cosmere library mod shouldn't be in charge of this
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
 			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
 			{
-				spiritwebCapability.giveManifestation(manifestation, MathHelper.randomInt(1, 24));
-
+				final int ribbonCount = MathHelper.randomInt(1, 24);
+				spiritwebCapability.giveManifestation(manifestation, ribbonCount);
+				//Break here because there is only one attribute for ribbons.
+				CosmereAPI.logger.info("Setting entity {} ribbons to {}", spiritwebCapability.getLiving().getName(), ribbonCount);
+				break;
 			}
 		}
 	}
