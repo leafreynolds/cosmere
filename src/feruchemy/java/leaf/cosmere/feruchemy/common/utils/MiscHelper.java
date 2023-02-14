@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 11 - 2022 ~ Leaf
+ * File updated ~ 15 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.utils;
@@ -30,8 +30,10 @@ public class MiscHelper
 			{
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 				{
-					//give allomancy
-					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
+					//give feruchemy
+					final boolean isFeruchemy = manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
+					final boolean notAtium = manifestation.getPowerID() != Metals.MetalType.ATIUM.getID();
+					if (isFeruchemy && notAtium)//don't double up on improving electrum
 					{
 						//todo config feruchemy god metal strength
 						final double strength = manifestation.getStrength(iSpiritweb, true);

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 15 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.utils;
@@ -41,7 +41,9 @@ public class MiscHelper
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 				{
 					//give allomancy
-					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
+					final boolean isAllomancy = manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
+					final boolean notAtium = manifestation.getPowerID() != Metals.MetalType.ATIUM.getID();
+					if (isAllomancy && notAtium)
 					{
 						//todo allomancy godmetal strength
 						final double strength = manifestation.getStrength(iSpiritweb, true);
