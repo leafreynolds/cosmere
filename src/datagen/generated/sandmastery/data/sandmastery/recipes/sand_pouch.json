@@ -8,7 +8,7 @@
       "item": "sandmastery:sand_jar"
     },
     "L": {
-      "item": "minecraft:leather"
+      "tag": "forge:leather"
     }
   },
   "pattern": [

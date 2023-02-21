@@ -5,7 +5,7 @@
       "item": "minecraft:goat_horn"
     },
     "S": {
-      "item": "minecraft:string"
+      "tag": "forge:string"
     }
   },
   "pattern": [
