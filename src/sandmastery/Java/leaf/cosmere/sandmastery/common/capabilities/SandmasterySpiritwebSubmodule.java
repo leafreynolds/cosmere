@@ -54,10 +54,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 			                           : 0;
 
 			int currentFlags = 0;
-			currentFlags = currentFlags << isActivatedAndActive;
-			currentFlags = currentFlags << elevateFlag;
-			currentFlags = currentFlags << launchFlag;
-			currentFlags = currentFlags << projectileFlag;
+			currentFlags = currentFlags + isActivatedAndActive;
+			currentFlags = currentFlags + elevateFlag;
+			currentFlags = currentFlags + launchFlag;
+			currentFlags = currentFlags + projectileFlag;
 
 			if (hotkeyFlags != currentFlags)
 			{

@@ -4,7 +4,9 @@
 
 package leaf.cosmere.sandmastery.common.items;
 
+import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Taldain;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
@@ -12,8 +14,8 @@ import leaf.cosmere.sandmastery.common.entities.SandProjectile;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
-import leaf.cosmere.sandmastery.common.sandpouch.SandPouchContainerMenu;
-import leaf.cosmere.sandmastery.common.sandpouch.SandPouchInventory;
+import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
+import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchInventory;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -51,7 +53,7 @@ public class SandPouchItem extends ChargeableItemBase
 
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
-        if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
+		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
         {
             return true;
         }
@@ -65,10 +67,17 @@ public class SandPouchItem extends ChargeableItemBase
 	}
 
 	@Override
+	public int getCharge(ItemStack itemStack)
+	{
+		int itemCharge = StackNBTHelper.getInt(itemStack, Constants.NBT.CHARGE_LEVEL, 0);
+		return  itemCharge * itemStack.getCount();
+	}
+
+	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
 		int res = 0;
-		IItemHandler inv = itemStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		IItemHandler inv = getPouchInv(itemStack);
         if (inv == null)
         {
             return res;
@@ -107,8 +116,6 @@ public class SandPouchItem extends ChargeableItemBase
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyer) ->
 						new SandPouchContainerMenu(windowID, playerInv, pouchStack), pouchStack.getHoverName());
 				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
-
-				System.out.println();
 			}
 		}
 		return InteractionResultHolder.consume(pouchStack);
@@ -125,7 +132,7 @@ public class SandPouchItem extends ChargeableItemBase
 		return this.sandPouchInventory;
 	}
 
-	private static IItemHandlerModifiable getPouchInv(ItemStack pouchStack)
+	public static IItemHandlerModifiable getPouchInv(ItemStack pouchStack)
 	{
 		return (IItemHandlerModifiable) pouchStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 	}
@@ -135,7 +142,7 @@ public class SandPouchItem extends ChargeableItemBase
 		SpiritwebCapability.get(player).ifPresent((data) ->
 		{
 			int mode = data.getMode(SandmasteryManifestations.SANDMASTERY_POWERS.get(Taldain.Mastery.PROJECTILE).get());
-			IItemHandlerModifiable inv = (IItemHandlerModifiable) pouch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+			IItemHandlerModifiable inv = getPouchInv(pouch);
 			ItemStack ammo = inv.getStackInSlot(2);
 			if (ammo.getCount() > 0)
 			{

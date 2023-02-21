@@ -1,5 +1,6 @@
-package leaf.cosmere.sandmastery.common.sandpouch;
+package leaf.cosmere.sandmastery.common.items.sandpouch;
 
+import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
@@ -9,7 +10,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ public class SandPouchContainerMenu extends AbstractContainerMenu {
         super(SandmasteryMenuTypes.SAND_POUCH.get(), windowId);
         this.pouch = pouch;
 
-        IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+        IItemHandlerModifiable pouchInv = SandPouchItem.getPouchInv(pouch);
 
         int invStart = 0;
 

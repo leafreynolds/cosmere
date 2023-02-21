@@ -25,9 +25,10 @@ public class SandmasteryBlockTagsGen extends BlockTagsProvider
     @Override
     protected void addTags()
     {
-        add(BlockTags.MINEABLE_WITH_SHOVEL, SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock());
-        add(BlockTags.MINEABLE_WITH_SHOVEL, SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock());
+        add(BlockTags.MINEABLE_WITH_SHOVEL, SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock(), SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock());
+        add(BlockTags.SAND, SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock(), SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock());
         add(BlockTags.MINEABLE_WITH_PICKAXE, SandmasteryBlocksRegistry.SAND_JAR_BLOCK.getBlock());
+        add(BlockTags.MINEABLE_WITH_AXE, SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock());
 
     }
 

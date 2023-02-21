@@ -1,18 +1,13 @@
 package leaf.cosmere.sandmastery.common.blocks;
 
-import leaf.cosmere.common.blocks.BaseBlock;
 import leaf.cosmere.common.properties.PropTypes;
-import leaf.cosmere.sandmastery.common.blockentities.SandJarBE;
+import leaf.cosmere.sandmastery.common.blocks.entities.SandJarBE;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
-import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;

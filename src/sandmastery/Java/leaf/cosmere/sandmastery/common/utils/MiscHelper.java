@@ -34,9 +34,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MiscHelper
@@ -158,6 +161,8 @@ public class MiscHelper
 
 	public static int getChargeFromItemStack(ItemStack stack)
 	{
+		if(stack.isEmpty()) return 0;
+
         if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem())
         {
             return stack.getCount() * 10;
@@ -176,26 +181,13 @@ public class MiscHelper
         }
 	}
 
-	public static String intToAbbreviatedStr(int num)
-	{
-        if (num < 1e3)
-        {
-            return String.valueOf(num);
-        }
-        if (num < 1e6)
-        {
-            return String.valueOf(num / 1000) + "k";
-        }
-        if (num < 1e9)
-        {
-            return String.valueOf(num / 1000000) + "m";
-        }
-        if (num < 1e12)
-        {
-            return String.valueOf(num / 1000000000) + "b";
-        }
-		return "";
-	}
+    public static String intToAbbreviatedStr(int num) {
+        if(num < 1e3) return String.valueOf(num);
+        if(num < 1e6) return String.valueOf(num/1000) + "k";
+        if(num < 1e9) return String.valueOf(num/1000000) + "m";
+        if(num < 1e12) return String.valueOf(num/1000000000) + "b";
+        return "";
+    }
 
 	public static void logToChat(ISpiritweb data, String msg)
 	{
@@ -231,5 +223,9 @@ public class MiscHelper
 			enabledViaHotkey = true;
 		}
 		return enabledViaHotkey;
+	}
+
+	public static int randomSlot(ItemStackHandler itemStackHandler) {
+		return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
 	}
 }

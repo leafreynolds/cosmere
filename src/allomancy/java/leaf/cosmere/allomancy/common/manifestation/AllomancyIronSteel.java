@@ -57,7 +57,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	@Override
 	public void applyEffectTick(ISpiritweb data)
 	{
-		System.out.println(data.getLiving().level.isClientSide);
 		if (data.getLiving().level.isClientSide)
 		{
 			performEffectClient(data);
