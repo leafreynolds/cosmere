@@ -1,5 +1,5 @@
 /*
- * File updated ~ 13 - 2 - 2023 ~ Leaf
+ * File updated ~ 21 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -125,7 +125,7 @@ public class EntityEventHandler
 					: Manifestations.ManifestationTypes.FERUCHEMY;
 
 
-			CosmereAPI.logger.info("Entity {} has full powers! {}", spiritwebCapability.getLiving().getName(), manifestationType);
+			CosmereAPI.logger.info("Entity {} has full powers! {}", spiritwebCapability.getLiving().getName().getString(), manifestationType);
 
 			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 			{
@@ -157,7 +157,7 @@ public class EntityEventHandler
 
 				CosmereAPI.logger.info(
 						"Entity {} has been granted allomantic {} and feruchemical {}!",
-						spiritwebCapability.getLiving().getName(),
+						spiritwebCapability.getLiving().getName().getString(),
 						allomancyMetal,
 						feruchemyMetal);
 			}
@@ -170,7 +170,7 @@ public class EntityEventHandler
 
 				spiritwebCapability.giveManifestation(manifestation, 10);
 				CosmereAPI.logger.info("Entity {} has been granted {}, with metal {}!",
-						spiritwebCapability.getLiving().getName(),
+						spiritwebCapability.getLiving().getName().getString(),
 						isAllomancy
 						? Manifestations.ManifestationTypes.ALLOMANCY.getName()
 						: Manifestations.ManifestationTypes.FERUCHEMY.getName(),
@@ -190,7 +190,7 @@ public class EntityEventHandler
 				final int ribbonCount = MathHelper.randomInt(1, 24);
 				spiritwebCapability.giveManifestation(manifestation, ribbonCount);
 				//Break here because there is only one attribute for ribbons.
-				CosmereAPI.logger.info("Setting entity {} ribbons to {}", spiritwebCapability.getLiving().getName(), ribbonCount);
+				CosmereAPI.logger.info("Setting entity {} ribbons to {}", spiritwebCapability.getLiving().getName().getString(), ribbonCount);
 				break;
 			}
 		}
