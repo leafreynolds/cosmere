@@ -7,10 +7,12 @@ package leaf.cosmere.sandmastery.client.eventHandlers;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.sandmastery.client.gui.SandPouchContainerScreen;
+import leaf.cosmere.sandmastery.client.gui.SandSpreaderScreen;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreader.SandSpreaderMenu;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEntityTypes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
-import leaf.cosmere.sandmastery.common.sandpouch.SandPouchContainerMenu;
+import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -51,6 +53,7 @@ public class SandmasteryClientSetup
 		event.register(Registry.MENU_REGISTRY, helper ->
 		{
 			MenuScreens.register((MenuType<SandPouchContainerMenu>) SandmasteryMenuTypes.SAND_POUCH.get(), SandPouchContainerScreen::new);
+			MenuScreens.register((MenuType<SandSpreaderMenu>) SandmasteryMenuTypes.SAND_SPREADER.get(), SandSpreaderScreen::new);
 			CosmereAPI.logger.info("Sandmastery registered menutypes!");
 		});
 	}

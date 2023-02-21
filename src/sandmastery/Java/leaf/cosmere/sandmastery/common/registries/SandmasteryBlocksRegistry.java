@@ -11,6 +11,7 @@ import leaf.cosmere.common.registration.impl.BlockDeferredRegister;
 import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
+import leaf.cosmere.sandmastery.common.blocks.SandSpreadingTubBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainSandLayerBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainSandBlock;
 import net.minecraft.world.item.BlockItem;
@@ -21,5 +22,6 @@ public class SandmasteryBlocksRegistry
 	public static final BlockRegistryObject<TaldainSandLayerBlock, BlockItem> TALDAIN_SAND_LAYER = BLOCKS.register("taldain_sand_layer", TaldainSandLayerBlock::new);
 	public static final BlockRegistryObject<TaldainSandBlock, BlockItem> TALDAIN_SAND = BLOCKS.register("taldain_sand", TaldainSandBlock::new);
 	public static final BlockRegistryObject<SandJarBlock, BlockItem> SAND_JAR_BLOCK = BLOCKS.register("sand_jar_block", SandJarBlock::new);
+	public static final BlockRegistryObject<SandSpreadingTubBlock, BlockItem> SAND_SPREADING_TUB_BLOCK = BLOCKS.register("sand_spreading_tub", SandSpreadingTubBlock::new);
 
 }

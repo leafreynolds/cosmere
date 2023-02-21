@@ -1,4 +1,4 @@
-package leaf.cosmere.sandmastery.common.sandpouch;
+package leaf.cosmere.sandmastery.common.items.sandpouch;
 
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;

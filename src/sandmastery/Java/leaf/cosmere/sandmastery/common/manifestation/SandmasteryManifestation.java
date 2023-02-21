@@ -156,7 +156,7 @@ public class SandmasteryManifestation extends Manifestation
 	public int getCost(ISpiritweb data)
 	{
 		int mode = data.getMode(this);
-		return mode * 10;
+		return mode * 2;
 	}
 
 	private static Predicate<ItemStack> getIsItemInvalid()
