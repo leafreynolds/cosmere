@@ -9,6 +9,7 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
 import java.util.function.Consumer;
@@ -48,6 +49,13 @@ public class SandmasteryRecipeGen extends RecipeProvider implements IConditionBu
 				.pattern("LJL")
 				.pattern("LLL")
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
+				.save(consumer);
+
+		ShapedRecipeBuilder.shaped(SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock())
+				.define('W', Items.BIRCH_PLANKS)
+				.pattern("W W")
+				.pattern("WWW")
+				.unlockedBy("has_material", has(Items.BIRCH_PLANKS))
 				.save(consumer);
 
 		ShapelessRecipeBuilder.shapeless(SandmasteryItems.SAND_JAR_ITEM.get())
