@@ -1,9 +1,10 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 13 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.capabilities;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -196,8 +197,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 	public void debugRibbonUsage()
 	{
-		System.out.print("Ribbons in use ");
-		System.out.println(ribbonsInUse);
+		CosmereAPI.logger.info("Ribbons in use ");
+		CosmereAPI.logger.info(ribbonsInUse.toString());
 	}
 
 	public void updateFlags(int flags)

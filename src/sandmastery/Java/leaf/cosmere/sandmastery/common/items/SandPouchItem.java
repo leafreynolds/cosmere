@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 13 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.items;
@@ -54,9 +54,9 @@ public class SandPouchItem extends ChargeableItemBase
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
 		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
-        {
-            return true;
-        }
+		{
+			return true;
+		}
 		return itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem();
 	};
 

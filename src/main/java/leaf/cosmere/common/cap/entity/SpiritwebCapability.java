@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 15 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -330,7 +330,7 @@ public class SpiritwebCapability implements ISpiritweb
 				case 1 -> rate = "Burning";
 				case 2, 3 -> rate = "Flared!";//copper has a 3rd mode for only smoking self
 			}
-
+			stringToDraw2 = "Mode: " + rate;
 		}
 
 		//todo translations

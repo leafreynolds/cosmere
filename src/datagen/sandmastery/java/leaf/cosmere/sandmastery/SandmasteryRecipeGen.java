@@ -52,10 +52,10 @@ public class SandmasteryRecipeGen extends RecipeProvider implements IConditionBu
 				.save(consumer);
 
 		ShapedRecipeBuilder.shaped(SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock())
-				.define('W', Items.BIRCH_PLANKS)
+				.define('W', Items.BIRCH_SLAB)
 				.pattern("W W")
 				.pattern("WWW")
-				.unlockedBy("has_material", has(Items.BIRCH_PLANKS))
+				.unlockedBy("has_material", has(Items.BIRCH_SLAB))
 				.save(consumer);
 
 		ShapelessRecipeBuilder.shapeless(SandmasteryItems.SAND_JAR_ITEM.get())

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "W": {
-      "item": "minecraft:birch_planks"
+      "item": "minecraft:birch_slab"
     }
   },
   "pattern": [
