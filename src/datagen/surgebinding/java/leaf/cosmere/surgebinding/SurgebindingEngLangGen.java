@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -7,10 +7,12 @@ package leaf.cosmere.surgebinding;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
+import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -69,6 +71,11 @@ public class SurgebindingEngLangGen extends LanguageProvider
 
 	private void addEntities()
 	{
+		for (IEntityTypeProvider type : SurgebindingEntityTypes.ENTITY_TYPES.getAllEntityTypes())
+		{
+			final ResourceLocation id = type.getRegistryName();
+			add(type.getEntityType().getDescriptionId(), StringHelper.fixCapitalisation(id.getPath()));
+		}
 	}
 
 	private void addAdvancements()

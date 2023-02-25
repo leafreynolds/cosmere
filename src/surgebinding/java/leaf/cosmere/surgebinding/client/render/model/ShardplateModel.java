@@ -1,8 +1,8 @@
 /*
- * File updated ~ 27 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 2 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.surgebinding.client.render.armor;
+package leaf.cosmere.surgebinding.client.render.model;
 
 // Made with Blockbench 4.3.1
 // Exported for Minecraft version 1.17 - 1.18 with Mojang mappings

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common;
@@ -45,6 +45,7 @@ public class Surgebinding implements IModModule
 		//Registries
 		SurgebindingBlocks.BLOCKS.register(modBus);
 		SurgebindingItems.ITEMS.register(modBus);
+		SurgebindingEntityTypes.ENTITY_TYPES.register(modBus);
 		SurgebindingAttributes.ATTRIBUTES.register(modBus);
 		SurgebindingManifestations.MANIFESTATIONS.register(modBus);
 
