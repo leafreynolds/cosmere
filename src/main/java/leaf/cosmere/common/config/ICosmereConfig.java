@@ -1,5 +1,5 @@
 /*
- * File updated ~ 6 - 2 - 2023 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -22,8 +22,9 @@ public interface ICosmereConfig
 	}
 
 	/**
-	 * Should this config be added to the mods "config" files. Make this return false to only create the config. This will allow it to be tracked, but not override the
-	 * value that has already been added to this mod's container. As the list is from config type to mod config.
+	 * Whether the config should be synced to client?
+	 * If it's added to the mod container, I think that lets forge handle overriding values.
+	 * If false, then it creates the file, so it can be tracked, but not overridden
 	 */
 	default boolean addToContainer()
 	{

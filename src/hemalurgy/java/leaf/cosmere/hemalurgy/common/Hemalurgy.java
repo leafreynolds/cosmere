@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 1 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common;
@@ -10,6 +10,7 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.hemalurgy.common.capabilities.HemalurgySpiritwebSubmodule;
+import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
@@ -37,6 +38,9 @@ public class Hemalurgy implements IModModule
 	{
 		Cosmere.addModule(instance = this);
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		HemalurgyConfigs.registerConfigs(ModLoadingContext.get());
+
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigLoad);
 		modBus.addListener(this::imcQueue);

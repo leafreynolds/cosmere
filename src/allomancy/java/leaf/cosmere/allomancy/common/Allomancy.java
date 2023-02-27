@@ -1,12 +1,12 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.allomancy.common.config.CosmereAllomancyConfig;
+import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.network.AllomancyPacketHandler;
 import leaf.cosmere.allomancy.common.registries.*;
 import leaf.cosmere.api.CosmereAPI;
@@ -35,7 +35,7 @@ public class Allomancy implements IModModule
 	public Allomancy()
 	{
 		Cosmere.addModule(instance = this);
-		CosmereAllomancyConfig.registerConfigs(ModLoadingContext.get());
+		AllomancyConfigs.registerConfigs(ModLoadingContext.get());
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::onConfigLoad);
@@ -95,7 +95,7 @@ public class Allomancy implements IModModule
 				IConfigSpec<?> spec = configEvent.getConfig().getSpec();
 				CommentedConfig commentedConfig = configEvent.getConfig().getConfigData();
 
-				if (spec == CosmereAllomancyConfig.SERVER.getConfigSpec())
+				if (spec == AllomancyConfigs.SERVER.getConfigSpec())
 				{
 					//??
 				}

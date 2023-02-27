@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common;
@@ -10,7 +10,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.commands.CosmereCommand;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
-import leaf.cosmere.common.config.CosmereConfig;
+import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.eventHandlers.ColorHandler;
 import leaf.cosmere.common.network.NetworkPacketHandler;
 import leaf.cosmere.common.registry.*;
@@ -46,7 +46,7 @@ public class Cosmere
 	{
 		instance = this;
 
-		CosmereConfig.registerConfigs(ModLoadingContext.get());
+		CosmereConfigs.registerConfigs(ModLoadingContext.get());
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::commonSetup);
@@ -164,7 +164,7 @@ public class Cosmere
 				IConfigSpec<?> spec = configEvent.getConfig().getSpec();
 				CommentedConfig commentedConfig = configEvent.getConfig().getConfigData();
 
-				if (spec == CosmereConfig.common.getConfigSpec())
+				if (spec == CosmereConfigs.SERVER_CONFIG.getConfigSpec())
 				{
 					//??
 				}

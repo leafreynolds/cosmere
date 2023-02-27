@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -10,6 +10,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -53,8 +54,7 @@ public class HUDHandler
 						final int heldStormlight = sbModule.getStormlight();
 						if (heldStormlight > 0)
 						{
-							//todo config
-							final int maxPlayerStormlight = 1000;
+							final int maxPlayerStormlight = SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get();
 							renderStormlightBar(ms, heldStormlight, maxPlayerStormlight);
 						}
 					}

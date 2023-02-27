@@ -1,10 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
- *
- * Special thank you to Vazkii and their Mod Botania for providing the itemstack NBT interaction example!
- * https://github.com/Vazkii/Botania
- * I've used their example of storing mana as the basis for storing different types of feruchemical attributes.
- * In future, will also be doing it for gems and stormlight.
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.charge;
@@ -13,6 +8,7 @@ import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.StackNBTHelper;
+import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
@@ -28,11 +24,10 @@ public interface IChargeable
 {
 	default int getMaxCharge(ItemStack itemStack)
 	{
-		//todo config max value
-		return Mth.floor(18000 * getMaxChargeModifier()) * itemStack.getCount();
+		final int maxCharge = CosmereConfigs.SERVER_CONFIG.CHARGEABLE_MAX_VALUE.get();
+		return Mth.floor(maxCharge * getMaxChargeModifier()) * itemStack.getCount();
 	}
 
-	//todo itemstack specific charge modification
 	default float getMaxChargeModifier()
 	{
 		return 1;

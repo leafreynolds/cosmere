@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.network.packets;
@@ -7,7 +7,7 @@ package leaf.cosmere.surgebinding.common.network.packets;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
-import leaf.cosmere.surgebinding.common.config.CosmereSurgebindingConfig;
+import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.items.ShardbladeItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -41,7 +41,7 @@ public class SummonShardblade implements ICosmerePacket
 			final LivingEntity livingEntity = cap.getLiving();
 			final ItemStack itemInHand = livingEntity.getItemInHand(InteractionHand.MAIN_HAND);
 
-			final int maxShardblades = CosmereSurgebindingConfig.SERVER.MAX_SHARDBLADES.get();
+			final int maxShardblades = SurgebindingConfigs.SERVER.MAX_SHARDBLADES.get();
 
 			if (itemInHand.isEmpty())
 			{

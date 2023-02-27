@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 11 - 2022 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -13,7 +13,7 @@ import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
-import leaf.cosmere.surgebinding.common.config.CosmereSurgebindingConfig;
+import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.util.Mth;
@@ -127,7 +127,7 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 
 			int playerStormlight = sb.getStormlight();
 
-			final int maxPlayerStormlight = CosmereSurgebindingConfig.SERVER.PLAYER_MAX_STORMLIGHT.get();
+			final int maxPlayerStormlight = SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get();
 
 			//Get stormlight from gems
 			if (!pPlayer.isCrouching())

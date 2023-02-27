@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common;
@@ -10,6 +10,7 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.feruchemy.common.capabilities.FeruchemySpiritwebSubmodule;
+import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +36,10 @@ public class Feruchemy implements IModModule
 		Cosmere.addModule(instance = this);
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+
+		FeruchemyConfigs.registerConfigs(ModLoadingContext.get());
+
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigLoad);
 		FeruchemyItems.ITEMS.register(modBus);

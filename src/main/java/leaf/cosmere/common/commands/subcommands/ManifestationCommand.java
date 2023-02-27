@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.commands.subcommands;
@@ -130,7 +130,7 @@ public class ManifestationCommand extends ModCommand
 
 			SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 			{
-				//todo config ability strength
+				//todo change this so that the user sets the strength in the command
 				spiritweb.giveManifestation(manifestation, 9);
 				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 				ReportPowersFoundOnPlayer(context, player);

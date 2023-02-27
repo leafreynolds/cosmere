@@ -1,11 +1,12 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -27,9 +28,8 @@ public class FeruchemyBendalloy extends FeruchemyManifestation
 			FoodData foodData = player.getFoodData();
 			if (isTapping(data) && !foodData.needsFood() && foodData.getSaturationLevel() < foodData.getFoodLevel())
 			{
-				//todo config
-				//currently double cost if only doing saturation
-				cost *= 2;
+				//currently increase cost if only doing saturation
+				cost *= FeruchemyConfigs.SERVER.BENDALLOY_SATURATION_MULTIPLIER.get();
 			}
 		}
 

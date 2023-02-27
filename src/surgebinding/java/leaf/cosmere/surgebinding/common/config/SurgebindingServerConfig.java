@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.config;
@@ -8,12 +8,11 @@ import leaf.cosmere.common.config.ICosmereConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig.Type;
 
-public class SurgebindingConfig implements ICosmereConfig
+public class SurgebindingServerConfig implements ICosmereConfig
 {
 
 	private final ForgeConfigSpec configSpec;
 
-	// Boost amount for Duralumin and Nicrosil
 	public final ForgeConfigSpec.IntValue MAX_SHARDBLADES;
 	public final ForgeConfigSpec.IntValue PLAYER_MAX_STORMLIGHT;
 	public final ForgeConfigSpec.IntValue STORMLIGHT_DRAIN_RATE;
@@ -21,12 +20,12 @@ public class SurgebindingConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue PROGRESSION_HEAL_COST;
 
 
-	SurgebindingConfig()
+	SurgebindingServerConfig()
 	{
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-		builder.comment("Surgebinding Config. This config is synced between server and client.").push("allomancy");
+		builder.comment("Surgebinding Config. This config is synced between server and client.").push("surgebinding");
 
-		MAX_SHARDBLADES = builder.comment("How many shardblades total that the user can bond").defineInRange("bondAmount", 10, 0, 20);
+		MAX_SHARDBLADES = builder.comment("How many shardblades total that the user can bond").defineInRange("shardbladeBondAmount", 10, 0, 20);
 		PLAYER_MAX_STORMLIGHT = builder.comment("How much stormlight can a player hold at once").defineInRange("playerMaxStormlight", 5000, 100, 20000);
 		STORMLIGHT_DRAIN_RATE = builder.comment("How many points of stormlight drain per second").defineInRange("stormlightDrainRate", 5, 1, 100);
 		PROGRESSION_BONEMEAL_COST = builder.comment("How many points of stormlight to trigger the bonemeal effect").defineInRange("progressionBonemealStormlightCost", 20, 1, 1000);

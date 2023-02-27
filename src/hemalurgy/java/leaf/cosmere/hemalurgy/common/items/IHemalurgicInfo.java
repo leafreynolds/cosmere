@@ -1,5 +1,5 @@
 /*
- * File updated ~ 21 - 2 - 2023 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.items;
@@ -15,6 +15,7 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -392,19 +393,19 @@ public interface IHemalurgicInfo
 			case LERASATIUM ->
 			{
 				//lerasatium spikes can't give more than 5
-				//todo config max lerasatium spike strength amount
-				strength = Math.min(5, strength);
+				final int max = HemalurgyConfigs.SERVER.LERASATIUM_MAX_SPIKE_STRENGTH.get();
+				strength = Math.min(max, strength);
 			}
 			case CHROMIUM ->
 			{
-				//todo config enforced max chromium spike luck amount
-				strength = Math.min(3, strength);
+				final int max = HemalurgyConfigs.SERVER.CHROMIUM_MAX_SPIKE_STRENGTH.get();
+				strength = Math.min(max, strength);
 			}
 			default ->
 			{
 				//other spikes can't give more than 7
-				//todo config max power spike strength amount
-				strength = Math.min(7, strength);
+				final int max = HemalurgyConfigs.SERVER.DEFAULT_POWER_MAX_SPIKE_STRENGTH.get();
+				strength = Math.min(max, strength);
 			}
 		}
 

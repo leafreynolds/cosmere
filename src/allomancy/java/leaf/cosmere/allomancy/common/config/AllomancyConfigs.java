@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.config;
@@ -8,14 +8,14 @@ import leaf.cosmere.common.config.CosmereConfigHelper;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
 
-public class CosmereAllomancyConfig
+public class AllomancyConfigs
 {
-	private CosmereAllomancyConfig()
+	private AllomancyConfigs()
 	{
 
 	}
 
-	public static final AllomancyConfig SERVER = new AllomancyConfig();
+	public static final AllomancyServerConfig SERVER = new AllomancyServerConfig();
 
 	public static void registerConfigs(ModLoadingContext modLoadingContext)
 	{

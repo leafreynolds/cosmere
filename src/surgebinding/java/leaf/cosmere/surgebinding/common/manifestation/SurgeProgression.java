@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -46,7 +46,6 @@ public class SurgeProgression extends SurgebindingManifestation
 						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
 						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
-						//todo config
 						final int stormlightHealingCostMultiplier = SurgebindingConfigs.SERVER.PROGRESSION_HEAL_COST.get();
 						if (submodule.adjustStormlight(-(healthMissing * stormlightHealingCostMultiplier), true))
 						{

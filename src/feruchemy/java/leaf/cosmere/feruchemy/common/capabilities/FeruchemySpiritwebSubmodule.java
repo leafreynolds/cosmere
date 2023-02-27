@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.capabilities;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
+import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
@@ -20,13 +21,12 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void GiveStartingItem(Player player)
 	{
-		//todo config how many metalminds a full feruchemist can start with
-		final int startingMetalmindCount = 3;
+		final int startingMetalmindCount = FeruchemyConfigs.SERVER.FULL_FERUCHEMIST_STARTING_METALMIND_COUNT.get();
+		final double maxAmount = FeruchemyConfigs.SERVER.STARTING_METALMIND_RANDOMISED_MAX_FILL_AMOUNT.get();
 
 		for (int i = 0; i < startingMetalmindCount; i++)
 		{
-			//todo config feruchemist starting metalmind charge level
-			final float fillAmount = (float) (0.6667f * Math.random());
+			final float fillAmount = (float) (maxAmount * Math.random());
 			int id = MathHelper.randomInt(0, 15);
 			Metals.MetalType.valueOf(id).ifPresent(metalType -> GiveStartingItem(player, metalType, fillAmount));
 		}
@@ -37,8 +37,9 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 	{
 		if (manifestation instanceof FeruchemyManifestation feruchemyManifestation)
 		{
-			//todo config ferring starting metalmind charge level
-			final float fillAmount = (float) (0.6667f * Math.random());
+			final double maxAmount = FeruchemyConfigs.SERVER.STARTING_METALMIND_RANDOMISED_MAX_FILL_AMOUNT.get();
+
+			final float fillAmount = (float) (maxAmount * Math.random());
 			GiveStartingItem(player, feruchemyManifestation.getMetalType(), fillAmount);
 		}
 	}

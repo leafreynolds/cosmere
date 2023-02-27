@@ -1,11 +1,10 @@
 /*
- * File updated ~ 10 - 1 - 2023 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
@@ -28,7 +27,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 				addAttributeModifier(
 						AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get(),
 						"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
-						AllomancyConfigs.SERVER.boostAmount.get(),
+						0.334D,// todo config - Need to figure out an alternative to config boost amount //AllomancyConfigs.SERVER.boostAmount.get(),
 						AttributeModifier.Operation.MULTIPLY_TOTAL);
 				//todo boost other manifestation types
 

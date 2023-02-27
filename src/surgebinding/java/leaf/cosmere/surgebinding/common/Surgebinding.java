@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common;
@@ -39,6 +39,7 @@ public class Surgebinding implements IModModule
 	public Surgebinding()
 	{
 		Cosmere.addModule(instance = this);
+
 		SurgebindingConfigs.registerConfigs(ModLoadingContext.get());
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();

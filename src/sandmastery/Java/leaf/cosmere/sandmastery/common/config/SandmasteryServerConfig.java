@@ -1,28 +1,27 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.allomancy.common.config;
+package leaf.cosmere.sandmastery.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig.Type;
 
-public class AllomancyConfig implements ICosmereConfig
+public class SandmasteryServerConfig implements ICosmereConfig
 {
 
 	private final ForgeConfigSpec configSpec;
 
-	// Boost amount for Duralumin and Nicrosil
-	public final ForgeConfigSpec.DoubleValue boostAmount;
+	public final ForgeConfigSpec.DoubleValue someValue;
 
 
-	AllomancyConfig()
+	SandmasteryServerConfig()
 	{
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-		builder.comment("Allomancy Config. This config is synced between server and client.").push("allomancy");
+		builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
 
-		boostAmount = builder.comment("Boost amount for Duralumin and Nicrosil").defineInRange("boostAmount", 0.334D, 0D, 1D);
+		someValue = builder.comment("some value but with comment").defineInRange("someValue", 0.334D, 0D, 1D);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -31,7 +30,7 @@ public class AllomancyConfig implements ICosmereConfig
 	@Override
 	public String getFileName()
 	{
-		return "allomancy";
+		return "SandmasteryServer";
 	}
 
 	@Override

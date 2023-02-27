@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities;
@@ -7,7 +7,7 @@ package leaf.cosmere.surgebinding.common.capabilities;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.surgebinding.common.config.CosmereSurgebindingConfig;
+import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
@@ -89,7 +89,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 					}
 				}
 
-				int drainRate = CosmereSurgebindingConfig.SERVER.STORMLIGHT_DRAIN_RATE.get();
+				int drainRate = SurgebindingConfigs.SERVER.STORMLIGHT_DRAIN_RATE.get();
 				//todo maybe reducing cost based on how many ideals they have sworn?
 				int idealsSworn = 1;
 

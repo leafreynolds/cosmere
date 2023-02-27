@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -7,6 +7,7 @@ package leaf.cosmere.feruchemy.common.manifestation;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,8 +23,9 @@ public class FeruchemyGold extends FeruchemyManifestation
 	public int getCost(ISpiritweb data)
 	{
 		final int cost = super.getCost(data);
-		//todo config gold tap cost
-		return isTapping(data) ? cost * 10 : cost;
+		return isTapping(data)
+		       ? cost * FeruchemyConfigs.SERVER.GOLD_TAP_COST_MULTIPLIER.get()
+		       : cost;
 	}
 
 	@Override

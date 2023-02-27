@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 2 - 2023 ~ Leaf
+ * File updated ~ 27 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.utils;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -35,9 +36,10 @@ public class MiscHelper
 					final boolean notAtium = manifestation.getPowerID() != Metals.MetalType.ATIUM.getID();
 					if (isFeruchemy && notAtium)//don't double up on improving electrum
 					{
-						//todo config feruchemy god metal strength
 						final double strength = manifestation.getStrength(iSpiritweb, true);
-						spiritweb.giveManifestation(manifestation, strength < 13 ? 13 : (int) (strength + 1));
+						final int minimum = FeruchemyConfigs.SERVER.GOD_METAL_EAT_STRENGTH_MINIMUM.get();
+
+						spiritweb.giveManifestation(manifestation, strength < minimum ? minimum : (int) (strength + 1));
 					}
 				}
 			}
