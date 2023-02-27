@@ -1,9 +1,11 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.spiritweb;
 
+import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,6 +15,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 public interface ISpiritweb extends INBTSerializable<CompoundTag>
 {
@@ -62,4 +65,8 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	void transferFrom(ISpiritweb oldSpiritWeb);
 
 	CompoundTag getCompoundTag();
+
+	ISpiritwebSubmodule getSubmodule(Manifestations.ManifestationTypes manifestationType);
+
+	Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> getSubmodules();
 }

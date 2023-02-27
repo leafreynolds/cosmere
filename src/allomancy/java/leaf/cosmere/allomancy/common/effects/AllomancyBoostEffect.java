@@ -1,11 +1,11 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 1 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.allomancy.common.config.CosmereAllomancyConfig;
+import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
@@ -28,7 +28,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 				addAttributeModifier(
 						AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get(),
 						"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
-						CosmereAllomancyConfig.SERVER.boostAmount.get(),
+						AllomancyConfigs.SERVER.boostAmount.get(),
 						AttributeModifier.Operation.MULTIPLY_TOTAL);
 				//todo boost other manifestation types
 
@@ -47,7 +47,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 		{
 			SpiritwebCapability.get(livingEntity).ifPresent(data ->
 			{
-				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 
 				for (Metals.MetalType metalType : Metals.MetalType.values())
 				{

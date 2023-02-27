@@ -6,9 +6,10 @@ package leaf.cosmere.surgebinding.common.eventHandlers;
 
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
+import leaf.cosmere.surgebinding.common.entity.*;
+import leaf.cosmere.surgebinding.common.registries.*;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.event.entity.*;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,5 +27,11 @@ public class SurgebindingModBusEventHandler
 			event.add(EntityType.PLAYER, SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(surge).getAttribute());
 		}
 
+	}
+
+	@SubscribeEvent
+	public static void entityAttributeEvent(EntityAttributeCreationEvent event)
+	{
+		event.put(SurgebindingEntityTypes.CHULL.get(), Chull.createAttributes().build());
 	}
 }

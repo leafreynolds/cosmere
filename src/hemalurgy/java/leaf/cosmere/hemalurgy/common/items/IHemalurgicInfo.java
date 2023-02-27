@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 21 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.items;
@@ -150,14 +150,9 @@ public interface IHemalurgicInfo
 						else
 						{
 							//todo decide if we just pick a random power
-							manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.ALLOMANCY);
-							if (manifestation == null)
-							{
-								//todo decide if prefer allomancy over feruchemy? the only source of both would be a player though, so who cares
-								manifestation = getRandomMetalPowerFromList(manifestationsFound, whiteList, Manifestations.ManifestationTypes.FERUCHEMY);
-							}
+							Collections.shuffle(manifestationsFound);
+							manifestation = manifestationsFound.get(0);
 						}
-
 
 						//then try steal it
 						if (manifestation != null)

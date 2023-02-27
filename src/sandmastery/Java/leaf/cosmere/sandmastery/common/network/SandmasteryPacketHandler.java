@@ -8,6 +8,7 @@ import leaf.cosmere.sandmastery.common.network.packets.PlayerShootSandProjectile
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.BasePacketHandler;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class SandmasteryPacketHandler extends BasePacketHandler
@@ -24,6 +25,7 @@ public class SandmasteryPacketHandler extends BasePacketHandler
 	public void initialize()
 	{
 		registerClientToServer(PlayerShootSandProjectileMessage.class, PlayerShootSandProjectileMessage::decode);
+		registerClientToServer(SyncMasteryBindsMessage.class, SyncMasteryBindsMessage::decode);
 
 	}
 

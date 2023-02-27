@@ -1,11 +1,12 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 2 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.surgebinding.client.render.armor;
+package leaf.cosmere.surgebinding.client.render.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.surgebinding.client.render.SurgebindingLayerDefinitions;
+import leaf.cosmere.surgebinding.client.render.model.ShardplateModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;

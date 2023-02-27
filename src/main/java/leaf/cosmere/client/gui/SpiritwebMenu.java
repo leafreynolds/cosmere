@@ -1,12 +1,5 @@
 /*
- *
- * Special thank you to the Chisels and Bits team for their example of rendering a dynamic menu based on given elements!
- * https://github.com/ChiselsAndBits/Chisels-and-Bits
- *
- * At the moment it's just showing all manifestation powers that a user has,
- * but eventually will be subclassed to show menus by power type instead.
- *
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client.gui;
@@ -372,7 +365,7 @@ public class SpiritwebMenu extends Screen
 		final int[] y = {(int) middle_y / 2};
 		m_infoText.clear();
 
-		for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.spiritwebSubmodules.values())
+		for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.getSubmodules().values())
 		{
 			spiritwebSubmodule.collectMenuInfo(m_infoText);
 		}

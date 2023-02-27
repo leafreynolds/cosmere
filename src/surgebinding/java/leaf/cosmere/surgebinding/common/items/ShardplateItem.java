@@ -1,11 +1,11 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
 
 import leaf.cosmere.client.render.CosmereRenderers;
-import leaf.cosmere.surgebinding.client.render.armor.ArmorRenderer;
+import leaf.cosmere.surgebinding.client.render.renderer.ArmorRenderer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
 import net.minecraft.client.model.HumanoidModel;

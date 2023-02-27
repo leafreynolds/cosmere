@@ -1,5 +1,5 @@
 /*
- * File updated ~ 2 - 11 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -48,7 +48,7 @@ public class HUDHandler
 				{
 					if (!player.isSpectator())
 					{
-						var sbModule = (SurgebindingSpiritwebSubmodule) data.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+						var sbModule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
 						final int heldStormlight = sbModule.getStormlight();
 						if (heldStormlight > 0)

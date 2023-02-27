@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -32,7 +32,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -69,7 +68,7 @@ public class SpiritwebCapability implements ISpiritweb
 	public List<Integer> pullEntities = new ArrayList<>(4);
 	private CompoundTag nbt;
 
-	public Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
+	private final Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
 
 
 	public SpiritwebCapability(LivingEntity ent)
@@ -164,6 +163,18 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
+	public ISpiritwebSubmodule getSubmodule(Manifestations.ManifestationTypes manifestationType)
+	{
+		return spiritwebSubmodules.get(manifestationType);
+	}
+
+	@Override
+	public Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> getSubmodules()
+	{
+		return spiritwebSubmodules;
+	}
+
+	@Override
 	public void tick()
 	{
 		//if server
@@ -238,7 +249,7 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			//attribute registry name is now the same as the manifestation registry name, so this function
 			//doesn't need to be able to access the attribute registries of sub mods :)
-			Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(manifestation.getRegistryName());
+			Attribute attribute = manifestation.getAttribute();
 			if (attribute != null)
 			{
 				AttributeInstance oldAttr = oldAttMap.getInstance(attribute);
@@ -319,7 +330,7 @@ public class SpiritwebCapability implements ISpiritweb
 				case 1 -> rate = "Burning";
 				case 2, 3 -> rate = "Flared!";//copper has a 3rd mode for only smoking self
 			}
-
+			stringToDraw2 = "Mode: " + rate;
 		}
 
 		//todo translations
@@ -339,7 +350,9 @@ public class SpiritwebCapability implements ISpiritweb
 	public Manifestation getSelectedManifestation()
 	{
 		return selectedManifestation;
-	};
+	}
+
+	;
 
 	public boolean hasBeenInitialized()
 	{

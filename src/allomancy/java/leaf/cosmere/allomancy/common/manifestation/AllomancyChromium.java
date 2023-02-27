@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -92,7 +92,7 @@ public class AllomancyChromium extends AllomancyManifestation
 
 						if (entity != null)
 						{
-							AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) targetSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+							AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) targetSpiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 							for (Metals.MetalType metalType : Metals.MetalType.values())
 							{
 								float drainAmount = allo.getIngestedMetal(metalType) * 0.1f;

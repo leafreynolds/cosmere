@@ -1,6 +1,5 @@
-package leaf.cosmere.sandmastery.common.blockentities;
+package leaf.cosmere.sandmastery.common.blocks.entities;
 
-import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;

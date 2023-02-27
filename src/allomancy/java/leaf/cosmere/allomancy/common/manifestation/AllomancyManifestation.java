@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -110,7 +110,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	{
 		//absolute value, because compounding uses negative modes.
 		int mode = Mth.abs(getMode(data));
-		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 
 		//make sure the user can afford the cost of burning this metal
 		while (mode > 0)
@@ -144,7 +144,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		int mode = getMode(data);
 		final int cost = Mth.abs(mode);
 
-		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).spiritwebSubmodules.get(Manifestations.ManifestationTypes.ALLOMANCY);
+		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();

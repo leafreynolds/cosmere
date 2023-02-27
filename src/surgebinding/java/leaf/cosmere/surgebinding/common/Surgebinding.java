@@ -12,7 +12,7 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.capability.world.IRoshar;
-import leaf.cosmere.surgebinding.common.config.CosmereSurgebindingConfig;
+import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.network.SurgebindingPacketHandler;
 import leaf.cosmere.surgebinding.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ public class Surgebinding implements IModModule
 	public Surgebinding()
 	{
 		Cosmere.addModule(instance = this);
-		CosmereSurgebindingConfig.registerConfigs(ModLoadingContext.get());
+		SurgebindingConfigs.registerConfigs(ModLoadingContext.get());
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::commonSetup);
@@ -49,6 +49,7 @@ public class Surgebinding implements IModModule
 		//Registries
 		SurgebindingBlocks.BLOCKS.register(modBus);
 		SurgebindingItems.ITEMS.register(modBus);
+		SurgebindingEntityTypes.ENTITY_TYPES.register(modBus);
 		SurgebindingAttributes.ATTRIBUTES.register(modBus);
 		SurgebindingManifestations.MANIFESTATIONS.register(modBus);
 
@@ -116,7 +117,7 @@ public class Surgebinding implements IModModule
 				IConfigSpec<?> spec = configEvent.getConfig().getSpec();
 				CommentedConfig commentedConfig = configEvent.getConfig().getConfigData();
 
-				if (spec == CosmereSurgebindingConfig.SERVER.getConfigSpec())
+				if (spec == SurgebindingConfigs.SERVER.getConfigSpec())
 				{
 					//??
 				}

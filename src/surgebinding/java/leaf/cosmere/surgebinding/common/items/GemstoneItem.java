@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 3 - 11 - 2022 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -123,7 +123,7 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 
 			final int charge = getCharge(itemStack);
 
-			SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) data.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+			SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
 			int playerStormlight = sb.getStormlight();
 

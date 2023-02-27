@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -15,7 +15,7 @@ import leaf.cosmere.common.charge.ItemChargeHelper;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
@@ -32,6 +32,15 @@ public class SandmasteryManifestation extends Manifestation
 	{
 		super(Manifestations.ManifestationTypes.SANDMASTERY);
 		this.mastery = mastery;
+	}
+
+	@Override
+	public void tick(ISpiritweb data)
+	{
+		if (MiscHelper.isClient(data))
+		{
+			performEffectClient(data);
+		}
 	}
 
 	@Override
@@ -52,62 +61,87 @@ public class SandmasteryManifestation extends Manifestation
 	}
 
 	@Override
-	public int modeMin(ISpiritweb data) {
+	public int modeMin(ISpiritweb data)
+	{
 		return 0;
 	}
 
 	@Override
-	public int modeMax(ISpiritweb data) {
+	public int modeMax(ISpiritweb data)
+	{
 		return (int) data.getSelectedManifestation().getStrength(data, false);
 	}
 
 	@Override
-	public void onModeChange(ISpiritweb data, int lastMode) {
+	public void onModeChange(ISpiritweb data, int lastMode)
+	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.spiritwebSubmodules.get(Manifestations.ManifestationTypes.SANDMASTERY);
-		if(getMode(data) > lastMode) {
+		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		if (getMode(data) > lastMode)
+		{
 			submodule.useRibbon(data, this);
-		} else if(getMode(data) < lastMode) {
+		}
+		else if (getMode(data) < lastMode)
+		{
 			submodule.releaseRibbon(data, this);
 		}
 	}
 
-	protected boolean enoughChargedSand(ISpiritweb data) {
-		if(data.getLiving() instanceof Player player) {
+	protected boolean enoughChargedSand(ISpiritweb data)
+	{
+		if (data.getLiving() instanceof Player player)
+		{
 			List<ItemStack> allPouches = getSandPouches(player);
 			int required = getCost(data);
 
-			if (allPouches.isEmpty()) return false;
+			if (allPouches.isEmpty())
+			{
+				return false;
+			}
 
 			int count = 0;
-			for(ItemStack stack : allPouches) {
+			for (ItemStack stack : allPouches)
+			{
 				count += StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-				if(count > required) return true;
+				if (count > required)
+				{
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
-	public void useChargedSand(ISpiritweb data) {
-		if(data.getLiving() instanceof Player player) {
+	public void useChargedSand(ISpiritweb data)
+	{
+		if (data.getLiving() instanceof Player player)
+		{
 			List<ItemStack> allPouches = getSandPouches(player);
 
 			int changeLeft = getCost(data);
-			for (ItemStack stack : allPouches) {
+			for (ItemStack stack : allPouches)
+			{
 				int startingCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 				int amountLeft = (startingCharge - changeLeft);
-				if(amountLeft >= 0)
+				if (amountLeft >= 0)
+				{
 					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, amountLeft);
-				else {
+				}
+				else
+				{
 					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 					changeLeft += amountLeft;
 				}
-				if(changeLeft <= 0) break;
+				if (changeLeft <= 0)
+				{
+					break;
+				}
 			}
 		}
 	}
 
-	protected List<ItemStack> getSandPouches(Player player) {
+	protected List<ItemStack> getSandPouches(Player player)
+	{
 		List<ItemStack> curios = ItemChargeHelper.getChargeCurios(player);
 		List<ItemStack> items = ItemChargeHelper.getChargeItems(player);
 
@@ -122,21 +156,29 @@ public class SandmasteryManifestation extends Manifestation
 	public int getCost(ISpiritweb data)
 	{
 		int mode = data.getMode(this);
-		return mode * 10;
+		return mode * 2;
 	}
 
 	private static Predicate<ItemStack> getIsItemInvalid()
 	{
 		return obj ->
 		{
-			if (obj.getItem() instanceof SandPouchItem) return false;
+			if (obj.getItem() instanceof SandPouchItem)
+			{
+				return false;
+			}
 			return true;
 		};
 	}
 
 	@Override
-	public Attribute getAttribute() {
+	public Attribute getAttribute()
+	{
 		return SandmasteryAttributes.RIBBONS.getAttribute();
 	}
 
+	protected void performEffectClient(ISpiritweb data)
+	{
+
+	}
 }

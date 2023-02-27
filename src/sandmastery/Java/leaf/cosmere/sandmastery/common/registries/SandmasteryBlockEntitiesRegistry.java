@@ -8,7 +8,8 @@
 package leaf.cosmere.sandmastery.common.registries;
 
 import leaf.cosmere.sandmastery.common.Sandmastery;
-import leaf.cosmere.sandmastery.common.blockentities.SandJarBE;
+import leaf.cosmere.sandmastery.common.blocks.entities.SandJarBE;
+import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreaderBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,4 +20,5 @@ public class SandmasteryBlockEntitiesRegistry
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Sandmastery.MODID);
 
 	public static final RegistryObject<BlockEntityType<SandJarBE>> SAND_JAR_BE = BLOCK_ENTITIES.register("sand_jar_be", () -> BlockEntityType.Builder.of(SandJarBE::new, SandmasteryBlocksRegistry.SAND_JAR_BLOCK.getBlock()).build(null));
+	public static final RegistryObject<BlockEntityType<SandSpreaderBE>> SAND_SPREADER_BE = BLOCK_ENTITIES.register("sand_spreader_be", () -> BlockEntityType.Builder.of(SandSpreaderBE::new, SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock()).build(null));
 }

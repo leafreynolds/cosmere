@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "W W",
+    "WWW"
+  ],
+  "result": {
+    "item": "sandmastery:sand_spreading_tub"
+  }
+}

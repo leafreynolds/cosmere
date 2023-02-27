@@ -1,5 +1,5 @@
 /*
- * File updated ~ 1 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -36,7 +36,7 @@ public class SurgeGravitation extends SurgebindingManifestation
 				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get()))
 				{
 
-					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) ((SpiritwebCapability) iSpiritweb).spiritwebSubmodules.get(Manifestations.ManifestationTypes.SURGEBINDING);
+					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
 					if (submodule.adjustStormlight(-20, true))
 					{

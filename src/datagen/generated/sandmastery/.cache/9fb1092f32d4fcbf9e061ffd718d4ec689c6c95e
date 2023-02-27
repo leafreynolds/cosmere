@@ -1,11 +1,13 @@
-// 1.19.2	2023-02-07T12:59:24.2702926	Recipes
+// 1.19.2	2023-02-22T10:55:52.5524754	Recipes
 e1977557702477a26dc890211eac132769ca8076 data/sandmastery/advancements/recipes/cosmere.blocks/sand_jar_block.json
-cfd07ffd913c47a0e77869a13a2ae77e8feffc17 data/sandmastery/advancements/recipes/sandmastery/jar.json
+88dece6461db7302399c1da0cb29237fc8f42023 data/sandmastery/advancements/recipes/cosmere.blocks/sand_spreading_tub.json
+ec5bf101a9ad0945c2c2049e5d60c4cb3ca8b10a data/sandmastery/advancements/recipes/sandmastery/jar.json
 b629bda5977cfebea35ad7c99637c15a898b7e81 data/sandmastery/advancements/recipes/sandmastery/qido.json
 be3759a5e4338fb7ac5f06a77c6ad9dddaadac3a data/sandmastery/advancements/recipes/sandmastery/sand_jar.json
 163d85ffaf8245d6d35e0ac986e148150fc7a619 data/sandmastery/advancements/recipes/sandmastery/sand_pouch.json
-31db11789d471517e69c13bc28a767b258d22a07 data/sandmastery/recipes/jar.json
-e83973951acbffdfa388e107dc5773ec9149a655 data/sandmastery/recipes/qido.json
+2b4a56924d8fe8c7548bff7cc1c7d7fa7fee5dad data/sandmastery/recipes/jar.json
+5010ccc0e0cd6e459c86e52c81308e2be94b2108 data/sandmastery/recipes/qido.json
 96f2616e4d28c49e45bfd79af63aac4b36aaebc3 data/sandmastery/recipes/sand_jar.json
 2556ee8f849d29dc58d3351893674f2560979caf data/sandmastery/recipes/sand_jar_block.json
-210e1d4a0b42e8f3a7c8940a87dcca434cbcc163 data/sandmastery/recipes/sand_pouch.json
+ed128fd7b4193c1a257950564d2f5d58e47c5c32 data/sandmastery/recipes/sand_pouch.json
+2e1824fcd5105e13b581e7816f9072b6f21e52e6 data/sandmastery/recipes/sand_spreading_tub.json
