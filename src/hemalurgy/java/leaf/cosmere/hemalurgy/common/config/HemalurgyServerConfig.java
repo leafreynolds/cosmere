@@ -38,7 +38,7 @@ public class HemalurgyServerConfig implements ICosmereConfig
 	@Override
 	public String getFileName()
 	{
-		return "hemalurgyServer";
+		return "HemalurgyServer";
 	}
 
 	@Override

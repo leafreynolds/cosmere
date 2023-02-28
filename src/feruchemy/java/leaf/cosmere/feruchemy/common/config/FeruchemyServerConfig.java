@@ -42,7 +42,7 @@ public class FeruchemyServerConfig implements ICosmereConfig
 	@Override
 	public String getFileName()
 	{
-		return "FeruchemyCommon";
+		return "FeruchemyServer";
 	}
 
 	@Override

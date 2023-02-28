@@ -16,7 +16,7 @@ public class CosmereClientConfig implements ICosmereConfig
 	CosmereClientConfig()
 	{
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-		builder.comment("Client Config. This config only exists on the client").push("client");
+		builder.comment("Client Config. This config only exists on the client").push("cosmere");
 
 		clientConfigTest = builder.comment("clientConfigTest").translation("config.cosmere.clientconfigtest").define("clientconfigtest", true);
 
@@ -27,7 +27,7 @@ public class CosmereClientConfig implements ICosmereConfig
 	@Override
 	public String getFileName()
 	{
-		return "client";
+		return "CosmereClient";
 	}
 
 	@Override

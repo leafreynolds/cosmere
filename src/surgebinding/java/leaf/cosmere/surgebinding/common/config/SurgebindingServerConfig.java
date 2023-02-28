@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.config;
@@ -38,7 +38,7 @@ public class SurgebindingServerConfig implements ICosmereConfig
 	@Override
 	public String getFileName()
 	{
-		return "surgebinding";
+		return "SurgebindingServer";
 	}
 
 	@Override

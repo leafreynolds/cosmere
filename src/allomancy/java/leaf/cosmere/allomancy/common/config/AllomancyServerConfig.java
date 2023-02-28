@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 28 - 2 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.config;
@@ -14,7 +14,7 @@ public class AllomancyServerConfig implements ICosmereConfig
 	private final ForgeConfigSpec configSpec;
 
 	// Boost amount for Duralumin and Nicrosil
-	public final ForgeConfigSpec.DoubleValue boostAmount;
+	//public final ForgeConfigSpec.DoubleValue boostAmount;
 
 
 	AllomancyServerConfig()
@@ -22,7 +22,8 @@ public class AllomancyServerConfig implements ICosmereConfig
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.comment("Allomancy Config. This config is synced between server and client.").push("allomancy");
 
-		boostAmount = builder.comment("Boost amount for Duralumin and Nicrosil").defineInRange("boostAmount", 0.334D, 0D, 1D);
+		//can't modify registry objects like that
+		//boostAmount = builder.comment("Boost amount for Duralumin and Nicrosil").defineInRange("boostAmount", 0.334D, 0D, 1D);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -31,7 +32,7 @@ public class AllomancyServerConfig implements ICosmereConfig
 	@Override
 	public String getFileName()
 	{
-		return "AllomancyCommon";
+		return "AllomancyServer";
 	}
 
 	@Override

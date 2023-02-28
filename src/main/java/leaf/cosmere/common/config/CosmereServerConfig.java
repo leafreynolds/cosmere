@@ -18,7 +18,7 @@ public class CosmereServerConfig implements ICosmereConfig
 	CosmereServerConfig()
 	{
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-		builder.comment("Cosmere Server Config. This config is synced between server and client.").push("Cosmere Server");
+		builder.comment("Cosmere Server Config. This config is synced between server and client.").push("cosmere");
 
 		CHARGEABLE_MAX_VALUE = builder.comment("What is the max value for chargeables? This value is modified based on the object").defineInRange("chargeableMaxValue", 18000, 1000, 1000000);
 
@@ -29,7 +29,7 @@ public class CosmereServerConfig implements ICosmereConfig
 	@Override
 	public String getFileName()
 	{
-		return "cosmereServer";
+		return "CosmereServer";
 	}
 
 	@Override
