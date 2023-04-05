@@ -1,5 +1,5 @@
 /*
- * File updated ~ 13 - 2 - 2023 ~ Leaf
+ * File updated ~ 5 - 4 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -315,11 +315,22 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		living.hurtMarked = true;
 	}
 
-	private static final List<Vec3> found = new ArrayList<>();
+	public static final class ScanResult
+	{
+		public final List<Vec3> foundEntities = new ArrayList<>();
+		public final List<BlockPos> foundBlocks = new ArrayList<>();
 
+		public void Clear()
+		{
+			foundEntities.clear();
+			foundBlocks.clear();
+		}
+	}
+
+	private static final ScanResult scanResult = new ScanResult();
 
 	@OnlyIn(Dist.CLIENT)
-	public static List<Vec3> getDrawLines(int range)
+	public static ScanResult getDrawLines(int range)
 	{
 		final Minecraft mc = Minecraft.getInstance();
 		final ProfilerFiller profiler = mc.getProfiler();
@@ -327,10 +338,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		//only update box list every so often
 		if (playerEntity.tickCount % 15 != 0)
 		{
-			return found;
+			return scanResult;
 		}
-
-		found.clear();
+		scanResult.Clear();
 
 		//find all the things that we want to draw a line to from the player
 
@@ -344,7 +354,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					Block block = playerEntity.level.getBlockState(blockPos).getBlock();
 					return block instanceof IHasMetalType || AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
 				})
-				.forEach(blockPos -> found.add(new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5)));
+				.forEach(blockPos -> scanResult.foundBlocks.add(blockPos.immutable()));
 
 		profiler.pop();
 
@@ -354,12 +364,16 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			if (entityContainsMetal(entity))
 			{
-				found.add(entity.position());
+				scanResult.foundEntities.add(
+						entity.position().add(
+								0,
+								entity.getBoundingBox().getYsize() / 2,
+								0));
 			}
 		});
 		profiler.pop();
 
-		return found;
+		return scanResult;
 	}
 
 
