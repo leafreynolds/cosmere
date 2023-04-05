@@ -4,6 +4,7 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
 import leaf.cosmere.api.CosmereAPI;
@@ -41,7 +42,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
@@ -315,18 +319,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		living.hurtMarked = true;
 	}
 
-	public static final class ScanResult
-	{
-		public final List<Vec3> foundEntities = new ArrayList<>();
-		public final List<BlockPos> foundBlocks = new ArrayList<>();
-
-		public void Clear()
-		{
-			foundEntities.clear();
-			foundBlocks.clear();
-		}
-	}
-
 	private static final ScanResult scanResult = new ScanResult();
 
 	@OnlyIn(Dist.CLIENT)
@@ -344,8 +336,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 		//find all the things that we want to draw a line to from the player
 
-		//todo stop aluminum showing up, check IHasMetalType.getMetalType != aluminum
-
 		//metal blocks
 		profiler.push("cosmere-getBlocksInRange");
 		BlockPos.withinManhattanStream(playerEntity.blockPosition(), range, range, range)
@@ -356,7 +346,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					final boolean guestimateMetalBlock = AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
 					return validMetalBlock || guestimateMetalBlock;
 				})
-				.forEach(blockPos -> scanResult.foundBlocks.add(blockPos.immutable()));
+				.forEach(blockPos -> scanResult.addBlock(blockPos.immutable()));
+
+		scanResult.finalizeClusters();
 
 		profiler.pop();
 

@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common.capabilities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
@@ -138,20 +139,31 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (range > 0)
 			{
 				Minecraft.getInstance().getProfiler().push("cosmere-getDrawLines");
-				AllomancyIronSteel.ScanResult scanResult = AllomancyIronSteel.getDrawLines(range);
+				ScanResult scanResult = AllomancyIronSteel.getDrawLines(range);
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
-				PoseStack matrixStack = event.getPoseStack();
+
+
+				//PoseStack matrixStack = event.getPoseStack();
+
+
+				PoseStack viewModelStack = new PoseStack();
+				viewModelStack.last().pose().load(event.getPoseStack().last().pose());
+
 
 				if (!scanResult.foundEntities.isEmpty())
 				{
-					DrawHelper.drawLinesFromPoint(matrixStack, originPoint, Color.BLUE, scanResult.foundEntities);
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.foundEntities);
+				}
+				if (!scanResult.clusterResults.isEmpty())
+				{
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.clusterCenters);
 				}
 				if (!scanResult.foundBlocks.isEmpty())
 				{
-					DrawHelper.drawBlocksAtPoint(matrixStack, Color.BLUE, scanResult.foundBlocks);
-
+					DrawHelper.drawBlocksAtPoint(viewModelStack, Color.BLUE, scanResult.foundBlocks);
 				}
+
 				Minecraft.getInstance().getProfiler().pop();
 			}
 		}

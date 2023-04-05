@@ -1,10 +1,9 @@
 /*
- * File updated ~ 15 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 4 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -138,7 +137,7 @@ public class ClientEvents
 		{
 			profiler.push("cosmere-hud");
 
-			if (Minecraft.getInstance().gameMode.canHurtPlayer())
+			//if (Minecraft.getInstance().gameMode.canHurtPlayer())
 			{
 				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
 				{
@@ -150,7 +149,7 @@ public class ClientEvents
 			}
 			profiler.pop();
 
-			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+			//RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 		}
 
 	}
