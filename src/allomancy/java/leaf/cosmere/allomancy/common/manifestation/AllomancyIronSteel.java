@@ -352,7 +352,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				.filter(blockPos ->
 				{
 					Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-					return block instanceof IHasMetalType || AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
+					final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+					final boolean guestimateMetalBlock = AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
+					return validMetalBlock || guestimateMetalBlock;
 				})
 				.forEach(blockPos -> scanResult.foundBlocks.add(blockPos.immutable()));
 
@@ -427,7 +429,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			{
 				return true;
 			}
-			if (item instanceof IHasMetalType || containsMetal(ResourceLocationHelper.get(item).getPath()))
+
+			final boolean validMetalItem = item instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+			final boolean guestimateMetal = containsMetal(ResourceLocationHelper.get(item).getPath());
+			if (validMetalItem || guestimateMetal)
 			{
 				return true;
 			}
