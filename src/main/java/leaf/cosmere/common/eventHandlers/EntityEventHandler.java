@@ -1,5 +1,5 @@
 /*
- * File updated ~ 21 - 2 - 2023 ~ Leaf
+ * File updated ~ 25 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -12,11 +12,15 @@ import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -24,6 +28,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EntityEventHandler
@@ -74,9 +79,25 @@ public class EntityEventHandler
 				}
 
 			}
+			else if (eventEntity instanceof Warden warden)
+			{
+				//todo move this out
+				final Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation("allomancy:bronze"));
+				if (attribute == null)
+				{
+					return;
+				}
+				AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+
+				if (manifestationAttribute != null)
+				{
+					manifestationAttribute.setBaseValue(9);
+				}
+			}
 
 			spiritweb.setHasBeenInitialized();
 		});
+
 
 	}
 
@@ -131,7 +152,7 @@ public class EntityEventHandler
 			{
 				if (manifestation.getManifestationType() == manifestationType)
 				{
-					spiritwebCapability.giveManifestation(manifestation, 8);
+					spiritwebCapability.giveManifestation(manifestation, 9);
 
 				}
 			}
@@ -168,7 +189,7 @@ public class EntityEventHandler
 						? allomancyPower
 						: feruchemyPower;
 
-				spiritwebCapability.giveManifestation(manifestation, 10);
+				spiritwebCapability.giveManifestation(manifestation, 9);
 				CosmereAPI.logger.info("Entity {} has been granted {}, with metal {}!",
 						spiritwebCapability.getLiving().getName().getString(),
 						isAllomancy

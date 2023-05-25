@@ -1,5 +1,5 @@
 /*
- * File updated ~ 2 - 11 - 2022 ~ Leaf
+ * File updated ~ 25 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.eventHandlers;
@@ -52,5 +52,7 @@ public class AllomancyModBusEventHandler
 				}
 			}
 		}
+
+		event.add(EntityType.WARDEN, AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(Metals.MetalType.BRONZE).get());
 	}
 }
