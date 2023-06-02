@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -33,14 +33,14 @@ public class FeruchemyCopper extends FeruchemyManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 
 		if (!(livingEntity instanceof Player playerEntity) || livingEntity.tickCount % 20 != 0)
 		{
-			return;
+			return false;
 		}
 
 		int mode = getMode(data);
@@ -50,11 +50,12 @@ public class FeruchemyCopper extends FeruchemyManifestation
 		{
 			//remove active effects.
 			//let the current effect run out.
-			return;
+			return false;
 		}
 
 		performXPAdjustment(data, playerEntity);
 
+		return true;
 	}
 
 

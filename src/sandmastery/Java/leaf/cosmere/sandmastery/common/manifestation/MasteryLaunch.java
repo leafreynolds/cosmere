@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -23,29 +23,30 @@ public class MasteryLaunch extends SandmasteryManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.LAUNCH_HOTKEY_FLAG);
-        if (getMode(data) > 0 && enabledViaHotkey)
-        {
-            performEffectServer(data);
-        }
+		if (getMode(data) > 0 && enabledViaHotkey)
+		{
+			return performEffectServer(data);
+		}
+		return false;
 	}
 
-	protected void performEffectServer(ISpiritweb data)
+	protected boolean performEffectServer(ISpiritweb data)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
-        if (!submodule.adjustHydration(-10, false))
-        {
-            return;
-        }
+		if (!submodule.adjustHydration(-10, false))
+		{
+			return false;
+		}
 		int scaleFactor = getMode(data);
-        if (!enoughChargedSand(data))
-        {
-            return;
-        }
+		if (notEnoughChargedSand(data))
+		{
+			return false;
+		}
 
 		LivingEntity living = data.getLiving();
 		Vec3 direction = living.getForward();
@@ -59,5 +60,6 @@ public class MasteryLaunch extends SandmasteryManifestation
 
 		submodule.adjustHydration(-10, true);
 		useChargedSand(data);
+		return true;
 	}
 }

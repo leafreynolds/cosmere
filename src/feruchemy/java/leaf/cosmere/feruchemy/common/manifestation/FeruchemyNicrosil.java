@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -45,14 +45,14 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 
 		if (livingEntity.tickCount % 20 != 0)
 		{
-			return;
+			return false;
 		}
 
 		int mode = getMode(data);
@@ -81,7 +81,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		{
 			//remove active effects.
 			//let the current effect run out.
-			return;
+			return false;
 		}
 
 		final ItemStack itemStack = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, adjustAmount, true, true);
@@ -100,6 +100,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			{
 				checkTapNicrosil(data, itemStack);
 			}
+			return true;
 		}
 		else
 		{
@@ -107,6 +108,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			data.setMode(this, 0);
 		}
 
+		return false;
 	}
 
 	@Override

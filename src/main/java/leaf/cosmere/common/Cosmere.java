@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 1 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common;
@@ -68,6 +68,7 @@ public class Cosmere
 		VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
 		BiomeModifierRegistry.BIOME_MODIFIER_SERIALIZERS.register(modBus);
 		LootFunctionRegistry.LOOT_FUNCTIONS.register(modBus);
+		GameEventRegistry.GAME_EVENTS.register(modBus);
 
 		BiomeRegistry.BIOMES.register(modBus);
 		FeatureRegistry.CONFIGURED_FEATURES.register(modBus);

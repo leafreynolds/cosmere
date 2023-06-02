@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -21,47 +21,48 @@ public class MasteryCushion extends SandmasteryManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
-        if (getMode(data) > 0)
-        {
-            performEffectServer(data);
-        }
+		if (getMode(data) > 0)
+		{
+			return performEffectServer(data);
+		}
+		return false;
 	}
 
 	public void tickClient(ISpiritweb data)
 	{
-        if (MiscHelper.isClient(data))
-        {
-            performEffectClient(data);
-        }
+		if (MiscHelper.isClient(data))
+		{
+			performEffectClient(data);
+		}
 	}
 
-	protected void performEffectServer(ISpiritweb data)
+	protected boolean performEffectServer(ISpiritweb data)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
 		LivingEntity living = data.getLiving();
 		Vec3 movement = living.getDeltaMovement();
-        if (movement.y > 0)
-        {
-            return;
-        }
+		if (movement.y > 0)
+		{
+			return false;
+		}
 		double distFromGround = MiscHelper.distanceFromGround(living);
-        if (!(distFromGround > 1 && distFromGround < 10))
-        {
-            return;
-        }
+		if (!(distFromGround > 1 && distFromGround < 10))
+		{
+			return false;
+		}
 
-        if (!submodule.adjustHydration(-10, false))
-        {
-            return;
-        }
-        if (!enoughChargedSand(data))
-        {
-            return;
-        }
+		if (!submodule.adjustHydration(-10, false))
+		{
+			return false;
+		}
+		if (notEnoughChargedSand(data))
+		{
+			return false;
+		}
 
 
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
@@ -69,5 +70,6 @@ public class MasteryCushion extends SandmasteryManifestation
 		living.resetFallDistance();
 		submodule.adjustHydration(-10, true);
 		useChargedSand(data);
+		return true;
 	}
 }

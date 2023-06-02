@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -141,7 +141,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
@@ -151,13 +151,15 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		if ((livingEntity.tickCount % 20 != 0) || mode == 0)
 		{
 			//if not active tick, or mode is off
-			return;
+			return false;
 		}
 
 		if (canAfford(data, false))//success
 		{
 			applyEffectTick(data);
+			return true;
 		}
+		return false;
 	}
 
 	@Override

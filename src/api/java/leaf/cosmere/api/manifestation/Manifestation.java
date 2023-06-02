@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.manifestation;
@@ -63,9 +63,9 @@ public class Manifestation implements IManifestationProvider
 		return false;
 	}
 
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
-
+		return false;
 	}
 
 	protected void applyEffectTick(ISpiritweb data)

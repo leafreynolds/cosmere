@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 2 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -13,6 +13,7 @@ public class CosmereServerConfig implements ICosmereConfig
 	private final ForgeConfigSpec configSpec;
 
 	public final ForgeConfigSpec.IntValue CHARGEABLE_MAX_VALUE;
+	public final ForgeConfigSpec.BooleanValue SCULK_CAN_HEAR_KINETIC_INVESTITURE;
 
 
 	CosmereServerConfig()
@@ -21,6 +22,7 @@ public class CosmereServerConfig implements ICosmereConfig
 		builder.comment("Cosmere Server Config. This config is synced between server and client.").push("cosmere");
 
 		CHARGEABLE_MAX_VALUE = builder.comment("What is the max value for chargeables? This value is modified based on the object").defineInRange("chargeableMaxValue", 18000, 1000, 1000000);
+		SCULK_CAN_HEAR_KINETIC_INVESTITURE = builder.comment("Can sculk and Warden hear people using powers if the user isn't copper clouded").define("sculkHearsKineticInvestiture", true);
 
 		builder.pop();
 		configSpec = builder.build();

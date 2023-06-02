@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 2 - 2023 ~ Leaf
+ * File updated ~ 2 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -12,15 +12,19 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
+import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -32,6 +36,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -187,14 +192,17 @@ public class SpiritwebCapability implements ISpiritweb
 				didSetup = true;
 			}
 
+			final LivingEntity spiritWebEntity = getLiving();
 			if (selectedManifestation != ManifestationRegistry.NONE.get() && !hasManifestation(selectedManifestation))
 			{
 				selectedManifestation = ManifestationRegistry.NONE.get();
-				if (getLiving() instanceof ServerPlayer serverPlayer)
+				if (spiritWebEntity instanceof ServerPlayer serverPlayer)
 				{
 					syncToClients(serverPlayer);
 				}
 			}
+
+			boolean effectRun = false;
 
 			//Tick
 			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
@@ -203,7 +211,18 @@ public class SpiritwebCapability implements ISpiritweb
 				//don't tick powers that are not active
 				if (manifestation.isActive(this))
 				{
-					manifestation.tick(this);
+					//ordering here matters (: tick must always run
+					effectRun = manifestation.tick(this) || effectRun;
+				}
+			}
+
+			//An example from mekanism had the event triggering every two seconds
+			if (effectRun && (spiritWebEntity.tickCount % 40 == 0) && CosmereConfigs.SERVER_CONFIG.SCULK_CAN_HEAR_KINETIC_INVESTITURE.get())
+			{
+				final MobEffect copperEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
+				if (copperEffect == null || !spiritWebEntity.hasEffect(copperEffect))
+				{
+					spiritWebEntity.gameEvent(GameEventRegistry.KINETIC_INVESTITURE.get());
 				}
 			}
 
@@ -211,7 +230,6 @@ public class SpiritwebCapability implements ISpiritweb
 			{
 				spiritwebSubmodule.tickServer(this);
 			}
-
 		}
 		else//if client
 		{

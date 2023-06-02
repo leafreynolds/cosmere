@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -22,31 +22,32 @@ public class MasteryElevate extends SandmasteryManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.ELEVATE_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
-			performEffectServer(data);
+			return performEffectServer(data);
 		}
+		return false;
 	}
 
-	protected void performEffectServer(ISpiritweb data)
+	protected boolean performEffectServer(ISpiritweb data)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
 		if (getMode(data) < 3)
 		{
-			return; // It's shown in White Sand that one can't lift themselves with fewer than 3 ribbons
+			return false;
 		}
 		if (!submodule.adjustHydration(-10, false))
 		{
-			return; // Too dehydrated to use sand mastery
+			return false;
 		}
-		if (!enoughChargedSand(data))
+		if (notEnoughChargedSand(data))
 		{
-			return;
+			return false;
 		}
 
 		LivingEntity living = data.getLiving();
@@ -54,7 +55,7 @@ public class MasteryElevate extends SandmasteryManifestation
 		int maxLift = getMode(data) * 4;
 		if (distFromGround > maxLift)
 		{
-			return;
+			return false;
 		}
 
 
@@ -66,5 +67,7 @@ public class MasteryElevate extends SandmasteryManifestation
 
 		submodule.adjustHydration(-10, true);
 		useChargedSand(data);
+
+		return true;
 	}
 }

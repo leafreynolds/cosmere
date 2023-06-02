@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -37,14 +37,14 @@ public class FeruchemyBendalloy extends FeruchemyManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 		int mode = getMode(data);
 		if (mode == 0)
 		{
-			return;
+			return false;
 		}
 
 		if (livingEntity instanceof Player player)
@@ -53,15 +53,15 @@ public class FeruchemyBendalloy extends FeruchemyManifestation
 			if (isStoring(data) && foodData.getFoodLevel() <= 0)
 			{
 				//no food to store
-				return;
+				return false;
 			}
 			else if (isTapping(data) && !(foodData.needsFood() || foodData.getSaturationLevel() < foodData.getFoodLevel()))
 			{
 				//already full
-				return;
+				return false;
 			}
 		}
 
-		super.tick(data);
+		return super.tick(data);
 	}
 }

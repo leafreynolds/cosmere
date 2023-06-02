@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -23,35 +23,36 @@ public class MasteryProjectile extends SandmasteryManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 		submodule.tickProjectileCooldown();
 		if (!submodule.projectileReady())
 		{
-			return;
+			return false;
 		}
 
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PROJECTILE_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
-			performEffectServer(data);
+			return performEffectServer(data);
 		}
+		return false;
 	}
 
-	protected void performEffectServer(ISpiritweb data)
+	protected boolean performEffectServer(ISpiritweb data)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		ServerPlayer player = (ServerPlayer) data.getLiving();
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 		if (!submodule.adjustHydration(-10, false))
 		{
-			return;
+			return false;
 		}
-		if (!enoughChargedSand(data))
+		if (notEnoughChargedSand(data))
 		{
-			return;
+			return false;
 		}
 		for (int i = 0; i < player.getInventory().getContainerSize(); i++)
 		{
@@ -60,13 +61,14 @@ public class MasteryProjectile extends SandmasteryManifestation
 			{
 				SandmasteryItems.SAND_POUCH_ITEM.get().shoot(pouch, player);
 
-				return;
+				return false;
 			}
 		}
 
 		submodule.adjustHydration(-10, true);
 		useChargedSand(data);
 		submodule.setProjectileCooldown(15);
+		return true;
 	}
 
 }

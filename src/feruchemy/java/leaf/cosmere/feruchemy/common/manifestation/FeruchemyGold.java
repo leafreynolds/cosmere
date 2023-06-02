@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -29,7 +29,7 @@ public class FeruchemyGold extends FeruchemyManifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
@@ -37,12 +37,12 @@ public class FeruchemyGold extends FeruchemyManifestation
 		//don't heal more than needed.
 		if (livingEntity.tickCount % 20 != 0)
 		{
-			return;
+			return false;
 		}
 
 		if (isTapping(data) && livingEntity.getHealth() >= livingEntity.getMaxHealth())
 		{
-			return;
+			return false;
 		}
 
 		// we charge them for tapping,
@@ -53,7 +53,9 @@ public class FeruchemyGold extends FeruchemyManifestation
 		if (canAfford(data, !spend))//success
 		{
 			applyEffectTick(data);
+			return true;
 		}
+		return false;
 	}
 
 	@Override

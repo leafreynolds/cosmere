@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 1 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -13,6 +13,7 @@ import leaf.cosmere.items.ItemModelsGen;
 import leaf.cosmere.items.ItemTagsGen;
 import leaf.cosmere.loottables.LootTableGen;
 import leaf.cosmere.patchouli.PatchouliGen;
+import leaf.cosmere.tag.CosmereTagProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -45,6 +46,9 @@ public class CosmereDataGenerator
 
 		generator.addProvider(true, new BiomeModifierGen(generator));
 		generator.addProvider(true, new BiomeTagsProvider(generator, existingFileHelper));
+
+		generator.addProvider(true, new CosmereTagProvider(generator, existingFileHelper));
+
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -134,11 +134,11 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		if (!isActive(data))
 		{
-			return;
+			return false;
 		}
 
 		int mode = getMode(data);
@@ -160,13 +160,17 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		if (mode > 0)
 		{
 			applyEffectTick(data);
+			return true;
 		}
 		//else funnel all that power to feruchemy attribute
 		//but only if active tick
 		else if (isActiveTick)
 		{
 			tickCompounding(data, cost);
+			return true;
 		}
+
+		return false;
 	}
 
 	private void tickCompounding(ISpiritweb data, int allomanticSecondsUsed)

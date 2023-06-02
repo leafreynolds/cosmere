@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 2 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -35,12 +35,13 @@ public class SandmasteryManifestation extends Manifestation
 	}
 
 	@Override
-	public void tick(ISpiritweb data)
+	public boolean tick(ISpiritweb data)
 	{
 		if (MiscHelper.isClient(data))
 		{
 			performEffectClient(data);
 		}
+		return false;
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class SandmasteryManifestation extends Manifestation
 		}
 	}
 
-	protected boolean enoughChargedSand(ISpiritweb data)
+	protected boolean notEnoughChargedSand(ISpiritweb data)
 	{
 		if (data.getLiving() instanceof Player player)
 		{
@@ -96,7 +97,7 @@ public class SandmasteryManifestation extends Manifestation
 
 			if (allPouches.isEmpty())
 			{
-				return false;
+				return true;
 			}
 
 			int count = 0;
@@ -105,11 +106,11 @@ public class SandmasteryManifestation extends Manifestation
 				count += StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 				if (count > required)
 				{
-					return true;
+					return false;
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public void useChargedSand(ISpiritweb data)

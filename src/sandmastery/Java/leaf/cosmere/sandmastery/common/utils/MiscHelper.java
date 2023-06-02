@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 5 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.utils;
@@ -38,7 +38,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -56,25 +55,25 @@ public class MiscHelper
 		AtomicBoolean foundSomething = new AtomicBoolean(false);
 
 		MobEffect mobEffect = null;
-        if (allomancyLoaded)
-        {
-            mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
-        }
+		if (allomancyLoaded)
+		{
+			mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
+		}
 		for (LivingEntity targetEntity : entitiesToCheckForInvesiture)
 		{
 			MobEffectInstance copperEffect;
-            if (mobEffect == null)
-            {
-                copperEffect = null;
-            }
-            else
-            {
-                copperEffect = targetEntity.getEffect(mobEffect);
-            }
-            if (copperEffect != null && copperEffect.getDuration() > 0)
-            {
-                continue; //skip clouded entities.
-            }
+			if (mobEffect == null)
+			{
+				copperEffect = null;
+			}
+			else
+			{
+				copperEffect = targetEntity.getEffect(mobEffect);
+			}
+			if (copperEffect != null && copperEffect.getDuration() > 0)
+			{
+				continue; //skip clouded entities.
+			}
 
 			SpiritwebCapability.get(targetEntity).ifPresent(targetSpiritweb ->
 			{
@@ -83,14 +82,14 @@ public class MiscHelper
 				{
 					for (Metals.MetalType metalType : Metals.MetalType.values())
 					{
-                        if (metalType == Metals.MetalType.COPPER)
-                        {
-                            continue;
-                        }
-                        if (!metalType.hasAssociatedManifestation())
-                        {
-                            continue;
-                        }
+						if (metalType == Metals.MetalType.COPPER)
+						{
+							continue;
+						}
+						if (!metalType.hasAssociatedManifestation())
+						{
+							continue;
+						}
 
 						int metalTypeID = metalType.getID();
 						if (targetSpiritweb.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalTypeID)))
@@ -120,15 +119,15 @@ public class MiscHelper
 
 	public static void chargeItemFromInvestiture(ItemStack stack, Level level, Entity pEntity, int maxCharge)
 	{
-        if (level.isClientSide())
-        {
-            return;
-        }
+		if (level.isClientSide())
+		{
+			return;
+		}
 		int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-        if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition()))
-        {
-            StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
-        }
+		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition()))
+		{
+			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
+		}
 	}
 
 	public static boolean onTaldain(Level pLevel)
@@ -144,10 +143,10 @@ public class MiscHelper
 		for (double i = y; i >= e.level.getMinBuildHeight(); i--)
 		{
 			BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
-            if (!block.isAir())
-            {
-                return dist;
-            }
+			if (!block.isAir())
+			{
+				return dist;
+			}
 			dist++;
 		}
 
@@ -161,33 +160,49 @@ public class MiscHelper
 
 	public static int getChargeFromItemStack(ItemStack stack)
 	{
-		if(stack.isEmpty()) return 0;
+		if (stack.isEmpty())
+		{
+			return 0;
+		}
 
-        if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem())
-        {
-            return stack.getCount() * 10;
-        }
-        if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
-        {
-            return stack.getCount() * 80;
-        }
-        if (stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem())
-        {
-            return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-        }
-        else
-        {
-            return 0;
-        }
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem())
+		{
+			return stack.getCount() * 10;
+		}
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
+		{
+			return stack.getCount() * 80;
+		}
+		if (stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem())
+		{
+			return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
-    public static String intToAbbreviatedStr(int num) {
-        if(num < 1e3) return String.valueOf(num);
-        if(num < 1e6) return String.valueOf(num/1000) + "k";
-        if(num < 1e9) return String.valueOf(num/1000000) + "m";
-        if(num < 1e12) return String.valueOf(num/1000000000) + "b";
-        return "";
-    }
+	public static String intToAbbreviatedStr(int num)
+	{
+		if (num < 1e3)
+		{
+			return String.valueOf(num);
+		}
+		if (num < 1e6)
+		{
+			return String.valueOf(num / 1000) + "k";
+		}
+		if (num < 1e9)
+		{
+			return String.valueOf(num / 1000000) + "m";
+		}
+		if (num < 1e12)
+		{
+			return String.valueOf(num / 1000000000) + "b";
+		}
+		return "";
+	}
 
 	public static void logToChat(ISpiritweb data, String msg)
 	{
@@ -199,8 +214,7 @@ public class MiscHelper
 
 	public static boolean isClient(ISpiritweb data)
 	{
-		boolean clientSide = data.getLiving().level.isClientSide;
-		return clientSide;
+		return data.getLiving().level.isClientSide;
 	}
 
 	public static int getHotkeyFlags(ISpiritweb data)
@@ -225,7 +239,8 @@ public class MiscHelper
 		return enabledViaHotkey;
 	}
 
-	public static int randomSlot(ItemStackHandler itemStackHandler) {
+	public static int randomSlot(ItemStackHandler itemStackHandler)
+	{
 		return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
 	}
 }

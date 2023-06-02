@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 9 - 2022 ~ Leaf
+ * File updated ~ 2 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -17,6 +17,7 @@ import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -76,6 +77,7 @@ public class CapabilitiesHandler
 				|| entity instanceof ZombieVillager
 				|| (entity instanceof Raider && !(entity instanceof Ravager))
 				|| entity instanceof AbstractPiglin
+				|| entity instanceof Warden
 				|| entity instanceof Llama
 				|| entity instanceof Cat;
 	}
