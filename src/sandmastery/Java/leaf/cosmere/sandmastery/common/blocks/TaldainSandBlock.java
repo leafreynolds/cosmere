@@ -49,8 +49,11 @@ public class TaldainSandBlock extends BaseFallingBlock
 	public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		if (!pLevel.isAreaLoaded(pPos, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
 		BlockState state = this.defaultBlockState();
-
-		if ((!MiscHelper.onTaldain(pLevel) &&!pLevel.canSeeSky(pPos.above())) && !MiscHelper.checkIfNearbyInvestiture(pLevel, pPos)) return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
+		boolean nearbyInvestiture = MiscHelper.checkIfNearbyInvestiture(pLevel, pPos);
+		boolean offTaldain = !MiscHelper.onTaldain(pLevel);
+		boolean canSeeSky = pLevel.canSeeSky(pPos.above());
+		if(offTaldain && !nearbyInvestiture) return;
+		if (!canSeeSky && !nearbyInvestiture) return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
 		pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
 
 		for(int i = 0; i < 4; ++i) {

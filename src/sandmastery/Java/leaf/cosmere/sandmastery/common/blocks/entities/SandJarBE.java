@@ -16,6 +16,8 @@ public class SandJarBE extends BlockEntity {
         super(SandmasteryBlockEntitiesRegistry.SAND_JAR_BE.get(), pPos, pBlockState);
     }
 
+    private int ticksSinceUpdate = 0;
+
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
@@ -28,10 +30,13 @@ public class SandJarBE extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, SandJarBE entity) {
         if(level.isClientSide()) return;
+        entity.ticksSinceUpdate++;
+        if(entity.ticksSinceUpdate < 4) return;
         int investiture = state.getValue(INVESTITURE);
         if (MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos))
-            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.min(investiture + 1, 100)));
+            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.min(investiture + 4, 100)));
         else
-            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.max(investiture - 1, 0)));
+            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.max(investiture - 4, 0)));
+        entity.ticksSinceUpdate = 0;
     }
 }
