@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 3 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.mixin;
@@ -55,6 +55,26 @@ public class EntityMixin
 		}
 	}
 
+	@Inject(at = @At("RETURN"), method = "isSteppingCarefully", cancellable = true)
+	public void handleIsSteppingCarefully(CallbackInfoReturnable<Boolean> cir)
+	{
+		//exit out early if they're already stepping lightly
+		if (cir.getReturnValue())
+		{
+			return;
+		}
+
+		Entity entity = (Entity) (Object) this;
+		if (entity instanceof LivingEntity livingEntity)
+		{
+			MobEffect iron = FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.IRON).get();
+			final MobEffectInstance effectInstance = livingEntity.getEffect(iron);
+			if (effectInstance != null && effectInstance.getAmplifier() > 1)
+			{
+				cir.setReturnValue(true);
+			}
+		}
+	}
 
 	//region Feru steel run on water
 	//Special thanks to ExpandAbility api mod for showing how this works!
@@ -64,18 +84,19 @@ public class EntityMixin
 	@ModifyVariable(method = "move", name = "vec3", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/Entity;collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;"))
 	private Vec3 fluidCollision(Vec3 originalDisplacement)
 	{
-		if (!((Object) this instanceof LivingEntity entity) || entity.isCrouching())
+		Entity entity = (Entity) (Object) this;
+		if (!(entity instanceof LivingEntity livingEntity) || livingEntity.isCrouching())
 		{
 			return originalDisplacement;
 		}
 
 		MobEffect steel = FeruchemyEffects.TAPPING_EFFECTS.get(Metals.MetalType.STEEL).get();
-		final MobEffectInstance effectInstance = entity.getEffect(steel);
+		final MobEffectInstance effectInstance = livingEntity.getEffect(steel);
 		if (effectInstance != null && effectInstance.getAmplifier() > 2)
 		{
-			if (originalDisplacement.y <= 0.0 && !isTouchingFluid(entity, entity.getBoundingBox().deflate(0.001D)))
+			if (originalDisplacement.y <= 0.0 && !isTouchingFluid(livingEntity, livingEntity.getBoundingBox().deflate(0.001D)))
 			{
-				Map<Vec3, Double> points = findFluidDistances(entity, originalDisplacement);
+				Map<Vec3, Double> points = findFluidDistances(livingEntity, originalDisplacement);
 				Double highestDistance = null;
 
 				for (Map.Entry<Vec3, Double> point : points.entrySet())
@@ -89,15 +110,15 @@ public class EntityMixin
 				if (highestDistance != null)
 				{
 					Vec3 finalDisplacement = new Vec3(originalDisplacement.x, highestDistance, originalDisplacement.z);
-					AABB finalBox = entity.getBoundingBox().move(finalDisplacement).deflate(0.001D);
-					if (isTouchingFluid(entity, finalBox))
+					AABB finalBox = livingEntity.getBoundingBox().move(finalDisplacement).deflate(0.001D);
+					if (isTouchingFluid(livingEntity, finalBox))
 					{
 						return originalDisplacement;
 					}
 					else
 					{
-						entity.fallDistance = 0.0F;
-						entity.setOnGround(true);
+						livingEntity.fallDistance = 0.0F;
+						livingEntity.setOnGround(true);
 						return finalDisplacement;
 					}
 				}

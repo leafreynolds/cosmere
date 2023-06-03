@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 3 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.manifestation;
@@ -63,6 +63,12 @@ public class Manifestation implements IManifestationProvider
 		return false;
 	}
 
+	/**
+	 * @param data : spiritweb of whatever entity that's using this manifestation
+	 * @return true if this manifestation should trigger a {@link net.minecraft.world.level.gameevent.GameEvent} for sculk sensors and wardens to pick up
+	 * @see leaf.cosmere.common.cap.entity.SpiritwebCapability#tick()
+	 */
+	@SuppressWarnings("JavadocReference")
 	public boolean tick(ISpiritweb data)
 	{
 		return false;

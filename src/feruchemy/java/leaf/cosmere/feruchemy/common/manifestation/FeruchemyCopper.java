@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 3 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -55,7 +55,8 @@ public class FeruchemyCopper extends FeruchemyManifestation
 
 		performXPAdjustment(data, playerEntity);
 
-		return true;
+		//copper doesn't trigger sculk
+		return false;
 	}
 
 

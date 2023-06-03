@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 3 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -53,7 +53,9 @@ public class FeruchemyGold extends FeruchemyManifestation
 		if (canAfford(data, !spend))//success
 		{
 			applyEffectTick(data);
-			return true;
+			//todo, decide if gold should always trigger sculk
+			//spiritual healing seems like it would be kinda loud, right?
+			return isTapping(data);
 		}
 		return false;
 	}

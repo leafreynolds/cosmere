@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 3 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -157,7 +157,8 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		if (canAfford(data, false))//success
 		{
 			applyEffectTick(data);
-			return true;
+			//todo, move to config so that players can choose how high tap rate needs to be to be picked up by sculk
+			return isTapping(data) && mode < -4;
 		}
 		return false;
 	}

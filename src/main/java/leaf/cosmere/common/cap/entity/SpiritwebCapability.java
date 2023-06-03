@@ -1,5 +1,5 @@
 /*
- * File updated ~ 2 - 6 - 2023 ~ Leaf
+ * File updated ~ 3 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -202,7 +202,7 @@ public class SpiritwebCapability implements ISpiritweb
 				}
 			}
 
-			boolean effectRun = false;
+			boolean shouldTriggerSculkEvent = false;
 
 			//Tick
 			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
@@ -212,12 +212,12 @@ public class SpiritwebCapability implements ISpiritweb
 				if (manifestation.isActive(this))
 				{
 					//ordering here matters (: tick must always run
-					effectRun = manifestation.tick(this) || effectRun;
+					shouldTriggerSculkEvent = manifestation.tick(this) || shouldTriggerSculkEvent;
 				}
 			}
 
 			//An example from mekanism had the event triggering every two seconds
-			if (effectRun && (spiritWebEntity.tickCount % 40 == 0) && CosmereConfigs.SERVER_CONFIG.SCULK_CAN_HEAR_KINETIC_INVESTITURE.get())
+			if (shouldTriggerSculkEvent && (spiritWebEntity.tickCount % 40 == 0) && CosmereConfigs.SERVER_CONFIG.SCULK_CAN_HEAR_KINETIC_INVESTITURE.get())
 			{
 				final MobEffect copperEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
 				if (copperEffect == null || !spiritWebEntity.hasEffect(copperEffect))

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 3 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -94,13 +94,14 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			if (mode > 0)
 			{
 				checkStoreNicrosil(data, itemStack);
+				return false;
 			}
 			//tapping
 			else
 			{
 				checkTapNicrosil(data, itemStack);
+				return true;
 			}
-			return true;
 		}
 		else
 		{
