@@ -32,10 +32,10 @@ public class MasteryProjectile extends SandmasteryManifestation
 		{
 			return false;
 		}
-
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PROJECTILE_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
+			submodule.setProjectileCooldown(30);
 			return performEffectServer(data);
 		}
 		return false;
@@ -60,14 +60,11 @@ public class MasteryProjectile extends SandmasteryManifestation
 			if (!pouch.isEmpty() && pouch.is(SandmasteryItems.SAND_POUCH_ITEM.get()))
 			{
 				SandmasteryItems.SAND_POUCH_ITEM.get().shoot(pouch, player);
-
-				return false;
+				break;
 			}
 		}
-
-		submodule.adjustHydration(-10, true);
+		submodule.adjustHydration(-20, true);
 		useChargedSand(data);
-		submodule.setProjectileCooldown(15);
 		return true;
 	}
 
