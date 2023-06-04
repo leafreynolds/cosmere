@@ -13,7 +13,7 @@ public class Taldain
 	public enum Mastery
 	{
 		ELEVATE(0),
-//		PLATFORM(1),
+		PLATFORM(1),
 //		STAIR(2),
 		LAUNCH(3),
 		PROJECTILE(4),

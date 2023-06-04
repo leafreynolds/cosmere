@@ -18,6 +18,8 @@
   "manifestation.sandmastery.elevate.description": "Masters can use elevate",
   "manifestation.sandmastery.launch": "Sand Mastery Launch",
   "manifestation.sandmastery.launch.description": "Masters can use launch",
+  "manifestation.sandmastery.platform": "Sand Mastery Platform",
+  "manifestation.sandmastery.platform.description": "Masters can use platform",
   "manifestation.sandmastery.projectile": "Sand Mastery Projectile",
   "manifestation.sandmastery.projectile.description": "Masters can use projectile"
 }

@@ -180,6 +180,5 @@ public class SandmasteryManifestation extends Manifestation
 
 	protected void performEffectClient(ISpiritweb data)
 	{
-
 	}
 }

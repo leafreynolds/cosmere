@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TemporarySandBlock extends BaseEntityBlock {
     public TemporarySandBlock() {
-        super(PropTypes.Blocks.SAND.get());
+        super(PropTypes.Blocks.SAND.get().noOcclusion());
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(AGE, 20)

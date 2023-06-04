@@ -41,6 +41,8 @@ public class SandmasteryManifestations
 				return new MasteryCushion(mastery);
 			case PROJECTILE:
 				return new MasteryProjectile(mastery);
+			case PLATFORM:
+				return new MasteryPlatform(mastery);
 			default:
 				return new SandmasteryManifestation(mastery);
 		}
