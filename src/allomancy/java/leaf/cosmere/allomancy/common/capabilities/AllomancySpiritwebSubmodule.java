@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 4 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities;
@@ -143,13 +143,8 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 
-
-				//PoseStack matrixStack = event.getPoseStack();
-
-
 				PoseStack viewModelStack = new PoseStack();
 				viewModelStack.last().pose().load(event.getPoseStack().last().pose());
-
 
 				if (!scanResult.foundEntities.isEmpty())
 				{
