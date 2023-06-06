@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 1 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.registries;
@@ -19,8 +19,11 @@ public class HemalurgyEntityTypes
 			ENTITY_TYPES.register(
 					"koloss",
 					EntityType.Builder.<Koloss>of(Koloss::new, MobCategory.MISC)
-							.sized(1, 1)
-							.clientTrackingRange(4)
-							.updateInterval(20));
+							.setShouldReceiveVelocityUpdates(false)
+							.updateInterval(1)
+							.setTrackingRange(8)
+							.clientTrackingRange(10)
+							.sized(2, 2)
+			);
 
 }

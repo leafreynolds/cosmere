@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.entity;
@@ -27,5 +27,11 @@ public class Chull extends AbstractChestedHorse
 	public boolean canMate(Animal pOtherAnimal)
 	{
 		return pOtherAnimal != this && pOtherAnimal instanceof Chull;
+	}
+
+	@Override
+	public int getMaxSpawnClusterSize()
+	{
+		return 4;
 	}
 }
