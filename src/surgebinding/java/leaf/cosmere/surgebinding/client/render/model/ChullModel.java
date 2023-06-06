@@ -57,7 +57,7 @@ public class ChullModel<T extends Entity> extends EntityModel<T>
 				.texOffs(0, 0).addBox(-7.3F, -22.7F, 26.4F, 15.0F, 15.0F, 15.0F, new CubeDeformation(0.0F))
 				.texOffs(141, 192).addBox(-5.5F, -22.0F, 41.8F, 11.0F, 11.0F, 11.0F, new CubeDeformation(0.0F))
 				.texOffs(60, 45).addBox(2.4F, -25.0F, 50.6F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
-				.texOffs(60, 40).addBox(-4.2F, -25.0F, 50.6F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 24.0F, 0.0F, 0.0F, -3.0107F, 0.0F));
+				.texOffs(60, 40).addBox(-4.2F, -25.0F, 50.6F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 24.0F, 0.0F, 0.0F, 3.1416F, 0.0F));
 
 		PartDefinition cube_r1 = Everything.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(36, 30).addBox(-0.9F, 0.0F, -9.9F, 2.0F, 0.0F, 20.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.0384F, -14.8501F, 80.0511F, -0.5236F, -0.2182F, 0.0F));
 
