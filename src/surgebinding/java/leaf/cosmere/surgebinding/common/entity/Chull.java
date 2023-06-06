@@ -21,7 +21,12 @@ public class Chull extends AbstractChestedHorse
 
 	public static AttributeSupplier.Builder createAttributes()
 	{
-		return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, (double) 0.35F).add(Attributes.FOLLOW_RANGE, 12.0D).add(Attributes.MAX_HEALTH, 24.0D).add(Attributes.ATTACK_DAMAGE, 5.0D);
+		return Monster.createMonsterAttributes()
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
+				.add(Attributes.FOLLOW_RANGE, 12.0D)
+				.add(Attributes.MAX_HEALTH, 24.0D)
+				.add(Attributes.JUMP_STRENGTH, 0.1D)
+				.add(Attributes.ATTACK_DAMAGE, 5.0D);
 	}
 
 	public boolean canMate(Animal pOtherAnimal)
