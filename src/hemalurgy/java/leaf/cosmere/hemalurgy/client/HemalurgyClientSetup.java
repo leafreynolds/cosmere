@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 1 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client;
@@ -22,7 +22,7 @@ public class HemalurgyClientSetup
 	public static void registerLayers(final EntityRenderersEvent.RegisterLayerDefinitions evt)
 	{
 		evt.registerLayerDefinition(HemalurgyLayerDefinitions.SPIKE, SpikeModel::createLayer);
-		evt.registerLayerDefinition(HemalurgyLayerDefinitions.KOLOSS, KolossModel::createBodyLayer);
+		evt.registerLayerDefinition(HemalurgyLayerDefinitions.KOLOSS_LARGE, KolossModel::createBodyLayer);
 	}
 
 	@SubscribeEvent

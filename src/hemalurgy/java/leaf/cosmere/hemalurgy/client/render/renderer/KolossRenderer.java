@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 1 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client.render.renderer;
@@ -14,11 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 
 public class KolossRenderer extends MobRenderer<Koloss, KolossModel<Koloss>>
 {
-	private static final ResourceLocation TEXTURE = Hemalurgy.rl("textures/entity/koloss/koloss.png");
+	private static final ResourceLocation TEXTURE = Hemalurgy.rl("textures/entity/koloss/koloss_large.png");
 
 	public KolossRenderer(EntityRendererProvider.Context context)
 	{
-		super(context, new KolossModel<>(context.bakeLayer(HemalurgyLayerDefinitions.KOLOSS)), 1.0F);
+		super(context, new KolossModel<>(context.bakeLayer(HemalurgyLayerDefinitions.KOLOSS_LARGE)), 1.0F);
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeMod;
 
 public class Koloss extends AbstractIllager
 {
@@ -63,8 +64,14 @@ public class Koloss extends AbstractIllager
 	{
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
-				.add(Attributes.FOLLOW_RANGE, 12.0D)
-				.add(Attributes.MAX_HEALTH, 24.0D)
-				.add(Attributes.ATTACK_DAMAGE, 5.0D);
+				.add(Attributes.FOLLOW_RANGE, 32.0D)
+				.add(Attributes.MAX_HEALTH, 100.0D)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.75d)
+				.add(Attributes.ARMOR, 4.0d)
+				.add(Attributes.ARMOR_TOUGHNESS, 1.0d)
+				.add(Attributes.LUCK, -1.0d)
+				.add(Attributes.ATTACK_DAMAGE, 12.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
+				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
 	}
 }
