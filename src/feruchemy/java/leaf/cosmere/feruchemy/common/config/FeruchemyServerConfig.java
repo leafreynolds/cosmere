@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.config;
@@ -15,7 +15,6 @@ public class FeruchemyServerConfig implements ICosmereConfig
 
 	public final ForgeConfigSpec.IntValue BENDALLOY_SATURATION_MULTIPLIER;
 	public final ForgeConfigSpec.IntValue GOLD_TAP_COST_MULTIPLIER;
-
 
 	public final ForgeConfigSpec.IntValue GOD_METAL_EAT_STRENGTH_MINIMUM;
 	public final ForgeConfigSpec.IntValue FULL_FERUCHEMIST_STARTING_METALMIND_COUNT;
@@ -55,5 +54,15 @@ public class FeruchemyServerConfig implements ICosmereConfig
 	public Type getConfigType()
 	{
 		return Type.SERVER;
+	}
+
+	@Override
+	public void clearCache()
+	{
+		BENDALLOY_SATURATION_MULTIPLIER.clearCache();
+		GOLD_TAP_COST_MULTIPLIER.clearCache();
+		GOD_METAL_EAT_STRENGTH_MINIMUM.clearCache();
+		FULL_FERUCHEMIST_STARTING_METALMIND_COUNT.clearCache();
+		STARTING_METALMIND_RANDOMISED_MAX_FILL_AMOUNT.clearCache();
 	}
 }

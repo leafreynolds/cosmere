@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.config;
@@ -43,5 +43,11 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public Type getConfigType()
 	{
 		return Type.SERVER;
+	}
+
+	@Override
+	public void clearCache()
+	{
+		someValue.clearCache();
 	}
 }

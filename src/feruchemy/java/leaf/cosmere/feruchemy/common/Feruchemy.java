@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.feruchemy.common.capabilities.FeruchemySpiritwebSubmodule;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.registries.*;
@@ -85,13 +86,10 @@ public class Feruchemy implements IModModule
 
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
-		//Note: We listen to both the initial load and the reload, to make sure that we fix any accidentally
-		// cached values from calls before the initial loading
 		ModConfig config = configEvent.getConfig();
-		//Make sure it is for the same modid as us
-		if (config.getModId().equals(MODID))
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
 		{
-
+			cosmereModConfig.clearCache();
 		}
 	}
 }

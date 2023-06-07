@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -40,5 +40,11 @@ public class CosmereClientConfig implements ICosmereConfig
 	public Type getConfigType()
 	{
 		return Type.CLIENT;
+	}
+
+	@Override
+	public void clearCache()
+	{
+		clientConfigTest.clearCache();
 	}
 }

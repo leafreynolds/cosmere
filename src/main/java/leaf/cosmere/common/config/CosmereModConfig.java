@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -33,6 +33,11 @@ public class CosmereModConfig extends ModConfig
 	public ConfigFileTypeHandler getHandler()
 	{
 		return COSMERE_TOML;
+	}
+
+	public void clearCache()
+	{
+		cosmereConfig.clearCache();
 	}
 
 	private static class CosmereConfigFileTypeHandler extends ConfigFileTypeHandler

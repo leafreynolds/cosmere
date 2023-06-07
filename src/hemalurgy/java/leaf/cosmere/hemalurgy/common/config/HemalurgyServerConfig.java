@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.config;
@@ -51,5 +51,14 @@ public class HemalurgyServerConfig implements ICosmereConfig
 	public Type getConfigType()
 	{
 		return Type.SERVER;
+	}
+
+	@Override
+	public void clearCache()
+	{
+		SPIRITWEB_INTEGRITY_TICK_CHECK.clearCache();
+		LERASATIUM_MAX_SPIKE_STRENGTH.clearCache();
+		CHROMIUM_MAX_SPIKE_STRENGTH.clearCache();
+		DEFAULT_POWER_MAX_SPIKE_STRENGTH.clearCache();
 	}
 }

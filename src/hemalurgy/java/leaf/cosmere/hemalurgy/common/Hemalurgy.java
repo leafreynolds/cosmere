@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.hemalurgy.common.capabilities.HemalurgySpiritwebSubmodule;
 import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
@@ -85,13 +86,12 @@ public class Hemalurgy implements IModModule
 		return new HemalurgySpiritwebSubmodule();
 	}
 
-
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID))
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
 		{
-
+			cosmereModConfig.clearCache();
 		}
 	}
 }

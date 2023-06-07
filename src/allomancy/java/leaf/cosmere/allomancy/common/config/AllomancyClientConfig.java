@@ -45,4 +45,11 @@ public class AllomancyClientConfig implements ICosmereConfig
 	{
 		return Type.CLIENT;
 	}
+
+	@Override
+	public void clearCache()
+	{
+		drawMetalBoxes.clearCache();
+		drawMetalLines.clearCache();
+	}
 }
