@@ -5,6 +5,7 @@
 package leaf.cosmere.hemalurgy.common.entity;
 
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -56,7 +57,7 @@ public class Koloss extends AbstractIllager
 	@Override
 	public SoundEvent getCelebrateSound()
 	{
-		return null;
+		return SoundEvents.RAVAGER_CELEBRATE;
 	}
 
 
