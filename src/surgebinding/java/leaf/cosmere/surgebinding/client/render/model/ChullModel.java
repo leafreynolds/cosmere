@@ -4,19 +4,19 @@
 
 package leaf.cosmere.surgebinding.client.render.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-public class ChullModel<T extends Entity> extends EntityModel<T>
+public class ChullModel<T extends Entity> extends AgeableListModel<T>
 {
 	private final ModelPart root;
 	private final ModelPart head;
+	private final ModelPart body;
 	private final ModelPart backRightLeg;
 	private final ModelPart backLeftLeg;
 	private final ModelPart middleRightLeg;
@@ -30,6 +30,7 @@ public class ChullModel<T extends Entity> extends EntityModel<T>
 	{
 		this.root = pRoot.getChild("Everything");
 		this.head = root.getChild("head");
+		this.body = root.getChild("body");
 
 		this.backRightLeg = root.getChild("back_right_leg");
 		this.backLeftLeg = root.getChild("back_left_leg");
@@ -42,6 +43,18 @@ public class ChullModel<T extends Entity> extends EntityModel<T>
 
 		this.rightForeleg = root.getChild("right_foreleg");
 		this.leftForeleg = root.getChild("left_foreleg");
+	}
+
+	@Override
+	protected Iterable<ModelPart> headParts()
+	{
+		return ImmutableList.of();
+	}
+
+	@Override
+	protected Iterable<ModelPart> bodyParts()
+	{
+		return ImmutableList.of(this.root);
 	}
 
 	public static LayerDefinition createBodyLayer()
@@ -476,11 +489,5 @@ public class ChullModel<T extends Entity> extends EntityModel<T>
 
 		this.rightForeleg.yRot += forelegRotationY;
 		this.leftForeleg.yRot += -forelegRotationY;
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
-	{
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

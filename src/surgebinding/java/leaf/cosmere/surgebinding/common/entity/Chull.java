@@ -1,16 +1,21 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 10 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.entity;
 
+import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public class Chull extends AbstractChestedHorse
 {
@@ -38,5 +43,15 @@ public class Chull extends AbstractChestedHorse
 	public int getMaxSpawnClusterSize()
 	{
 		return 4;
+	}
+
+	@Nullable
+	@Override
+	public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent)
+	{
+		EntityType<? extends AbstractHorse> entitytype = SurgebindingEntityTypes.CHULL.getEntityType();
+		AbstractHorse abstracthorse = entitytype.create(pLevel);
+		this.setOffspringAttributes(pOtherParent, abstracthorse);
+		return abstracthorse;
 	}
 }
