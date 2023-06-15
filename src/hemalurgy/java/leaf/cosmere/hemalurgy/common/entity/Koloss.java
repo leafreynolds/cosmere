@@ -1,13 +1,16 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 15 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.entity;
 
+import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -16,14 +19,19 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.ForgeMod;
+import org.jetbrains.annotations.Nullable;
 
 public class Koloss extends AbstractIllager
 {
@@ -46,6 +54,12 @@ public class Koloss extends AbstractIllager
 		this.goalSelector.addGoal(8, new RandomStrollGoal(this, 0.6D));
 		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
 		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+	}
+
+	@Override
+	public boolean isBaby()
+	{
+		return false;
 	}
 
 	@Override
@@ -74,5 +88,27 @@ public class Koloss extends AbstractIllager
 				.add(Attributes.ATTACK_DAMAGE, 12.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
 				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+	}
+
+	@Nullable
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag)
+	{
+		SpawnGroupData spawngroupdata = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+		((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
+		RandomSource randomsource = pLevel.getRandom();
+		this.populateDefaultEquipmentSlots(randomsource, pDifficulty);
+		this.populateDefaultEquipmentEnchantments(randomsource, pDifficulty);
+		return spawngroupdata;
+	}
+
+	@Override
+	protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty)
+	{
+		final Item value = HemalurgyItems.KOLOSS_SWORD.get();
+		if (value != null)
+		{
+			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(value));
+		}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 6 - 2023 ~ Leaf
+ * File updated ~ 13 - 6 - 2023 ~ Leaf
  */
 
 // Made with Blockbench 4.6.1
@@ -8,23 +8,36 @@
 
 package leaf.cosmere.hemalurgy.client.render.model;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 public class KolossModel<T extends LivingEntity> extends HumanoidModel<T>
 {
-	private final ModelPart bb_main;
+	private final ModelPart root;
 
 	public KolossModel(ModelPart root)
 	{
 		super(root);
-		this.bb_main = root;
+		this.root = root;
+	}
+
+	@Override
+	protected Iterable<ModelPart> headParts()
+	{
+		return ImmutableList.of();
+	}
+
+	@Override
+	protected Iterable<ModelPart> bodyParts()
+	{
+		return ImmutableList.of(this.root);
 	}
 
 	public static LayerDefinition createBodyLayer()
@@ -108,8 +121,15 @@ public class KolossModel<T extends LivingEntity> extends HumanoidModel<T>
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack)
 	{
-		bb_main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		float f = pSide == HumanoidArm.RIGHT ? 2.0F : -2.0F;
+		ModelPart modelpart = this.getArm(pSide);
+		modelpart.x -= 10;
+		modelpart.y += 20;
+		modelpart.translateAndRotate(pPoseStack);
+		modelpart.x += 10;
+		modelpart.y -= 20;
+
 	}
 }
