@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 6 - 2023 ~ Leaf
+ * File updated ~ 19 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.entity;
@@ -77,6 +77,7 @@ public class Koloss extends AbstractIllager
 
 	public static AttributeSupplier.Builder createAttributes()
 	{
+		//todo, make different based on size of koloss
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
 				.add(Attributes.FOLLOW_RANGE, 32.0D)

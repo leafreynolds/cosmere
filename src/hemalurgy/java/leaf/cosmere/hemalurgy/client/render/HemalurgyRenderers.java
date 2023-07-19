@@ -1,11 +1,13 @@
 /*
- * File updated ~ 30 - 1 - 2023 ~ Leaf
+ * File updated ~ 19 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client.render;
 
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
-import leaf.cosmere.hemalurgy.client.render.renderer.KolossRenderer;
+import leaf.cosmere.hemalurgy.client.render.renderer.KolossLargeRenderer;
+import leaf.cosmere.hemalurgy.client.render.renderer.KolossMediumRenderer;
+import leaf.cosmere.hemalurgy.client.render.renderer.KolossSmallRenderer;
 import leaf.cosmere.hemalurgy.client.render.renderer.SpikeRenderer;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
@@ -26,7 +28,9 @@ public class HemalurgyRenderers
 			CuriosRendererRegistry.register(itemRegistryObject.get(), spikeRenderer);
 		}
 
-		EntityRenderers.register(HemalurgyEntityTypes.KOLOSS.get(), KolossRenderer::new);
+		EntityRenderers.register(HemalurgyEntityTypes.KOLOSS_LARGE.get(), KolossLargeRenderer::new);
+		EntityRenderers.register(HemalurgyEntityTypes.KOLOSS_MEDIUM.get(), KolossMediumRenderer::new);
+		EntityRenderers.register(HemalurgyEntityTypes.KOLOSS_SMALL.get(), KolossSmallRenderer::new);
 	}
 
 }

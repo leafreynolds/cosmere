@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 1 - 2023 ~ Leaf
+ * File updated ~ 19 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.eventHandlers;
@@ -30,6 +30,8 @@ public class HemalurgyModBusEventHandler
 	@SubscribeEvent
 	public static void entityAttributeEvent(EntityAttributeCreationEvent event)
 	{
-		event.put(HemalurgyEntityTypes.KOLOSS.get(), Koloss.createAttributes().build());
+		event.put(HemalurgyEntityTypes.KOLOSS_LARGE.get(), Koloss.createAttributes().build());
+		event.put(HemalurgyEntityTypes.KOLOSS_MEDIUM.get(), Koloss.createAttributes().build());
+		event.put(HemalurgyEntityTypes.KOLOSS_SMALL.get(), Koloss.createAttributes().build());
 	}
 }

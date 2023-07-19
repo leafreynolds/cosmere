@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 19 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.registries;
@@ -15,15 +15,35 @@ public class HemalurgyEntityTypes
 {
 	public static final EntityTypeDeferredRegister ENTITY_TYPES = new EntityTypeDeferredRegister(Hemalurgy.MODID);
 
-	public static final EntityTypeRegistryObject<Koloss> KOLOSS =
+	public static final EntityTypeRegistryObject<Koloss> KOLOSS_LARGE =
 			ENTITY_TYPES.register(
-					"koloss",
+					"koloss_large",
 					EntityType.Builder.<Koloss>of(Koloss::new, MobCategory.MISC)
 							.setShouldReceiveVelocityUpdates(false)
 							.updateInterval(1)
 							.setTrackingRange(8)
 							.clientTrackingRange(10)
 							.sized(2, 2)
+			);
+	public static final EntityTypeRegistryObject<Koloss> KOLOSS_MEDIUM =
+			ENTITY_TYPES.register(
+					"koloss_medium",
+					EntityType.Builder.<Koloss>of(Koloss::new, MobCategory.MISC)
+							.setShouldReceiveVelocityUpdates(false)
+							.updateInterval(1)
+							.setTrackingRange(8)
+							.clientTrackingRange(10)
+							.sized(1.5f, 1.5f)
+			);
+	public static final EntityTypeRegistryObject<Koloss> KOLOSS_SMALL =
+			ENTITY_TYPES.register(
+					"koloss_small",
+					EntityType.Builder.<Koloss>of(Koloss::new, MobCategory.MISC)
+							.setShouldReceiveVelocityUpdates(false)
+							.updateInterval(1)
+							.setTrackingRange(8)
+							.clientTrackingRange(10)
+							.sized(1, 1)
 			);
 
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 13 - 6 - 2023 ~ Leaf
+ * File updated ~ 19 - 7 - 2023 ~ Leaf
  */
 
 // Made with Blockbench 4.6.1
@@ -18,11 +18,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
-public class KolossModel<T extends LivingEntity> extends HumanoidModel<T>
+public class KolossSmallModel<T extends LivingEntity> extends HumanoidModel<T>
 {
 	private final ModelPart root;
 
-	public KolossModel(ModelPart root)
+	public KolossSmallModel(ModelPart root)
 	{
 		super(root);
 		this.root = root;
