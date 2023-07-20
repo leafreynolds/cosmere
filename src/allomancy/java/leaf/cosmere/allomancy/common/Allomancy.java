@@ -1,10 +1,9 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.network.AllomancyPacketHandler;
@@ -14,11 +13,11 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.config.CosmereModConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -86,20 +85,9 @@ public class Allomancy implements IModModule
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
-
-		if (config.getModId().equals(MODID))
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
 		{
-
-			if (configEvent.getConfig().getType() == ModConfig.Type.SERVER)
-			{
-				IConfigSpec<?> spec = configEvent.getConfig().getSpec();
-				CommentedConfig commentedConfig = configEvent.getConfig().getConfigData();
-
-				if (spec == AllomancyConfigs.SERVER.getConfigSpec())
-				{
-					//??
-				}
-			}
+			cosmereModConfig.clearCache();
 		}
 	}
 

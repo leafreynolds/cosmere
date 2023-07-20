@@ -1,15 +1,18 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.registries;
 
 import leaf.cosmere.api.Constants.RegNameStubs;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.common.registration.impl.ItemDeferredRegister;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tiers;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -32,5 +35,6 @@ public class HemalurgyItems
 									() -> new HemalurgicSpikeItem(type)
 							)));
 
+	public static final ItemRegistryObject<SwordItem> KOLOSS_SWORD = ITEMS.register("koloss_sword", () -> new SwordItem(Tiers.IRON, 10, -2.4F, PropTypes.Items.ONE.get()));
 
 }

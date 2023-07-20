@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.registries;
@@ -18,9 +18,12 @@ public class SurgebindingEntityTypes
 	public static final EntityTypeRegistryObject<Chull> CHULL =
 			ENTITY_TYPES.register(
 					"chull",
-					EntityType.Builder.<Chull>of(Chull::new, MobCategory.MISC)
-							.sized(1, 1)
-							.clientTrackingRange(4)
-							.updateInterval(20));
+					EntityType.Builder.<Chull>of(Chull::new, MobCategory.CREATURE)
+							.setShouldReceiveVelocityUpdates(false)
+							.setUpdateInterval(1)
+							.setTrackingRange(8)
+							.clientTrackingRange(10)
+							.sized(4.5f, 5.2f)
+			);
 
 }

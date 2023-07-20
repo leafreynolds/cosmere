@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -7,10 +7,12 @@ package leaf.cosmere.hemalurgy;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.itemgroups.HemalurgyItemGroups;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
+import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -71,7 +73,12 @@ public class HemalurgyEngLangGen extends LanguageProvider
 
 	private void addEntities()
 	{
-
+		//Entities
+		for (IEntityTypeProvider type : HemalurgyEntityTypes.ENTITY_TYPES.getAllEntityTypes())
+		{
+			final ResourceLocation id = type.getRegistryName();
+			add(type.getEntityType().getDescriptionId(), StringHelper.fixCapitalisation(id.getPath()));
+		}
 	}
 
 	private void addAdvancements()

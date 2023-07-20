@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 15 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.items;
@@ -12,6 +12,7 @@ import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -40,6 +41,11 @@ public class HemalurgyItemModelsGen extends ItemModelProvider
 				this.getBuilder(path)
 						.parent(new ModelFile.UncheckedModelFile("hemalurgy:item/spike"))
 						.texture("layer0", modLoc("item/" + "metal_spike"));
+				continue;
+			}
+			else if (item instanceof SwordItem)
+			{
+				//koloss sword
 				continue;
 			}
 

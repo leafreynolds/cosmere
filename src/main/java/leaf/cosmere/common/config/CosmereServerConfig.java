@@ -1,5 +1,5 @@
 /*
- * File updated ~ 2 - 6 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -44,5 +44,12 @@ public class CosmereServerConfig implements ICosmereConfig
 	public Type getConfigType()
 	{
 		return Type.SERVER;
+	}
+
+	@Override
+	public void clearCache()
+	{
+		CHARGEABLE_MAX_VALUE.clearCache();
+		SCULK_CAN_HEAR_KINETIC_INVESTITURE.clearCache();
 	}
 }

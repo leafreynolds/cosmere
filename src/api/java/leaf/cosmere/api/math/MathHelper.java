@@ -1,8 +1,10 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.math;
+
+import net.minecraft.util.Mth;
 
 import java.util.Random;
 
@@ -35,7 +37,7 @@ public class MathHelper
 
 	public static float clamp01(final float f)
 	{
-		return Math.max(0.0f, Math.min(1.0f, f));
+		return Mth.clamp(f, 0.0f, 1.0f);
 	}
 
 

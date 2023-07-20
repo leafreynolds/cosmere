@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.config;
@@ -51,5 +51,15 @@ public class SurgebindingServerConfig implements ICosmereConfig
 	public Type getConfigType()
 	{
 		return Type.SERVER;
+	}
+
+	@Override
+	public void clearCache()
+	{
+		MAX_SHARDBLADES.clearCache();
+		PLAYER_MAX_STORMLIGHT.clearCache();
+		STORMLIGHT_DRAIN_RATE.clearCache();
+		PROGRESSION_BONEMEAL_COST.clearCache();
+		PROGRESSION_HEAL_COST.clearCache();
 	}
 }

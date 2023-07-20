@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 4 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.client.metalScanning;
@@ -54,12 +54,50 @@ public final class ScanResult
 	private boolean tryAddToCluster(final Map<BlockPos, BlockScanResult> clusters, final BlockPos pos)
 	{
 		BlockScanResult root = null;
-		root = tryAddToCluster(clusters, pos, pos.east(), root);
-		root = tryAddToCluster(clusters, pos, pos.west(), root);
-		root = tryAddToCluster(clusters, pos, pos.north(), root);
-		root = tryAddToCluster(clusters, pos, pos.south(), root);
+
+		//all the blocks directly touching this one
+		final BlockPos east = pos.east();
+		root = tryAddToCluster(clusters, pos, east, root);
+		final BlockPos west = pos.west();
+		root = tryAddToCluster(clusters, pos, west, root);
+		final BlockPos north = pos.north();
+		root = tryAddToCluster(clusters, pos, north, root);
+		final BlockPos south = pos.south();
+		root = tryAddToCluster(clusters, pos, south, root);
 		root = tryAddToCluster(clusters, pos, pos.above(), root);
 		root = tryAddToCluster(clusters, pos, pos.below(), root);
+
+		//center slice
+		root = tryAddToCluster(clusters, pos, north.above(), root);
+		root = tryAddToCluster(clusters, pos, north.below(), root);
+		root = tryAddToCluster(clusters, pos, south.above(), root);
+		root = tryAddToCluster(clusters, pos, south.below(), root);
+
+		//west slice
+		root = tryAddToCluster(clusters, pos, east.above(), root);
+		root = tryAddToCluster(clusters, pos, east.below(), root);
+		final BlockPos eastNorth = east.north();
+		root = tryAddToCluster(clusters, pos, eastNorth, root);
+		root = tryAddToCluster(clusters, pos, eastNorth.above(), root);
+		root = tryAddToCluster(clusters, pos, eastNorth.below(), root);
+		final BlockPos eastSouth = east.south();
+		root = tryAddToCluster(clusters, pos, eastSouth, root);
+		root = tryAddToCluster(clusters, pos, eastSouth.above(), root);
+		root = tryAddToCluster(clusters, pos, eastSouth.below(), root);
+
+		//east slice
+		root = tryAddToCluster(clusters, pos, west.above(), root);
+		root = tryAddToCluster(clusters, pos, west.below(), root);
+		final BlockPos westNorth = west.north();
+		root = tryAddToCluster(clusters, pos, westNorth, root);
+		root = tryAddToCluster(clusters, pos, westNorth.above(), root);
+		root = tryAddToCluster(clusters, pos, westNorth.below(), root);
+		final BlockPos westSouth = east.south();
+		root = tryAddToCluster(clusters, pos, westSouth, root);
+		root = tryAddToCluster(clusters, pos, westSouth.above(), root);
+		root = tryAddToCluster(clusters, pos, westSouth.below(), root);
+
+
 		return root != null;
 	}
 

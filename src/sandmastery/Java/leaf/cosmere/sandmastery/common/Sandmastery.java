@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.network.SandmasteryPacketHandler;
@@ -90,11 +91,10 @@ public class Sandmastery implements IModModule
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID))
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
 		{
-
+			cosmereModConfig.clearCache();
 		}
-
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event)

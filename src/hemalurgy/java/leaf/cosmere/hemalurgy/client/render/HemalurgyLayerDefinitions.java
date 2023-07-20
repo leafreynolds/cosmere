@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 1 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client.render;
@@ -11,4 +11,6 @@ public class HemalurgyLayerDefinitions
 {
 	public static final ModelLayerLocation SPIKE = new ModelLayerLocation(Hemalurgy.rl("spike"), "spike");
 	public static final ModelLayerLocation KOLOSS = new ModelLayerLocation(Hemalurgy.rl("koloss"), "koloss");
+	public static final ModelLayerLocation KOLOSS_MEDIUM = new ModelLayerLocation(Hemalurgy.rl("koloss_medium"), "koloss_medium");
+	public static final ModelLayerLocation KOLOSS_LARGE = new ModelLayerLocation(Hemalurgy.rl("koloss_large"), "koloss_large");
 }

@@ -1,16 +1,16 @@
 /*
- * File updated ~ 1 - 6 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
 import leaf.cosmere.api.*;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.commands.CosmereCommand;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.common.config.CosmereConfigs;
+import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.common.eventHandlers.ColorHandler;
 import leaf.cosmere.common.network.NetworkPacketHandler;
 import leaf.cosmere.common.registry.*;
@@ -19,7 +19,6 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -152,27 +151,14 @@ public class Cosmere
 		packetHandler.initialize();
 	}
 
-
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
-
-		if (config.getModId().equals(MODID))
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
 		{
-
-			if (configEvent.getConfig().getType() == ModConfig.Type.SERVER)
-			{
-				IConfigSpec<?> spec = configEvent.getConfig().getSpec();
-				CommentedConfig commentedConfig = configEvent.getConfig().getConfigData();
-
-				if (spec == CosmereConfigs.SERVER_CONFIG.getConfigSpec())
-				{
-					//??
-				}
-			}
+			cosmereModConfig.clearCache();
 		}
 	}
-
 
 	private void onAddCaps(RegisterCapabilitiesEvent capabilitiesEvent)
 	{

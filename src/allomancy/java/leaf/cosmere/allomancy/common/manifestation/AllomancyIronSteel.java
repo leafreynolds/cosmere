@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 4 - 2023 ~ Leaf
+ * File updated ~ 7 - 6 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -338,33 +338,37 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 		//metal blocks
 		profiler.push("cosmere-getBlocksInRange");
-		BlockPos.withinManhattanStream(playerEntity.blockPosition(), range, range, range)
-				.filter(blockPos ->
-				{
-					Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-					final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-					final boolean guestimateMetalBlock = AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
-					return validMetalBlock || guestimateMetalBlock;
-				})
-				.forEach(blockPos -> scanResult.addBlock(blockPos.immutable()));
+		{
+			BlockPos.withinManhattanStream(playerEntity.blockPosition(), range, range, range)
+					.filter(blockPos ->
+					{
+						Block block = playerEntity.level.getBlockState(blockPos).getBlock();
+						final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+						final boolean guestimateMetalBlock = AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
+						return validMetalBlock || guestimateMetalBlock;
+					})
+					.forEach(blockPos -> scanResult.addBlock(blockPos.immutable()));
 
-		scanResult.finalizeClusters();
+			scanResult.finalizeClusters();
+		}
 
 		profiler.pop();
 
 		//entities with metal armor/tools
 		profiler.push("cosmere-getEntitiesInRange");
-		EntityHelper.getEntitiesInRange(playerEntity, range, false).forEach(entity ->
 		{
-			if (entityContainsMetal(entity))
+			EntityHelper.getEntitiesInRange(playerEntity, range, false).forEach(entity ->
 			{
-				scanResult.foundEntities.add(
-						entity.position().add(
-								0,
-								entity.getBoundingBox().getYsize() / 2,
-								0));
-			}
-		});
+				if (entityContainsMetal(entity))
+				{
+					scanResult.foundEntities.add(
+							entity.position().add(
+									0,
+									entity.getBoundingBox().getYsize() / 2,
+									0));
+				}
+			});
+		}
 		profiler.pop();
 
 		return scanResult;
