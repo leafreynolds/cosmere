@@ -33,8 +33,8 @@ public class SandJarBE extends BlockEntity {
         entity.ticksSinceUpdate++;
         if(entity.ticksSinceUpdate < 4) return;
         int investiture = state.getValue(INVESTITURE);
-        if (MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos))
-            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.min(investiture + 4, 100)));
+        if (MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos, true))
+            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.min(investiture + 1, 100)));
         else
             level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.max(investiture - 4, 0)));
         entity.ticksSinceUpdate = 0;

@@ -151,7 +151,7 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider {
         if(level.isClientSide()) return;
         if(!entity.readyToUpdate()) return;
         if(!entity.hasCatalyst()) return;
-        if(!MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos)) return;
+        if(!MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos, false)) return;
         ItemStackHandler inv = entity.itemHandler;
         int slot = MiscHelper.randomSlot(inv);
         ItemStack item = inv.getStackInSlot(slot);

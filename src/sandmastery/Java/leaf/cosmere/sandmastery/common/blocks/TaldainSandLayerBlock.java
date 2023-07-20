@@ -137,12 +137,13 @@ public class TaldainSandLayerBlock extends BaseFallingBlock {
         if (!pLevel.isAreaLoaded(pPos, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
         BlockState state = this.defaultBlockState();
 
-        boolean nearbyInvestiture = MiscHelper.checkIfNearbyInvestiture(pLevel, pPos);
+        boolean nearbyInvestiture = MiscHelper.checkIfNearbyInvestiture(pLevel, pPos, false);
         boolean offTaldain = !MiscHelper.onTaldain(pLevel);
         boolean canSeeSky = pLevel.canSeeSky(pPos.above());
         if(offTaldain && !nearbyInvestiture) return;
         if (!canSeeSky && !nearbyInvestiture) return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
 
+        if ((!MiscHelper.onTaldain(pLevel) &&!pLevel.canSeeSky(pPos.above())) && !MiscHelper.checkIfNearbyInvestiture(pLevel, pPos, false)) return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
         pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true).setValue(LAYERS, pState.getValue(LAYERS)));
 
         for(int i = 0; i < 4; ++i) {
