@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 26 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -8,12 +8,12 @@ import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -23,7 +23,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,10 +39,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -109,7 +105,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				BlockPos pos = ((BlockHitResult) ray).getBlockPos();
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
-				if (state.getBlock() instanceof IHasMetalType || containsMetal(ResourceLocationHelper.get(state.getBlock()).getPath()))
+				if (state.getBlock() instanceof IHasMetalType || state.getBlock().builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL))
 				{
 					blocks.add(pos.immutable());
 
@@ -344,8 +340,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					{
 						Block block = playerEntity.level.getBlockState(blockPos).getBlock();
 						final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-						final boolean guestimateMetalBlock = AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(block).getPath());
-						return validMetalBlock || guestimateMetalBlock;
+						return validMetalBlock || block.builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL);
 					})
 					.forEach(blockPos -> scanResult.addBlock(blockPos.immutable()));
 
@@ -379,24 +374,19 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	{
 		if (entity instanceof LivingEntity livingEntity)
 		{
-			//metal entities like iron golems
-			if (containsMetal(ResourceLocationHelper.get(entity).getPath()))
+			if (entity.getType().is(CosmereTags.EntityTypes.CONTAINS_METAL))
 			{
 				return true;
 			}
 
-			if (containsMetal(ResourceLocationHelper.get(livingEntity.getMainHandItem().getItem()).getPath()))
-			{
-				return true;
-			}
-			if (containsMetal(ResourceLocationHelper.get(livingEntity.getOffhandItem().getItem()).getPath()))
+			if (livingEntity.getMainHandItem().is(CosmereTags.Items.CONTAINS_METAL) || livingEntity.getOffhandItem().is(CosmereTags.Items.CONTAINS_METAL))
 			{
 				return true;
 			}
 
 			for (ItemStack itemStack : livingEntity.getArmorSlots())
 			{
-				if (containsMetal(ResourceLocationHelper.get(itemStack.getItem()).getPath()))
+				if (itemStack.is(CosmereTags.Items.CONTAINS_METAL))
 				{
 					return true;
 				}
@@ -419,19 +409,21 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		else if (entity instanceof ItemEntity itemEntity)
 		{
 			ItemStack stack = (itemEntity).getItem();
+
+			if (stack.is(CosmereTags.Items.CONTAINS_METAL))
+			{
+				return true;
+			}
+
 			Item item = stack.getItem();
 
-			if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof IHasMetalType || containsMetal(ResourceLocationHelper.get(item).getPath()))
+			if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof IHasMetalType)
 			{
 				return true;
 			}
 
 			final boolean validMetalItem = item instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-			final boolean guestimateMetal = containsMetal(ResourceLocationHelper.get(item).getPath());
-			if (validMetalItem || guestimateMetal)
-			{
-				return true;
-			}
+			return validMetalItem;
 		}
 		else if (entity instanceof CoinProjectile coinProjectile)
 		{
@@ -441,71 +433,4 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		return false;
 	}
 
-	public static boolean containsMetal(String path)
-	{
-		if (s_whiteList == null)
-		{
-			createWhitelist();
-		}
-
-		final boolean foundMatch = s_whiteList.contains(path);
-
-		//look for any block or item that contains one of our metals
-		//eg iron fence
-
-		return foundMatch;
-	}
-
-	//client side is the only time this gets initialized.
-	private static void createWhitelist()
-	{
-		s_whiteList = new HashSet<>();
-
-		//add the obvious stuff
-		//todo replace with config
-		s_whiteList.add("lightning_rod");
-		s_whiteList.add("netherite");
-		s_whiteList.add("ancient_debris");
-		s_whiteList.add("hopper");
-		s_whiteList.add("chain");
-		s_whiteList.add("anvil");
-
-		String[] metalNames = Arrays.stream(Metals.MetalType.values()).map(Metals.MetalType::getName).toArray(String[]::new);
-
-		//add the potential stuff.
-		//This may result in false positives.
-		//requires testing.
-		ForgeRegistries.ITEMS.getValues()
-				.stream()
-				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
-				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));
-		ForgeRegistries.BLOCKS.getValues()
-				.stream()
-				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
-				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));
-		ForgeRegistries.ENTITY_TYPES.getValues()
-				.stream()
-				.filter(test -> testPath(ResourceLocationHelper.get(test), metalNames))
-				.forEach(match -> s_whiteList.add(ResourceLocationHelper.get(match).getPath()));
-
-		for (String s : s_whiteList)
-		{
-			CosmereAPI.logger.info("Allomancy: %s added to Push/Pull whitelist".formatted(s));
-		}
-	}
-
-	private static boolean testPath(ResourceLocation test, String[] metalNames)
-	{
-		final String path = test.getPath();
-		//No twisting vines, paintings, crafting tables or silverfish. Lead by itself is also incorrect.
-		//also no pushing on aluminum, ya dang fool
-		boolean misMatch =
-				path.contains("ting")
-						|| path.contains("tint")
-						|| path.contains("silverfish")
-						|| path.contains("aluminum")
-						|| path.equals("lead");
-
-		return !misMatch && Arrays.stream(metalNames).anyMatch(path::contains);
-	}
 }

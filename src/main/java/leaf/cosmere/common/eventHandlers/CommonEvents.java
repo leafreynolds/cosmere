@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 26 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -19,8 +19,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.BasicItemListing;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -221,5 +223,12 @@ public class CommonEvents
 		}
 
 		return count;
+	}
+
+
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onResourceReload(AddReloadListenerEvent event)
+	{
+		event.addListener(new RecipeReloadListener(event.getServerResources()));
 	}
 }

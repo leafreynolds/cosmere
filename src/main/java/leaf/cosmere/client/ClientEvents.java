@@ -1,12 +1,14 @@
 /*
- * File updated ~ 5 - 4 - 2023 ~ Leaf
+ * File updated ~ 26 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client;
 
+import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.eventHandlers.RecipeReloadListener;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.ChangeSelectedManifestationMessage;
 import leaf.cosmere.common.network.packets.DeactivateManifestationsMessage;
@@ -14,17 +16,23 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Collection;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT)
 public class ClientEvents
@@ -168,5 +176,48 @@ public class ClientEvents
 		});
 
 	}
+
+	private static RecipeManager manager = null;
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onRecipesUpdated(final RecipesUpdatedEvent event)
+	{
+		manager = event.getRecipeManager();
+		updateTagsOnItems();
+	}
+
+
+	@SubscribeEvent
+	public static void onClientReload(final RegisterClientReloadListenersEvent event)
+	{
+		event.registerReloadListener(new ClientRecipeReloadListener());
+	}
+
+
+	@SubscribeEvent
+	public static void onTagsUpdated(final TagsUpdatedEvent event)
+	{
+		//RecipeManager manager = Minecraft.getInstance().getConnection().getRecipeManager();
+		//updateTagsOnItems();
+	}
+
+	private static void updateTagsOnItems()
+	{
+		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
+		final Collection<Recipe<?>> recipes = manager.getRecipes();
+
+		for (var recipe : recipes)
+		{
+			final ItemStack resultItem = recipe.getResultItem();
+
+			if (resultItem.is(containsMetal))
+			{
+				continue;
+			}
+
+			RecipeReloadListener.CheckRecipeForMetal(containsMetal, recipe, resultItem);
+		}
+	}
+
 
 }
