@@ -1,10 +1,11 @@
 /*
- * File updated ~ 1 - 6 - 2023 ~ Leaf
+ * File updated ~ 21 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.tag;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.common.registration.impl.GameEventRegistryObject;
@@ -82,7 +83,7 @@ public abstract class BaseTagProvider implements DataProvider
 	{
 		supportedTagTypes.values().forEach(Map::clear);
 		registerTags();
-		/* todo eventually migrate all tags to use CosmereTagProvider
+		//todo eventually migrate all tags to use CosmereTagProvider
 		for (IBlockProvider blockProvider : getAllBlocks())
 		{
 			Block block = blockProvider.getBlock();
@@ -90,7 +91,7 @@ public abstract class BaseTagProvider implements DataProvider
 			{
 				throw new IllegalStateException("Missing harvest tool type for block '" + ResourceLocationHelper.get(block) + "' that requires the correct tool for drops.");
 			}
-		}*/
+		}
 		supportedTagTypes.forEach((tagType, tagTypeMap) -> act(cache, tagType, tagTypeMap));
 	}
 
