@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 30 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.config.ModConfig.Type;
 public class CosmereClientConfig implements ICosmereConfig
 {
 	private final ForgeConfigSpec configSpec;
-	public final ForgeConfigSpec.BooleanValue clientConfigTest;
+	public final ForgeConfigSpec.BooleanValue disableItemTinting;
 
 
 	CosmereClientConfig()
@@ -18,7 +18,7 @@ public class CosmereClientConfig implements ICosmereConfig
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.comment("Client Config. This config only exists on the client").push("cosmere");
 
-		clientConfigTest = builder.comment("clientConfigTest").translation("config.cosmere.clientconfigtest").define("clientconfigtest", true);
+		disableItemTinting = builder.comment("Lets you disable item and block tinting for metal items and blocks").define("disableItemTinting", false);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -45,6 +45,6 @@ public class CosmereClientConfig implements ICosmereConfig
 	@Override
 	public void clearCache()
 	{
-		clientConfigTest.clearCache();
+		disableItemTinting.clearCache();
 	}
 }
