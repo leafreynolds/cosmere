@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 7 - 2023 ~ Leaf
+ * File updated ~ 28 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -14,6 +14,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
+import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -21,8 +22,10 @@ import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,6 +34,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -40,8 +46,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
@@ -94,6 +103,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 
+		if (s_whiteList == null)
+		{
+			createWhitelist(cap.getLiving());
+		}
+
 		//Pushes/Pulls on Nearby Metals
 		if (getKeyBinding().isDown())
 		{
@@ -105,7 +119,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				BlockPos pos = ((BlockHitResult) ray).getBlockPos();
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
-				if (state.getBlock() instanceof IHasMetalType || state.getBlock().builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL))
+				if (state.getBlock() instanceof IHasMetalType || containsMetal(state.getBlock()))
 				{
 					blocks.add(pos.immutable());
 
@@ -340,7 +354,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					{
 						Block block = playerEntity.level.getBlockState(blockPos).getBlock();
 						final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-						return validMetalBlock || block.builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL);
+						return validMetalBlock || containsMetal(block);
 					})
 					.forEach(blockPos -> scanResult.addBlock(blockPos.immutable()));
 
@@ -374,19 +388,19 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	{
 		if (entity instanceof LivingEntity livingEntity)
 		{
-			if (entity.getType().is(CosmereTags.EntityTypes.CONTAINS_METAL))
+			if (containsMetal(entity))
 			{
 				return true;
 			}
 
-			if (livingEntity.getMainHandItem().is(CosmereTags.Items.CONTAINS_METAL) || livingEntity.getOffhandItem().is(CosmereTags.Items.CONTAINS_METAL))
+			if (containsMetal(livingEntity.getMainHandItem()) || containsMetal(livingEntity.getOffhandItem()))
 			{
 				return true;
 			}
 
 			for (ItemStack itemStack : livingEntity.getArmorSlots())
 			{
-				if (itemStack.is(CosmereTags.Items.CONTAINS_METAL))
+				if (containsMetal(itemStack.getItem()))
 				{
 					return true;
 				}
@@ -409,20 +423,14 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		else if (entity instanceof ItemEntity itemEntity)
 		{
 			ItemStack stack = (itemEntity).getItem();
-
-			if (stack.is(CosmereTags.Items.CONTAINS_METAL))
-			{
-				return true;
-			}
-
 			Item item = stack.getItem();
 
-			if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof IHasMetalType)
+			if (item instanceof BlockItem blockItem && containsMetal(blockItem.getBlock()))
 			{
 				return true;
 			}
 
-			final boolean validMetalItem = item instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+			final boolean validMetalItem = containsMetal(item);
 			return validMetalItem;
 		}
 		else if (entity instanceof CoinProjectile coinProjectile)
@@ -433,4 +441,104 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		return false;
 	}
 
+	private static boolean containsMetal(ItemStack itemStack)
+	{
+		return containsMetal(itemStack.getItem());
+	}
+
+	private static boolean containsMetal(Item item)
+	{
+		if (item.builtInRegistryHolder().is(CosmereTags.Items.CONTAINS_METAL))
+		{
+			return true;
+		}
+		if (s_whiteList == null)
+		{
+			return false;
+		}
+		return s_whiteList.contains(ResourceLocationHelper.get(item).getPath());
+	}
+
+
+	private static boolean containsMetal(Block block)
+	{
+		if (block.builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL))
+		{
+			return true;
+		}
+		if (s_whiteList == null)
+		{
+			return false;
+		}
+		return s_whiteList.contains(ResourceLocationHelper.get(block).getPath());
+	}
+
+	private static boolean containsMetal(Entity entity)
+	{
+		if (entity.getType().is(CosmereTags.EntityTypes.CONTAINS_METAL))
+		{
+			return true;
+		}
+		if (s_whiteList == null)
+		{
+			return false;
+		}
+		return s_whiteList.contains(ResourceLocationHelper.get(entity).getPath());
+	}
+
+	public static void invalidateWhitelist()
+	{
+		s_whiteList = null;
+	}
+
+	//client side is the only time this gets initialized.
+	private static void createWhitelist(Entity entity)
+	{
+		if (s_whiteList != null)
+		{
+			return;
+		}
+
+		s_whiteList = new HashSet<>();
+
+		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
+		final RecipeManager recipeManager = entity.level.getRecipeManager();
+		final Collection<Recipe<?>> recipes = recipeManager.getRecipes();
+
+		for (var recipe : recipes)
+		{
+			final ItemStack resultItem = recipe.getResultItem();
+
+			if (resultItem.is(containsMetal))
+			{
+				continue;
+			}
+
+			CheckRecipeForMetal(containsMetal, recipe, resultItem);
+		}
+	}
+
+
+	public static void CheckRecipeForMetal(TagKey<Item> containsMetal, Recipe<?> recipe, ItemStack resultItem)
+	{
+		for (Ingredient ingredient : recipe.getIngredients())
+		{
+			for (ItemStack itemStack : ingredient.getItems())
+			{
+				if (itemStack.is(containsMetal))
+				{
+					//found one
+					final Holder.Reference<Item> itemReference = resultItem.getItem().builtInRegistryHolder();
+					List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
+					allTags.add(CosmereTags.Items.CONTAINS_METAL);
+					itemReference.bindTags(allTags);
+
+					CosmereAPI.logger.info(itemReference + " has been identified as containing metal.");
+
+					s_whiteList.add(ResourceLocationHelper.get(resultItem.getItem()).getPath());
+					return;
+				}
+			}
+		}
+	}
 }

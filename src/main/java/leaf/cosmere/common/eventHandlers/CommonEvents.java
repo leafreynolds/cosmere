@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 7 - 2023 ~ Leaf
+ * File updated ~ 30 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -229,6 +229,6 @@ public class CommonEvents
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		event.addListener(new RecipeReloadListener(event.getServerResources()));
+		//event.addListener(new RecipeReloadListener(event.getServerResources()));
 	}
 }
