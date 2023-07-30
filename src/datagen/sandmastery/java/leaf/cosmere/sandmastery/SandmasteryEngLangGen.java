@@ -163,6 +163,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 		add(KEY_SANDMASTERY_LAUNCH, "Use Launch Mastery");
 		add(KEY_SANDMASTERY_ELEVATE, "Use Elevate Mastery");
 		add(KEY_SANDMASTERY_PROJECTILE, "Use Projectile Mastery");
+		add(KEY_SANDMASTERY_PLATFORM, "Use Platform Mastery");
 	}
 
 	private void addStats()
