@@ -29,24 +29,10 @@ public class KolossItemInHandLayer<T extends LivingEntity, M extends EntityModel
 
 	public void render(PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight, T pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch)
 	{
-		boolean flag = pLivingEntity.getMainArm() == HumanoidArm.RIGHT;
-		ItemStack itemstack = flag ? pLivingEntity.getOffhandItem() : pLivingEntity.getMainHandItem();
-		ItemStack itemstack1 = flag ? pLivingEntity.getMainHandItem() : pLivingEntity.getOffhandItem();
-		if (!itemstack.isEmpty() || !itemstack1.isEmpty())
-		{
-			pMatrixStack.pushPose();
-			if (this.getParentModel().young)
-			{
-				float f = 0.5F;
-				pMatrixStack.translate(0.0D, 0.0D, 0.0D);
-				pMatrixStack.scale(0.5F, 0.5F, 0.5F);
-			}
+		return;
 
-			this.renderArmWithItem(pLivingEntity, itemstack1, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, pMatrixStack, pBuffer, pPackedLight);
-			this.renderArmWithItem(pLivingEntity, itemstack, ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, pMatrixStack, pBuffer, pPackedLight);
-			pMatrixStack.popPose();
 		}
-	}
+
 
 	protected void renderArmWithItem(LivingEntity pLivingEntity, ItemStack pItemStack, ItemTransforms.TransformType pTransformType, HumanoidArm pArm, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight)
 	{
