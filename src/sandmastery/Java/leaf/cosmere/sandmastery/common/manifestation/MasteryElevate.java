@@ -9,6 +9,7 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +42,7 @@ public class MasteryElevate extends SandmasteryManifestation
         {
             return false;
         }
-        if (!submodule.adjustHydration(-10, false))
+        if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), false))
         {
             return false;
         }
@@ -65,7 +66,7 @@ public class MasteryElevate extends SandmasteryManifestation
         living.hurtMarked = true; // Allow the game to move the player
         living.resetFallDistance();
 
-        submodule.adjustHydration(-10, true);
+        submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true);
         useChargedSand(data);
 
         return true;

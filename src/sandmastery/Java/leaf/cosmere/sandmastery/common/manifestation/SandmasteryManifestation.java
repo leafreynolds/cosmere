@@ -13,6 +13,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.ItemChargeHelper;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
@@ -155,7 +156,7 @@ public class SandmasteryManifestation extends Manifestation
     public int getCost(ISpiritweb data)
     {
         int mode = data.getMode(this);
-        return mode * 2;
+        return mode * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
     }
 
     private static Predicate<ItemStack> getIsItemInvalid()

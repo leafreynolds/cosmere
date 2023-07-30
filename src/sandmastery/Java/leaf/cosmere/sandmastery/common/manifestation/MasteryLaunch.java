@@ -10,6 +10,7 @@ import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +39,7 @@ public class MasteryLaunch extends SandmasteryManifestation
         SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
-        if (!submodule.adjustHydration(-10, false))
+        if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), false))
         {
             return false;
         }
@@ -58,7 +59,7 @@ public class MasteryLaunch extends SandmasteryManifestation
         data.setMode(this, getMode(data) - 1);
         data.syncToClients(null);
 
-        submodule.adjustHydration(-10, true);
+        submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), true);
         useChargedSand(data);
         return true;
     }

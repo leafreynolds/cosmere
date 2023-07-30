@@ -5,6 +5,7 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
@@ -30,7 +31,7 @@ public class MasteryPlatform extends SandmasteryManifestation
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
         boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PLATFORM_HOTKEY_FLAG);
-        if (!submodule.adjustHydration(-30, false))
+        if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), false))
         {
             return false;
         }
@@ -72,7 +73,7 @@ public class MasteryPlatform extends SandmasteryManifestation
             }
             pos = pos.offset(0, 0, -(size * 2) - 1);
         }
-        submodule.adjustHydration(-30, true);
+        submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), true);
         return true;
     }
 }
