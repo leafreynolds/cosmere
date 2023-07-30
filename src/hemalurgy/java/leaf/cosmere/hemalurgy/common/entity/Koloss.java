@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 7 - 2023 ~ Leaf
+ * File updated ~ 30 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.entity;
@@ -75,7 +75,39 @@ public class Koloss extends AbstractIllager
 	}
 
 
-	public static AttributeSupplier.Builder createAttributes()
+	public static AttributeSupplier.Builder smallAttributes()
+	{
+		//todo, make different based on size of koloss
+		return Monster.createMonsterAttributes()
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
+				.add(Attributes.FOLLOW_RANGE, 32.0D)
+				.add(Attributes.MAX_HEALTH, 100.0D)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.75d)
+				.add(Attributes.ARMOR, 4.0d)
+				.add(Attributes.ARMOR_TOUGHNESS, 1.0d)
+				.add(Attributes.LUCK, -1.0d)
+				.add(Attributes.ATTACK_DAMAGE, 12.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
+				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+	}
+
+	public static AttributeSupplier.Builder mediumAttributes()
+	{
+		//todo, make different based on size of koloss
+		return Monster.createMonsterAttributes()
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
+				.add(Attributes.FOLLOW_RANGE, 32.0D)
+				.add(Attributes.MAX_HEALTH, 100.0D)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.75d)
+				.add(Attributes.ARMOR, 4.0d)
+				.add(Attributes.ARMOR_TOUGHNESS, 1.0d)
+				.add(Attributes.LUCK, -1.0d)
+				.add(Attributes.ATTACK_DAMAGE, 12.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
+				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+	}
+
+	public static AttributeSupplier.Builder largeAttributes()
 	{
 		//todo, make different based on size of koloss
 		return Monster.createMonsterAttributes()
