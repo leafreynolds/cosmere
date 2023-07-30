@@ -23,7 +23,7 @@ public class HemalurgyEntityTypes
 							.updateInterval(1)
 							.setTrackingRange(8)
 							.clientTrackingRange(10)
-							.sized(2, 2)
+							.sized(2.5F, 5.5F)
 			);
 	public static final EntityTypeRegistryObject<Koloss> KOLOSS_MEDIUM =
 			ENTITY_TYPES.register(
@@ -33,7 +33,7 @@ public class HemalurgyEntityTypes
 							.updateInterval(1)
 							.setTrackingRange(8)
 							.clientTrackingRange(10)
-							.sized(1.5f, 1.5f)
+							.sized(1.5f, 4)
 			);
 	public static final EntityTypeRegistryObject<Koloss> KOLOSS_SMALL =
 			ENTITY_TYPES.register(
@@ -43,7 +43,7 @@ public class HemalurgyEntityTypes
 							.updateInterval(1)
 							.setTrackingRange(8)
 							.clientTrackingRange(10)
-							.sized(1, 1)
+							.sized(1, 2)
 			);
 
 }
