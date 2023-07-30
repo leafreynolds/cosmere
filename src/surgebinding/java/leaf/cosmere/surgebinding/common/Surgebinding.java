@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 30 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common;
@@ -11,7 +11,7 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
-import leaf.cosmere.surgebinding.common.capability.world.IRoshar;
+import leaf.cosmere.surgebinding.common.capabilities.world.IRoshar;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.network.SurgebindingPacketHandler;
 import leaf.cosmere.surgebinding.common.registries.*;
