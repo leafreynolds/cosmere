@@ -1,5 +1,5 @@
 /*
- * File updated ~ 1 - 6 - 2023 ~ Leaf
+ * File updated ~ 21 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -7,10 +7,8 @@ package leaf.cosmere;
 import leaf.cosmere.biome.BiomeModifierGen;
 import leaf.cosmere.biome.BiomeTagsProvider;
 import leaf.cosmere.blocks.BlockModelsGen;
-import leaf.cosmere.blocks.BlockTagsGen;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.items.ItemModelsGen;
-import leaf.cosmere.items.ItemTagsGen;
 import leaf.cosmere.loottables.LootTableGen;
 import leaf.cosmere.patchouli.PatchouliGen;
 import leaf.cosmere.tag.CosmereTagProvider;
@@ -32,10 +30,6 @@ public class CosmereDataGenerator
 
 
 		generator.addProvider(true, new EngLangGen(generator));
-
-		BlockTagsGen blockTags = new BlockTagsGen(generator, existingFileHelper);
-		generator.addProvider(true, blockTags);
-		generator.addProvider(true, new ItemTagsGen(generator, blockTags, existingFileHelper));
 
 		generator.addProvider(true, new ItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new BlockModelsGen(generator, existingFileHelper));

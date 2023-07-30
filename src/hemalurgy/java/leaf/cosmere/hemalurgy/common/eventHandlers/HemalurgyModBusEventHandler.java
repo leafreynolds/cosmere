@@ -30,8 +30,8 @@ public class HemalurgyModBusEventHandler
 	@SubscribeEvent
 	public static void entityAttributeEvent(EntityAttributeCreationEvent event)
 	{
-		event.put(HemalurgyEntityTypes.KOLOSS_LARGE.get(), Koloss.createAttributes().build());
-		event.put(HemalurgyEntityTypes.KOLOSS_MEDIUM.get(), Koloss.createAttributes().build());
-		event.put(HemalurgyEntityTypes.KOLOSS_SMALL.get(), Koloss.createAttributes().build());
+		event.put(HemalurgyEntityTypes.KOLOSS_LARGE.get(), Koloss.largeAttributes().build());
+		event.put(HemalurgyEntityTypes.KOLOSS_MEDIUM.get(), Koloss.mediumAttributes().build());
+		event.put(HemalurgyEntityTypes.KOLOSS_SMALL.get(), Koloss.smallAttributes().build());
 	}
 }

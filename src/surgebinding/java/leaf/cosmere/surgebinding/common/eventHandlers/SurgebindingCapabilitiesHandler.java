@@ -1,13 +1,13 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 30 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.eventHandlers;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.capability.world.IRoshar;
-import leaf.cosmere.surgebinding.common.capability.world.RosharCapability;
+import leaf.cosmere.surgebinding.common.capabilities.world.IRoshar;
+import leaf.cosmere.surgebinding.common.capabilities.world.RosharCapability;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;

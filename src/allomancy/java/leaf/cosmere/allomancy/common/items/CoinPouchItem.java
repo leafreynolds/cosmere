@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 26 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -13,8 +13,8 @@ import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
 import leaf.cosmere.allomancy.common.network.packets.PlayerShootProjectileMessage;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
+import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import net.minecraft.nbt.CompoundTag;
@@ -46,7 +46,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 	public static final Predicate<ItemStack> SUPPORTED_PROJECTILES = (itemStack) ->
 	{
 		final boolean isNugget = itemStack.is(Tags.Items.NUGGETS);
-		final boolean containsMetal = AllomancyIronSteel.containsMetal(ResourceLocationHelper.get(itemStack.getItem()).getPath());
+		final boolean containsMetal = itemStack.is(CosmereTags.Items.CONTAINS_METAL);
 		return isNugget && containsMetal;
 	};
 

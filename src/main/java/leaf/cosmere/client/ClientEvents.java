@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 4 - 2023 ~ Leaf
+ * File updated ~ 28 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client;
@@ -168,5 +168,4 @@ public class ClientEvents
 		});
 
 	}
-
 }

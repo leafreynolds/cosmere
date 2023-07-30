@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -39,6 +40,8 @@ public class CosmereTags
 
 
 		public static final TagKey<Item> CURIO_LINCHPIN = makeItem(CuriosApi.MODID, "linchpin");
+
+		public static final TagKey<Item> CONTAINS_METAL = makeItem("cosmere", "contains_metal");
 
 		public static TagKey<Item> METAL_SPIKE = makeItem("cosmere", "spike");
 
@@ -106,12 +109,14 @@ public class CosmereTags
 	public static class Blocks
 	{
 
-		public static TagKey<Block> DRAGON_PROOF = makeBlock("minecraft", "dragon_immune");
-		public static TagKey<Block> WITHER_PROOF = makeBlock("minecraft", "wither_immune");
+		public static final TagKey<Block> DRAGON_PROOF = makeBlock("minecraft", "dragon_immune");
+		public static final TagKey<Block> WITHER_PROOF = makeBlock("minecraft", "wither_immune");
+
+		public static final TagKey<Block> CONTAINS_METAL = makeBlock("cosmere", "contains_metal");
 
 		public static final Map<Metals.MetalType, TagKey<Block>> METAL_ORE_BLOCK_TAGS =
 				Arrays.stream(Metals.MetalType.values())
-						.filter(Metals.MetalType::hasOre)
+						//.filter(Metals.MetalType::hasOre)
 						.collect(Collectors.toMap(
 								Function.identity(),
 								type -> forgeTag("ores/" + type.getName())));
@@ -162,6 +167,21 @@ public class CosmereTags
 		private static TagKey<Biome> create(ResourceLocation resourceLocation)
 		{
 			return TagKey.create(Registry.BIOME_REGISTRY, resourceLocation);
+		}
+	}
+
+	public static class EntityTypes
+	{
+		public static final TagKey<EntityType<?>> CONTAINS_METAL = create("cosmere", "contains_metal");
+
+		private static TagKey<EntityType<?>> create(String namespace, String path)
+		{
+			return create(new ResourceLocation(namespace, path));
+		}
+
+		private static TagKey<EntityType<?>> create(ResourceLocation resourceLocation)
+		{
+			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, resourceLocation);
 		}
 	}
 }
