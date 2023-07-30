@@ -39,26 +39,31 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		if (spiritweb.getSelectedManifestation() instanceof SandmasteryManifestation sandmasteryManifestation)
 		{
 			final int isActivatedAndActive = Keybindings.MANIFESTATION_USE_ACTIVE.isDown()
-			                                 ? 1
-			                                 : 0;
-
-			final int elevateFlag = SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown()
-			                        ? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
-			                        : 0;
-			final int launchFlag =
-					SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown()
-					? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
+					? 1
 					: 0;
 
+			final int elevateFlag = SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown()
+					? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
+					: 0;
+			final int launchFlag =
+					SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown()
+							? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
+							: 0;
+
 			final int projectileFlag = SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown()
-			                           ? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
-			                           : 0;
+					? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
+					: 0;
+
+			final int platformFlag = SandmasteryKeybindings.SANDMASTERY_PLATFORM.isDown()
+					? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
+					: 0;
 
 			int currentFlags = 0;
 			currentFlags = currentFlags + isActivatedAndActive;
 			currentFlags = currentFlags + elevateFlag;
 			currentFlags = currentFlags + launchFlag;
 			currentFlags = currentFlags + projectileFlag;
+			currentFlags = currentFlags + platformFlag;
 
 			if (hotkeyFlags != currentFlags)
 			{
@@ -96,6 +101,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		sandmasteryTag = CompoundNBTHelper.getOrCreate(compoundTag, Sandmastery.MODID);
 		//unload the player specific fields
 		hydrationLevel = sandmasteryTag.getInt(SandmasteryConstants.HYDRATION_TAG);
+		projectileCooldown = sandmasteryTag.getInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG);
 		hotkeyFlags = sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
 	}
 
@@ -110,6 +116,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		sandmasteryTag.putInt(SandmasteryConstants.HYDRATION_TAG, hydrationLevel);
+		sandmasteryTag.putInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG, projectileCooldown);
 		sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
 
 		//this shouldn't be necessary, as the spiritweb tag should already have the reference
@@ -159,7 +166,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 	public void tickProjectileCooldown()
 	{
-		this.projectileCooldown -= this.projectileCooldown > 0 ? 1 : 0;
+		this.projectileCooldown -= this.projectileCooldown < 1 ? 0 : 1;
 	}
 
 	public void setProjectileCooldown(int cooldown)
@@ -169,7 +176,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 	public boolean projectileReady()
 	{
-		return this.projectileCooldown == 0;
+		return this.projectileCooldown <= 0;
 	}
 
 

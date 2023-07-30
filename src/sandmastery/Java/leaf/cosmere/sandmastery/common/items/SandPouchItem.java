@@ -70,7 +70,7 @@ public class SandPouchItem extends ChargeableItemBase
 	public int getCharge(ItemStack itemStack)
 	{
 		int itemCharge = StackNBTHelper.getInt(itemStack, Constants.NBT.CHARGE_LEVEL, 0);
-		return  itemCharge * itemStack.getCount();
+		return itemCharge * itemStack.getCount();
 	}
 
 	@Override
@@ -78,10 +78,10 @@ public class SandPouchItem extends ChargeableItemBase
 	{
 		int res = 0;
 		IItemHandler inv = getPouchInv(itemStack);
-        if (inv == null)
-        {
-            return res;
-        }
+		if (inv == null)
+		{
+			return res;
+		}
 		for (int i = 0; i < SandPouchInventory.size; i++)
 		{
 			ItemStack stack = inv.getStackInSlot(i);

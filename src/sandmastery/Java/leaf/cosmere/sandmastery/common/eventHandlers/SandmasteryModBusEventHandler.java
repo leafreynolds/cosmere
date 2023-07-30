@@ -12,10 +12,10 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SandmasteryModBusEventHandler
 {
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
-    {
-        event.add(EntityType.PLAYER, SandmasteryAttributes.RIBBONS.getAttribute());
-    }
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
+	{
+		event.add(EntityType.PLAYER, SandmasteryAttributes.RIBBONS.getAttribute());
+	}
 }
 

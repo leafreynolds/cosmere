@@ -9,6 +9,8 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
@@ -32,10 +34,10 @@ public class MasteryProjectile extends SandmasteryManifestation
 		{
 			return false;
 		}
-
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PROJECTILE_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
+			submodule.setProjectileCooldown(SandmasteryConfigs.SERVER.PROJECTILE_COOLDOWN.get());
 			return performEffectServer(data);
 		}
 		return false;
@@ -46,7 +48,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		ServerPlayer player = (ServerPlayer) data.getLiving();
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-		if (!submodule.adjustHydration(-10, false))
+		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), false))
 		{
 			return false;
 		}
@@ -60,14 +62,11 @@ public class MasteryProjectile extends SandmasteryManifestation
 			if (!pouch.isEmpty() && pouch.is(SandmasteryItems.SAND_POUCH_ITEM.get()))
 			{
 				SandmasteryItems.SAND_POUCH_ITEM.get().shoot(pouch, player);
-
-				return false;
+				break;
 			}
 		}
-
-		submodule.adjustHydration(-10, true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), true);
 		useChargedSand(data);
-		submodule.setProjectileCooldown(15);
 		return true;
 	}
 

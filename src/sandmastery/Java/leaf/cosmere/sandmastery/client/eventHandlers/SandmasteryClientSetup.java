@@ -79,7 +79,7 @@ public class SandmasteryClientSetup
 		for (final Taldain.Mastery manifestation : Taldain.Mastery.values())
 		{
 			String abilityToLower = manifestation.toString().toLowerCase(Locale.ROOT);
-			event.addSprite(Sandmastery.rl("icon/sandmastery/"+abilityToLower));
+			event.addSprite(Sandmastery.rl("icon/sandmastery/" + abilityToLower));
 		}
 	}
 

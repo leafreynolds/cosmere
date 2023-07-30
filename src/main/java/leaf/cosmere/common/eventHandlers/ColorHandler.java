@@ -1,10 +1,11 @@
 /*
- * File updated ~ 13 - 10 - 2022 ~ Leaf
+ * File updated ~ 30 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
 
 import leaf.cosmere.api.IHasColour;
+import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.block.BlockColors;
@@ -20,8 +21,10 @@ public final class ColorHandler
 
 	public static void init()
 	{
-		//todo check client side config for if it's wanted
-
+		if (CosmereConfigs.CLIENT_CONFIG.disableItemTinting.get())
+		{
+			return;
+		}
 
 		BlockColors blockColors = Minecraft.getInstance().getBlockColors();
 		ItemColors itemColors = Minecraft.getInstance().getItemColors();

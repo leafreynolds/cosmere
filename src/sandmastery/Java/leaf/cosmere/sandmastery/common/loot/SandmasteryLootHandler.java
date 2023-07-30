@@ -15,54 +15,54 @@ import net.minecraftforge.fml.common.Mod;
 public final class SandmasteryLootHandler
 {
 
-    @SubscribeEvent
-    public static void lootLoad(LootTableLoadEvent evt)
-    {
-        String prefix = "minecraft:chests/";
-        String name = evt.getName().toString();
+	@SubscribeEvent
+	public static void lootLoad(LootTableLoadEvent evt)
+	{
+		String prefix = "minecraft:chests/";
+		String name = evt.getName().toString();
 
-        if (name.startsWith(prefix))
-        {
-            String file = name.substring(name.indexOf(prefix) + prefix.length());
-            switch (file)
-            {
-                case "abandoned_mineshaft":
-                case "bastion_treasure":
-                case "bastion_other":
-                case "bastion_bridge":
-                case "desert_pyramid":
-                case "end_city_treasure":
-                case "jungle_temple":
-                case "simple_dungeon":
-                case "spawn_bonus_chest":
-                case "stronghold_corridor":
-                case "stronghold_crossing":
-                case "stronghold_library":
-                case "village_blacksmith":
-                case "woodland_mansion":
-                    evt.getTable().addPool(getInjectPool(file));
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+		if (name.startsWith(prefix))
+		{
+			String file = name.substring(name.indexOf(prefix) + prefix.length());
+			switch (file)
+			{
+				case "abandoned_mineshaft":
+				case "bastion_treasure":
+				case "bastion_other":
+				case "bastion_bridge":
+				case "desert_pyramid":
+				case "end_city_treasure":
+				case "jungle_temple":
+				case "simple_dungeon":
+				case "spawn_bonus_chest":
+				case "stronghold_corridor":
+				case "stronghold_crossing":
+				case "stronghold_library":
+				case "village_blacksmith":
+				case "woodland_mansion":
+					evt.getTable().addPool(getInjectPool(file));
+					break;
+				default:
+					break;
+			}
+		}
+	}
 
-    public static LootPool getInjectPool(String entryName)
-    {
-        return LootPool.lootPool()
-                .add(getInjectEntry(entryName, 1))
-                .setBonusRolls(UniformGenerator.between(0, 1))
-                .name("sandmastery_inject")
-                .build();
-    }
+	public static LootPool getInjectPool(String entryName)
+	{
+		return LootPool.lootPool()
+				.add(getInjectEntry(entryName, 1))
+				.setBonusRolls(UniformGenerator.between(0, 1))
+				.name("sandmastery_inject")
+				.build();
+	}
 
-    private static LootPoolEntryContainer.Builder<?> getInjectEntry(String name, int weight)
-    {
-        ResourceLocation table = Sandmastery.rl("inject/" + name);
-        return LootTableReference.lootTableReference(table)
-                .setWeight(weight);
+	private static LootPoolEntryContainer.Builder<?> getInjectEntry(String name, int weight)
+	{
+		ResourceLocation table = Sandmastery.rl("inject/" + name);
+		return LootTableReference.lootTableReference(table)
+				.setWeight(weight);
 
-    }
+	}
 
 }

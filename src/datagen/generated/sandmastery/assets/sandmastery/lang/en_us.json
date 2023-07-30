@@ -3,6 +3,7 @@
   "block.sandmastery.sand_spreading_tub": "Sand Spreading Tub",
   "block.sandmastery.taldain_sand": "Taldain Sand",
   "block.sandmastery.taldain_sand_layer": "Taldain Sand Layer",
+  "block.sandmastery.temporary_sand_block": "Temporary Sand Block",
   "item.sandmastery.jar": "Jar",
   "item.sandmastery.qido": "Qido",
   "item.sandmastery.sand_jar": "Sand Jar",
@@ -10,6 +11,7 @@
   "itemGroup.sandmastery": "Sandmastery Items",
   "key.cosmere.sandmastery.elevate": "Use Elevate Mastery",
   "key.cosmere.sandmastery.launch": "Use Launch Mastery",
+  "key.cosmere.sandmastery.platform": "Use Platform Mastery",
   "key.cosmere.sandmastery.projectile": "Use Projectile Mastery",
   "manifestation.sandmastery.cushion": "Sand Mastery Cushion",
   "manifestation.sandmastery.cushion.description": "Masters can use cushion",
@@ -17,6 +19,8 @@
   "manifestation.sandmastery.elevate.description": "Masters can use elevate",
   "manifestation.sandmastery.launch": "Sand Mastery Launch",
   "manifestation.sandmastery.launch.description": "Masters can use launch",
+  "manifestation.sandmastery.platform": "Sand Mastery Platform",
+  "manifestation.sandmastery.platform.description": "Masters can use platform",
   "manifestation.sandmastery.projectile": "Sand Mastery Projectile",
   "manifestation.sandmastery.projectile.description": "Masters can use projectile"
 }

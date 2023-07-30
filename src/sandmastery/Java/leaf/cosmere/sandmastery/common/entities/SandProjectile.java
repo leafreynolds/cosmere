@@ -6,7 +6,9 @@ package leaf.cosmere.sandmastery.common.entities;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.registry.ItemsRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEntityTypes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -16,7 +18,7 @@ import net.minecraft.world.level.Level;
 
 public class SandProjectile extends AbstractArrow implements ItemSupplier
 {
-	private ItemStack projectileStack = ItemsRegistry.METAL_NUGGETS.get(Metals.MetalType.COPPER).get().getDefaultInstance();
+	private ItemStack projectileStack = SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getItemStack();
 
 	public SandProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack)
 	{
@@ -38,6 +40,6 @@ public class SandProjectile extends AbstractArrow implements ItemSupplier
 	@Override
 	public ItemStack getItem()
 	{
-		return ItemStack.EMPTY;
+		return projectileStack;
 	}
 }

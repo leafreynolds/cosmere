@@ -11,27 +11,37 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import static leaf.cosmere.sandmastery.common.blocks.SandJarBlock.INVESTITURE;
 
-public class SandJarBE extends BlockEntity {
-    public SandJarBE(BlockPos pPos, BlockState pBlockState) {
-        super(SandmasteryBlockEntitiesRegistry.SAND_JAR_BE.get(), pPos, pBlockState);
-    }
+public class SandJarBE extends BlockEntity
+{
+	public SandJarBE(BlockPos pPos, BlockState pBlockState)
+	{
+		super(SandmasteryBlockEntitiesRegistry.SAND_JAR_BE.get(), pPos, pBlockState);
+	}
 
-    @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
-    }
+	private int ticksSinceUpdate = 0;
 
-    @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-    }
+	@Override
+	protected void saveAdditional(CompoundTag nbt)
+	{
+		super.saveAdditional(nbt);
+	}
 
-    public static void tick(Level level, BlockPos pos, BlockState state, SandJarBE entity) {
-        if(level.isClientSide()) return;
-        int investiture = state.getValue(INVESTITURE);
-        if (MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos))
-            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.min(investiture + 1, 100)));
-        else
-            level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.max(investiture - 1, 0)));
-    }
+	@Override
+	public void load(CompoundTag nbt)
+	{
+		super.load(nbt);
+	}
+
+	public static void tick(Level level, BlockPos pos, BlockState state, SandJarBE entity)
+	{
+		if (level.isClientSide()) return;
+		entity.ticksSinceUpdate++;
+		if (entity.ticksSinceUpdate < 4) return;
+		int investiture = state.getValue(INVESTITURE);
+		if (MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos, true))
+			level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.min(investiture + 1, 100)));
+		else
+			level.setBlockAndUpdate(pos, state.setValue(INVESTITURE, Math.max(investiture - 4, 0)));
+		entity.ticksSinceUpdate = 0;
+	}
 }

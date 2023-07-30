@@ -4,10 +4,7 @@
 
 package leaf.cosmere.sandmastery.common.utils;
 
-import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.*;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -43,75 +40,59 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MiscHelper
 {
-	public static boolean checkIfNearbyInvestiture(ServerLevel pLevel, BlockPos pPos)
+	public static boolean checkIfNearbyInvestiture(ServerLevel pLevel, BlockPos pPos, boolean includeMobs)
 	{
 		boolean allomancyLoaded = Cosmere.isModuleLoaded("Allomancy");
-		boolean surgebindingLoaded = Cosmere.isModuleLoaded("Surgebinding");
 
-		int range = 10;
+		int range = 6;
 		AABB areaOfEffect = new AABB(pPos).inflate(range, range, range);
 		List<LivingEntity> entitiesToCheckForInvesiture = pLevel.getEntitiesOfClass(LivingEntity.class, areaOfEffect, e -> true);
 
 		AtomicBoolean foundSomething = new AtomicBoolean(false);
 
-		MobEffect mobEffect = null;
+		MobEffect mobEffect;
 		if (allomancyLoaded)
 		{
 			mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
 		}
-		for (LivingEntity targetEntity : entitiesToCheckForInvesiture)
+		else
 		{
-			MobEffectInstance copperEffect;
-			if (mobEffect == null)
-			{
-				copperEffect = null;
-			}
-			else
-			{
-				copperEffect = targetEntity.getEffect(mobEffect);
-			}
-			if (copperEffect != null && copperEffect.getDuration() > 0)
-			{
-				continue; //skip clouded entities.
-			}
-
-			SpiritwebCapability.get(targetEntity).ifPresent(targetSpiritweb ->
-			{
-				// Check for Allomancy nearby
-				if (allomancyLoaded)
+			mobEffect = null;
+		}
+		for (LivingEntity target : entitiesToCheckForInvesiture)
+		{
+			SpiritwebCapability.get(target).ifPresent(targetSpiritweb -> {
+				MobEffectInstance copperEffect;
+				if (mobEffect == null)
 				{
-					for (Metals.MetalType metalType : Metals.MetalType.values())
-					{
-						if (metalType == Metals.MetalType.COPPER)
-						{
-							continue;
-						}
-						if (!metalType.hasAssociatedManifestation())
-						{
-							continue;
-						}
-
-						int metalTypeID = metalType.getID();
-						if (targetSpiritweb.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalTypeID)))
-						{
-							foundSomething.set(true);
-						}
-					}
+					copperEffect = null;
+				}
+				else
+				{
+					copperEffect = target.getEffect(mobEffect);
+				}
+				if (copperEffect != null && copperEffect.getDuration() > 0)
+				{
+					return; //skip clouded entities.
 				}
 
-				// Check for Surgebinding nearby
-				if (surgebindingLoaded)
+				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 				{
-					for (Roshar.Surges surge : Roshar.Surges.values())
+					final boolean targetIsPlayer = target instanceof Player;
+
+					//if target is not a player and has any manifestations at all
+					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation) && includeMobs)
 					{
-						int surgeID = surge.getID();
-						if (targetSpiritweb.canTickManifestation(Manifestations.ManifestationTypes.SURGEBINDING.getManifestation(surgeID)))
-						{
-							foundSomething.set(true);
-						}
+						foundSomething.set(true);
+						break;
+					}
+					//if target is player and has any active manifestations,
+					else if (targetIsPlayer && manifestation.isActive(targetSpiritweb))
+					{
+						foundSomething.set(true);
+						break;
 					}
 				}
-
 			});
 		}
 		return foundSomething.get();
@@ -124,7 +105,7 @@ public class MiscHelper
 			return;
 		}
 		int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition()))
+		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition(), false))
 		{
 			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
 		}

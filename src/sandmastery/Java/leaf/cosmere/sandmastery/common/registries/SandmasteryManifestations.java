@@ -32,7 +32,8 @@ public class SandmasteryManifestations
 
 	private static SandmasteryManifestation makeSandmasteryManifestation(Taldain.Mastery mastery)
 	{
-		switch(mastery) {
+		switch (mastery)
+		{
 			case LAUNCH:
 				return new MasteryLaunch(mastery);
 			case ELEVATE:
@@ -41,6 +42,8 @@ public class SandmasteryManifestations
 				return new MasteryCushion(mastery);
 			case PROJECTILE:
 				return new MasteryProjectile(mastery);
+			case PLATFORM:
+				return new MasteryPlatform(mastery);
 			default:
 				return new SandmasteryManifestation(mastery);
 		}
