@@ -45,7 +45,8 @@ public class JarItem extends BaseItem
 
 			charged = state.getValue(TaldainSandLayerBlock.INVESTED);
 			fill = true;
-		} else if (state.is(SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock()))
+		}
+		else if (state.is(SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock()))
 		{
 			pLevel.setBlockAndUpdate(pos,
 					SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock()
@@ -61,7 +62,8 @@ public class JarItem extends BaseItem
 		if (charged)
 		{
 			StackNBTHelper.setInt(item, Constants.NBT.CHARGE_LEVEL, 100);
-		} else
+		}
+		else
 		{
 			StackNBTHelper.setInt(item, Constants.NBT.CHARGE_LEVEL, 0);
 		}

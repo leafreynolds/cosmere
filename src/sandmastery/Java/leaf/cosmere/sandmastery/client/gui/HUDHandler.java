@@ -81,7 +81,8 @@ public class HUDHandler
 		if (maxHydration == 0)
 		{
 			barWidth = 0;
-		} else
+		}
+		else
 		{
 			double multiplier = (double) hydration / (double) maxHydration;
 			barWidth = (int) ((double) fullBarWidth * multiplier);
@@ -92,7 +93,8 @@ public class HUDHandler
 			if (hydration > 0)
 			{
 				barWidth = 1;
-			} else
+			}
+			else
 			{
 				return;
 			}

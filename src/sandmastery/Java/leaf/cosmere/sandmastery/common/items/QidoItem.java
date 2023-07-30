@@ -57,7 +57,8 @@ public class QidoItem extends ChargeableItemBase
 				pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
 				setCharge(itemStack, getMaxCharge(itemStack));
 			}
-		} else
+		}
+		else
 		{
 			SpiritwebCapability.get(pPlayer).ifPresent(spiritweb ->
 			{
@@ -81,7 +82,8 @@ public class QidoItem extends ChargeableItemBase
 				{
 					sb.adjustHydration((maxPlayerHydration - playerHydration), true);
 					setCharge(itemStack, ((liquid + playerHydration) - maxPlayerHydration));
-				} else
+				}
+				else
 				{
 					sb.adjustHydration(liquid, true);
 					setCharge(itemStack, 0);

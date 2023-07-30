@@ -54,7 +54,8 @@ public class MiscHelper
 		if (allomancyLoaded)
 		{
 			mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
-		} else
+		}
+		else
 		{
 			mobEffect = null;
 		}
@@ -65,7 +66,8 @@ public class MiscHelper
 				if (mobEffect == null)
 				{
 					copperEffect = null;
-				} else
+				}
+				else
 				{
 					copperEffect = target.getEffect(mobEffect);
 				}
@@ -155,7 +157,8 @@ public class MiscHelper
 		if (stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem())
 		{
 			return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-		} else
+		}
+		else
 		{
 			return 0;
 		}

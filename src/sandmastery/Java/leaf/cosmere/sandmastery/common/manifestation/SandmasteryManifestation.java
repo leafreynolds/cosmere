@@ -82,7 +82,8 @@ public class SandmasteryManifestation extends Manifestation
 		if (getMode(data) > lastMode)
 		{
 			submodule.useRibbon(data, this);
-		} else if (getMode(data) < lastMode)
+		}
+		else if (getMode(data) < lastMode)
 		{
 			submodule.releaseRibbon(data, this);
 		}
@@ -127,7 +128,8 @@ public class SandmasteryManifestation extends Manifestation
 				if (amountLeft >= 0)
 				{
 					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, amountLeft);
-				} else
+				}
+				else
 				{
 					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 					changeLeft += amountLeft;

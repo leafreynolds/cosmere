@@ -81,7 +81,8 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 				if (changedStack.getItem() == sandBlock)
 				{
 					layers += 8 * count; // Blocks are worth 8 layers
-				} else if (changedStack.getItem() == sandLayer)
+				}
+				else if (changedStack.getItem() == sandLayer)
 				{
 					layers += count;
 				}
@@ -165,7 +166,8 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 			if (existing.isEmpty())
 			{
 				this.stacks.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
-			} else
+			}
+			else
 			{
 				existing.grow(reachedLimit ? limit : stack.getCount());
 			}
@@ -203,11 +205,13 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 				this.stacks.set(slot, ItemStack.EMPTY);
 				onContentsChanged(slot, existing.getCount(), MODES.REMOVE);
 				return existing;
-			} else
+			}
+			else
 			{
 				return existing.copy();
 			}
-		} else
+		}
+		else
 		{
 			if (!simulate)
 			{

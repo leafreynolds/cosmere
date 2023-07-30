@@ -118,7 +118,8 @@ public class TaldainSandLayerBlock extends BaseFallingBlock
 			if (pUseContext.replacingClickedOnBlock())
 			{
 				return pUseContext.getClickedFace() == Direction.UP;
-			} else
+			}
+			else
 			{
 				return true;
 			}
@@ -134,7 +135,8 @@ public class TaldainSandLayerBlock extends BaseFallingBlock
 		{
 			int i = blockstate.getValue(LAYERS);
 			return blockstate.setValue(LAYERS, Integer.valueOf(Math.min(8, i + 1))).setValue(INVESTED, false);
-		} else
+		}
+		else
 		{
 			return super.getStateForPlacement(pContext);
 		}

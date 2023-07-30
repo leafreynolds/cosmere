@@ -107,7 +107,8 @@ public class SandJarItem extends ChargeableItemBase
 							.defaultBlockState()
 							.setValue(SandJarBlock.INVESTITURE, StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0))
 			);
-		} else
+		}
+		else
 		{
 			inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected : -106, new ItemStack(SandmasteryItems.JAR_ITEM));
 			if (state.is(SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock()) && state.getValue(TaldainSandLayerBlock.LAYERS) < 8)
@@ -118,7 +119,8 @@ public class SandJarItem extends ChargeableItemBase
 								.setValue(TaldainSandLayerBlock.LAYERS, layers + 1)
 								.setValue(TaldainSandLayerBlock.INVESTED, wasCharged)
 				);
-			} else
+			}
+			else
 			{
 				BlockPos pos2 = pos.offset(dir.getNormal());
 				pLevel.setBlockAndUpdate(pos2,

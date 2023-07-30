@@ -102,7 +102,8 @@ public class SandSpreaderMenu extends AbstractContainerMenu
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.moveItemStackTo(itemstack1, 0, maxSlots, false))
+			}
+			else if (!this.moveItemStackTo(itemstack1, 0, maxSlots, false))
 			{
 				return ItemStack.EMPTY;
 			}
@@ -110,7 +111,8 @@ public class SandSpreaderMenu extends AbstractContainerMenu
 			if (itemstack1.isEmpty())
 			{
 				slot.set(ItemStack.EMPTY);
-			} else
+			}
+			else
 			{
 				slot.setChanged();
 			}

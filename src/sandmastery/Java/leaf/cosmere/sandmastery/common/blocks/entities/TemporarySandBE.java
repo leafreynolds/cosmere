@@ -43,7 +43,8 @@ public class TemporarySandBE extends BlockEntity
 		if (age <= 0)
 		{
 			level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-		} else
+		}
+		else
 		{
 			level.setBlockAndUpdate(pos, state.setValue(AGE, age - 1));
 		}

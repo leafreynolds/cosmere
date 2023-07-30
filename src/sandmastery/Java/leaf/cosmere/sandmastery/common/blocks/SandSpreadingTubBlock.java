@@ -58,7 +58,8 @@ public class SandSpreadingTubBlock extends BaseEntityBlock
 			if (entity instanceof SandSpreaderBE)
 			{
 				NetworkHooks.openScreen(((ServerPlayer) player), (SandSpreaderBE) entity, pos);
-			} else
+			}
+			else
 			{
 				throw new IllegalStateException("Our Container provider is missing!");
 			}
