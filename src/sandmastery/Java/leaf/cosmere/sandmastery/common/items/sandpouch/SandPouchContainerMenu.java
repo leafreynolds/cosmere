@@ -13,7 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
-public class SandPouchContainerMenu extends AbstractContainerMenu {
+public class SandPouchContainerMenu extends AbstractContainerMenu
+{
     public static SandPouchContainerMenu fromNetwork(int windowId, Inventory inv, FriendlyByteBuf buf)
     {
         InteractionHand hand = buf.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
@@ -21,7 +22,9 @@ public class SandPouchContainerMenu extends AbstractContainerMenu {
     }
 
     private final ItemStack pouch;
-    public SandPouchContainerMenu(int windowId, Inventory playerInv, ItemStack pouch) {
+
+    public SandPouchContainerMenu(int windowId, Inventory playerInv, ItemStack pouch)
+    {
         super(SandmasteryMenuTypes.SAND_POUCH.get(), windowId);
         this.pouch = pouch;
 
@@ -42,20 +45,24 @@ public class SandPouchContainerMenu extends AbstractContainerMenu {
         }
 
         // Player Inventory
-        for(int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
+        for (int i = 0; i < 3; ++i)
+        {
+            for (int j = 0; j < 9; ++j)
+            {
                 addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 41 + 17 + (i + invStart) * 18));
             }
         }
 
         // Player Hotbar
-        for(int i = 0; i < 9; ++i) {
+        for (int i = 0; i < 9; ++i)
+        {
             addSlot(new Slot(playerInv, i, 8 + i * 18, 45 + 17 + (3 + invStart) * 18));
         }
     }
 
     @Override
-    public ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex) {
+    public ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex)
+    {
         ItemStack itemStack = ItemStack.EMPTY;
 
         // TODO: make shift clicking actually work.. right now it duplicates the crap out of the sand. Commented out in repo until fixed
@@ -88,15 +95,18 @@ public class SandPouchContainerMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(@NotNull Player pPlayer) {
+    public boolean stillValid(@NotNull Player pPlayer)
+    {
         ItemStack main = pPlayer.getMainHandItem();
         ItemStack off = pPlayer.getOffhandItem();
         return !main.isEmpty() && main == pouch || !off.isEmpty() && off == pouch;
     }
 
     @Override
-    public void clicked(int slot, int dragType, @NotNull ClickType clickTypeIn, @NotNull Player player) {
-        if(!(slot >= 0 && getSlot(slot).getItem() == player.getItemInHand(InteractionHand.MAIN_HAND))) {
+    public void clicked(int slot, int dragType, @NotNull ClickType clickTypeIn, @NotNull Player player)
+    {
+        if (!(slot >= 0 && getSlot(slot).getItem() == player.getItemInHand(InteractionHand.MAIN_HAND)))
+        {
             super.clicked(slot, dragType, clickTypeIn, player);
         }
     }

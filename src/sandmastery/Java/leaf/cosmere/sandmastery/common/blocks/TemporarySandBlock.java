@@ -17,8 +17,10 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 import org.jetbrains.annotations.Nullable;
 
-public class TemporarySandBlock extends BaseEntityBlock {
-    public TemporarySandBlock() {
+public class TemporarySandBlock extends BaseEntityBlock
+{
+    public TemporarySandBlock()
+    {
         super(PropTypes.Blocks.SAND.get().noOcclusion());
         this.registerDefaultState(
                 this.stateDefinition.any()
@@ -29,23 +31,28 @@ public class TemporarySandBlock extends BaseEntityBlock {
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 400);
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
+    {
         pBuilder.add(AGE);
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state)
+    {
         return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
         return new TemporarySandBE(pos, state);
     }
+
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+    {
         return createTickerHelper(type, SandmasteryBlockEntitiesRegistry.TEMPORARY_SAND_BE.get(), TemporarySandBE::tick);
     }
 }

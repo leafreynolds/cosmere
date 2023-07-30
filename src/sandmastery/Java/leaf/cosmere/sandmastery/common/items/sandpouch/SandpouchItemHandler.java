@@ -17,15 +17,19 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiable, INBTSerializable<CompoundTag> {
+public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiable, INBTSerializable<CompoundTag>
+{
 
-    private enum MODES {
+    private enum MODES
+    {
         ADD,
         REMOVE,
         NO_CHANGE
     }
+
     protected NonNullList<ItemStack> stacks;
     protected int layers;
+
     public SandpouchItemHandler()
     {
         this(1);
@@ -51,8 +55,8 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
         int newCount = stack.isEmpty() ? 0 : stack.getCount();
         MODES mode = null;
 
-        if(prevCount < newCount) mode = MODES.ADD;
-        else if(newCount < prevCount) mode = MODES.REMOVE;
+        if (prevCount < newCount) mode = MODES.ADD;
+        else if (newCount < prevCount) mode = MODES.REMOVE;
         else mode = MODES.NO_CHANGE;
 
         this.stacks.set(slot, stack);
@@ -70,21 +74,26 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
         Item sandBlock = SandmasteryBlocksRegistry.TALDAIN_SAND.asItem();
         Item sandLayer = SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem();
 
-        switch(slot) {
+        switch (slot)
+        {
             case 0:
                 if (mode != MODES.ADD) break; // This slot is input, and can accept both, don't update if it's removed
-                if (changedStack.getItem() == sandBlock) {
+                if (changedStack.getItem() == sandBlock)
+                {
                     layers += 8 * count; // Blocks are worth 8 layers
-                } else if (changedStack.getItem() == sandLayer) {
+                } else if (changedStack.getItem() == sandLayer)
+                {
                     layers += count;
                 }
                 break;
             case 1:
-                if(mode != MODES.REMOVE) break; // this slot is output only, no item filter as only one item can ever be here
+                if (mode != MODES.REMOVE)
+                    break; // this slot is output only, no item filter as only one item can ever be here
                 layers -= 8 * count; // Blocks are worth 8 layers
                 break;
             case 2:
-                if(mode != MODES.REMOVE) break; // this slot is output only, no item filter as only one item can ever be here
+                if (mode != MODES.REMOVE)
+                    break; // this slot is output only, no item filter as only one item can ever be here
                 layers -= count;
                 break;
         }
@@ -93,7 +102,8 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
     }
 
-    private void updateSlots() {
+    private void updateSlots()
+    {
         int numBlocks = (int) Math.floor(this.layers / 8);
 
         ItemStack blocksInSlot = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_SAND);
@@ -108,7 +118,8 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
     }
 
     @Override
-    public int getSlots() {
+    public int getSlots()
+    {
         return this.stacks.size();
     }
 
@@ -154,15 +165,14 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
             if (existing.isEmpty())
             {
                 this.stacks.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
-            }
-            else
+            } else
             {
                 existing.grow(reachedLimit ? limit : stack.getCount());
             }
             onContentsChanged(slot);
         }
 
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
+        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
     }
 
     protected int getStackLimit(int slot, @NotNull ItemStack stack)
@@ -193,13 +203,11 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
                 this.stacks.set(slot, ItemStack.EMPTY);
                 onContentsChanged(slot, existing.getCount(), MODES.REMOVE);
                 return existing;
-            }
-            else
+            } else
             {
                 return existing.copy();
             }
-        }
-        else
+        } else
         {
             if (!simulate)
             {
@@ -212,7 +220,8 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
     }
 
     @Override
-    public int getSlotLimit(int slot) {
+    public int getSlotLimit(int slot)
+    {
         return 64;
     }
 
@@ -273,12 +282,14 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
             throw new RuntimeException("Slot " + slot + " not in valid range - [0," + stacks.size() + ")");
     }
 
-    protected void setLayers(int layers) {
+    protected void setLayers(int layers)
+    {
         this.layers = layers;
         updateSlots();
     }
 
-    public int getLayers() {
+    public int getLayers()
+    {
         return this.layers;
     }
 }

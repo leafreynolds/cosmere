@@ -9,7 +9,8 @@ import leaf.cosmere.sandmastery.common.items.QidoItem;
 import leaf.cosmere.sandmastery.common.items.SandJarItem;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 
-public class SandmasteryItems {
+public class SandmasteryItems
+{
     public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(Sandmastery.MODID);
     public static final ItemRegistryObject<QidoItem> QIDO_ITEM = ITEMS.register("qido", QidoItem::new);
     public static final ItemRegistryObject<SandJarItem> SAND_JAR_ITEM = ITEMS.register("sand_jar", SandJarItem::new);

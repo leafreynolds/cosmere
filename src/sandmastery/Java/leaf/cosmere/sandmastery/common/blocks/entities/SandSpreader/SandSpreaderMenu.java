@@ -17,15 +17,19 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class SandSpreaderMenu extends AbstractContainerMenu {
+public class SandSpreaderMenu extends AbstractContainerMenu
+{
     public final SandSpreaderBE blockEntity;
     private final Level level;
     private final ContainerData data;
-    public SandSpreaderMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
+
+    public SandSpreaderMenu(int id, Inventory inv, FriendlyByteBuf extraData)
+    {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
-    public SandSpreaderMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
+    public SandSpreaderMenu(int id, Inventory inv, BlockEntity entity, ContainerData data)
+    {
         super(SandmasteryMenuTypes.SAND_SPREADER.get(), id);
         checkContainerSize(inv, 3);
         this.blockEntity = (SandSpreaderBE) entity;
@@ -48,25 +52,30 @@ public class SandSpreaderMenu extends AbstractContainerMenu {
         }
 
         // Player Inventory
-        for(i = 0; i < 3; ++i) {
-            for (j = 0; j < 9; ++j) {
+        for (i = 0; i < 3; ++i)
+        {
+            for (j = 0; j < 9; ++j)
+            {
                 addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 41 + 17 + (i + invStart) * 18));
             }
         }
 
         // Player Hotbar
-        for(i = 0; i < 9; ++i) {
+        for (i = 0; i < 9; ++i)
+        {
             addSlot(new Slot(inv, i, 8 + i * 18, 45 + 17 + (3 + invStart) * 18));
         }
 
         addDataSlots(data);
     }
 
-    public boolean isCrafting() {
+    public boolean isCrafting()
+    {
         return data.get(0) > 0;
     }
 
-    public int getScaledProgress() {
+    public int getScaledProgress()
+    {
         int progress = this.data.get(0);
         int maxProgress = this.data.get(1);  // Max Progress
         int progressArrowSize = 26; // This is the height in pixels of your arrow
@@ -75,7 +84,8 @@ public class SandSpreaderMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public ItemStack quickMoveStack(Player player, int index)
+    {
 
         ItemStack itemstack = ItemStack.EMPTY;
         int maxSlots = 18;
@@ -92,8 +102,7 @@ public class SandSpreaderMenu extends AbstractContainerMenu {
                 {
                     return ItemStack.EMPTY;
                 }
-            }
-            else if (!this.moveItemStackTo(itemstack1, 0, maxSlots, false))
+            } else if (!this.moveItemStackTo(itemstack1, 0, maxSlots, false))
             {
                 return ItemStack.EMPTY;
             }
@@ -101,8 +110,7 @@ public class SandSpreaderMenu extends AbstractContainerMenu {
             if (itemstack1.isEmpty())
             {
                 slot.set(ItemStack.EMPTY);
-            }
-            else
+            } else
             {
                 slot.setChanged();
             }
@@ -111,7 +119,8 @@ public class SandSpreaderMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player pPlayer) {
+    public boolean stillValid(Player pPlayer)
+    {
         return stillValid(ContainerLevelAccess.create(this.level, this.blockEntity.getBlockPos()), pPlayer, SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock());
     }
 }

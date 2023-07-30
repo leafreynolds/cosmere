@@ -17,8 +17,10 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SandJarBlock extends BaseEntityBlock {
-    public SandJarBlock() {
+public class SandJarBlock extends BaseEntityBlock
+{
+    public SandJarBlock()
+    {
         super(PropTypes.Blocks.SAND.get().noOcclusion());
         this.registerDefaultState(
                 this.stateDefinition.any()
@@ -29,37 +31,43 @@ public class SandJarBlock extends BaseEntityBlock {
     public static final IntegerProperty INVESTITURE = IntegerProperty.create("investiture", 0, 100);
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
+    {
         pBuilder.add(INVESTITURE);
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState pState) {
+    public boolean hasAnalogOutputSignal(BlockState pState)
+    {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos) {
+    public int getAnalogOutputSignal(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos)
+    {
         int investiture = pState.getValue(INVESTITURE);
         int res = Math.round((investiture / 100F) * 15);
         return res;
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state)
+    {
         return RenderShape.MODEL;
     }
 
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
         return new SandJarBE(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+    {
         return createTickerHelper(type, SandmasteryBlockEntitiesRegistry.SAND_JAR_BE.get(), SandJarBE::tick);
     }
 

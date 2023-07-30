@@ -35,52 +35,52 @@ public class SandmasteryClientSetup
 {
 
 
-	@SubscribeEvent
-	public static void init(final FMLClientSetupEvent event)
-	{
-		event.enqueueWork(() ->
-		{
+    @SubscribeEvent
+    public static void init(final FMLClientSetupEvent event)
+    {
+        event.enqueueWork(() ->
+        {
 
-		});
+        });
 
 
-		CosmereAPI.logger.info("Sandmastery client setup complete!");
-	}
+        CosmereAPI.logger.info("Sandmastery client setup complete!");
+    }
 
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void registerContainers(RegisterEvent event)
-	{
-		event.register(Registry.MENU_REGISTRY, helper ->
-		{
-			MenuScreens.register((MenuType<SandPouchContainerMenu>) SandmasteryMenuTypes.SAND_POUCH.get(), SandPouchContainerScreen::new);
-			MenuScreens.register((MenuType<SandSpreaderMenu>) SandmasteryMenuTypes.SAND_SPREADER.get(), SandSpreaderScreen::new);
-			CosmereAPI.logger.info("Sandmastery registered menutypes!");
-		});
-	}
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void registerContainers(RegisterEvent event)
+    {
+        event.register(Registry.MENU_REGISTRY, helper ->
+        {
+            MenuScreens.register((MenuType<SandPouchContainerMenu>) SandmasteryMenuTypes.SAND_POUCH.get(), SandPouchContainerScreen::new);
+            MenuScreens.register((MenuType<SandSpreaderMenu>) SandmasteryMenuTypes.SAND_SPREADER.get(), SandSpreaderScreen::new);
+            CosmereAPI.logger.info("Sandmastery registered menutypes!");
+        });
+    }
 
-	@SubscribeEvent
-	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
-	{
-		event.registerEntityRenderer(SandmasteryEntityTypes.SAND_PROJECTILE.get(), ThrownItemRenderer::new);
-	}
+    @SubscribeEvent
+    public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
+    {
+        event.registerEntityRenderer(SandmasteryEntityTypes.SAND_PROJECTILE.get(), ThrownItemRenderer::new);
+    }
 
-	//special thank you to the chisels and bits team who have an example of how to register other sprites
-	@SubscribeEvent
-	public static void registerIconTextures(TextureStitchEvent.Pre event)
-	{
-		final TextureAtlas map = event.getAtlas();
-		if (!map.location().equals(InventoryMenu.BLOCK_ATLAS))
-		{
-			return;
-		}
+    //special thank you to the chisels and bits team who have an example of how to register other sprites
+    @SubscribeEvent
+    public static void registerIconTextures(TextureStitchEvent.Pre event)
+    {
+        final TextureAtlas map = event.getAtlas();
+        if (!map.location().equals(InventoryMenu.BLOCK_ATLAS))
+        {
+            return;
+        }
 
-		event.addSprite(Sandmastery.rl("icon/sandmastery"));
+        event.addSprite(Sandmastery.rl("icon/sandmastery"));
 
-		for (final Taldain.Mastery manifestation : Taldain.Mastery.values())
-		{
-			String abilityToLower = manifestation.toString().toLowerCase(Locale.ROOT);
-			event.addSprite(Sandmastery.rl("icon/sandmastery/"+abilityToLower));
-		}
-	}
+        for (final Taldain.Mastery manifestation : Taldain.Mastery.values())
+        {
+            String abilityToLower = manifestation.toString().toLowerCase(Locale.ROOT);
+            event.addSprite(Sandmastery.rl("icon/sandmastery/" + abilityToLower));
+        }
+    }
 
 }

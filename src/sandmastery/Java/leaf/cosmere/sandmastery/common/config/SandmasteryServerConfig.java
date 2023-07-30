@@ -11,43 +11,43 @@ import net.minecraftforge.fml.config.ModConfig.Type;
 public class SandmasteryServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+    private final ForgeConfigSpec configSpec;
 
-	public final ForgeConfigSpec.DoubleValue someValue;
+    public final ForgeConfigSpec.DoubleValue someValue;
 
 
-	SandmasteryServerConfig()
-	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-		builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
+    SandmasteryServerConfig()
+    {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
 
-		someValue = builder.comment("some value but with comment").defineInRange("someValue", 0.334D, 0D, 1D);
+        someValue = builder.comment("some value but with comment").defineInRange("someValue", 0.334D, 0D, 1D);
 
-		builder.pop();
-		configSpec = builder.build();
-	}
+        builder.pop();
+        configSpec = builder.build();
+    }
 
-	@Override
-	public String getFileName()
-	{
-		return "SandmasteryServer";
-	}
+    @Override
+    public String getFileName()
+    {
+        return "SandmasteryServer";
+    }
 
-	@Override
-	public ForgeConfigSpec getConfigSpec()
-	{
-		return configSpec;
-	}
+    @Override
+    public ForgeConfigSpec getConfigSpec()
+    {
+        return configSpec;
+    }
 
-	@Override
-	public Type getConfigType()
-	{
-		return Type.SERVER;
-	}
+    @Override
+    public Type getConfigType()
+    {
+        return Type.SERVER;
+    }
 
-	@Override
-	public void clearCache()
-	{
-		someValue.clearCache();
-	}
+    @Override
+    public void clearCache()
+    {
+        someValue.clearCache();
+    }
 }

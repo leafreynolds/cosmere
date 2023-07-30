@@ -11,9 +11,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SandmasteryAttributes {
+public class SandmasteryAttributes
+{
     public static final AttributeDeferredRegister ATTRIBUTES = new AttributeDeferredRegister(Sandmastery.MODID);
-    
+
     public static final AttributeRegistryObject<Attribute> RIBBONS =
             ATTRIBUTES.register(
                     "ribbons",

@@ -12,26 +12,32 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SandPouchInventory  implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class SandPouchInventory implements ICapabilityProvider, INBTSerializable<CompoundTag>
+{
     public static final int size = 3;
-    private final IItemHandler inv = new SandpouchItemHandler(size) {};
+    private final IItemHandler inv = new SandpouchItemHandler(size)
+    {
+    };
 
     private final LazyOptional<IItemHandler> opt = LazyOptional.of(() -> inv);
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing)
+    {
         return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT()
+    {
         CompoundTag tag = ((SandpouchItemHandler) inv).serializeNBT();
         return tag;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(CompoundTag nbt)
+    {
         ((SandpouchItemHandler) inv).deserializeNBT(nbt);
     }
 

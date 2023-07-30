@@ -13,14 +13,14 @@ import net.minecraft.world.entity.MobCategory;
 
 public class SandmasteryEntityTypes
 {
-	public static final EntityTypeDeferredRegister ENTITY_TYPES = new EntityTypeDeferredRegister(Sandmastery.MODID);
+    public static final EntityTypeDeferredRegister ENTITY_TYPES = new EntityTypeDeferredRegister(Sandmastery.MODID);
 
-	public static final EntityTypeRegistryObject<SandProjectile> SAND_PROJECTILE =
-			ENTITY_TYPES.register(
-					"coin_projectile",
-					EntityType.Builder.<SandProjectile>of(SandProjectile::new, MobCategory.MISC)
-							.sized(0.5F, 0.5F)
-							.clientTrackingRange(4)
-							.updateInterval(20));
+    public static final EntityTypeRegistryObject<SandProjectile> SAND_PROJECTILE =
+            ENTITY_TYPES.register(
+                    "coin_projectile",
+                    EntityType.Builder.<SandProjectile>of(SandProjectile::new, MobCategory.MISC)
+                            .sized(0.5F, 0.5F)
+                            .clientTrackingRange(4)
+                            .updateInterval(20));
 
 }

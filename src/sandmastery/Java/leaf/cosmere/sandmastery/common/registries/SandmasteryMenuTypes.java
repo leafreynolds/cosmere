@@ -14,12 +14,12 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 
 public class SandmasteryMenuTypes
 {
-	public static final MenuTypeDeferredRegister MENU_TYPES = new MenuTypeDeferredRegister(Sandmastery.MODID);
-	public static final MenuTypeRegistryObject<MenuType<?>> SAND_POUCH = MENU_TYPES.register(
-			"sand_pouch",
-			() -> IForgeMenuType.create(SandPouchContainerMenu::fromNetwork));
-	public static final MenuTypeRegistryObject<MenuType<?>> SAND_SPREADER = MENU_TYPES.register(
-			"sand_spreader",
-			() -> IForgeMenuType.create(SandSpreaderMenu::new));
+    public static final MenuTypeDeferredRegister MENU_TYPES = new MenuTypeDeferredRegister(Sandmastery.MODID);
+    public static final MenuTypeRegistryObject<MenuType<?>> SAND_POUCH = MENU_TYPES.register(
+            "sand_pouch",
+            () -> IForgeMenuType.create(SandPouchContainerMenu::fromNetwork));
+    public static final MenuTypeRegistryObject<MenuType<?>> SAND_SPREADER = MENU_TYPES.register(
+            "sand_spreader",
+            () -> IForgeMenuType.create(SandSpreaderMenu::new));
 
 }

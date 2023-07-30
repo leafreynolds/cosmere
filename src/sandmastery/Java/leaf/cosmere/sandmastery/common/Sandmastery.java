@@ -27,84 +27,84 @@ import org.jetbrains.annotations.Nullable;
 @Mod(Sandmastery.MODID)
 public class Sandmastery implements IModModule
 {
-	public static final String MODID = "sandmastery";
-	public static Sandmastery instance;
-	public final Version versionNumber;
+    public static final String MODID = "sandmastery";
+    public static Sandmastery instance;
+    public final Version versionNumber;
 
-	private final SandmasteryPacketHandler packetHandler;
+    private final SandmasteryPacketHandler packetHandler;
 
-	public Sandmastery()
-	{
-		Cosmere.addModule(instance = this);
+    public Sandmastery()
+    {
+        Cosmere.addModule(instance = this);
 
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		SandmasteryConfigs.registerConfigs(ModLoadingContext.get());
+        SandmasteryConfigs.registerConfigs(ModLoadingContext.get());
 
-		modBus.addListener(this::onConfigLoad);
-		modBus.addListener(this::commonSetup);
+        modBus.addListener(this::onConfigLoad);
+        modBus.addListener(this::commonSetup);
 
-		SandmasteryItems.ITEMS.register(modBus);
-		SandmasteryBlocksRegistry.BLOCKS.register(modBus);
-		SandmasteryBlockEntitiesRegistry.BLOCK_ENTITIES.register(modBus);
-		SandmasteryAttributes.ATTRIBUTES.register(modBus);
-		SandmasteryEntityTypes.ENTITY_TYPES.register(modBus);
-		SandmasteryManifestations.MANIFESTATIONS.register(modBus);
-		SandmasteryMenuTypes.MENU_TYPES.register(modBus);
+        SandmasteryItems.ITEMS.register(modBus);
+        SandmasteryBlocksRegistry.BLOCKS.register(modBus);
+        SandmasteryBlockEntitiesRegistry.BLOCK_ENTITIES.register(modBus);
+        SandmasteryAttributes.ATTRIBUTES.register(modBus);
+        SandmasteryEntityTypes.ENTITY_TYPES.register(modBus);
+        SandmasteryManifestations.MANIFESTATIONS.register(modBus);
+        SandmasteryMenuTypes.MENU_TYPES.register(modBus);
 
-		SandmasteryDimensions.register();
+        SandmasteryDimensions.register();
 
-		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
-		this.versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
-		this.packetHandler = new SandmasteryPacketHandler();
-	}
+        //Set our version number to match the mods.toml file, which matches the one in our build.gradle
+        this.versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+        this.packetHandler = new SandmasteryPacketHandler();
+    }
 
-	public static ResourceLocation rl(String path)
-	{
-		return new ResourceLocation(Sandmastery.MODID, path);
-	}
+    public static ResourceLocation rl(String path)
+    {
+        return new ResourceLocation(Sandmastery.MODID, path);
+    }
 
-	@Override
-	public Version getVersion()
-	{
-		return versionNumber;
-	}
+    @Override
+    public Version getVersion()
+    {
+        return versionNumber;
+    }
 
-	public static SandmasteryPacketHandler packetHandler()
-	{
-		return instance.packetHandler;
-	}
+    public static SandmasteryPacketHandler packetHandler()
+    {
+        return instance.packetHandler;
+    }
 
-	@Override
-	public String getName()
-	{
-		return "Sandmastery";
-	}
+    @Override
+    public String getName()
+    {
+        return "Sandmastery";
+    }
 
-	@Nullable
-	@Override
-	public ISpiritwebSubmodule makeSubmodule()
-	{
-		return new SandmasterySpiritwebSubmodule();
-	}
+    @Nullable
+    @Override
+    public ISpiritwebSubmodule makeSubmodule()
+    {
+        return new SandmasterySpiritwebSubmodule();
+    }
 
-	private void onConfigLoad(ModConfigEvent configEvent)
-	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
-	}
+    private void onConfigLoad(ModConfigEvent configEvent)
+    {
+        ModConfig config = configEvent.getConfig();
+        if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+        {
+            cosmereModConfig.clearCache();
+        }
+    }
 
-	private void commonSetup(FMLCommonSetupEvent event)
-	{
-		CosmereAPI.logger.info("Cosmere: Sand Mastery module Version {} initializing...", versionNumber);
+    private void commonSetup(FMLCommonSetupEvent event)
+    {
+        CosmereAPI.logger.info("Cosmere: Sand Mastery module Version {} initializing...", versionNumber);
 
-		event.enqueueWork(() ->
-		{
-		});
+        event.enqueueWork(() ->
+        {
+        });
 
-		this.packetHandler.initialize();
-	}
+        this.packetHandler.initialize();
+    }
 }

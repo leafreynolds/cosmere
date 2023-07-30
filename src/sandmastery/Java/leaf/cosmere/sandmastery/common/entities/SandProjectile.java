@@ -18,28 +18,28 @@ import net.minecraft.world.level.Level;
 
 public class SandProjectile extends AbstractArrow implements ItemSupplier
 {
-	private ItemStack projectileStack = SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getItemStack();
+    private ItemStack projectileStack = SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getItemStack();
 
-	public SandProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack)
-	{
-		super(SandmasteryEntityTypes.SAND_PROJECTILE.get(), livingEntity, level);
-		this.projectileStack = itemStack.copy();
-	}
+    public SandProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack)
+    {
+        super(SandmasteryEntityTypes.SAND_PROJECTILE.get(), livingEntity, level);
+        this.projectileStack = itemStack.copy();
+    }
 
-	public SandProjectile(EntityType<SandProjectile> sandProjectileEntityType, Level level)
-	{
-		super(sandProjectileEntityType, level);
-	}
+    public SandProjectile(EntityType<SandProjectile> sandProjectileEntityType, Level level)
+    {
+        super(sandProjectileEntityType, level);
+    }
 
-	@Override
-	protected ItemStack getPickupItem()
-	{
-		return ItemStack.EMPTY;
-	}
+    @Override
+    protected ItemStack getPickupItem()
+    {
+        return ItemStack.EMPTY;
+    }
 
-	@Override
-	public ItemStack getItem()
-	{
-		return projectileStack;
-	}
+    @Override
+    public ItemStack getItem()
+    {
+        return projectileStack;
+    }
 }

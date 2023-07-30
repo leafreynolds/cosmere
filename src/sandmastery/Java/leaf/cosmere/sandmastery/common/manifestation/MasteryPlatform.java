@@ -16,8 +16,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class MasteryPlatform extends SandmasteryManifestation{
-    public MasteryPlatform(Taldain.Mastery mastery) {
+public class MasteryPlatform extends SandmasteryManifestation
+{
+    public MasteryPlatform(Taldain.Mastery mastery)
+    {
         super(mastery);
     }
 
@@ -43,28 +45,32 @@ public class MasteryPlatform extends SandmasteryManifestation{
         return false;
     }
 
-    private void setBlockIfAir(Level level, BlockPos pos, BlockState state) {
+    private void setBlockIfAir(Level level, BlockPos pos, BlockState state)
+    {
         Block block = level.getBlockState(pos).getBlock();
-        if(block != Blocks.AIR && block != SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock()) return;
+        if (block != Blocks.AIR && block != SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock()) return;
         level.setBlockAndUpdate(pos, state);
     }
 
-    protected boolean performEffectServer(ISpiritweb data) {
+    protected boolean performEffectServer(ISpiritweb data)
+    {
         SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
         SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
         LivingEntity living = data.getLiving();
         Level level = living.level;
         BlockPos pos = living.blockPosition().below();
         BlockState state = SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock().defaultBlockState();
-        int size = getMode(data)/2;
-        pos = pos.offset(-(size+1), living.isCrouching() ? -1 : 0, -(size+1));
-        for(int x = -size; x <= size; x++) {
+        int size = getMode(data) / 2;
+        pos = pos.offset(-(size + 1), living.isCrouching() ? -1 : 0, -(size + 1));
+        for (int x = -size; x <= size; x++)
+        {
             pos = pos.offset(1, 0, 0);
-            for(int z = -size; z <= size; z++) {
+            for (int z = -size; z <= size; z++)
+            {
                 pos = pos.offset(0, 0, 1);
                 setBlockIfAir(level, pos, state);
             }
-            pos = pos.offset(0, 0, -(size*2)-1);
+            pos = pos.offset(0, 0, -(size * 2) - 1);
         }
         submodule.adjustHydration(-30, true);
         return true;

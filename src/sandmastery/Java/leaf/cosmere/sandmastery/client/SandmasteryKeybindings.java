@@ -12,7 +12,8 @@ import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
 import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.*;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class SandmasteryKeybindings {
+public class SandmasteryKeybindings
+{
 
     public static KeyMapping SANDMASTERY_LAUNCH;
     public static KeyMapping SANDMASTERY_ELEVATE;

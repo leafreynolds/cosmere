@@ -11,13 +11,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 
-public class SandSpreaderScreen extends AbstractContainerScreen<SandSpreaderMenu> {
-    public SandSpreaderScreen(SandSpreaderMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+public class SandSpreaderScreen extends AbstractContainerScreen<SandSpreaderMenu>
+{
+    public SandSpreaderScreen(SandSpreaderMenu pMenu, Inventory pPlayerInventory, Component pTitle)
+    {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
     @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY)
+    {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, new ResourceLocation(Sandmastery.MODID, "textures/gui/sand_spreader.png"));
@@ -27,7 +30,8 @@ public class SandSpreaderScreen extends AbstractContainerScreen<SandSpreaderMenu
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta)
+    {
         renderBackground(pPoseStack);
         super.render(pPoseStack, mouseX, mouseY, delta);
         renderTooltip(pPoseStack, mouseX, mouseY);
