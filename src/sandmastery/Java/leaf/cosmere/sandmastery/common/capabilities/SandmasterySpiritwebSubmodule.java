@@ -54,7 +54,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
                     ? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
                     : 0;
 
-            final int platformFlag = SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown()
+            final int platformFlag = SandmasteryKeybindings.SANDMASTERY_PLATFORM.isDown()
                     ? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
                     : 0;
 
