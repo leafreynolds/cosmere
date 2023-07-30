@@ -15,28 +15,28 @@ import net.minecraftforge.network.NetworkEvent;
 
 public class PlayerShootSandProjectileMessage implements ICosmerePacket
 {
-    public PlayerShootSandProjectileMessage()
-    {
-        //empty
-    }
+	public PlayerShootSandProjectileMessage()
+	{
+		//empty
+	}
 
-    @Override
-    public void encode(FriendlyByteBuf buf)
-    {
-        //empty
-    }
+	@Override
+	public void encode(FriendlyByteBuf buf)
+	{
+		//empty
+	}
 
-    public static PlayerShootSandProjectileMessage decode(FriendlyByteBuf buf)
-    {
-        return new PlayerShootSandProjectileMessage();
-    }
+	public static PlayerShootSandProjectileMessage decode(FriendlyByteBuf buf)
+	{
+		return new PlayerShootSandProjectileMessage();
+	}
 
-    @Override
-    public void handle(NetworkEvent.Context context)
-    {
-        ServerPlayer player = context.getSender();
-        MinecraftServer server = player.getServer();
+	@Override
+	public void handle(NetworkEvent.Context context)
+	{
+		ServerPlayer player = context.getSender();
+		MinecraftServer server = player.getServer();
 
-    }
+	}
 
 }

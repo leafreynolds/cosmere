@@ -14,39 +14,39 @@ import static leaf.cosmere.sandmastery.common.blocks.TemporarySandBlock.AGE;
 
 public class TemporarySandBE extends BlockEntity
 {
-    public TemporarySandBE(BlockPos pPos, BlockState pBlockState)
-    {
-        super(SandmasteryBlockEntitiesRegistry.TEMPORARY_SAND_BE.get(), pPos, pBlockState);
-    }
+	public TemporarySandBE(BlockPos pPos, BlockState pBlockState)
+	{
+		super(SandmasteryBlockEntitiesRegistry.TEMPORARY_SAND_BE.get(), pPos, pBlockState);
+	}
 
-    private int ticksSinceUpdate = 0;
+	private int ticksSinceUpdate = 0;
 
-    @Override
-    protected void saveAdditional(CompoundTag nbt)
-    {
-        super.saveAdditional(nbt);
-    }
+	@Override
+	protected void saveAdditional(CompoundTag nbt)
+	{
+		super.saveAdditional(nbt);
+	}
 
-    @Override
-    public void load(CompoundTag nbt)
-    {
-        super.load(nbt);
-    }
+	@Override
+	public void load(CompoundTag nbt)
+	{
+		super.load(nbt);
+	}
 
-    public static void tick(Level level, BlockPos pos, BlockState state, TemporarySandBE entity)
-    {
-        if (level.isClientSide()) return;
-        entity.ticksSinceUpdate++;
-        if (entity.ticksSinceUpdate < 5) return;
-        if (ThreadLocalRandom.current().nextBoolean()) return;
-        int age = state.getValue(AGE);
-        if (age <= 0)
-        {
-            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-        } else
-        {
-            level.setBlockAndUpdate(pos, state.setValue(AGE, age - 1));
-        }
-        entity.ticksSinceUpdate = 0;
-    }
+	public static void tick(Level level, BlockPos pos, BlockState state, TemporarySandBE entity)
+	{
+		if (level.isClientSide()) return;
+		entity.ticksSinceUpdate++;
+		if (entity.ticksSinceUpdate < 5) return;
+		if (ThreadLocalRandom.current().nextBoolean()) return;
+		int age = state.getValue(AGE);
+		if (age <= 0)
+		{
+			level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+		} else
+		{
+			level.setBlockAndUpdate(pos, state.setValue(AGE, age - 1));
+		}
+		entity.ticksSinceUpdate = 0;
+	}
 }

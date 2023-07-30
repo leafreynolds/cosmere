@@ -17,35 +17,35 @@ import java.util.stream.Collectors;
 
 public class SandmasteryManifestations
 {
-    public static final ManifestationDeferredRegister MANIFESTATIONS = new ManifestationDeferredRegister(Sandmastery.MODID);
+	public static final ManifestationDeferredRegister MANIFESTATIONS = new ManifestationDeferredRegister(Sandmastery.MODID);
 
-    public static final Map<Taldain.Mastery, ManifestationRegistryObject<SandmasteryManifestation>> SANDMASTERY_POWERS =
-            Arrays.stream(Taldain.Mastery.values())
-                    .collect(Collectors.toMap(
-                            Function.identity(),
-                            investiture ->
-                                    MANIFESTATIONS.register(
-                                            investiture.getName(),
-                                            () -> makeSandmasteryManifestation(investiture))
-                    ));
+	public static final Map<Taldain.Mastery, ManifestationRegistryObject<SandmasteryManifestation>> SANDMASTERY_POWERS =
+			Arrays.stream(Taldain.Mastery.values())
+					.collect(Collectors.toMap(
+							Function.identity(),
+							investiture ->
+									MANIFESTATIONS.register(
+											investiture.getName(),
+											() -> makeSandmasteryManifestation(investiture))
+					));
 
 
-    private static SandmasteryManifestation makeSandmasteryManifestation(Taldain.Mastery mastery)
-    {
-        switch (mastery)
-        {
-            case LAUNCH:
-                return new MasteryLaunch(mastery);
-            case ELEVATE:
-                return new MasteryElevate(mastery);
-            case CUSHION:
-                return new MasteryCushion(mastery);
-            case PROJECTILE:
-                return new MasteryProjectile(mastery);
-            case PLATFORM:
-                return new MasteryPlatform(mastery);
-            default:
-                return new SandmasteryManifestation(mastery);
-        }
-    }
+	private static SandmasteryManifestation makeSandmasteryManifestation(Taldain.Mastery mastery)
+	{
+		switch (mastery)
+		{
+			case LAUNCH:
+				return new MasteryLaunch(mastery);
+			case ELEVATE:
+				return new MasteryElevate(mastery);
+			case CUSHION:
+				return new MasteryCushion(mastery);
+			case PROJECTILE:
+				return new MasteryProjectile(mastery);
+			case PLATFORM:
+				return new MasteryPlatform(mastery);
+			default:
+				return new SandmasteryManifestation(mastery);
+		}
+	}
 }

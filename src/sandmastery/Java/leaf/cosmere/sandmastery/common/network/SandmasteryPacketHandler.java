@@ -13,21 +13,21 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class SandmasteryPacketHandler extends BasePacketHandler
 {
-    private final SimpleChannel NETWORK_CHANNEL = createChannel(Cosmere.rl(Sandmastery.MODID), Sandmastery.instance.versionNumber);
+	private final SimpleChannel NETWORK_CHANNEL = createChannel(Cosmere.rl(Sandmastery.MODID), Sandmastery.instance.versionNumber);
 
-    @Override
-    protected SimpleChannel getChannel()
-    {
-        return NETWORK_CHANNEL;
-    }
+	@Override
+	protected SimpleChannel getChannel()
+	{
+		return NETWORK_CHANNEL;
+	}
 
-    @Override
-    public void initialize()
-    {
-        registerClientToServer(PlayerShootSandProjectileMessage.class, PlayerShootSandProjectileMessage::decode);
-        registerClientToServer(SyncMasteryBindsMessage.class, SyncMasteryBindsMessage::decode);
+	@Override
+	public void initialize()
+	{
+		registerClientToServer(PlayerShootSandProjectileMessage.class, PlayerShootSandProjectileMessage::decode);
+		registerClientToServer(SyncMasteryBindsMessage.class, SyncMasteryBindsMessage::decode);
 
-    }
+	}
 
 
 }

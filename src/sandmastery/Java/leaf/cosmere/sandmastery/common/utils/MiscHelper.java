@@ -40,185 +40,185 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MiscHelper
 {
-    public static boolean checkIfNearbyInvestiture(ServerLevel pLevel, BlockPos pPos, boolean includeMobs)
-    {
-        boolean allomancyLoaded = Cosmere.isModuleLoaded("Allomancy");
+	public static boolean checkIfNearbyInvestiture(ServerLevel pLevel, BlockPos pPos, boolean includeMobs)
+	{
+		boolean allomancyLoaded = Cosmere.isModuleLoaded("Allomancy");
 
-        int range = 6;
-        AABB areaOfEffect = new AABB(pPos).inflate(range, range, range);
-        List<LivingEntity> entitiesToCheckForInvesiture = pLevel.getEntitiesOfClass(LivingEntity.class, areaOfEffect, e -> true);
+		int range = 6;
+		AABB areaOfEffect = new AABB(pPos).inflate(range, range, range);
+		List<LivingEntity> entitiesToCheckForInvesiture = pLevel.getEntitiesOfClass(LivingEntity.class, areaOfEffect, e -> true);
 
-        AtomicBoolean foundSomething = new AtomicBoolean(false);
+		AtomicBoolean foundSomething = new AtomicBoolean(false);
 
-        MobEffect mobEffect;
-        if (allomancyLoaded)
-        {
-            mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
-        } else
-        {
-            mobEffect = null;
-        }
-        for (LivingEntity target : entitiesToCheckForInvesiture)
-        {
-            SpiritwebCapability.get(target).ifPresent(targetSpiritweb -> {
-                MobEffectInstance copperEffect;
-                if (mobEffect == null)
-                {
-                    copperEffect = null;
-                } else
-                {
-                    copperEffect = target.getEffect(mobEffect);
-                }
-                if (copperEffect != null && copperEffect.getDuration() > 0)
-                {
-                    return; //skip clouded entities.
-                }
+		MobEffect mobEffect;
+		if (allomancyLoaded)
+		{
+			mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
+		} else
+		{
+			mobEffect = null;
+		}
+		for (LivingEntity target : entitiesToCheckForInvesiture)
+		{
+			SpiritwebCapability.get(target).ifPresent(targetSpiritweb -> {
+				MobEffectInstance copperEffect;
+				if (mobEffect == null)
+				{
+					copperEffect = null;
+				} else
+				{
+					copperEffect = target.getEffect(mobEffect);
+				}
+				if (copperEffect != null && copperEffect.getDuration() > 0)
+				{
+					return; //skip clouded entities.
+				}
 
-                for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
-                {
-                    final boolean targetIsPlayer = target instanceof Player;
+				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+				{
+					final boolean targetIsPlayer = target instanceof Player;
 
-                    //if target is not a player and has any manifestations at all
-                    if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation) && includeMobs)
-                    {
-                        foundSomething.set(true);
-                        break;
-                    }
-                    //if target is player and has any active manifestations,
-                    else if (targetIsPlayer && manifestation.isActive(targetSpiritweb))
-                    {
-                        foundSomething.set(true);
-                        break;
-                    }
-                }
-            });
-        }
-        return foundSomething.get();
-    }
+					//if target is not a player and has any manifestations at all
+					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation) && includeMobs)
+					{
+						foundSomething.set(true);
+						break;
+					}
+					//if target is player and has any active manifestations,
+					else if (targetIsPlayer && manifestation.isActive(targetSpiritweb))
+					{
+						foundSomething.set(true);
+						break;
+					}
+				}
+			});
+		}
+		return foundSomething.get();
+	}
 
-    public static void chargeItemFromInvestiture(ItemStack stack, Level level, Entity pEntity, int maxCharge)
-    {
-        if (level.isClientSide())
-        {
-            return;
-        }
-        int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-        if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition(), false))
-        {
-            StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
-        }
-    }
+	public static void chargeItemFromInvestiture(ItemStack stack, Level level, Entity pEntity, int maxCharge)
+	{
+		if (level.isClientSide())
+		{
+			return;
+		}
+		int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition(), false))
+		{
+			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
+		}
+	}
 
-    public static boolean onTaldain(Level pLevel)
-    {
-        return pLevel.dimension().equals(SandmasteryDimensions.DAYSIDE_TALDAIN_DIM_KEY);
-    }
+	public static boolean onTaldain(Level pLevel)
+	{
+		return pLevel.dimension().equals(SandmasteryDimensions.DAYSIDE_TALDAIN_DIM_KEY);
+	}
 
-    public static int distanceFromGround(LivingEntity e)
-    {
-        BlockPos pos = e.blockPosition();
-        double y = pos.getY();
-        int dist = 0;
-        for (double i = y; i >= e.level.getMinBuildHeight(); i--)
-        {
-            BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
-            if (!block.isAir())
-            {
-                return dist;
-            }
-            dist++;
-        }
+	public static int distanceFromGround(LivingEntity e)
+	{
+		BlockPos pos = e.blockPosition();
+		double y = pos.getY();
+		int dist = 0;
+		for (double i = y; i >= e.level.getMinBuildHeight(); i--)
+		{
+			BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
+			if (!block.isAir())
+			{
+				return dist;
+			}
+			dist++;
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    public static boolean isActivatedAndActive(ISpiritweb data, Manifestation manifestation)
-    {
-        return (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation() == manifestation.getManifestation());
-    }
+	public static boolean isActivatedAndActive(ISpiritweb data, Manifestation manifestation)
+	{
+		return (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation() == manifestation.getManifestation());
+	}
 
-    public static int getChargeFromItemStack(ItemStack stack)
-    {
-        if (stack.isEmpty())
-        {
-            return 0;
-        }
+	public static int getChargeFromItemStack(ItemStack stack)
+	{
+		if (stack.isEmpty())
+		{
+			return 0;
+		}
 
-        if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem())
-        {
-            return stack.getCount() * 10;
-        }
-        if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
-        {
-            return stack.getCount() * 80;
-        }
-        if (stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem())
-        {
-            return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-        } else
-        {
-            return 0;
-        }
-    }
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem())
+		{
+			return stack.getCount() * 10;
+		}
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
+		{
+			return stack.getCount() * 80;
+		}
+		if (stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem())
+		{
+			return StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+		} else
+		{
+			return 0;
+		}
+	}
 
-    public static String intToAbbreviatedStr(int num)
-    {
-        if (num < 1e3)
-        {
-            return String.valueOf(num);
-        }
-        if (num < 1e6)
-        {
-            return String.valueOf(num / 1000) + "k";
-        }
-        if (num < 1e9)
-        {
-            return String.valueOf(num / 1000000) + "m";
-        }
-        if (num < 1e12)
-        {
-            return String.valueOf(num / 1000000000) + "b";
-        }
-        return "";
-    }
+	public static String intToAbbreviatedStr(int num)
+	{
+		if (num < 1e3)
+		{
+			return String.valueOf(num);
+		}
+		if (num < 1e6)
+		{
+			return String.valueOf(num / 1000) + "k";
+		}
+		if (num < 1e9)
+		{
+			return String.valueOf(num / 1000000) + "m";
+		}
+		if (num < 1e12)
+		{
+			return String.valueOf(num / 1000000000) + "b";
+		}
+		return "";
+	}
 
-    public static void logToChat(ISpiritweb data, String msg)
-    {
-        if (data.getLiving() instanceof Player player)
-        {
-            player.sendSystemMessage(Component.literal(msg));
-        }
-    }
+	public static void logToChat(ISpiritweb data, String msg)
+	{
+		if (data.getLiving() instanceof Player player)
+		{
+			player.sendSystemMessage(Component.literal(msg));
+		}
+	}
 
-    public static boolean isClient(ISpiritweb data)
-    {
-        return data.getLiving().level.isClientSide;
-    }
+	public static boolean isClient(ISpiritweb data)
+	{
+		return data.getLiving().level.isClientSide;
+	}
 
-    public static int getHotkeyFlags(ISpiritweb data)
-    {
-        final CompoundTag dataTag = data.getCompoundTag();
-        final CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(dataTag, Sandmastery.MODID);
-        return sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
-    }
+	public static int getHotkeyFlags(ISpiritweb data)
+	{
+		final CompoundTag dataTag = data.getCompoundTag();
+		final CompoundTag sandmasteryTag = CompoundNBTHelper.getOrCreate(dataTag, Sandmastery.MODID);
+		return sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
+	}
 
-    public static boolean enabledViaHotkey(ISpiritweb data, int requiredFlag)
-    {
-        int hotkeyFlags = getHotkeyFlags(data);
-        boolean enabledViaHotkey = false;
-        if ((hotkeyFlags & requiredFlag) != 0)
-        {
-            enabledViaHotkey = true;
-        }
-        if ((hotkeyFlags & 1) != 0)
-        {
-            enabledViaHotkey = true;
-        }
-        return enabledViaHotkey;
-    }
+	public static boolean enabledViaHotkey(ISpiritweb data, int requiredFlag)
+	{
+		int hotkeyFlags = getHotkeyFlags(data);
+		boolean enabledViaHotkey = false;
+		if ((hotkeyFlags & requiredFlag) != 0)
+		{
+			enabledViaHotkey = true;
+		}
+		if ((hotkeyFlags & 1) != 0)
+		{
+			enabledViaHotkey = true;
+		}
+		return enabledViaHotkey;
+	}
 
-    public static int randomSlot(ItemStackHandler itemStackHandler)
-    {
-        return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
-    }
+	public static int randomSlot(ItemStackHandler itemStackHandler)
+	{
+		return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
+	}
 }

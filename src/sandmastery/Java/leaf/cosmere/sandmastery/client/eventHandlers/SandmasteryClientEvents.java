@@ -18,19 +18,19 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class SandmasteryClientEvents
 {
 
-    @SubscribeEvent
-    public static void registerGuiOverlays(RegisterGuiOverlaysEvent guiOverlaysEvent)
-    {
-        guiOverlaysEvent.registerBelow(
-                VanillaGuiOverlay.FOOD_LEVEL.id(),
-                "hud",
-                (gui, poseStack, partialTick, width, height) -> HUDHandler.onDrawScreenPost(poseStack)
-        );
-    }
+	@SubscribeEvent
+	public static void registerGuiOverlays(RegisterGuiOverlaysEvent guiOverlaysEvent)
+	{
+		guiOverlaysEvent.registerBelow(
+				VanillaGuiOverlay.FOOD_LEVEL.id(),
+				"hud",
+				(gui, poseStack, partialTick, width, height) -> HUDHandler.onDrawScreenPost(poseStack)
+		);
+	}
 
-    @SubscribeEvent
-    public static void init(final FMLClientSetupEvent event)
-    {
-        CosmereAPI.logger.info("Sandmastery client setup complete!");
-    }
+	@SubscribeEvent
+	public static void init(final FMLClientSetupEvent event)
+	{
+		CosmereAPI.logger.info("Sandmastery client setup complete!");
+	}
 }

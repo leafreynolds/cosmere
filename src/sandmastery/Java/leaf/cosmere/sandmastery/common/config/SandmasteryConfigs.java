@@ -10,12 +10,12 @@ import net.minecraftforge.fml.ModLoadingContext;
 
 public class SandmasteryConfigs
 {
-    public static final SandmasteryServerConfig SERVER = new SandmasteryServerConfig();
+	public static final SandmasteryServerConfig SERVER = new SandmasteryServerConfig();
 
-    public static void registerConfigs(ModLoadingContext modLoadingContext)
-    {
-        ModContainer modContainer = modLoadingContext.getActiveContainer();
-        CosmereConfigHelper.registerConfig(modContainer, SERVER);
-    }
+	public static void registerConfigs(ModLoadingContext modLoadingContext)
+	{
+		ModContainer modContainer = modLoadingContext.getActiveContainer();
+		CosmereConfigHelper.registerConfig(modContainer, SERVER);
+	}
 
 }

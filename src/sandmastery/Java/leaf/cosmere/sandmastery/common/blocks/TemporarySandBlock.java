@@ -19,40 +19,40 @@ import org.jetbrains.annotations.Nullable;
 
 public class TemporarySandBlock extends BaseEntityBlock
 {
-    public TemporarySandBlock()
-    {
-        super(PropTypes.Blocks.SAND.get().noOcclusion());
-        this.registerDefaultState(
-                this.stateDefinition.any()
-                        .setValue(AGE, 20)
-        );
-    }
+	public TemporarySandBlock()
+	{
+		super(PropTypes.Blocks.SAND.get().noOcclusion());
+		this.registerDefaultState(
+				this.stateDefinition.any()
+						.setValue(AGE, 20)
+		);
+	}
 
-    public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 400);
+	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 400);
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
-    {
-        pBuilder.add(AGE);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
+	{
+		pBuilder.add(AGE);
+	}
 
-    @Override
-    public RenderShape getRenderShape(BlockState state)
-    {
-        return RenderShape.MODEL;
-    }
+	@Override
+	public RenderShape getRenderShape(BlockState state)
+	{
+		return RenderShape.MODEL;
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
-        return new TemporarySandBE(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+	{
+		return new TemporarySandBE(pos, state);
+	}
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
-    {
-        return createTickerHelper(type, SandmasteryBlockEntitiesRegistry.TEMPORARY_SAND_BE.get(), TemporarySandBE::tick);
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+	{
+		return createTickerHelper(type, SandmasteryBlockEntitiesRegistry.TEMPORARY_SAND_BE.get(), TemporarySandBE::tick);
+	}
 }

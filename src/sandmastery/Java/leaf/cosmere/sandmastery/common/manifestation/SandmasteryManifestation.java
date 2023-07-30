@@ -27,157 +27,157 @@ import java.util.function.Predicate;
 
 public class SandmasteryManifestation extends Manifestation
 {
-    protected final Taldain.Mastery mastery;
+	protected final Taldain.Mastery mastery;
 
-    public SandmasteryManifestation(Taldain.Mastery mastery)
-    {
-        super(Manifestations.ManifestationTypes.SANDMASTERY);
-        this.mastery = mastery;
-    }
+	public SandmasteryManifestation(Taldain.Mastery mastery)
+	{
+		super(Manifestations.ManifestationTypes.SANDMASTERY);
+		this.mastery = mastery;
+	}
 
-    @Override
-    public boolean tick(ISpiritweb data)
-    {
-        if (MiscHelper.isClient(data))
-        {
-            performEffectClient(data);
-        }
-        return false;
-    }
+	@Override
+	public boolean tick(ISpiritweb data)
+	{
+		if (MiscHelper.isClient(data))
+		{
+			performEffectClient(data);
+		}
+		return false;
+	}
 
-    @Override
-    public double getStrength(ISpiritweb data, boolean getBaseStrength)
-    {
-        AttributeInstance attribute = data.getLiving().getAttribute(getAttribute());
-        if (attribute != null)
-        {
-            return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
-        }
-        return 0;
-    }
+	@Override
+	public double getStrength(ISpiritweb data, boolean getBaseStrength)
+	{
+		AttributeInstance attribute = data.getLiving().getAttribute(getAttribute());
+		if (attribute != null)
+		{
+			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
+		}
+		return 0;
+	}
 
-    @Override
-    public int getPowerID()
-    {
-        return mastery.getID();
-    }
+	@Override
+	public int getPowerID()
+	{
+		return mastery.getID();
+	}
 
-    @Override
-    public int modeMin(ISpiritweb data)
-    {
-        return 0;
-    }
+	@Override
+	public int modeMin(ISpiritweb data)
+	{
+		return 0;
+	}
 
-    @Override
-    public int modeMax(ISpiritweb data)
-    {
-        return (int) data.getSelectedManifestation().getStrength(data, false);
-    }
+	@Override
+	public int modeMax(ISpiritweb data)
+	{
+		return (int) data.getSelectedManifestation().getStrength(data, false);
+	}
 
-    @Override
-    public void onModeChange(ISpiritweb data, int lastMode)
-    {
-        SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-        SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-        if (getMode(data) > lastMode)
-        {
-            submodule.useRibbon(data, this);
-        } else if (getMode(data) < lastMode)
-        {
-            submodule.releaseRibbon(data, this);
-        }
-    }
+	@Override
+	public void onModeChange(ISpiritweb data, int lastMode)
+	{
+		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
+		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		if (getMode(data) > lastMode)
+		{
+			submodule.useRibbon(data, this);
+		} else if (getMode(data) < lastMode)
+		{
+			submodule.releaseRibbon(data, this);
+		}
+	}
 
-    protected boolean notEnoughChargedSand(ISpiritweb data)
-    {
-        if (data.getLiving() instanceof Player player)
-        {
-            List<ItemStack> allPouches = getSandPouches(player);
-            int required = getCost(data);
+	protected boolean notEnoughChargedSand(ISpiritweb data)
+	{
+		if (data.getLiving() instanceof Player player)
+		{
+			List<ItemStack> allPouches = getSandPouches(player);
+			int required = getCost(data);
 
-            if (allPouches.isEmpty())
-            {
-                return true;
-            }
+			if (allPouches.isEmpty())
+			{
+				return true;
+			}
 
-            int count = 0;
-            for (ItemStack stack : allPouches)
-            {
-                count += StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-                if (count > required)
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+			int count = 0;
+			for (ItemStack stack : allPouches)
+			{
+				count += StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+				if (count > required)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
-    public void useChargedSand(ISpiritweb data)
-    {
-        if (data.getLiving() instanceof Player player)
-        {
-            List<ItemStack> allPouches = getSandPouches(player);
+	public void useChargedSand(ISpiritweb data)
+	{
+		if (data.getLiving() instanceof Player player)
+		{
+			List<ItemStack> allPouches = getSandPouches(player);
 
-            int changeLeft = getCost(data);
-            for (ItemStack stack : allPouches)
-            {
-                int startingCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-                int amountLeft = (startingCharge - changeLeft);
-                if (amountLeft >= 0)
-                {
-                    StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, amountLeft);
-                } else
-                {
-                    StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-                    changeLeft += amountLeft;
-                }
-                if (changeLeft <= 0)
-                {
-                    break;
-                }
-            }
-        }
-    }
+			int changeLeft = getCost(data);
+			for (ItemStack stack : allPouches)
+			{
+				int startingCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+				int amountLeft = (startingCharge - changeLeft);
+				if (amountLeft >= 0)
+				{
+					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, amountLeft);
+				} else
+				{
+					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
+					changeLeft += amountLeft;
+				}
+				if (changeLeft <= 0)
+				{
+					break;
+				}
+			}
+		}
+	}
 
-    protected List<ItemStack> getSandPouches(Player player)
-    {
-        List<ItemStack> curios = ItemChargeHelper.getChargeCurios(player);
-        List<ItemStack> items = ItemChargeHelper.getChargeItems(player);
+	protected List<ItemStack> getSandPouches(Player player)
+	{
+		List<ItemStack> curios = ItemChargeHelper.getChargeCurios(player);
+		List<ItemStack> items = ItemChargeHelper.getChargeItems(player);
 
-        curios.removeIf(getIsItemInvalid());
-        items.removeIf(getIsItemInvalid());
+		curios.removeIf(getIsItemInvalid());
+		items.removeIf(getIsItemInvalid());
 
-        curios.addAll(items);
+		curios.addAll(items);
 
-        return curios;
-    }
+		return curios;
+	}
 
-    public int getCost(ISpiritweb data)
-    {
-        int mode = data.getMode(this);
-        return mode * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
-    }
+	public int getCost(ISpiritweb data)
+	{
+		int mode = data.getMode(this);
+		return mode * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
+	}
 
-    private static Predicate<ItemStack> getIsItemInvalid()
-    {
-        return obj ->
-        {
-            if (obj.getItem() instanceof SandPouchItem)
-            {
-                return false;
-            }
-            return true;
-        };
-    }
+	private static Predicate<ItemStack> getIsItemInvalid()
+	{
+		return obj ->
+		{
+			if (obj.getItem() instanceof SandPouchItem)
+			{
+				return false;
+			}
+			return true;
+		};
+	}
 
-    @Override
-    public Attribute getAttribute()
-    {
-        return SandmasteryAttributes.RIBBONS.getAttribute();
-    }
+	@Override
+	public Attribute getAttribute()
+	{
+		return SandmasteryAttributes.RIBBONS.getAttribute();
+	}
 
-    protected void performEffectClient(ISpiritweb data)
-    {
-    }
+	protected void performEffectClient(ISpiritweb data)
+	{
+	}
 }

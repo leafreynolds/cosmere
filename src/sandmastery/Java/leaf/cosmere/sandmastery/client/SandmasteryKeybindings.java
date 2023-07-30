@@ -15,17 +15,17 @@ import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.*;
 public class SandmasteryKeybindings
 {
 
-    public static KeyMapping SANDMASTERY_LAUNCH;
-    public static KeyMapping SANDMASTERY_ELEVATE;
-    public static KeyMapping SANDMASTERY_PROJECTILE;
-    public static KeyMapping SANDMASTERY_PLATFORM;
+	public static KeyMapping SANDMASTERY_LAUNCH;
+	public static KeyMapping SANDMASTERY_ELEVATE;
+	public static KeyMapping SANDMASTERY_PROJECTILE;
+	public static KeyMapping SANDMASTERY_PLATFORM;
 
-    @SubscribeEvent
-    public static void register(RegisterKeyMappingsEvent event)
-    {
-        event.register(SANDMASTERY_LAUNCH = new KeyMapping(KEY_SANDMASTERY_LAUNCH, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-        event.register(SANDMASTERY_ELEVATE = new KeyMapping(KEY_SANDMASTERY_ELEVATE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-        event.register(SANDMASTERY_PROJECTILE = new KeyMapping(KEY_SANDMASTERY_PROJECTILE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-        event.register(SANDMASTERY_PLATFORM = new KeyMapping(KEY_SANDMASTERY_PLATFORM, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-    }
+	@SubscribeEvent
+	public static void register(RegisterKeyMappingsEvent event)
+	{
+		event.register(SANDMASTERY_LAUNCH = new KeyMapping(KEY_SANDMASTERY_LAUNCH, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+		event.register(SANDMASTERY_ELEVATE = new KeyMapping(KEY_SANDMASTERY_ELEVATE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+		event.register(SANDMASTERY_PROJECTILE = new KeyMapping(KEY_SANDMASTERY_PROJECTILE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+		event.register(SANDMASTERY_PLATFORM = new KeyMapping(KEY_SANDMASTERY_PLATFORM, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+	}
 }

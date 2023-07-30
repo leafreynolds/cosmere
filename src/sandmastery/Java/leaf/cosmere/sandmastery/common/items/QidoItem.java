@@ -28,71 +28,71 @@ import org.jetbrains.annotations.NotNull;
 
 public class QidoItem extends ChargeableItemBase
 {
-    public QidoItem()
-    {
-        super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
-    }
+	public QidoItem()
+	{
+		super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
+	}
 
-    @Override
-    public int getMaxCharge(ItemStack itemStack)
-    {
-        return Mth.floor(1000 * getMaxChargeModifier());
-    }
+	@Override
+	public int getMaxCharge(ItemStack itemStack)
+	{
+		return Mth.floor(1000 * getMaxChargeModifier());
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
-    {
-        ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
-        if (pLevel.isClientSide)
-        {
-            return InteractionResultHolder.pass(itemStack);
-        }
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+	{
+		ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
+		if (pLevel.isClientSide)
+		{
+			return InteractionResultHolder.pass(itemStack);
+		}
 
-        if (pPlayer.isCrouching())
-        {
-            BlockPos pos = getPlayerPOVHitResult(pLevel, pPlayer, ClipContext.Fluid.WATER).getBlockPos();
-            BlockState state = pLevel.getBlockState(pos);
-            if (state.is(Blocks.WATER))
-            {
-                pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                setCharge(itemStack, getMaxCharge(itemStack));
-            }
-        } else
-        {
-            SpiritwebCapability.get(pPlayer).ifPresent(spiritweb ->
-            {
-                SpiritwebCapability data = (SpiritwebCapability) spiritweb;
+		if (pPlayer.isCrouching())
+		{
+			BlockPos pos = getPlayerPOVHitResult(pLevel, pPlayer, ClipContext.Fluid.WATER).getBlockPos();
+			BlockState state = pLevel.getBlockState(pos);
+			if (state.is(Blocks.WATER))
+			{
+				pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+				setCharge(itemStack, getMaxCharge(itemStack));
+			}
+		} else
+		{
+			SpiritwebCapability.get(pPlayer).ifPresent(spiritweb ->
+			{
+				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
 
-                boolean isMaster = SandmasteryManifestations.SANDMASTERY_POWERS.values().stream().anyMatch((manifestation -> spiritweb.hasManifestation(manifestation.getManifestation())));
+				boolean isMaster = SandmasteryManifestations.SANDMASTERY_POWERS.values().stream().anyMatch((manifestation -> spiritweb.hasManifestation(manifestation.getManifestation())));
 
-                if (!isMaster)
-                {
-                    return;
-                }
+				if (!isMaster)
+				{
+					return;
+				}
 
-                final int liquid = getCharge(itemStack);
+				final int liquid = getCharge(itemStack);
 
-                SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+				SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
-                int playerHydration = sb.getHydrationLevel();
-                final int maxPlayerHydration = sb.MAX_HYDRATION;
+				int playerHydration = sb.getHydrationLevel();
+				final int maxPlayerHydration = sb.MAX_HYDRATION;
 
-                if (liquid + playerHydration > maxPlayerHydration)
-                {
-                    sb.adjustHydration((maxPlayerHydration - playerHydration), true);
-                    setCharge(itemStack, ((liquid + playerHydration) - maxPlayerHydration));
-                } else
-                {
-                    sb.adjustHydration(liquid, true);
-                    setCharge(itemStack, 0);
-                }
-            });
-        }
+				if (liquid + playerHydration > maxPlayerHydration)
+				{
+					sb.adjustHydration((maxPlayerHydration - playerHydration), true);
+					setCharge(itemStack, ((liquid + playerHydration) - maxPlayerHydration));
+				} else
+				{
+					sb.adjustHydration(liquid, true);
+					setCharge(itemStack, 0);
+				}
+			});
+		}
 
-        return InteractionResultHolder.consume(itemStack);
-    }
+		return InteractionResultHolder.consume(itemStack);
+	}
 
-    // TODO figure out how to get this to work
+	// TODO figure out how to get this to work
 //    @Override
 //    public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
 //        int availableWater = getCharge(pStack);
@@ -117,22 +117,22 @@ public class QidoItem extends ChargeableItemBase
 //        super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 //    }
 
-    @Override
-    public UseAnim getUseAnimation(ItemStack pStack)
-    {
-        return UseAnim.DRINK;
-    }
+	@Override
+	public UseAnim getUseAnimation(ItemStack pStack)
+	{
+		return UseAnim.DRINK;
+	}
 
-    @Override
-    public boolean isFoil(@NotNull ItemStack stack)
-    {
-        return stack.isEnchanted();
-    }
+	@Override
+	public boolean isFoil(@NotNull ItemStack stack)
+	{
+		return stack.isEnchanted();
+	}
 
-    @Override
-    public int getUseDuration(ItemStack pStack)
-    {
-        return 16;
-    }
+	@Override
+	public int getUseDuration(ItemStack pStack)
+	{
+		return 16;
+	}
 
 }

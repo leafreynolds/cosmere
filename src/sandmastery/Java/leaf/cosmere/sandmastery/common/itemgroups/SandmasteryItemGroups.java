@@ -7,12 +7,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class SandmasteryItemGroups
 {
-    public static CreativeModeTab ITEMS = new CreativeModeTab(Sandmastery.MODID)
-    {
-        @Override
-        public ItemStack makeIcon()
-        {
-            return new ItemStack(SandmasteryItems.QIDO_ITEM);
-        }
-    };
+	public static CreativeModeTab ITEMS = new CreativeModeTab(Sandmastery.MODID)
+	{
+		@Override
+		public ItemStack makeIcon()
+		{
+			return new ItemStack(SandmasteryItems.QIDO_ITEM);
+		}
+	};
 }

@@ -11,9 +11,9 @@ import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 
 public class SandmasteryItems
 {
-    public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(Sandmastery.MODID);
-    public static final ItemRegistryObject<QidoItem> QIDO_ITEM = ITEMS.register("qido", QidoItem::new);
-    public static final ItemRegistryObject<SandJarItem> SAND_JAR_ITEM = ITEMS.register("sand_jar", SandJarItem::new);
-    public static final ItemRegistryObject<JarItem> JAR_ITEM = ITEMS.register("jar", JarItem::new);
-    public static final ItemRegistryObject<SandPouchItem> SAND_POUCH_ITEM = ITEMS.register("sand_pouch", SandPouchItem::new);
+	public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(Sandmastery.MODID);
+	public static final ItemRegistryObject<QidoItem> QIDO_ITEM = ITEMS.register("qido", QidoItem::new);
+	public static final ItemRegistryObject<SandJarItem> SAND_JAR_ITEM = ITEMS.register("sand_jar", SandJarItem::new);
+	public static final ItemRegistryObject<JarItem> JAR_ITEM = ITEMS.register("jar", JarItem::new);
+	public static final ItemRegistryObject<SandPouchItem> SAND_POUCH_ITEM = ITEMS.register("sand_pouch", SandPouchItem::new);
 }

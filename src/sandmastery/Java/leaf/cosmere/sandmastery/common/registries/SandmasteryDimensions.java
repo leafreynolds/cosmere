@@ -13,14 +13,14 @@ import net.minecraft.world.level.dimension.DimensionType;
 
 public class SandmasteryDimensions
 {
-    public static final ResourceKey<Level> DAYSIDE_TALDAIN_DIM_KEY =
-            ResourceKey.create(
-                    Registry.DIMENSION_REGISTRY,
-                    Sandmastery.rl("dayside")
-            );
+	public static final ResourceKey<Level> DAYSIDE_TALDAIN_DIM_KEY =
+			ResourceKey.create(
+					Registry.DIMENSION_REGISTRY,
+					Sandmastery.rl("dayside")
+			);
 
-    public static void register()
-    {
-        CosmereAPI.logger.info("Registering sandmastery dimensions");
-    }
+	public static void register()
+	{
+		CosmereAPI.logger.info("Registering sandmastery dimensions");
+	}
 }
