@@ -1,16 +1,23 @@
 /*
- * File updated ~ 30 - 7 - 2023 ~ Leaf
+ * File updated ~ 31 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.entity;
 
+import leaf.cosmere.api.Metals;
+import leaf.cosmere.common.registration.impl.ItemRegistryObject;
+import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -141,7 +148,34 @@ public class Koloss extends AbstractIllager
 		final Item value = HemalurgyItems.KOLOSS_SWORD.get();
 		if (value != null)
 		{
-			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(value));
+			//don't actually give them a sword for now, it's easier to balance.
+			//Instead, we just add it as a potential drop.
+			//this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(value));
+		}
+	}
+
+
+	@Override
+	protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit)
+	{
+		super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
+
+		if (this.random.nextInt(100) < 25)
+		{
+			this.spawnAtLocation(new ItemStack(HemalurgyItems.KOLOSS_SWORD));
+		}
+		final ItemRegistryObject<HemalurgicSpikeItem> ironSpike = HemalurgyItems.METAL_SPIKE.get(Metals.MetalType.IRON);
+		if (this.random.nextInt(100) < 10)
+		{
+			final ItemStack weakSpike = new ItemStack(ironSpike);
+			ironSpike.get().Invest(weakSpike, Metals.MetalType.IRON, 8, this.getUUID());
+			this.spawnAtLocation(weakSpike);
+		}
+		if (this.random.nextInt(100) < 5)
+		{
+			final ItemStack strongSpike = new ItemStack(ironSpike);
+			ironSpike.get().Invest(strongSpike, Metals.MetalType.IRON, 16, this.getUUID());
+			this.spawnAtLocation(strongSpike);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 7 - 2023 ~ Leaf
+ * File updated ~ 31 - 7 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.capabilities.world;
@@ -127,6 +127,7 @@ public class KolossPatrolSpawner implements CustomSpawner
 			return false;
 
 		}
+		//if you can spawn a pillager there, for now lets just assume koloss can go there
 		if (!PatrollingMonster.checkPatrollingMonsterSpawnRules(EntityType.PILLAGER, pLevel, MobSpawnType.PATROL, pPos, pRandom))
 		{
 			return false;
