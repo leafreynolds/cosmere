@@ -23,10 +23,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "cosmere:lerasium_nugget"
-        },
-        {
-          "type": "minecraft:item",
           "name": "cosmere:atium_nugget",
           "functions": [
             {
