@@ -11,6 +11,7 @@ import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.GemBlock;
 import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
+import leaf.cosmere.surgebinding.common.blocks.VinebudBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Rarity;
 
@@ -50,5 +51,6 @@ public class SurgebindingBlocks
 									() -> new GemOreBlock(gemstone),
 									Rarity.UNCOMMON)));
 
+	public static final BlockRegistryObject<VinebudBlock, BlockItem> VINEBUD_BLOCK = BLOCKS.register("vinebud", VinebudBlock::new);
 
 }
