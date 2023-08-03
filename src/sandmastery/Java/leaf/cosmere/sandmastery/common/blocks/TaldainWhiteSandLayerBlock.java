@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -26,20 +25,18 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class TaldainSandLayerBlock extends BaseFallingBlock
+public class TaldainWhiteSandLayerBlock extends BaseFallingBlock
 {
-	public TaldainSandLayerBlock()
+	public TaldainWhiteSandLayerBlock()
 	{
 		super(PropTypes.Blocks.SAND.get(), SoundType.SAND, 1F, 2F);
 		this.registerDefaultState(
 				this.stateDefinition.any()
-						.setValue(INVESTED, false)
 						.setValue(LAYERS, 1)
 		);
 	}
 
 	public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
-	public static final BooleanProperty INVESTED = BooleanProperty.create("invested");
 	protected static final VoxelShape[] SHAPE_BY_LAYER = new VoxelShape[]{Shapes.empty(), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
 	@Override
@@ -103,7 +100,6 @@ public class TaldainSandLayerBlock extends BaseFallingBlock
 	@Override
 	public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos)
 	{
-		if (!pState.canSurvive(pLevel, pCurrentPos)) return Blocks.AIR.defaultBlockState();
 		if (touchesLiquid(pLevel, pCurrentPos, pState))
 			return this.defaultBlockState().setValue(LAYERS, pState.getValue(LAYERS));
 		return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
@@ -134,7 +130,7 @@ public class TaldainSandLayerBlock extends BaseFallingBlock
 		if (blockstate.is(this))
 		{
 			int i = blockstate.getValue(LAYERS);
-			return blockstate.setValue(LAYERS, Integer.valueOf(Math.min(8, i + 1))).setValue(INVESTED, false);
+			return blockstate.setValue(LAYERS, Integer.valueOf(Math.min(8, i + 1)));
 		}
 		else
 		{
@@ -145,14 +141,13 @@ public class TaldainSandLayerBlock extends BaseFallingBlock
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
 	{
 		pBuilder
-				.add(LAYERS)
-				.add(INVESTED);
+				.add(LAYERS);
 	}
 
 	@Override
 	public boolean isRandomlyTicking(BlockState pState)
 	{
-		return !pState.getValue(INVESTED);
+		return true;
 	}
 
 	@Override
@@ -171,14 +166,13 @@ public class TaldainSandLayerBlock extends BaseFallingBlock
 
 		if ((!MiscHelper.onTaldain(pLevel) && !pLevel.canSeeSky(pPos.above())) && !MiscHelper.checkIfNearbyInvestiture(pLevel, pPos, false))
 			return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
-		pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true).setValue(LAYERS, pState.getValue(LAYERS)));
 
 		for (int i = 0; i < 4; ++i)
 		{
 			BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
 			if (pLevel.getBlockState(blockpos).is(Blocks.SAND))
 			{
-				pLevel.setBlockAndUpdate(blockpos, SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock().defaultBlockState().setValue(INVESTED, true));
+				pLevel.setBlockAndUpdate(blockpos, SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.getBlock().defaultBlockState());
 			}
 		}
 	}

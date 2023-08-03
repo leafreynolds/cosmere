@@ -53,11 +53,11 @@ public class SandPouchItem extends ChargeableItemBase
 
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
-		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
+		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem())
 		{
 			return true;
 		}
-		return itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem();
+		return itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem();
 	};
 
 	@Override

@@ -6,41 +6,26 @@ package leaf.cosmere.sandmastery.common.blocks;
 
 //import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 
-import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-public class TaldainSandBlock extends BaseFallingBlock
+public class TaldainWhiteSandBlock extends BaseFallingBlock
 {
 
-	public TaldainSandBlock()
+	public TaldainWhiteSandBlock()
 	{
 		super(PropTypes.Blocks.SAND.get(), SoundType.SAND, 1F, 2F);
-		this.registerDefaultState(
-				this.stateDefinition.any()
-						.setValue(INVESTED, false)
-		);
-	}
-
-	public static final BooleanProperty INVESTED = BooleanProperty.create("invested");
-
-	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
-	{
-		pBuilder.add(INVESTED);
 	}
 
 	@Override
@@ -54,18 +39,20 @@ public class TaldainSandBlock extends BaseFallingBlock
 	{
 		if (!pLevel.isAreaLoaded(pPos, 3))
 			return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
-		BlockState state = this.defaultBlockState();
 
-		if ((!MiscHelper.onTaldain(pLevel) && !pLevel.canSeeSky(pPos.above())) && !MiscHelper.checkIfNearbyInvestiture(pLevel, pPos, false))
+		boolean nearbyInvestiture = MiscHelper.checkIfNearbyInvestiture(pLevel, pPos, false);
+		boolean offTaldain = !MiscHelper.onTaldain(pLevel);
+		boolean canSeeSky = pLevel.canSeeSky(pPos.above());
+		if (offTaldain && !nearbyInvestiture) return;
+		if (!canSeeSky && !nearbyInvestiture)
 			return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
-		pLevel.setBlockAndUpdate(pPos, state.setValue(INVESTED, true));
 
 		for (int i = 0; i < 4; ++i)
 		{
 			BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
 			if (pLevel.getBlockState(blockpos).is(Blocks.SAND))
 			{
-				pLevel.setBlockAndUpdate(blockpos, state.setValue(INVESTED, true));
+				pLevel.setBlockAndUpdate(blockpos, SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.getBlock().defaultBlockState());
 			}
 		}
 	}
@@ -95,7 +82,7 @@ public class TaldainSandBlock extends BaseFallingBlock
 	public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos)
 	{
 		return touchesLiquid(pLevel, pCurrentPos, pState) ?
-				this.defaultBlockState() :
+				SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.getBlock().defaultBlockState() :
 				super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
 	}
 }

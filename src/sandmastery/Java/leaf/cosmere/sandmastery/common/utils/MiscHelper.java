@@ -146,11 +146,11 @@ public class MiscHelper
 			return 0;
 		}
 
-		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem())
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem())
 		{
 			return stack.getCount() * 10;
 		}
-		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem())
 		{
 			return stack.getCount() * 80;
 		}

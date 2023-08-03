@@ -1,6 +1,8 @@
 {
   "values": [
     "sandmastery:taldain_sand_layer",
-    "sandmastery:taldain_sand"
+    "sandmastery:taldain_sand",
+    "sandmastery:charged_taldain_sand_layer",
+    "sandmastery:charged_taldain_sand"
   ]
 }
