@@ -26,6 +26,7 @@ public class SurgebindingDataGenerator
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event)
 	{
+		System.out.println("@@@ SurgebindingDataGenerator#gatherData");
 		DataGenerator generator = event.getGenerator();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
