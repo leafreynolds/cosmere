@@ -16,6 +16,11 @@ import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotTypePreset;
+import top.theillusivec4.curios.api.type.capability.ICurio;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 public class MasteryProjectile extends SandmasteryManifestation
 {
@@ -65,6 +70,23 @@ public class MasteryProjectile extends SandmasteryManifestation
 				break;
 			}
 		}
+
+		CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(handler -> {
+			ICurioStacksHandler stacksHandler = handler.getCurios().get(SlotTypePreset.BELT.getIdentifier());
+			if (stacksHandler != null)
+			{
+				for (int i = 0; i < stacksHandler.getSlots(); i++)
+				{
+					ItemStack pouch = stacksHandler.getStacks().getStackInSlot(i);
+					if (!pouch.isEmpty() && pouch.is(SandmasteryItems.SAND_POUCH_ITEM.get()))
+					{
+						SandmasteryItems.SAND_POUCH_ITEM.get().shoot(pouch, player);
+						break;
+					}
+				}
+			}
+		});
+
 		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), true);
 		useChargedSand(data);
 		return true;
