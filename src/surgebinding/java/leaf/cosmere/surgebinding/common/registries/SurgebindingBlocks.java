@@ -9,9 +9,7 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.registration.impl.BlockDeferredRegister;
 import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.blocks.GemBlock;
-import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
-import leaf.cosmere.surgebinding.common.blocks.VinebudBlock;
+import leaf.cosmere.surgebinding.common.blocks.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Rarity;
 
@@ -51,6 +49,9 @@ public class SurgebindingBlocks
 									() -> new GemOreBlock(gemstone),
 									Rarity.UNCOMMON)));
 
+	public static final BlockRegistryObject<LavisPolypBlock, BlockItem> LAVIS_POLYP_BLOCK = BLOCKS.register("lavis_polyp", LavisPolypBlock::new);
+	public static final BlockRegistryObject<PrickletacBlock, BlockItem> PRICKLETAC_BLOCK = BLOCKS.register("prickletac", PrickletacBlock::new);
+	public static final BlockRegistryObject<RockbudVariantBlock, BlockItem> ROCKBUD_VARIANT_BLOCK = BLOCKS.register("rockbud_variant", RockbudVariantBlock::new);
 	public static final BlockRegistryObject<VinebudBlock, BlockItem> VINEBUD_BLOCK = BLOCKS.register("vinebud", VinebudBlock::new);
 
 }

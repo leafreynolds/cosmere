@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "surgebinding:block/lavis_polyp"
+    }
+  }
+}
