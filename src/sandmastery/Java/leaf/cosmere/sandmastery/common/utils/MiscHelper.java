@@ -79,6 +79,7 @@ public class MiscHelper
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 				{
 					final boolean targetIsPlayer = target instanceof Player;
+					if(manifestation.getManifestationType() != Manifestations.ManifestationTypes.SANDMASTERY) continue; //sandmastery uses charged sand, and as such won't charge it either
 
 					//if target is not a player and has any manifestations at all
 					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation) && includeMobs)
