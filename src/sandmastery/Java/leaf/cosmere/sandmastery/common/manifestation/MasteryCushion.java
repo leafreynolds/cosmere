@@ -9,6 +9,8 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -55,7 +57,7 @@ public class MasteryCushion extends SandmasteryManifestation
 			return false;
 		}
 
-		if (!submodule.adjustHydration(-10, false))
+		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), false))
 		{
 			return false;
 		}
@@ -68,7 +70,7 @@ public class MasteryCushion extends SandmasteryManifestation
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
 		living.hurtMarked = true;
 		living.resetFallDistance();
-		submodule.adjustHydration(-10, true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true);
 		useChargedSand(data);
 		return true;
 	}
