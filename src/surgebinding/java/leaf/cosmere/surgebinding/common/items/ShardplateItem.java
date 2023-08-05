@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 2 - 2023 ~ Leaf
+ * File updated ~ 5 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -52,16 +52,31 @@ public class ShardplateItem extends ArmorItem
 
 				if (armorModel.isPresent() && armorModel.get() instanceof ArmorRenderer armorRenderer)
 				{
+					final boolean isHead = equipmentSlot == EquipmentSlot.HEAD;
+					final boolean isChest = equipmentSlot == EquipmentSlot.CHEST;
+					final boolean isLegs = equipmentSlot == EquipmentSlot.LEGS;
+					final boolean isFeet = equipmentSlot == EquipmentSlot.FEET;
+
 					var model = armorRenderer.model;
-					model.head.visible = equipmentSlot == EquipmentSlot.HEAD;
 					model.hat.visible = false;
+					model.head.visible = isHead;
 
-					model.body.visible = equipmentSlot == EquipmentSlot.CHEST;
-					model.rightArm.visible = equipmentSlot == EquipmentSlot.CHEST;
-					model.leftArm.visible = equipmentSlot == EquipmentSlot.CHEST;
+					model.body.visible = isChest;
+					//chestplate is done separately because pants have to set body visible for some reason
+					model.Chestplate.visible = isChest;
+					model.rightArm.visible = isChest;
+					model.leftArm.visible = isChest;
 
-					model.rightLeg.visible = equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET;
-					model.leftLeg.visible = equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET;
+					//set the parts on the base model visible
+					model.rightLeg.visible = true;
+					model.leftLeg.visible = true;
+
+					//then set the actual child legs/boots visibility.
+					//kinda janky but it works
+					model.LeftLeg.visible = isLegs;
+					model.RightLeg.visible = isLegs;
+					model.LeftBoot.visible = isFeet;
+					model.RightBoot.visible = isFeet;
 
 					return model;
 				}
