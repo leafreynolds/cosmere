@@ -84,51 +84,52 @@ public class Koloss extends AbstractIllager
 
 	public static AttributeSupplier.Builder smallAttributes()
 	{
-		//todo, make different based on size of koloss
+
 		return Monster.createMonsterAttributes()
-				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
-				.add(Attributes.FOLLOW_RANGE, 32.0D)
-				.add(Attributes.MAX_HEALTH, 100.0D)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 0.75d)
-				.add(Attributes.ARMOR, 4.0d)
-				.add(Attributes.ARMOR_TOUGHNESS, 1.0d)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.33F)
+				.add(Attributes.FOLLOW_RANGE, 40.0D)
+				.add(Attributes.MAX_HEALTH, 40.0D)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.5d)
+				.add(Attributes.ARMOR, 7.0d)
+				.add(Attributes.ARMOR_TOUGHNESS, 0.0d)
 				.add(Attributes.LUCK, -1.0d)
-				.add(Attributes.ATTACK_DAMAGE, 12.0D)
-				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
+				.add(Attributes.ATTACK_DAMAGE, 4.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.1D)
 				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
 	}
 
 	public static AttributeSupplier.Builder mediumAttributes()
 	{
-		//todo, make different based on size of koloss
+
 		return Monster.createMonsterAttributes()
-				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
-				.add(Attributes.FOLLOW_RANGE, 32.0D)
-				.add(Attributes.MAX_HEALTH, 100.0D)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 0.75d)
-				.add(Attributes.ARMOR, 4.0d)
-				.add(Attributes.ARMOR_TOUGHNESS, 1.0d)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.3F)
+				.add(Attributes.FOLLOW_RANGE, 40.0D)
+				.add(Attributes.MAX_HEALTH, 70.0D)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6d)
+				.add(Attributes.ARMOR, 3.5d)
+				.add(Attributes.ARMOR_TOUGHNESS, 0.0d)
 				.add(Attributes.LUCK, -1.0d)
-				.add(Attributes.ATTACK_DAMAGE, 12.0D)
-				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
+				.add(Attributes.ATTACK_DAMAGE, 8.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.3D)
 				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+
 	}
 
 	public static AttributeSupplier.Builder largeAttributes()
 	{
-		//todo, make different based on size of koloss
+
 		return Monster.createMonsterAttributes()
-				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
-				.add(Attributes.FOLLOW_RANGE, 32.0D)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.25F)
+				.add(Attributes.FOLLOW_RANGE, 40.0D)
 				.add(Attributes.MAX_HEALTH, 100.0D)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.75d)
-				.add(Attributes.ARMOR, 4.0d)
-				.add(Attributes.ARMOR_TOUGHNESS, 1.0d)
+				.add(Attributes.ARMOR, 1.0d)
+				.add(Attributes.ARMOR_TOUGHNESS, 4.0d)
 				.add(Attributes.LUCK, -1.0d)
 				.add(Attributes.ATTACK_DAMAGE, 12.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
 				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
-	}
+		}
 
 	@Nullable
 	@Override
