@@ -1,5 +1,5 @@
 /*
- * File updated ~ 25 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.items;
@@ -389,6 +389,8 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 	@Override
 	public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack)
 	{
+		super.onUnequip(slotContext, newStack, stack);
+
 		//only damage if removing the spike. We can ignore replacing the spike with another spike.
 		boolean isUnequipping = newStack.isEmpty() || !newStack.is(stack.getItem());
 		if (isUnequipping)

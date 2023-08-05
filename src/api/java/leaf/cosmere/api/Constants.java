@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 7 - 2023 ~ Leaf
+ * File updated ~ 5 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -39,6 +39,7 @@ public class Constants
 		public static final String ATTUNED_PLAYER_NAME = "attuned_player_name";
 
 		public static final UUID UNKEYED_UUID = UUID.fromString("422fc419-1e39-4eac-ac01-6fc98512c122");
+		public static final UUID FERU_NICROSIL_UUID = UUID.fromString("5199248a-4a6e-4891-bc2a-1f3c0fcb5191");
 		public static final UUID ALUMINUM_UUID = UUID.fromString("8da98b83-be5e-4b34-b51e-5fdd79700893");
 	}
 

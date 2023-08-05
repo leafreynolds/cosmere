@@ -1,13 +1,19 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 5 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.items;
 
+import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
@@ -47,5 +53,33 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 	public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer)
 	{
 		return this.metalType == Metals.MetalType.GOLD;
+	}
+
+	@Override
+	public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack)
+	{
+		ICurioItem.super.onUnequip(slotContext, newStack, stack);
+
+		//Clear any nicrosil feruchemy based powers
+		if (this.metalType == Metals.MetalType.NICROSIL)
+		{
+			SpiritwebCapability.get(slotContext.entity()).ifPresent(data ->
+			{
+				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+				{
+					Attribute attribute = manifestation.getAttribute();
+					if (attribute == null)
+					{
+						continue;
+					}
+
+					final AttributeInstance attributeInstance = data.getLiving().getAttribute(attribute);
+					if (attributeInstance != null)
+					{
+						attributeInstance.removeModifier(Constants.NBT.FERU_NICROSIL_UUID);
+					}
+				}
+			});
+		}
 	}
 }

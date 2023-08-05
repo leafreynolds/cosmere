@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 5 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.items;
@@ -262,6 +262,7 @@ public interface IHemalurgicInfo
 					continue;
 				}
 
+				//prevent all other powers being used.
 				attributeModifiers.put(
 						attribute,
 						new AttributeModifier(

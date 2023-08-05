@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 6 - 2023 ~ Leaf
+ * File updated ~ 5 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -124,7 +124,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		}
 	}
 
-	public void clearNicrosilPowers(ISpiritweb data)
+	public static void clearNicrosilPowers(ISpiritweb data)
 	{
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
@@ -139,6 +139,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			{
 				attributeInstance.removeModifier(data.getLiving().getUUID());
 				attributeInstance.removeModifier(Constants.NBT.UNKEYED_UUID);
+				attributeInstance.removeModifier(Constants.NBT.FERU_NICROSIL_UUID);
 			}
 		}
 	}
@@ -205,7 +206,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			attributeModifiers.put(
 					attribute,
 					new AttributeModifier(
-							nbt.hasUUID("identity") ? nbt.getUUID("identity") : Constants.NBT.UNKEYED_UUID,
+							Constants.NBT.FERU_NICROSIL_UUID,
 							manifestationName,
 							CompoundNBTHelper.getDouble(
 									nbt,
