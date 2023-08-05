@@ -1,10 +1,13 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.client.eventHandlers;
 
 import leaf.cosmere.allomancy.client.gui.CoinPouchContainerScreen;
+import leaf.cosmere.allomancy.client.render.AllomancyLayerDefinitions;
+import leaf.cosmere.allomancy.client.render.AllomancyRenderers;
+import leaf.cosmere.allomancy.client.render.model.MistcloakModel;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.coinpouch.CoinPouchContainerMenu;
 import leaf.cosmere.allomancy.common.registries.AllomancyEntityTypes;
@@ -32,16 +35,10 @@ import java.util.Locale;
 public class AllomancyClientSetup
 {
 
-
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
-		event.enqueueWork(() ->
-		{
-
-		});
-
-
+		AllomancyRenderers.register();
 		CosmereAPI.logger.info("Allomancy client setup complete!");
 	}
 
@@ -59,6 +56,13 @@ public class AllomancyClientSetup
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
 		event.registerEntityRenderer(AllomancyEntityTypes.COIN_PROJECTILE.get(), ThrownItemRenderer::new);
+	}
+
+	@SubscribeEvent
+	public static void registerLayers(final EntityRenderersEvent.RegisterLayerDefinitions evt)
+	{
+		//shardplate
+		evt.registerLayerDefinition(AllomancyLayerDefinitions.MISTCLOAK, MistcloakModel::createBodyLayer);
 	}
 
 	//special thank you to the chisels and bits team who have an example of how to register other sprites
