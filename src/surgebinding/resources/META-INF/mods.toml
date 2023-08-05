@@ -9,7 +9,14 @@ version = "${version}"
 displayName = "Cosmere: Surgebinding"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "Leafy"
-credits = "Ridanisaurus, Arkamis13, Luke13234, Hawktrav and many others"
+credits = '''
+
+Hawktrav - Various models and textures
+Luke13234 - Who wrote much of the Ars Arcanum guide book entries.
+
+Special thanks go to:
+Ridanisaurus - For many item and block textures.
+'''
 logoFile = "logo.png"
 description = '''Surgebinding module for Cosmere.'''
 

@@ -9,7 +9,14 @@ version = "${version}"
 displayName = "Cosmere: Hemalurgy"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "Leafy"
-credits = "Ridanisaurus, Arkamis13, Luke13234, Hawktrav and many others"
+credits = '''
+
+Arkamis - for the initial information in the guide book
+Luke13234 - Who then updated it to what it is today
+
+Special thanks go to:
+Ridanisaurus - For many item and block textures.
+'''
 logoFile = "logo.png"
 description = '''Hemalurgy module for Cosmere.'''
 

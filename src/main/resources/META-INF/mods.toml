@@ -9,7 +9,10 @@ version = "${version}"
 displayName = "Cosmere"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere/"
 authors = "Leafy"
-credits = "Ridanisaurus, Arkamis13, Luke13234, Hawktrav and many others"
+credits = '''
+
+Ridanisaurus - For many item and block textures.
+'''
 logoFile = "logo.png"
 description = '''Cosmere is a library mod, meant to be used with it's modules that add features from Brandon Sanderson's Cosmere universe.'''
 
