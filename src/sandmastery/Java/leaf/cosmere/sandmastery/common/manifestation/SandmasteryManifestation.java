@@ -16,6 +16,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.ItemChargeHelper;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
@@ -46,7 +47,7 @@ public class SandmasteryManifestation extends Manifestation
 		if (living.tickCount % 20 != 0) return false;
 		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 		double percentage = (((double) submodule.getHydrationLevel()) / ((double) SandmasteryConfigs.SERVER.MAX_HYDRATION.get())) * 100;
-		if (percentage < 50)
+		if (percentage <= SandmasteryConfigs.SERVER.DEHYDRATION_THRESHOLD.get())
 		{
 			living.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.DEHYDRATED_EFFECT.get(), 0, 30));
 		}
