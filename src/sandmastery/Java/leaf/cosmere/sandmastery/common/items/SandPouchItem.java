@@ -13,9 +13,7 @@ import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.entities.SandProjectile;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
-import leaf.cosmere.sandmastery.common.items.sandpouch.SandpouchItemHandler;
 import leaf.cosmere.sandmastery.common.items.sandpouch.ISandPouchItemHandler;
-import leaf.cosmere.sandmastery.common.items.sandpouch.SandpouchItemHandler;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
@@ -88,17 +86,12 @@ public class SandPouchItem extends ChargeableItemBase
 	public int getMaxCharge(ItemStack itemStack)
 	{
 		int res = 0;
-		IItemHandler inv = getPouchInv(itemStack);
+		ISandPouchItemHandler inv = getPouchInv(itemStack);
 		if (inv == null)
 		{
 			return res;
 		}
-		for (int i = 0; i < SandPouchInventory.size; i++)
-		{
-			ItemStack stack = inv.getStackInSlot(i);
-			res += MiscHelper.getChargeFromItemStack(stack);
-		}
-		return res;
+		return inv.getLayers() * SandmasteryConfigs.SERVER.SAND_LAYER_CHARGE_CAPACITY.get();
 	}
 
 	@Override
