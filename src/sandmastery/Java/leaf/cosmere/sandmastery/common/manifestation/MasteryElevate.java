@@ -45,10 +45,6 @@ public class MasteryElevate extends SandmasteryManifestation
 		{
 			return false;
 		}
-		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), false))
-		{
-			return false;
-		}
 		if (notEnoughChargedSand(data))
 		{
 			return false;
@@ -69,7 +65,7 @@ public class MasteryElevate extends SandmasteryManifestation
 		living.hurtMarked = true; // Allow the game to move the player
 		living.resetFallDistance();
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true, living);
 		useChargedSand(data);
 
 		return true;

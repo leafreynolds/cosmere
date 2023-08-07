@@ -81,12 +81,12 @@ public class QidoItem extends ChargeableItemBase
 
 				if (liquid + playerHydration > maxPlayerHydration)
 				{
-					sb.adjustHydration((maxPlayerHydration - playerHydration), true);
+					sb.adjustHydration((maxPlayerHydration - playerHydration));
 					setCharge(itemStack, ((liquid + playerHydration) - maxPlayerHydration));
 				}
 				else
 				{
-					sb.adjustHydration(liquid, true);
+					sb.adjustHydration(liquid);
 					setCharge(itemStack, 0);
 				}
 			});

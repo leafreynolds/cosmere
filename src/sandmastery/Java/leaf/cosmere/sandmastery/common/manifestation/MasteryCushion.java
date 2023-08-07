@@ -53,10 +53,6 @@ public class MasteryCushion extends SandmasteryManifestation
 			return false;
 		}
 
-		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), false))
-		{
-			return false;
-		}
 		if (notEnoughChargedSand(data))
 		{
 			return false;
@@ -66,7 +62,7 @@ public class MasteryCushion extends SandmasteryManifestation
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
 		living.hurtMarked = true;
 		living.resetFallDistance();
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true, living);
 		useChargedSand(data);
 		return true;
 	}

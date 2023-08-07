@@ -43,10 +43,6 @@ public class MasteryLaunch extends SandmasteryManifestation
 	{
 		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 
-		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), false))
-		{
-			return false;
-		}
 		int scaleFactor = getMode(data);
 		if (notEnoughChargedSand(data))
 		{
@@ -63,7 +59,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 		data.setMode(this, getMode(data) - 1);
 		data.syncToClients(null);
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), true, living);
 		useChargedSand(data);
 		return true;
 	}

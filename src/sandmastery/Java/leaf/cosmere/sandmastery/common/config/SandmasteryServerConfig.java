@@ -22,6 +22,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue CHARGE_COST_MULTIPLIER;
 	public final ForgeConfigSpec.IntValue STARTING_HYDRATION;
 	public final ForgeConfigSpec.IntValue MAX_HYDRATION;
+	public final ForgeConfigSpec.IntValue OVERMASTERY_DURATION;
 	public final ForgeConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
 
 
@@ -42,6 +43,8 @@ public class SandmasteryServerConfig implements ICosmereConfig
 
 		STARTING_HYDRATION = builder.comment("Starting hydration a player has when they spawn into the world for the first time").defineInRange("startingHydration", 10000, 1, 100000);
 		MAX_HYDRATION = builder.comment("Max hydration a player can have").defineInRange("maxHydration", 10000, 1, 100000);
+
+		OVERMASTERY_DURATION = builder.comment("How long overmastery lasts in minutes").defineInRange("overmasteryDuration", 120, 1, 720);
 
 		DEHYDRATION_THRESHOLD = builder.comment("The threshold at which a player will start to become dehydrated (percentage of max)").defineInRange("dehydrationThreshold", 50.0, 0.1, 100.0);
 
