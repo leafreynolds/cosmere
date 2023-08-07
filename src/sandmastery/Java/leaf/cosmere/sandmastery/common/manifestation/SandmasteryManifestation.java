@@ -5,7 +5,6 @@
 package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.helpers.EffectsHelper;
@@ -16,7 +15,6 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.ItemChargeHelper;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
@@ -192,6 +190,6 @@ public class SandmasteryManifestation extends Manifestation
 	protected static boolean sandmasteryBlocked(ISpiritweb data)
 	{
 		LivingEntity entity = data.getLiving();
-		return entity.getEffect(SandmasteryEffects.OVERMASTERY_EFFECT.get()) != null;
+		return entity.getEffect(SandmasteryEffects.OVERMASTERED_EFFECT.get()) != null;
 	}
 }

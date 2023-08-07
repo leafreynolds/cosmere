@@ -110,7 +110,7 @@ public class MiscHelper
 		int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition(), false))
 		{
-			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
+			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 100, 0, maxCharge));
 		}
 	}
 

@@ -159,7 +159,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 		if (allowOvermastery && newHydrationValue < 0)
 		{
-			entity.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERY_EFFECT.get(), 0, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60)); //  * 20 * 60 to convert minutes to ticks
+			entity.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERY_INSTANT_EFFECT.get(), 0, 1));
+			entity.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERED_EFFECT.get(), 0, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60)); //  * 20 * 60 to convert minutes to ticks
 		}
 
 		return true;

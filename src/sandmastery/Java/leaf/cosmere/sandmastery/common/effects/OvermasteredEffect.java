@@ -8,9 +8,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OvermasteryEffect extends MobEffectBase
+public class OvermasteredEffect extends MobEffectBase
 {
-	public OvermasteryEffect(MobEffectCategory mobEffectCategory, int colorValue)
+	public OvermasteredEffect(MobEffectCategory mobEffectCategory, int colorValue)
 	{
 		super(mobEffectCategory, colorValue);
 	}

@@ -1,7 +1,7 @@
 package leaf.cosmere.sandmastery.mixin;
 
 import leaf.cosmere.sandmastery.common.effects.DehydratedEffect;
-import leaf.cosmere.sandmastery.common.effects.OvermasteryEffect;
+import leaf.cosmere.sandmastery.common.effects.OvermasteredEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ public class EffectInstanceMixin
 	)
 	private void getIsSandmasteryEffect(CallbackInfoReturnable<Boolean> cir)
 	{
-		if (getEffect() instanceof DehydratedEffect || getEffect() instanceof OvermasteryEffect)
+		if (getEffect() instanceof DehydratedEffect || getEffect() instanceof OvermasteredEffect)
 		{
 			// always show **:** instead of the 3 second timer
 			cir.setReturnValue(true);
@@ -32,7 +32,7 @@ public class EffectInstanceMixin
 	)
 	private void getShowIcon(CallbackInfoReturnable<Boolean> cir)
 	{
-		if (getEffect() instanceof DehydratedEffect || getEffect() instanceof OvermasteryEffect)
+		if (getEffect() instanceof DehydratedEffect || getEffect() instanceof OvermasteredEffect)
 		{
 			//never show the icon on the normal HUD.
 			//should only show in inventory if they're interested.
