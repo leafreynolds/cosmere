@@ -30,6 +30,10 @@ public class MasteryPlatform extends SandmasteryManifestation
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
+		if(sandmasteryBlocked(data))
+		{
+			return false;
+		}
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PLATFORM_HOTKEY_FLAG);
 		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), false))
 		{

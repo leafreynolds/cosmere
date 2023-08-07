@@ -35,6 +35,10 @@ public class MasteryProjectile extends SandmasteryManifestation
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 		submodule.tickProjectileCooldown();
+		if(sandmasteryBlocked(data))
+		{
+			return false;
+		}
 		if (!submodule.projectileReady())
 		{
 			return false;

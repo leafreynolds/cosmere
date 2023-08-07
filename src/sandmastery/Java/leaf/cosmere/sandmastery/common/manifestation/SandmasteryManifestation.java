@@ -16,7 +16,9 @@ import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodul
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
@@ -181,5 +183,11 @@ public class SandmasteryManifestation extends Manifestation
 
 	protected void performEffectClient(ISpiritweb data)
 	{
+	}
+
+	protected static boolean sandmasteryBlocked(ISpiritweb data)
+	{
+		LivingEntity entity = data.getLiving();
+		return entity.getEffect(SandmasteryEffects.OVERMASTERY_EFFECT.get()) != null;
 	}
 }

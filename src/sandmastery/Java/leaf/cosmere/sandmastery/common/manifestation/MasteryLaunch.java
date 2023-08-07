@@ -26,6 +26,10 @@ public class MasteryLaunch extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
+		if(sandmasteryBlocked(data))
+		{
+			return false;
+		}
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.LAUNCH_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{

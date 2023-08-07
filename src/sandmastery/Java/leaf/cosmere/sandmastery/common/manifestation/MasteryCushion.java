@@ -25,6 +25,10 @@ public class MasteryCushion extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
+		if(sandmasteryBlocked(data))
+		{
+			return false;
+		}
 		if (getMode(data) > 0)
 		{
 			return performEffectServer(data);
