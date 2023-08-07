@@ -12,6 +12,7 @@ import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.entities.SandProjectile;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
+import leaf.cosmere.sandmastery.common.items.sandpouch.SandpouchItemHandler;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
@@ -53,6 +54,14 @@ public class SandPouchItem extends ChargeableItemBase
 
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
+		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.asItem())
+		{
+			return true;
+		}
+		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.asItem())
+		{
+			return true;
+		}
 		if (itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem())
 		{
 			return true;
@@ -77,17 +86,12 @@ public class SandPouchItem extends ChargeableItemBase
 	public int getMaxCharge(ItemStack itemStack)
 	{
 		int res = 0;
-		IItemHandler inv = getPouchInv(itemStack);
+		SandpouchItemHandler inv = (SandpouchItemHandler) getPouchInv(itemStack);
 		if (inv == null)
 		{
 			return res;
 		}
-		for (int i = 0; i < SandPouchInventory.size; i++)
-		{
-			ItemStack stack = inv.getStackInSlot(i);
-			res += MiscHelper.getChargeFromItemStack(stack);
-		}
-		return res;
+		return inv.getLayers();
 	}
 
 	@Override

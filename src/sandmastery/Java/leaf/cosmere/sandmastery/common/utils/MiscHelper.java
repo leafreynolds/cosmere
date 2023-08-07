@@ -14,6 +14,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
@@ -151,11 +152,11 @@ public class MiscHelper
 
 		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem())
 		{
-			return stack.getCount() * 10;
+			return stack.getCount() * SandmasteryConfigs.SERVER.SAND_LAYER_CHARGE_CAPACITY.get();
 		}
 		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem())
 		{
-			return stack.getCount() * 80;
+			return stack.getCount() * SandmasteryConfigs.SERVER.SAND_LAYER_CHARGE_CAPACITY.get() * 8;
 		}
 		if (stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem())
 		{
