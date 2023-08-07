@@ -12,6 +12,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
@@ -26,9 +27,8 @@ import java.util.List;
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	private CompoundTag sandmasteryTag = null;
-	private int hydrationLevel = 10000;
+	private int hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
 	private int projectileCooldown = 0;
-	public final int MAX_HYDRATION = 10000;
 	private final LinkedList<SandmasteryManifestation> ribbonsInUse = new LinkedList<>();
 
 	private int hotkeyFlags = 0;
