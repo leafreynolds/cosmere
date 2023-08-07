@@ -27,9 +27,8 @@ public class MasteryPlatform extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
+		super.tick(data);
 		if(sandmasteryBlocked(data))
 		{
 			return false;

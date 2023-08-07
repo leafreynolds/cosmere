@@ -13,6 +13,7 @@ import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
@@ -224,5 +225,12 @@ public class MiscHelper
 	public static int randomSlot(ItemStackHandler itemStackHandler)
 	{
 		return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
+	}
+
+	public static SandmasterySpiritwebSubmodule getSandmasterySubmodule(ISpiritweb data)
+	{
+		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
+		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		return submodule;
 	}
 }

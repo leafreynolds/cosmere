@@ -25,6 +25,7 @@ public class MasteryCushion extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
+		super.tick(data);
 		if(sandmasteryBlocked(data))
 		{
 			return false;
@@ -36,18 +37,9 @@ public class MasteryCushion extends SandmasteryManifestation
 		return false;
 	}
 
-	public void tickClient(ISpiritweb data)
-	{
-		if (MiscHelper.isClient(data))
-		{
-			performEffectClient(data);
-		}
-	}
-
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 
 		LivingEntity living = data.getLiving();
 		Vec3 movement = living.getDeltaMovement();

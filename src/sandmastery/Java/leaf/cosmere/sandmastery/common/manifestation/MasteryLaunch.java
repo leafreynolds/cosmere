@@ -26,6 +26,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
+		super.tick(data);
 		if(sandmasteryBlocked(data))
 		{
 			return false;
@@ -40,8 +41,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 
 		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), false))
 		{

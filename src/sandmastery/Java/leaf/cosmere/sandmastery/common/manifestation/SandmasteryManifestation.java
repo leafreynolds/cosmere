@@ -5,8 +5,10 @@
 package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
@@ -40,9 +42,13 @@ public class SandmasteryManifestation extends Manifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		if (MiscHelper.isClient(data))
+		LivingEntity living = data.getLiving();
+		if (living.tickCount % 20 != 0) return false;
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
+		double percentage = (((double) submodule.getHydrationLevel()) / ((double) SandmasteryConfigs.SERVER.MAX_HYDRATION.get())) * 100;
+		if (percentage < 50)
 		{
-			performEffectClient(data);
+			living.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.DEHYDRATED_EFFECT.get(), 0, 30));
 		}
 		return false;
 	}
@@ -181,9 +187,6 @@ public class SandmasteryManifestation extends Manifestation
 		return SandmasteryAttributes.RIBBONS.getAttribute();
 	}
 
-	protected void performEffectClient(ISpiritweb data)
-	{
-	}
 
 	protected static boolean sandmasteryBlocked(ISpiritweb data)
 	{

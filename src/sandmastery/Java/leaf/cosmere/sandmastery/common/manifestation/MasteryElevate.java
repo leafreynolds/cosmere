@@ -30,6 +30,7 @@ public class MasteryElevate extends SandmasteryManifestation
 			return false;
 		}
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.ELEVATE_HOTKEY_FLAG);
+		super.tick(data);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
 			return performEffectServer(data);
@@ -39,9 +40,7 @@ public class MasteryElevate extends SandmasteryManifestation
 
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 		if (getMode(data) < 3)
 		{
 			return false;

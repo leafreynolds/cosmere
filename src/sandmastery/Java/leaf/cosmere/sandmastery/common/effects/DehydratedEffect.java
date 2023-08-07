@@ -18,6 +18,6 @@ public class DehydratedEffect extends MobEffectBase
 	@Override
 	public void applyEffectTick(LivingEntity livingEntity, int amplifier)
 	{
-
+		//TODO: make this actually harmful
 	}
 }
