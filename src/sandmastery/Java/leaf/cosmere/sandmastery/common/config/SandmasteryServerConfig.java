@@ -13,6 +13,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 
 	private final ForgeConfigSpec configSpec;
 
+	public final ForgeConfigSpec.IntValue SAND_LAYER_CHARGE_CAPACITY;
 	public final ForgeConfigSpec.IntValue PROJECTILE_COOLDOWN;
 	public final ForgeConfigSpec.IntValue PROJECTILE_HYDRATION_COST;
 	public final ForgeConfigSpec.IntValue PLATFORM_HYDRATION_COST;
@@ -30,6 +31,8 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	{
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
+
+		SAND_LAYER_CHARGE_CAPACITY = builder.comment("How much charge a sand layer can hold").defineInRange("sandLayerChargeCapacity", 10, 1, 100);
 
 		PROJECTILE_COOLDOWN = builder.comment("How many ticks between each projectile").defineInRange("projectileCooldown", 30, 1, 1000);
 
