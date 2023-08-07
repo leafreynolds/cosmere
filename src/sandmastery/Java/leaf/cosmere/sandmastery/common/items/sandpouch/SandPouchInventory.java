@@ -1,31 +1,29 @@
 package leaf.cosmere.sandmastery.common.items.sandpouch;
 
+import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class SandPouchInventory implements ICapabilityProvider, INBTSerializable<CompoundTag>
 {
-	public static final int size = 3;
-	private final IItemHandler inv = new SandpouchItemHandler(size)
+	private final ISandPouchItemHandler inv = new SandpouchItemHandler(3)
 	{
 	};
 
-	private final LazyOptional<IItemHandler> opt = LazyOptional.of(() -> inv);
+	private final LazyOptional<ISandPouchItemHandler> opt = LazyOptional.of(() -> inv);
 
 	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing)
 	{
-		return ForgeCapabilities.ITEM_HANDLER.orEmpty(capability, opt);
+		return SandPouchItem.POUCH_HANDLER.orEmpty(capability, opt);
 	}
 
 	@Override

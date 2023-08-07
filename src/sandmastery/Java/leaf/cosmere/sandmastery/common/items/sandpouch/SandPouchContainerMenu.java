@@ -10,7 +10,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 public class SandPouchContainerMenu extends AbstractContainerMenu
@@ -28,7 +27,7 @@ public class SandPouchContainerMenu extends AbstractContainerMenu
 		super(SandmasteryMenuTypes.SAND_POUCH.get(), windowId);
 		this.pouch = pouch;
 
-		IItemHandlerModifiable pouchInv = SandPouchItem.getPouchInv(pouch);
+		ISandPouchItemHandler pouchInv = SandPouchItem.getPouchInv(pouch);
 
 		int invStart = 0;
 

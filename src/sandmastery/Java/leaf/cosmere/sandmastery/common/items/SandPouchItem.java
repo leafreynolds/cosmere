@@ -10,8 +10,11 @@ import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.entities.SandProjectile;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
+import leaf.cosmere.sandmastery.common.items.sandpouch.ISandPouchItemHandler;
+import leaf.cosmere.sandmastery.common.items.sandpouch.SandpouchItemHandler;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
@@ -32,10 +35,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +44,8 @@ import java.util.function.Predicate;
 
 public class SandPouchItem extends ChargeableItemBase
 {
+	public static Capability<ISandPouchItemHandler> POUCH_HANDLER = CapabilityManager.get(new CapabilityToken<>(){});
+
 	public SandPouchItem()
 	{
 		super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
@@ -77,17 +79,12 @@ public class SandPouchItem extends ChargeableItemBase
 	public int getMaxCharge(ItemStack itemStack)
 	{
 		int res = 0;
-		IItemHandler inv = getPouchInv(itemStack);
+		ISandPouchItemHandler inv = getPouchInv(itemStack);
 		if (inv == null)
 		{
 			return res;
 		}
-		for (int i = 0; i < SandPouchInventory.size; i++)
-		{
-			ItemStack stack = inv.getStackInSlot(i);
-			res += MiscHelper.getChargeFromItemStack(stack);
-		}
-		return res;
+		return inv.getLayers() * SandmasteryConfigs.SERVER.SAND_LAYER_CHARGE_CAPACITY.get();
 	}
 
 	@Override
@@ -132,9 +129,9 @@ public class SandPouchItem extends ChargeableItemBase
 		return this.sandPouchInventory;
 	}
 
-	public static IItemHandlerModifiable getPouchInv(ItemStack pouchStack)
+	public static ISandPouchItemHandler getPouchInv(ItemStack pouchStack)
 	{
-		return (IItemHandlerModifiable) pouchStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		return pouchStack.getCapability(POUCH_HANDLER).orElse(null);
 	}
 
 	public void shoot(ItemStack pouch, Player player)
@@ -142,7 +139,7 @@ public class SandPouchItem extends ChargeableItemBase
 		SpiritwebCapability.get(player).ifPresent((data) ->
 		{
 			int mode = data.getMode(SandmasteryManifestations.SANDMASTERY_POWERS.get(Taldain.Mastery.PROJECTILE).get());
-			IItemHandlerModifiable inv = getPouchInv(pouch);
+			ISandPouchItemHandler inv = getPouchInv(pouch);
 			ItemStack ammo = inv.getStackInSlot(2);
 			if (ammo.getCount() > 0)
 			{

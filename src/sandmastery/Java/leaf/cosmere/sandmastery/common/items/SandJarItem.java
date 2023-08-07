@@ -6,6 +6,7 @@ import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandLayerBlock;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
@@ -40,7 +41,7 @@ public class SandJarItem extends ChargeableItemBase
 	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
-		return Mth.floor(SandmasteryConstants.CHARGE_PER_SAND_LAYER);
+		return Mth.floor(SandmasteryConfigs.SERVER.SAND_LAYER_CHARGE_CAPACITY.get());
 	}
 
 	@Override

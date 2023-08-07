@@ -9,14 +9,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiable, INBTSerializable<CompoundTag>
+public class SandpouchItemHandler implements ISandPouchItemHandler, INBTSerializable<CompoundTag>
 {
 
 	private enum MODES
@@ -72,29 +70,31 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 		ItemStack changedStack = getStackInSlot(slot);
 		Item sandBlock = SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem();
 		Item sandLayer = SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem();
+		Item chargedSandBlock = SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.asItem();
+		Item chargedSandLayer = SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.asItem();
 
 		switch (slot)
 		{
 			case 0:
 				if (mode != MODES.ADD) break; // This slot is input, and can accept both, don't update if it's removed
-				if (changedStack.getItem() == sandBlock)
+				if (changedStack.getItem() == sandBlock || changedStack.getItem() == chargedSandBlock)
 				{
-					layers += 8 * count; // Blocks are worth 8 layers
+					setLayers(getLayers() + (8 * count)); // Blocks are worth 8 layers
 				}
-				else if (changedStack.getItem() == sandLayer)
+				else if (changedStack.getItem() == sandLayer || changedStack.getItem() == chargedSandLayer)
 				{
-					layers += count;
+					setLayers(getLayers() + count);
 				}
 				break;
 			case 1:
 				if (mode != MODES.REMOVE)
 					break; // this slot is output only, no item filter as only one item can ever be here
-				layers -= 8 * count; // Blocks are worth 8 layers
+				setLayers(getLayers() - (8 * count)); // Blocks are worth 8 layers
 				break;
 			case 2:
 				if (mode != MODES.REMOVE)
 					break; // this slot is output only, no item filter as only one item can ever be here
-				layers -= count;
+				setLayers(getLayers() - count);
 				break;
 		}
 
@@ -104,13 +104,13 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
 	private void updateSlots()
 	{
-		int numBlocks = (int) Math.floor(this.layers / 8);
+		int numBlocks = (int) Math.floor(this.getLayers() / 8);
 
 		ItemStack blocksInSlot = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND);
 		blocksInSlot.setCount(Math.min(numBlocks, 64));
 
 		ItemStack layersInSlot = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER);
-		layersInSlot.setCount(Math.min(this.layers, 64));
+		layersInSlot.setCount(Math.min(this.getLayers(), 64));
 
 		this.stacks.set(0, ItemStack.EMPTY);
 		this.stacks.set(1, blocksInSlot);
@@ -285,12 +285,13 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + stacks.size() + ")");
 	}
 
-	protected void setLayers(int layers)
+	@Override
+	public void setLayers(int layers)
 	{
 		this.layers = layers;
 		updateSlots();
 	}
-
+	@Override
 	public int getLayers()
 	{
 		return this.layers;
