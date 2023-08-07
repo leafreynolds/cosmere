@@ -46,7 +46,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 
 		OVERMASTERY_DURATION = builder.comment("How long overmastery lasts in minutes").defineInRange("overmasteryDuration", 120, 1, 720);
 
-		DEHYDRATION_THRESHOLD = builder.comment("The threshold at which a player will start to become dehydrated (percentage of max)").defineInRange("dehydrationThreshold", 50.0, 0.1, 100.0);
+		DEHYDRATION_THRESHOLD = builder.comment("The threshold at which a player will start to become dehydrated (percentage of max)").defineInRange("dehydrationThreshold", 0.01, 0.1, 100.0);
 
 		builder.pop();
 		configSpec = builder.build();
