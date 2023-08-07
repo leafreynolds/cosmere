@@ -26,7 +26,7 @@ public class MasteryCushion extends SandmasteryManifestation
 	public boolean tick(ISpiritweb data)
 	{
 		super.tick(data);
-		if(sandmasteryBlocked(data))
+		if (sandmasteryBlocked(data))
 		{
 			return false;
 		}

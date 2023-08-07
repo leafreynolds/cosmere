@@ -27,7 +27,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 	public boolean tick(ISpiritweb data)
 	{
 		super.tick(data);
-		if(sandmasteryBlocked(data))
+		if (sandmasteryBlocked(data))
 		{
 			return false;
 		}

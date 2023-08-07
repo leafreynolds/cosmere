@@ -157,12 +157,14 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		final int newHydrationValue = hydration + amountToAdjust;
 		hydrationLevel = Math.max(0, newHydrationValue);
 
-		if(allowOvermastery && newHydrationValue < 0) {
+		if (allowOvermastery && newHydrationValue < 0)
+		{
 			entity.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERY_EFFECT.get(), 0, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60)); //  * 20 * 60 to convert minutes to ticks
 		}
 
 		return true;
 	}
+
 	public void adjustHydration(int amountToAdjust)
 	{
 		int hydration = getHydrationLevel();

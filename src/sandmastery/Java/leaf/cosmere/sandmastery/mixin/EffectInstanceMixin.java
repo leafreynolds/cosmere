@@ -17,11 +17,11 @@ public class EffectInstanceMixin
 			method = "isNoCounter",
 			cancellable = true
 	)
-	private void getIsFeruchemyEffect(CallbackInfoReturnable<Boolean> cir)
+	private void getIsSandmasteryEffect(CallbackInfoReturnable<Boolean> cir)
 	{
 		if (getEffect() instanceof DehydratedEffect || getEffect() instanceof OvermasteryEffect)
 		{
-			// allways show **:** instead of the 3 second timer
+			// always show **:** instead of the 3 second timer
 			cir.setReturnValue(true);
 		}
 	}

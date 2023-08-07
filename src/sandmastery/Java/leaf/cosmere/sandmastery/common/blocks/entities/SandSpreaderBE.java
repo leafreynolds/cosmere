@@ -62,11 +62,11 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 			public int get(int index)
 			{
 				return switch (index)
-						{
-							case 0 -> SandSpreaderBE.this.progress;
-							case 1 -> SandSpreaderBE.this.maxProgress;
-							default -> 0;
-						};
+				{
+					case 0 -> SandSpreaderBE.this.progress;
+					case 1 -> SandSpreaderBE.this.maxProgress;
+					default -> 0;
+				};
 			}
 
 			@Override

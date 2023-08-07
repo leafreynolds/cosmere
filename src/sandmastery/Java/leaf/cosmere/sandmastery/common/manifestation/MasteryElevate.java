@@ -25,7 +25,7 @@ public class MasteryElevate extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		if(sandmasteryBlocked(data))
+		if (sandmasteryBlocked(data))
 		{
 			return false;
 		}

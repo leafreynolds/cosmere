@@ -29,7 +29,7 @@ public class MasteryPlatform extends SandmasteryManifestation
 	{
 		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 		super.tick(data);
-		if(sandmasteryBlocked(data))
+		if (sandmasteryBlocked(data))
 		{
 			return false;
 		}

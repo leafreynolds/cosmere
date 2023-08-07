@@ -35,7 +35,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 		super.tick(data);
 		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 		submodule.tickProjectileCooldown();
-		if(sandmasteryBlocked(data))
+		if (sandmasteryBlocked(data))
 		{
 			return false;
 		}
