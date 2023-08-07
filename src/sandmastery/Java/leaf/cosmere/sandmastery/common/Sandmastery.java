@@ -48,6 +48,7 @@ public class Sandmastery implements IModModule
 		SandmasteryBlocksRegistry.BLOCKS.register(modBus);
 		SandmasteryBlockEntitiesRegistry.BLOCK_ENTITIES.register(modBus);
 		SandmasteryAttributes.ATTRIBUTES.register(modBus);
+		SandmasteryEffects.EFFECTS.register(modBus);
 		SandmasteryEntityTypes.ENTITY_TYPES.register(modBus);
 		SandmasteryManifestations.MANIFESTATIONS.register(modBus);
 		SandmasteryMenuTypes.MENU_TYPES.register(modBus);
