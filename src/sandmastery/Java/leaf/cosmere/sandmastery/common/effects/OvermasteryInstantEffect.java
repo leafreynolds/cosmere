@@ -17,5 +17,6 @@ public class OvermasteryInstantEffect extends InstantenousMobEffect
 	public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
 		AttributeInstance availableRibbons = pLivingEntity.getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
 		availableRibbons.setBaseValue(Math.min(availableRibbons.getBaseValue() + 2, 24));
+		pLivingEntity.hurt(DehydratedEffect.DEHYDRATED, 10F);
 	}
 }
