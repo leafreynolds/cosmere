@@ -28,7 +28,7 @@ public class TemporarySandBlock extends BaseEntityBlock
 		);
 	}
 
-	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 400);
+	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 20);
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)

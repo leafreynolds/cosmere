@@ -3,7 +3,6 @@ package leaf.cosmere.sandmastery.common.blocks.entities;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreader.SandSpreaderMenu;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -166,8 +164,8 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 		for (int i = 0; i < this.itemHandler.getSlots(); i++)
 		{
 			ItemStack item = this.itemHandler.getStackInSlot(i);
-			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem()) return true;
-			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem()) return true;
+			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem()) return true;
+			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem()) return true;
 		}
 		return false;
 	}
@@ -183,7 +181,7 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 		ItemStack item = inv.getStackInSlot(slot);
 		if (item.getItem() == Blocks.SAND.asItem())
 		{
-			ItemStack newItem = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_SAND);
+			ItemStack newItem = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND);
 			newItem.setCount(item.getCount());
 			inv.setStackInSlot(slot, newItem);
 		}

@@ -12,7 +12,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -71,8 +70,8 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 	protected void onContentsChanged(int slot, int count, MODES mode)
 	{
 		ItemStack changedStack = getStackInSlot(slot);
-		Item sandBlock = SandmasteryBlocksRegistry.TALDAIN_SAND.asItem();
-		Item sandLayer = SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem();
+		Item sandBlock = SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem();
+		Item sandLayer = SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem();
 
 		switch (slot)
 		{
@@ -107,10 +106,10 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 	{
 		int numBlocks = (int) Math.floor(this.layers / 8);
 
-		ItemStack blocksInSlot = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_SAND);
+		ItemStack blocksInSlot = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND);
 		blocksInSlot.setCount(Math.min(numBlocks, 64));
 
-		ItemStack layersInSlot = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER);
+		ItemStack layersInSlot = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER);
 		layersInSlot.setCount(Math.min(this.layers, 64));
 
 		this.stacks.set(0, ItemStack.EMPTY);

@@ -79,6 +79,7 @@ public class MiscHelper
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 				{
 					final boolean targetIsPlayer = target instanceof Player;
+					if(manifestation.getManifestationType() != Manifestations.ManifestationTypes.SANDMASTERY) continue; //sandmastery uses charged sand, and as such won't charge it either
 
 					//if target is not a player and has any manifestations at all
 					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation) && includeMobs)
@@ -146,11 +147,11 @@ public class MiscHelper
 			return 0;
 		}
 
-		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.asItem())
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem())
 		{
 			return stack.getCount() * 10;
 		}
-		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_SAND.asItem())
+		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem())
 		{
 			return stack.getCount() * 80;
 		}

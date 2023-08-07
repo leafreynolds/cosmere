@@ -35,8 +35,7 @@ public class PropTypes
 		public static final Supplier<BlockBehaviour.Properties> SAND = () ->
 				BlockBehaviour.Properties
 						.of(Material.SAND)
-						.strength(0.5f)
-						.requiresCorrectToolForDrops();
+						.strength(0.5f);
 	}
 
 	public static class Items

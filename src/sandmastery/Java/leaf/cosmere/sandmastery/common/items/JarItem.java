@@ -4,8 +4,8 @@ import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.common.items.BaseItem;
 import leaf.cosmere.common.properties.PropTypes;
-import leaf.cosmere.sandmastery.common.blocks.TaldainSandBlock;
-import leaf.cosmere.sandmastery.common.blocks.TaldainSandLayerBlock;
+import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandBlock;
+import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandLayerBlock;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
@@ -37,24 +37,44 @@ public class JarItem extends BaseItem
 		Inventory inv = pPlayer.getInventory();
 		boolean fill = false;
 		boolean charged = false;
-		if (state.is(SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock()))
+		if (state.is(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock()))
 		{
-			int layers = state.getValue(TaldainSandLayerBlock.LAYERS);
-			if (layers > 1) pLevel.setBlockAndUpdate(pos, state.setValue(TaldainSandLayerBlock.LAYERS, layers - 1));
+			int layers = state.getValue(TaldainBlackSandLayerBlock.LAYERS);
+			if (layers > 1)
+				pLevel.setBlockAndUpdate(pos, state.setValue(TaldainBlackSandLayerBlock.LAYERS, layers - 1));
 			else pLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 
-			charged = state.getValue(TaldainSandLayerBlock.INVESTED);
+			charged = false;
 			fill = true;
 		}
-		else if (state.is(SandmasteryBlocksRegistry.TALDAIN_SAND.getBlock()))
+		else if (state.is(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.getBlock()))
 		{
 			pLevel.setBlockAndUpdate(pos,
-					SandmasteryBlocksRegistry.TALDAIN_SAND_LAYER.getBlock()
+					SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock()
 							.defaultBlockState()
-							.setValue(TaldainSandLayerBlock.LAYERS, 7)
-							.setValue(TaldainSandLayerBlock.INVESTED, state.getValue(TaldainSandBlock.INVESTED))
+							.setValue(TaldainBlackSandLayerBlock.LAYERS, 7)
 			);
-			charged = state.getValue(TaldainSandBlock.INVESTED);
+			charged = false;
+			fill = true;
+		}
+		if (state.is(SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock()))
+		{
+			int layers = state.getValue(TaldainBlackSandLayerBlock.LAYERS);
+			if (layers > 1)
+				pLevel.setBlockAndUpdate(pos, state.setValue(TaldainBlackSandLayerBlock.LAYERS, layers - 1));
+			else pLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+
+			charged = true;
+			fill = true;
+		}
+		else if (state.is(SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock()))
+		{
+			pLevel.setBlockAndUpdate(pos,
+					SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock()
+							.defaultBlockState()
+							.setValue(TaldainBlackSandLayerBlock.LAYERS, 7)
+			);
+			charged = true;
 			fill = true;
 		}
 
