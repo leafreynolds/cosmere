@@ -11,11 +11,13 @@ displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "Leafy"
 credits = '''
 
-Hawktrav - Various models and textures
+Hawktrav - Various models and textures.
 Luke13234 - Who wrote much of the Ars Arcanum guide book entries.
+Eliot Lash - Implementation of Rosharan plant blocks.
 
 Special thanks go to:
 Ridanisaurus - For many item and block textures.
+AlaharranHonor - For Rosharan plant blocks and textures.
 '''
 logoFile = "logo.png"
 description = '''Surgebinding module for Cosmere.'''
