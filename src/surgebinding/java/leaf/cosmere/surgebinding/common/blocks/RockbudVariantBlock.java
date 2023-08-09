@@ -30,7 +30,6 @@ public class RockbudVariantBlock extends BaseBlock {
 
     @Override
     public InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
-        // TODO: Use non-deprecated method
         if (pLevel.isClientSide) return InteractionResult.SUCCESS;
 
         pLevel.setBlockAndUpdate(pPos, pState.cycle(STATE));
