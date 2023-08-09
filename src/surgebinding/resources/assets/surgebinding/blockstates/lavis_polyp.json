@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
+      "model": "surgebinding:block/lavis_polyp",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "surgebinding:block/lavis_polyp",
+      "y": 270
+    },
+    "facing=south": {
       "model": "surgebinding:block/lavis_polyp"
+    },
+    "facing=west": {
+      "model": "surgebinding:block/lavis_polyp",
+      "y": 90
     }
   }
 }
