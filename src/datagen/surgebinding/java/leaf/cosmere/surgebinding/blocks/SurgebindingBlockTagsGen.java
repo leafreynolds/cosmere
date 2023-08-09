@@ -29,8 +29,6 @@ public class SurgebindingBlockTagsGen extends BlockTagsProvider
 	@Override
 	protected void addTags()
 	{
-		System.out.println("@@@ SurgebindingBlockTagsGen#addTags");
-
 		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
 			final GemBlock gemBlock = SurgebindingBlocks.GEM_BLOCKS.get(gemstone).getBlock();
@@ -59,7 +57,6 @@ public class SurgebindingBlockTagsGen extends BlockTagsProvider
 			add(CosmereTags.Blocks.GEM_BLOCK_TAGS.get(gemstone), gemBlock);
 		}
 
-		System.out.println("@@@ plant blocks size:" + SurgebindingBlocks.PLANT_BLOCKS.size());
 		for (var plantBlockMap : SurgebindingBlocks.PLANT_BLOCKS) {
 			var plantBlock = plantBlockMap.getBlock();
 			add(BlockTags.MINEABLE_WITH_AXE, plantBlock);
