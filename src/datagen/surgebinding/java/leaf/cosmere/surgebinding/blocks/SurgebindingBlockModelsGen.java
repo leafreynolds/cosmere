@@ -8,8 +8,7 @@ import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.blocks.GemBlock;
-import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
+import leaf.cosmere.surgebinding.common.blocks.*;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
@@ -54,6 +53,9 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 						.texture("overlay", Surgebinding.rl("block/gem_ore_block_tint_overlay"));
 
 				simpleBlock(block, blockModel);
+				continue;
+			}
+			else if (block instanceof LavisPolypBlock || block instanceof PrickletacBlock || block instanceof RockbudVariantBlock || block instanceof VinebudBlock) {
 				continue;
 			}
 
