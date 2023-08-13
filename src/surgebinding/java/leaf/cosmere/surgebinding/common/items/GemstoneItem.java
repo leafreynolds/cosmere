@@ -65,17 +65,15 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entityItem)
 	{
-		if (!entityItem.level.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
+		if (entityItem.level.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
 		{
-			return true;
-		}
-
-		if (entityItem.level.isRainingAt(entityItem.blockPosition()) && entityItem.level.isThundering())
-		{
-			if (getCharge(stack) < getMaxCharge(stack))
+			if (entityItem.level.isRainingAt(entityItem.blockPosition()) && entityItem.level.isThundering())
 			{
-				//gemstones charge faster in the world
-				this.increaseCurrentCharge(stack, 5);
+				if (getCharge(stack) < getMaxCharge(stack))
+				{
+					//gemstones charge faster in the world
+					this.increaseCurrentCharge(stack, 5);
+				}
 			}
 		}
 		return super.onEntityItemUpdate(stack, entityItem);
