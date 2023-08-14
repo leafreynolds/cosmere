@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -32,6 +32,7 @@ public class AllomancyDataGenerator
 
 		generator.addProvider(true, new AllomancyPatchouliGen(generator));
 		generator.addProvider(true, new AllomancyAdvancementGen(generator));
+		generator.addProvider(true, new AllomancyTagProvider(generator, existingFileHelper));
 	}
 
 }

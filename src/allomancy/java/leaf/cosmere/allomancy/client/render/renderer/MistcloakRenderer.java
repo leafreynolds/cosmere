@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 7 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.client.render.renderer;
@@ -56,8 +56,6 @@ public class MistcloakRenderer implements ICurioRenderer
 		this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
 		ICurioRenderer.followBodyRotations(entity, this.model);
-
-		//this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
-
+		this.model.render(matrixStack, renderTypeBuffer, light);
 	}
 }
