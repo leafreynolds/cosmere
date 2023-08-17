@@ -9,6 +9,7 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.client.render.SurgebindingLayerDefinitions;
 import leaf.cosmere.surgebinding.client.render.SurgebindingRenderers;
 import leaf.cosmere.surgebinding.client.render.model.ChullModel;
+import leaf.cosmere.surgebinding.client.render.model.CrypticModel;
 import leaf.cosmere.surgebinding.client.render.model.ShardplateModel;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -44,6 +45,7 @@ public class SurgebindingClientEventsMod
 		//shardplate
 		evt.registerLayerDefinition(SurgebindingLayerDefinitions.SHARDPLATE, ShardplateModel::createBodyLayer);
 		evt.registerLayerDefinition(SurgebindingLayerDefinitions.CHULL, ChullModel::createBodyLayer);
+		evt.registerLayerDefinition(SurgebindingLayerDefinitions.CRYPTIC, CrypticModel::createBodyLayer);
 	}
 
 
