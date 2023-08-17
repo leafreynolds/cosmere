@@ -75,7 +75,7 @@ public class Cryptic extends TamableAnimal {
 
     public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        System.out.println("Cryptic#mobInteract 1 itemStack:" + itemstack + " isTamed:" + this.isTame());
+//        System.out.println("Cryptic#mobInteract start itemStack:" + itemstack + " isTamed:" + this.isTame());
         if (!this.isTame() && TAMING_INGREDIENTS.contains(itemstack.getItem())) {
             if (!pPlayer.getAbilities().instabuild) {
                 itemstack.shrink(1);
@@ -87,11 +87,11 @@ public class Cryptic extends TamableAnimal {
 
             if (!this.level.isClientSide) {
                 if (this.random.nextInt(10) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, pPlayer)) {
-                    System.out.println("Cryptic#mobInteract isClient, setOwner:" + pPlayer);
+//                    System.out.println("Cryptic#mobInteract isClient, setOwner:" + pPlayer);
                     this.tame(pPlayer);
                     this.level.broadcastEntityEvent(this, (byte)7);
                 } else {
-                    System.out.println("Cryptic#mobInteract isClient, tame FAIL");
+//                    System.out.println("Cryptic#mobInteract isClient, tame FAIL");
                     this.level.broadcastEntityEvent(this, (byte)6);
                 }
             }
@@ -99,7 +99,7 @@ public class Cryptic extends TamableAnimal {
             return InteractionResult.sidedSuccess(this.level.isClientSide);
         } else if (this.isTame() && this.isOwnedBy(pPlayer)) {
             if (!this.level.isClientSide) {
-                System.out.println("Cryptic#mobInteract setOrderedToSit");
+//                System.out.println("Cryptic#mobInteract setOrderedToSit");
                 this.setOrderedToSit(!this.isOrderedToSit());
             }
 
