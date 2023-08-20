@@ -7,6 +7,7 @@ package leaf.cosmere.sandmastery.items;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.items.AnimatedItem;
 import leaf.cosmere.sandmastery.common.items.SandJarItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.data.DataGenerator;
@@ -38,7 +39,10 @@ public class SandmasteryItemModelsGen extends ItemModelProvider
 
 			//blocks have their own model rules
 			if (item instanceof BlockItem) continue;
+			//sand jars have their own model rules
 			if (item instanceof SandJarItem) continue;
+			//animated items have their own model rules
+			if (item instanceof AnimatedItem) continue;
 			//else normal item texture rules apply
 			simpleItem(path, path);
 		}

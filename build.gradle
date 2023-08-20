@@ -373,6 +373,10 @@ def setupRunConfig(RunConfig runConfig, boolean supportsGameTests, String direct
 
 repositories {
 	maven {
+		name = 'GeckoLib'
+		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+	}
+	maven {
 		// location of the maven that hosts JEI files
 		url "https://dvs1.progwml6.com/files/maven/"
 	}
@@ -406,6 +410,7 @@ repositories {
 						excludeGroup 'mezz.jei'
 						excludeGroup 'top.theillusivec4.curios'
 						excludeGroup 'vazkii.patchouli'
+						excludeGroup 'software.bernie.geckolib'
 					}
 					println("Adding exclusions to ${url}")
 				} catch (Exception ignored) {
@@ -438,6 +443,8 @@ dependencies {
 
 	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
 	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
+	implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.19:3.1.40')
 
 }
 
