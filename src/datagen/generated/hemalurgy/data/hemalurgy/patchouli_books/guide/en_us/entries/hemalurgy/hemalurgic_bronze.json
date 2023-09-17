@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "Bronze spikes steal the mental allomantic powers: $(p)Allomantically burning $(l:allomancy:allomancy/allomantic_zinc)Zinc$(), $(l:allomancy:allomancy/allomantic_brass)Brass$(), $(l:allomancy:allomancy/allomantic_copper)Copper$() and $(l:allomancy:allomancy/allomantic_bronze)Bronze$()."
+      "text": "Bronze spikes steal the mental allomantic powers: $(p)Allomantically burning $(l:allomancy:allomancy/allomantic_zinc)Zinc$(), $(l:allomancy:allomancy/allomantic_brass)Brass$(), $(l:allomancy:allomancy/allomantic_copper)Copper$() and $(l:allomancy:allomancy/allomantic_bronze)Bronze$().A substance known as Skulk lies deep within the ground on this planet. Reports indicate that it can detect nearby uses of allomancy, similarly to allomantic bronze. I theorize that spiking a creature of the skulk could give a hemalurgic charge of allomantic bronze, just like spiking a human Seeker."
     },
     {
       "type": "patchouli:crafting",

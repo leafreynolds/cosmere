@@ -143,15 +143,15 @@ public class PatchouliAllomancyCategory
 					break;
 				case GOLD:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"(The rest of the page is scratched out.)"));
+							"The rest of the page is scratched out. (WIP)"));
 					break;
 				case ELECTRUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"(The rest of the page is missing...)"));
+							"The rest of the page is missing... (WIP)"));
 					break;
 				case ATIUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"(The rest of the page is blank...)"));
+							"The rest of the page is blank... (WIP)"));
 					break;
 			}
 			entryForThisPower.pages = pages.toArray(BookStuff.Page[]::new);

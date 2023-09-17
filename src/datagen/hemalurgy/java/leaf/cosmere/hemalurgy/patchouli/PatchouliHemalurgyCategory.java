@@ -71,6 +71,13 @@ public class PatchouliHemalurgyCategory
 		pages.clear();
 		entries.add(hemalurgyBasics);
 
+		BookStuff.Entry Koloss = new BookStuff.Entry("Koloss", hemalurgy, hemalurgy.icon);
+		pages.add(new BookStuff.TextPage("Koloss are hemalurgic creations involving the use of iron spikes. This robbed the spiked individual of nearly all their humanity, instead replacing it with incredible strength and bloodthirsty rage. " +
+				"They should be approached with extreme caution."));
+		Koloss.pages = pages.toArray(BookStuff.Page[]::new);
+		pages.clear();
+		entries.add(Koloss);
+
 		//hemalurgy
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
@@ -155,7 +162,7 @@ public class PatchouliHemalurgyCategory
 			break;
 			case ZINC:
 				builder.append("[Not Yet Implemented] $(p)");
-				builder.append("My research has yet to determine any Hemalurgic properties of zinc - further research necessary.");
+				builder.append("My research has yet to determine any Hemalurgic properties of zinc - further research necessary. (WIP)");
 				break;
 			case BRASS://Zinc//Brass//Copper//Bronze
 			{
@@ -194,6 +201,8 @@ public class PatchouliHemalurgyCategory
 								PatchouliTextFormat.LinkEntry(c, allomanticPageLink + c),
 								PatchouliTextFormat.LinkEntry(d, allomanticPageLink + d)
 						));
+				builder.append("A substance known as Skulk lies deep within the ground on this planet. Reports indicate that it can detect nearby uses of allomancy, similarly to allomantic bronze. " +
+						"I theorize that spiking a creature of the skulk could give a hemalurgic charge of allomantic bronze, just like spiking a human Seeker.");
 			}
 			break;
 			case ALUMINUM:

@@ -5,15 +5,15 @@
   "pages": [
     {
       "type": "text",
-      "text": "A ferring who taps $(thing)nicrosil$() is known as a \"$(thing)Soulbearer$()\", and stores Investiture. Little known- more research required."
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "feruchemy:nicrosil_bracelet_metalmind"
+      "text": "A ferring who taps $(thing)nicrosil$() is known as a \"$(thing)Soulbearer$()\", and stores Investiture. Little is known- more research required. (WIP)"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "feruchemy:nicrosil_ring_metalmind"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "feruchemy:nicrosil_bracelet_metalmind"
     },
     {
       "type": "patchouli:crafting",

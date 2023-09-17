@@ -5,13 +5,18 @@
   "pages": [
     {
       "type": "text",
-      "text": "If you entered this world with an feruchemical ability, you're called a $(6)ferring$().",
+      "text": "If you entered this world with a feruchemical ability, you're called a $(6)ferring$(). Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes.",
       "title": "feruchemy:copper_bracelet_metalmind"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "feruchemy:brass_bracelet_metalmind",
-      "text": "Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes."
+      "recipe": "feruchemy:steel_ring_metalmind",
+      "recipe2": "feruchemy:steel_bracelet_metalmind"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "feruchemy:steel_necklace_metalmind",
+      "text": "Metalminds can store varying amounts of charges, depending on the size."
     }
   ],
   "priority": true,

@@ -40,6 +40,11 @@ public class PatchouliTextFormat
 		return format(input, "$(strike)");
 	}
 
+	public static String Keybind(String input)
+	{
+		return format("", "$(k:%s)".formatted(input));
+	}
+
 	public static String LinkEntry(String input, String entryToLinkTo)
 	{
 		//example

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)atium$() is known as a \"$(thing)Seer$()\". (The rest of the page is blank...)"
+      "text": "A misting who burns $(thing)atium$() is known as a \"$(thing)Seer$()\". The rest of the page is blank... (WIP)"
     }
   ],
   "priority": false,

@@ -4,6 +4,7 @@
 
 package leaf.cosmere.surgebinding.patchouli;
 
+import leaf.cosmere.patchouli.PatchouliBasics;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.data.DataGenerator;
@@ -40,7 +41,7 @@ public class SurgebindingPatchouliGen extends PatchouliProvider
 		//  -                                       //
 		//------------------------------------------//
 
-		//PatchouliBasics.collect(this.categories, this.entries);
+		PatchouliSurgebindingCategory.collect(this.categories, this.entries);
 
 
 	}
