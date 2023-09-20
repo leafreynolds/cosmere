@@ -30,7 +30,7 @@ public class FeruchemyAttributes
 											Feruchemy.MODID,
 											0,
 											0,
-											20
+											100
 									)));
 
 
