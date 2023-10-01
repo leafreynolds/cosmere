@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 18 - 9 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.patchouli;
@@ -143,15 +143,15 @@ public class PatchouliAllomancyCategory
 					break;
 				case GOLD:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"The rest of the page is scratched out. (WIP)"));
+							"The rest of the page is scratched out. (Not yet implemented)"));
 					break;
 				case ELECTRUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"The rest of the page is missing... (WIP)"));
+							"The rest of the page is missing... (Not yet implemented)"));
 					break;
 				case ATIUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"The rest of the page is blank... (WIP)"));
+							"The rest of the page is blank... (Not yet implemented)"));
 					break;
 			}
 			entryForThisPower.pages = pages.toArray(BookStuff.Page[]::new);

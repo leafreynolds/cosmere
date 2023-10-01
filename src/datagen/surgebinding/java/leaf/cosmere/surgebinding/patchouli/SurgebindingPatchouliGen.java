@@ -1,10 +1,9 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 18 - 9 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.patchouli;
 
-import leaf.cosmere.patchouli.PatchouliBasics;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.data.DataGenerator;
@@ -51,7 +50,7 @@ public class SurgebindingPatchouliGen extends PatchouliProvider
 	 */
 	public String getName()
 	{
-		return "Cosmere PatchouliGeneration";
+		return "Surgebinding PatchouliGeneration";
 	}
 
 }

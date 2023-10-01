@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A ferring who taps $(thing)nicrosil$() is known as a \"$(thing)Soulbearer$()\", and stores Investiture. Little is known- more research required. (WIP)"
+      "text": "A ferring who taps $(thing)nicrosil$() is known as a \"$(thing)Soulbearer$()\", and stores Investiture. Little is known- more research required. (Not yet implemented)"
     },
     {
       "type": "patchouli:crafting",

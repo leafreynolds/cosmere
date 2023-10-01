@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.patchouli;
@@ -26,7 +26,15 @@ public class PatchouliSurgebindingCategory
 		surgebindingBasics.priority = true;
 		pages.add(new BookStuff.TextPage("One who enters a Nahel Bond with a spren will gain the surgebinding abilities of their specific order. (WIP)", surgebindingCategory.icon));
 
+
 		surgebindingBasics.pages = pages.toArray(BookStuff.Page[]::new);
 		entries.add(surgebindingBasics);
+		pages.clear();
+
+		BookStuff.Entry chullEntry = new BookStuff.Entry("chull", surgebindingCategory, surgebindingCategory.icon);
+		pages.add(new BookStuff.TextPage("Chull exist, but don't do much as of yet. They are adorable though. (WIP)", surgebindingCategory.icon));
+		pages.add(new BookStuff.EntityPage("Look how cute they are!", "Chull", "surgebinding:chull"));
+		chullEntry.pages = pages.toArray(BookStuff.Page[]::new);
+		entries.add(chullEntry);
 	}
 }
