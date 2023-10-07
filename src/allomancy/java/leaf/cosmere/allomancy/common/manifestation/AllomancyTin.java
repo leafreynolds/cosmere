@@ -6,6 +6,7 @@ package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
@@ -34,6 +35,17 @@ public class AllomancyTin extends AllomancyManifestation
 		if (living.hasEffect(MobEffects.DARKNESS))
 		{
 			living.removeEffect(MobEffects.DARKNESS);
+		}
+
+		//todo make blind in the sunlight?
+		final int blockLighting = living.getFeetBlockState().getLightEmission();
+		if (blockLighting > 14)
+		{
+			living.addEffect(EffectsHelper.getNewEffect(MobEffects.BLINDNESS, blockLighting - 14));
+		}
+		else if (blockLighting < 8 && living.hasEffect(MobEffects.BLINDNESS))
+		{
+			living.removeEffect(MobEffects.BLINDNESS);
 		}
 	}
 
