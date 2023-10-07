@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
@@ -20,7 +20,7 @@ public class AttributesRegistry
 	public static final AttributeRegistryObject<Attribute> SIZE_ATTRIBUTE = ATTRIBUTES.register(Metals.MetalType.ATIUM.getName(), Cosmere.MODID, 1, 0.1f, 20);
 
 
-	//copper clouds,
+	//copper clouds, aviaar, light weavers, aluminum cages?
 	public static final AttributeRegistryObject<Attribute> COGNITIVE_CONCEALMENT =
 			ATTRIBUTES.register(
 					"cognitive_concealment",

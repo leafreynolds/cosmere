@@ -1,33 +1,34 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.compat.hwyla;
 
+import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyBronze;
-import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public class SpiritWebTooltip implements IEntityComponentProvider
+public class BronzeSeekerTooltip implements IEntityComponentProvider
 {
-	static final SpiritWebTooltip INSTANCE = new SpiritWebTooltip();
+	static final BronzeSeekerTooltip INSTANCE = new BronzeSeekerTooltip();
 
 	@Override
 	public ResourceLocation getUid()
 	{
-		return Cosmere.rl("spiritweb");
+		return Allomancy.rl("bronze_seeker_tooltip");
 	}
 
 	@Override
@@ -42,18 +43,25 @@ public class SpiritWebTooltip implements IEntityComponentProvider
 			{
 				final double playerBronzeStrength = allomancyBronze.getStrength(clientPlayer, false);
 				//check the entity we are trying to
-				SpiritwebCapability.get((LivingEntity) accessor.getEntity()).ifPresent(targetSpiritweb ->
+				final LivingEntity targetEntity = (LivingEntity) accessor.getEntity();
+
+				//if the target has copper powers, and it is active, early exit
+				final AttributeMap targetAttributes = targetEntity.getAttributes();
+				double concealmentStrength = 0;
+				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 				{
-					MobEffectInstance effect = targetSpiritweb.getLiving().getEffect(AllomancyEffects.ALLOMANTIC_COPPER.get());
+					concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);
+				}
 
-					final double copperCloudStrength =
-							effect != null && effect.getDuration() > 0
-							? effect.getAmplifier() : 0;
+				//do they have more concealment than the player has bronze strength?
+				if (concealmentStrength >= playerBronzeStrength)
+				{
+					return;
+				}
 
-					if (!playerCreativeMode && (copperCloudStrength >= playerBronzeStrength))
-					{
-						return;
-					}
+				SpiritwebCapability.get(targetEntity).ifPresent(targetSpiritweb ->
+				{
 					final boolean targetIsPlayer = targetSpiritweb.getLiving() instanceof Player;
 
 					//show all manifestations, including hemalurgic based ones.

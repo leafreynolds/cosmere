@@ -32,12 +32,14 @@ public class AllomancyTin extends AllomancyManifestation
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		final LivingEntity living = data.getLiving();
+		//allomantic tin allows you to see through investiture based hindrances
+		//I would say that the darkness from a warden definitely counts.
 		if (living.hasEffect(MobEffects.DARKNESS))
 		{
 			living.removeEffect(MobEffects.DARKNESS);
 		}
 
-		//todo make blind in the sunlight?
+		//todo re-evaluate if this is fun or interesting. We want there to be drawbacks to powers too.
 		final int blockLighting = living.getFeetBlockState().getLightEmission();
 		if (blockLighting > 14)
 		{
