@@ -1,14 +1,17 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,6 +27,15 @@ public class AllomancyTin extends AllomancyManifestation
 		super(metalType);
 	}
 
+	@Override
+	protected void applyEffectTick(ISpiritweb data)
+	{
+		final LivingEntity living = data.getLiving();
+		if (living.hasEffect(MobEffects.DARKNESS))
+		{
+			living.removeEffect(MobEffects.DARKNESS);
+		}
+	}
 
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
