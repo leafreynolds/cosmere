@@ -30,7 +30,7 @@ public class AllomancyAttributes
 											Allomancy.MODID,
 											0,
 											0,
-											100
+											30
 									)));
 
 }
