@@ -1,6 +1,6 @@
-// 1.19.2	2023-09-17T10:47:58.5002522	PatchouliGeneration
+// 1.19.2	2023-10-02T12:37:11.1870244	PatchouliGeneration
 9ea74965ee52ee3a9e5b7dd62822fc2e5959498e data/feruchemy/patchouli_books/guide/en_us/categories/feruchemy.json
-487658343b9ed6fee13b656efd8a78b16ef12bd4 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/compounding.json
+d81d6c75d18eb1665f8a0201c8faeaa59dbe1350 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/compounding.json
 ea20297801857799c0b6c4149b4a53c3b63b471b data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_aluminum.json
 9f4f8d39ee8b77e44d97b9c249f1fa392965dc0f data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_atium.json
 3a9fad94dc0d0f6e5aabe47fa9b640f9229b4994 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_bendalloy.json
@@ -13,7 +13,7 @@ c20bcdc529c3ebdc85f07ed4e37a70ccc769487b data/feruchemy/patchouli_books/guide/en
 de72eb0cfb091723766842ffed2d611d230eccbc data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_electrum.json
 bf4d8e806b474ca78a9a7a88da5c1b3c14db3ed8 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_gold.json
 36dbc09d9719f3350022df82fc88c8328999ca08 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_iron.json
-c12c4034b69cb396c4ec7a42bdecd400467b8744 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_nicrosil.json
+ef4437c8cb2a31fe5e731a6c2c04d4e2b87b7844 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_nicrosil.json
 a7a960e582794cc90ce6bfee3f295e7255f7fd6a data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_pewter.json
 74952a9fb01600ff380c38daaf30b9ce7eed9c48 data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_steel.json
 b3dc451871ef853f2f8cb08e083843fc0c95ddbe data/feruchemy/patchouli_books/guide/en_us/entries/feruchemy/feruchemical_tin.json

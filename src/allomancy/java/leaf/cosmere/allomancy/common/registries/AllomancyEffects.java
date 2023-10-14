@@ -1,12 +1,12 @@
 /*
- * File updated ~ 22 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.registries;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.effects.AllomancyBoostEffect;
-import leaf.cosmere.allomancy.common.effects.AllomancyEffectBase;
+import leaf.cosmere.allomancy.common.effects.CopperCloudEffect;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.registration.impl.MobEffectDeferredRegister;
 import leaf.cosmere.common.registration.impl.MobEffectRegistryObject;
@@ -18,9 +18,9 @@ public class AllomancyEffects
 
 	public static final MobEffectDeferredRegister EFFECTS = new MobEffectDeferredRegister(Allomancy.MODID);
 
-	public static final MobEffectRegistryObject<AllomancyEffectBase> ALLOMANTIC_COPPER = EFFECTS.register(
+	public static final MobEffectRegistryObject<CopperCloudEffect> ALLOMANTIC_COPPER = EFFECTS.register(
 			"copper_cloud",
-			() -> new AllomancyEffectBase(Metals.MetalType.COPPER, MobEffectCategory.NEUTRAL));
+			() -> new CopperCloudEffect(Metals.MetalType.COPPER, MobEffectCategory.NEUTRAL));
 
 	public static final MobEffectRegistryObject<MobEffect> ALLOMANCY_BOOST = EFFECTS.register(
 			"allomancy_boost",

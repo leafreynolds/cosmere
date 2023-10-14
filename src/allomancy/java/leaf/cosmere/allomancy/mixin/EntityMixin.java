@@ -1,20 +1,21 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.mixin;
 
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
-import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,23 +50,33 @@ public class EntityMixin
 			}
 			final double bronzeStrength = bronzeAllomancyManifestation.getStrength(playerSpiritweb, false);
 
+
+			//todo range to config
+			//get allomantic strength of
+			double range = bronzeAllomancyManifestation.getRange(playerSpiritweb);
+			final boolean inRangeOfBronze = clientPlayer != null && clientPlayer.distanceTo(target) < range;
+			if (!inRangeOfBronze)
+			{
+				return;
+			}
+			//if target has copper and it's active, early exit
+			final AttributeMap targetAttributes = target.getAttributes();
+			double concealmentStrength = 0;
+			final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+			if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
+			{
+				concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);
+			}
+
+			//do they have more concealment than the player has bronze strength?
+			if (concealmentStrength >= bronzeStrength)
+			{
+				return;
+			}
+
+			//okay, now we can actually check if they have powers we care about
 			SpiritwebCapability.get(target).ifPresent(targetSpiritweb ->
 			{
-				//if target has copper and it's active, early exit
-				MobEffectInstance effect = targetSpiritweb.getLiving().getEffect(AllomancyEffects.ALLOMANTIC_COPPER.get());
-				final double copperCloudStrength =
-						effect != null && effect.getDuration() > 0
-						? effect.getAmplifier() : 0;
-
-				if (copperCloudStrength >= bronzeStrength)
-				{
-					return;
-				}
-
-				//get allomantic strength of
-
-				//todo range to config
-				double range = bronzeAllomancyManifestation.getRange(playerSpiritweb);
 				boolean found = false;
 
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
@@ -86,7 +97,7 @@ public class EntityMixin
 					}
 				}
 
-				if ((clientPlayer != null && clientPlayer.distanceTo(target) < range) && found)
+				if (found)
 				{
 					cir.setReturnValue(true);
 				}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -10,7 +10,6 @@ import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
@@ -64,17 +63,17 @@ public class AllomancyCopper extends AllomancyManifestation
 		//Hides Allomantic Pulses
 		if (isActiveTick)
 		{
-			MobEffectInstance newEffect = EffectsHelper.getNewEffect(
-					AllomancyEffects.ALLOMANTIC_COPPER.get(),
-					Mth.fastFloor(
-							getStrength(data, false)
-					)
-			);
 
 			switch (getMode(data))
 			{
 				case 1:
-					data.getLiving().addEffect(newEffect);
+					data.getLiving().addEffect(
+							EffectsHelper.getNewEffect(
+									AllomancyEffects.ALLOMANTIC_COPPER.get(),
+									Mth.fastFloor(
+											getStrength(data, false)
+									)
+							));
 					break;
 				case 2:
 				case 3:
@@ -82,7 +81,12 @@ public class AllomancyCopper extends AllomancyManifestation
 
 					for (LivingEntity e : entitiesToApplyEffect)
 					{
-						e.addEffect(newEffect);
+						e.addEffect(EffectsHelper.getNewEffect(
+								AllomancyEffects.ALLOMANTIC_COPPER.get(),
+								Mth.fastFloor(
+										getStrength(data, false)
+								)
+						));
 					}
 					break;
 			}

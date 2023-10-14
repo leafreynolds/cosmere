@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.compat.hwyla;
@@ -15,6 +15,6 @@ public class HwylaCompat implements IWailaPlugin
 	@Override
 	public void registerClient(IWailaClientRegistration registration)
 	{
-		registration.registerEntityComponent(SpiritWebTooltip.INSTANCE, LivingEntity.class);
+		registration.registerEntityComponent(BronzeSeekerTooltip.INSTANCE, LivingEntity.class);
 	}
 }
