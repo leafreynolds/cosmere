@@ -7,17 +7,25 @@ package leaf.cosmere.allomancy.common.eventHandlers;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.items.CoinPouchItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyAtium;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyNicrosil;
 import leaf.cosmere.allomancy.common.utils.MiscHelper;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.items.MetalNuggetItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -97,5 +105,24 @@ public class AllomancyEntityEventHandler
 		AllomancyNicrosil.onLivingHurtEvent(event);
 	}
 
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public static void onEntityJoinLevelEvent(EntityJoinLevelEvent event)
+	{
+		if (Minecraft.getInstance().player == null)
+			return;
 
+        if (event.getEntity().getName().equals(Minecraft.getInstance().player.getName()))
+		{
+			CosmereAPI.logger.info("player is here");
+			AllomancyIronSteel.startLinesThread();
+		}
+	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public static void onServerStoppingEvent(ServerStoppingEvent event)
+	{
+		AllomancyIronSteel.stopLinesThread();
+	}
 }

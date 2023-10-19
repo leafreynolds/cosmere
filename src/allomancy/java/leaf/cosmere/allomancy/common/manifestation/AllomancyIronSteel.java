@@ -7,13 +7,9 @@ package leaf.cosmere.allomancy.common.manifestation;
 import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.CosmereTags;
-import leaf.cosmere.api.IHasMetalType;
-import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.*;
 import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
-import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
@@ -37,23 +33,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
+	private static final IronSteelLinesThread linesThread = new IronSteelLinesThread();
+	private static final HashMap<Material, Double> materialResistanceMap = initHashMap();
+
 	private final boolean isPush;
 	private static Set<String> s_whiteList = null;
 
@@ -61,6 +58,42 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	{
 		super(metalType);
 		this.isPush = metalType == Metals.MetalType.STEEL;
+	}
+
+	public static ScanResult requestScanResult()
+	{
+		return linesThread.requestScanResult();
+	}
+
+	public static void releaseScanResult()
+	{
+		linesThread.releaseScanResult();
+	}
+
+	public static void startLinesThread()
+	{
+		linesThread.start();
+	}
+
+	public static void stopLinesThread()
+	{
+		linesThread.stop();
+	}
+
+	private static HashMap<Material, Double> initHashMap()
+	{
+		HashMap<Material, Double> output = new HashMap<>();
+
+		// map definitely isn't done, but this is a good start
+		output.put(Material.STONE, 0.5);
+		output.put(Material.DIRT, 0.2);
+		output.put(Material.WOOD, 0.25);
+		output.put(Material.METAL, 0.5);
+		output.put(Material.PISTON, 0.5);
+		output.put(Material.SAND, 0.2);
+		output.put(Material.CLAY, 0.2);
+
+		return output;
 	}
 
 	@Override
@@ -111,12 +144,63 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		//Pushes/Pulls on Nearby Metals
 		if (getKeyBinding().isDown())
 		{
+			Player player = Minecraft.getInstance().player;
+			Level level = Minecraft.getInstance().level;
 			Minecraft mc = Minecraft.getInstance();
-			HitResult ray = PlayerHelper.pickWithRange(cap.getLiving(), getRange(cap));
 
-			if (ray.getType() == HitResult.Type.BLOCK && !blocks.contains(((BlockHitResult) ray).getBlockPos()))
+			Vec3 lerpAngle = player.getLookAngle();
+			Vec3 currPos = player.getEyePosition();
+			float resistance = 0.0F;
+			boolean hitEntity = false;
+			Entity entityHitResult = null;
+
+			// lerp forward within range
+			for (int i = 0; i < getRange(cap); i++)
 			{
-				BlockPos pos = ((BlockHitResult) ray).getBlockPos();
+				BlockState blockAtPos = level.getBlockState(new BlockPos(currPos));
+
+				// if block is air, might be entity. check.
+				if (blockAtPos.isAir())
+				{
+					try
+					{
+						AABB aabb = new AABB(new BlockPos(currPos));
+						Entity firstMetalEntity = null;
+						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator())) {
+							if (entityContainsMetal(ent)) {
+								firstMetalEntity = ent;
+								break;
+							}
+						}
+						hitEntity = firstMetalEntity != null && entityContainsMetal(firstMetalEntity);
+						if (hitEntity)
+						{
+							entityHitResult = firstMetalEntity;
+							break;
+						}
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+						hitEntity = false;
+					}
+				}
+
+				// if resistance is 100+% or the currently targeted block has metal; exit
+				if (resistance >= 1.0F || containsMetal(blockAtPos.getBlock()))
+					break;
+
+				// if block isn't air, add material resistance value
+				if (!blockAtPos.isAir())
+					resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
+
+				// lerp to next position (1 block forward)
+				currPos = currPos.add(lerpAngle);
+			}
+
+			if (resistance < 1.0F && !hitEntity)
+			{
+				BlockPos pos = new BlockPos(currPos);
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
 				if (state.getBlock() instanceof IHasMetalType || containsMetal(state.getBlock()))
@@ -131,12 +215,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				}
 			}
 
-			if (ray instanceof EntityHitResult entityHitResult)
+			if (hitEntity)
 			{
-				final Entity hitResultEntity = entityHitResult.getEntity();
 				//tracks entity if it meets requirements
 				//eg must contain metal
-				hasChanged = trackValidEntity(data, hitResultEntity);
+				hasChanged = trackValidEntity(data, entityHitResult);
 			}
 		}
 		else
@@ -329,61 +412,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		living.hurtMarked = true;
 	}
 
-	private static final ScanResult scanResult = new ScanResult();
-
-	@OnlyIn(Dist.CLIENT)
-	public static ScanResult getDrawLines(int range)
-	{
-		final Minecraft mc = Minecraft.getInstance();
-		final ProfilerFiller profiler = mc.getProfiler();
-		LocalPlayer playerEntity = mc.player;
-		//only update box list every so often
-		if (playerEntity.tickCount % 15 != 0)
-		{
-			return scanResult;
-		}
-		scanResult.Clear();
-
-		//find all the things that we want to draw a line to from the player
-
-		//metal blocks
-		profiler.push("cosmere-getBlocksInRange");
-		{
-			BlockPos.withinManhattanStream(playerEntity.blockPosition(), range, range, range)
-					.filter(blockPos ->
-					{
-						Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-						final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-						return validMetalBlock || containsMetal(block);
-					})
-					.forEach(blockPos -> scanResult.addBlock(blockPos.immutable()));
-
-			scanResult.finalizeClusters();
-		}
-
-		profiler.pop();
-
-		//entities with metal armor/tools
-		profiler.push("cosmere-getEntitiesInRange");
-		{
-			EntityHelper.getEntitiesInRange(playerEntity, range, false).forEach(entity ->
-			{
-				if (entityContainsMetal(entity))
-				{
-					scanResult.foundEntities.add(
-							entity.position().add(
-									0,
-									entity.getBoundingBox().getYsize() / 2,
-									0));
-				}
-			});
-		}
-		profiler.pop();
-
-		return scanResult;
-	}
-
-
 	private static boolean entityContainsMetal(Entity entity)
 	{
 		if (entity instanceof LivingEntity livingEntity)
@@ -492,6 +520,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 	//client side is the only time this gets initialized.
+	// this does not work for items with no recipe, such as vanilla ores
 	private static void createWhitelist(Entity entity)
 	{
 		if (s_whiteList != null)
@@ -541,4 +570,221 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			}
 		}
 	}
+
+	// set scan range of Lines Thread
+	public static void setScanRange(int range)
+	{
+		linesThread.setScanRange(range);
+	}
+
+	// this should be threaded to avoid lag spikes on the render thread when flaring metals
+	static class IronSteelLinesThread implements Runnable {
+		private static Thread t;
+		private static final Lock lock = new ReentrantLock();
+		private static ScanResult scanResult = new ScanResult();
+		private static int scanRange = 0;
+		private static boolean isStopping = false;
+
+		public ScanResult requestScanResult()
+		{
+			lock.lock();
+			try
+			{
+				return scanResult;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				lock.unlock();
+				return null;
+			}
+		}
+
+		public void releaseScanResult()
+		{
+			lock.unlock();
+		}
+
+		public void setScanRange(int range)
+		{
+			scanRange = range;
+		}
+
+		public void start()
+		{
+			if (t == null)
+			{
+				CosmereAPI.logger.info("Starting lines thread");
+				t = new Thread(this, "lines_thread");
+				t.start();
+			}
+		}
+
+		public void stop()
+		{
+			if (t != null && !isStopping)
+			{
+				isStopping = true;
+			}
+		}
+
+		private void setScanResult(ScanResult result)
+		{
+			scanResult = result;
+		}
+
+		@Override
+		@OnlyIn(Dist.CLIENT)
+		public void run() {
+			while (!isStopping) {
+				final Minecraft mc = Minecraft.getInstance();
+				final ProfilerFiller profiler = mc.getProfiler();
+				ScanResult nextScan;
+				LocalPlayer playerEntity = mc.player;
+				//only update box list every so often
+				// will run even if iron and steel are off. is problem? maybe
+				if (playerEntity.tickCount % 15 != 0)
+				{
+					try
+					{
+						Thread.sleep(50);
+					}
+					catch (InterruptedException e)
+					{
+						throw new RuntimeException(e);
+					}
+					continue;
+				}
+				nextScan = new ScanResult();
+
+				//find all the things that we want to draw a line to from the player
+
+				//metal blocks
+				profiler.push("cosmere-getBlocksInRange");
+				{
+					BlockPos.withinManhattanStream(playerEntity.blockPosition(), scanRange, scanRange, scanRange)
+							.filter(blockPos ->
+							{
+								Block block = playerEntity.level.getBlockState(blockPos).getBlock();
+								final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+								boolean isGood = validMetalBlock || containsMetal(block);
+
+								if (isGood)
+								{
+									try
+									{
+										Player player = Minecraft.getInstance().player;
+										Level level = Minecraft.getInstance().level;
+										BlockState endBlock = Objects.requireNonNull(level.getBlockState(blockPos));
+										Vec3 currVec = player.getEyePosition();
+										Vec3 endPos = new Vec3(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F);
+										double resistance = 0.0F;
+
+										// linear interpolation to see if the block is obscured by blocks
+										// this method is, insanely enough, *more performant* than not filtering at all
+										int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
+										for (int i = 0; i < loopTimes; i++)
+										{
+											BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
+
+											if (bState == endBlock || resistance >= 1.0F)
+											{
+												break;
+											}
+
+											resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+
+											double distance = currVec.distanceTo(endPos);
+											currVec = currVec.lerp(endPos, 1.0F / distance);
+										}
+
+										isGood = resistance < 1.0F;
+									}
+									catch (Exception e)
+									{
+										e.printStackTrace();
+										isGood = false;
+									}
+								}
+
+								return isGood;
+							})
+							.forEach(blockPos -> nextScan.addBlock(blockPos.immutable()));
+
+					nextScan.finalizeClusters();
+				}
+
+				profiler.pop();
+
+				//entities with metal armor/tools
+				profiler.push("cosmere-getEntitiesInRange");
+				{
+					EntityHelper.getEntitiesInRange(playerEntity, scanRange, false).forEach(entity ->
+					{
+						if (entityContainsMetal(entity)) {
+							double resistance = 0.0F;
+							try
+							{
+								Player player = Minecraft.getInstance().player;
+								Level level = Minecraft.getInstance().level;
+								Vec3 currVec = player.getEyePosition();
+								Vec3 endPos = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+
+								// linear interpolation to see if the entity is obscured by blocks
+								// this method is, insanely enough, *more performant* than not filtering at all
+								int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
+								for (int i = 0; i < loopTimes; i++)
+								{
+									BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
+
+									final boolean pastEntity = (player.getEyePosition().distanceTo(currVec) >= player.getEyePosition().distanceTo(endPos));
+
+									if (pastEntity || resistance >= 1.0F)
+									{
+										break;
+									}
+
+									resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+
+									double distance = currVec.distanceTo(endPos);
+									currVec = currVec.lerp(endPos, 1.0F / distance);
+
+								}
+							}
+							catch (Exception e)
+							{
+								e.printStackTrace();
+								resistance = 100.0F;    // just to be sure :)
+							}
+
+							if (resistance < 1.0F)
+							{
+								nextScan.foundEntities.add(
+										entity.position().add(
+												0,
+												entity.getBoundingBox().getYsize() / 2,
+												0));
+							}
+						}
+					});
+				}
+				profiler.pop();
+
+				lock.lock();
+				try
+				{
+					setScanResult(nextScan);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				finally
+				{
+					lock.unlock();
+				}
+			}
+		}
+	}
 }
+
