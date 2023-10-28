@@ -39,7 +39,7 @@ public class MiscHelper
 						final double strength = manifestation.getStrength(iSpiritweb, true);
 						final int minimum = FeruchemyConfigs.SERVER.GOD_METAL_EAT_STRENGTH_MINIMUM.get();
 
-						spiritweb.giveManifestation(manifestation, strength < minimum ? minimum : (int) (strength + 1));
+						spiritweb.giveManifestation(manifestation, strength < 16 ? 16 : (int) (strength + 1));
 					}
 				}
 			}

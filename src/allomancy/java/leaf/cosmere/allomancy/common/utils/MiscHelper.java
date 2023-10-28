@@ -47,7 +47,7 @@ public class MiscHelper
 					{
 						//todo allomancy godmetal strength
 						final double strength = manifestation.getStrength(iSpiritweb, true);
-						spiritweb.giveManifestation(manifestation, strength < 13 ? 13 : (int) (strength + 1));
+						spiritweb.giveManifestation(manifestation, strength < 16 ? 16 : (int) (strength + 1));
 					}
 				}
 			}
