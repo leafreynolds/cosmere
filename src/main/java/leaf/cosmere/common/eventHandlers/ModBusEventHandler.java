@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 5 - 2021 ~ Leaf
+ * File updated ~ 7 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -17,6 +17,29 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBusEventHandler
 {
+	//one place that multiple sub mods can reference?
+	public final static EntityType[] ENTITIES_THAT_CAN_HAVE_POWERS = {
+			EntityType.PLAYER,
+
+			EntityType.VILLAGER,
+			EntityType.ZOMBIE_VILLAGER,
+			EntityType.WANDERING_TRADER,
+
+			EntityType.EVOKER,
+			EntityType.ILLUSIONER,
+			EntityType.PILLAGER,
+			EntityType.VINDICATOR,
+			EntityType.WITCH,
+
+			EntityType.PIGLIN,
+			EntityType.PIGLIN_BRUTE,
+
+			EntityType.CAT,
+			EntityType.LLAMA,
+			EntityType.TRADER_LLAMA,
+	};
+
+
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
@@ -28,5 +51,9 @@ public class ModBusEventHandler
 		event.add(EntityType.PLAYER, nightVision);
 		event.add(EntityType.PLAYER, sizeAttr);
 
+		for (EntityType entityType : ModBusEventHandler.ENTITIES_THAT_CAN_HAVE_POWERS)
+		{
+			event.add(entityType, AttributesRegistry.COGNITIVE_CONCEALMENT.get());
+		}
 	}
 }

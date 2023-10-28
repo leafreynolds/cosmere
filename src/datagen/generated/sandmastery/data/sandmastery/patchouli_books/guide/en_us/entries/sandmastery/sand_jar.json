@@ -1,0 +1,15 @@
+{
+  "category": "sandmastery:sandmastery",
+  "icon": "sandmastery:sand_jar_block",
+  "name": "Sand Jar",
+  "pages": [
+    {
+      "type": "text",
+      "text": "As mentioned previously, the sand from Tal'Dain reacts to physical investiture, which means that it can be measured. Common technology on this planet seems to use a substance called 'redstone' in order to power their fabrials. A device like the 'Comparator' Can measure the investiture in the sand jar, and release a redstone signal."
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}

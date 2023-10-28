@@ -103,7 +103,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 		{
 			final AllomancyIronSteel steelManifestation = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
 
-			if (steelManifestation.isActive(data))
+			if (steelManifestation.isActive(data) && steelManifestation.getMode(data) > 0)
 			{
 				final boolean playerCreativeMode = player.getAbilities().instabuild;
 				final boolean infiniteAmmo = playerCreativeMode || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, coinPouchStack) > 0;

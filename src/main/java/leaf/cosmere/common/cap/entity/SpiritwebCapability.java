@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 6 - 2023 ~ Leaf
+ * File updated ~ 7 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -14,17 +14,16 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -36,7 +35,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -219,8 +217,17 @@ public class SpiritwebCapability implements ISpiritweb
 			//An example from mekanism had the event triggering every two seconds
 			if (shouldTriggerSculkEvent && (spiritWebEntity.tickCount % 40 == 0) && CosmereConfigs.SERVER_CONFIG.SCULK_CAN_HEAR_KINETIC_INVESTITURE.get())
 			{
-				final MobEffect copperEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
-				if (copperEffect == null || !spiritWebEntity.hasEffect(copperEffect))
+				// if the target is properly concealed, we don't trigger investiture game events
+				final AttributeMap targetAttributes = spiritWebEntity.getAttributes();
+				double concealmentStrength = 0;
+				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
+				{
+					concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);
+				}
+				//but the concealment needs to be strong enough?
+				//todo move this to a config so people can define how strong the concealment needs to be
+				if (concealmentStrength < 2)
 				{
 					spiritWebEntity.gameEvent(GameEventRegistry.KINETIC_INVESTITURE.get());
 				}

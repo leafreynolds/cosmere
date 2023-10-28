@@ -1,5 +1,5 @@
 /*
- * File updated ~ 25 - 5 - 2023 ~ Leaf
+ * File updated ~ 18 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -12,6 +12,7 @@ import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -72,8 +73,10 @@ public class EntityEventHandler
 				// only 1 in 16 will have the gene
 
 
-				final int chance = eventEntity instanceof Raider ? 50 : 16;
-				if (MathHelper.randomInt(1, chance) % chance == 0)
+				final int raiderPowersChance = CosmereConfigs.SERVER_CONFIG.RAIDER_POWERS_CHANCE.get();
+				final int mobPowersChance = CosmereConfigs.SERVER_CONFIG.MOB_POWERS_CHANCE.get();
+				final int chance = eventEntity instanceof Raider ? raiderPowersChance : mobPowersChance;
+				if (MathHelper.chance(chance))
 				{
 					giveEntityStartingManifestation(livingEntity, spiritweb);
 				}
@@ -119,13 +122,16 @@ public class EntityEventHandler
 	public static void giveEntityStartingManifestation(LivingEntity entity, SpiritwebCapability spiritwebCapability)
 	{
 		boolean isPlayerEntity = entity instanceof Player;
+
+		final Integer chanceOfFullPowers = CosmereConfigs.SERVER_CONFIG.FULLBORN_POWERS_CHANCE.get();
+		final Integer chanceOfTwinborn = CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE.get();
 		//low chance of having full powers of one type
 		//0-15 inclusive is normal powers.
-		boolean isFullPowersFromOneType = MathHelper.randomInt(0, 16) % 16 == 0;
+		boolean isFullPowersFromOneType = MathHelper.chance(chanceOfFullPowers);
 
 		//small chance of being twin born, but only if not having full powers above
 		//except for players who are guaranteed having at least two powers.
-		boolean isTwinborn = isPlayerEntity || MathHelper.randomInt(0, 16) < 3;
+		boolean isTwinborn = isPlayerEntity || MathHelper.chance(chanceOfTwinborn);
 
 		//randomise the given powers from allomancy and feruchemy
 		int allomancyPowerID = MathHelper.randomInt(0, 15);

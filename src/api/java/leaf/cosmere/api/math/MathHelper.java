@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 6 - 2023 ~ Leaf
+ * File updated ~ 18 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.math;
@@ -16,6 +16,12 @@ public class MathHelper
 	public static int randomInt(int min, int max)
 	{
 		return RANDOM.nextInt((max - min) + 1) + min;
+	}
+
+	// 1 out of how many.
+	public static boolean chance(int chance)
+	{
+		return MathHelper.randomInt(1, chance) % chance == 0;
 	}
 
 	public static boolean randomBool()

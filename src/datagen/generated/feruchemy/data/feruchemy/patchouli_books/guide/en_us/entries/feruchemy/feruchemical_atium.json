@@ -9,11 +9,11 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "feruchemy:atium_bracelet_metalmind"
+      "recipe": "feruchemy:atium_ring_metalmind"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "feruchemy:atium_ring_metalmind"
+      "recipe": "feruchemy:atium_bracelet_metalmind"
     },
     {
       "type": "patchouli:crafting",

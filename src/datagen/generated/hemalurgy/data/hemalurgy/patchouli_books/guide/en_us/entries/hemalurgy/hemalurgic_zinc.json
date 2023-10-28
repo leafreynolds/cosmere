@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "[Not Yet Implemented] $(p)My research has yet to determine any Hemalurgic properties of zinc - further research necessary."
+      "text": "[Not Yet Implemented] $(p)My research has yet to determine any Hemalurgic properties of zinc - further research necessary. (WIP)"
     },
     {
       "type": "patchouli:crafting",

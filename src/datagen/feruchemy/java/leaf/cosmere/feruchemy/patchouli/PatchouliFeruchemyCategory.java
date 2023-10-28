@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 18 - 9 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.patchouli;
@@ -25,6 +25,7 @@ public class PatchouliFeruchemyCategory
 				"feruchemy",
 				"The art of equivalent exchange when it comes to the body. ",
 				"feruchemy:copper_bracelet_metalmind");
+
 		feruchemy.sortnum = 2;
 		categories.add(feruchemy);
 
@@ -32,11 +33,21 @@ public class PatchouliFeruchemyCategory
 
 		BookStuff.Entry feruchemyBasics = new BookStuff.Entry("feruchemy_basics", feruchemy, feruchemy.icon);
 		feruchemyBasics.priority = true;
-		pages.add(new BookStuff.TextPage("If you entered this world with an feruchemical ability, you're called a $(6)ferring$().", feruchemy.icon));
-		pages.add(new BookStuff.CraftingPage("feruchemy:brass_bracelet_metalmind").setText("Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes."));
+		pages.add(new BookStuff.TextPage("If you entered this world with a feruchemical ability, you're called a $(6)ferring$(). Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes.", feruchemy.icon));
+		pages.add(new BookStuff.CraftingPage("", "feruchemy:steel_ring_metalmind", "feruchemy:steel_bracelet_metalmind"));
+		pages.add(new BookStuff.CraftingPage("feruchemy:steel_necklace_metalmind").setText("Metalminds can store varying amounts of charges, depending on the size."));
 
 		feruchemyBasics.pages = pages.toArray(BookStuff.Page[]::new);
+		pages.clear();
 		entries.add(feruchemyBasics);
+
+		BookStuff.Entry Compounding = new BookStuff.Entry("Compounding", feruchemy, feruchemy.icon);
+		pages.add(new BookStuff.TextPage("A curious loophole in the systems of investiture on this planet has been discovered. It involves a metalborn with the allomantic and feruchemical " +
+				"abilities of the same metal to burn one of their feruchemical metalminds, essentially creating a new allomantic metal that releases the stored feruchemical charge tenfold."));
+		pages.add(new BookStuff.TextPage("This is activated by setting your allomantic power to a negative mode called Compounding and Flared Compounding, which spends allomantic charges to gain feruchemical stores quickly."));
+		Compounding.pages = pages.toArray(BookStuff.Page[]::new);
+		pages.clear();
+		entries.add(Compounding);
 
 		//feruchemy
 		for (ManifestationRegistryObject<Manifestation> manifestationRegistryObject : FeruchemyManifestations.FERUCHEMY_POWERS.values())
@@ -110,7 +121,7 @@ public class PatchouliFeruchemyCategory
 					break;
 				case NICROSIL:
 					pages.add(new BookStuff.TextPage("A ferring who taps " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(ferringName) + "\", and stores Investiture. " +
-							"Little known- more research required."));
+							"Little is known- more research required. (Not yet implemented)"));
 					break;
 				case CADMIUM:
 					pages.add(new BookStuff.TextPage("A ferring who taps " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(ferringName) + "\", and stores Breaths. " +
@@ -136,8 +147,8 @@ public class PatchouliFeruchemyCategory
 
 			final String itemLoc = String.format("feruchemy:%s", metalName);
 
-			pages.add(new BookStuff.CraftingPage(itemLoc + Constants.RegNameStubs.BRACELET + Constants.RegNameStubs.METALMIND));
 			pages.add(new BookStuff.CraftingPage(itemLoc + Constants.RegNameStubs.RING + Constants.RegNameStubs.METALMIND));
+			pages.add(new BookStuff.CraftingPage(itemLoc + Constants.RegNameStubs.BRACELET + Constants.RegNameStubs.METALMIND));
 			pages.add(new BookStuff.CraftingPage(itemLoc + Constants.RegNameStubs.NECKLACE + Constants.RegNameStubs.METALMIND));
 
 			entryForThisMetal.pages = pages.toArray(BookStuff.Page[]::new);
