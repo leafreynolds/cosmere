@@ -116,6 +116,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 		if (getMode(cap) != 0)
 		{
+			if (getMode(cap) > 0)
+				startLinesThread();
+			else if (getMode(cap) < 0)
+				stopLinesThread();
 			return;
 		}
 
@@ -596,7 +600,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			{
 				e.printStackTrace();
 				lock.unlock();
-				return null;
+				return new ScanResult();	// empty ScanResult so it doesn't crash
 			}
 		}
 
@@ -642,7 +646,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
 				//only update box list every so often
-				// will run even if iron and steel are off. is problem? maybe
 				if (playerEntity.tickCount % 15 != 0)
 				{
 					try

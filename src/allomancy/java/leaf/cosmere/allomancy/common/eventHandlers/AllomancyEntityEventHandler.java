@@ -104,25 +104,4 @@ public class AllomancyEntityEventHandler
 	{
 		AllomancyNicrosil.onLivingHurtEvent(event);
 	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public static void onEntityJoinLevelEvent(EntityJoinLevelEvent event)
-	{
-		if (Minecraft.getInstance().player == null)
-			return;
-
-        if (event.getEntity().getName().equals(Minecraft.getInstance().player.getName()))
-		{
-			CosmereAPI.logger.info("player is here");
-			AllomancyIronSteel.startLinesThread();
-		}
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public static void onServerStoppingEvent(ServerStoppingEvent event)
-	{
-		AllomancyIronSteel.stopLinesThread();
-	}
 }
