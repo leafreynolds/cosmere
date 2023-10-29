@@ -1,26 +1,25 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
-import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
+import leaf.cosmere.common.registry.AttributesRegistry;
+import leaf.cosmere.feruchemy.common.registries.FeruchemyManifestations;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 
@@ -59,7 +58,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 
 		int adjustAmount;
 
-		MobEffect effect = getEffect(mode);
+		CosmereEffect effect = getEffect(mode);
 
 		// if we are tapping
 		//check if there is charges to tap
@@ -87,8 +86,8 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		final ItemStack itemStack = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, adjustAmount, true, true);
 		if (!itemStack.isEmpty())
 		{
-			MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
-			livingEntity.addEffect(currentEffect);
+			CosmereEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, livingEntity, Math.abs(mode) - 1);
+			data.addEffect(currentEffect);
 
 			//storing
 			if (mode > 0)
@@ -112,39 +111,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		return false;
 	}
 
-	@Override
-	public void onModeChange(ISpiritweb data, int lastMode)
-	{
-		super.onModeChange(data, lastMode);
-
-		if (getMode(data) == 0)
-		{
-			//clear
-			clearNicrosilPowers(data);
-		}
-	}
-
-	public static void clearNicrosilPowers(ISpiritweb data)
-	{
-		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
-		{
-			Attribute attribute = manifestation.getAttribute();
-			if (attribute == null)
-			{
-				continue;
-			}
-
-			final AttributeInstance attributeInstance = data.getLiving().getAttribute(attribute);
-			if (attributeInstance != null)
-			{
-				attributeInstance.removeModifier(data.getLiving().getUUID());
-				attributeInstance.removeModifier(Constants.NBT.UNKEYED_UUID);
-				attributeInstance.removeModifier(Constants.NBT.FERU_NICROSIL_UUID);
-			}
-		}
-	}
-
-	private static void checkStoreNicrosil(ISpiritweb data, ItemStack metalmind)
+	private void checkStoreNicrosil(ISpiritweb data, ItemStack metalmind)
 	{
 		//extra metalmind logic.
 		//if we are actually updating the charge inside
@@ -154,8 +121,9 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		//set the powers they have to the stack.
 
 		CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
-		MobEffectInstance storingIdentity = data.getLiving().getEffect(FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.ALUMINUM).get());
-		boolean isStoringIdentity = (storingIdentity != null && storingIdentity.getDuration() > 0);
+
+		int identity = (int) EntityHelper.getAttributeValue(data.getLiving(), AttributesRegistry.IDENTITY.getAttribute());
+		boolean isStoringIdentity = identity < 1;
 
 		//set unkeyed if no identity set
 		if (!nbt.contains("identity") && isStoringIdentity)
@@ -167,56 +135,79 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			nbt.putUUID("identity", data.getLiving().getUUID());
 		}
 
+		final CosmereEffectInstance effectInstance = getOrCreateEffect(getStoringEffect(), data, 0);
+
 		//for each power the user has access to
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
 			//even if it's granted from hemalurgy/temporary
 			//update the nbt.
 			//this will add/remove powers based on what the user currently has.
-			final double baseStrength = manifestation.getStrength(data, true);
-			if (baseStrength > 0)
+			final double totalStrength = manifestation.getStrength(data, false);
+			final String registryName = manifestation.getRegistryName().toString();
+			if (totalStrength > 0)
 			{
-				nbt.putDouble(manifestation.getName(), baseStrength);
+				nbt.putDouble(registryName, totalStrength);
 			}
 			//remove if not available
-			else if (nbt.contains(manifestation.getName()))
+			else if (nbt.contains(registryName))
 			{
-				nbt.remove(manifestation.getName());
+				nbt.remove(registryName);
 			}
-		}
-	}
 
-	private static void checkTapNicrosil(ISpiritweb data, ItemStack metalmind)
-	{
-		//todo better nicrosil tracking.
-		Multimap<Attribute, AttributeModifier> attributeModifiers = LinkedHashMultimap.create();
-		CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
-		//for each power the user has access to
-		//todo add the stored investiture identity to spiritweb data if not there already?
+			final Attribute attributeRegistryObject = manifestation.getAttribute();
 
-		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
-		{
-			String manifestationName = manifestation.getName();
-			Attribute attribute = manifestation.getAttribute();
-			if (!CompoundNBTHelper.verifyExistance(nbt, manifestationName) || attribute == null)
+			//don't disable nicrosil, because we want to keep storing
+			//don't disable aluminum, because we may be wanting to store without identity
+			final boolean invalidMetalToDisable =
+					manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.NICROSIL).get()
+							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get();
+
+			if (attributeRegistryObject == null || invalidMetalToDisable)
 			{
 				continue;
 			}
 
-			attributeModifiers.put(
-					attribute,
-					new AttributeModifier(
-							Constants.NBT.FERU_NICROSIL_UUID,
-							manifestationName,
-							CompoundNBTHelper.getDouble(
-									nbt,
-									manifestationName,
-									0),
-							AttributeModifier.Operation.ADDITION));
-
+			//also disable all powers
+			effectInstance.setDynamicAttribute(manifestation.getAttribute(), -1000, AttributeModifier.Operation.ADDITION);
 		}
 
-		data.getLiving().getAttributes().addTransientAttributeModifiers(attributeModifiers);
+		data.addEffect(effectInstance);
 	}
 
+	private void checkTapNicrosil(ISpiritweb data, ItemStack metalmind)
+	{
+		CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
+		//for each power the user has access to
+		//todo add the stored investiture identity to spiritweb data if not there already?
+
+		final CosmereEffectInstance effectInstance = getOrCreateEffect(getTappingEffect(), data, 0);
+
+		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+		{
+			String manifestationName = manifestation.getRegistryName().toString();
+			Attribute attribute = manifestation.getAttribute();
+			if (CompoundNBTHelper.verifyExistance(nbt, manifestationName))
+			{
+				final double strength =
+						CompoundNBTHelper.getDouble(
+								nbt,
+								manifestationName,
+								0);
+
+				effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADDITION);
+			}
+			else
+			{
+				//remove any old attributes that don't exist on the item
+				//this could happen if the user was switching nicrosil metalminds
+				if (attribute != null)
+				{
+					effectInstance.removeDynamicAttribute(attribute);
+				}
+			}
+		}
+
+		data.addEffect(effectInstance);
+	}
 }

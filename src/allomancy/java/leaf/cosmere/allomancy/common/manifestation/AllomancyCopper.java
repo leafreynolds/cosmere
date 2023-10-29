@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 10 - 2023 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -64,29 +65,32 @@ public class AllomancyCopper extends AllomancyManifestation
 		if (isActiveTick)
 		{
 
+			final int actionableStrength = Mth.fastFloor(getStrength(data, false));
 			switch (getMode(data))
 			{
 				case 1:
-					data.getLiving().addEffect(
+					data.addEffect(
 							EffectsHelper.getNewEffect(
 									AllomancyEffects.ALLOMANTIC_COPPER.get(),
-									Mth.fastFloor(
-											getStrength(data, false)
-									)
+									data.getLiving(),
+									actionableStrength
 							));
 					break;
 				case 2:
 				case 3:
 					List<LivingEntity> entitiesToApplyEffect = EntityHelper.getLivingEntitiesInRange(livingEntity, getRange(data), true);
 
-					for (LivingEntity e : entitiesToApplyEffect)
+					for (LivingEntity target : entitiesToApplyEffect)
 					{
-						e.addEffect(EffectsHelper.getNewEffect(
-								AllomancyEffects.ALLOMANTIC_COPPER.get(),
-								Mth.fastFloor(
-										getStrength(data, false)
-								)
-						));
+						SpiritwebCapability.get(target).ifPresent(targetSpiritweb ->
+						{
+							targetSpiritweb.addEffect(EffectsHelper.getNewEffect(
+									AllomancyEffects.ALLOMANTIC_COPPER.get(),
+									data.getLiving(),
+									actionableStrength
+							));
+
+						});
 					}
 					break;
 			}

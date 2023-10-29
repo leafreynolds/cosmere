@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.registries;
@@ -47,8 +47,6 @@ public class FeruchemyManifestations
 				return new FeruchemyNicrosil(metalType);
 			case GOLD:
 				return new FeruchemyGold(metalType);
-			case ELECTRUM:
-				return new FeruchemyElectrum(metalType);
 			case BENDALLOY:
 				return new FeruchemyBendalloy(metalType);
 			case ATIUM:

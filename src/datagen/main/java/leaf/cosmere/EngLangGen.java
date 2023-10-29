@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -8,17 +8,15 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
+import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.itemgroups.CosmereItemGroups;
-import leaf.cosmere.common.registry.AttributesRegistry;
-import leaf.cosmere.common.registry.EntityTypeRegistry;
-import leaf.cosmere.common.registry.ManifestationRegistry;
+import leaf.cosmere.common.registry.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import static leaf.cosmere.api.Constants.Strings.*;
 
@@ -57,9 +55,10 @@ public class EngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (IItemProvider item : ItemsRegistry.ITEMS.getAllItems())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final Item currentItem = item.asItem();
+			final ResourceLocation registryName = ResourceLocationHelper.get(currentItem);
 			if (registryName.getNamespace().contentEquals(Cosmere.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -71,18 +70,26 @@ public class EngLangGen extends LanguageProvider
 					localisedString = "Ars Arcanum";//after the book that is written by Khriss
 				}
 
-				add(item.getDescriptionId(), localisedString);
+				add(currentItem.getDescriptionId(), localisedString);
 			}
+		}
+
+		for (IItemProvider item : BlocksRegistry.BLOCKS.getAllBlocks())
+		{
+			final Item currentItem = item.asItem();
+			final ResourceLocation registryName = ResourceLocationHelper.get(currentItem);
+			String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
+			add(currentItem.getDescriptionId(), localisedString);
 		}
 
 
 		//work through each metal and generate localisation for related things.
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
+			//if a vanilla metal, like iron/gold
 			if (!metalType.hasMaterialItem())
 			{
 				final String name = metalType.getName();
-				//if a vanilla metal, like iron/gold
 				//add(item.getDescriptionId(), localisedString);
 				final String n = name + "_nugget";
 				final String i = name + "_ingot";
@@ -169,7 +176,6 @@ public class EngLangGen extends LanguageProvider
 
 	private void addConfigs()
 	{
-		add("config.jade.plugin_cosmere.spiritweb", "Spiritweb");
 	}
 
 	private void addCommands()

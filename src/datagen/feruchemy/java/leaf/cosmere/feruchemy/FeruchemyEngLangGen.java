@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -10,7 +10,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
-import leaf.cosmere.api.providers.IMobEffectProvider;
+import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
@@ -206,9 +206,9 @@ public class FeruchemyEngLangGen extends LanguageProvider
 
 	private void addMobEffects()
 	{
-		for (IMobEffectProvider effect : FeruchemyEffects.EFFECTS.getAllMobEffects())
+		for (ICosmereEffectProvider effect : FeruchemyEffects.EFFECTS.getEffectsInRegistry())
 		{
-			add(effect.getMobEffect().getDescriptionId(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
+			add(effect.getEffect().getTranslationKey(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
 		}
 	}
 

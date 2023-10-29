@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common;
@@ -63,6 +63,7 @@ public class Cosmere
 		EntityTypeRegistry.ENTITY_TYPES.register(modBus);
 		AttributesRegistry.ATTRIBUTES.register(modBus);
 		ManifestationRegistry.MANIFESTATIONS.createAndRegisterManifestation(modBus);
+		CosmereEffectsRegistry.EFFECTS.createAndRegister(modBus);
 		PoiTypesRegistry.POINT_OF_INTERESTS.register(modBus);
 		VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
 		BiomeModifierRegistry.BIOME_MODIFIER_SERIALIZERS.register(modBus);

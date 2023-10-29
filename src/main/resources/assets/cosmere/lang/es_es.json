@@ -44,7 +44,6 @@
   "command.cosmere.power.set.fail": "Fallo al actualizar el poder.",
   "command.cosmere.power.set.success": "Poder transferido con éxito a: %s",
   "command.cosmere.power.strength": "Fuerza base: %s \nFuerza total: %s",
-  "config.jade.plugin_cosmere.spiritweb": "Red espiritual",
   "cosmere.landing": "El Cosmere está lleno de magia y sucesos extraordinarios. He escrito todas mis investigaciones en este libro.",
   "entity.minecraft.villager.cosmere.metal_trader": "Comerciante de metales",
   "item.cosmere.aluminum_ingot": "Lingote de Aluminio",

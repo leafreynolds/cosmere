@@ -44,7 +44,6 @@
   "command.cosmere.power.set.fail": "Failed to update power",
   "command.cosmere.power.set.success": "Successfully set power to: %s",
   "command.cosmere.power.strength": "Base Strength: %s \nTotal Strength: %s",
-  "config.jade.plugin_cosmere.spiritweb": "Spiritweb",
   "cosmere.landing": "The Cosmere is filled with many fantastical things. I have left my findings written within this book.",
   "entity.minecraft.villager.cosmere.metal_trader": "Metal Trader",
   "item.cosmere.aluminum_ingot": "Aluminum Ingot",

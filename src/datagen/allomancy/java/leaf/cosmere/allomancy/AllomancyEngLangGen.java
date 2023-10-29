@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -14,8 +14,8 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
+import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
-import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import net.minecraft.data.DataGenerator;
@@ -188,9 +188,10 @@ public class AllomancyEngLangGen extends LanguageProvider
 
 	private void addMobEffects()
 	{
-		for (IMobEffectProvider effect : AllomancyEffects.EFFECTS.getAllMobEffects())
+		//
+		for (ICosmereEffectProvider effect : AllomancyEffects.EFFECTS.getEffectsInRegistry())
 		{
-			add(effect.getMobEffect().getDescriptionId(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
+			add(effect.getEffect().getTranslationKey(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
 		}
 	}
 
@@ -201,6 +202,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 
 	private void addConfigs()
 	{
+		add("config.jade.plugin_allomancy.bronze_seeker_tooltip", "Seeker Tooltip");
 	}
 
 	private void addCommands()

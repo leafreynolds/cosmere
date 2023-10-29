@@ -1,56 +1,66 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
-import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 
 public class GoldTapEffect extends FeruchemyEffectBase
 {
-	public GoldTapEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public GoldTapEffect(Metals.MetalType type)
 	{
-		super(type, effectType);
+		super(type);
+		addAttributeModifier(
+				AttributesRegistry.HEALING_STRENGTH.getAttribute(),
+				1.0D,
+				AttributeModifier.Operation.ADDITION);
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
 	{
 		if (!isActiveTick(entityLivingBaseIn))
 		{
 			return;
 		}
 
-		final int i = 1 + amplifier;
+		final int i = (int) (strength);
 		if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
 		{
 			entityLivingBaseIn.heal(i);
 		}
 
+		//todo move to config
+		final int timeToReduceByInTicks = i * 40;
+		final int ticksNeededLeftToReduce = 5;
+
 		//remove harmful effects over time
 		for (MobEffectInstance activeEffect : entityLivingBaseIn.getActiveEffects())
 		{
-			if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > 5)
+			if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
 			{
-				double reduceAmount = 1 - (i / 10d);
-
-				MobEffectInstance effectInstance = new MobEffectInstance(
+				//never reduce down below 5 ticks
+				final double clamped = Math.max(ticksNeededLeftToReduce, activeEffect.getDuration() - timeToReduceByInTicks);
+				final int duration = Mth.floor(clamped);
+				MobEffectInstance newInstance = new MobEffectInstance(
 						activeEffect.getEffect(),
-						Mth.floor(activeEffect.getDuration() * reduceAmount),
+						duration,
 						activeEffect.getAmplifier(),
 						activeEffect.isAmbient(),
 						activeEffect.isVisible(),
 						activeEffect.showIcon());
 				entityLivingBaseIn.removeEffectNoUpdate(activeEffect.getEffect());
-				entityLivingBaseIn.addEffect(effectInstance);
+				entityLivingBaseIn.addEffect(newInstance);
 			}
 		}
 	}
@@ -64,10 +74,9 @@ public class GoldTapEffect extends FeruchemyEffectBase
 
 		if (event.getAmount() > event.getEntity().getHealth())
 		{
-			MobEffectInstance tapEffect = event.getEntity().getEffect(FeruchemyEffects.TAPPING_EFFECTS.get(Metals.MetalType.GOLD).get());
-
+			int strength = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.HEALING_STRENGTH.getAttribute(), 0);
 			//take less damage when tapping
-			if (tapEffect != null && tapEffect.getDuration() > 0 && tapEffect.getAmplifier() > 6)
+			if (strength > 6)
 			{
 				event.setAmount(event.getEntity().getHealth() - 1);
 			}

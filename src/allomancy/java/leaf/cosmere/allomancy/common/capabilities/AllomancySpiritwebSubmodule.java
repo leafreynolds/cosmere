@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities;
@@ -97,7 +97,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 		final CompoundTag ingestedMetals = spiritweb.getCompoundTag().getCompound("ingested_metals");
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-			final String metalKey = metalType.getName() + "_ingested";
+			final String metalKey = metalType.getName();
 			if (ingestedMetals.contains(metalKey))
 			{
 				final int ingestedMetalAmount = ingestedMetals.getInt(metalKey);
@@ -119,7 +119,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			final Integer ingestedMetalAmount = METALS_INGESTED.get(metalType);
 			if (ingestedMetalAmount > 0)
 			{
-				ingestedMetals.putInt(metalType.getName() + "_ingested", ingestedMetalAmount);
+				ingestedMetals.putInt(metalType.getName(), ingestedMetalAmount);
 			}
 		}
 		spiritweb.getCompoundTag().put("ingested_metals", ingestedMetals);
