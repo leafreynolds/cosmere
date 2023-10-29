@@ -72,11 +72,13 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 	public static void startLinesThread()
 	{
+		CosmereAPI.logger.info("Thread started");
 		linesThread.start();
 	}
 
 	public static void stopLinesThread()
 	{
+		CosmereAPI.logger.info("Thread stopped");
 		linesThread.stop();
 	}
 
@@ -114,11 +116,13 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	{
 		super.onModeChange(cap, lastMode);
 
+		CosmereAPI.logger.info("Mode: " + getMode(cap));
+
 		if (getMode(cap) != 0)
 		{
 			if (getMode(cap) > 0)
 				startLinesThread();
-			else if (getMode(cap) < 0)
+			else if (getMode(cap) <= 0)
 				stopLinesThread();
 			return;
 		}
@@ -588,6 +592,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		private static ScanResult scanResult = new ScanResult();
 		private static int scanRange = 0;
 		private static boolean isStopping = false;
+		final static ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
 
 		public ScanResult requestScanResult()
 		{
@@ -620,6 +625,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			{
 				CosmereAPI.logger.info("Starting lines thread");
 				t = new Thread(this, "lines_thread");
+				isStopping = false;
 				t.start();
 			}
 		}
@@ -642,11 +648,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		public void run() {
 			while (!isStopping) {
 				final Minecraft mc = Minecraft.getInstance();
-				final ProfilerFiller profiler = mc.getProfiler();
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
+				profiler.push("cosmere-linesThread");
 				//only update box list every so often
-				if (playerEntity.tickCount % 15 != 0)
+				if ((playerEntity.tickCount + 5) % 15 != 0)
 				{
 					try
 					{
@@ -663,7 +669,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				//find all the things that we want to draw a line to from the player
 
 				//metal blocks
-				profiler.push("cosmere-getBlocksInRange");
 				{
 					BlockPos.withinManhattanStream(playerEntity.blockPosition(), scanRange, scanRange, scanRange)
 							.filter(blockPos ->
@@ -717,10 +722,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					nextScan.finalizeClusters();
 				}
 
-				profiler.pop();
-
 				//entities with metal armor/tools
-				profiler.push("cosmere-getEntitiesInRange");
 				{
 					EntityHelper.getEntitiesInRange(playerEntity, scanRange, false).forEach(entity ->
 					{
@@ -771,7 +773,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 						}
 					});
 				}
-				profiler.pop();
 
 				lock.lock();
 				try
@@ -786,6 +787,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				{
 					lock.unlock();
 				}
+				profiler.pop();
 			}
 		}
 	}
