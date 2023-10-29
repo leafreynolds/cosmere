@@ -647,18 +647,19 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
 				//only update box list every so often
-				if ((playerEntity.tickCount + 5) % 5 != 0)
-				{
-					try
-					{
-						Thread.sleep(50);
-					}
-					catch (InterruptedException e)
-					{
-						throw new RuntimeException(e);
-					}
-					continue;
-				}
+				// commented out for testing purposes
+				//if ((playerEntity.tickCount + 5) % 5 != 0)
+				//{
+				//	try
+				//	{
+				//		Thread.sleep(50);
+				//	}
+				//	catch (InterruptedException e)
+				//	{
+				//		throw new RuntimeException(e);
+				//	}
+				//	continue;
+				//}
 				nextScan = new ScanResult();
 
 				//find all the things that we want to draw a line to from the player
