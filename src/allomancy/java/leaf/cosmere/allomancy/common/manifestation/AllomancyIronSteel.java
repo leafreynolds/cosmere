@@ -116,8 +116,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	{
 		super.onModeChange(cap, lastMode);
 
-		CosmereAPI.logger.info("Mode: " + getMode(cap));
-
 		if (getMode(cap) != 0)
 		{
 			if (getMode(cap) > 0)
