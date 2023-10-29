@@ -22,7 +22,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -590,7 +589,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		private static ScanResult scanResult = new ScanResult();
 		private static int scanRange = 0;
 		private static boolean isStopping = false;
-		final static ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
 
 		public ScanResult requestScanResult()
 		{
@@ -648,7 +646,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				final Minecraft mc = Minecraft.getInstance();
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
-				profiler.push("cosmere-linesThread");
 				//only update box list every so often
 				if ((playerEntity.tickCount + 5) % 5 != 0)
 				{
@@ -785,7 +782,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				{
 					lock.unlock();
 				}
-				profiler.pop();
 			}
 		}
 	}
