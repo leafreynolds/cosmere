@@ -1,15 +1,16 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
+//Increases Physical Abilities
 public class AllomancyPewter extends AllomancyManifestation
 {
 	public AllomancyPewter(Metals.MetalType metalType)
@@ -21,23 +22,14 @@ public class AllomancyPewter extends AllomancyManifestation
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
-		//Increases Physical Abilities
-		if (isActiveTick)
+		//if we're here, we already know we are not compounding and have already 'paid' for the effect
+		//if (!isCompounding(data))
 		{
-			int mode = getMode(data);
-			livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, 0));
-			switch (mode)
-			{
-				case 3:
-				case 2:
-					livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DIG_SPEED, 0));
-					livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_RESISTANCE, mode - 2));
-				case 1:
-					livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, mode - 1));
-					break;
-			}
+			final double strength = getStrength(data, false);
+			//flaring gets extra out of the effect
+			int actionableStrength = (int) Math.round(strength) * getMode(data);
+			data.addEffect(EffectsHelper.getNewEffect(AllomancyEffects.ALLOMANTIC_PEWTER.getEffect(), livingEntity, actionableStrength));
 		}
 	}
 }
