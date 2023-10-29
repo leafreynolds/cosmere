@@ -652,7 +652,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				LocalPlayer playerEntity = mc.player;
 				profiler.push("cosmere-linesThread");
 				//only update box list every so often
-				if ((playerEntity.tickCount + 5) % 15 != 0)
+				if ((playerEntity.tickCount + 5) % 5 != 0)
 				{
 					try
 					{
