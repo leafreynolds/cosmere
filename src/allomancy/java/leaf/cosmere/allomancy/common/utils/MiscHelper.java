@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 2 - 2023 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.utils;
@@ -51,7 +51,7 @@ public class MiscHelper
 					}
 				}
 			}
-			else
+			else if (metalType != Metals.MetalType.LERASATIUM)//ignore lerasatium, that's handled in feruchemy
 			{
 				//add to metal stored
 				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;

@@ -1,10 +1,11 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
 
 import com.mojang.logging.LogUtils;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.manifestation.Manifestation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -52,4 +53,24 @@ public class CosmereAPI
 		return MANIFESTATION_REGISTRY;
 	}
 
+	@NotNull
+	private static final Lazy<ResourceKey<? extends Registry<CosmereEffect>>> COSMERE_EFFECT_REGISTRY_NAME = registryKey(CosmereEffect.class, "cosmere_effect");
+	private static IForgeRegistry<CosmereEffect> COSMERE_EFFECT_REGISTRY;
+
+	@NotNull
+	public static ResourceKey<? extends Registry<CosmereEffect>> cosmereEffectRegistryName()
+	{
+		return COSMERE_EFFECT_REGISTRY_NAME.get();
+	}
+
+
+	@NotNull
+	public static IForgeRegistry<CosmereEffect> cosmereEffectRegistry()
+	{
+		if (COSMERE_EFFECT_REGISTRY == null)
+		{
+			COSMERE_EFFECT_REGISTRY = RegistryManager.ACTIVE.getRegistry(cosmereEffectRegistryName());
+		}
+		return COSMERE_EFFECT_REGISTRY;
+	}
 }

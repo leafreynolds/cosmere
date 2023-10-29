@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
@@ -8,17 +8,16 @@ import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
 import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.effects.MobEffectBase;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-public class AllomancyBoostEffect extends MobEffectBase
+public class AllomancyBoostEffect extends CosmereEffect
 {
-	public AllomancyBoostEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public AllomancyBoostEffect()
 	{
-		super(effectType, type.getColorValue());
+		super();
 
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
@@ -26,7 +25,6 @@ public class AllomancyBoostEffect extends MobEffectBase
 			{
 				addAttributeModifier(
 						AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get(),
-						"ad9ba05c-d9e5-4f74-8f25-fa65139d178c",
 						0.334D,// todo config - Need to figure out an alternative to config boost amount //AllomancyConfigs.SERVER.boostAmount.get(),
 						AttributeModifier.Operation.MULTIPLY_TOTAL);
 				//todo boost other manifestation types
@@ -38,7 +36,7 @@ public class AllomancyBoostEffect extends MobEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity livingEntity, int amplifier)
+	public void applyEffectTick(LivingEntity livingEntity, double strength)
 	{
 		//todo boost metal drain balancing
 

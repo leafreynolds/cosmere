@@ -1,23 +1,27 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 26 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.store;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
-import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 //warmth
 public class BrassStoreEffect extends FeruchemyEffectBase
 {
-	public BrassStoreEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public BrassStoreEffect(Metals.MetalType type)
 	{
-		super(type, effectType);
+		super(type);
+		addAttributeModifier(
+				AttributesRegistry.WARMTH.get(),
+				-1, // colder when storing
+				AttributeModifier.Operation.ADDITION);
 	}
 
 	public static void onLivingHurtEvent(LivingHurtEvent event)
@@ -27,20 +31,24 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 			return;
 		}
 
-		MobEffectInstance effectInstance = event.getEntity().getEffect(FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
-		if (effectInstance != null && effectInstance.getDuration() > 0)
+		//a higher total means hotter
+		//a lower total means colder
+		final int total = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.WARMTH.getAttribute());
+		if (total < 0)
 		{
+			//absolute value, because we're using the mode as the strength for feruchemy
+			int warmth = Math.abs(total);
 			final float amount;
-			switch (effectInstance.getAmplifier())
+			switch (warmth)
 			{
-				case 0:
+				case 1:
 					amount = event.getAmount() / 2;
 					break;
-				case 1:
+				case 2:
 					amount = event.getAmount() / 4;
 					break;
 				default:
-				case 2:
+				case 3:
 					event.setCanceled(true);
 					return;
 			}
@@ -56,10 +64,14 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 			return;
 		}
 
-		MobEffectInstance effectInstance = event.getEntity().getEffect(FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.BRASS).get());
-		if (effectInstance != null && effectInstance.getDuration() > 0)
+		//a higher total means hotter
+		//a lower total means colder
+		final int total = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.WARMTH.getAttribute());
+		if (total < 0)
 		{
-			switch (effectInstance.getAmplifier())
+			//absolute value, because we're using the mode as the strength for feruchemy
+			int warmth = Math.abs(total);
+			switch (warmth)
 			{
 				case 0:
 				case 1:

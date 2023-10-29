@@ -1,16 +1,16 @@
 /*
- * File updated ~ 3 - 6 - 2023 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.mixin;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashMap;
@@ -67,66 +66,66 @@ public class EntityMixin
 		Entity entity = (Entity) (Object) this;
 		if (entity instanceof LivingEntity livingEntity)
 		{
-			MobEffect iron = FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.IRON).get();
-			final MobEffectInstance effectInstance = livingEntity.getEffect(iron);
-			if (effectInstance != null && effectInstance.getAmplifier() > 1)
+			SpiritwebCapability.get(livingEntity).ifPresent(data ->
 			{
-				cir.setReturnValue(true);
-			}
+				CosmereEffect iron = FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.IRON).get();
+				if (data.totalStrengthOfEffect(iron) > 2)
+				{
+					cir.setReturnValue(true);
+				}
+			});
 		}
 	}
 
 	//region Feru steel run on water
 	//Special thanks to ExpandAbility api mod for showing how this works!
 	//https://github.com/florensie/ExpandAbility/blob/9b80bb256ed4b9dd305c3e1c3b3f6f730b57a237/common/src/main/java/be/florens/expandability/mixin/fluidcollision/EntityMixin.java
-	@SuppressWarnings("InvalidInjectorMethodSignature")
-//for some reason this complains of no possible signatures, but it _does_ work.
-	@ModifyVariable(method = "move", name = "vec3", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/Entity;collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;"))
-	private Vec3 fluidCollision(Vec3 originalDisplacement)
+	// originally they used @modify variable on the return of collide, but I want to use CallbackInfoReturnable to set value inside getting spiritweb data
+	@Inject(at = @At("RETURN"), method = "collide", cancellable = true)
+	private void collideWithFluid(CallbackInfoReturnable<Vec3> cir)
 	{
+		Vec3 originalDisplacement = cir.getReturnValue();
+
 		Entity entity = (Entity) (Object) this;
 		if (!(entity instanceof LivingEntity livingEntity) || livingEntity.isCrouching())
 		{
-			return originalDisplacement;
+			return;
 		}
 
-		MobEffect steel = FeruchemyEffects.TAPPING_EFFECTS.get(Metals.MetalType.STEEL).get();
-		final MobEffectInstance effectInstance = livingEntity.getEffect(steel);
-		if (effectInstance != null && effectInstance.getAmplifier() > 2)
+		SpiritwebCapability.get(livingEntity).ifPresent(data ->
 		{
-			if (originalDisplacement.y <= 0.0 && !isTouchingFluid(livingEntity, livingEntity.getBoundingBox().deflate(0.001D)))
+			CosmereEffect steel = FeruchemyEffects.TAPPING_EFFECTS.get(Metals.MetalType.STEEL).get();
+			if (data.totalStrengthOfEffect(steel) > 5)
 			{
-				Map<Vec3, Double> points = findFluidDistances(livingEntity, originalDisplacement);
-				Double highestDistance = null;
-
-				for (Map.Entry<Vec3, Double> point : points.entrySet())
+				if (originalDisplacement.y <= 0.0 && !isTouchingFluid(livingEntity, livingEntity.getBoundingBox().deflate(0.001D)))
 				{
-					if (highestDistance == null || (point.getValue() != null && point.getValue() > highestDistance))
-					{
-						highestDistance = point.getValue();
-					}
-				}
+					Map<Vec3, Double> points = findFluidDistances(livingEntity, originalDisplacement);
+					Double highestDistance = null;
 
-				if (highestDistance != null)
-				{
-					Vec3 finalDisplacement = new Vec3(originalDisplacement.x, highestDistance, originalDisplacement.z);
-					AABB finalBox = livingEntity.getBoundingBox().move(finalDisplacement).deflate(0.001D);
-					if (isTouchingFluid(livingEntity, finalBox))
+					for (Map.Entry<Vec3, Double> point : points.entrySet())
 					{
-						return originalDisplacement;
+						if (highestDistance == null || (point.getValue() != null && point.getValue() > highestDistance))
+						{
+							highestDistance = point.getValue();
+						}
 					}
-					else
+
+					if (highestDistance != null)
 					{
-						livingEntity.fallDistance = 0.0F;
-						livingEntity.setOnGround(true);
-						return finalDisplacement;
+						Vec3 finalDisplacement = new Vec3(originalDisplacement.x, highestDistance, originalDisplacement.z);
+						AABB finalBox = livingEntity.getBoundingBox().move(finalDisplacement).deflate(0.001D);
+						if (!isTouchingFluid(livingEntity, finalBox))
+						{
+							livingEntity.fallDistance = 0.0F;
+							livingEntity.setOnGround(true);
+							cir.setReturnValue(finalDisplacement);
+						}
 					}
 				}
 			}
+		});
 
-		}
-
-		return originalDisplacement;
+		//do nothing, use original value
 	}
 
 	//Special thanks to ExpandAbility api mod for showing how this works!

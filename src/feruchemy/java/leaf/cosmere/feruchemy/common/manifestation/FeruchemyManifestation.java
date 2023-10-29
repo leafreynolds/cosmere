@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 6 - 2023 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -7,14 +7,14 @@ package leaf.cosmere.feruchemy.common.manifestation;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
@@ -70,17 +70,18 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		if (getMode(data) == 0)
 		{
 			//todo check if removing effects on mode change is wise. May be better to let them run out as they have already "paid" for them.
-			data.getLiving().removeEffect(getStoringEffect());
-			data.getLiving().removeEffect(getTappingEffect());
+			final LivingEntity effectSource = data.getLiving();
+			data.removeEffect(EffectsHelper.getEffectUUID(getStoringEffect(), effectSource));
+			data.removeEffect(EffectsHelper.getEffectUUID(getTappingEffect(), effectSource));
 		}
 	}
 
-	protected MobEffect getTappingEffect()
+	protected CosmereEffect getTappingEffect()
 	{
 		return FeruchemyEffects.TAPPING_EFFECTS.get(this.metalType).get();
 	}
 
-	protected MobEffect getStoringEffect()
+	protected CosmereEffect getStoringEffect()
 	{
 		return FeruchemyEffects.STORING_EFFECTS.get(this.metalType).get();
 	}
@@ -167,18 +168,13 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 	public void applyEffectTick(ISpiritweb data)
 	{
 		int mode = getMode(data);
-		MobEffect effect = getEffect(mode);
-		MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
+		CosmereEffect effect = getEffect(mode);
+		CosmereEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, data.getLiving(), Math.abs(mode) - 1);//todo check this strength
 
-		if (effect == null)
-		{
-			return;
-		}
-		data.getLiving().removeEffect(effect);
-		data.getLiving().addEffect(currentEffect);
+		data.addEffect(currentEffect);
 	}
 
-	protected MobEffect getEffect(int mode)
+	protected CosmereEffect getEffect(int mode)
 	{
 		if (mode == 0)
 		{

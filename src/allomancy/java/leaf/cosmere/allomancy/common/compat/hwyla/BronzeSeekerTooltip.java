@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2023 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.compat.hwyla;
@@ -10,11 +10,8 @@ import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
@@ -41,21 +38,10 @@ public class BronzeSeekerTooltip implements IEntityComponentProvider
 			AllomancyBronze allomancyBronze = (AllomancyBronze) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
 			if (allomancyBronze.isMetalBurning(clientPlayer) || playerCreativeMode)
 			{
-				final double playerBronzeStrength = allomancyBronze.getStrength(clientPlayer, false);
 				//check the entity we are trying to
 				final LivingEntity targetEntity = (LivingEntity) accessor.getEntity();
 
-				//if the target has copper powers, and it is active, early exit
-				final AttributeMap targetAttributes = targetEntity.getAttributes();
-				double concealmentStrength = 0;
-				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
-				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
-				{
-					concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);
-				}
-
-				//do they have more concealment than the player has bronze strength?
-				if (concealmentStrength >= playerBronzeStrength)
+				if (!AllomancyBronze.contestConcealment(clientPlayer, targetEntity))
 				{
 					return;
 				}

@@ -1,14 +1,17 @@
 /*
- * File updated ~ 7 - 10 - 2023 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
 
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
@@ -21,9 +24,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -71,6 +76,8 @@ public class SpiritwebCapability implements ISpiritweb
 	public List<Integer> pullEntities = new ArrayList<>(4);
 	private CompoundTag nbt;
 
+	private final Map<UUID, CosmereEffectInstance> activeEffects = Maps.newHashMap();
+
 	private final Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
 
 
@@ -109,6 +116,22 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 		nbt.put("manifestation_modes", modeNBT);
 
+		if (this.activeEffects.isEmpty())
+		{
+			nbt.remove("ActiveEffects");
+		}
+		else
+		{
+			ListTag listtag = new ListTag();
+
+			for (CosmereEffectInstance cosmereEffectInstance : this.activeEffects.values())
+			{
+				listtag.add(cosmereEffectInstance.save(new CompoundTag()));
+			}
+
+			nbt.put("ActiveEffects", listtag);
+		}
+
 		for (ISpiritwebSubmodule spiritwebSubmodule : spiritwebSubmodules.values())
 		{
 			spiritwebSubmodule.serialize(this);
@@ -119,12 +142,12 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(CompoundTag compoundTag)
 	{
-		this.nbt = nbt;
+		this.nbt = compoundTag;
 
-		hasBeenInitialized = nbt.getBoolean("assigned_powers");
-		CompoundTag modeNBT = nbt.getCompound("manifestation_modes");
+		hasBeenInitialized = compoundTag.getBoolean("assigned_powers");
+		CompoundTag modeNBT = compoundTag.getCompound("manifestation_modes");
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
@@ -148,15 +171,28 @@ public class SpiritwebCapability implements ISpiritweb
 				manifestation.onModeChange(this, oldManifestationMode);
 			}
 		}
-		selectedManifestation = ManifestationRegistry.fromID(nbt.getString("selected_power"));
+		selectedManifestation = ManifestationRegistry.fromID(compoundTag.getString("selected_power"));
 
+		if (compoundTag.contains("ActiveEffects"))
+		{
+			//I think when you use 9 as a tag type, it means list of compound
+			ListTag listtag = compoundTag.getList("ActiveEffects", 9);
+
+			for (int i = 0; i < listtag.size(); ++i)
+			{
+				CompoundTag compoundtag = listtag.getCompound(i);
+				CosmereEffectInstance cosmereEffectInstance = CosmereEffectInstance.load(compoundtag);
+				if (cosmereEffectInstance != null)
+				{
+					this.activeEffects.put(cosmereEffectInstance.getUUID(), cosmereEffectInstance);
+				}
+			}
+		}
 
 		for (ISpiritwebSubmodule spiritwebSubmodule : spiritwebSubmodules.values())
 		{
 			spiritwebSubmodule.deserialize(this);
 		}
-
-
 	}
 
 	@Override
@@ -175,6 +211,115 @@ public class SpiritwebCapability implements ISpiritweb
 	public Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> getSubmodules()
 	{
 		return spiritwebSubmodules;
+	}
+
+	@Override
+	public void tickEffects()
+	{
+		Iterator<UUID> iterator = this.activeEffects.keySet().iterator();
+
+		try
+		{
+			while (iterator.hasNext())
+			{
+				UUID uuidOfEffedInstance = iterator.next();
+				CosmereEffectInstance cosmereEffectInstance = this.activeEffects.get(uuidOfEffedInstance);
+				if (!cosmereEffectInstance.tick(this.getLiving()))
+				{
+					if (!this.getLiving().level.isClientSide)
+					{
+						iterator.remove();
+						this.onEffectRemoved(cosmereEffectInstance);
+					}
+				}
+				else if (cosmereEffectInstance.getDuration() % 600 == 0)
+				{
+					//this was copied from mob effect code, serverplayer
+					// overrides the section to send effect packet updates
+					//we don't do that, as everything on spiritweb gets synced at once
+					this.onEffectUpdated(cosmereEffectInstance, false, (Entity) null);
+				}
+			}
+		}
+		catch (ConcurrentModificationException concurrentmodificationexception)
+		{
+			//ignore
+		}
+	}
+
+	@Override
+	public void addEffect(CosmereEffectInstance newEffect)
+	{
+		this.addEffect(newEffect, (Entity) null);
+	}
+
+	@Override
+	public void addEffect(CosmereEffectInstance newEffect, @Nullable Entity sourceEntity)
+	{
+		CosmereEffectInstance cosmereEffectInstance = this.activeEffects.get(newEffect.getUUID());
+
+		if (cosmereEffectInstance != null)
+		{
+			//remove old copy
+			removeEffect(cosmereEffectInstance.getUUID());
+		}
+
+		this.activeEffects.put(newEffect.getUUID(), newEffect);
+		this.onEffectAdded(newEffect, sourceEntity);
+	}
+
+	@Override
+	public void onEffectAdded(CosmereEffectInstance effectInstance, Entity sourceEntity)
+	{
+		if (!this.getLiving().level.isClientSide)
+		{
+			effectInstance.applyAttributeModifiers(this.getLiving(), this.getLiving().getAttributes());
+		}
+
+		//todo do something with source entity here
+	}
+
+	@Override
+	public void onEffectUpdated(CosmereEffectInstance cosmereEffectInstance, boolean forced, Entity entity)
+	{
+		final LivingEntity livingEntity = this.getLiving();
+		if (forced && !livingEntity.level.isClientSide)
+		{
+			cosmereEffectInstance.removeAttributeModifiers(livingEntity.getAttributes());
+			cosmereEffectInstance.applyAttributeModifiers(livingEntity, livingEntity.getAttributes());
+		}
+	}
+
+	@Override
+	public void removeEffect(UUID uuid)
+	{
+		if (!this.getLiving().level.isClientSide)
+		{
+			final CosmereEffectInstance effectInstance = this.activeEffects.remove(uuid);
+			onEffectRemoved(effectInstance);
+		}
+	}
+
+	@Override
+	public void onEffectRemoved(CosmereEffectInstance cosmereEffectInstance)
+	{
+		if (!this.getLiving().level.isClientSide && cosmereEffectInstance != null)
+		{
+			cosmereEffectInstance.removeAttributeModifiers(this.getLiving().getAttributes());
+		}
+	}
+
+	@Override
+	public CosmereEffectInstance getEffect(UUID uuid)
+	{
+		return this.activeEffects.get(uuid);
+	}
+
+	//get the sum total strength of all matching effects in list of effects affecting target
+	@Override
+	public int totalStrengthOfEffect(CosmereEffect cosmereEffect)
+	{
+		return this.activeEffects.values().stream().filter(effectInstance -> effectInstance.getEffect() == cosmereEffect).mapToInt(o -> (int) o.getStrength()).sum();
 	}
 
 	@Override
@@ -237,6 +382,8 @@ public class SpiritwebCapability implements ISpiritweb
 			{
 				spiritwebSubmodule.tickServer(this);
 			}
+
+			this.tickEffects();
 		}
 		else//if client
 		{
@@ -376,8 +523,6 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		return selectedManifestation;
 	}
-
-	;
 
 	public boolean hasBeenInitialized()
 	{
@@ -590,7 +735,11 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public int getMode(Manifestation manifestation)
 	{
-		return MANIFESTATIONS_MODE.getOrDefault(manifestation, 0);
+		if (manifestation != null)
+		{
+			return MANIFESTATIONS_MODE.getOrDefault(manifestation, 0);
+		}
+		return 0;
 	}
 
 	@Override

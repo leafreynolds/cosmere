@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 10 - 2023 ~ Leaf
+ * File updated ~ 26 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -7,7 +7,6 @@ package leaf.cosmere.common.eventHandlers;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,17 +42,19 @@ public class ModBusEventHandler
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
-		final Attribute xpRate = AttributesRegistry.XP_RATE_ATTRIBUTE.getAttribute();
-		final Attribute nightVision = AttributesRegistry.NIGHT_VISION_ATTRIBUTE.getAttribute();
-		final Attribute sizeAttr = AttributesRegistry.SIZE_ATTRIBUTE.get();
-
-		event.add(EntityType.PLAYER, xpRate);
-		event.add(EntityType.PLAYER, nightVision);
-		event.add(EntityType.PLAYER, sizeAttr);
+		event.add(EntityType.PLAYER, AttributesRegistry.XP_RATE_ATTRIBUTE.getAttribute());
+		event.add(EntityType.PLAYER, AttributesRegistry.NIGHT_VISION_ATTRIBUTE.getAttribute());
+		event.add(EntityType.PLAYER, AttributesRegistry.SIZE_ATTRIBUTE.get());
 
 		for (EntityType entityType : ModBusEventHandler.ENTITIES_THAT_CAN_HAVE_POWERS)
 		{
 			event.add(entityType, AttributesRegistry.COGNITIVE_CONCEALMENT.get());
+			event.add(entityType, AttributesRegistry.CONNECTION.get());
+			event.add(entityType, AttributesRegistry.COSMERE_FORTUNE.get());
+			event.add(entityType, AttributesRegistry.IDENTITY.get());
+			event.add(entityType, AttributesRegistry.DETERMINATION.get());
+			event.add(entityType, AttributesRegistry.WARMTH.get());
+			event.add(entityType, AttributesRegistry.HEALING_STRENGTH.get());
 		}
 	}
 }

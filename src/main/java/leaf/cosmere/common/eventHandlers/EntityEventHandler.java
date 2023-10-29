@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 8 - 2023 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -7,13 +7,16 @@ package leaf.cosmere.common.eventHandlers;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -27,6 +30,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -229,4 +234,59 @@ public class EntityEventHandler
 	{
 		SpiritwebCapability.get(event.getEntity()).ifPresent(ISpiritweb::tick);
 	}
+
+
+	@SubscribeEvent
+	public static void onLootingLevelEvent(LootingLevelEvent event)
+	{
+		if (event.getDamageSource() == null)
+		{
+			return;
+		}
+		if (!event.getEntity().level.isClientSide && event.getDamageSource().getEntity() instanceof LivingEntity sourceLiving)
+		{
+			int total = (int) EntityHelper.getAttributeValue(sourceLiving, AttributesRegistry.COSMERE_FORTUNE.getAttribute());
+			if (total != 0)
+			{
+				event.setLootingLevel(event.getLootingLevel() + total);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLivingHurtEvent(LivingHurtEvent event)
+	{
+		if (event.isCanceled())
+		{
+			return;
+		}
+
+		int total = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.DETERMINATION.getAttribute());
+
+		//take less damage when tapping
+		//always reduce damage by something
+		//always increase damage by something
+		final int i = Math.abs(total) + 1;
+		//never able to reduce by 100%
+		// 76% ish max? eg tap10 / 13 = 0.76
+		//store 3 is the max so never able to increase damage to self by more than 23%?
+		// 23% ish max? eg store3 / 13 = 0.23
+		final float v = i / 13f;
+		// leaving 24%
+		// 1 - 0.76 = 0.24
+		// So we add 76% extra damage
+		// 1 + 0.23 = 1.23
+		final float v1 = total > 0 ? (1 + v) : (1 - v);
+
+		//eg 7 damage at tap 10 would be:
+		// 7 * 0.24 = 1.68 damage remaining
+		//eg 7 damage at store 3 would be:
+		// 7 * 1.23 = 8.61
+
+		//basically never let them have more than 80% damage reduction
+		//but also why not let them increase taking damage, that's fine.
+		final float clampedPercentage = Mth.clamp(v1, 0.2f, 2);
+		event.setAmount(event.getAmount() * clampedPercentage);//todo convert to config
+	}
+
 }

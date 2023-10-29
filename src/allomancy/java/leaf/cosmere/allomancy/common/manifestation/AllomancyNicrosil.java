@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -7,13 +7,11 @@ package leaf.cosmere.allomancy.common.manifestation;
 import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -48,9 +46,9 @@ public class AllomancyNicrosil extends AllomancyManifestation
 	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
 		Entity trueSource = event.getSource().getEntity();
-		if (trueSource instanceof Player)
+		if (trueSource instanceof Player trueSourcePlayer)
 		{
-			SpiritwebCapability.get((LivingEntity) trueSource).ifPresent(iSpiritweb ->
+			SpiritwebCapability.get(trueSourcePlayer).ifPresent(iSpiritweb ->
 			{
 				ItemStack itemInHand = iSpiritweb.getLiving().getMainHandItem();
 
@@ -62,13 +60,17 @@ public class AllomancyNicrosil extends AllomancyManifestation
 					if (alloNicrosil.isActive(iSpiritweb))
 					{
 						//valid set up found.
-						MobEffectInstance newEffect = EffectsHelper.getNewEffect(
+						CosmereEffectInstance newEffect = EffectsHelper.getNewEffect(
 								AllomancyEffects.ALLOMANCY_BOOST.get(),
-								Mth.floor(alloNicrosil.getStrength(iSpiritweb, false))
+								iSpiritweb.getLiving(),
+								(alloNicrosil.getStrength(iSpiritweb, false))
 						);
 
 						//apply to the hit entity
-						event.getEntity().addEffect(newEffect);
+						SpiritwebCapability.get(event.getEntity()).ifPresent(target ->
+						{
+							target.addEffect(newEffect, trueSourcePlayer);
+						});
 					}
 				}
 			});
