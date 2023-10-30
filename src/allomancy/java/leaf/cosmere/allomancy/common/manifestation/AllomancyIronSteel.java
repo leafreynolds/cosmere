@@ -71,13 +71,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 	public static void startLinesThread()
 	{
-		CosmereAPI.logger.info("Thread started");
 		linesThread.start();
 	}
 
 	public static void stopLinesThread()
 	{
-		CosmereAPI.logger.info("Thread stopped");
 		linesThread.stop();
 	}
 
@@ -617,7 +615,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 		public void start()
 		{
-			if (t == null)
+			if (t == null || isStopping)
 			{
 				CosmereAPI.logger.info("Starting lines thread");
 				t = new Thread(this, "lines_thread");
@@ -642,8 +640,8 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public void run() {
+			final Minecraft mc = Minecraft.getInstance();
 			while (!isStopping) {
-				final Minecraft mc = Minecraft.getInstance();
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
 				//only update box list every so often
@@ -679,6 +677,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 									{
 										Player player = Minecraft.getInstance().player;
 										Level level = Minecraft.getInstance().level;
+										// if level is null, the player has no world loaded, so stop
+										if (mc.level == null)
+										{
+											stop();
+											return false;
+										}
 										BlockState endBlock = Objects.requireNonNull(level.getBlockState(blockPos));
 										Vec3 currVec = player.getEyePosition();
 										Vec3 endPos = new Vec3(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F);
@@ -707,6 +711,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 									catch (Exception e)
 									{
 										e.printStackTrace();
+
 										isGood = false;
 									}
 								}
@@ -728,6 +733,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 							{
 								Player player = Minecraft.getInstance().player;
 								Level level = Minecraft.getInstance().level;
+								// if level is null, the player has no world loaded, so stop
+								if (mc.level == null)
+								{
+									stop();
+									return;
+								}
 								Vec3 currVec = player.getEyePosition();
 								Vec3 endPos = new Vec3(entity.getX(), entity.getY(), entity.getZ());
 
