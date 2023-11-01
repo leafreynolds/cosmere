@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 2 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
@@ -36,7 +36,7 @@ public class PewterBurnEffect extends CosmereEffect
 		//3 knock back at 8 strength, double for flare
 		addAttributeModifier(
 				Attributes.ATTACK_KNOCKBACK,
-				0.125D,
+				0.03125D,
 				AttributeModifier.Operation.ADDITION);
 
 		//damage resistance
