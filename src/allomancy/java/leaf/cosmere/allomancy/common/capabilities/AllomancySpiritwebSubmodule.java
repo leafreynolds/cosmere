@@ -140,7 +140,8 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (range > 0)
 			{
 				Minecraft.getInstance().getProfiler().push("cosmere-getDrawLines");
-				ScanResult scanResult = AllomancyIronSteel.getDrawLines(range);
+				AllomancyIronSteel.setScanRange(range);
+				ScanResult scanResult = AllomancyIronSteel.requestScanResult();
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 
@@ -162,6 +163,8 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				}
 
 				Minecraft.getInstance().getProfiler().pop();
+
+				AllomancyIronSteel.releaseScanResult();
 			}
 		}
 	}
