@@ -523,7 +523,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 	//client side is the only time this gets initialized.
-	// this does not work for items with no recipe, such as vanilla ores
 	private static void createWhitelist(Entity entity)
 	{
 		if (s_whiteList != null)
@@ -644,24 +643,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			while (!isStopping) {
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
-				//only update box list every so often
-				// commented out for testing purposes
-				//if ((playerEntity.tickCount + 5) % 5 != 0)
-				//{
-				//	try
-				//	{
-				//		Thread.sleep(50);
-				//	}
-				//	catch (InterruptedException e)
-				//	{
-				//		throw new RuntimeException(e);
-				//	}
-				//	continue;
-				//}
 				nextScan = new ScanResult();
+				// todo: add configurable tick rate for this thread
 
 				//find all the things that we want to draw a line to from the player
-
 				//metal blocks
 				{
 					BlockPos.withinManhattanStream(playerEntity.blockPosition(), scanRange, scanRange, scanRange)
@@ -689,7 +674,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 										double resistance = 0.0F;
 
 										// linear interpolation to see if the block is obscured by blocks
-										// this method is, insanely enough, *more performant* than not filtering at all
 										int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
 										for (int i = 0; i < loopTimes; i++)
 										{
@@ -743,7 +727,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 								Vec3 endPos = new Vec3(entity.getX(), entity.getY(), entity.getZ());
 
 								// linear interpolation to see if the entity is obscured by blocks
-								// this method is, insanely enough, *more performant* than not filtering at all
 								int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
 								for (int i = 0; i < loopTimes; i++)
 								{
