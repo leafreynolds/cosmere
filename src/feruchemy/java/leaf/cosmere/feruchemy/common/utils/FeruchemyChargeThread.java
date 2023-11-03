@@ -9,8 +9,11 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class FeruchemyChargeThread implements Runnable {
+    private static Lock lock = new ReentrantLock();
     private static FeruchemyChargeThread INSTANCE;
     private static final HashMap<Metals.MetalType, Double> feruchemyChargeMap = new HashMap<>();
     static Thread t;
@@ -28,7 +31,18 @@ public class FeruchemyChargeThread implements Runnable {
 
     public Double getCharge(Metals.MetalType metalType)
     {
-        return feruchemyChargeMap.getOrDefault(metalType, 0D);
+        lock.lock();
+        try {
+            Double retVal = feruchemyChargeMap.getOrDefault(metalType, 0D);
+            lock.unlock();
+            return retVal;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            lock.unlock();
+        }
+        return 0D;
     }
 
     public void start()
@@ -76,6 +90,7 @@ public class FeruchemyChargeThread implements Runnable {
             // hashmap to keep track of each metal's f-charge in the inventory
             final HashMap<Metals.MetalType, Double> metalmindCharges = new HashMap<>();
 
+            // all inventory metalminds are counted
             for (ItemStack stack : mc.player.getInventory().items)
             {
                 if (stack.getItem() instanceof ChargeableMetalCurioItem item)
@@ -89,6 +104,7 @@ public class FeruchemyChargeThread implements Runnable {
                 }
             }
 
+            // all curio metalminds are counted
             CuriosApi.getCuriosHelper().getEquippedCurios(mc.player)
                     .map(mapper ->
                     {
@@ -106,9 +122,17 @@ public class FeruchemyChargeThread implements Runnable {
                         return true;
                     });
 
-            for (Metals.MetalType metalType : metalmindCharges.keySet())
+            lock.lock();
+            try {
+                feruchemyChargeMap.clear();
+                feruchemyChargeMap.putAll(metalmindCharges);
+            }
+            catch (Exception e)
             {
-                feruchemyChargeMap.put(metalType, metalmindCharges.get(metalType));
+                e.printStackTrace();
+            }
+            finally {
+                lock.unlock();
             }
         }
     }
