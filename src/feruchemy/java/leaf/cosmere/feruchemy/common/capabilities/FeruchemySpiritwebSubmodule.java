@@ -4,7 +4,6 @@
 
 package leaf.cosmere.feruchemy.common.capabilities;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.PlayerHelper;
