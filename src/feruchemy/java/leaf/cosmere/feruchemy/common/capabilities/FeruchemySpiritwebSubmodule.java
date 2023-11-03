@@ -13,7 +13,7 @@ import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
-import leaf.cosmere.feruchemy.common.utils.FeruchemyChargeThread;
+import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 

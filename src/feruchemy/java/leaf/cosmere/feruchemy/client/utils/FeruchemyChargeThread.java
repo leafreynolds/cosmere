@@ -1,4 +1,4 @@
-package leaf.cosmere.feruchemy.common.utils;
+package leaf.cosmere.feruchemy.client.utils;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
