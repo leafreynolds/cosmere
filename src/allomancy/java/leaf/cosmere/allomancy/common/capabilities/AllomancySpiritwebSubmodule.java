@@ -180,7 +180,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (value > 0)
 			{
 				//todo localisation check
-				final String text = metalType.getName() + ": " + value;
+				final String text = "A. " + metalType.getName() + ": " + value;
 				m_infoText.add(text);
 			}
 		}

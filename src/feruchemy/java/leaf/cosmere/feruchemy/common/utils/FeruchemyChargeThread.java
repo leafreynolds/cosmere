@@ -13,7 +13,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class FeruchemyChargeThread implements Runnable {
-    private static Lock lock = new ReentrantLock();
+    private static final Lock lock = new ReentrantLock();
     private static FeruchemyChargeThread INSTANCE;
     private static final HashMap<Metals.MetalType, Double> feruchemyChargeMap = new HashMap<>();
     static Thread t;
@@ -29,11 +29,11 @@ public class FeruchemyChargeThread implements Runnable {
         return INSTANCE;
     }
 
-    public Double getCharge(Metals.MetalType metalType)
+    public HashMap<Metals.MetalType, Double> getCharges()
     {
         lock.lock();
         try {
-            Double retVal = feruchemyChargeMap.getOrDefault(metalType, 0D);
+            HashMap<Metals.MetalType, Double> retVal = new HashMap<>(feruchemyChargeMap);
             lock.unlock();
             return retVal;
         }
@@ -42,7 +42,7 @@ public class FeruchemyChargeThread implements Runnable {
             e.printStackTrace();
             lock.unlock();
         }
-        return 0D;
+        return new HashMap<>();
     }
 
     public void start()
@@ -99,7 +99,14 @@ public class FeruchemyChargeThread implements Runnable {
                     if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
                     {
                         Double chargeToAdd = (double) item.getCharge(stack);
-                        metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                        if (metalmindCharges.containsKey(item.getMetalType()))
+                        {
+                            metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+                        }
+                        else
+                        {
+                            metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                        }
                     }
                 }
             }
@@ -115,7 +122,14 @@ public class FeruchemyChargeThread implements Runnable {
                                 if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
                                 {
                                     Double chargeToAdd = (double) item.getCharge(mapper.getStackInSlot(i));
-                                    metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                                    if (metalmindCharges.containsKey(item.getMetalType()))
+                                    {
+                                        metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+                                    }
+                                    else
+                                    {
+                                        metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                                    }
                                 }
                             }
                         }
