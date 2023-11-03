@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common.capabilities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.items.MetalVialItem;
@@ -140,8 +141,8 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (range > 0)
 			{
 				Minecraft.getInstance().getProfiler().push("cosmere-getDrawLines");
-				AllomancyIronSteel.setScanRange(range);
-				ScanResult scanResult = AllomancyIronSteel.requestScanResult();
+				IronSteelLinesThread.getInstance().setScanRange(range);
+				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 
@@ -164,7 +165,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 				Minecraft.getInstance().getProfiler().pop();
 
-				AllomancyIronSteel.releaseScanResult();
+				IronSteelLinesThread.getInstance().releaseScanResult();
 			}
 		}
 	}
