@@ -59,7 +59,6 @@ public class CuriosCompat
 				SlotTypePreset.HEAD,
 				SlotTypePreset.HANDS,
 				SlotTypePreset.CHARM,
-				SlotTypePreset.BODY,
 				SlotTypePreset.NECKLACE,
 		};
 
@@ -68,6 +67,7 @@ public class CuriosCompat
 			InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> type.getMessageBuilder().size(2).build());
 		}
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BRACELET.getMessageBuilder().size(4).build());
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BODY.getMessageBuilder().size(8).build());
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.RING.getMessageBuilder().size(8).build());
 
 		//custom slots
