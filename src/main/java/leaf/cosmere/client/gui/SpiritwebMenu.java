@@ -9,9 +9,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import leaf.cosmere.api.IHasMetalType;
-import leaf.cosmere.api.ISpiritwebSubmodule;
-import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.math.Vector2;
@@ -52,6 +50,7 @@ public class SpiritwebMenu extends Screen
 
 	protected ArrayList<RadialMenuButton> radialMenuButtons = new ArrayList<>();
 	protected ArrayList<SidedMenuButton> sidedMenuButtons = new ArrayList<>();
+	protected ArrayList<MetalQuadrant> metalQuadrants = new ArrayList<>();
 
 	private final List<String> m_infoText = new ArrayList<>();
 
@@ -243,10 +242,112 @@ public class SpiritwebMenu extends Screen
 
 	}
 
+	static class MetalQuadrant
+	{
+		public final Metals.MetalType metalType;
+		public double centerX;
+		public double centerY;
+		public static double width = 50;
+		public static double height = 40;
+
+		public MetalQuadrant(final Metals.MetalType metalType, double centerX, double centerY)
+		{
+			this.metalType = metalType;
+			this.centerX = centerX;
+			this.centerY = centerY;
+		}
+
+	}
+
 	protected void SetupButtons()
 	{
 		radialMenuButtons.clear();
 		sidedMenuButtons.clear();
+		metalQuadrants.clear();
+
+		if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY)
+		{
+			// adding manually one-by-one was better than a for loop, as there would have to be a switch case anyway
+
+			// add physical metals
+			double quadCenterX = width/2F - MetalQuadrant.width*3;		// these multiplications are kinda random, but if it works, it works
+			double quadCenterY = height/2F - MetalQuadrant.height*0.75;
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.IRON,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.STEEL,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.TIN,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.PEWTER,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			// add mental metals
+			quadCenterX = width/2 + MetalQuadrant.width*3;
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ZINC,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BRASS,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.COPPER,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BRONZE,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			// add enhancement metals
+			quadCenterX = width/2F - MetalQuadrant.width*3;
+			quadCenterY = height/2F + MetalQuadrant.height*1.75;
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ALUMINUM,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.DURALUMIN,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.CHROMIUM,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.NICROSIL,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			// add temporal metals
+			quadCenterX = width/2 + MetalQuadrant.width*3;
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.GOLD,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ELECTRUM,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY - MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.CADMIUM,
+					quadCenterX - MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BENDALLOY,
+					quadCenterX + 2 + MetalQuadrant.width/2,
+					quadCenterY + 2 + MetalQuadrant.height/2));
+
+			// add atium
+			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ATIUM,
+					width/2D,
+					quadCenterY + MetalQuadrant.height/2));
+		}
 
 		final List<Manifestation> availableManifestations = spiritweb.getAvailableManifestations();
 
@@ -319,6 +420,9 @@ public class SpiritwebMenu extends Screen
 		selectedManifestation = null;
 		doAction = null;
 
+		//render the metal quadrant backgrounds
+		renderMetalQuadrants(buffer);
+
 		//render the button backgrounds
 		renderRadialButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
 		renderSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
@@ -333,6 +437,8 @@ public class SpiritwebMenu extends Screen
 		renderRadialButtonStrings(matrixStack, (int) middle_x, (int) middle_y);
 		//draw sided button strings
 		renderSidedButtonStrings(matrixStack, middle_x, middle_y);
+		//draw quadrant strings
+		renderMetalQuadrantsStrings(matrixStack);
 		//do extra text info stuff
 		renderAnyExtraInfoTexts(matrixStack, (int) middle_x, (int) middle_y);
 
@@ -363,35 +469,23 @@ public class SpiritwebMenu extends Screen
 	{
 		int leftSideX = 10;
 		final int[] y = {(int) middle_y / 2};
-		m_infoText.clear();
 
-		for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.getSubmodules().values())
+		if (selectedPowerType == Manifestations.ManifestationTypes.SANDMASTERY)
 		{
-			spiritwebSubmodule.collectMenuInfo(m_infoText);
-		}
+			m_infoText.clear();
 
-		for (String s : m_infoText)
-		{
-			// I am supremely unhappy about this, but it was the only way without having dependencies, or reworking the entire menu text system - Gerbagel
-			if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY && s.toLowerCase().contains("a."))
+			for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.getSubmodules().values())
 			{
-				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
-				y[0] += 10;
+				spiritwebSubmodule.collectMenuInfo(m_infoText);
 			}
-			else if (selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && s.toLowerCase().contains("f."))
+
+			for (String s : m_infoText)
 			{
-				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
-				y[0] += 10;
-			}
-			else if (selectedPowerType == Manifestations.ManifestationTypes.SANDMASTERY && s.toLowerCase().contains("hydration"))
-			{
-				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
-				y[0] += 10;
-			}
-			else if (!s.toLowerCase().contains("f.") && !s.toLowerCase().contains("a.") && !s.toLowerCase().contains("hydration"))
-			{
-				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
-				y[0] += 10;
+				if (s.toLowerCase().contains("hydration"))
+				{
+					font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
+					y[0] += 10;
+				}
 			}
 		}
 
@@ -407,6 +501,75 @@ public class SpiritwebMenu extends Screen
 		//todo mode translation
 		font.drawShadow(matrixStack, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
 
+	}
+
+	private void renderMetalQuadrantsStrings(PoseStack matrixStack)
+	{
+		m_infoText.clear();
+
+		for (ISpiritwebSubmodule submodule : spiritweb.getSubmodules().values())
+		{
+			submodule.collectMenuInfo(m_infoText);
+		}
+
+		// string manipulation like this still bothers me, but oh well - Gerbagel
+		for (MetalQuadrant quad : metalQuadrants)
+		{
+			boolean numberFound = false;
+			if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY)
+			{
+				for (String s : m_infoText)
+				{
+					if (s.toLowerCase().contains("a. " + quad.metalType.getName()))
+					{
+						String displayString = s.split(":")[1].stripLeading();
+						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+
+						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
+						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+
+						numberFound = true;
+						break;
+					}
+				}
+
+				//if (!numberFound)
+				//{
+				//	String displayString = "0";
+				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+//
+				//	displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
+				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+				//}
+			}
+
+			if (selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY)
+			{
+				for (String s : m_infoText)
+				{
+					if (s.toLowerCase().contains("f. " + quad.metalType.getName()))
+					{
+						String displayString = s.split(":")[1].stripLeading();
+						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+
+						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
+						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+
+						numberFound = true;
+						break;
+					}
+				}
+
+				//if (!numberFound)
+				//{
+				//	String displayString = "0";
+				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+//
+				//	displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
+				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+				//}
+			}
+		}
 	}
 
 	private void renderSidedButtonStrings(PoseStack matrixStack, double middle_x, double middle_y)
@@ -573,6 +736,22 @@ public class SpiritwebMenu extends Screen
 			//set second triangle
 			buffer.vertex(middle_x + button.x2, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
 			buffer.vertex(middle_x + button.x2, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
+		}
+	}
+
+	private void renderMetalQuadrants(BufferBuilder buffer)
+	{
+		if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY)
+		{
+			int r = 0, g = 0, b = 0, a = 127;		// 127 is halfway between 0 and 255, so 0.5 transparency
+
+			for (MetalQuadrant quadrant : metalQuadrants)
+			{
+				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
+			}
 		}
 	}
 
