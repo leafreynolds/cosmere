@@ -372,8 +372,27 @@ public class SpiritwebMenu extends Screen
 
 		for (String s : m_infoText)
 		{
-			font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
-			y[0] += 10;
+			// I am supremely unhappy about this, but it was the only way without having dependencies, or reworking the entire menu text system - Gerbagel
+			if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY && s.toLowerCase().contains("a."))
+			{
+				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
+				y[0] += 10;
+			}
+			else if (selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && s.toLowerCase().contains("f."))
+			{
+				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
+				y[0] += 10;
+			}
+			else if (selectedPowerType == Manifestations.ManifestationTypes.SANDMASTERY && s.toLowerCase().contains("hydration"))
+			{
+				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
+				y[0] += 10;
+			}
+			else if (!s.toLowerCase().contains("f.") && !s.toLowerCase().contains("a.") && !s.toLowerCase().contains("hydration"))
+			{
+				font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
+				y[0] += 10;
+			}
 		}
 
 		if (selectedManifestation == null)

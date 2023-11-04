@@ -68,6 +68,9 @@ public class FeruchemyChargeThread implements Runnable {
     public void run() {
         Minecraft mc = Minecraft.getInstance();
 
+        // hashmap to keep track of each metal's f-charge in the inventory
+        final HashMap<Metals.MetalType, Double> metalmindCharges = new HashMap<>();
+
         while (!isStopping)
         {
             // no serverside action, unloaded levels, or non-existent players allowed >:(
@@ -87,8 +90,7 @@ public class FeruchemyChargeThread implements Runnable {
                 continue;
             }
 
-            // hashmap to keep track of each metal's f-charge in the inventory
-            final HashMap<Metals.MetalType, Double> metalmindCharges = new HashMap<>();
+            metalmindCharges.clear();
 
             // all inventory metalminds are counted
             for (ItemStack stack : mc.player.getInventory().items)
