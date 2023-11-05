@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 7 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -7,7 +7,10 @@ package leaf.cosmere.allomancy.common.manifestation;
 import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
-import leaf.cosmere.api.*;
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.CosmereTags;
+import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
@@ -36,7 +39,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -116,9 +120,13 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		if (getMode(cap) != 0)
 		{
 			if (getMode(cap) > 0)
+			{
 				startLinesThread();
+			}
 			else if (getMode(cap) <= 0)
+			{
 				stopLinesThread();
+			}
 			return;
 		}
 
@@ -147,9 +155,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		//Pushes/Pulls on Nearby Metals
 		if (getKeyBinding().isDown())
 		{
-			Player player = Minecraft.getInstance().player;
-			Level level = Minecraft.getInstance().level;
-			Minecraft mc = Minecraft.getInstance();
+			final Minecraft mc = Minecraft.getInstance();
+			Player player = mc.player;
+			Level level = mc.level;
 
 			Vec3 lerpAngle = player.getLookAngle();
 			Vec3 currPos = player.getEyePosition();
@@ -169,8 +177,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					{
 						AABB aabb = new AABB(new BlockPos(currPos));
 						Entity firstMetalEntity = null;
-						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator())) {
-							if (entityContainsMetal(ent)) {
+						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator()))
+						{
+							if (entityContainsMetal(ent))
+							{
 								firstMetalEntity = ent;
 								break;
 							}
@@ -191,11 +201,15 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 				// if resistance is 100+% or the currently targeted block has metal; exit
 				if (resistance >= 1.0F || containsMetal(blockAtPos.getBlock()))
+				{
 					break;
+				}
 
 				// if block isn't air, add material resistance value
 				if (!blockAtPos.isAir())
+				{
 					resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
+				}
 
 				// lerp to next position (1 block forward)
 				currPos = currPos.add(lerpAngle);
@@ -580,7 +594,8 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 	// this should be threaded to avoid lag spikes on the render thread when flaring metals
-	static class IronSteelLinesThread implements Runnable {
+	static class IronSteelLinesThread implements Runnable
+	{
 		private static Thread t;
 		private static final Lock lock = new ReentrantLock();
 		private static ScanResult scanResult = new ScanResult();
@@ -598,7 +613,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			{
 				e.printStackTrace();
 				lock.unlock();
-				return new ScanResult();	// empty ScanResult so it doesn't crash
+				return new ScanResult();    // empty ScanResult so it doesn't crash
 			}
 		}
 
@@ -638,9 +653,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 		@Override
 		@OnlyIn(Dist.CLIENT)
-		public void run() {
+		public void run()
+		{
 			final Minecraft mc = Minecraft.getInstance();
-			while (!isStopping) {
+			while (!isStopping)
+			{
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
 				nextScan = new ScanResult();
@@ -684,7 +701,8 @@ public class AllomancyIronSteel extends AllomancyManifestation
 												break;
 											}
 
-											resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+											resistance += (materialResistanceMap.containsKey(bState.getMaterial()))
+											              ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
 
 											double distance = currVec.distanceTo(endPos);
 											currVec = currVec.lerp(endPos, 1.0F / distance);
@@ -711,7 +729,8 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				{
 					EntityHelper.getEntitiesInRange(playerEntity, scanRange, false).forEach(entity ->
 					{
-						if (entityContainsMetal(entity)) {
+						if (entityContainsMetal(entity))
+						{
 							double resistance = 0.0F;
 							try
 							{
@@ -739,7 +758,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 										break;
 									}
 
-									resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+									resistance +=
+											(materialResistanceMap.containsKey(bState.getMaterial()))
+											? materialResistanceMap.get(bState.getMaterial())
+											: 0.0F;
 
 									double distance = currVec.distanceTo(endPos);
 									currVec = currVec.lerp(endPos, 1.0F / distance);

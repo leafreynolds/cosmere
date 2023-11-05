@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.mixin;
@@ -38,7 +38,7 @@ public class GameRendererMixin
 
 		SpiritwebCapability.get(player).ifPresent(playerSpiritweb ->
 		{
-			final FeruchemyManifestation tinF = (FeruchemyManifestation) FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.TIN).get();
+			final FeruchemyManifestation tinF = FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.TIN).get();
 
 			if (tinF.isTapping(playerSpiritweb) && tinF.canAfford(playerSpiritweb, true))
 			{
@@ -66,13 +66,13 @@ public class GameRendererMixin
 
 		SpiritwebCapability.get(player).ifPresent(playerSpiritweb ->
 		{
-			final FeruchemyManifestation feruchemy = (FeruchemyManifestation) FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.TIN).get();
+			final FeruchemyManifestation tinF = FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.TIN).get();
 
-			if (feruchemy.isStoring(playerSpiritweb) && feruchemy.canAfford(playerSpiritweb, true))
+			if (tinF.isStoring(playerSpiritweb) && tinF.canAfford(playerSpiritweb, true))
 			{
 				float renderDistance = info.getReturnValue();
 
-				final int i = Mth.abs(feruchemy.getMode(playerSpiritweb));
+				final int i = Mth.abs(tinF.getMode(playerSpiritweb));
 				final double pow = Math.pow(2, i);
 				final int floor = Mth.fastFloor(pow);
 				final float v = renderDistance / floor;

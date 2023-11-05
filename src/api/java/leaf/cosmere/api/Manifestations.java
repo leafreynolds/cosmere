@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -15,6 +15,7 @@ public class Manifestations
 {
 	public final static int ALLOMANCY_ID = 1;
 	public final static int FERUCHEMY_ID = 2;
+	public final static int HEMALURGY_ID = 7;//yes I know. Didn't add this till way later and now I'm too afraid to change it... todo: change it
 	public final static int SURGEBINDING_ID = 3;
 	public final static int AONDOR_ID = 4;
 	public final static int AWAKENING_ID = 5;
@@ -28,6 +29,9 @@ public class Manifestations
 
 		//Feruchemy Section
 		FERUCHEMY(FERUCHEMY_ID),
+
+		//Hemalurgy Section
+		HEMALURGY(HEMALURGY_ID),
 
 		//Knight Radiant Section
 		SURGEBINDING(SURGEBINDING_ID),
@@ -92,6 +96,11 @@ public class Manifestations
 				case AWAKENING:
 					break;
 				case SANDMASTERY:
+					Optional<Taldain.Mastery> masteryStyle = Taldain.Mastery.valueOf(powerID);
+					if (masteryStyle.isPresent())
+					{
+						return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation(this.getName(), masteryStyle.get().getName()));
+					}
 					break;
 			}
 			return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("cosmere", "none"));

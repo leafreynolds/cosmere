@@ -1,11 +1,10 @@
 /*
- * File updated ~ 24 - 10 - 2022 ~ Leaf
+ * File updated ~ 4 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.advancements;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
@@ -49,9 +48,9 @@ public class FeruchemyAdvancements implements Consumer<Consumer<Advancement>>
 				.save(advancementConsumer, String.format(achievementPathFormat, tabName, "root"));
 
 
-		for (ManifestationRegistryObject<Manifestation> manifestation : FeruchemyManifestations.FERUCHEMY_POWERS.values())
+		for (ManifestationRegistryObject<FeruchemyManifestation> manifestation : FeruchemyManifestations.FERUCHEMY_POWERS.values())
 		{
-			FeruchemyManifestation feruchemyManifestation = (FeruchemyManifestation) manifestation.get();
+			FeruchemyManifestation feruchemyManifestation = manifestation.get();
 
 			Metals.MetalType metalType = feruchemyManifestation.getMetalType();
 			String metalName = metalType.getName();
