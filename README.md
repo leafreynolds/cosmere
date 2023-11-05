@@ -58,4 +58,4 @@ Perhaps the cognitive realm may interest you... Better find the nearest perpendi
 [Commands](https://github.com/leafreynolds/cosmere/wiki/commands)
 
 ## Got something to say?
-Consider dropping by the [discord server dedicated to this mod](https://discord.gg/wNghzCbqXw)! 
+Consider dropping by the [discord server dedicated to this mod](https://discord.gg/nj6rnQqdc8)! 
