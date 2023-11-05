@@ -9,6 +9,7 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.PotionItem;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,9 +25,11 @@ public class SandmasteryEntityEventHandler
 		{
 			return;
 		}
-
+		Item item = event.getItem().getItem();
+		boolean potion = item instanceof PotionItem;
+		boolean metalVial = item.getDescriptionId().equals("item.allomancy.metal_vial"); // TODO: Replace the magic string with code
 		final LivingEntity livingEntity = event.getEntity();
-		if (event.getItem().getItem() instanceof PotionItem item)
+		if (potion || metalVial)
 		{
 			SpiritwebCapability.get(livingEntity).ifPresent(spiritweb ->
 			{
@@ -36,7 +39,8 @@ public class SandmasteryEntityEventHandler
 				int maxPlayerHydration = sb.MAX_HYDRATION;
 				if(playerHydration < maxPlayerHydration)
 				{
-					sb.adjustHydration(Math.min(1000, maxPlayerHydration - playerHydration), true);
+					if(potion) sb.adjustHydration(Math.min(1000, maxPlayerHydration - playerHydration), true);
+					// if(metalVial) sb.adjustHydration(Math.min(1000, maxPlayerHydration - playerHydration), true); // TODO: bottling machine should determine liquit used, and as such hydration value
 				}
 			});
 		}
