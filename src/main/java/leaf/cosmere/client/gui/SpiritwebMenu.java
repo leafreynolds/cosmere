@@ -13,6 +13,7 @@ import leaf.cosmere.api.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.math.Vector2;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -512,11 +513,14 @@ public class SpiritwebMenu extends Screen
 			submodule.collectMenuInfo(m_infoText);
 		}
 
-		// string manipulation like this still bothers me, but oh well - Gerbagel
 		for (MetalQuadrant quad : metalQuadrants)
 		{
-			boolean numberFound = false;
-			if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY)
+			int maniListSize = spiritweb.getAvailableManifestations().size();
+			boolean foundNumber = false;
+			boolean inSubmenu = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY && maniListSize > 16;
+			boolean manifestationIsSelected = selectedManifestation != null && maniListSize <= 16 && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
+			// if there are submenus, or if an allomantic manifestation is selected in the menu, proceed
+			if (inSubmenu || manifestationIsSelected)
 			{
 				for (String s : m_infoText)
 				{
@@ -528,22 +532,16 @@ public class SpiritwebMenu extends Screen
 						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
 						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
 
-						numberFound = true;
+						foundNumber = true;
 						break;
 					}
 				}
-
-				//if (!numberFound)
-				//{
-				//	String displayString = "0";
-				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
-//
-				//	displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
-				//}
 			}
 
-			if (selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY)
+			inSubmenu = selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && maniListSize > 16;
+			manifestationIsSelected = selectedManifestation != null && maniListSize <= 16 && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
+			// if there are submenus, or if a feruchemical manifestation is selected in the menu, proceed
+			if (inSubmenu || manifestationIsSelected)
 			{
 				for (String s : m_infoText)
 				{
@@ -555,19 +553,23 @@ public class SpiritwebMenu extends Screen
 						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
 						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
 
-						numberFound = true;
+						foundNumber = true;
 						break;
 					}
 				}
+			}
 
-				//if (!numberFound)
-				//{
-				//	String displayString = "0";
-				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
-//
-				//	displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-				//	font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
-				//}
+			if (!foundNumber && (spiritweb.getAvailableManifestations().contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID())) || spiritweb.getAvailableManifestations().contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID()))))
+			{
+				String displayString;
+				if (selectedManifestation != null)
+				{
+					displayString = "0";
+					font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+				}
+
+				displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
+				font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
 			}
 		}
 	}
@@ -741,12 +743,23 @@ public class SpiritwebMenu extends Screen
 
 	private void renderMetalQuadrants(BufferBuilder buffer)
 	{
-		if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY)
+		List<Manifestation> maniList = spiritweb.getAvailableManifestations();
+		boolean hasSubmenu = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && maniList.size() > 16;
+		boolean manifestationIsSelected = selectedManifestation != null && maniList.size() <= 16 && (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY || selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY);
+
+		// if there are submenus, or if an allo/feru manifestation is selected in the menu, proceed
+		if (hasSubmenu || manifestationIsSelected)
 		{
 			int r = 0, g = 0, b = 0, a = 127;		// 127 is halfway between 0 and 255, so 0.5 transparency
 
 			for (MetalQuadrant quadrant : metalQuadrants)
 			{
+				// if player doesn't have the manifestation, skip it
+				if (!maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quadrant.metalType.getID())) && !maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quadrant.metalType.getID())))
+				{
+					continue;
+				}
+
 				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
 				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
 				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
