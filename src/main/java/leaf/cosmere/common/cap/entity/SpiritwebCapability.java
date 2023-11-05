@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 4 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -28,6 +28,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -450,9 +451,17 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void renderWorldEffects(RenderLevelStageEvent event)
 	{
-		for (ISpiritwebSubmodule spiritwebSubmodule : spiritwebSubmodules.values())
+		ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
+
+		for (Map.Entry<Manifestations.ManifestationTypes, ISpiritwebSubmodule> set : spiritwebSubmodules.entrySet())
 		{
-			spiritwebSubmodule.renderWorldEffects(this, event);
+			ISpiritwebSubmodule spiritwebSubmodule = set.getValue();
+
+			profiler.push(set.getKey().getName());
+			{
+				spiritwebSubmodule.renderWorldEffects(this, event);
+			}
+			profiler.pop();
 		}
 	}
 

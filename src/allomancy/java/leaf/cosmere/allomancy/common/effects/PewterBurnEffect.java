@@ -33,7 +33,7 @@ public class PewterBurnEffect extends CosmereEffect
 				0.375D,
 				AttributeModifier.Operation.ADDITION);
 
-		//3 knock back at 8 strength, double for flare
+		//0.25 knock back at 8 strength, double for flare
 		addAttributeModifier(
 				Attributes.ATTACK_KNOCKBACK,
 				0.03125D,

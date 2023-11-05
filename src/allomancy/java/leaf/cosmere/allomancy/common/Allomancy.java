@@ -1,10 +1,11 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
+import leaf.cosmere.allomancy.common.capabilities.world.IScadrial;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.network.AllomancyPacketHandler;
 import leaf.cosmere.allomancy.common.registries.*;
@@ -15,6 +16,7 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereModConfig;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +40,9 @@ public class Allomancy implements IModModule
 
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::onConfigLoad);
+		modBus.addListener(this::onConfigReload);
 		modBus.addListener(this::commonSetup);
+		modBus.addListener(this::onAddCaps);
 
 		AllomancyItems.ITEMS.register(modBus);
 		AllomancyAttributes.ATTRIBUTES.register(modBus);
@@ -91,6 +95,17 @@ public class Allomancy implements IModModule
 		}
 	}
 
+	private void onConfigReload(ModConfigEvent.Reloading configEvent)
+	{
+		ModConfig config = configEvent.getConfig();
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		{
+			cosmereModConfig.clearCache();
+			if (cosmereModConfig.getSpec() == AllomancyConfigs.CLIENT.getConfigSpec())
+			{
+			}
+		}
+	}
 
 	private void commonSetup(FMLCommonSetupEvent event)
 	{
@@ -106,4 +121,8 @@ public class Allomancy implements IModModule
 		packetHandler.initialize();
 	}
 
+	private void onAddCaps(RegisterCapabilitiesEvent capabilitiesEvent)
+	{
+		capabilitiesEvent.register(IScadrial.class);
+	}
 }
