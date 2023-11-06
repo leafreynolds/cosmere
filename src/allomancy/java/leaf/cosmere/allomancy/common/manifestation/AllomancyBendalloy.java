@@ -4,6 +4,7 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
@@ -11,10 +12,14 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class AllomancyBendalloy extends AllomancyManifestation
 {
+	private static final HashMap<String, BendalloyThread> playerThreadMap = new HashMap<>();
 	public AllomancyBendalloy(Metals.MetalType metalType)
 	{
 		super(metalType);
@@ -23,24 +28,79 @@ public class AllomancyBendalloy extends AllomancyManifestation
 	@Override
 	protected void applyEffectTick(ISpiritweb data)
 	{
-		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		int mode = getMode(data);
 
-		//Slows Down Time for the entities around the user
-		if (isActiveTick)
+		String uuid = data.getLiving().getStringUUID();
+		if (mode > 0 && !playerThreadMap.containsKey(uuid))
 		{
-			int mode = getMode(data);
+			playerThreadMap.put(uuid, new BendalloyThread(data));
+		}
 
-			int range = this.getRange(data);
+        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning);
+	}
 
-			List<LivingEntity> entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
+	class BendalloyThread implements Runnable
+	{
+		private final ISpiritweb data;
+		public boolean isRunning = true;
 
-			for (LivingEntity e : entitiesToAffect)
+		public BendalloyThread(ISpiritweb data)
+		{
+			this.data = data;
+
+			Thread t = new Thread(this, "bendalloy_thread_" + data.getLiving().getDisplayName());
+			t.start();
+		}
+
+		@Override
+		public void run()
+		{
+			while (true)
 			{
-				e.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode));
-			}
+				try
+				{
+					int mode = getMode(data);
 
-			//todo slow tile entities? not sure how to do that. cadmium just calls tick more often.
+					// check if bendalloy is off or compounding
+					if (mode <= 0)
+					{
+						break;
+					}
+
+					// this is the only way to check if the player is still online, thanks forge devs
+					if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+					{
+						break;
+					}
+
+					LivingEntity livingEntity = data.getLiving();
+					boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+
+					//Slows Down Time for the entities around the user
+					if (isActiveTick)
+					{
+						int range = getRange(data);
+
+						List<LivingEntity> entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
+
+						for (LivingEntity e : entitiesToAffect)
+						{
+							e.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode));
+						}
+
+						//todo slow tile entities? not sure how to do that. cadmium just calls tick more often.
+					}
+
+					// sleep thread for 1 tick (50ms)
+					Thread.sleep(50);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					break;
+				}
+			}
+			isRunning = false;
 		}
 	}
 }
