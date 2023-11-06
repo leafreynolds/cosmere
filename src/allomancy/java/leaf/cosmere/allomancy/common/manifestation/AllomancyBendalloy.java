@@ -4,7 +4,6 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
@@ -13,9 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class AllomancyBendalloy extends AllomancyManifestation
 {

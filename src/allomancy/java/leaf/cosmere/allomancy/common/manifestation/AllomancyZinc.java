@@ -4,17 +4,12 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
