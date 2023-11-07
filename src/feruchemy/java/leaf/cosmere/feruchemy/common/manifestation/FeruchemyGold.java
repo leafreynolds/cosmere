@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -32,7 +32,7 @@ public class FeruchemyGold extends FeruchemyManifestation
 		LivingEntity livingEntity = data.getLiving();
 
 		//don't heal more than needed.
-		if (livingEntity.tickCount % 20 != 0)
+		if (!isActiveTick(data))
 		{
 			return false;
 		}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -45,6 +45,11 @@ public class AllomancyNicrosil extends AllomancyManifestation
 	//Enhances Allomantic Burn of Target
 	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
+		if (event.isCanceled())
+		{
+			return;
+		}
+
 		Entity trueSource = event.getSource().getEntity();
 		if (trueSource instanceof Player trueSourcePlayer)
 		{

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 6 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -38,7 +38,7 @@ public class FeruchemyCopper extends FeruchemyManifestation
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 
-		if (!(livingEntity instanceof Player playerEntity) || livingEntity.tickCount % 20 != 0)
+		if (!(livingEntity instanceof Player playerEntity) || !isActiveTick(data))
 		{
 			return false;
 		}

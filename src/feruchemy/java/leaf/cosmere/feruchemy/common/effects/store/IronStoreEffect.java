@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.store;
@@ -33,7 +33,7 @@ public class IronStoreEffect extends FeruchemyEffectBase
 	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
 	{
 		//ensure the user has correct buffs at least as strong as their store effect
-		if (entityLivingBaseIn.level.isClientSide || entityLivingBaseIn.tickCount % 20 != 0)
+		if (entityLivingBaseIn.level.isClientSide || (entityLivingBaseIn.tickCount + metalType.getID()) % 20 != 0)
 		{
 			return;
 		}

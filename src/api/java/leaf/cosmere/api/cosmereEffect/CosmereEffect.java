@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.cosmereEffect;
@@ -49,14 +49,14 @@ public abstract class CosmereEffect implements ICosmereEffectProvider
 		return this;
 	}
 
-	protected int getActiveTick()
+	protected int getActiveTick(LivingEntity livingEntity)
 	{
-		return 20;
+		return livingEntity.tickCount;
 	}
 
 	protected boolean isActiveTick(LivingEntity livingEntity)
 	{
-		return livingEntity.tickCount % getActiveTick() == 0;
+		return getActiveTick(livingEntity) % 20 == 0;
 	}
 
 	public boolean isDurationEffectTick(int pDuration, int pStrength)

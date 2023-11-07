@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -21,7 +21,7 @@ public class AllomancyAluminum extends AllomancyManifestation
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		//passive active ability, if any
-		if (data.getLiving().tickCount % 20 == 0)
+		if (isActiveTick(data))
 		{
 			int drainedCount = 0;
 
