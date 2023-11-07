@@ -57,7 +57,7 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 			for (Metals.MetalType metalType : metalmindChargesMap.keySet())
 			{
 				// todo localisation check
-				final String text = "F. " + metalType.getName() + ": " + metalmindChargesMap.getOrDefault(metalType, 0D);
+				final String text = "F. " + metalType.getName() + ": " + metalmindChargesMap.getOrDefault(metalType, 0D).intValue();
 				m_infoText.add(text);
 			}
 		}

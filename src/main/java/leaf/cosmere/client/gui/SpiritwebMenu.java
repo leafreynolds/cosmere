@@ -421,12 +421,12 @@ public class SpiritwebMenu extends Screen
 		selectedManifestation = null;
 		doAction = null;
 
-		//render the metal quadrant backgrounds
-		renderMetalQuadrants(buffer);
-
 		//render the button backgrounds
 		renderRadialButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
 		renderSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
+
+		//render the metal quadrant backgrounds
+		renderMetalQuadrants(buffer);
 
 		//draw out what we've asked for
 		tessellator.end();
@@ -508,6 +508,14 @@ public class SpiritwebMenu extends Screen
 	{
 		m_infoText.clear();
 
+		List<Manifestation> maniList = spiritweb.getAvailableManifestations();
+		int maniListSize = maniList.size();
+		boolean manifestationNotNull = selectedManifestation != null;
+		boolean inMetalSubmenu = (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY) && maniListSize > 16;
+		boolean shouldShowAllomancy = maniListSize <= 16 && manifestationNotNull && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
+		boolean shouldShowFeruchemy = maniListSize <= 16 && manifestationNotNull && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
+		boolean manifestationIsSelected = shouldShowAllomancy || shouldShowFeruchemy;
+
 		for (ISpiritwebSubmodule submodule : spiritweb.getSubmodules().values())
 		{
 			submodule.collectMenuInfo(m_infoText);
@@ -515,16 +523,27 @@ public class SpiritwebMenu extends Screen
 
 		for (MetalQuadrant quad : metalQuadrants)
 		{
-			int maniListSize = spiritweb.getAvailableManifestations().size();
 			boolean foundNumber = false;
-			boolean inSubmenu = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY && maniListSize > 16;
-			boolean manifestationIsSelected = selectedManifestation != null && maniListSize <= 16 && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
-			// if there are submenus, or if an allomantic manifestation is selected in the menu, proceed
-			if (inSubmenu || manifestationIsSelected)
+			boolean selectedAllomancyType = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || shouldShowAllomancy;
+			boolean selectedFeruchemyType = selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY || shouldShowFeruchemy;
+
+			// if there are submenus, or if a manifestation is selected in the menu, proceed
+			if (inMetalSubmenu || manifestationIsSelected)
 			{
 				for (String s : m_infoText)
 				{
-					if (s.toLowerCase().contains("a. " + quad.metalType.getName()))
+					if (((inMetalSubmenu && selectedAllomancyType) || shouldShowAllomancy) && s.toLowerCase().contains("a. " + quad.metalType.getName()) && maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID())))
+					{
+						String displayString = s.split(":")[1].stripLeading();
+						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+
+						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
+						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+
+						foundNumber = true;
+						break;
+					}
+					else if (((inMetalSubmenu && selectedFeruchemyType) || shouldShowFeruchemy) && s.toLowerCase().contains("f. " + quad.metalType.getName()) && maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID())))
 					{
 						String displayString = s.split(":")[1].stripLeading();
 						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
@@ -538,35 +557,12 @@ public class SpiritwebMenu extends Screen
 				}
 			}
 
-			inSubmenu = selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && maniListSize > 16;
-			manifestationIsSelected = selectedManifestation != null && maniListSize <= 16 && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
-			// if there are submenus, or if a feruchemical manifestation is selected in the menu, proceed
-			if (inSubmenu || manifestationIsSelected)
-			{
-				for (String s : m_infoText)
-				{
-					if (s.toLowerCase().contains("f. " + quad.metalType.getName()))
-					{
-						String displayString = s.split(":")[1].stripLeading();
-						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
-
-						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
-
-						foundNumber = true;
-						break;
-					}
-				}
-			}
-
-			if (!foundNumber && (spiritweb.getAvailableManifestations().contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID())) || spiritweb.getAvailableManifestations().contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID()))))
+			boolean shouldDrawMetalNames = !foundNumber && manifestationNotNull && ((selectedAllomancyType && maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID()))) || (selectedFeruchemyType && maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID()))));
+			if (shouldDrawMetalNames)
 			{
 				String displayString;
-				if (selectedManifestation != null)
-				{
-					displayString = "0";
-					font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
-				}
+				displayString = "0";
+				font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
 
 				displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
 				font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
@@ -744,22 +740,23 @@ public class SpiritwebMenu extends Screen
 	private void renderMetalQuadrants(BufferBuilder buffer)
 	{
 		List<Manifestation> maniList = spiritweb.getAvailableManifestations();
-		boolean hasSubmenu = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && maniList.size() > 16;
 		boolean manifestationIsSelected = selectedManifestation != null && maniList.size() <= 16 && (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY || selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY);
+		boolean allomancySubmenuOpen = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY && maniList.size() > 16;
+		boolean feruchemySubmenuOpen = selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && maniList.size() > 16;
+		boolean hasSubmenu = allomancySubmenuOpen || feruchemySubmenuOpen;
+		boolean allomancySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
+		boolean feruchemySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
+		int r = 0, g = 0, b = 0, a = 127;		// 127 is halfway between 0 and 255, so 0.5 transparency
 
-		// if there are submenus, or if an allo/feru manifestation is selected in the menu, proceed
-		if (hasSubmenu || manifestationIsSelected)
+		for (MetalQuadrant quadrant : metalQuadrants)
 		{
-			int r = 0, g = 0, b = 0, a = 127;		// 127 is halfway between 0 and 255, so 0.5 transparency
+			Manifestation alloMani = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quadrant.metalType.getID());
+			Manifestation feruMani = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quadrant.metalType.getID());
 
-			for (MetalQuadrant quadrant : metalQuadrants)
+			// if player doesn't have the manifestation, skip it
+			if ((hasSubmenu && ((allomancySubmenuOpen && maniList.contains(alloMani)) || (feruchemySubmenuOpen && maniList.contains(feruMani))))
+				|| (!hasSubmenu && ((allomancySelected && maniList.contains(alloMani)) || (feruchemySelected && maniList.contains(feruMani)))))
 			{
-				// if player doesn't have the manifestation, skip it
-				if (!maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quadrant.metalType.getID())) && !maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quadrant.metalType.getID())))
-				{
-					continue;
-				}
-
 				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
 				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
 				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
