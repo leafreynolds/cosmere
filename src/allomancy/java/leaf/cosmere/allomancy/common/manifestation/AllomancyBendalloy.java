@@ -52,6 +52,8 @@ public class AllomancyBendalloy extends AllomancyManifestation
 		@Override
 		public void run()
 		{
+			LivingEntity livingEntity = data.getLiving();
+			List<LivingEntity> entitiesToAffect;
 			while (true)
 			{
 				try
@@ -69,8 +71,6 @@ public class AllomancyBendalloy extends AllomancyManifestation
 					{
 						break;
 					}
-
-					LivingEntity livingEntity = data.getLiving();
 					boolean isActiveTick = livingEntity.tickCount % 20 == 0;
 
 					//Slows Down Time for the entities around the user
@@ -78,7 +78,7 @@ public class AllomancyBendalloy extends AllomancyManifestation
 					{
 						int range = getRange(data);
 
-						List<LivingEntity> entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
+						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
 
 						for (LivingEntity e : entitiesToAffect)
 						{

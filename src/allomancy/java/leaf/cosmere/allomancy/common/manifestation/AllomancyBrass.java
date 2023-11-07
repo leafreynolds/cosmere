@@ -52,6 +52,7 @@ public class AllomancyBrass extends AllomancyManifestation
 		@Override
 		public void run()
 		{
+			List<LivingEntity> entitiesToAffect;
 			while (true)
 			{
 				try
@@ -74,7 +75,7 @@ public class AllomancyBrass extends AllomancyManifestation
 					//todo, replace x * mode with config based value
 					double allomanticStrength = getStrength(data, false);
 
-					List<LivingEntity> entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
+					entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
 
 					for (LivingEntity e : entitiesToAffect)
 					{

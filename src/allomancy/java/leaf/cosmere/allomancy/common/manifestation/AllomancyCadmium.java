@@ -54,6 +54,7 @@ public class AllomancyCadmium extends AllomancyManifestation
 		@Override
 		public void run()
 		{
+			List<LivingEntity> entitiesToCheck;
 			//Speeds Up Time for everything around the user, implying the user is slower
 			while (true)
 			{
@@ -99,7 +100,7 @@ public class AllomancyCadmium extends AllomancyManifestation
 
 						//todo tick living entities?
 
-						List<LivingEntity> entitiesToCheck = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
+						entitiesToCheck = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
 
 						for (LivingEntity e : entitiesToCheck)
 						{

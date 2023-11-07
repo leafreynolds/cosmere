@@ -54,6 +54,7 @@ public class AllomancyZinc extends AllomancyManifestation
         @Override
         public void run()
 		{
+            List<LivingEntity> entitiesToAffect;
             while (true)
             {
                 try
@@ -73,7 +74,7 @@ public class AllomancyZinc extends AllomancyManifestation
                         break;
                     }
 
-                    List<LivingEntity> entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
+                    entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
 
                     for (LivingEntity e : entitiesToAffect)
                     {
