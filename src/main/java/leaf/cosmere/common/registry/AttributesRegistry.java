@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2023 ~ Leaf
+ * File updated ~ 26 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
@@ -27,6 +27,54 @@ public class AttributesRegistry
 					Cosmere.MODID,
 					0,
 					0,
+					99);
+
+	public static final AttributeRegistryObject<Attribute> CONNECTION =
+			ATTRIBUTES.register(
+					"connection",
+					Cosmere.MODID,
+					0,
+					-99,
+					99);
+
+	public static final AttributeRegistryObject<Attribute> COSMERE_FORTUNE =
+			ATTRIBUTES.register(
+					"cosmere_fortune",
+					Cosmere.MODID,
+					0,
+					-99,
+					99);
+
+	public static final AttributeRegistryObject<Attribute> IDENTITY =
+			ATTRIBUTES.register(
+					"identity",
+					Cosmere.MODID,
+					1,
+					-99,
+					99);
+
+	public static final AttributeRegistryObject<Attribute> DETERMINATION =
+			ATTRIBUTES.register(
+					"determination",
+					Cosmere.MODID,
+					1,
+					-99,
+					99);
+
+	public static final AttributeRegistryObject<Attribute> WARMTH =
+			ATTRIBUTES.register(
+					"warmth",
+					Cosmere.MODID,
+					0,
+					-99,
+					99);
+
+	public static final AttributeRegistryObject<Attribute> HEALING_STRENGTH =
+			ATTRIBUTES.register(
+					"healing_strength",
+					Cosmere.MODID,
+					0,
+					-99,
 					99);
 
 }

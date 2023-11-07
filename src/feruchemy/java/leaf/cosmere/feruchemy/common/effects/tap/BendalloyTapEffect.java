@@ -1,12 +1,11 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 19 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -14,13 +13,13 @@ import net.minecraft.world.food.FoodData;
 
 public class BendalloyTapEffect extends FeruchemyEffectBase
 {
-	public BendalloyTapEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public BendalloyTapEffect(Metals.MetalType type)
 	{
-		super(type, effectType);
+		super(type);
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
 	{
 		if (!isActiveTick(entityLivingBaseIn))
 		{
@@ -30,7 +29,7 @@ public class BendalloyTapEffect extends FeruchemyEffectBase
 		if (!entityLivingBaseIn.level.isClientSide)
 		{
 			final FoodData foodData = ((Player) entityLivingBaseIn).getFoodData();
-			final int i = 1 + amplifier;
+			final int i = (int) (1 + strength);
 			if (foodData.needsFood())
 			{
 				foodData.setFoodLevel(foodData.getFoodLevel() + i);

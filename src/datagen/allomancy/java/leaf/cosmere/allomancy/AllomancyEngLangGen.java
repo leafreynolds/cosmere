@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -14,8 +14,8 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
+import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
-import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import net.minecraft.data.DataGenerator;
@@ -90,7 +90,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addAdvancements()
 	{
 		//innate
-		for (Manifestations.ManifestationTypes value : Manifestations.ManifestationTypes.values())
+		Manifestations.ManifestationTypes value = Manifestations.ManifestationTypes.ALLOMANCY;
 		{
 			add(String.format(advancementTitleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
 			add(String.format(advancementDescriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));
@@ -182,15 +182,16 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addDamageSources()
 	{
 		//Damage Sources
-		add("death.attack.eat_metal", "%1$s shredded their throat while eating metal");
-		add("death.attack.eat_metal.player", "%1$s tried to eat metal directly while fighting %2$s");
+		add("death.attack.pewter_delayed_damage", "%1$s stopped burning pewter and succumbed to their wounds");
+		add("death.attack.pewter_delayed_damage.player", "%1$s ran out of pewter while fighting %2$s");
 	}
 
 	private void addMobEffects()
 	{
-		for (IMobEffectProvider effect : AllomancyEffects.EFFECTS.getAllMobEffects())
+		//
+		for (ICosmereEffectProvider effect : AllomancyEffects.EFFECTS.getEffectsInRegistry())
 		{
-			add(effect.getMobEffect().getDescriptionId(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
+			add(effect.getEffect().getTranslationKey(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
 		}
 	}
 
@@ -201,6 +202,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 
 	private void addConfigs()
 	{
+		add("config.jade.plugin_allomancy.bronze_seeker_tooltip", "Seeker Tooltip");
 	}
 
 	private void addCommands()

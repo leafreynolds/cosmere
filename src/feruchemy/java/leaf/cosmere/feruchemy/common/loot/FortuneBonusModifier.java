@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.loot;
@@ -8,9 +8,8 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import leaf.cosmere.api.Metals;
-import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
-import net.minecraft.world.effect.MobEffectInstance;
+import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -63,25 +62,11 @@ public class FortuneBonusModifier extends LootModifier
 			Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
 			BlockState blockState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 
-			if (blockState != null && entity instanceof LivingEntity player)
+			if (blockState != null && entity instanceof LivingEntity livingEntity)
 			{
-
-				MobEffectInstance storingLuckEffect = player.getEffect(FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());
-				MobEffectInstance tappingLuckEffect = player.getEffect(FeruchemyEffects.TAPPING_EFFECTS.get(Metals.MetalType.CHROMIUM).get());
+				int totalFortuneBonus = (int) EntityHelper.getAttributeValue(livingEntity, AttributesRegistry.COSMERE_FORTUNE.getAttribute());
 
 				//bonus for tapping amplifier.
-				int totalFortuneBonus = 0;
-				if (tappingLuckEffect != null)
-				{
-					totalFortuneBonus = tappingLuckEffect.getAmplifier() + 1;
-				}
-
-				//minus off the unlucky effect amplifier
-
-				if (storingLuckEffect != null)
-				{
-					totalFortuneBonus -= (storingLuckEffect.getAmplifier() + 1);
-				}
 
 				if (totalFortuneBonus != 0)
 				{

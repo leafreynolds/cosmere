@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 7 - 2023 ~ Leaf
+ * File updated ~ 4 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client;
@@ -130,26 +130,18 @@ public class ClientEvents
 			return;
 		}
 
-
 		Minecraft mc = Minecraft.getInstance();
 		ProfilerFiller profiler = mc.getProfiler();
 		LocalPlayer playerEntity = mc.player;
 		{
-			profiler.push("cosmere-hud");
-
-			//if (Minecraft.getInstance().gameMode.canHurtPlayer())
+			profiler.push("cosmere-world-effects");
 			{
 				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
 				{
-					profiler.push(spiritweb.getSelectedManifestation().getName());
 					spiritweb.renderWorldEffects(event);
-					profiler.pop();
-
 				});
 			}
 			profiler.pop();
-
-			//RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 		}
 
 	}

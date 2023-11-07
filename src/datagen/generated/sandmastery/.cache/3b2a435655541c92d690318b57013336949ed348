@@ -1,4 +1,7 @@
-// 1.19.2	2023-09-17T10:47:58.295446	PatchouliGeneration
+// 1.19.2	2023-11-05T11:50:58.3703273	PatchouliGeneration
 d4771d73d38f6e1c6d6980c5ed56d11dddcb3f61 data/sandmastery/patchouli_books/guide/en_us/categories/sandmastery.json
-70d1afa34bca9afd77f7794c42e43199b9f28d73 data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sandmastery_basics.json
-172381ce81184c1a318426d6af3959b30fbd5a58 data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sand_jar.json
+7240c0a0233cff9fa51f236fbe1e102a3c8a7ab8 data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/qido.json
+50046cc055e45dae1f5b753f5f51ce6a7490886e data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sandmastery_basics.json
+120bcbdd46480280891193ad6ffa85f80f0e1619 data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sand_jar.json
+42c91fd18b4d15fde03a5bd25178f9d8724c682b data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sand_pouch.json
+4c7cb35822ccaa0eece380af3a880566f27d60ce data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sand_spreader.json

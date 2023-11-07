@@ -1,15 +1,12 @@
 /*
- * File updated ~ 3 - 6 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
 public class FeruchemyGold extends FeruchemyManifestation
@@ -35,7 +32,7 @@ public class FeruchemyGold extends FeruchemyManifestation
 		LivingEntity livingEntity = data.getLiving();
 
 		//don't heal more than needed.
-		if (livingEntity.tickCount % 20 != 0)
+		if (!isActiveTick(data))
 		{
 			return false;
 		}
@@ -58,21 +55,5 @@ public class FeruchemyGold extends FeruchemyManifestation
 			return isTapping(data);
 		}
 		return false;
-	}
-
-	@Override
-	public void applyEffectTick(ISpiritweb data)
-	{
-		super.applyEffectTick(data);
-		final int mode = getMode(data);
-		MobEffect effect = getEffect(mode);
-		MobEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, Math.abs(mode) - 1);
-
-		if (effect == null)
-		{
-			return;
-		}
-
-		data.getLiving().addEffect(currentEffect);
 	}
 }

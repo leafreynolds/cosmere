@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -105,32 +105,46 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		return isMetalBurning(data) && getMode(data) < 0;
 	}
 
+	public boolean isAllomanticBurn(ISpiritweb data)
+	{
+		return isMetalBurning(data) && getMode(data) > 0;
+	}
+
 	//A metal is considered burning if the user has the power and can afford the next tick of burning.
 	public boolean isMetalBurning(ISpiritweb data)
 	{
 		//absolute value, because compounding uses negative modes.
-		int mode = Mth.abs(getMode(data));
+		int modeAbs = Mth.abs(getMode(data));
 		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 
 		//make sure the user can afford the cost of burning this metal
-		while (mode > 0)
+		while (modeAbs > 0)
 		{
 			//if not then try reduce the amount that they are burning
 
-			if (allo.adjustIngestedMetal(metalType, -mode, false))
+			if (allo.adjustIngestedMetal(metalType, -modeAbs, false))
 			{
 				return true;
 			}
 			else
 			{
-				mode--;
+				//todo fix this to work for compounding,
+				modeAbs--;
 				//set that mode back to the capability.
-				data.setMode(this, mode);
+				data.setMode(this, modeAbs);
 				//if it hits zero then return out
 				//try again at a lower burn rate.
 			}
 		}
 		return false;
+	}
+
+	//is flaring, in either normal burn or compounding
+	protected boolean isFlaring(ISpiritweb data)
+	{
+		int mode = getMode(data);
+		final int absMode = Mth.abs(mode);
+		return absMode > 1;
 	}
 
 	@Override
@@ -148,7 +162,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 		allo.adjustIngestedMetal(metalType, -cost, isActiveTick);
 
 		if (isActiveTick && livingEntity instanceof ServerPlayer serverPlayer)
@@ -246,5 +260,4 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		final int mode = Math.max(getMode(data), 0);
 		return Mth.floor(allomanticStrength * mode);
 	}
-
 }

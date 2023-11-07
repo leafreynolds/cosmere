@@ -1,21 +1,16 @@
 /*
- * File updated ~ 7 - 10 - 2023 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.mixin;
 
-import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
-import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyBronze;
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,35 +37,10 @@ public class EntityMixin
 
 		SpiritwebCapability.get(clientPlayer).ifPresent(playerSpiritweb ->
 		{
-			final AllomancyManifestation bronzeAllomancyManifestation = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
-			//if the player does not have bronze, early exit
-			if (!bronzeAllomancyManifestation.isActive(playerSpiritweb))
+			if (!AllomancyBronze.contestConcealment(playerSpiritweb, target))
 			{
-				return;
-			}
-			final double bronzeStrength = bronzeAllomancyManifestation.getStrength(playerSpiritweb, false);
-
-
-			//todo range to config
-			//get allomantic strength of
-			double range = bronzeAllomancyManifestation.getRange(playerSpiritweb);
-			final boolean inRangeOfBronze = clientPlayer != null && clientPlayer.distanceTo(target) < range;
-			if (!inRangeOfBronze)
-			{
-				return;
-			}
-			//if target has copper and it's active, early exit
-			final AttributeMap targetAttributes = target.getAttributes();
-			double concealmentStrength = 0;
-			final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
-			if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
-			{
-				concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);
-			}
-
-			//do they have more concealment than the player has bronze strength?
-			if (concealmentStrength >= bronzeStrength)
-			{
+				//close out of consumer, does not meet requirements for seeking.
+				//either not using bronze, not in range, or not strong enough
 				return;
 			}
 

@@ -4,6 +4,7 @@
 
 package leaf.cosmere.sandmastery.common.items;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
@@ -17,6 +18,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
@@ -25,6 +27,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 public class QidoItem extends ChargeableItemBase
 {
@@ -36,17 +40,13 @@ public class QidoItem extends ChargeableItemBase
 	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
-		return Mth.floor(1000 * getMaxChargeModifier());
+		return Mth.floor(10000 * getMaxChargeModifier());
 	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
 	{
 		ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
-		if (pLevel.isClientSide)
-		{
-			return InteractionResultHolder.pass(itemStack);
-		}
 
 		if (pPlayer.isCrouching())
 		{
@@ -60,6 +60,9 @@ public class QidoItem extends ChargeableItemBase
 		}
 		else
 		{
+			if(getCharge(itemStack) <= 0) {
+				InteractionResultHolder.pass(itemStack);
+			}
 			SpiritwebCapability.get(pPlayer).ifPresent(spiritweb ->
 			{
 				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
@@ -71,22 +74,14 @@ public class QidoItem extends ChargeableItemBase
 					return;
 				}
 
-				final int liquid = getCharge(itemStack);
-
 				SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
 				int playerHydration = sb.getHydrationLevel();
 				final int maxPlayerHydration = sb.MAX_HYDRATION;
 
-				if (liquid + playerHydration > maxPlayerHydration)
+				if (playerHydration < maxPlayerHydration)
 				{
-					sb.adjustHydration((maxPlayerHydration - playerHydration), true);
-					setCharge(itemStack, ((liquid + playerHydration) - maxPlayerHydration));
-				}
-				else
-				{
-					sb.adjustHydration(liquid, true);
-					setCharge(itemStack, 0);
+					pPlayer.startUsingItem(pUsedHand);
 				}
 			});
 		}
@@ -94,31 +89,38 @@ public class QidoItem extends ChargeableItemBase
 		return InteractionResultHolder.consume(itemStack);
 	}
 
-	// TODO figure out how to get this to work
-//    @Override
-//    public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
-//        int availableWater = getCharge(pStack);
-//        if (availableWater == 0) return;
-//        SpiritwebCapability.get(pLivingEntity).ifPresent(spiritweb ->
-//        {
-//            SpiritwebCapability data = (SpiritwebCapability) spiritweb;
-//            SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-//
-//            int increasePerTick = Math.min(63, availableWater);
-//            int playerHydration = sb.getHydrationLevel();
-//            final int maxPlayerHydration = sb.MAX_HYDRATION;
-//
-//            if(playerHydration == maxPlayerHydration) return;
-//            if ((increasePerTick + playerHydration) > maxPlayerHydration) increasePerTick = maxPlayerHydration-playerHydration;
-//
-//            sb.adjustHydration(increasePerTick, true);
-//            setCharge(pStack, availableWater - increasePerTick);
-//
-//            CosmereAPI.logger.info(increasePerTick);
-//        });
-//        super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
-//    }
+	@Override
+	public void onUsingTick(ItemStack pStack, LivingEntity pLivingEntity, int pRemainingUseDuration)
+	{
+		if (!pLivingEntity.isCrouching())
+		{
+			int availableWater = getCharge(pStack);
+			if (availableWater == 0)
+			{
+				pLivingEntity.stopUsingItem();
+				return;
+			}
+			SpiritwebCapability.get(pLivingEntity).ifPresent(spiritweb ->
+			{
+				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
+				SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
+				int increasePerTick = Math.min(50, availableWater);
+				int playerHydration = sb.getHydrationLevel();
+				final int maxPlayerHydration = sb.MAX_HYDRATION;
+
+				if (playerHydration == maxPlayerHydration) return;
+				if ((increasePerTick + playerHydration) > maxPlayerHydration)
+					increasePerTick = maxPlayerHydration - playerHydration;
+
+				sb.adjustHydration(increasePerTick, true);
+				setCharge(pStack, availableWater - increasePerTick);
+			});
+		}
+		super.onUsingTick(pStack, pLivingEntity, pRemainingUseDuration);
+	}
+
+	@Nonnull
 	@Override
 	public UseAnim getUseAnimation(ItemStack pStack)
 	{
@@ -134,7 +136,7 @@ public class QidoItem extends ChargeableItemBase
 	@Override
 	public int getUseDuration(ItemStack pStack)
 	{
-		return 16;
+		return 16000;
 	}
 
 }

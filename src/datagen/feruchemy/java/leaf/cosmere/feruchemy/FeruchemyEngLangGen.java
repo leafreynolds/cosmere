@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -10,7 +10,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
-import leaf.cosmere.api.providers.IMobEffectProvider;
+import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
@@ -98,7 +98,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	private void addAdvancements()
 	{
 		//innate
-		for (Manifestations.ManifestationTypes value : Manifestations.ManifestationTypes.values())
+		Manifestations.ManifestationTypes value = Manifestations.ManifestationTypes.FERUCHEMY;
 		{
 			add(String.format(advancementTitleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
 			add(String.format(advancementDescriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));
@@ -206,9 +206,9 @@ public class FeruchemyEngLangGen extends LanguageProvider
 
 	private void addMobEffects()
 	{
-		for (IMobEffectProvider effect : FeruchemyEffects.EFFECTS.getAllMobEffects())
+		for (ICosmereEffectProvider effect : FeruchemyEffects.EFFECTS.getEffectsInRegistry())
 		{
-			add(effect.getMobEffect().getDescriptionId(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
+			add(effect.getEffect().getTranslationKey(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
 		}
 	}
 

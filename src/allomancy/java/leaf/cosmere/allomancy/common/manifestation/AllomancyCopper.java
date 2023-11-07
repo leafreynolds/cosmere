@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -45,11 +46,11 @@ public class AllomancyCopper extends AllomancyManifestation
 		//mode minus one, because copper has special mode stuff.
 		final int mode = getMode(data);
 		int i = switch (mode)
-				{
-					case 1, 2 -> 1;
-					case 3 -> 2;
-					default -> 0;
-				};
+		{
+			case 1, 2 -> 1;
+			case 3 -> 2;
+			default -> 0;
+		};
 
 		return Mth.floor(allomanticStrength * i);
 	}
@@ -58,35 +59,38 @@ public class AllomancyCopper extends AllomancyManifestation
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 
 		//Hides Allomantic Pulses
 		if (isActiveTick)
 		{
 
+			final int actionableStrength = Mth.fastFloor(getStrength(data, false));
 			switch (getMode(data))
 			{
 				case 1:
-					data.getLiving().addEffect(
+					data.addEffect(
 							EffectsHelper.getNewEffect(
 									AllomancyEffects.ALLOMANTIC_COPPER.get(),
-									Mth.fastFloor(
-											getStrength(data, false)
-									)
+									data.getLiving(),
+									actionableStrength
 							));
 					break;
 				case 2:
 				case 3:
 					List<LivingEntity> entitiesToApplyEffect = EntityHelper.getLivingEntitiesInRange(livingEntity, getRange(data), true);
 
-					for (LivingEntity e : entitiesToApplyEffect)
+					for (LivingEntity target : entitiesToApplyEffect)
 					{
-						e.addEffect(EffectsHelper.getNewEffect(
-								AllomancyEffects.ALLOMANTIC_COPPER.get(),
-								Mth.fastFloor(
-										getStrength(data, false)
-								)
-						));
+						SpiritwebCapability.get(target).ifPresent(targetSpiritweb ->
+						{
+							targetSpiritweb.addEffect(EffectsHelper.getNewEffect(
+									AllomancyEffects.ALLOMANTIC_COPPER.get(),
+									data.getLiving(),
+									actionableStrength
+							));
+
+						});
 					}
 					break;
 			}

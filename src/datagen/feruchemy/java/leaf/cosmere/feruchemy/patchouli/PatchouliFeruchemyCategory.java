@@ -1,12 +1,11 @@
 /*
- * File updated ~ 18 - 9 - 2023 ~ Leaf
+ * File updated ~ 4 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.patchouli;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
@@ -50,10 +49,9 @@ public class PatchouliFeruchemyCategory
 		entries.add(Compounding);
 
 		//feruchemy
-		for (ManifestationRegistryObject<Manifestation> manifestationRegistryObject : FeruchemyManifestations.FERUCHEMY_POWERS.values())
+		for (ManifestationRegistryObject<FeruchemyManifestation> manifestationRegistryObject : FeruchemyManifestations.FERUCHEMY_POWERS.values())
 		{
-			Manifestation manifestation = manifestationRegistryObject.get();
-			FeruchemyManifestation feruchemyManifestation = (FeruchemyManifestation) manifestation;
+			FeruchemyManifestation feruchemyManifestation = manifestationRegistryObject.get();
 			Metals.MetalType metalType = feruchemyManifestation.getMetalType();
 
 			if (!metalType.hasFeruchemicalEffect())
