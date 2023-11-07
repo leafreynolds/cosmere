@@ -27,7 +27,7 @@ public class FeruchemyServerConfig implements ICosmereConfig
 
 		BENDALLOY_SATURATION_MULTIPLIER = builder.comment("The cost multiplier for when player is full and needs to start doing saturation").defineInRange("bendalloySaturationMultiplier", 2, 1, Integer.MAX_VALUE);
 		GOLD_TAP_COST_MULTIPLIER = builder.comment("Healing cost multiplier for tapping").defineInRange("goldTapCostMultiplier", 2, 1, Integer.MAX_VALUE);
-		GOD_METAL_EAT_STRENGTH_MINIMUM = builder.comment("When the user eats a lerasatium nugget, what should their strength in feruchemy be set to").defineInRange("godMetalMinimumStrength", 13, 1, 20);
+		GOD_METAL_EAT_STRENGTH_MINIMUM = builder.comment("When the user eats a lerasatium nugget, what should their strength in feruchemy be set to").defineInRange("godMetalMinimumStrength", 16, 1, 32);
 		FULL_FERUCHEMIST_STARTING_METALMIND_COUNT = builder.comment("How many metalminds should a full feruchemist start with?").defineInRange("fullFeruchemistStartingMetalmindCount", 3, 0, 16);
 
 		STARTING_METALMIND_RANDOMISED_MAX_FILL_AMOUNT = builder
