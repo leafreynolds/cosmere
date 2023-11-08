@@ -33,17 +33,15 @@ public class AllomancyBrass extends AllomancyManifestation
 			playerThreadMap.put(uuid, new BrassThread(data));
 		}
 
-		playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning);
+		playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
 	}
 
-	class BrassThread implements Runnable
+	class BrassThread extends AllomancyEntityThread
 	{
-		private final ISpiritweb data;
-		public boolean isRunning = true;
 
 		public BrassThread(ISpiritweb data)
 		{
-			this.data = data;
+			super(data);
 
 			Thread t = new Thread(this, "brass_thread_" + data.getLiving().getDisplayName().getString());
 			t.start();
@@ -55,6 +53,8 @@ public class AllomancyBrass extends AllomancyManifestation
 			List<LivingEntity> entitiesToAffect;
 			while (true)
 			{
+				if (serverShutdown)
+					break;
 				try
 				{
 					int mode = getMode(data);
@@ -75,6 +75,7 @@ public class AllomancyBrass extends AllomancyManifestation
 					//todo, replace x * mode with config based value
 					double allomanticStrength = getStrength(data, false);
 
+					lock.lock();
 					entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
 
 					for (LivingEntity e : entitiesToAffect)
@@ -96,6 +97,7 @@ public class AllomancyBrass extends AllomancyManifestation
 							}
 						}
 					}
+					lock.unlock();
 
 					// sleep thread for 1 tick (50ms)
 					Thread.sleep(50);

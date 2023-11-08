@@ -33,17 +33,14 @@ public class AllomancyBendalloy extends AllomancyManifestation
 			playerThreadMap.put(uuid, new BendalloyThread(data));
 		}
 
-        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning);
+        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
 	}
 
-	class BendalloyThread implements Runnable
+	class BendalloyThread extends AllomancyEntityThread
 	{
-		private final ISpiritweb data;
-		public boolean isRunning = true;
-
 		public BendalloyThread(ISpiritweb data)
 		{
-			this.data = data;
+			super(data);
 
 			Thread t = new Thread(this, "bendalloy_thread_" + data.getLiving().getDisplayName());
 			t.start();
@@ -56,6 +53,9 @@ public class AllomancyBendalloy extends AllomancyManifestation
 			List<LivingEntity> entitiesToAffect;
 			while (true)
 			{
+				if (serverShutdown)
+					break;
+
 				try
 				{
 					int mode = getMode(data);
@@ -78,12 +78,14 @@ public class AllomancyBendalloy extends AllomancyManifestation
 					{
 						int range = getRange(data);
 
+						lock.lock();
 						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
 
 						for (LivingEntity e : entitiesToAffect)
 						{
 							e.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode));
 						}
+						lock.unlock();
 
 						//todo slow tile entities? not sure how to do that. cadmium just calls tick more often.
 					}

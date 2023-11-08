@@ -11,7 +11,6 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,17 +34,15 @@ public class AllomancyZinc extends AllomancyManifestation
             playerThreadMap.put(uuid, new ZincThread(data));
         }
 
-        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning);
+        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
     }
 
-    class ZincThread implements Runnable
+    class ZincThread extends AllomancyEntityThread
     {
-        private final ISpiritweb data;
-        public boolean isRunning = true;
 
 		public ZincThread(ISpiritweb data)
 		{
-			this.data = data;
+            super(data);
 
             Thread t = new Thread(this, "zinc_thread_" + data.getLiving().getDisplayName().getString());
             t.start();
@@ -57,6 +54,8 @@ public class AllomancyZinc extends AllomancyManifestation
             List<LivingEntity> entitiesToAffect;
             while (true)
             {
+                if (serverShutdown)
+                    break;
                 try
                 {
                     int mode = getMode(data);
@@ -74,6 +73,7 @@ public class AllomancyZinc extends AllomancyManifestation
                         break;
                     }
 
+                    lock.lock();
                     entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
 
                     for (LivingEntity e : entitiesToAffect)
@@ -106,6 +106,7 @@ public class AllomancyZinc extends AllomancyManifestation
                             }
                         }
                     }
+                    lock.unlock();
 
                     // sleep thread for 1 tick (50ms)
                     Thread.sleep(50);
@@ -113,6 +114,7 @@ public class AllomancyZinc extends AllomancyManifestation
                 catch (Exception e)
                 {
                     e.printStackTrace();
+                    break;
                 }
             }
             isRunning = false;

@@ -35,17 +35,15 @@ public class AllomancyCadmium extends AllomancyManifestation
 			playerThreadMap.put(uuid, new CadmiumThread(data));
 		}
 
-		playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning);
+		playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
 	}
 
-	class CadmiumThread implements Runnable
+	class CadmiumThread extends AllomancyEntityThread
 	{
-		private final ISpiritweb data;
-		public boolean isRunning = true;
 
 		public CadmiumThread(ISpiritweb data)
 		{
-			this.data = data;
+			super(data);
 
 			Thread t = new Thread(this, "cadmium_thread_" + data.getLiving().getDisplayName());
 			t.start();
@@ -58,6 +56,8 @@ public class AllomancyCadmium extends AllomancyManifestation
 			//Speeds Up Time for everything around the user, implying the user is slower
 			while (true)
 			{
+				if (serverShutdown)
+					break;
 				try
 				{
 					int mode = getMode(data);
@@ -74,6 +74,7 @@ public class AllomancyCadmium extends AllomancyManifestation
 						break;
 					}
 
+					lock.lock();
 					//tick entities around user
 					if (data.getLiving().tickCount % 6 == 0)
 					{
@@ -104,9 +105,18 @@ public class AllomancyCadmium extends AllomancyManifestation
 
 						for (LivingEntity e : entitiesToCheck)
 						{
-							e.aiStep();
+							try
+							{
+								e.aiStep();
+							}
+							catch (Exception err)
+							{
+								if (!(err instanceof NullPointerException))
+									err.printStackTrace();
+							}
 						}
 					}
+					lock.unlock();
 
 					// sleep thread for 1 tick (50ms)
 					Thread.sleep(50);
