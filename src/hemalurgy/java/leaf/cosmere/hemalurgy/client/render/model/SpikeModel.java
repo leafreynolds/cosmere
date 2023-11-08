@@ -31,29 +31,69 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 {
 	private static final ResourceLocation TEXTURE = Cosmere.rl("textures/block/metal_block.png");
 
-	// region string IDs
+	// Body Parts
+	private static final String headID = "head";
+	private static final String bodyID = "body";
 	private static final String leftArmID = "left_arm";
 	private static final String rightArmID = "right_arm";
 	private static final String leftLegID = "left_leg";
 	private static final String rightLegID = "right_leg";
-	private static final String headID = "head";
-	private static final String eyeRootID = "eyeRoot";
-	private static final String backID = "back";
-	private static final String bodyID = "body";
-	private static final String linchpinID = "linchpin";
-	private static final String braceletID = "bracelet";
-	private static final String handsID = "hands";
-	private static final String legsID = "legs";
-	private static final String feetID = "feet";
-//endregion
 
-	//region model parts
+	// Categories
+	private static final String eyeRootID = "eyeRoot";
+	private static final String eyesID = "eyes";
+
+	private static final String linchpinID = "linchpin";
+
+	private static final String backID = "back";
+
+	private static final String chestID = "chest";
+
+	private static final String shouldersTopID = "shoulders_top";
+	private static final String shouldersSideID = "shoulders_side";
+	private static final String shouldersBackID = "shoulders_back";
+
+	private static final String upperArmsID = "upper_arms";
+	private static final String upperArmsBackID = "upper_arms_back";
+	private static final String middleArmsID = "middle_arms";
+	private static final String lowerArmsID = "lower_arms";
+	private static final String handsID = "hands";
+
+	private static final String ribsTopID = "ribs_top";
+	private static final String ribsTopMiddleID = "ribs_top_middle";
+	private static final String ribsBottomMiddleID = "ribs_bottom_middle";
+	private static final String ribsBottomID = "ribs_bottom";
+
+	private static final String upperLegsID = "upper_legs";
+	private static final String upperMiddleLegsID = "upper_middle_legs";
+	private static final String lowerMiddleLegsID = "lower_middle_legs";
+	private static final String lowerLegsID = "lower_legs";
+
+	// Model Parts
 	private final ModelPart root;
 	private final ModelPart eyeRoot;
-	private final ModelPart eyeLeft;
-	private final ModelPart eyeRight;
+	private final ModelPart eyeLeftFront;
+	private final ModelPart eyeRightFront;
+	private final ModelPart eyeLeftBack;
+	private final ModelPart eyeRightBack;
+
 	private final ModelPart linchpin;
-	private final ModelPart back;
+
+	private final ModelPart upperBack;
+	private final ModelPart upperMiddleBack;
+	private final ModelPart lowerMiddleBack;
+	private final ModelPart lowerBack;
+
+	private final ModelPart upperChest;
+	private final ModelPart lowerChest;
+
+	private final ModelPart rightShoulderTop;
+	private final ModelPart leftShoulderTop;
+	private final ModelPart rightShoulderSide;
+	private final ModelPart leftShoulderSide;
+	private final ModelPart rightShoulderBack;
+	private final ModelPart leftShoulderBack;
+
 	private final ModelPart ribLeftTop;
 	private final ModelPart ribLeftTopMiddle;
 	private final ModelPart ribLeftBottomMiddle;
@@ -62,31 +102,52 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 	private final ModelPart ribRightTopMiddle;
 	private final ModelPart ribRightBottomMiddle;
 	private final ModelPart ribRightBottom;
+
 	private final ModelPart rightArmUpper;
+	private final ModelPart rightArmUpperBack;
+	private final ModelPart rightArmMiddle;
 	private final ModelPart rightArmLower;
-	private final ModelPart rightHand;
+
 	private final ModelPart leftArmUpper;
+	private final ModelPart leftArmUpperBack;
+	private final ModelPart leftArmMiddle;
 	private final ModelPart leftArmLower;
+
+	private final ModelPart rightHand;
 	private final ModelPart leftHand;
+
 	private final ModelPart rightLegUpper;
+	private final ModelPart rightLegUpperMiddle;
+	private final ModelPart rightLegLowerMiddle;
 	private final ModelPart rightLegLower;
+
 	private final ModelPart leftLegUpper;
+	private final ModelPart leftLegUpperMiddle;
+	private final ModelPart leftLegLowerMiddle;
 	private final ModelPart leftLegLower;
-//endregion
 
 	public SpikeModel(ModelPart part)
 	{
 		super(part, RenderType::entityCutoutNoCull);
 		this.root = part;
-		ModelPart find = this.root.getChild(headID);
 
+		ModelPart find = this.root.getChild(headID);
 		eyeRoot = find.getChild(eyeRootID);
-		eyeLeft = eyeRoot.getChild("left_eye");
-		eyeRight = eyeRoot.getChild("right_eye");
+		eyeLeftFront = eyeRoot.getChild("left_eye_front");
+		eyeRightFront = eyeRoot.getChild("right_eye_front");
+		eyeLeftBack = eyeRoot.getChild("left_eye_back");
+		eyeRightBack = eyeRoot.getChild("right_eye_back");
 
 		find = part.getChild(bodyID);
-		linchpin = find.getChild(linchpinID);
-		back = find.getChild("back");
+		linchpin = find.getChild("linchpin");
+		upperBack = find.getChild("upper_back");
+		upperMiddleBack = find.getChild("upper_middle_back");
+		lowerMiddleBack = find.getChild("lower_middle_back");
+		lowerBack = find.getChild("lower_back");
+
+		upperChest = find.getChild("upper_chest");
+		lowerChest = find.getChild("lower_chest");
+
 		ribLeftTop = find.getChild("rib_left_top");
 		ribLeftTopMiddle = find.getChild("rib_left_top_middle");
 		ribLeftBottomMiddle = find.getChild("rib_left_bottom_middle");
@@ -97,22 +158,39 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 		ribRightBottom = find.getChild("rib_right_bottom");
 
 		find = part.getChild(rightArmID);
-		rightArmUpper = find.getChild("upper_spike");
-		rightArmLower = find.getChild("lower_spike");
+		rightShoulderTop = find.getChild("shoulder_top");
+		rightShoulderSide = find.getChild("shoulder_side");
+		rightShoulderBack = find.getChild("shoulder_back");
+
+		rightArmUpper = find.getChild("upper");
+		rightArmUpperBack = find.getChild("back");
+		rightArmMiddle = find.getChild("middle");
+		rightArmLower = find.getChild("lower");
+
 		rightHand = find.getChild("hand");
 
 		find = part.getChild(leftArmID);
-		leftArmUpper = find.getChild("upper_spike");
-		leftArmLower = find.getChild("lower_spike");
+		leftShoulderTop = find.getChild("shoulder_top");
+		leftShoulderSide = find.getChild("shoulder_side");
+		leftShoulderBack = find.getChild("shoulder_back");
+
+		leftArmUpper = find.getChild("upper");
+		leftArmUpperBack = find.getChild("back");
+		leftArmMiddle = find.getChild("middle");
+		leftArmLower = find.getChild("lower");
+
 		leftHand = find.getChild("hand");
 
 		find = part.getChild(rightLegID);
-		rightLegUpper = find.getChild("upper_spike");
-		rightLegLower = find.getChild("lower_spike");
+		rightLegUpper = find.getChild("upper");
+		rightLegUpperMiddle = find.getChild("upper_middle");
+		rightLegLowerMiddle = find.getChild("lower_middle");
+		rightLegLower = find.getChild("lower");
 
-		find = part.getChild(leftLegID);
-		leftLegUpper = find.getChild("upper_spike");
-		leftLegLower = find.getChild("lower_spike");
+		leftLegUpper = find.getChild("upper");
+		leftLegUpperMiddle = find.getChild("upper_middle");
+		leftLegLowerMiddle = find.getChild("lower_middle");
+		leftLegLower = find.getChild("lower");
 	}
 
 	public static LayerDefinition createLayer()
@@ -134,18 +212,31 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 		);
 
 		eyeRoot.addOrReplaceChild(
-				"right_eye",
+				"right_eye_front",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.0F, -3.0F, -5.0F, 2.0F, 2.0F, 10, cube),
+						.addBox(-3.0F, -3.0F, -4.25F, 2.0F, 2.0F, 5, cube),
 				PartPose.ZERO);
 
-		final String left_eye = "left_eye";
 		eyeRoot.addOrReplaceChild(
-				left_eye,
+				"right_eye_back",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(1.0F, -3.0F, -5.0F, 2.0F, 2.0F, 10, cube),
+						.addBox(-2.25F, -2.25F, 3.0F, 0.5F, 0.5F, 1, cube),
+				PartPose.ZERO);
+
+		eyeRoot.addOrReplaceChild(
+				"left_eye_front",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(1.0F, -3.0F, -4.25F, 2.0F, 2.0F, 5, cube),
+				PartPose.ZERO);
+
+		eyeRoot.addOrReplaceChild(
+				"left_eye_back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(1.75F, -2.25F, 3.0F, 0.5F, 0.5F, 1, cube),
 				PartPose.ZERO);
 
 
@@ -156,73 +247,108 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 		);
 
 		body.addOrReplaceChild(
-				linchpinID,
+				"linchpin",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-0.5F, 1.5F, 2.0F, 1.0F, 1.0F, 2.0F, cube),
+						.addBox(-0.25F, 1.0F, 1.5F, 0.5F, 0.5F, 0.5F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
-				"back",
+				"upper_back",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-1F, 3.5f, 0.0F, 2.0F, 2.0F, 3.0F, cube),
+						.addBox(-0.25F, 3.5F, 1.5F, 0.5F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		body.addOrReplaceChild(
+				"upper_middle_back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 5.5F, 1.5F, 0.5F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		body.addOrReplaceChild(
+				"lower_middle_back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 7.5F, 1.5F, 0.5F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		body.addOrReplaceChild(
+				"lower_back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 9.5F, 1.5F, 0.5F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		body.addOrReplaceChild(
+				"upper_chest",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 5.5F, -2.03125F, 0.5F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		body.addOrReplaceChild(
+				"lower_chest",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 9.5F, -2.03125F, 0.5F, 0.5F, 0.5F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_right_top",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-2.5F, 10.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(-2.5F, 4.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_right_top_middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-2.5F, 8.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(-2.5F, 6.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_right_bottom_middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-2.5F, 6.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(-2.5F, 8.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_right_bottom",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-2.5F, 4.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(-2.5F, 10.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_left_top",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(2F, 10.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(2F, 4.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_left_top_middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(2F, 8.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(2F, 6.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_left_bottom_middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(2F, 6.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(2F, 8.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		body.addOrReplaceChild(
 				"rib_left_bottom",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(2F, 4.0F, -2.5f, 0.5F, 0.5F, 5.0F, cube),
+						.addBox(2F, 10.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		final PartDefinition rightArm = part.addOrReplaceChild(
@@ -231,22 +357,52 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
-		rightArm.addOrReplaceChild("upper_spike",
+		rightArm.addOrReplaceChild("shoulder_top",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.5f, 0, -0.5F, 2, 1, 1, cube),
+						.addBox(-1.25F, -2.0F, -0.25F, 0.5F, 1.0F, 0.5F, cube),
 				PartPose.ZERO);
 
-		rightArm.addOrReplaceChild("lower_spike",
+		rightArm.addOrReplaceChild("shoulder_side",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.5f, 3, -0.5F, 2, 1, 1, cube),
+						.addBox(-3.0F, 0.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		rightArm.addOrReplaceChild("shoulder_back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-1.25F, 0.0F, 0.0625F, 0.5F, 0.5F, 2.0F, cube),
+				PartPose.ZERO);
+
+		rightArm.addOrReplaceChild("upper",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-3.0F, 2.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		rightArm.addOrReplaceChild("back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-1.25F, 2.0F, 0.0625F, 0.5F, 0.5F, 2.0F, cube),
+				PartPose.ZERO);
+
+		rightArm.addOrReplaceChild("middle",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-3.0F, 4.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		rightArm.addOrReplaceChild("lower",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-3.0F, 6.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
 				PartPose.ZERO);
 
 		rightArm.addOrReplaceChild("hand",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.5f, 6, -0.5F, 2, 1, 1, cube),
+						.addBox(-3.0F, 8.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
 				PartPose.ZERO);
 
 
@@ -256,22 +412,52 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
-		leftArm.addOrReplaceChild("upper_spike",
+		leftArm.addOrReplaceChild("shoulder_top",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(1.5f, 0, -0.5F, 2, 1, 1, cube),
+						.addBox(0.75F, -2.0F, -0.25F, 0.5F, 1.0F, 0.5F, cube),
 				PartPose.ZERO);
 
-		leftArm.addOrReplaceChild("lower_spike",
+		leftArm.addOrReplaceChild("shoulder_side",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(1.5f, 3, -0.5F, 2, 1, 1, cube),
+						.addBox(1.0F, 0.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		leftArm.addOrReplaceChild("shoulder_back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(0.75F, 0.0F, 0.0625F, 0.5F, 0.5F, 2.0F, cube),
+				PartPose.ZERO);
+
+		leftArm.addOrReplaceChild("upper",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(1.0F, 2.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		leftArm.addOrReplaceChild("back",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(0.75F, 2.0F, 0.0625F, 0.5F, 0.5F, 2.0F, cube),
+				PartPose.ZERO);
+
+		leftArm.addOrReplaceChild("middle",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(1.0F, 4.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
+				PartPose.ZERO);
+
+		leftArm.addOrReplaceChild("lower",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(1.0F, 6.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
 				PartPose.ZERO);
 
 		leftArm.addOrReplaceChild("hand",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(1.5f, 6, -0.5F, 2, 1, 1, cube),
+						.addBox(1.0F, 8.0F, -0.25F, 2.0F, 0.5F, 0.5F, cube),
 				PartPose.ZERO);
 
 		final PartDefinition rightLeg = part.addOrReplaceChild(
@@ -280,16 +466,28 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
-		rightLeg.addOrReplaceChild("upper_spike",
+		rightLeg.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-0.5F, 2.0F, -2.5F, 1, 1, 5, cube),
+						.addBox(-0.25F, 2.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
-		rightLeg.addOrReplaceChild("lower_spike",
+		rightLeg.addOrReplaceChild("upper_middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-0.5F, 7.0F, -2.5F, 1, 1, 5, cube),
+						.addBox(-0.25F, 4.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
+				PartPose.ZERO);
+
+		rightLeg.addOrReplaceChild("lower_middle",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 6.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
+				PartPose.ZERO);
+
+		rightLeg.addOrReplaceChild("lower",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 8.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 
@@ -299,16 +497,28 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
-		leftLeg.addOrReplaceChild("upper_spike",
+		leftLeg.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-0.5F, 2.0F, -2.5F, 1, 1, 5, cube),
+						.addBox(-0.25F, 2.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
-		leftLeg.addOrReplaceChild("lower_spike",
+		leftLeg.addOrReplaceChild("upper_middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-0.5F, 7.0F, -2.5F, 1, 1, 5, cube),
+						.addBox(-0.25F, 4.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
+				PartPose.ZERO);
+
+		leftLeg.addOrReplaceChild("lower_middle",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 6.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
+				PartPose.ZERO);
+
+		leftLeg.addOrReplaceChild("lower",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-0.25F, 8.0F, -2.03125F, 0.5F, 0.5F, 4.0625F, cube),
 				PartPose.ZERO);
 
 		return LayerDefinition.create(mesh, 16, 16);
@@ -342,9 +552,11 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 		ModelPart modelPartToRender = null;
 		switch (slotContext.identifier())
 		{
-			case headID:
-				eyeLeft.visible = leftHandSide;
-				eyeRight.visible = !leftHandSide;
+			case eyesID:
+				eyeLeftFront.visible = leftHandSide;
+				eyeRightFront.visible = !leftHandSide;
+				eyeLeftBack.visible = leftHandSide;
+				eyeRightBack.visible = !leftHandSide;
 
 				SpiritwebCapability.get(slotContext.entity()).ifPresent((data) ->
 				{
@@ -361,76 +573,129 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				break;
 			case linchpinID:
 				modelPartToRender = linchpin;
-				modelPartToRender.copyFrom(this.root.getChild(headID));
-
-				modelPartToRender.y = -1;
-				break;
-			case backID:
-				modelPartToRender = back;
 				modelPartToRender.copyFrom(this.root.getChild(bodyID));
 				break;
-			case bodyID:
+			case backID:
+				switch (slotContext.index())
+				{
+					case 0:
+						modelPartToRender = upperBack;
+						break;
+					case 1:
+						modelPartToRender = upperMiddleBack;
+						break;
+					case 2:
+						modelPartToRender = lowerMiddleBack;
+						break;
+					case 3:
+						modelPartToRender = lowerBack;
+						break;
+				}
+				modelPartToRender.copyFrom(this.root.getChild(bodyID));
+				break;
+			case chestID:
+				switch (slotContext.index())
+				{
+					case 0:
+						modelPartToRender = upperChest;
+						break;
+					case 1:
+						modelPartToRender = lowerChest;
+						break;
+				}
+				modelPartToRender.copyFrom(this.root.getChild(bodyID));
+				break;
+			case shouldersTopID:
+				modelPartToRender = leftHandSide ? leftShoulderTop : rightShoulderTop;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case shouldersSideID:
+				modelPartToRender = leftHandSide ? leftShoulderSide : rightShoulderSide;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case shouldersBackID:
+				modelPartToRender = leftHandSide ? leftShoulderBack : rightShoulderBack;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case upperArmsID:
+				modelPartToRender = leftHandSide ? leftArmUpper : rightArmUpper;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case upperArmsBackID:
+				modelPartToRender = leftHandSide ? leftArmUpperBack : rightArmUpperBack;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case middleArmsID:
+				modelPartToRender = leftHandSide ? leftArmMiddle : rightArmMiddle;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case lowerArmsID:
+				modelPartToRender = leftHandSide ? leftArmLower : rightArmLower;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case handsID:
+				modelPartToRender = leftHandSide ? leftHand : rightHand;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case ribsTopID:
 				switch (slotContext.index())
 				{
 					case 0:
 						modelPartToRender = ribLeftTop;
 						break;
 					case 1:
-						modelPartToRender = ribLeftTopMiddle;
-						break;
-					case 2:
-						modelPartToRender = ribLeftBottomMiddle;
-						break;
-					case 3:
-						modelPartToRender = ribLeftBottom;
-						break;
-					case 4:
 						modelPartToRender = ribRightTop;
 						break;
-					case 5:
+				}
+				modelPartToRender.copyFrom(this.root.getChild(bodyID));
+				break;
+			case ribsTopMiddleID:
+				switch (slotContext.index()) {
+					case 0:
+						modelPartToRender = ribLeftTopMiddle;
+						break;
+					case 1:
 						modelPartToRender = ribRightTopMiddle;
 						break;
-					case 6:
+				}
+				modelPartToRender.copyFrom(this.root.getChild(bodyID));
+				break;
+			case ribsBottomMiddleID:
+				switch (slotContext.index()) {
+					case 0:
+						modelPartToRender = ribLeftBottomMiddle;
+						break;
+					case 1:
 						modelPartToRender = ribRightBottomMiddle;
 						break;
-					case 7:
+				}
+				modelPartToRender.copyFrom(this.root.getChild(bodyID));
+				break;
+			case ribsBottomID:
+				switch (slotContext.index()) {
+					case 0:
+						modelPartToRender = ribLeftBottom;
+						break;
+					case 1:
 						modelPartToRender = ribRightBottom;
 						break;
 				}
 				modelPartToRender.copyFrom(this.root.getChild(bodyID));
 				break;
-			case braceletID:
-				switch (slotContext.index())
-				{
-					case 0:
-						modelPartToRender = leftArmUpper;
-						break;
-					case 1:
-						modelPartToRender = rightArmUpper;
-						break;
-					case 2:
-						modelPartToRender = leftArmLower;
-						break;
-					case 3:
-						modelPartToRender = rightArmLower;
-						break;
-				}
-
-				if (modelPartToRender != null)
-				{
-					modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				}
-				break;
-			case handsID:
-				modelPartToRender = leftHandSide ? leftHand : rightHand;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case legsID:
-				modelPartToRender = slotContext.index() == 0 ? leftLegUpper : rightLegUpper;
+			case upperLegsID:
+				modelPartToRender = leftHandSide ? leftLegUpper : rightLegUpper;
 				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
 				break;
-			case feetID:
-				modelPartToRender = slotContext.index() == 0 ? leftLegLower : rightLegLower;
+			case upperMiddleLegsID:
+				modelPartToRender = leftHandSide ? leftLegUpperMiddle : rightLegUpperMiddle;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
+				break;
+			case lowerMiddleLegsID:
+				modelPartToRender = leftHandSide ? leftLegLowerMiddle : rightLegLowerMiddle;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
+				break;
+			case lowerLegsID:
+				modelPartToRender = leftHandSide ? leftLegLower : rightLegLower;
 				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
 				break;
 		}
@@ -456,7 +721,6 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				color.getBlue() / 255f,
 				1);
 
-
 		/*
 		//debug only, so a spike will render in all locations
 		renderToBuffer(
@@ -468,7 +732,5 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				color.getGreen(),
 				color.getBlue(),
 				1);*/
-
-
 	}
 }
