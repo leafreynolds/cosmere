@@ -1,15 +1,17 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
 
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.fog.FogManager;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -33,6 +35,12 @@ public class PlayerEventHandler
 
 					newSpiritWeb.transferFrom(oldSpiritWeb);
 				}));
+	}
+
+	@SubscribeEvent
+	public static void onClientPlayerClone(ClientPlayerNetworkEvent.Clone event)
+	{
+		FogManager.resetFog();
 	}
 
 	@SubscribeEvent
