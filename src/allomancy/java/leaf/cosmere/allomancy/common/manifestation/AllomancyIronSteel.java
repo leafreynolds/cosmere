@@ -19,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -514,6 +515,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		for (var recipe : recipes)
 		{
 			final ItemStack resultItem = recipe.getResultItem();
+
+			// check if is air, and if is, skip (air's ID is 0)
+			if (resultItem.is(Item.byId(0)))
+			{
+				continue;
+			}
 
 			if (resultItem.is(containsMetal))
 			{
