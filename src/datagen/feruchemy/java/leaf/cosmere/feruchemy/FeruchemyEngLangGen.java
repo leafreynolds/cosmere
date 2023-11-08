@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -98,7 +98,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	private void addAdvancements()
 	{
 		//innate
-		for (Manifestations.ManifestationTypes value : Manifestations.ManifestationTypes.values())
+		Manifestations.ManifestationTypes value = Manifestations.ManifestationTypes.FERUCHEMY;
 		{
 			add(String.format(advancementTitleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
 			add(String.format(advancementDescriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));

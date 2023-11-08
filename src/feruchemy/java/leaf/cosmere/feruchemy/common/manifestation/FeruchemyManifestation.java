@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -149,7 +149,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 
 		int mode = getMode(data);
 
-		if ((livingEntity.tickCount % 20 != 0) || mode == 0)
+		if ((!isActiveTick(data)) || mode == 0)
 		{
 			//if not active tick, or mode is off
 			return false;

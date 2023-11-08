@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -90,7 +90,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addAdvancements()
 	{
 		//innate
-		for (Manifestations.ManifestationTypes value : Manifestations.ManifestationTypes.values())
+		Manifestations.ManifestationTypes value = Manifestations.ManifestationTypes.ALLOMANCY;
 		{
 			add(String.format(advancementTitleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
 			add(String.format(advancementDescriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));
@@ -182,8 +182,8 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addDamageSources()
 	{
 		//Damage Sources
-		add("death.attack.eat_metal", "%1$s shredded their throat while eating metal");
-		add("death.attack.eat_metal.player", "%1$s tried to eat metal directly while fighting %2$s");
+		add("death.attack.pewter_delayed_damage", "%1$s stopped burning pewter and succumbed to their wounds");
+		add("death.attack.pewter_delayed_damage.player", "%1$s ran out of pewter while fighting %2$s");
 	}
 
 	private void addMobEffects()

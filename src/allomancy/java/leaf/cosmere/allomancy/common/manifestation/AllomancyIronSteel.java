@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 7 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -7,7 +7,10 @@ package leaf.cosmere.allomancy.common.manifestation;
 import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
-import leaf.cosmere.api.*;
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.CosmereTags;
+import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.math.VectorHelper;
@@ -35,7 +38,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -124,9 +128,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		//Pushes/Pulls on Nearby Metals
 		if (getKeyBinding().isDown())
 		{
-			Player player = Minecraft.getInstance().player;
-			Level level = Minecraft.getInstance().level;
-			Minecraft mc = Minecraft.getInstance();
+			final Minecraft mc = Minecraft.getInstance();
+			Player player = mc.player;
+			Level level = mc.level;
 
 			Vec3 lerpAngle = player.getLookAngle();
 			Vec3 currPos = player.getEyePosition();
@@ -146,8 +150,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					{
 						AABB aabb = new AABB(new BlockPos(currPos));
 						Entity firstMetalEntity = null;
-						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator())) {
-							if (entityContainsMetal(ent)) {
+						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator()))
+						{
+							if (entityContainsMetal(ent))
+							{
 								firstMetalEntity = ent;
 								break;
 							}
@@ -168,11 +174,15 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 				// if resistance is 100+% or the currently targeted block has metal; exit
 				if (resistance >= 1.0F || containsMetal(blockAtPos.getBlock()))
+				{
 					break;
+				}
 
 				// if block isn't air, add material resistance value
 				if (!blockAtPos.isAir())
+				{
 					resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
+				}
 
 				// lerp to next position (1 block forward)
 				currPos = currPos.add(lerpAngle);

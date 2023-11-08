@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -164,6 +164,9 @@ public class EngLangGen extends LanguageProvider
 
 	private void addDamageSources()
 	{
+		//Damage Sources
+		add("death.attack.eat_metal", "%1$s shredded their throat while eating metal");
+		add("death.attack.eat_metal.player", "%1$s tried to eat metal directly while fighting %2$s");
 	}
 
 	private void addMobEffects()

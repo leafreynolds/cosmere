@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -49,7 +49,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
 
-		if (livingEntity.tickCount % 20 != 0)
+		if (!isActiveTick(data))
 		{
 			return false;
 		}

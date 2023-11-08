@@ -1,16 +1,16 @@
 /*
- * File updated ~ 26 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -27,17 +27,14 @@ public class GoldTapEffect extends FeruchemyEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		if (!isActiveTick(entityLivingBaseIn))
-		{
-			return;
-		}
+		var living = data.getLiving();
 
 		final int i = (int) (strength);
-		if (entityLivingBaseIn.getHealth() < entityLivingBaseIn.getMaxHealth())
+		if (living.getHealth() < living.getMaxHealth())
 		{
-			entityLivingBaseIn.heal(i);
+			living.heal(i);
 		}
 
 		//todo move to config
@@ -45,7 +42,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
 		final int ticksNeededLeftToReduce = 5;
 
 		//remove harmful effects over time
-		for (MobEffectInstance activeEffect : entityLivingBaseIn.getActiveEffects())
+		for (MobEffectInstance activeEffect : living.getActiveEffects())
 		{
 			if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
 			{
@@ -59,8 +56,8 @@ public class GoldTapEffect extends FeruchemyEffectBase
 						activeEffect.isAmbient(),
 						activeEffect.isVisible(),
 						activeEffect.showIcon());
-				entityLivingBaseIn.removeEffectNoUpdate(activeEffect.getEffect());
-				entityLivingBaseIn.addEffect(newInstance);
+				living.removeEffectNoUpdate(activeEffect.getEffect());
+				living.addEffect(newInstance);
 			}
 		}
 	}

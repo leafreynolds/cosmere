@@ -1,11 +1,12 @@
 /*
- * File updated ~ 26 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
@@ -34,18 +35,14 @@ public class BrassTapEffect extends FeruchemyEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		if (!isActiveTick(entityLivingBaseIn))
-		{
-			return;
-		}
-
 		//todo move to config
-		if (!entityLivingBaseIn.level.isClientSide && strength >= 5 && !entityLivingBaseIn.isInWater())
+		final LivingEntity living = data.getLiving();
+		if (!living.level.isClientSide && strength >= 5 && !living.isInWater())
 		{
 			//set user on fire
-			entityLivingBaseIn.setSecondsOnFire(3);
+			living.setSecondsOnFire(3);
 		}
 
 	}

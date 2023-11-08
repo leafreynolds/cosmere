@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 4 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities;
@@ -7,6 +7,7 @@ package leaf.cosmere.allomancy.common.capabilities;
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
+import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
@@ -14,7 +15,9 @@ import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -37,16 +40,27 @@ import java.util.stream.Collectors;
 
 public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 {
+	final String INGESTED_KEY = "ingested_metals";
+	final String PEWTER_DELAYED_DAMAGE_KEY = "pewter_delayed_damage";
+	private CompoundTag moduleTag = null;
 
 	//metals ingested
 	public final Map<Metals.MetalType, Integer> METALS_INGESTED =
 			Arrays.stream(Metals.MetalType.values())
 					.collect(Collectors.toMap(Function.identity(), type -> 0));
 
+	private float pewterDelayedDamage = 0;
+
+	public static AllomancySpiritwebSubmodule getSubmodule(ISpiritweb data)
+	{
+		return (AllomancySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
+	}
 
 	@Override
 	public void tickClient(ISpiritweb spiritweb)
 	{
+		//todo fix this, why am I only calling apply effect tick on the client for iron/steel?
+
 		//Iron allomancy
 		{
 			AllomancyIronSteel iron = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
@@ -82,8 +96,8 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				Integer metalIngestAmount = METALS_INGESTED.get(metalType);
 				if (metalIngestAmount > 0)
 				{
-					//todo decide how and when we poison the user for eating metal, that sure ain't safe champ.
-
+					//todo decide how and when we poison the user for eating large amounts of metal, that sure ain't safe champ.
+					//even if the user is immune to metal poisoning, it's still not safe to eat a bunch of metal.
 
 					//todo, decide what's appropriate for reducing ingested metal amounts
 					METALS_INGESTED.put(metalType, metalIngestAmount - 1);
@@ -95,7 +109,22 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void deserialize(ISpiritweb spiritweb)
 	{
-		final CompoundTag ingestedMetals = spiritweb.getCompoundTag().getCompound("ingested_metals");
+		final CompoundTag compoundTag = spiritweb.getCompoundTag();
+
+		CompoundTag ingestedMetals;// = compoundTag.getCompound("ingested_metals");
+
+		moduleTag = CompoundNBTHelper.getOrCreate(compoundTag, Allomancy.MODID);
+
+		//backwards compat, todo remove later in 1.20+ port
+		if (compoundTag.contains(INGESTED_KEY))
+		{
+			ingestedMetals = compoundTag.getCompound(INGESTED_KEY);
+		}
+		else
+		{
+			ingestedMetals = CompoundNBTHelper.getOrCreate(moduleTag, INGESTED_KEY);
+		}
+
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
 			final String metalKey = metalType.getName();
@@ -109,11 +138,17 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				METALS_INGESTED.put(metalType, 0);
 			}
 		}
+
+		pewterDelayedDamage = CompoundNBTHelper.getFloat(moduleTag, PEWTER_DELAYED_DAMAGE_KEY, 0f);
 	}
 
 	@Override
 	public void serialize(ISpiritweb spiritweb)
 	{
+		final CompoundTag compoundTag = spiritweb.getCompoundTag();
+		moduleTag = CompoundNBTHelper.getOrCreate(compoundTag, Allomancy.MODID);
+
+		//replace old ingested tag with new one
 		final CompoundTag ingestedMetals = new CompoundTag();
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
@@ -123,7 +158,19 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				ingestedMetals.putInt(metalType.getName(), ingestedMetalAmount);
 			}
 		}
-		spiritweb.getCompoundTag().put("ingested_metals", ingestedMetals);
+
+		//todo remove in 1.20+ port
+		//remove old ingested tag if exists
+		if (compoundTag.contains(INGESTED_KEY))
+		{
+			compoundTag.remove(INGESTED_KEY);
+		}
+
+		//put it in the new place
+		moduleTag.put(INGESTED_KEY, ingestedMetals);
+		moduleTag.putFloat(PEWTER_DELAYED_DAMAGE_KEY, pewterDelayedDamage);
+
+		compoundTag.put(Allomancy.MODID, moduleTag);
 	}
 
 	@Override
@@ -230,5 +277,15 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		return false;
+	}
+
+	public float getPewterDelayedDamage()
+	{
+		return pewterDelayedDamage;
+	}
+
+	public void setPewterDelayedDamage(float pewterDelayedDamage)
+	{
+		this.pewterDelayedDamage = pewterDelayedDamage;
 	}
 }

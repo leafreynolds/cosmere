@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -23,8 +23,7 @@ public class AllomancyBendalloy extends AllomancyManifestation
 	@Override
 	protected void applyEffectTick(ISpiritweb data)
 	{
-		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 
 		//Slows Down Time for the entities around the user
 		if (isActiveTick)

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.cosmereEffect;
@@ -7,6 +7,7 @@ package leaf.cosmere.api.cosmereEffect;
 import com.google.common.collect.Maps;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -136,13 +137,13 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 		return null;
 	}
 
-	public boolean tick(LivingEntity pEntity)
+	public boolean tick(ISpiritweb data)
 	{
 		if (this.duration > 0)
 		{
-			if (this.effect.isDurationEffectTick(this.duration, (int) this.strength))
+			if (this.effect.isActiveTick(data))
 			{
-				this.applyEffect(pEntity);
+				this.effect.applyEffectTick(data, this.strength);
 			}
 
 			this.decreaseDuration();
@@ -151,32 +152,10 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 		return this.duration > 0;
 	}
 
-
-	public void applyEffect(LivingEntity pEntity)
-	{
-		if (this.duration > 0)
-		{
-			this.effect.applyEffectTick(pEntity, this.strength);
-		}
-	}
-
-
 	private void decreaseDuration()
 	{
 		--this.duration;
 	}
-
-	public boolean update(CosmereEffectInstance newEffect)
-	{
-
-		this.uuid = newEffect.uuid;
-		this.effect = newEffect.effect;
-		this.strength = newEffect.strength;
-		this.duration = newEffect.duration;
-
-		return true;
-	}
-
 
 	public void applyAttributeModifiers(LivingEntity livingEntity, AttributeMap pAttributeMap)
 	{

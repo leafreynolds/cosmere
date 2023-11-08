@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.manifestation;
@@ -40,6 +40,16 @@ public class Manifestation implements IManifestationProvider
 	public int getPowerID()
 	{
 		return 0;
+	}
+
+	public int getActiveTick(ISpiritweb data)
+	{
+		return data.getLiving().tickCount + getPowerID();
+	}
+
+	public boolean isActiveTick(ISpiritweb data)
+	{
+		return getActiveTick(data) % 20 == 0;
 	}
 
 	public void onModeChange(ISpiritweb data, int lastMode)

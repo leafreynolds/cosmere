@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -33,7 +33,7 @@ public class AllomancyChromium extends AllomancyManifestation
 
 			LivingEntity living = data.getLiving();
 			Level world = living.level;
-			boolean isActiveTick = living.level.getGameTime() % 20 == 0;
+			boolean isActiveTick = isActiveTick(data);
 			if (!world.isClientSide && isActiveTick)
 			{
 				//thank you to CyclopsMC and their repo EverlastingAbilities for their section on detecting enemies you are looking at
