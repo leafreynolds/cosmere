@@ -19,7 +19,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,6 +32,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.*;
@@ -48,6 +48,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 	private final boolean isPush;
 	private static Set<String> s_whiteList = null;
+	private static  Set<String> s_blackList = null;
 
 	public AllomancyIronSteel(Metals.MetalType metalType)
 	{
@@ -506,6 +507,15 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			return;
 		}
 
+		if (s_blackList == null)
+		{
+			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
+			s_blackList = new HashSet<>();
+			s_blackList.add(Blocks.AIR.getDescriptionId());			// air block
+			s_blackList.add(Blocks.WATER.getDescriptionId());		// water block
+			s_blackList.add(Blocks.LAVA.getDescriptionId());		// lava block
+		}
+
 		s_whiteList = new HashSet<>();
 
 		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
@@ -516,8 +526,8 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			final ItemStack resultItem = recipe.getResultItem();
 
-			// check if is air, and if is, skip (air's ID is 0)
-			if (resultItem.is(Item.byId(0)))
+			// check if is blacklisted, and if is, skip
+			if (s_blackList.contains(resultItem.getItem().getDescriptionId()))
 			{
 				continue;
 			}
