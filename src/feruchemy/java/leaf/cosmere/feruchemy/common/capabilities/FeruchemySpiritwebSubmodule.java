@@ -13,8 +13,12 @@ import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
+import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 {
@@ -42,6 +46,23 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 			final float fillAmount = (float) (maxAmount * Math.random());
 			GiveStartingItem(player, feruchemyManifestation.getMetalType(), fillAmount);
 		}
+	}
+
+	@Override
+	public void collectMenuInfo(List<String> m_infoText) {
+		HashMap<Metals.MetalType, Double> metalmindChargesMap = FeruchemyChargeThread.getInstance().getCharges();
+
+		if (!metalmindChargesMap.isEmpty())
+		{
+			for (Metals.MetalType metalType : metalmindChargesMap.keySet())
+			{
+				// todo localisation check
+				final String text = "F. " + metalType.getName() + ": " + metalmindChargesMap.getOrDefault(metalType, 0D).intValue();
+				m_infoText.add(text);
+			}
+		}
+
+		ISpiritwebSubmodule.super.collectMenuInfo(m_infoText);
 	}
 
 	private static void GiveStartingItem(Player player, Metals.MetalType metalType, float fillAmount)

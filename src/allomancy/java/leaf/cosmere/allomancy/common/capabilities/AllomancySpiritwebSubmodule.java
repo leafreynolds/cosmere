@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common.capabilities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
@@ -186,33 +187,32 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 			if (range > 0)
 			{
-				Minecraft.getInstance().getProfiler().push("IronSteel-getDrawLines");
+				Minecraft.getInstance().getProfiler().push("cosmere-getDrawLines");
+				IronSteelLinesThread.getInstance().setScanRange(range);
+				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
+
+				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
+
+				PoseStack viewModelStack = new PoseStack();
+				viewModelStack.last().pose().load(event.getPoseStack().last().pose());
+
+				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
+				if (drawMetalLines && !scanResult.foundEntities.isEmpty())
 				{
-					AllomancyIronSteel.setScanRange(range);
-					ScanResult scanResult = AllomancyIronSteel.requestScanResult();
-
-					Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
-
-					PoseStack viewModelStack = new PoseStack();
-					viewModelStack.last().pose().load(event.getPoseStack().last().pose());
-
-					final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
-					if (drawMetalLines && !scanResult.foundEntities.isEmpty())
-					{
-						DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.foundEntities);
-					}
-					if (drawMetalLines && !scanResult.clusterResults.isEmpty())
-					{
-						DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.clusterCenters);
-					}
-					if (AllomancyConfigs.CLIENT.drawMetalBoxes.get() && !scanResult.foundBlocks.isEmpty())
-					{
-						DrawHelper.drawBlocksAtPoint(viewModelStack, Color.BLUE, scanResult.foundBlocks);
-					}
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.foundEntities);
 				}
+				if (drawMetalLines && !scanResult.clusterResults.isEmpty())
+				{
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.clusterCenters);
+				}
+				if (AllomancyConfigs.CLIENT.drawMetalBoxes.get() && !scanResult.foundBlocks.isEmpty())
+				{
+					DrawHelper.drawBlocksAtPoint(viewModelStack, Color.BLUE, scanResult.foundBlocks);
+				}
+
 				Minecraft.getInstance().getProfiler().pop();
 
-				AllomancyIronSteel.releaseScanResult();
+				IronSteelLinesThread.getInstance().releaseScanResult();
 			}
 		}
 	}
@@ -228,7 +228,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (value > 0)
 			{
 				//todo localisation check
-				final String text = metalType.getName() + ": " + value;
+				final String text = "A. " + metalType.getName() + ": " + value;
 				m_infoText.add(text);
 			}
 		}
