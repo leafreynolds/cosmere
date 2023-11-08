@@ -1,13 +1,13 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.cosmereEffect;
 
 import com.google.common.collect.Maps;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
@@ -49,25 +49,31 @@ public abstract class CosmereEffect implements ICosmereEffectProvider
 		return this;
 	}
 
-	protected int getActiveTick(LivingEntity livingEntity)
+	protected int getTickToCheck(ISpiritweb data)
 	{
-		return livingEntity.tickCount;
+		return data.getLiving().tickCount + this.getTickOffset();
 	}
 
-	protected boolean isActiveTick(LivingEntity livingEntity)
+	protected int getTickOffset()
 	{
-		return getActiveTick(livingEntity) % 20 == 0;
+		//offset the tick check
+		//ie entity tick count + this offset = tick to check against active tick
+		return 0;
 	}
 
-	public boolean isDurationEffectTick(int pDuration, int pStrength)
+	protected int getActiveTick()
 	{
-		//assume true, since we can't check the entity here
-		//should we instead just remove this?
-		return true;
+		//every 20 ticks, or 1 second
+		return 20;
+	}
+
+	protected boolean isActiveTick(ISpiritweb data)
+	{
+		return getTickToCheck(data) % getActiveTick() == 0;
 	}
 
 
-	public void applyEffectTick(LivingEntity pLivingEntity, double strength)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
 	}
 

@@ -1,10 +1,11 @@
 /*
- * File updated ~ 23 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,16 +31,24 @@ public class CadmiumTapEffect extends FeruchemyEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
+	protected boolean isActiveTick(ISpiritweb data)
 	{
-		if (entityLivingBaseIn.level.isClientSide)
+		//just make cadmium always run effect tick.
+		return true;
+	}
+
+	@Override
+	public void applyEffectTick(ISpiritweb data, double strength)
+	{
+		final LivingEntity living = data.getLiving();
+		if (living.level.isClientSide)
 		{
 			return;
 		}
-		final int minAirSupply = entityLivingBaseIn.getAirSupply();
-		final int maxAirSupply = entityLivingBaseIn.getMaxAirSupply();
+		final int minAirSupply = living.getAirSupply();
+		final int maxAirSupply = living.getMaxAirSupply();
 		final double potentialNextVal = minAirSupply + 3 + (strength);//todo find out what 3 means here.
-		entityLivingBaseIn.setAirSupply((int) Mth.clamp(potentialNextVal, minAirSupply, maxAirSupply));
+		living.setAirSupply((int) Mth.clamp(potentialNextVal, minAirSupply, maxAirSupply));
 
 	}
 }

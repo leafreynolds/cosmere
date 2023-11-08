@@ -1,11 +1,12 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.store;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,14 +31,15 @@ public class IronStoreEffect extends FeruchemyEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
+		final LivingEntity living = data.getLiving();
 		//ensure the user has correct buffs at least as strong as their store effect
-		if (entityLivingBaseIn.level.isClientSide || (entityLivingBaseIn.tickCount + metalType.getID()) % 20 != 0)
+		if (living.level.isClientSide)
 		{
 			return;
 		}
-		entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(MobEffects.SLOW_FALLING, (int) strength));
-		entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, (int) strength));
+		living.addEffect(EffectsHelper.getNewEffect(MobEffects.SLOW_FALLING, (int) strength));
+		living.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, (int) strength));
 	}
 }

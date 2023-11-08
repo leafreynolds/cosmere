@@ -1,10 +1,11 @@
 /*
- * File updated ~ 12 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.entity.LivingEntity;
@@ -49,13 +50,12 @@ public class AtiumTapEffect extends FeruchemyEffectBase
 
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		super.applyEffectTick(entityLivingBaseIn, strength);
-
-		if (entityLivingBaseIn.getHealth() > entityLivingBaseIn.getMaxHealth())
+		final LivingEntity living = data.getLiving();
+		if (living.getHealth() > living.getMaxHealth())
 		{
-			entityLivingBaseIn.setHealth(entityLivingBaseIn.getMaxHealth());
+			living.setHealth(living.getMaxHealth());
 		}
 	}
 }

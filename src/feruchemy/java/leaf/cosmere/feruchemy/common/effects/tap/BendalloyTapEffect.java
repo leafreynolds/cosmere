@@ -1,12 +1,12 @@
 /*
- * File updated ~ 19 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 
@@ -19,16 +19,11 @@ public class BendalloyTapEffect extends FeruchemyEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		if (!isActiveTick(entityLivingBaseIn))
+		if (data.getLiving() instanceof Player player && !player.level.isClientSide)
 		{
-			return;
-		}
-
-		if (!entityLivingBaseIn.level.isClientSide)
-		{
-			final FoodData foodData = ((Player) entityLivingBaseIn).getFoodData();
+			final FoodData foodData = player.getFoodData();
 			final int i = (int) (1 + strength);
 			if (foodData.needsFood())
 			{

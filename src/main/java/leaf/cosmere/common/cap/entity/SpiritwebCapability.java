@@ -1,5 +1,5 @@
 /*
- * File updated ~ 4 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -225,7 +225,7 @@ public class SpiritwebCapability implements ISpiritweb
 			{
 				UUID uuidOfEffedInstance = iterator.next();
 				CosmereEffectInstance cosmereEffectInstance = this.activeEffects.get(uuidOfEffedInstance);
-				if (!cosmereEffectInstance.tick(this.getLiving()))
+				if (!cosmereEffectInstance.tick(this))
 				{
 					if (!this.getLiving().level.isClientSide)
 					{
@@ -238,6 +238,7 @@ public class SpiritwebCapability implements ISpiritweb
 					//this was copied from mob effect code, serverplayer
 					// overrides the section to send effect packet updates
 					//we don't do that, as everything on spiritweb gets synced at once
+					//todo decide if we wanna remove
 					this.onEffectUpdated(cosmereEffectInstance, false, (Entity) null);
 				}
 			}

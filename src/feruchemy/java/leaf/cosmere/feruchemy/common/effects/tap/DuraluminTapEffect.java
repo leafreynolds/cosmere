@@ -1,11 +1,12 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.effect.MobEffects;
@@ -26,14 +27,15 @@ public class DuraluminTapEffect extends FeruchemyEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, double strength)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
+		final LivingEntity living = data.getLiving();
 		//ensure the user has correct buffs at least as strong as their store effect
-		if (entityLivingBaseIn.level.isClientSide || (entityLivingBaseIn.tickCount + metalType.getID()) % 20 != 0)
+		if (living.level.isClientSide)
 		{
 			return;
 		}
 
-		entityLivingBaseIn.addEffect(EffectsHelper.getNewEffect(MobEffects.HERO_OF_THE_VILLAGE, (int) strength));
+		living.addEffect(EffectsHelper.getNewEffect(MobEffects.HERO_OF_THE_VILLAGE, (int) strength));
 	}
 }
