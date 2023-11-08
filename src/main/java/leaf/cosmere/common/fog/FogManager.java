@@ -51,7 +51,7 @@ public class FogManager
 	public FogManager()
 	{
 		this.mc = Minecraft.getInstance();
-		this.fogStart = new InterpolatedValue(0.0F);
+		this.fogStart = new InterpolatedValue(0.9F);
 		this.fogEnd = new InterpolatedValue(1.0F);
 	}
 
@@ -131,4 +131,12 @@ public class FogManager
 	{
 	}
 
+	public static void resetFog()
+	{
+		if (densityManager != null)
+		{
+			densityManager.fogStart.setDefaultValue(0.9F);
+			densityManager.fogEnd.setDefaultValue(1.0F);
+		}
+	}
 }

@@ -69,6 +69,30 @@ public class ScadrialCapability implements IScadrial
 		this.nbt = nbt;
 	}
 
+	private boolean isMistNight()
+	{
+		int day = (int) (level.getDayTime() / 24000L % 2147483647L);
+
+		//todo - decide how we want to pick misty nights. Right now is prime numbers.
+		if (day < 2)
+		{
+			return false;
+		}
+		if (day % 2 == 0)
+		{
+			return day == 2;
+		}
+		for (int i = 3; i * i <= day; i += 2)
+		{
+			if (day % i == 0)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	@Override
 	public float getMistNearDistance()
 	{
@@ -175,37 +199,41 @@ public class ScadrialCapability implements IScadrial
 		final float mistNearDistance = this.getMistNearDistance();
 		//far plane moves after that
 		final float mistFarDistance = this.getMistFarDistance();
+		float startFogDistance = 0.9f;
+		float endFogDistance = 1f;
 
-
-		//if it's nighttime, we want to make the mists more dense
-		//except when they are burning tin, in which case we want to make them less dense right out to render distance
-		//check burning tin, if it even exists
-		float tinAlloVal = 0;
+		if (isMistNight())
 		{
-			final LazyOptional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(player);
-
-			if (iSpiritwebLazyOptional.isPresent())
+			//if it's nighttime, we want to make the mists more dense
+			//except when they are burning tin, in which case we want to make them less dense right out to render distance
+			//check burning tin, if it even exists
+			float tinAlloVal = 0;
 			{
-				var spiritweb = iSpiritwebLazyOptional.resolve();
-				final AllomancyManifestation tinAllomancy = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
-				//if tin allomancy exists in this mod pack and it's currently active
-				if (spiritweb.isPresent() && spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isMetalBurning(data))
-				{
-					//burning or flaring strength
-					double currentBurnStrength = tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy);
-					final RangedAttribute attribute = (RangedAttribute) tinAllomancy.getAttribute();
-					double maxTinFlareStrengthPossible = attribute.getMaxValue() * 2;
+				final LazyOptional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(player);
 
-					//tin takes actual strength into account, as compared to total possible strength including flaring.
-					//todo - move the min/max night vision to config, ideally server side that gets synced to client
-					tinAlloVal = (float) Mth.lerp(currentBurnStrength / maxTinFlareStrengthPossible, 0.0f, 0.95f);
+				if (iSpiritwebLazyOptional.isPresent())
+				{
+					var spiritweb = iSpiritwebLazyOptional.resolve();
+					final AllomancyManifestation tinAllomancy = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
+					//if tin allomancy exists in this mod pack and it's currently active
+					if (spiritweb.isPresent() && spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isMetalBurning(data))
+					{
+						//burning or flaring strength
+						double currentBurnStrength = tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy);
+						final RangedAttribute attribute = (RangedAttribute) tinAllomancy.getAttribute();
+						double maxTinFlareStrengthPossible = attribute.getMaxValue() * 2;
+
+						//tin takes actual strength into account, as compared to total possible strength including flaring.
+						//todo - move the min/max night vision to config, ideally server side that gets synced to client
+						tinAlloVal = (float) Mth.lerp(currentBurnStrength / maxTinFlareStrengthPossible, 0.0f, 0.95f);
+					}
 				}
 			}
-		}
 
-		//a low mist distance means it is closer, so we add tin allo value to it to push it further away.
-		float startFogDistance = Mth.clamp(mistNearDistance + tinAlloVal, 0.0f, 1.0f);
-		float endFogDistance = Mth.clamp(mistFarDistance + tinAlloVal, 0.0f, 1.0f);
+			//a low mist distance means it is closer, so we add tin allo value to it to push it further away.
+			startFogDistance = Mth.clamp(mistNearDistance + tinAlloVal, 0.0f, 1.0f);
+			endFogDistance = Mth.clamp(mistFarDistance + tinAlloVal, 0.0f, 1.0f);
+		}
 
 		//that said, we are probably never going to otherwise want it to be less than 0.1 at night.
 		densityManager.fogStart.setDefaultValue(startFogDistance);
