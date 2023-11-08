@@ -1,11 +1,11 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.allomancy.mixin;
+package leaf.cosmere.mixin;
 
-import leaf.cosmere.allomancy.client.fog.FogManager;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.common.fog.FogManager;
 import net.minecraft.client.renderer.LevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

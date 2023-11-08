@@ -1,8 +1,8 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.allomancy.client.fog;
+package leaf.cosmere.common.fog;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.InterpolatedValue;
