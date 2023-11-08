@@ -556,7 +556,7 @@ public class SpiritwebMenu extends Screen
 				}
 			}
 
-			boolean shouldDrawMetalNames = !foundNumber && (inMetalSubmenu || manifestationNotNull) && ((selectedAllomancyType && maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID()))) || (selectedFeruchemyType && maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID()))));
+			boolean shouldDrawMetalNames = !foundNumber && (inMetalSubmenu || (shouldShowAllomancy || shouldShowFeruchemy)) && ((selectedAllomancyType && maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID()))) || (selectedFeruchemyType && maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID()))));
 			if (shouldDrawMetalNames)
 			{
 				String displayString;
