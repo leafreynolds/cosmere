@@ -1,5 +1,5 @@
 /*
- * File updated ~ 4 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client;
@@ -7,6 +7,7 @@ package leaf.cosmere.client;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.fog.FogManager;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.ChangeSelectedManifestationMessage;
 import leaf.cosmere.common.network.packets.DeactivateManifestationsMessage;
@@ -19,6 +20,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -159,5 +161,11 @@ public class ClientEvents
 			SpiritwebMenu.instance.postRender(event, spiritweb);
 		});
 
+	}
+
+	@SubscribeEvent
+	public static void onClientPlayerClone(ClientPlayerNetworkEvent.Clone event)
+	{
+		FogManager.resetFog();
 	}
 }
