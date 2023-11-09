@@ -4,6 +4,7 @@
       "id": "#cosmere:spike",
       "required": false
     },
+    "#forge:raw_materials/iron",
     "#forge:nuggets/iron",
     "#forge:ingots/iron",
     "#forge:storage_blocks/iron",
@@ -27,6 +28,7 @@
     "#forge:nuggets/brass",
     "#forge:ingots/brass",
     "#forge:storage_blocks/brass",
+    "#forge:raw_materials/copper",
     "#forge:nuggets/copper",
     "#forge:ingots/copper",
     "#forge:storage_blocks/copper",
@@ -58,6 +60,7 @@
     "#forge:nuggets/bendalloy",
     "#forge:ingots/bendalloy",
     "#forge:storage_blocks/bendalloy",
+    "#forge:raw_materials/gold",
     "#forge:nuggets/gold",
     "#forge:ingots/gold",
     "#forge:storage_blocks/gold",

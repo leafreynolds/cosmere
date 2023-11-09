@@ -1,5 +1,6 @@
 {
   "values": [
+    "#forge:ores/iron",
     "#forge:storage_blocks/iron",
     "#forge:storage_blocks/steel",
     "#forge:ores/tin",
@@ -8,6 +9,7 @@
     "#forge:ores/zinc",
     "#forge:storage_blocks/zinc",
     "#forge:storage_blocks/brass",
+    "#forge:ores/copper",
     "#forge:storage_blocks/copper",
     "#forge:storage_blocks/bronze",
     "#forge:ores/aluminum",
@@ -19,6 +21,7 @@
     "#forge:ores/cadmium",
     "#forge:storage_blocks/cadmium",
     "#forge:storage_blocks/bendalloy",
+    "#forge:ores/gold",
     "#forge:storage_blocks/gold",
     "#forge:storage_blocks/electrum",
     "#forge:storage_blocks/atium",

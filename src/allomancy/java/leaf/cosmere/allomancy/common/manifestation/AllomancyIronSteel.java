@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -52,7 +52,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 	private final boolean isPush;
 	private static Set<String> s_whiteList = null;
-	private static  Set<String> s_blackList = null;
+	private static Set<String> s_blackList = null;
 
 	public AllomancyIronSteel(Metals.MetalType metalType)
 	{
@@ -92,15 +92,21 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	@Override
 	public void onModeChange(ISpiritweb cap, int lastMode)
 	{
-		if (cap.getLiving().level.isClientSide) {
+		if (cap.getLiving().level.isClientSide)
+		{
 
 			super.onModeChange(cap, lastMode);
 
-			if (getMode(cap) != 0) {
+			if (getMode(cap) != 0)
+			{
 				if (getMode(cap) > 0)
+				{
 					IronSteelLinesThread.getInstance().start();
+				}
 				else if (getMode(cap) <= 0)
+				{
 					IronSteelLinesThread.getInstance().stop();
+				}
 				return;
 			}
 
@@ -523,9 +529,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
 			s_blackList = new HashSet<>();
-			s_blackList.add(Blocks.AIR.getDescriptionId());			// air block
-			s_blackList.add(Blocks.WATER.getDescriptionId());		// water block
-			s_blackList.add(Blocks.LAVA.getDescriptionId());		// lava block
+			s_blackList.add(Blocks.AIR.getDescriptionId());            // air block
+			s_blackList.add(Blocks.WATER.getDescriptionId());        // water block
+			s_blackList.add(Blocks.LAVA.getDescriptionId());        // lava block
 		}
 
 		s_whiteList = new HashSet<>();

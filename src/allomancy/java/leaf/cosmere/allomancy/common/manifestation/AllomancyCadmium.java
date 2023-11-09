@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -19,6 +19,7 @@ import java.util.List;
 public class AllomancyCadmium extends AllomancyManifestation
 {
 	private static final HashMap<String, CadmiumThread> playerThreadMap = new HashMap<>();
+
 	public AllomancyCadmium(Metals.MetalType metalType)
 	{
 		super(metalType);
@@ -57,7 +58,9 @@ public class AllomancyCadmium extends AllomancyManifestation
 			while (true)
 			{
 				if (serverShutdown)
+				{
 					break;
+				}
 				try
 				{
 					int mode = getMode(data);
@@ -112,7 +115,9 @@ public class AllomancyCadmium extends AllomancyManifestation
 							catch (Exception err)
 							{
 								if (!(err instanceof NullPointerException))
+								{
 									err.printStackTrace();
+								}
 							}
 						}
 					}

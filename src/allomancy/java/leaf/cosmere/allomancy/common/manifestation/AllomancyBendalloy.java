@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -17,11 +17,11 @@ import java.util.List;
 public class AllomancyBendalloy extends AllomancyManifestation
 {
 	private static final HashMap<String, BendalloyThread> playerThreadMap = new HashMap<>();
+
 	public AllomancyBendalloy(Metals.MetalType metalType)
 	{
 		super(metalType);
 	}
-
 
 
 	@Override
@@ -35,7 +35,7 @@ public class AllomancyBendalloy extends AllomancyManifestation
 			playerThreadMap.put(uuid, new BendalloyThread(data));
 		}
 
-        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
+		playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
 	}
 
 	class BendalloyThread extends AllomancyEntityThread
@@ -56,7 +56,9 @@ public class AllomancyBendalloy extends AllomancyManifestation
 			while (true)
 			{
 				if (serverShutdown)
+				{
 					break;
+				}
 
 				try
 				{

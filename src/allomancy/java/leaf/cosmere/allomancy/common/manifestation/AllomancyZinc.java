@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -16,108 +16,112 @@ import java.util.List;
 
 public class AllomancyZinc extends AllomancyManifestation
 {
-    private static final HashMap<String, ZincThread> playerThreadMap = new HashMap<>();
-    public AllomancyZinc(Metals.MetalType metalType) {
-        super(metalType);
-    }
+	private static final HashMap<String, ZincThread> playerThreadMap = new HashMap<>();
 
-    //Inflames Emotions
-    //make hostiles target you but also make non-hostiles target hostiles?
-    @Override
-    protected void applyEffectTick(ISpiritweb data)
+	public AllomancyZinc(Metals.MetalType metalType)
 	{
-        int mode = getMode(data);
+		super(metalType);
+	}
 
-        String uuid = data.getLiving().getStringUUID();
-        if (mode > 0 && !playerThreadMap.containsKey(uuid))
-        {
-            playerThreadMap.put(uuid, new ZincThread(data));
-        }
+	//Inflames Emotions
+	//make hostiles target you but also make non-hostiles target hostiles?
+	@Override
+	protected void applyEffectTick(ISpiritweb data)
+	{
+		int mode = getMode(data);
 
-        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
-    }
+		String uuid = data.getLiving().getStringUUID();
+		if (mode > 0 && !playerThreadMap.containsKey(uuid))
+		{
+			playerThreadMap.put(uuid, new ZincThread(data));
+		}
 
-    class ZincThread extends AllomancyEntityThread
-    {
+		playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
+	}
+
+	class ZincThread extends AllomancyEntityThread
+	{
 
 		public ZincThread(ISpiritweb data)
 		{
-            super(data);
+			super(data);
 
-            Thread t = new Thread(this, "zinc_thread_" + data.getLiving().getDisplayName().getString());
-            t.start();
+			Thread t = new Thread(this, "zinc_thread_" + data.getLiving().getDisplayName().getString());
+			t.start();
 		}
 
-        @Override
-        public void run()
+		@Override
+		public void run()
 		{
-            List<LivingEntity> entitiesToAffect;
-            while (true)
-            {
-                if (serverShutdown)
-                    break;
-                try
-                {
-                    int mode = getMode(data);
-                    int range = getRange(data);
+			List<LivingEntity> entitiesToAffect;
+			while (true)
+			{
+				if (serverShutdown)
+				{
+					break;
+				}
+				try
+				{
+					int mode = getMode(data);
+					int range = getRange(data);
 
-                    // check if zinc is off or compounding
-                    if (mode <= 0)
-                    {
-                        break;
-                    }
+					// check if zinc is off or compounding
+					if (mode <= 0)
+					{
+						break;
+					}
 
-                    // this is the only way to check if the player is still online, thanks forge devs
-                    if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
-                    {
-                        break;
-                    }
+					// this is the only way to check if the player is still online, thanks forge devs
+					if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+					{
+						break;
+					}
 
-                    lock.lock();
-                    entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
+					lock.lock();
+					entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
 
-                    for (LivingEntity e : entitiesToAffect)
-                    {
-                        if (e instanceof Mob mob)
-                        {
+					for (LivingEntity e : entitiesToAffect)
+					{
+						if (e instanceof Mob mob)
+						{
 
-                            //mob.targetSelector.enableFlag(Goal.Flag.TARGET);
-                            mob.setNoAi(false);
+							//mob.targetSelector.enableFlag(Goal.Flag.TARGET);
+							mob.setNoAi(false);
 
-                            switch (mode)
-                            {
-                                case 3:
-                                    if (mob.getTarget() == null)
-                                    {
-                                        LivingEntity attackTarget = entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size()));
-                                        mob.setTarget(attackTarget);
-                                    }
-                                case 2:
-                                    if (mob.getLastHurtByMob() == null)
-                                    {
-                                        mob.setLastHurtByMob(mob.getTarget() != null
-                                                ? mob.getTarget()
-                                                : entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size())));
-                                    }
+							switch (mode)
+							{
+								case 3:
+									if (mob.getTarget() == null)
+									{
+										LivingEntity attackTarget = entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size()));
+										mob.setTarget(attackTarget);
+									}
+								case 2:
+									if (mob.getLastHurtByMob() == null)
+									{
+										mob.setLastHurtByMob(mob.getTarget() != null
+										                     ? mob.getTarget()
+										                     : entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size())));
+									}
 
-                                case 1:
-                                default:
-                                    mob.setAggressive(true);
-                            }
-                        }
-                    }
-                    lock.unlock();
+								case 1:
+								default:
+									mob.setAggressive(true);
+							}
+						}
+					}
+					lock.unlock();
 
-                    // sleep thread for 1 tick (50ms)
-                    Thread.sleep(50);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    break;
-                }
-            }
-            isRunning = false;
-        }
-    }
+					// sleep thread for 1 tick (50ms)
+					Thread.sleep(50);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					break;
+				}
+			}
+			isRunning = false;
+		}
+	}
 }
