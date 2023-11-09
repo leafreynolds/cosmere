@@ -92,24 +92,26 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	@Override
 	public void onModeChange(ISpiritweb cap, int lastMode)
 	{
-		super.onModeChange(cap, lastMode);
+		if (cap.getLiving().level.isClientSide) {
 
-		if (getMode(cap) != 0)
-		{
-			if (getMode(cap) > 0)
-				IronSteelLinesThread.getInstance().start();
-			else if (getMode(cap) <= 0)
-				IronSteelLinesThread.getInstance().stop();
-			return;
+			super.onModeChange(cap, lastMode);
+
+			if (getMode(cap) != 0) {
+				if (getMode(cap) > 0)
+					IronSteelLinesThread.getInstance().start();
+				else if (getMode(cap) <= 0)
+					IronSteelLinesThread.getInstance().stop();
+				return;
+			}
+
+			SpiritwebCapability data = (SpiritwebCapability) cap;
+
+			List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
+			List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
+
+			blocks.clear();
+			entities.clear();
 		}
-
-		SpiritwebCapability data = (SpiritwebCapability) cap;
-
-		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
-		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
-
-		blocks.clear();
-		entities.clear();
 	}
 
 	@OnlyIn(Dist.CLIENT)

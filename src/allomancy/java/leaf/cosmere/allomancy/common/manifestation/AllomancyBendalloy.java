@@ -11,35 +11,97 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AllomancyBendalloy extends AllomancyManifestation
 {
+	private static final HashMap<String, BendalloyThread> playerThreadMap = new HashMap<>();
 	public AllomancyBendalloy(Metals.MetalType metalType)
 	{
 		super(metalType);
 	}
 
+
+
 	@Override
 	protected void applyEffectTick(ISpiritweb data)
 	{
-		boolean isActiveTick = isActiveTick(data);
+		int mode = getMode(data);
 
-		//Slows Down Time for the entities around the user
-		if (isActiveTick)
+		String uuid = data.getLiving().getStringUUID();
+		if (mode > 0 && !playerThreadMap.containsKey(uuid))
 		{
-			int mode = getMode(data);
+			playerThreadMap.put(uuid, new BendalloyThread(data));
+		}
 
-			int range = this.getRange(data);
+        playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
+	}
 
-			List<LivingEntity> entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
+	class BendalloyThread extends AllomancyEntityThread
+	{
+		public BendalloyThread(ISpiritweb data)
+		{
+			super(data);
 
-			for (LivingEntity e : entitiesToAffect)
+			Thread t = new Thread(this, "bendalloy_thread_" + data.getLiving().getDisplayName());
+			t.start();
+		}
+
+		@Override
+		public void run()
+		{
+			LivingEntity livingEntity = data.getLiving();
+			List<LivingEntity> entitiesToAffect;
+			while (true)
 			{
-				e.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode));
-			}
+				if (serverShutdown)
+					break;
 
-			//todo slow tile entities? not sure how to do that. cadmium just calls tick more often.
+				try
+				{
+					int mode = getMode(data);
+
+					// check if bendalloy is off or compounding
+					if (mode <= 0)
+					{
+						break;
+					}
+
+					// this is the only way to check if the player is still online, thanks forge devs
+					if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+					{
+						break;
+					}
+					boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+
+					//Slows Down Time for the entities around the user
+					if (isActiveTick)
+					{
+						int range = getRange(data);
+
+						lock.lock();
+						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
+
+						for (LivingEntity e : entitiesToAffect)
+						{
+							e.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode));
+						}
+						lock.unlock();
+
+						//todo slow tile entities? not sure how to do that. cadmium just calls tick more often.
+					}
+
+					// sleep thread for 1 tick (50ms)
+					Thread.sleep(50);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					break;
+				}
+			}
+			isRunning = false;
 		}
 	}
 }

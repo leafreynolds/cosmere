@@ -6,11 +6,13 @@ package leaf.cosmere.allomancy.common.eventHandlers;
 
 
 import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyEntityThread;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.common.registry.VillagerProfessionRegistry;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.BasicItemListing;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,5 +35,12 @@ public class AllomancyCommonEvents
 					8,
 					2));
 		}
+	}
+
+	@SubscribeEvent
+	public static void onServerStoppingEvent(ServerStoppingEvent event)
+	{
+		// tell threads it's time to stop
+		AllomancyEntityThread.serverShutdown = true;
 	}
 }
