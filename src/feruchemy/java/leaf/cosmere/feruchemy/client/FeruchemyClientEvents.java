@@ -8,12 +8,14 @@ import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
+import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -125,6 +127,15 @@ public class FeruchemyClientEvents
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+
+	@SubscribeEvent
+	public static void onEntityJoinLevelEvent(EntityJoinLevelEvent event)
+	{
+		if (event.getEntity().level.isClientSide && event.getEntity() instanceof Player)
+		{
+			FeruchemyChargeThread.getInstance().start();
 		}
 	}
 }

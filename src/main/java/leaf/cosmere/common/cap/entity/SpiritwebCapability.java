@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -28,6 +28,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -224,7 +225,7 @@ public class SpiritwebCapability implements ISpiritweb
 			{
 				UUID uuidOfEffedInstance = iterator.next();
 				CosmereEffectInstance cosmereEffectInstance = this.activeEffects.get(uuidOfEffedInstance);
-				if (!cosmereEffectInstance.tick(this.getLiving()))
+				if (!cosmereEffectInstance.tick(this))
 				{
 					if (!this.getLiving().level.isClientSide)
 					{
@@ -237,6 +238,7 @@ public class SpiritwebCapability implements ISpiritweb
 					//this was copied from mob effect code, serverplayer
 					// overrides the section to send effect packet updates
 					//we don't do that, as everything on spiritweb gets synced at once
+					//todo decide if we wanna remove
 					this.onEffectUpdated(cosmereEffectInstance, false, (Entity) null);
 				}
 			}
@@ -450,9 +452,17 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void renderWorldEffects(RenderLevelStageEvent event)
 	{
-		for (ISpiritwebSubmodule spiritwebSubmodule : spiritwebSubmodules.values())
+		ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
+
+		for (Map.Entry<Manifestations.ManifestationTypes, ISpiritwebSubmodule> set : spiritwebSubmodules.entrySet())
 		{
-			spiritwebSubmodule.renderWorldEffects(this, event);
+			ISpiritwebSubmodule spiritwebSubmodule = set.getValue();
+
+			profiler.push(set.getKey().getName());
+			{
+				spiritwebSubmodule.renderWorldEffects(this, event);
+			}
+			profiler.pop();
 		}
 	}
 

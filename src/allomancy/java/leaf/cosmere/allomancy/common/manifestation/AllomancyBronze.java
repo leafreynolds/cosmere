@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -36,7 +36,7 @@ public class AllomancyBronze extends AllomancyManifestation
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 		//Detects Allomantic Pulses
 
 		//passive active ability, if any

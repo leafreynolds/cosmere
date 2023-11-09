@@ -1,22 +1,23 @@
 /*
- * File updated ~ 28 - 7 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
-import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
+import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
-import leaf.cosmere.api.*;
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.CosmereTags;
+import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
-import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -34,49 +35,29 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
-	private static final IronSteelLinesThread linesThread = new IronSteelLinesThread();
-	private static final HashMap<Material, Double> materialResistanceMap = initHashMap();
+	public static final HashMap<Material, Double> materialResistanceMap = initHashMap();
 
 	private final boolean isPush;
 	private static Set<String> s_whiteList = null;
+	private static  Set<String> s_blackList = null;
 
 	public AllomancyIronSteel(Metals.MetalType metalType)
 	{
 		super(metalType);
 		this.isPush = metalType == Metals.MetalType.STEEL;
-	}
-
-	public static ScanResult requestScanResult()
-	{
-		return linesThread.requestScanResult();
-	}
-
-	public static void releaseScanResult()
-	{
-		linesThread.releaseScanResult();
-	}
-
-	public static void startLinesThread()
-	{
-		linesThread.start();
-	}
-
-	public static void stopLinesThread()
-	{
-		linesThread.stop();
 	}
 
 	private static HashMap<Material, Double> initHashMap()
@@ -117,9 +98,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 			if (getMode(cap) != 0) {
 				if (getMode(cap) > 0)
-					startLinesThread();
+					IronSteelLinesThread.getInstance().start();
 				else if (getMode(cap) <= 0)
-					stopLinesThread();
+					IronSteelLinesThread.getInstance().stop();
 				return;
 			}
 
@@ -149,9 +130,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		//Pushes/Pulls on Nearby Metals
 		if (getKeyBinding().isDown())
 		{
-			Player player = Minecraft.getInstance().player;
-			Level level = Minecraft.getInstance().level;
-			Minecraft mc = Minecraft.getInstance();
+			final Minecraft mc = Minecraft.getInstance();
+			Player player = mc.player;
+			Level level = mc.level;
 
 			Vec3 lerpAngle = player.getLookAngle();
 			Vec3 currPos = player.getEyePosition();
@@ -171,8 +152,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					{
 						AABB aabb = new AABB(new BlockPos(currPos));
 						Entity firstMetalEntity = null;
-						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator())) {
-							if (entityContainsMetal(ent)) {
+						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator()))
+						{
+							if (entityContainsMetal(ent))
+							{
 								firstMetalEntity = ent;
 								break;
 							}
@@ -193,11 +176,15 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 				// if resistance is 100+% or the currently targeted block has metal; exit
 				if (resistance >= 1.0F || containsMetal(blockAtPos.getBlock()))
+				{
 					break;
+				}
 
 				// if block isn't air, add material resistance value
 				if (!blockAtPos.isAir())
+				{
 					resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
+				}
 
 				// lerp to next position (1 block forward)
 				currPos = currPos.add(lerpAngle);
@@ -417,7 +404,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		living.hurtMarked = true;
 	}
 
-	private static boolean entityContainsMetal(Entity entity)
+	public static boolean entityContainsMetal(Entity entity)
 	{
 		if (entity instanceof LivingEntity livingEntity)
 		{
@@ -474,12 +461,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		return false;
 	}
 
-	private static boolean containsMetal(ItemStack itemStack)
+	public static boolean containsMetal(ItemStack itemStack)
 	{
 		return containsMetal(itemStack.getItem());
 	}
 
-	private static boolean containsMetal(Item item)
+	public static boolean containsMetal(Item item)
 	{
 		if (item.builtInRegistryHolder().is(CosmereTags.Items.CONTAINS_METAL))
 		{
@@ -493,7 +480,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 
-	private static boolean containsMetal(Block block)
+	public static boolean containsMetal(Block block)
 	{
 		if (block.builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL))
 		{
@@ -506,7 +493,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		return s_whiteList.contains(ResourceLocationHelper.get(block).getPath());
 	}
 
-	private static boolean containsMetal(Entity entity)
+	public static boolean containsMetal(Entity entity)
 	{
 		if (entity.getType().is(CosmereTags.EntityTypes.CONTAINS_METAL))
 		{
@@ -532,6 +519,15 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			return;
 		}
 
+		if (s_blackList == null)
+		{
+			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
+			s_blackList = new HashSet<>();
+			s_blackList.add(Blocks.AIR.getDescriptionId());			// air block
+			s_blackList.add(Blocks.WATER.getDescriptionId());		// water block
+			s_blackList.add(Blocks.LAVA.getDescriptionId());		// lava block
+		}
+
 		s_whiteList = new HashSet<>();
 
 		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
@@ -541,6 +537,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		for (var recipe : recipes)
 		{
 			final ItemStack resultItem = recipe.getResultItem();
+
+			// check if is blacklisted, and if is, skip
+			if (s_blackList.contains(resultItem.getItem().getDescriptionId()))
+			{
+				continue;
+			}
 
 			if (resultItem.is(containsMetal))
 			{
@@ -570,214 +572,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 					s_whiteList.add(ResourceLocationHelper.get(resultItem.getItem()).getPath());
 					return;
-				}
-			}
-		}
-	}
-
-	// set scan range of Lines Thread
-	public static void setScanRange(int range)
-	{
-		linesThread.setScanRange(range);
-	}
-
-	// this should be threaded to avoid lag spikes on the render thread when flaring metals
-	static class IronSteelLinesThread implements Runnable {
-		private static Thread t;
-		private static final Lock lock = new ReentrantLock();
-		private static ScanResult scanResult = new ScanResult();
-		private static int scanRange = 0;
-		private static boolean isStopping = false;
-
-		public ScanResult requestScanResult()
-		{
-			lock.lock();
-			try
-			{
-				return scanResult;
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				lock.unlock();
-				return new ScanResult();	// empty ScanResult so it doesn't crash
-			}
-		}
-
-		public void releaseScanResult()
-		{
-			lock.unlock();
-		}
-
-		public void setScanRange(int range)
-		{
-			scanRange = range;
-		}
-
-		public void start()
-		{
-			if (t == null || isStopping)
-			{
-				CosmereAPI.logger.info("Starting lines thread");
-				t = new Thread(this, "lines_thread");
-				isStopping = false;
-				t.start();
-			}
-		}
-
-		public void stop()
-		{
-			if (t != null && !isStopping)
-			{
-				isStopping = true;
-			}
-		}
-
-		private void setScanResult(ScanResult result)
-		{
-			scanResult = result;
-		}
-
-		@Override
-		@OnlyIn(Dist.CLIENT)
-		public void run() {
-			final Minecraft mc = Minecraft.getInstance();
-			while (!isStopping) {
-				ScanResult nextScan;
-				LocalPlayer playerEntity = mc.player;
-				nextScan = new ScanResult();
-				// todo: add configurable tick rate for this thread
-
-				//find all the things that we want to draw a line to from the player
-				//metal blocks
-				{
-					BlockPos.withinManhattanStream(playerEntity.blockPosition(), scanRange, scanRange, scanRange)
-							.filter(blockPos ->
-							{
-								Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-								final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-								boolean isGood = validMetalBlock || containsMetal(block);
-
-								if (isGood)
-								{
-									try
-									{
-										Player player = Minecraft.getInstance().player;
-										Level level = Minecraft.getInstance().level;
-										// if level is null, the player has no world loaded, so stop
-										if (mc.level == null)
-										{
-											stop();
-											return false;
-										}
-										BlockState endBlock = Objects.requireNonNull(level.getBlockState(blockPos));
-										Vec3 currVec = player.getEyePosition();
-										Vec3 endPos = new Vec3(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F);
-										double resistance = 0.0F;
-
-										// linear interpolation to see if the block is obscured by blocks
-										int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
-										for (int i = 0; i < loopTimes; i++)
-										{
-											BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
-
-											if (bState == endBlock || resistance >= 1.0F)
-											{
-												break;
-											}
-
-											resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
-
-											double distance = currVec.distanceTo(endPos);
-											currVec = currVec.lerp(endPos, 1.0F / distance);
-										}
-
-										isGood = resistance < 1.0F;
-									}
-									catch (Exception e)
-									{
-										e.printStackTrace();
-
-										isGood = false;
-									}
-								}
-
-								return isGood;
-							})
-							.forEach(blockPos -> nextScan.addBlock(blockPos.immutable()));
-
-					nextScan.finalizeClusters();
-				}
-
-				//entities with metal armor/tools
-				{
-					EntityHelper.getEntitiesInRange(playerEntity, scanRange, false).forEach(entity ->
-					{
-						if (entityContainsMetal(entity)) {
-							double resistance = 0.0F;
-							try
-							{
-								Player player = Minecraft.getInstance().player;
-								Level level = Minecraft.getInstance().level;
-								// if level is null, the player has no world loaded, so stop
-								if (mc.level == null)
-								{
-									stop();
-									return;
-								}
-								Vec3 currVec = player.getEyePosition();
-								Vec3 endPos = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-
-								// linear interpolation to see if the entity is obscured by blocks
-								int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
-								for (int i = 0; i < loopTimes; i++)
-								{
-									BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
-
-									final boolean pastEntity = (player.getEyePosition().distanceTo(currVec) >= player.getEyePosition().distanceTo(endPos));
-
-									if (pastEntity || resistance >= 1.0F)
-									{
-										break;
-									}
-
-									resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
-
-									double distance = currVec.distanceTo(endPos);
-									currVec = currVec.lerp(endPos, 1.0F / distance);
-
-								}
-							}
-							catch (Exception e)
-							{
-								e.printStackTrace();
-								resistance = 100.0F;    // just to be sure :)
-							}
-
-							if (resistance < 1.0F)
-							{
-								nextScan.foundEntities.add(
-										entity.position().add(
-												0,
-												entity.getBoundingBox().getYsize() / 2,
-												0));
-							}
-						}
-					});
-				}
-
-				lock.lock();
-				try
-				{
-					setScanResult(nextScan);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				finally
-				{
-					lock.unlock();
 				}
 			}
 		}

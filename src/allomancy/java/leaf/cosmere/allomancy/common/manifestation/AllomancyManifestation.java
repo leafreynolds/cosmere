@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -139,6 +139,14 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		return false;
 	}
 
+	//is flaring, in either normal burn or compounding
+	protected boolean isFlaring(ISpiritweb data)
+	{
+		int mode = getMode(data);
+		final int absMode = Mth.abs(mode);
+		return absMode > 1;
+	}
+
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
@@ -154,7 +162,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 
 		//don't check every tick.
 		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 		allo.adjustIngestedMetal(metalType, -cost, isActiveTick);
 
 		if (isActiveTick && livingEntity instanceof ServerPlayer serverPlayer)
@@ -252,5 +260,4 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		final int mode = Math.max(getMode(data), 0);
 		return Mth.floor(allomanticStrength * mode);
 	}
-
 }

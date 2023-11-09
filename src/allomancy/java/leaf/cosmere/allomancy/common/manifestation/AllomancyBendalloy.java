@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -21,6 +21,8 @@ public class AllomancyBendalloy extends AllomancyManifestation
 	{
 		super(metalType);
 	}
+
+
 
 	@Override
 	protected void applyEffectTick(ISpiritweb data)

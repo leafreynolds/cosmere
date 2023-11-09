@@ -1,18 +1,19 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery;
 
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.sandmastery.common.Sandmastery;
-import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
+import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -77,6 +78,11 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addAdvancements()
 	{
+		Manifestations.ManifestationTypes value = Manifestations.ManifestationTypes.SANDMASTERY;
+		{
+			add(String.format(advancementTitleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
+			add(String.format(advancementDescriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));
+		}
 	}
 
 	private void addManifestations()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -9,7 +9,6 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import net.minecraft.world.entity.LivingEntity;
 
 public class AllomancyDuralumin extends AllomancyManifestation
 {
@@ -22,8 +21,7 @@ public class AllomancyDuralumin extends AllomancyManifestation
 	@Override
 	public void applyEffectTick(ISpiritweb data)
 	{
-		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 
 		if (isActiveTick)
 		{

@@ -1,10 +1,11 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
@@ -32,6 +33,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	public void tickServer(ISpiritweb spiritweb)
 	{
 		final LivingEntity livingEntity = spiritweb.getLiving();
+		final boolean surgebindingActiveTick = (livingEntity.tickCount + Manifestations.ManifestationTypes.SURGEBINDING.getID()) % 20 == 0;
 
 		//todo replace with checking an oath boolean or something.
 		//just not efficient enough.
@@ -47,7 +49,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				stormlightStored += 1;
 			}
 
-			if (stormlightStored > 0 && livingEntity.tickCount % 20 == 0)
+			if (stormlightStored > 0 && surgebindingActiveTick)
 			{
 				//being hurt takes priority
 				if (livingEntity.getHealth() < livingEntity.getMaxHealth())
@@ -98,7 +100,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		//special effects for wearing shardplate.
-		if (livingEntity.tickCount % 20 == 0)
+		if (surgebindingActiveTick)
 		{
 			ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
 			ItemStack breastplate = livingEntity.getItemBySlot(EquipmentSlot.CHEST);

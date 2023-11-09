@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.effects;
@@ -9,8 +9,7 @@ import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import net.minecraft.world.entity.LivingEntity;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 public class AllomancyBoostEffect extends CosmereEffect
@@ -36,42 +35,42 @@ public class AllomancyBoostEffect extends CosmereEffect
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity livingEntity, double strength)
+	protected int getTickOffset()
+	{
+		return Metals.MetalType.NICROSIL.getID();
+	}
+
+	@Override
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
 		//todo boost metal drain balancing
 
-		if (isActiveTick(livingEntity))
+		AllomancySpiritwebSubmodule allo = AllomancySpiritwebSubmodule.getSubmodule(data);
+
+		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-			SpiritwebCapability.get(livingEntity).ifPresent(data ->
+			if (!metalType.hasAssociatedManifestation() || metalType == Metals.MetalType.DURALUMIN)
 			{
-				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) ((SpiritwebCapability) data).getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
+				continue;
+			}
 
-				for (Metals.MetalType metalType : Metals.MetalType.values())
+			int ingestedMetalAmount = allo.getIngestedMetal(metalType);
+
+			//if metal exists
+			if (ingestedMetalAmount > 0)
+			{
+				//drain metals that are actively being burned
+				if (data.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID())))
 				{
-					if (!metalType.hasAssociatedManifestation() || metalType == Metals.MetalType.DURALUMIN)
-					{
-						continue;
-					}
+					final int amountToAdjust =
+							ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount;
+					allo.adjustIngestedMetal(
+							metalType,
+							-amountToAdjust, //take amount away
+							true);
 
-					int ingestedMetalAmount = allo.getIngestedMetal(metalType);
-
-					//if metal exists
-					if (ingestedMetalAmount > 0)
-					{
-						//drain metals that are actively being burned
-						if (data.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID())))
-						{
-							final int amountToAdjust =
-									ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount;
-							allo.adjustIngestedMetal(
-									metalType,
-									-amountToAdjust, //take amount away
-									true);
-
-						}
-					}
 				}
-			});
+			}
 		}
 	}
 }

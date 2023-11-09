@@ -1,9 +1,10 @@
 /*
- * File updated ~ 26 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
 
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
@@ -80,6 +81,11 @@ public class SurgebindingEngLangGen extends LanguageProvider
 
 	private void addAdvancements()
 	{
+		Manifestations.ManifestationTypes value = Manifestations.ManifestationTypes.SURGEBINDING;
+		{
+			add(String.format(advancementTitleFormat, value.getName()), StringHelper.fixCapitalisation(value.getName()));
+			add(String.format(advancementDescriptionFormat, value.getName()), "Test description: " + StringHelper.fixCapitalisation(value.getName()));
+		}
 	}
 
 	private void addManifestations()

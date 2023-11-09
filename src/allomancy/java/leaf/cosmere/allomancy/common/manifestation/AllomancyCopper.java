@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -46,11 +46,11 @@ public class AllomancyCopper extends AllomancyManifestation
 		//mode minus one, because copper has special mode stuff.
 		final int mode = getMode(data);
 		int i = switch (mode)
-				{
-					case 1, 2 -> 1;
-					case 3 -> 2;
-					default -> 0;
-				};
+		{
+			case 1, 2 -> 1;
+			case 3 -> 2;
+			default -> 0;
+		};
 
 		return Mth.floor(allomanticStrength * i);
 	}
@@ -59,7 +59,7 @@ public class AllomancyCopper extends AllomancyManifestation
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 
 		//Hides Allomantic Pulses
 		if (isActiveTick)
