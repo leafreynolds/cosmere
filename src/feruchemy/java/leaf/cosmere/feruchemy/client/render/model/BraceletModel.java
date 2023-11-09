@@ -30,36 +30,44 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 {
 	private static final ResourceLocation TEXTURE = Cosmere.rl("textures/block/metal_block.png");
 
-	// region string IDs
+	// Body Parts
 	private static final String leftArmID = "left_arm";
 	private static final String rightArmID = "right_arm";
-	private static final String braceletID = "bracelet";
-	private static final String handsID = "hands";
-//endregion
 
-	//region model parts
+	// Categories
+	private static final String shouldersSideID = "shoulders_side";
+	private static final String upperArmsID = "upper_arms";
+	private static final String middleArmsID = "middle_arms";
+	private static final String lowerArmsID = "lower_arms";
+	private static final String handsID = "hands";
+
+	// Model Parts
 	private final ModelPart root;
+	private final ModelPart rightShoulderSide;
 	private final ModelPart rightArmUpper;
 	private final ModelPart rightArmMiddle;
-	private final ModelPart rightHand;
+	private final ModelPart rightArmLower;
+
+	private final ModelPart leftShoulderSide;
 	private final ModelPart leftArmUpper;
 	private final ModelPart leftArmMiddle;
-	private final ModelPart leftHand;
-//endregion
+	private final ModelPart leftArmLower;
 
 	public BraceletModel(ModelPart part)
 	{
 		super(part, RenderType::entityCutoutNoCull);
 		this.root = part;
 		ModelPart find = part.getChild(rightArmID);
+		rightShoulderSide = find.getChild("shoulder_side");
 		rightArmUpper = find.getChild("upper");
 		rightArmMiddle = find.getChild("middle");
-		rightHand = find.getChild("hand");
+		rightArmLower = find.getChild("lower");
 
 		find = part.getChild(leftArmID);
+		leftShoulderSide = find.getChild("shoulder_side");
 		leftArmUpper = find.getChild("upper");
 		leftArmMiddle = find.getChild("middle");
-		leftHand = find.getChild("hand");
+		leftArmLower = find.getChild("lower");
 	}
 
 	public static LayerDefinition createLayer()
@@ -74,24 +82,29 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
+		rightArm.addOrReplaceChild("shoulder_side",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(-3.0F, 0.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+				PartPose.ZERO);
+
 		rightArm.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.5f, 0, -2.5F, 2, 1, 5, cube),
+						.addBox(-3.0F, 2.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		rightArm.addOrReplaceChild("middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.5f, 3, -2.5F, 2, 1, 5, cube),
+						.addBox(-3.0F, 4.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
-		rightArm.addOrReplaceChild("hand",
+		rightArm.addOrReplaceChild("lower",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.5f, 6, -2.5F, 2, 1, 5, cube),
+						.addBox(-3.0F, 6.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
-
 
 		final PartDefinition leftArm = part.addOrReplaceChild(
 				leftArmID,
@@ -99,24 +112,29 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 				PartPose.ZERO
 		);
 
+		leftArm.addOrReplaceChild("shoulder_side",
+				CubeListBuilder.create()
+						.texOffs(0, 0)
+						.addBox(0.0F, 0.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+				PartPose.ZERO);
+
 		leftArm.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(1.5f, 0, -2.5F, 2, 1, 5, cube),
+						.addBox(0.0F, 2.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		leftArm.addOrReplaceChild("middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(1.5f, 3, -2.5F, 2, 1, 5, cube),
+						.addBox(0.0F, 4.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
-		leftArm.addOrReplaceChild("hand",
+		leftArm.addOrReplaceChild("lower",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(1.5f, 6, -2.5F, 2, 1, 5, cube),
+						.addBox(0.0F, 6.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
-
 
 		return LayerDefinition.create(mesh, 16, 16);
 	}
@@ -145,30 +163,20 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 		ModelPart modelPartToRender = null;
 		switch (slotContext.identifier())
 		{
-			case braceletID:
-				switch (slotContext.index())
-				{
-					case 0:
-						modelPartToRender = leftArmUpper;
-						break;
-					case 1:
-						modelPartToRender = rightArmUpper;
-						break;
-					case 2:
-						modelPartToRender = leftArmMiddle;
-						break;
-					case 3:
-						modelPartToRender = rightArmMiddle;
-						break;
-				}
-
-				if (modelPartToRender != null)
-				{
-					modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				}
+			case shouldersSideID:
+				modelPartToRender = leftHandSide ? leftShoulderSide : rightShoulderSide;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
 				break;
-			case handsID:
-				modelPartToRender = leftHandSide ? leftHand : rightHand;
+			case upperArmsID:
+				modelPartToRender = leftHandSide ? leftArmUpper : rightArmUpper;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case middleArmsID:
+				modelPartToRender = leftHandSide ? leftArmMiddle : rightArmMiddle;
+				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+				break;
+			case lowerArmsID:
+				modelPartToRender = leftHandSide ? leftArmLower : rightArmLower;
 				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
 				break;
 		}
