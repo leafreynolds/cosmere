@@ -8,6 +8,7 @@ import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.capabilities.world.IScadrial;
 import leaf.cosmere.allomancy.common.capabilities.world.ScadrialCapability;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyTin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.material.FogType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -58,5 +60,11 @@ public class AllomancyClientEvents
 		ScadrialCapability scadrial = (ScadrialCapability) resolve.get();
 
 		scadrial.tickFog(event, player);
+	}
+
+	@SubscribeEvent
+	public static void onPlaySoundEvent(PlaySoundEvent event)
+	{
+		AllomancyTin.onSound(event);
 	}
 }
