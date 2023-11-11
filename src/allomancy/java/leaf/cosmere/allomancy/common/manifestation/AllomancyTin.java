@@ -130,7 +130,7 @@ public class AllomancyTin extends AllomancyManifestation
 
 				if (distance < range)
 				{
-					soundPosMap.put(soundPos, 20);
+					soundPosMap.put(soundPos, 20);	// timer in ticks
 				}
 			}
 		});
