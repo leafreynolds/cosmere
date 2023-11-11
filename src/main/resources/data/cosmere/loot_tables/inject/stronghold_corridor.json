@@ -7,11 +7,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmere:lerasium_nugget",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
           "__comment": "with randomise metal type function, only tin doesn't matter here.",
           "name": "feruchemy:tin_ring_metalmind",
           "weight": 50,
@@ -26,7 +21,7 @@
         },
         {
           "type": "minecraft:empty",
-          "weight": 49
+          "weight": 50
         }
       ]
     }
