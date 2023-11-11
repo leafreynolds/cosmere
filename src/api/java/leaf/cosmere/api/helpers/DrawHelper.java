@@ -5,17 +5,20 @@
 package leaf.cosmere.api.helpers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import leaf.cosmere.api.CosmereAPI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
@@ -62,6 +65,79 @@ public class DrawHelper
 
 		Minecraft.getInstance().renderBuffers().bufferSource().endBatch(CosmereAPIRenderTypes.LINE_OVERLAY.get());
 		poseStack.popPose();
+		RenderSystem.enableDepthTest();
+	}
+
+	public static void drawSquareAtPoint(PoseStack pStack, Color color, List<Vec3> squarePosList, Vec3 destinationVec)
+	{
+		pStack.pushPose();
+		Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+
+		RenderSystem.disableDepthTest();
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+
+		pStack.translate(-view.x, -view.y, -view.z);
+
+		final VertexConsumer bufferIn = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(CosmereAPIRenderTypes.SQUARE_OVERLAY.get());
+
+		final float size = 0.5F;
+		for (Vec3 pos : squarePosList)
+		{
+			Vec3 directionalVec = pos.subtract(destinationVec).normalize();
+
+			Matrix4f matrix = pStack.last().pose();
+			//final Matrix3f normal = pStack.last().normal();
+
+			double pitch = Math.asin(-directionalVec.y);
+			double yaw = Math.atan2(directionalVec.x, directionalVec.z);
+
+			Quaternion rotQuat = Vector3f.YP.rotationDegrees((float) Math.toDegrees(yaw));
+			rotQuat.mul(Vector3f.XP.rotationDegrees((float) Math.toDegrees(pitch) + 90));
+
+			float[] vertices = {
+                    -size, 0, -size,
+					-size, 0, size,
+					size, 0, size,
+					size, 0, -size
+			};
+
+			float [] textureCoords = {
+					0.0F, 0.0F,
+					1.0F, 0.0F,
+					1.0F, 1.0F,
+					0.0F, 1.0F
+			};
+
+
+			// ?????????????????????????? no work??????????????????????????
+
+			RenderSystem.setShaderTexture(0, new ResourceLocation("allomancy", "textures/icon/allomancy.png"));	// for testing
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+
+			for (int i = 0; i < vertices.length; i += 3)
+			{
+				float vertexX = vertices[i];
+				float vertexY = vertices[i+1];
+				float vertexZ = vertices[i+2];
+
+				Vector3f rotQuatVec = new Vector3f(vertexX, vertexY, vertexZ);
+				rotQuatVec.transform(rotQuat);
+
+				float finalX = (float) (rotQuatVec.x() + pos.x());
+				float finalY = (float) (rotQuatVec.y() + pos.y());
+				float finalZ = (float) (rotQuatVec.z() + pos.z());
+
+				int textureUCoord = (int) textureCoords[i / 3 * 2];
+				int textureVCoord = (int) textureCoords[i / 3 * 2 + 1];
+
+				bufferIn.vertex(matrix, finalX, finalY, finalZ)
+						.uv(textureUCoord, textureVCoord)
+						.endVertex();
+			}
+
+		}
+		Minecraft.getInstance().renderBuffers().bufferSource().endBatch(CosmereAPIRenderTypes.SQUARE_OVERLAY.get());
+		pStack.popPose();
 		RenderSystem.enableDepthTest();
 	}
 
@@ -173,7 +249,8 @@ public class DrawHelper
 	public enum CosmereAPIRenderTypes
 	{
 		LINE_OVERLAY(() -> Internal.LINE_OVERLAY),
-		BLOCK_OVERLAY(() -> Internal.BLOCK_OVERLAY);
+		BLOCK_OVERLAY(() -> Internal.BLOCK_OVERLAY),
+		SQUARE_OVERLAY(() -> Internal.SQUARE_OVERLAY);
 
 		private final Supplier<RenderType> typeSupplier;
 
@@ -208,6 +285,23 @@ public class DrawHelper
 
 			private static final RenderType BLOCK_OVERLAY = create(CosmereAPI.COSMERE_MODID + ":block_render",
 					DefaultVertexFormat.POSITION_COLOR_NORMAL,
+					VertexFormat.Mode.QUADS,
+					25565,
+					false,
+					false,
+					RenderType.CompositeState.builder()
+							.setShaderState(RenderStateShard.POSITION_COLOR_SHADER)
+							.setTextureState(NO_TEXTURE)
+							.setLayeringState(VIEW_OFFSET_Z_LAYERING) // view_offset_z_layering
+							.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+							.setOutputState(TRANSLUCENT_TARGET)
+							.setWriteMaskState(COLOR_WRITE)
+							.setCullState(NO_CULL)
+							.setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
+							.createCompositeState(false));
+
+			private static final RenderType SQUARE_OVERLAY = create(CosmereAPI.COSMERE_MODID + ":square_render",
+					DefaultVertexFormat.POSITION_TEX,
 					VertexFormat.Mode.QUADS,
 					25565,
 					false,

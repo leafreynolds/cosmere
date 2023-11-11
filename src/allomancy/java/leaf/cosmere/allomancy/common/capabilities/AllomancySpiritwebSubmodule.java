@@ -194,6 +194,8 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 		PoseStack viewModelStack = new PoseStack();
 
+		Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
+
 		//if user has iron or steel manifestation
 		if (spiritweb.hasManifestation(ironAllomancy) || spiritweb.hasManifestation(steelAllomancy))
 		{
@@ -205,8 +207,6 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				Minecraft.getInstance().getProfiler().push("cosmere-getDrawLines");
 				IronSteelLinesThread.getInstance().setScanRange(range);
 				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
-
-				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 
 				viewModelStack.last().pose().load(event.getPoseStack().last().pose());
 
@@ -232,8 +232,10 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 		if (spiritweb.hasManifestation(tinAllomancy))
 		{
+			viewModelStack.last().pose().load(event.getPoseStack().last().pose());
+
 			Minecraft.getInstance().getProfiler().push("cosmere-getDrawSoundIndicator");
-			DrawHelper.drawBlocksAtPoint(viewModelStack, Color.GREEN, AllomancyTin.getTinSoundList());
+			DrawHelper.drawSquareAtPoint(viewModelStack, Color.WHITE, AllomancyTin.getTinSoundList(), spiritweb.getLiving().getEyePosition());
 			Minecraft.getInstance().getProfiler().pop();
 		}
 	}

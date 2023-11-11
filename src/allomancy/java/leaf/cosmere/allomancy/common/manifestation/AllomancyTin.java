@@ -12,7 +12,6 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.*;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,14 +37,9 @@ public class AllomancyTin extends AllomancyManifestation
 		super(metalType);
 	}
 
-	public static ArrayList<BlockPos> getTinSoundList()
+	public static ArrayList<Vec3> getTinSoundList()
 	{
-		ArrayList<BlockPos> retList = new ArrayList<>();
-		for (Vec3 v : soundPosMap.keySet())
-		{
-			retList.add(new BlockPos(v));
-		}
-		return retList;
+		return new ArrayList<>(soundPosMap.keySet());
 	}
 
 	@Override
@@ -98,7 +92,7 @@ public class AllomancyTin extends AllomancyManifestation
 			for (Vec3 v : soundPosMap.keySet())
 			{
 				// only make particles for 3 ticks
-				if (soundPosMap.get(v) < 10)
+				if (soundPosMap.get(v) > 18)
 				{
 					VibrationParticleOption vib = new VibrationParticleOption(playerSource, 10);
 					living.level.addParticle(vib, v.x, v.y, v.z, 1D, 1D, 1D);
@@ -127,7 +121,7 @@ public class AllomancyTin extends AllomancyManifestation
 
 		SpiritwebCapability.get(localPlayer).ifPresent(playerSpiritweb ->
 		{
-			if (tinAllomancy.isActive(playerSpiritweb))
+			if (tinAllomancy.isActive(playerSpiritweb) && !event.getName().equals("block.note_block.basedrum"))
 			{
 				//todo make the entity glow or something to the user?
 				Vec3 soundPos = new Vec3(event.getSound().getX(), event.getSound().getY(), event.getSound().getZ());
@@ -136,7 +130,7 @@ public class AllomancyTin extends AllomancyManifestation
 
 				if (distance < range)
 				{
-					soundPosMap.put(soundPos, 13);
+					soundPosMap.put(soundPos, 20);
 				}
 			}
 		});
