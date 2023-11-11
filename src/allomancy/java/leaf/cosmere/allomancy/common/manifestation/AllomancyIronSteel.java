@@ -201,7 +201,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				BlockPos pos = new BlockPos(currPos);
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
-				if (state.getBlock() instanceof IHasMetalType || containsMetal(state.getBlock()))
+				Block block = state.getBlock();
+				final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+				if (validMetalBlock || containsMetal(state.getBlock()))
 				{
 					blocks.add(pos.immutable());
 
