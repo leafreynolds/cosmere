@@ -11,11 +11,12 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import leaf.cosmere.api.CosmereAPI;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import java.awt.*;
 import java.util.List;
 import java.util.OptionalDouble;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public class DrawHelper
@@ -78,15 +80,21 @@ public class DrawHelper
 
 		pStack.translate(-view.x, -view.y, -view.z);
 
-		final VertexConsumer bufferIn = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(CosmereAPIRenderTypes.SQUARE_OVERLAY.get());
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
-		final float size = 0.5F;
+		// set up texture and buffer
+		final ResourceLocation icon = new ResourceLocation("minecraft", "textures/particle/note.png");
+		final RenderType RENDER_TYPE = CosmereAPIRenderTypes.SQUARE_TEX_OVERLAY(icon);
+		final MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+		final VertexConsumer bufferIn = bufferSource.getBuffer(RENDER_TYPE);
+
+		final float size = 0.2F;
 		for (Vec3 pos : squarePosList)
 		{
 			Vec3 directionalVec = pos.subtract(destinationVec).normalize();
 
-			Matrix4f matrix = pStack.last().pose();
-			//final Matrix3f normal = pStack.last().normal();
+			Matrix4f matrix4f = pStack.last().pose();
+			Matrix3f matrix3f = pStack.last().normal();
 
 			double pitch = Math.asin(-directionalVec.y);
 			double yaw = Math.atan2(directionalVec.x, directionalVec.z);
@@ -95,24 +103,18 @@ public class DrawHelper
 			rotQuat.mul(Vector3f.XP.rotationDegrees((float) Math.toDegrees(pitch) + 90));
 
 			float[] vertices = {
-                    -size, 0, -size,
+					-size, 0, -size,
 					-size, 0, size,
 					size, 0, size,
 					size, 0, -size
 			};
 
 			float [] textureCoords = {
-					0.0F, 0.0F,
 					1.0F, 0.0F,
 					1.0F, 1.0F,
-					0.0F, 1.0F
+					0.0F, 1.0F,
+					0.0F, 0.0F,
 			};
-
-
-			// ?????????????????????????? no work??????????????????????????
-
-			RenderSystem.setShaderTexture(0, new ResourceLocation("allomancy", "textures/icon/allomancy.png"));	// for testing
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
 			for (int i = 0; i < vertices.length; i += 3)
 			{
@@ -130,15 +132,22 @@ public class DrawHelper
 				int textureUCoord = (int) textureCoords[i / 3 * 2];
 				int textureVCoord = (int) textureCoords[i / 3 * 2 + 1];
 
-				bufferIn.vertex(matrix, finalX, finalY, finalZ)
-						.uv(textureUCoord, textureVCoord)
-						.endVertex();
+				squareTexVertex(bufferIn, matrix4f, matrix3f, 1, finalX, finalY, finalZ, textureUCoord, textureVCoord, color);
 			}
-
 		}
-		Minecraft.getInstance().renderBuffers().bufferSource().endBatch(CosmereAPIRenderTypes.SQUARE_OVERLAY.get());
+
+		bufferSource.endBatch(RENDER_TYPE);
 		pStack.popPose();
 		RenderSystem.enableDepthTest();
+	}
+
+	//copied from DragonFireballRenderer.java
+	private static void squareTexVertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, int uv2, float pX, float pY, float pZ, int pU, int pV, Color color) {
+		vertexConsumer.vertex(matrix4f, pX, pY, pZ)
+				.color(color.getRed(), color.getGreen(), color.getBlue(), 255).uv((float)pU, (float)pV)
+				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2)
+				.normal(matrix3f, 0.0F, 1.0F, 0.0F)
+				.endVertex();
 	}
 
 	public static void drawBlocksAtPoint(PoseStack poseStack, Color color, List<BlockPos> blockPosList)
@@ -249,8 +258,7 @@ public class DrawHelper
 	public enum CosmereAPIRenderTypes
 	{
 		LINE_OVERLAY(() -> Internal.LINE_OVERLAY),
-		BLOCK_OVERLAY(() -> Internal.BLOCK_OVERLAY),
-		SQUARE_OVERLAY(() -> Internal.SQUARE_OVERLAY);
+		BLOCK_OVERLAY(() -> Internal.BLOCK_OVERLAY);
 
 		private final Supplier<RenderType> typeSupplier;
 
@@ -262,6 +270,11 @@ public class DrawHelper
 		public RenderType get()
 		{
 			return typeSupplier.get();
+		}
+
+		public static RenderType SQUARE_TEX_OVERLAY(ResourceLocation icon)
+		{
+			return Internal.SQUARE_OVERLAY.apply(icon, true);
 		}
 
 		private static class Internal extends RenderType
@@ -300,22 +313,24 @@ public class DrawHelper
 							.setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
 							.createCompositeState(false));
 
-			private static final RenderType SQUARE_OVERLAY = create(CosmereAPI.COSMERE_MODID + ":square_render",
-					DefaultVertexFormat.POSITION_TEX,
-					VertexFormat.Mode.QUADS,
-					25565,
-					false,
-					false,
-					RenderType.CompositeState.builder()
-							.setShaderState(RenderStateShard.POSITION_COLOR_SHADER)
-							.setTextureState(NO_TEXTURE)
-							.setLayeringState(VIEW_OFFSET_Z_LAYERING) // view_offset_z_layering
-							.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-							.setOutputState(TRANSLUCENT_TARGET)
-							.setWriteMaskState(COLOR_WRITE)
-							.setCullState(NO_CULL)
-							.setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
-							.createCompositeState(false));
+			private static final BiFunction<ResourceLocation, Boolean, RenderType> SQUARE_OVERLAY = Util.memoize((icon, createComposite) -> {
+				return create(CosmereAPI.COSMERE_MODID + ":square_render",
+						DefaultVertexFormat.POSITION_TEX,
+						VertexFormat.Mode.QUADS,
+						25565,
+						false,
+						false,
+						RenderType.CompositeState.builder()
+								.setShaderState(RenderStateShard.POSITION_TEX_SHADER)
+								.setTextureState(new RenderStateShard.TextureStateShard(icon, false, false))
+								.setLayeringState(VIEW_OFFSET_Z_LAYERING) // view_offset_z_layering
+								.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+								.setOutputState(TRANSLUCENT_TARGET)
+								.setWriteMaskState(COLOR_WRITE)
+								.setCullState(NO_CULL)
+								.setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
+								.createCompositeState(createComposite));
+			});
 
 
 			private Internal(String name, VertexFormat fmt, VertexFormat.Mode glMode, int size, boolean doCrumbling, boolean depthSorting, Runnable onEnable, Runnable onDisable)
