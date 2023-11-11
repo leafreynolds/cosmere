@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client.render.model;
@@ -42,32 +42,11 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 	// Categories
 	private static final String eyeRootID = "eyeRoot";
 	private static final String eyesID = "eyes";
-
 	private static final String linchpinID = "linchpin";
-
-	private static final String backID = "back";
-
-	private static final String chestID = "chest";
-
-	private static final String shouldersTopID = "shoulders_top";
-	private static final String shouldersSideID = "shoulders_side";
-	private static final String shouldersBackID = "shoulders_back";
-
-	private static final String upperArmsID = "upper_arms";
-	private static final String upperArmsBackID = "upper_arms_back";
-	private static final String middleArmsID = "middle_arms";
-	private static final String lowerArmsID = "lower_arms";
-	private static final String handsID = "hands";
-
-	private static final String ribsTopID = "ribs_top";
-	private static final String ribsTopMiddleID = "ribs_top_middle";
-	private static final String ribsBottomMiddleID = "ribs_bottom_middle";
-	private static final String ribsBottomID = "ribs_bottom";
-
-	private static final String upperLegsID = "upper_legs";
-	private static final String upperMiddleLegsID = "upper_middle_legs";
-	private static final String lowerMiddleLegsID = "lower_middle_legs";
-	private static final String lowerLegsID = "lower_legs";
+	private static final String physicalID = "physical";
+	private static final String mentalID = "mental";
+	private static final String spiritualID = "spiritual";
+	private static final String temporalID = "temporal";
 
 	// Model Parts
 	private final ModelPart root;
@@ -546,23 +525,24 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 
 	public void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, MultiBufferSource buffer, int light)
 	{
-		final boolean leftHandSide = slotContext.index() % 2 == 0;
+		final int slotIndex = slotContext.index() + 1;//adding 1 for the is left ha
+		final boolean leftHandSide = slotIndex % 2 != 0;
 
 
 		ModelPart modelPartToRender = null;
 		switch (slotContext.identifier())
 		{
+			//iron, steel, tin, pewter
 			case eyesID:
+				//left
 				eyeLeftFront.visible = leftHandSide;
-				eyeRightFront.visible = !leftHandSide;
 				eyeLeftBack.visible = leftHandSide;
+				//right
+				eyeRightFront.visible = !leftHandSide;
 				eyeRightBack.visible = !leftHandSide;
 
 				SpiritwebCapability.get(slotContext.entity()).ifPresent((data) ->
 				{
-					//todo better
-
-
 					eyeRoot.y = CompoundNBTHelper.getInt(data.getCompoundTag(), "eye_height", 0);
 				});
 
@@ -571,132 +551,138 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				modelPartToRender = head;
 
 				break;
+			//iron, steel, tin, pewter, god metals, gold
 			case linchpinID:
 				modelPartToRender = linchpin;
 				modelPartToRender.copyFrom(this.root.getChild(bodyID));
 				break;
-			case backID:
-				switch (slotContext.index())
+			//iron, steel, tin, pewter
+			case physicalID:
+				switch (slotIndex)//linchpin and eyes handle the rest of the physcical spike locations
 				{
-					case 0:
-						modelPartToRender = upperBack;
-						break;
-					case 1:
-						modelPartToRender = upperMiddleBack;
-						break;
-					case 2:
-						modelPartToRender = lowerMiddleBack;
-						break;
-					case 3:
-						modelPartToRender = lowerBack;
-						break;
+					case 1, 2 ->
+					{
+						modelPartToRender = leftHandSide ? upperChest : lowerChest;
+						modelPartToRender.copyFrom(this.root.getChild(bodyID));
+					}
+					case 3, 4 ->
+					{
+						modelPartToRender = leftHandSide ? ribLeftTop : ribRightTop;
+						modelPartToRender.copyFrom(this.root.getChild(bodyID));
+					}
+					case 5, 6 ->
+					{
+						modelPartToRender = leftHandSide ? leftShoulderTop : rightShoulderTop;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+					}
+					case 7, 8 ->
+					{
+						modelPartToRender = leftHandSide ? leftLegUpper : rightLegUpper;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
+					}
+					default -> modelPartToRender = null;
 				}
-				modelPartToRender.copyFrom(this.root.getChild(bodyID));
 				break;
-			case chestID:
-				switch (slotContext.index())
+
+			//zinc,brass,copper,bronze
+			case mentalID:
+				switch (slotIndex)
 				{
-					case 0:
-						modelPartToRender = upperChest;
-						break;
-					case 1:
-						modelPartToRender = lowerChest;
-						break;
+					case 1, 2 ->
+					{
+						modelPartToRender = leftHandSide ? upperBack : upperMiddleBack;
+						modelPartToRender.copyFrom(this.root.getChild(bodyID));
+					}
+					case 3, 4 ->
+					{
+						modelPartToRender = leftHandSide ? lowerMiddleBack : lowerBack;
+						modelPartToRender.copyFrom(this.root.getChild(bodyID));
+					}
+					case 5, 6 ->
+					{
+						modelPartToRender = leftHandSide ? ribLeftTopMiddle : ribRightTopMiddle;
+						modelPartToRender.copyFrom(this.root.getChild(bodyID));
+					}
+					case 7, 8 ->
+					{
+						modelPartToRender = leftHandSide ? leftArmUpper : rightArmUpper;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+					}
+					case 9, 10 ->
+					{
+						modelPartToRender = leftHandSide ? leftLegUpperMiddle : rightLegUpperMiddle;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
+					}
+					default -> modelPartToRender = null;
 				}
-				modelPartToRender.copyFrom(this.root.getChild(bodyID));
 				break;
-			case shouldersTopID:
-				modelPartToRender = leftHandSide ? leftShoulderTop : rightShoulderTop;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case shouldersSideID:
-				modelPartToRender = leftHandSide ? leftShoulderSide : rightShoulderSide;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case shouldersBackID:
-				modelPartToRender = leftHandSide ? leftShoulderBack : rightShoulderBack;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case upperArmsID:
-				modelPartToRender = leftHandSide ? leftArmUpper : rightArmUpper;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case upperArmsBackID:
-				modelPartToRender = leftHandSide ? leftArmUpperBack : rightArmUpperBack;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case middleArmsID:
-				modelPartToRender = leftHandSide ? leftArmMiddle : rightArmMiddle;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case lowerArmsID:
-				modelPartToRender = leftHandSide ? leftArmLower : rightArmLower;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case handsID:
-				modelPartToRender = leftHandSide ? leftHand : rightHand;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case ribsTopID:
-				switch (slotContext.index())
+
+			//chromium, nicrosil, aluminum, duralumin
+			case spiritualID:
+				switch (slotIndex)
 				{
-					case 0:
-						modelPartToRender = ribLeftTop;
-						break;
-					case 1:
-						modelPartToRender = ribRightTop;
-						break;
+					case 1, 2 ->
+					{
+						modelPartToRender = leftHandSide ? ribLeftBottom : ribRightBottom;
+						modelPartToRender.copyFrom(this.root.getChild(bodyID));
+					}
+					case 3, 4 ->
+					{
+						modelPartToRender = leftHandSide ? leftShoulderSide : rightShoulderSide;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+					}
+					//need more spike locations? spiritual doesn't steal powers, but it can steal luck
+
+					default -> modelPartToRender = null;
 				}
-				modelPartToRender.copyFrom(this.root.getChild(bodyID));
 				break;
-			case ribsTopMiddleID:
-				switch (slotContext.index()) {
-					case 0:
-						modelPartToRender = ribLeftTopMiddle;
-						break;
-					case 1:
-						modelPartToRender = ribRightTopMiddle;
-						break;
+
+			//cadmium, bendalloy, gold, electrum
+			case temporalID:
+				switch (slotIndex)
+				{
+					case 1, 2 ->
+					{
+						modelPartToRender = leftHandSide ? ribLeftBottomMiddle : ribRightBottomMiddle;
+						modelPartToRender.copyFrom(this.root.getChild(bodyID));
+					}
+					case 3, 4 ->
+					{
+						modelPartToRender = leftHandSide ? leftShoulderBack : rightShoulderBack;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+					}
+					case 5, 6 ->
+					{
+						modelPartToRender = leftHandSide ? leftArmUpperBack : rightArmUpperBack;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+					}
+					case 7, 8 ->
+					{
+						modelPartToRender = leftHandSide ? leftArmMiddle : rightArmMiddle;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
+					}
+					case 9, 10 ->
+					{
+						modelPartToRender = leftHandSide ? leftHand : rightHand;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+					}
+					case 11, 12 ->
+					{
+						modelPartToRender = leftHandSide ? leftLegLowerMiddle : rightLegLowerMiddle;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
+					}
+					case 13, 14 ->
+					{
+						modelPartToRender = leftHandSide ? leftArmLower : rightArmLower;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
+					}
+					case 15, 16 ->
+					{
+						modelPartToRender = leftHandSide ? leftLegLower : rightLegLower;
+						modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
+					}
+					default -> modelPartToRender = null;
 				}
-				modelPartToRender.copyFrom(this.root.getChild(bodyID));
-				break;
-			case ribsBottomMiddleID:
-				switch (slotContext.index()) {
-					case 0:
-						modelPartToRender = ribLeftBottomMiddle;
-						break;
-					case 1:
-						modelPartToRender = ribRightBottomMiddle;
-						break;
-				}
-				modelPartToRender.copyFrom(this.root.getChild(bodyID));
-				break;
-			case ribsBottomID:
-				switch (slotContext.index()) {
-					case 0:
-						modelPartToRender = ribLeftBottom;
-						break;
-					case 1:
-						modelPartToRender = ribRightBottom;
-						break;
-				}
-				modelPartToRender.copyFrom(this.root.getChild(bodyID));
-				break;
-			case upperLegsID:
-				modelPartToRender = leftHandSide ? leftLegUpper : rightLegUpper;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
-				break;
-			case upperMiddleLegsID:
-				modelPartToRender = leftHandSide ? leftLegUpperMiddle : rightLegUpperMiddle;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
-				break;
-			case lowerMiddleLegsID:
-				modelPartToRender = leftHandSide ? leftLegLowerMiddle : rightLegLowerMiddle;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
-				break;
-			case lowerLegsID:
-				modelPartToRender = leftHandSide ? leftLegLower : rightLegLower;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftLegID : rightLegID));
 				break;
 		}
 

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.items;
@@ -35,16 +35,31 @@ public class HemalurgyItemTagsGen extends ItemTagsProvider
 				HemalurgicSpikeItem spikeItem = HemalurgyItems.METAL_SPIKE.get(metalType).asItem();
 				add(CosmereTags.Items.METAL_SPIKE, spikeItem);
 
-				add(CosmereTags.Items.CURIO_HEAD, spikeItem);
-				add(CosmereTags.Items.CURIO_LINCHPIN, spikeItem);
-				add(CosmereTags.Items.CURIO_BACK, spikeItem);
-				add(CosmereTags.Items.CURIO_BODY, spikeItem);
-				add(CosmereTags.Items.CURIO_BRACELET, spikeItem);
-				add(CosmereTags.Items.CURIO_HANDS, spikeItem);
-				add(CosmereTags.Items.CURIO_LEGS, spikeItem);
-				add(CosmereTags.Items.CURIO_FEET, spikeItem);
+
+				if (metalType.isPhysicalSpike())
+				{
+					add(CosmereTags.Items.CURIO_EYES, spikeItem);
+					add(CosmereTags.Items.CURIO_PHYSICAL, spikeItem);
+					//any spike can be a linchpin?
+					add(CosmereTags.Items.CURIO_LINCHPIN, spikeItem);
+				}
+				if (metalType.isMentalSpike())
+				{
+					add(CosmereTags.Items.CURIO_MENTAL, spikeItem);
+				}
+				if (metalType.isSpiritualSpike())
+				{
+					add(CosmereTags.Items.CURIO_SPIRITUAL, spikeItem);
+				}
+				if (metalType.isTemporalSpike())
+				{
+					add(CosmereTags.Items.CURIO_TEMPORAL, spikeItem);
+				}
 			}
 		}
+
+		//we do know gold spikes can be used as a linchpin
+		add(CosmereTags.Items.CURIO_LINCHPIN, HemalurgyItems.METAL_SPIKE.get(Metals.MetalType.GOLD).get());
 	}
 
 	public void add(TagKey<Item> branch, Item item)

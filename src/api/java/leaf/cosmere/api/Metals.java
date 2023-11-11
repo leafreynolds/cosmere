@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 10 - 2023 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -161,6 +161,74 @@ public class Metals
 					return false;
 				default:
 					return true;
+			}
+		}
+
+		public boolean isPhysicalSpike()
+		{
+			switch (this)
+			{
+				case IRON:
+				case STEEL:
+				case TIN:
+				case PEWTER:
+				case ATIUM:
+				case LERASIUM:
+				case LERASATIUM:
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		public boolean isMentalSpike()
+		{
+			switch (this)
+			{
+				case ZINC:
+				case BRASS:
+				case COPPER:
+				case BRONZE:
+				case ATIUM:
+				case LERASIUM:
+				case LERASATIUM:
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		public boolean isSpiritualSpike()
+		{
+			switch (this)
+			{
+				case CHROMIUM:
+				case NICROSIL:
+				case ALUMINUM:
+				case DURALUMIN:
+				case ATIUM:
+				case LERASIUM:
+				case LERASATIUM:
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		public boolean isTemporalSpike()
+		{
+			switch (this)
+			{
+				case CADMIUM:
+				case BENDALLOY:
+				case GOLD:
+				case ELECTRUM:
+				case ATIUM:
+				case LERASIUM:
+				case LERASATIUM:
+					return true;
+				default:
+					return false;
 			}
 		}
 
@@ -529,22 +597,22 @@ public class Metals
 		{
 			//todo convert to config item
 			double burnTimeInSeconds = switch (this)
-					{
-						case IRON, STEEL -> TimeHelper.MinutesToSeconds(5);
-						case TIN -> TimeHelper.MinutesToSeconds(15);
-						case PEWTER -> TimeHelper.MinutesToSeconds(2.5);
-						case ZINC, BRASS -> TimeHelper.MinutesToSeconds(5);
-						case COPPER -> TimeHelper.MinutesToSeconds(10);
-						case BRONZE -> TimeHelper.MinutesToSeconds(7.5);
-						case ALUMINUM, DURALUMIN, CHROMIUM, NICROSIL ->
-								TimeHelper.MinutesToSeconds(0.5);//these have special rules that make it burn out fast
-						case CADMIUM -> TimeHelper.MinutesToSeconds(7.5);
-						case BENDALLOY -> TimeHelper.MinutesToSeconds(2.5);
-						case GOLD, ELECTRUM -> TimeHelper.MinutesToSeconds(2.5);
-						case ATIUM -> TimeHelper.MinutesToSeconds(0.5f);
-						case MALATIUM -> TimeHelper.MinutesToSeconds(1);
-						default -> 99;
-					};
+			{
+				case IRON, STEEL -> TimeHelper.MinutesToSeconds(5);
+				case TIN -> TimeHelper.MinutesToSeconds(15);
+				case PEWTER -> TimeHelper.MinutesToSeconds(2.5);
+				case ZINC, BRASS -> TimeHelper.MinutesToSeconds(5);
+				case COPPER -> TimeHelper.MinutesToSeconds(10);
+				case BRONZE -> TimeHelper.MinutesToSeconds(7.5);
+				case ALUMINUM, DURALUMIN, CHROMIUM, NICROSIL ->
+						TimeHelper.MinutesToSeconds(0.5);//these have special rules that make it burn out fast
+				case CADMIUM -> TimeHelper.MinutesToSeconds(7.5);
+				case BENDALLOY -> TimeHelper.MinutesToSeconds(2.5);
+				case GOLD, ELECTRUM -> TimeHelper.MinutesToSeconds(2.5);
+				case ATIUM -> TimeHelper.MinutesToSeconds(0.5f);
+				case MALATIUM -> TimeHelper.MinutesToSeconds(1);
+				default -> 99;
+			};
 			return Mth.floor(burnTimeInSeconds);
 		}
 

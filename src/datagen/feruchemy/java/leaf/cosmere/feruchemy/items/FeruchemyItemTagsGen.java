@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.items;
@@ -7,7 +7,6 @@ package leaf.cosmere.feruchemy.items;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.feruchemy.common.Feruchemy;
-import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -29,22 +28,16 @@ public class FeruchemyItemTagsGen extends ItemTagsProvider
 	@Override
 	protected void addTags()
 	{
-		final Item bandsOfMourning = FeruchemyItems.BANDS_OF_MOURNING.get();
-		add(CosmereTags.Items.CURIO_BRACELET, bandsOfMourning);
-		add(CosmereTags.Items.CURIO_HANDS, bandsOfMourning);
+		add(CosmereTags.Items.CURIO_BRACELET, FeruchemyItems.BANDS_OF_MOURNING.get());
 
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
 			if (metalType.hasFeruchemicalEffect())
 			{
-
 				//curio stuff
 				add(CosmereTags.Items.CURIO_NECKLACE, FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
 				add(CosmereTags.Items.CURIO_RING, FeruchemyItems.METAL_RINGS.get(metalType).asItem());
-
-				final BraceletMetalmindItem braceletMetalmindItem = FeruchemyItems.METAL_BRACELETS.get(metalType).asItem();
-				add(CosmereTags.Items.CURIO_BRACELET, braceletMetalmindItem);
-				add(CosmereTags.Items.CURIO_HANDS, braceletMetalmindItem);
+				add(CosmereTags.Items.CURIO_BRACELET, FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.client.render.model;
@@ -35,11 +35,7 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 	private static final String rightArmID = "right_arm";
 
 	// Categories
-	private static final String shouldersSideID = "shoulders_side";
-	private static final String upperArmsID = "upper_arms";
-	private static final String middleArmsID = "middle_arms";
-	private static final String lowerArmsID = "lower_arms";
-	private static final String handsID = "hands";
+	private static final String braceletID = "bracelet";
 
 	// Model Parts
 	private final ModelPart root;
@@ -85,25 +81,25 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 		rightArm.addOrReplaceChild("shoulder_side",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.0F, 0.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-2.9F, 1.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		rightArm.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.0F, 2.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-2.9F, 3.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		rightArm.addOrReplaceChild("middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.0F, 4.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-2.9F, 5.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		rightArm.addOrReplaceChild("lower",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(-3.0F, 6.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-2.9F, 7.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		final PartDefinition leftArm = part.addOrReplaceChild(
@@ -115,25 +111,25 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 		leftArm.addOrReplaceChild("shoulder_side",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(0.0F, 0.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-0.1F, 1.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		leftArm.addOrReplaceChild("upper",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(0.0F, 2.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-0.1F, 3.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		leftArm.addOrReplaceChild("middle",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(0.0F, 4.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-0.1F, 5.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		leftArm.addOrReplaceChild("lower",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
-						.addBox(0.0F, 6.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
+						.addBox(-0.1F, 7.0F, -2.0F, 3.0F, 0.5F, 4.0F, cube),
 				PartPose.ZERO);
 
 		return LayerDefinition.create(mesh, 16, 16);
@@ -159,32 +155,29 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 	{
 		final boolean leftHandSide = slotContext.index() % 2 == 0;
 
-
 		ModelPart modelPartToRender = null;
-		switch (slotContext.identifier())
+		if (slotContext.identifier().equals(braceletID))
 		{
-			case shouldersSideID:
-				modelPartToRender = leftHandSide ? leftShoulderSide : rightShoulderSide;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case upperArmsID:
-				modelPartToRender = leftHandSide ? leftArmUpper : rightArmUpper;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case middleArmsID:
-				modelPartToRender = leftHandSide ? leftArmMiddle : rightArmMiddle;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
-			case lowerArmsID:
-				modelPartToRender = leftHandSide ? leftArmLower : rightArmLower;
-				modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
-				break;
+			modelPartToRender = switch (slotContext.index())
+			{
+				case 0 -> leftShoulderSide;
+				case 1 -> rightShoulderSide;
+				case 2 -> leftArmUpper;
+				case 3 -> rightArmUpper;
+				case 4 -> leftArmMiddle;
+				case 5 -> rightArmMiddle;
+				case 6 -> leftArmLower;
+				case 7 -> rightArmLower;
+				default -> null;
+			};
 		}
 
 		if (modelPartToRender == null)
 		{
 			return;
 		}
+
+		modelPartToRender.copyFrom(this.root.getChild(leftHandSide ? leftArmID : rightArmID));
 
 		IHasMetalType item = (IHasMetalType) stack.getItem();
 

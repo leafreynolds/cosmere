@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 6 - 2023 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -138,9 +138,11 @@ public class HemalurgyEngLangGen extends LanguageProvider
 
 	private void addCurioIdentifiers()
 	{
-		add("curios.identifier.feet", "Feet");
-		add("curios.identifier.legs", "Legs");
 		add("curios.identifier.linchpin", "Linchpin Spike");
+		add("curios.identifier.physical", "Physical Quadrant");
+		add("curios.identifier.mental", "Mental Quadrant");
+		add("curios.identifier.spiritual", "Spiritual Quadrant");
+		add("curios.identifier.temporal", "Temporal Quadrant");
 	}
 
 	private void addConfigs()

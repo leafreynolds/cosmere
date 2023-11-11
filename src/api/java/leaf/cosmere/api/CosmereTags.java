@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 7 - 2023 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -39,11 +39,16 @@ public class CosmereTags
 		public static final TagKey<Item> CURIO_FEET = makeItem(CuriosApi.MODID, "feet");
 
 
+		public static final TagKey<Item> CURIO_EYES = makeItem(CuriosApi.MODID, "eyes");
 		public static final TagKey<Item> CURIO_LINCHPIN = makeItem(CuriosApi.MODID, "linchpin");
+		public static final TagKey<Item> CURIO_PHYSICAL = makeItem(CuriosApi.MODID, "physical");
+		public static final TagKey<Item> CURIO_MENTAL = makeItem(CuriosApi.MODID, "mental");
+		public static final TagKey<Item> CURIO_TEMPORAL = makeItem(CuriosApi.MODID, "temporal");
+		public static final TagKey<Item> CURIO_SPIRITUAL = makeItem(CuriosApi.MODID, "spiritual");
 
 		public static final TagKey<Item> CONTAINS_METAL = makeItem("cosmere", "contains_metal");
 
-		public static TagKey<Item> METAL_SPIKE = makeItem("cosmere", "spike");
+		public static final TagKey<Item> METAL_SPIKE = makeItem("cosmere", "spike");
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_RAW_TAGS =
 				Arrays.stream(Metals.MetalType.values())
