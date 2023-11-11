@@ -4,6 +4,7 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
@@ -24,9 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 public class AllomancyTin extends AllomancyManifestation
 {
@@ -121,7 +120,12 @@ public class AllomancyTin extends AllomancyManifestation
 
 		SpiritwebCapability.get(localPlayer).ifPresent(playerSpiritweb ->
 		{
-			if (tinAllomancy.isActive(playerSpiritweb) && !event.getName().equals("block.note_block.basedrum"))
+			// if is rain and config is not enabled, return
+			if (event.getName().equals("weather.rain") && !AllomancyConfigs.CLIENT.canHearRain.get())
+				return;
+
+			boolean isBronzeSound = event.getName().equals("block.note_block.basedrum");
+			if (tinAllomancy.isActive(playerSpiritweb) && !isBronzeSound)
 			{
 				//todo make the entity glow or something to the user?
 				Vec3 soundPos = new Vec3(event.getSound().getX(), event.getSound().getY(), event.getSound().getZ());
