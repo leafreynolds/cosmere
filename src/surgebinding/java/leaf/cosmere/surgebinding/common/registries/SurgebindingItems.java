@@ -14,6 +14,7 @@ import leaf.cosmere.surgebinding.common.items.*;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardbladeItemTier;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -80,5 +81,6 @@ public class SurgebindingItems
 									() -> new GemstoneItem(type, Roshar.GemSize.BROAM)
 							)));
 
-
+	public static final ItemRegistryObject<ForgeSpawnEggItem> CHULL_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CHULL, 0x6c482f, 0x8a1a08);
+	public static final ItemRegistryObject<ForgeSpawnEggItem> CRYPTIC_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CRYPTIC, 0x272727, 0x4d4d4d);
 }

@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
@@ -39,6 +40,10 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 
 			//blocks have their own model rules
 			if (item instanceof BlockItem)
+			{
+				continue;
+			}
+			if (item instanceof ForgeSpawnEggItem)
 			{
 				continue;
 			}
