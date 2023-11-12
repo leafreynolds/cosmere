@@ -19,9 +19,9 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,6 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -44,7 +45,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
@@ -527,39 +527,48 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			return;
 		}
 
-		if (s_blackList == null)
+		//generate blacklist
+		//reset each time, because it's not working properly for some reason
 		{
 			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
 			s_blackList = new HashSet<>();
-			s_blackList.add(Blocks.AIR.getDescriptionId());            // air block
-			s_blackList.add(Blocks.WATER.getDescriptionId());        // water block
-			s_blackList.add(Blocks.LAVA.getDescriptionId());        // lava block
-			s_blackList.add(Blocks.GRASS_BLOCK.getDescriptionId());
-			s_blackList.add(Blocks.FARMLAND.getDescriptionId());
-			s_blackList.add(Blocks.GLASS.getDescriptionId());
-			s_blackList.add(Blocks.GLASS_PANE.getDescriptionId());
-			s_blackList.add(Blocks.BLACK_BED.getDescriptionId());
-			s_blackList.add(Blocks.BROWN_BED.getDescriptionId());
-			s_blackList.add(Blocks.BLUE_BED.getDescriptionId());
-			s_blackList.add(Blocks.RED_BED.getDescriptionId());
-			s_blackList.add(Blocks.CYAN_BED.getDescriptionId());
-			s_blackList.add(Blocks.GRAY_BED.getDescriptionId());
-			s_blackList.add(Blocks.GREEN_BED.getDescriptionId());
-			s_blackList.add(Blocks.LIGHT_BLUE_BED.getDescriptionId());
-			s_blackList.add(Blocks.LIGHT_GRAY_BED.getDescriptionId());
-			s_blackList.add(Blocks.LIME_BED.getDescriptionId());
-			s_blackList.add(Blocks.MAGENTA_BED.getDescriptionId());
-			s_blackList.add(Blocks.ORANGE_BED.getDescriptionId());
-			s_blackList.add(Blocks.PINK_BED.getDescriptionId());
-			s_blackList.add(Blocks.PURPLE_BED.getDescriptionId());
-			s_blackList.add(Blocks.WHITE_BED.getDescriptionId());
-			s_blackList.add(Blocks.YELLOW_BED.getDescriptionId());
-			s_blackList.add(Blocks.TORCH.getDescriptionId());
-			s_blackList.add(Blocks.SHULKER_BOX.getDescriptionId());
-			s_blackList.add(Blocks.ICE.getDescriptionId());
-			s_blackList.add(Blocks.BLUE_ICE.getDescriptionId());
-			s_blackList.add(Blocks.FROSTED_ICE.getDescriptionId());
-			s_blackList.add(Blocks.PACKED_ICE.getDescriptionId());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.AIR).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.WATER).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LAVA).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GRASS_BLOCK).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.FARMLAND).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS_PANE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BLACK_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BROWN_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.RED_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.CYAN_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GRAY_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GREEN_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_BLUE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_GRAY_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LIME_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.MAGENTA_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.ORANGE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.PINK_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.PURPLE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.WHITE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.YELLOW_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.TORCH).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.SHULKER_BOX).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.FROSTED_ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.PACKED_ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Items.DIAMOND).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Items.EMERALD).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Items.AIR).getPath());
+			s_blackList.add("philosophers_stone");//problem child
+		}
+		for (var itemInList : s_blackList)
+		{
+			CosmereAPI.logger.info("[MetalWhitelist] %s has been blacklisted from containing metal".formatted(itemInList));
 		}
 
 		s_whiteList = new HashSet<>();
@@ -573,7 +582,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			final ItemStack resultItem = recipe.getResultItem();
 
 			// check if is blacklisted, and if is, skip
-			if (s_blackList.contains(resultItem.getItem().getDescriptionId()))
+			if (s_blackList.contains(ResourceLocationHelper.get(resultItem.getItem()).getPath()))
 			{
 				continue;
 			}
@@ -588,24 +597,33 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 
-	public static void CheckRecipeForMetal(TagKey<Item> containsMetal, Recipe<?> recipe, ItemStack resultItem)
+	public static void CheckRecipeForMetal(TagKey<Item> containsMetal, Recipe<?> recipe, ItemStack resultItemStack)
 	{
 		for (Ingredient ingredient : recipe.getIngredients())
 		{
-			for (ItemStack itemStack : ingredient.getItems())
+			for (ItemStack ingredientStack : ingredient.getItems())
 			{
-				if (itemStack.is(containsMetal))
+				final Item ingredientItem = ingredientStack.getItem();
+				final ResourceLocation ingredientItemRL = ResourceLocationHelper.get(ingredientItem);
+				if (s_blackList.contains(ingredientItemRL.getPath()))
+				{
+					continue;
+				}
+
+				if (ingredientStack.is(containsMetal))
 				{
 					//found one
-					final Holder.Reference<Item> itemReference = resultItem.getItem().builtInRegistryHolder();
-					List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
-					allTags.add(CosmereTags.Items.CONTAINS_METAL);
-					itemReference.bindTags(allTags);
+					final Item resultItem = resultItemStack.getItem();
+					final ResourceLocation resultItemRL = ResourceLocationHelper.get(resultItem);
+					// final Holder.Reference<Item> itemReference = resultItem.builtInRegistryHolder();
+					// List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
+					// allTags.add(CosmereTags.Items.CONTAINS_METAL);
+					// itemReference.bindTags(allTags);
 
 					CosmereAPI.logger.info("[MetalWhitelist] %s has been identified as containing metal, thanks to %s in recipe"
-							.formatted(itemReference, itemStack.getItem().getDescriptionId()));
+							.formatted(resultItemRL, ingredientItemRL));
 
-					s_whiteList.add(ResourceLocationHelper.get(resultItem.getItem()).getPath());
+					s_whiteList.add(resultItemRL.getPath());
 					return;
 				}
 			}

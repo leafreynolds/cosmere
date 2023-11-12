@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 11 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client;
@@ -25,6 +25,7 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -124,7 +125,7 @@ public class ClientEvents
 		renderSpiritwebHUD(event);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onRenderLevelLastEvent(final RenderLevelStageEvent event)
 	{
 		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)

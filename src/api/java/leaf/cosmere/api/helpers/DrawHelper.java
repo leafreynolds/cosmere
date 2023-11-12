@@ -1,11 +1,14 @@
 /*
- * File updated ~ 5 - 4 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.helpers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
@@ -46,7 +49,8 @@ public class DrawHelper
 
 		//Tell the render system we're about to draw our lines
 		//Use our line settings, special thanks to chisels and bits showing how that works.
-		final VertexConsumer bufferIn = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(CosmereAPIRenderTypes.LINE_OVERLAY.get());
+		final MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+		final VertexConsumer bufferIn = bufferSource.getBuffer(CosmereAPIRenderTypes.LINE_OVERLAY.get());
 
 		//For all found things, draw the line
 		for (Vec3 endPos : lineEndPositions)
@@ -65,7 +69,7 @@ public class DrawHelper
 					.endVertex();
 		}
 
-		Minecraft.getInstance().renderBuffers().bufferSource().endBatch(CosmereAPIRenderTypes.LINE_OVERLAY.get());
+		bufferSource.endBatch(CosmereAPIRenderTypes.LINE_OVERLAY.get());
 		poseStack.popPose();
 		RenderSystem.enableDepthTest();
 	}
@@ -109,7 +113,7 @@ public class DrawHelper
 					size, 0, -size
 			};
 
-			float [] textureCoords = {
+			float[] textureCoords = {
 					1.0F, 0.0F,
 					1.0F, 1.0F,
 					0.0F, 1.0F,
@@ -119,8 +123,8 @@ public class DrawHelper
 			for (int i = 0; i < vertices.length; i += 3)
 			{
 				float vertexX = vertices[i];
-				float vertexY = vertices[i+1];
-				float vertexZ = vertices[i+2];
+				float vertexY = vertices[i + 1];
+				float vertexZ = vertices[i + 2];
 
 				Vector3f rotQuatVec = new Vector3f(vertexX, vertexY, vertexZ);
 				rotQuatVec.transform(rotQuat);
@@ -142,9 +146,10 @@ public class DrawHelper
 	}
 
 	//copied from DragonFireballRenderer.java
-	private static void squareTexVertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, int uv2, float pX, float pY, float pZ, int pU, int pV, Color color) {
+	private static void squareTexVertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, int uv2, float pX, float pY, float pZ, int pU, int pV, Color color)
+	{
 		vertexConsumer.vertex(matrix4f, pX, pY, pZ)
-				.color(color.getRed(), color.getGreen(), color.getBlue(), 255).uv((float)pU, (float)pV)
+				.color(color.getRed(), color.getGreen(), color.getBlue(), 255).uv((float) pU, (float) pV)
 				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2)
 				.normal(matrix3f, 0.0F, 1.0F, 0.0F)
 				.endVertex();
@@ -313,7 +318,8 @@ public class DrawHelper
 							.setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
 							.createCompositeState(false));
 
-			private static final BiFunction<ResourceLocation, Boolean, RenderType> SQUARE_OVERLAY = Util.memoize((icon, createComposite) -> {
+			private static final BiFunction<ResourceLocation, Boolean, RenderType> SQUARE_OVERLAY = Util.memoize((icon, createComposite) ->
+			{
 				return create(CosmereAPI.COSMERE_MODID + ":square_render",
 						DefaultVertexFormat.POSITION_TEX,
 						VertexFormat.Mode.QUADS,
