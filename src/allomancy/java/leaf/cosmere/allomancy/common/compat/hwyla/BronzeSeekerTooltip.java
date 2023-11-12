@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.compat.hwyla;
@@ -41,7 +41,7 @@ public class BronzeSeekerTooltip implements IEntityComponentProvider
 				//check the entity we are trying to
 				final LivingEntity targetEntity = (LivingEntity) accessor.getEntity();
 
-				if (!AllomancyBronze.contestConcealment(clientPlayer, targetEntity))
+				if (!AllomancyBronze.isValidSeekTarget(clientPlayer, targetEntity))
 				{
 					return;
 				}

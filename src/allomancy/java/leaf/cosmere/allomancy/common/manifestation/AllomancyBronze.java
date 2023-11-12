@@ -1,26 +1,26 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
-import leaf.cosmere.api.math.VectorHelper;
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.eventHandlers.ModBusEventHandler;
 import leaf.cosmere.common.registry.AttributesRegistry;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,73 +47,56 @@ public class AllomancyBronze extends AllomancyManifestation
 
 			for (LivingEntity targetEntity : entitiesToCheckForAllomancy)
 			{
-				if (!AllomancyBronze.contestConcealment(data, targetEntity))
+				if (AllomancyBronze.isValidSeekTarget(data, targetEntity))
 				{
-					//does not meet requirements for seeking.
-					//either not using bronze, not in range, or not strong enough
 					seekTarget(playerEntity, targetEntity);
 				}
+				//does not meet requirements for seeking.
+				//either not using bronze, not in range, or not strong enough, or target has no powers
 			}
 		}
 	}
 
-	private void seekTarget(ServerPlayer playerEntity, LivingEntity targetEntity)
+	private void seekTarget(ServerPlayer seekerPlayer, LivingEntity targetEntity)
 	{
 		SpiritwebCapability.get(targetEntity).ifPresent(targetSpiritweb ->
 		{
-			//check if any allomantic powers are active
-			for (Metals.MetalType metalType : Metals.MetalType.values())
+			//show all manifestations, including hemalurgic based ones.
+			for (Manifestation manifestation : targetSpiritweb.getAvailableManifestations())
 			{
-				if (!metalType.hasAssociatedManifestation())
-				{
-					continue;
-				}
-
-				int metalTypeID = metalType.getID();
-				//todo decide what to do about this part
 				//since this is running on the server specifically.
-				if (targetSpiritweb.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalTypeID)))
+				if (!(targetEntity instanceof Player) || targetSpiritweb.canTickManifestation(manifestation))
 				{
 					//found one
-
-					//todo play thump sound
-					//get the position between the user and the entity we found
-
-					//end point minus start point, then normalize
-					BlockPos destinationPosition = targetEntity.blockPosition();
-					BlockPos startingPosition = playerEntity.blockPosition();
-
-					BlockPos direction = new BlockPos(VectorHelper.Normalize(destinationPosition.subtract(startingPosition)));
-
-					//todo play in direction of target
-					playerEntity.playNotifySound(
-							NoteBlockInstrument.BASEDRUM.getSoundEvent(),
-							SoundSource.PLAYERS, //todo check this category
-							3.0F, //volume
-							1.0F); //pitch
-
-					//todo visual cue?
-					//todo make this stuff only happen for the user
-					targetEntity.level.addParticle(
-							ParticleTypes.NOTE,
-							(double) direction.getX() + 0.5D,
-							(double) direction.getY() + 1.2D,
-							(double) direction.getZ() + 0.5D,
-							(double) metalTypeID / 24.0D,
-							0.0D,
-							0.0D);
+					//play thump sound
+					//todo, make it so the sounds are spread out based on power id.
+					//that would potentially be too much scanning though, since we are trying not to do stuff every frame
+					final float pitch = Mth.lerp(manifestation.getPowerID() / 16f, 0.5F, 2.0F);
+					seekerPlayer.connection.send(
+							new ClientboundSoundPacket(
+									SoundEvents.NOTE_BLOCK_BASEDRUM,
+									SoundSource.NEUTRAL,
+									targetEntity.getX(),
+									targetEntity.getY(),
+									targetEntity.getZ(),
+									64.0f,
+									pitch,
+									targetEntity.getRandom().nextLong()
+							)
+					);
 
 					break;
 				}
+
 			}
 		});
 	}
 
 
-	public static boolean contestConcealment(ISpiritweb seeker, LivingEntity potentialConcealed)
+	public static boolean isValidSeekTarget(ISpiritweb seeker, LivingEntity potentialConcealed)
 	{
 		//can't get anything from entities that don't have powers
-		if (Arrays.stream(ModBusEventHandler.ENTITIES_THAT_CAN_HAVE_POWERS).anyMatch(test -> test != potentialConcealed.getType()))
+		if (!Arrays.stream(ModBusEventHandler.ENTITIES_THAT_CAN_HAVE_POWERS).anyMatch(test -> test == potentialConcealed.getType()))
 		{
 			return false;
 		}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.mixin;
@@ -37,7 +37,7 @@ public class EntityMixin
 
 		SpiritwebCapability.get(clientPlayer).ifPresent(playerSpiritweb ->
 		{
-			if (!AllomancyBronze.contestConcealment(playerSpiritweb, target))
+			if (!AllomancyBronze.isValidSeekTarget(playerSpiritweb, target))
 			{
 				//close out of consumer, does not meet requirements for seeking.
 				//either not using bronze, not in range, or not strong enough
