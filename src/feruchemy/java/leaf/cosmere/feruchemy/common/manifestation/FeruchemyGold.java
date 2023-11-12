@@ -44,7 +44,7 @@ public class FeruchemyGold extends FeruchemyManifestation
 
 		// we charge them for tapping,
 		// or if storing, we only want to add to their metalmind every so often. Otherwise gold is too strong.
-		final boolean spend = isTapping(data) || livingEntity.tickCount % 100 == 0;
+		final boolean spend = isTapping(data) || getActiveTick(data) % 100 == 0;
 
 		//if we are simulating, spend == false
 		if (canAfford(data, !spend))//success
