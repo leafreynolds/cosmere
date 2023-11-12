@@ -12,6 +12,7 @@ import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyTin;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.ISpiritwebSubmodule;
@@ -80,6 +81,17 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (steelActive && !steel.isCompounding(spiritweb))
 			{
 				steel.applyEffectTick(spiritweb);
+			}
+		}
+
+		//tin allomancy
+		{
+			AllomancyTin tin = (AllomancyTin) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
+			final boolean tinActive = tin.isActive(spiritweb);
+
+			if (tinActive && !tin.isCompounding(spiritweb))
+			{
+				tin.applyEffectTick(spiritweb);
 			}
 		}
 	}
@@ -178,6 +190,9 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	{
 		AllomancyIronSteel ironAllomancy = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();
 		AllomancyIronSteel steelAllomancy = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
+		AllomancyTin tinAllomancy = (AllomancyTin) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
+
+		PoseStack viewModelStack = new PoseStack();
 
 		//if user has iron or steel manifestation
 		if (spiritweb.hasManifestation(ironAllomancy) || spiritweb.hasManifestation(steelAllomancy))
@@ -193,7 +208,6 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 
-				PoseStack viewModelStack = new PoseStack();
 				viewModelStack.last().pose().load(event.getPoseStack().last().pose());
 
 				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
@@ -214,6 +228,15 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 				IronSteelLinesThread.getInstance().releaseScanResult();
 			}
+		}
+
+		if (spiritweb.hasManifestation(tinAllomancy))
+		{
+			viewModelStack.last().pose().load(event.getPoseStack().last().pose());
+
+			Minecraft.getInstance().getProfiler().push("cosmere-getDrawSoundIndicator");
+			DrawHelper.drawSquareAtPoint(viewModelStack, Color.WHITE, AllomancyTin.getTinSoundList(), spiritweb.getLiving().getEyePosition());
+			Minecraft.getInstance().getProfiler().pop();
 		}
 	}
 
