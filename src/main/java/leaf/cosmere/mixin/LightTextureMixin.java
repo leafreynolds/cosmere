@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.mixin;
@@ -57,13 +57,13 @@ public class LightTextureMixin
 			if (spiritweb.isPresent() && spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isActive(spiritweb.get()))
 			{
 				//burning or flaring strength
-				double currentBurnStrength = tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy);
+				float currentBurnStrength = (float) (tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy));
 				final RangedAttribute attribute = (RangedAttribute) tinAllomancy.getAttribute();
-				double maxTinFlareStrengthPossible = attribute.getMaxValue() * 2;
+				float maxTinFlareStrengthPossible = (float) (attribute.getMaxValue() * 2);
 
 				//tin takes actual strength into account, as compared to total possible strength including flaring.
 				//todo - move the min/max night vision to config, ideally server side that gets synced to client
-				tinAlloVal = (float) Mth.lerp(currentBurnStrength / maxTinFlareStrengthPossible, 0.0f, 0.95f);
+				tinAlloVal = Mth.lerp(MathHelper.clamp01(currentBurnStrength / maxTinFlareStrengthPossible), 0.0f, 0.95f);
 			}
 		}
 
