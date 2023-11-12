@@ -534,6 +534,32 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			s_blackList.add(Blocks.AIR.getDescriptionId());            // air block
 			s_blackList.add(Blocks.WATER.getDescriptionId());        // water block
 			s_blackList.add(Blocks.LAVA.getDescriptionId());        // lava block
+			s_blackList.add(Blocks.GRASS_BLOCK.getDescriptionId());
+			s_blackList.add(Blocks.FARMLAND.getDescriptionId());
+			s_blackList.add(Blocks.GLASS.getDescriptionId());
+			s_blackList.add(Blocks.GLASS_PANE.getDescriptionId());
+			s_blackList.add(Blocks.BLACK_BED.getDescriptionId());
+			s_blackList.add(Blocks.BROWN_BED.getDescriptionId());
+			s_blackList.add(Blocks.BLUE_BED.getDescriptionId());
+			s_blackList.add(Blocks.RED_BED.getDescriptionId());
+			s_blackList.add(Blocks.CYAN_BED.getDescriptionId());
+			s_blackList.add(Blocks.GRAY_BED.getDescriptionId());
+			s_blackList.add(Blocks.GREEN_BED.getDescriptionId());
+			s_blackList.add(Blocks.LIGHT_BLUE_BED.getDescriptionId());
+			s_blackList.add(Blocks.LIGHT_GRAY_BED.getDescriptionId());
+			s_blackList.add(Blocks.LIME_BED.getDescriptionId());
+			s_blackList.add(Blocks.MAGENTA_BED.getDescriptionId());
+			s_blackList.add(Blocks.ORANGE_BED.getDescriptionId());
+			s_blackList.add(Blocks.PINK_BED.getDescriptionId());
+			s_blackList.add(Blocks.PURPLE_BED.getDescriptionId());
+			s_blackList.add(Blocks.WHITE_BED.getDescriptionId());
+			s_blackList.add(Blocks.YELLOW_BED.getDescriptionId());
+			s_blackList.add(Blocks.TORCH.getDescriptionId());
+			s_blackList.add(Blocks.SHULKER_BOX.getDescriptionId());
+			s_blackList.add(Blocks.ICE.getDescriptionId());
+			s_blackList.add(Blocks.BLUE_ICE.getDescriptionId());
+			s_blackList.add(Blocks.FROSTED_ICE.getDescriptionId());
+			s_blackList.add(Blocks.PACKED_ICE.getDescriptionId());
 		}
 
 		s_whiteList = new HashSet<>();
