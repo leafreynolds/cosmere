@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 11 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -201,7 +201,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				BlockPos pos = new BlockPos(currPos);
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
-				if (state.getBlock() instanceof IHasMetalType || containsMetal(state.getBlock()))
+				Block block = state.getBlock();
+				final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+				if (validMetalBlock || containsMetal(state.getBlock()))
 				{
 					blocks.add(pos.immutable());
 
@@ -574,7 +576,8 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					allTags.add(CosmereTags.Items.CONTAINS_METAL);
 					itemReference.bindTags(allTags);
 
-					CosmereAPI.logger.info(itemReference + " has been identified as containing metal.");
+					CosmereAPI.logger.info("[MetalWhitelist] %s has been identified as containing metal, thanks to %s in recipe"
+							.formatted(itemReference, itemStack.getItem().getDescriptionId()));
 
 					s_whiteList.add(ResourceLocationHelper.get(resultItem.getItem()).getPath());
 					return;

@@ -1,10 +1,11 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 11 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.compat.curios;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -48,12 +49,31 @@ public class CuriosCompat
 		}
 
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.NECKLACE.getMessageBuilder().size(2).build());
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BRACELET.getMessageBuilder().size(6).build());
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.RING.getMessageBuilder().size(8).build());
 
 		//custom slots
-		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("eyes").priority(0).size(2).icon(EMPTY_SPIKE_SLOT).build());
-		// Physical 2
+
+		//physical
+		//2 eyes, 1 linchpin, 2 top ribs, 2 center chest, 2 upper top leg
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("eyes").priority(0).size(2).icon(InventoryMenu.EMPTY_ARMOR_SLOT_HELMET).build());
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("linchpin").priority(1).size(1).icon(EMPTY_SPIKE_SLOT).build());
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("physical").priority(501).size(8).icon(EMPTY_SPIKE_SLOT).build());
+
+		//mental
+		//4 upper arm, 4 upper rib?, 4 middle leg
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("mental").priority(502).size(10).icon(EMPTY_SPIKE_SLOT).build());
+
+		//spiritual
+		//4 lower leg, 4 lower arm, 4 lower  ribs
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("spiritual").priority(503).size(4).icon(EMPTY_SPIKE_SLOT).build());
+
+		//temporal
+		//4 middle ribs, 4 middle arm, 2 lower middle leg, 2 upper lower leg
+		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("temporal").priority(504).size(16).icon(EMPTY_SPIKE_SLOT).build());
+
+/*
+
 		// Physical 1
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("back").priority(2).size(4).icon(EMPTY_SPIKE_SLOT).build());
 		// Mental 4
@@ -91,6 +111,7 @@ public class CuriosCompat
 		// Temporal 2
 		InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("lower_legs").priority(19).size(2).icon(EMPTY_SPIKE_SLOT).build());
 		// Spiritual 2
+*/
 
 
 	}
