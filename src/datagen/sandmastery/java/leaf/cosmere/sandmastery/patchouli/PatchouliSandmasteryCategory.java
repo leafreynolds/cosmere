@@ -44,7 +44,7 @@ public class PatchouliSandmasteryCategory
 		pages.add(new BookStuff.TextPage("As mentioned previously, the sand from Tal'Dain reacts to physical investiture, which means that it can be measured. " +
 				"Common technology on this planet seems to use a substance called 'redstone' in order to power their fabrials. A device like the 'Comparator' " +
 				"Can measure the investiture in the sand jar, and release a redstone signal."));
-		pages.add(new BookStuff.CraftingPage("You can place the sand jar item on the ground as a block by crouching (holding " + PatchouliTextFormat.Keybind("key.sneak") + ") while placing, you can also craft the block back into a jar when picked up.", "sandmastery:sand_jar"));
+		pages.add(new BookStuff.TextPage("You can place the sand jar item on the ground as a block by crouching (holding " + PatchouliTextFormat.Keybind("key.sneak") + ") while placing, or you can get the sand out by placing normally. Removing the sand is how you get the starting sand for the sand spreader."));
 		sandJar.pages = pages.toArray(BookStuff.Page[]::new);
 		pages.clear();
 		entries.add(sandJar);
