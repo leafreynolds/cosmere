@@ -4,6 +4,8 @@
 
 package leaf.cosmere.feruchemy.common.effects.store;
 
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
@@ -41,10 +43,19 @@ public class CadmiumStoreEffect extends FeruchemyEffectBase
 			return;
 		}
 
-		final int minAirSupply = -20; //entityLivingBaseIn.getAirSupply();
+		final int minAirSupply = -20;
 		final int maxAirSupply = living.getMaxAirSupply();
-		final double potentialNextVal = minAirSupply - 4 - (strength);
-		living.setAirSupply((int) Mth.clamp(potentialNextVal, minAirSupply, maxAirSupply));
+		final double potentialNextVal = living.getAirSupply() - 4 - (strength);
+
+		if (strength >= 0.0)
+		{
+			// set to just low enough that bubbles appear in the hud, or potentialNextVal, whichever is lower
+			living.setAirSupply((int) Math.min(potentialNextVal, maxAirSupply-10));
+		}
+		else
+		{
+			living.setAirSupply((int) Mth.clamp(potentialNextVal, minAirSupply, maxAirSupply));
+		}
 
 		//every 2.5 seconds
 		if (living.getAirSupply() < -10 && (getTickToCheck(data) % getActiveTick() == 0))
