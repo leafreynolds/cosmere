@@ -1,17 +1,19 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 13 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.eventHandlers;
 
 
 import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.commands.AllomancyCommands;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyEntityThread;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.common.registry.VillagerProfessionRegistry;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.BasicItemListing;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,6 +24,12 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = Allomancy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AllomancyCommonEvents
 {
+	@SubscribeEvent
+	public static void registerCommands(RegisterCommandsEvent event)
+	{
+		AllomancyCommands.register(event.getDispatcher());
+	}
+
 	@SubscribeEvent
 	public static void registerTrades(VillagerTradesEvent event)
 	{
