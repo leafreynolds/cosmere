@@ -140,7 +140,16 @@ public class IronSteelLinesThread implements Runnable {
                                             break;
                                         }
 
-                                        resistance += (materialResistanceMap.containsKey(bMat)) ? materialResistanceMap.get(bMat) : 0.0F;
+                                        Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
+                                        if (currBlock instanceof IHasMetalType iHasMetalType && (iHasMetalType.getMetalType() == Metals.MetalType.ALUMINUM || iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+                                        {
+                                            // aluminum completely blocks steelsight
+                                            resistance += 1.0F;
+                                        }
+                                        else
+                                        {
+                                            resistance += (materialResistanceMap.containsKey(bMat)) ? materialResistanceMap.get(bMat) : 0.0F;
+                                        }
 
                                         double distance = currVec.distanceTo(endPos);
                                         currVec = currVec.lerp(endPos, 1.0F / distance);
