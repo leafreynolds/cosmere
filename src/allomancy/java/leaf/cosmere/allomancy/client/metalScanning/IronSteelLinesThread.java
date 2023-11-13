@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -121,23 +122,34 @@ public class IronSteelLinesThread implements Runnable {
                                         stop();
                                         return false;
                                     }
-                                    BlockState endBlock = Objects.requireNonNull(level.getBlockState(blockPos));
                                     Vec3 currVec = player.getEyePosition();
                                     Vec3 endPos = new Vec3(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F);
+                                    Vec3 endFloorVec = new Vec3(Math.floor(endPos.x), Math.floor(endPos.y), Math.floor(endPos.z));
                                     double resistance = 0.0F;
 
                                     // linear interpolation to see if the block is obscured by blocks
                                     int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
                                     for (int i = 0; i < loopTimes; i++)
                                     {
-                                        BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
+                                        Material bMat = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)).getMaterial());
 
-                                        if (bState == endBlock || resistance >= 1.0F)
+                                        Vec3 currFloorVec = new Vec3(Math.floor(currVec.x), Math.floor(currVec.y), Math.floor(currVec.z));
+
+                                        if (currFloorVec.equals(endFloorVec) || resistance >= 1.0F)
                                         {
                                             break;
                                         }
 
-                                        resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+                                        Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
+                                        if (currBlock instanceof IHasMetalType iHasMetalType && (iHasMetalType.getMetalType() == Metals.MetalType.ALUMINUM || iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+                                        {
+                                            // aluminum completely blocks steelsight
+                                            resistance += 1.0F;
+                                        }
+                                        else
+                                        {
+                                            resistance += (materialResistanceMap.containsKey(bMat)) ? materialResistanceMap.get(bMat) : 0.0F;
+                                        }
 
                                         double distance = currVec.distanceTo(endPos);
                                         currVec = currVec.lerp(endPos, 1.0F / distance);
