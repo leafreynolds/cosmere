@@ -6,8 +6,11 @@ package leaf.cosmere.common.charge;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.StackNBTHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -17,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Optional;
 import java.util.UUID;
 
 //item based chargeable
@@ -61,12 +65,16 @@ public interface IChargeable
 			if (noAttunedPlayer && metalType.getMetalType() != Metals.MetalType.ALUMINUM)
 			{
 				//No attuned player! Check to see whether they are storing identity
-				//todo clean up
-				final MobEffect aluminumStoreEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
-				assert aluminumStoreEffect != null;
-				MobEffectInstance storingIdentity = entity.getEffect(aluminumStoreEffect);
+				boolean isStoringIdentity = false;
+				{
+					Optional<ISpiritweb> data = SpiritwebCapability.get(entity).filter(obj -> true);
+					if (data.isPresent()) {
+						isStoringIdentity = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(Metals.MetalType.ALUMINUM.getID()).getMode(data.get()) > 0;
+					}
+				}
+
 				//if they are
-				if (storingIdentity != null && storingIdentity.getDuration() > 0)
+				if (isStoringIdentity)
 				{
 					//then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
 					StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNKEYED_UUID);

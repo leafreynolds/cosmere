@@ -6,24 +6,20 @@ package leaf.cosmere.common.charge;
 
 import com.google.common.collect.Iterables;
 import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.items.CapWrapper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
-import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ItemChargeHelper
 {
@@ -138,12 +134,10 @@ public class ItemChargeHelper
 		boolean isStoringIdentity = false;
 		{
 			//do aluminum checks
-
-			final MobEffect storingAluminumEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
-			if (storingAluminumEffect != null)
+			Optional<ISpiritweb> data = SpiritwebCapability.get(player).filter(obj -> true);
+			if (data.isPresent())
 			{
-				MobEffectInstance storingIdentityEffect = player.getEffect(storingAluminumEffect);
-				isStoringIdentity = storingIdentityEffect != null && storingIdentityEffect.getDuration() > 0;
+                isStoringIdentity = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(Metals.MetalType.ALUMINUM.getID()).getMode(data.get()) > 0;
 			}
 		}
 
