@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -128,6 +129,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 
+		TagKey<Block> aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+		TagKey<Block> aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+		TagKey<Block> aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
+		TagKey<Block> aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
+
 		if (s_whiteList == null)
 		{
 			createWhitelist(cap.getLiving());
@@ -189,7 +195,17 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				// if block isn't air, add material resistance value
 				if (!blockAtPos.isAir())
 				{
-					resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
+					Block currBlock = level.getBlockState(new BlockPos(currPos)).getBlock();
+
+					if (blockAtPos.is(aluminumOre) || blockAtPos.is(aluminumStorage) || blockAtPos.is(aluminumSheet) || blockAtPos.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+					{
+						// aluminum completely blocks steelsight
+						resistance += 1.0F;
+					}
+					else
+					{
+						resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
+					}
 				}
 
 				// lerp to next position (1 block forward)
