@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 8 - 2023 ~ Leaf
+ * File updated ~ 14 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -28,8 +28,8 @@ public class CosmereServerConfig implements ICosmereConfig
 		CHARGEABLE_MAX_VALUE = builder.comment("What is the max value for chargeables? This value is modified based on the object").defineInRange("chargeableMaxValue", 18000, 1000, 1000000);
 		SCULK_CAN_HEAR_KINETIC_INVESTITURE = builder.comment("Can sculk and Warden hear people using powers if the user isn't copper clouded").define("sculkHearsKineticInvestiture", true);
 
-		MOB_POWERS_CHANCE = builder.comment("1 in how many mobs should have powers?").defineInRange("mobPowersChance", 16, 1, 123456);
-		RAIDER_POWERS_CHANCE = builder.comment("1 in how many Raiders should have powers?").defineInRange("mobPowersChance", 64, 1, 123456);
+		MOB_POWERS_CHANCE = builder.comment("1 in how many mobs should have powers?").defineInRange("mobPowerChance", 16, 1, 123456);
+		RAIDER_POWERS_CHANCE = builder.comment("1 in how many Raiders should have powers?").defineInRange("raiderPowerChance", 64, 1, 123456);
 
 		FULLBORN_POWERS_CHANCE = builder.comment("1 in how many should powered individuals should have full powers of one type").defineInRange("fullPowersChance", 16, 1, 123456);
 		TWINBORN_POWERS_CHANCE = builder.comment("If not full born, 1 in how many powered mobs should be twinborn? Players are twinborn as a minimum.").defineInRange("twinbornPowersChance", 16, 1, 123456);
