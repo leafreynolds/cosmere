@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
+ */
+
 package leaf.cosmere.allomancy.client.metalScanning;
 
 import leaf.cosmere.api.CosmereAPI;
@@ -11,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,261 +30,314 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel.*;
 
-public class IronSteelLinesThread implements Runnable {
-    private static IronSteelLinesThread INSTANCE;
-    private static Thread t;
-    private static final Lock lock = new ReentrantLock();
-    private static ScanResult scanResult = new ScanResult();
-    private static int scanRange = 0;
-    private static boolean isStopping = false;
+public class IronSteelLinesThread implements Runnable
+{
+	private static IronSteelLinesThread INSTANCE;
+	private static Thread t;
+	private static final Lock lock = new ReentrantLock();
+	private static ScanResult scanResult = new ScanResult();
+	private static int scanRange = 0;
+	private static boolean isStopping = false;
 
-    public static IronSteelLinesThread getInstance()
-    {
-        if (INSTANCE == null)
-        {
-            INSTANCE = new IronSteelLinesThread();
-        }
 
-        return INSTANCE;
-    }
+	TagKey<Block> aluminumOre;
+	TagKey<Block> aluminumStorage;
+	// these two below may or may not work, better to keep them than remove
+	TagKey<Block> aluminumSheet;
+	TagKey<Block> aluminumWire;
 
-    public ScanResult requestScanResult()
-    {
-        lock.lock();
-        try
-        {
-            return scanResult;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            lock.unlock();
-            return new ScanResult();	// empty ScanResult so it doesn't crash
-        }
-    }
+	public static IronSteelLinesThread getInstance()
+	{
+		if(INSTANCE == null)
+		{
+			INSTANCE = new IronSteelLinesThread();
+		}
 
-    public void releaseScanResult()
-    {
-        lock.unlock();
-    }
+		return INSTANCE;
+	}
 
-    public void setScanRange(int range)
-    {
-        scanRange = range;
-    }
+	private IronSteelLinesThread()
+	{
+		aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+		aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+// these two below may or may not work, better to keep them than remove
+		aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
+		aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
+	}
 
-    public void start()
-    {
-        if (t == null || isStopping)
-        {
-            CosmereAPI.logger.info("Starting lines thread");
-            t = new Thread(this, "lines_thread");
-            isStopping = false;
-            t.start();
-        }
-    }
 
-    public void stop()
-    {
-        if (t != null && !isStopping)
-        {
-            isStopping = true;
-        }
-    }
+	//creates new thread if needed
+	public static void startThread()
+	{
+		getInstance().start();
+	}
 
-    private void setScanResult(ScanResult result)
-    {
-        scanResult = result;
-    }
+	//stops and kills thread
+	public static void stopThread()
+	{
+		if(INSTANCE != null)
+		{
+			INSTANCE.stop();
+			INSTANCE = null;
+		}
+	}
 
-    // this should be threaded to avoid lag spikes on the render thread when flaring metals
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void run()
-    {
-        final Minecraft mc = Minecraft.getInstance();
-        TagKey<Block> aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-        TagKey<Block> aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-        // these two below may or may not work, better to keep them than remove
-        TagKey<Block> aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
-        TagKey<Block> aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
-        while (!isStopping) {
-            try
-            {
+	public ScanResult requestScanResult()
+	{
+		lock.lock();
+		try
+		{
+			return scanResult;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			lock.unlock();
+			return new ScanResult();    // empty ScanResult so it doesn't crash
+		}
+	}
 
-                ScanResult nextScan;
-                LocalPlayer playerEntity = mc.player;
-                nextScan = new ScanResult();
-                // todo: add configurable tick rate for this thread
+	public void releaseScanResult()
+	{
+		lock.unlock();
+	}
 
-                //find all the things that we want to draw a line to from the player
-                //metal blocks
-                {
-                    BlockPos.withinManhattanStream(playerEntity.blockPosition(), scanRange, scanRange, scanRange)
-                            .filter(blockPos ->
-                            {
-                                Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-                                final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-                                boolean isGood = validMetalBlock || containsMetal(block);
+	public void setScanRange(int range)
+	{
+		scanRange = range;
+	}
 
-                                if (isGood)
-                                {
-                                    try
-                                    {
-                                        Player player = Minecraft.getInstance().player;
-                                        Level level = Minecraft.getInstance().level;
-                                        // if level is null, the player has no world loaded, so stop
-                                        if (mc.level == null)
-                                        {
-                                            stop();
-                                            return false;
-                                        }
-                                        Vec3 currVec = player.getEyePosition();
-                                        Vec3 endPos = new Vec3(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F);
-                                        Vec3 endFloorVec = new Vec3(Math.floor(endPos.x), Math.floor(endPos.y), Math.floor(endPos.z));
-                                        double resistance = 0.0F;
+	public void start()
+	{
+		if(t == null || isStopping)
+		{
+			CosmereAPI.logger.info("Starting lines thread");
+			t = new Thread(this, "lines_thread");
+			isStopping = false;
+			t.start();
+		}
+	}
 
-                                        // linear interpolation to see if the block is obscured by blocks
-                                        int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
-                                        for (int i = 0; i < loopTimes; i++)
-                                        {
-                                            BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
-                                            Vec3 currFloorVec = new Vec3(Math.floor(currVec.x), Math.floor(currVec.y), Math.floor(currVec.z));
+	public void stop()
+	{
+		if(t != null && !isStopping)
+		{
+			isStopping = true;
+		}
+	}
 
-                                            if (currFloorVec.equals(endFloorVec) || resistance >= 1.0F)
-                                            {
-                                                break;
-                                            }
+	private void setScanResult(ScanResult result)
+	{
+		scanResult = result;
+	}
 
-                                            Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
+	// this should be threaded to avoid lag spikes on the render thread when flaring metals
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void run()
+	{
+		final Minecraft mc = Minecraft.getInstance();
+		while (!isStopping)
+		{
+			try
+			{
 
-                                            if (bState.is(aluminumOre) || bState.is(aluminumStorage) || bState.is(aluminumSheet) || bState.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
-                                            {
-                                                // aluminum completely blocks steelsight
-                                                resistance += 1.0F;
-                                            }
-                                            else
-                                            {
-                                                resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
-                                            }
+				ScanResult nextScan;
+				LocalPlayer playerEntity = mc.player;
+				nextScan = new ScanResult();
+				// todo: add configurable tick rate for this thread
 
-                                            double distance = currVec.distanceTo(endPos);
-                                            currVec = currVec.lerp(endPos, 1.0F / distance);
-                                        }
+				//find all the things that we want to draw a line to from the player
+				//metal blocks
+				{
+					BlockPos.withinManhattanStream(playerEntity.blockPosition(), scanRange, scanRange, scanRange)
+							.filter(blockPos ->
+							{
+								Block block = playerEntity.level.getBlockState(blockPos).getBlock();
+								final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+								boolean isGood = validMetalBlock || containsMetal(block);
 
-                                        isGood = resistance < 1.0F;
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        e.printStackTrace();
+								if(isGood)
+								{
+									try
+									{
+										Player player = Minecraft.getInstance().player;
+										Level level = Minecraft.getInstance().level;
+										// if level is null, the player has no world loaded, so stop
+										if(player == null || mc.level == null)
+										{
+											stopThread();
+											return false;
+										}
+										isGood = !isBlockObscured(blockPos, player, level);
+									}
+									catch (Exception e)
+									{
+										e.printStackTrace();
 
-                                        isGood = false;
-                                    }
-                                }
+										isGood = false;
+									}
+								}
 
-                                return isGood;
-                            })
-                            .forEach(blockPos -> nextScan.addBlock(blockPos.immutable()));
+								return isGood;
+							})
+							.forEach(blockPos -> nextScan.addBlock(blockPos.immutable()));
 
-                    nextScan.finalizeClusters();
-                }
+					nextScan.finalizeClusters();
+				}
 
-                //entities with metal armor/tools
-                {
-                    EntityHelper.getEntitiesInRange(playerEntity, scanRange, false).forEach(entity ->
-                    {
-                        if (entityContainsMetal(entity)) {
-                            double resistance = 0.0F;
-                            try
-                            {
-                                Player player = Minecraft.getInstance().player;
-                                Level level = Minecraft.getInstance().level;
-                                // if level is null, the player has no world loaded, so stop
-                                if (mc.level == null)
-                                {
-                                    stop();
-                                    return;
-                                }
-                                Vec3 currVec = player.getEyePosition();
-                                Vec3 endPos = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+				//entities with metal armor/tools
+				{
+					EntityHelper.getEntitiesInRange(playerEntity, scanRange, false).forEach(entity ->
+					{
+						Player player = Minecraft.getInstance().player;
+						Level level = Minecraft.getInstance().level;
+						// if level is null, the player has no world loaded, so stop
+						if(player == null || mc.level == null)
+						{
+							stopThread();
+							return;
+						}
+						if(entityContainsMetal(entity)
+								&& !isEntityObscured(entity, player, level))
+						{
+							nextScan.foundEntities.add(
+									entity.position().add(
+											0,
+											entity.getBoundingBox().getYsize() / 2,
+											0));
+						}
+					});
+				}
 
-                                // linear interpolation to see if the entity is obscured by blocks
-                                int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
-                                for (int i = 0; i < loopTimes; i++)
-                                {
-                                    BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
+				if(lock.tryLock())
+				{
+					try
+					{
+						setScanResult(nextScan);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+					lock.unlock();
+				}
+			}
+			catch (Exception e)
+			{
+				CosmereAPI.logger.info("Issue with lines thread");
+				Player player = Minecraft.getInstance().player;
+				Level level = Minecraft.getInstance().level;
 
-                                    final boolean pastEntity = (player.getEyePosition().distanceTo(currVec) >= player.getEyePosition().distanceTo(endPos));
+				// if this check doesn't happen, the thread gets stuck in a loop when exiting worlds
+				if(player == null || level == null)
+				{
+					stopThread();
+					break;
+				}
 
-                                    if (pastEntity || resistance >= 1.0F)
-                                    {
-                                        break;
-                                    }
+				e.printStackTrace();
+			}
+		}
+	}
 
-                                    Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
+	private boolean isBlockObscured(BlockPos blockPos, Player player, Level level)
+	{
+		boolean isObscured;
+		Vec3 currVec = player.getEyePosition();
+		Vec3 endPos = new Vec3(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F);
+		Vec3 endFloorVec = new Vec3(Math.floor(endPos.x), Math.floor(endPos.y), Math.floor(endPos.z));
+		double resistance = 0.0F;
 
-                                    if (bState.is(aluminumOre) || bState.is(aluminumStorage) || bState.is(aluminumSheet) || bState.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
-                                    {
-                                        // aluminum completely blocks steelsight
-                                        resistance += 1.0F;
-                                    }
-                                    else
-                                    {
-                                        resistance += (materialResistanceMap.containsKey(bState.getMaterial())) ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
-                                    }
+		// linear interpolation to see if the block is obscured by blocks
+		int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
+		for (int i = 0; i < loopTimes; i++)
+		{
+			BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
+			Vec3 currFloorVec = new Vec3(Math.floor(currVec.x), Math.floor(currVec.y), Math.floor(currVec.z));
 
-                                    double distance = currVec.distanceTo(endPos);
-                                    currVec = currVec.lerp(endPos, 1.0F / distance);
+			if(currFloorVec.equals(endFloorVec) || resistance >= 1.0F)
+			{
+				break;
+			}
 
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                                resistance = 100.0F;    // just to be sure :)
-                            }
+			Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
 
-                            if (resistance < 1.0F)
-                            {
-                                nextScan.foundEntities.add(
-                                        entity.position().add(
-                                                0,
-                                                entity.getBoundingBox().getYsize() / 2,
-                                                0));
-                            }
-                        }
-                    });
-                }
+			if(bState.is(aluminumOre)
+					|| bState.is(aluminumStorage)
+					|| bState.is(aluminumSheet)
+					|| bState.is(aluminumWire)
+					|| (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+			{
+				// aluminum completely blocks steelsight
+				resistance += 1.0F;
+			}
+			else
+			{
+				resistance += (materialResistanceMap.containsKey(bState.getMaterial()))
+				              ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+			}
 
-                lock.lock();
-                try
-                {
-                    setScanResult(nextScan);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                finally
-                {
-                    lock.unlock();
-                }
-            }
-            catch (Exception e)
-            {
-                CosmereAPI.logger.info("Issue with lines thread");
-                Player player = Minecraft.getInstance().player;
-                Level level = Minecraft.getInstance().level;
+			double distance = currVec.distanceTo(endPos);
+			currVec = currVec.lerp(endPos, 1.0F / distance);
+		}
 
-                // if this check doesn't happen, the thread gets stuck in a loop when exiting worlds
-                if (player == null || level == null)
-                {
-                    stop();
-                    break;
-                }
+		isObscured = resistance >= 1.0F;
+		return isObscured;
+	}
 
-                e.printStackTrace();
-            }
-        }
-    }
+	private boolean isEntityObscured(Entity entity, Player player, Level level)
+	{
+		double resistance = 0.0F;
+		try
+		{
+			Vec3 currVec = player.getEyePosition();
+			Vec3 endPos = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+
+			// linear interpolation to see if the entity is obscured by blocks
+			int loopTimes = (int) Math.ceil(currVec.distanceTo(endPos));
+			for (int i = 0; i < loopTimes; i++)
+			{
+				BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
+
+				final boolean pastEntity = (player.getEyePosition().distanceTo(currVec) >= player.getEyePosition().distanceTo(endPos));
+
+				if(pastEntity || resistance >= 1.0F)
+				{
+					break;
+				}
+
+				Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
+
+				if(bState.is(aluminumOre) || bState.is(aluminumStorage) || bState.is(aluminumSheet) || bState.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+				{
+					// aluminum completely blocks steelsight
+					resistance += 1.0F;
+				}
+				else
+				{
+					resistance += (materialResistanceMap.containsKey(bState.getMaterial()))
+					              ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+				}
+
+				double distance = currVec.distanceTo(endPos);
+				currVec = currVec.lerp(endPos, 1.0F / distance);
+
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			resistance = 100.0F;    // just to be sure :)
+		}
+
+		if(resistance < 1.0F)
+		{
+			//entity is not obscured, can be added to the list
+			return false;
+		}
+
+		//entity obscured
+		return true;
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 4 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities;
@@ -203,6 +203,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (range > 0)
 			{
 				Minecraft.getInstance().getProfiler().push("cosmere-getDrawLines");
+				//todo - does this mean it's wrong on the first check? probably doesn't matter
 				IronSteelLinesThread.getInstance().setScanRange(range);
 				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
 

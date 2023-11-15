@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -102,11 +102,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			{
 				if (getMode(cap) > 0)
 				{
-					IronSteelLinesThread.getInstance().start();
+					IronSteelLinesThread.startThread();
 				}
 				else if (getMode(cap) <= 0)
 				{
-					IronSteelLinesThread.getInstance().stop();
+					IronSteelLinesThread.stopThread();
 				}
 				return;
 			}
