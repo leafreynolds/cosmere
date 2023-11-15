@@ -268,6 +268,16 @@ public class IronSteelLinesThread implements Runnable {
             catch (Exception e)
             {
                 CosmereAPI.logger.info("Issue with lines thread");
+                Player player = Minecraft.getInstance().player;
+                Level level = Minecraft.getInstance().level;
+
+                // if this check doesn't happen, the thread gets stuck in a loop when exiting worlds
+                if (player == null || level == null)
+                {
+                    stop();
+                    break;
+                }
+
                 e.printStackTrace();
             }
         }
