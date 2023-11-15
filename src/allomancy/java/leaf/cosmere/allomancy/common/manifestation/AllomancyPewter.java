@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -54,7 +54,7 @@ public class AllomancyPewter extends AllomancyManifestation
 	{
 		super.onModeChange(data, lastMode);
 
-		if (data.getLiving().level.isClientSide || data.getMode(this) == 0)
+		if (data.getLiving().level.isClientSide || data.getMode(this) > 0)
 		{
 			return;
 		}
