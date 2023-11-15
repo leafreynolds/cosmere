@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 11 - 2023 ~ Leaf
+ * File updated ~ 16 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.client.metalScanning;
@@ -48,7 +48,7 @@ public class IronSteelLinesThread implements Runnable
 
 	public static IronSteelLinesThread getInstance()
 	{
-		if(INSTANCE == null)
+		if (INSTANCE == null)
 		{
 			INSTANCE = new IronSteelLinesThread();
 		}
@@ -75,7 +75,7 @@ public class IronSteelLinesThread implements Runnable
 	//stops and kills thread
 	public static void stopThread()
 	{
-		if(INSTANCE != null)
+		if (INSTANCE != null)
 		{
 			INSTANCE.stop();
 			INSTANCE = null;
@@ -109,7 +109,7 @@ public class IronSteelLinesThread implements Runnable
 
 	public void start()
 	{
-		if(t == null || isStopping)
+		if (t == null || isStopping)
 		{
 			CosmereAPI.logger.info("Starting lines thread");
 			t = new Thread(this, "lines_thread");
@@ -120,7 +120,7 @@ public class IronSteelLinesThread implements Runnable
 
 	public void stop()
 	{
-		if(t != null && !isStopping)
+		if (t != null && !isStopping)
 		{
 			isStopping = true;
 		}
@@ -157,14 +157,14 @@ public class IronSteelLinesThread implements Runnable
 								final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
 								boolean isGood = validMetalBlock || containsMetal(block);
 
-								if(isGood)
+								if (isGood)
 								{
 									try
 									{
 										Player player = Minecraft.getInstance().player;
 										Level level = Minecraft.getInstance().level;
 										// if level is null, the player has no world loaded, so stop
-										if(player == null || mc.level == null)
+										if (player == null || mc.level == null)
 										{
 											stopThread();
 											return false;
@@ -193,12 +193,12 @@ public class IronSteelLinesThread implements Runnable
 						Player player = Minecraft.getInstance().player;
 						Level level = Minecraft.getInstance().level;
 						// if level is null, the player has no world loaded, so stop
-						if(player == null || mc.level == null)
+						if (player == null || mc.level == null)
 						{
 							stopThread();
 							return;
 						}
-						if(entityContainsMetal(entity)
+						if (entityContainsMetal(entity)
 								&& !isEntityObscured(entity, player, level))
 						{
 							nextScan.foundEntities.add(
@@ -210,7 +210,7 @@ public class IronSteelLinesThread implements Runnable
 					});
 				}
 
-				if(lock.tryLock())
+				if (lock.tryLock())
 				{
 					try
 					{
@@ -230,7 +230,7 @@ public class IronSteelLinesThread implements Runnable
 				Level level = Minecraft.getInstance().level;
 
 				// if this check doesn't happen, the thread gets stuck in a loop when exiting worlds
-				if(player == null || level == null)
+				if (player == null || level == null)
 				{
 					stopThread();
 					break;
@@ -239,6 +239,7 @@ public class IronSteelLinesThread implements Runnable
 				e.printStackTrace();
 			}
 		}
+		stopThread();
 	}
 
 	private boolean isBlockObscured(BlockPos blockPos, Player player, Level level)
@@ -256,14 +257,14 @@ public class IronSteelLinesThread implements Runnable
 			BlockState bState = Objects.requireNonNull(level.getBlockState(new BlockPos(currVec)));
 			Vec3 currFloorVec = new Vec3(Math.floor(currVec.x), Math.floor(currVec.y), Math.floor(currVec.z));
 
-			if(currFloorVec.equals(endFloorVec) || resistance >= 1.0F)
+			if (currFloorVec.equals(endFloorVec) || resistance >= 1.0F)
 			{
 				break;
 			}
 
 			Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
 
-			if(bState.is(aluminumOre)
+			if (bState.is(aluminumOre)
 					|| bState.is(aluminumStorage)
 					|| bState.is(aluminumSheet)
 					|| bState.is(aluminumWire)
@@ -302,14 +303,14 @@ public class IronSteelLinesThread implements Runnable
 
 				final boolean pastEntity = (player.getEyePosition().distanceTo(currVec) >= player.getEyePosition().distanceTo(endPos));
 
-				if(pastEntity || resistance >= 1.0F)
+				if (pastEntity || resistance >= 1.0F)
 				{
 					break;
 				}
 
 				Block currBlock = level.getBlockState(new BlockPos(currVec)).getBlock();
 
-				if(bState.is(aluminumOre) || bState.is(aluminumStorage) || bState.is(aluminumSheet) || bState.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+				if (bState.is(aluminumOre) || bState.is(aluminumStorage) || bState.is(aluminumSheet) || bState.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
 				{
 					// aluminum completely blocks steelsight
 					resistance += 1.0F;
@@ -331,7 +332,7 @@ public class IronSteelLinesThread implements Runnable
 			resistance = 100.0F;    // just to be sure :)
 		}
 
-		if(resistance < 1.0F)
+		if (resistance < 1.0F)
 		{
 			//entity is not obscured, can be added to the list
 			return false;
