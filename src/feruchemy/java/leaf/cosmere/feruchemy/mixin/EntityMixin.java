@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 16 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.mixin;
@@ -15,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
@@ -92,10 +93,9 @@ public class EntityMixin
 			return;
 		}
 
-		SpiritwebCapability.get(livingEntity).ifPresent(data ->
+		if (livingEntity.isSprinting())
 		{
-			CosmereEffect steel = FeruchemyEffects.TAPPING_EFFECTS.get(Metals.MetalType.STEEL).get();
-			if (data.totalStrengthOfEffect(steel) > 5)
+			if (livingEntity.getAttributeValue(Attributes.MOVEMENT_SPEED) > 0.3f)
 			{
 				if (originalDisplacement.y <= 0.0 && !isTouchingFluid(livingEntity, livingEntity.getBoundingBox().deflate(0.001D)))
 				{
@@ -123,7 +123,7 @@ public class EntityMixin
 					}
 				}
 			}
-		});
+		}
 
 		//do nothing, use original value
 	}
