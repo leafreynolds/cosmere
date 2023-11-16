@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 16 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -64,7 +64,7 @@ public class AllomancyCopper extends AllomancyManifestation
 		//Hides Allomantic Pulses
 		if (isActiveTick)
 		{
-
+			//do not multiply strength by mode here, flaring doesn't increase cognitive concealment and bronze flare doesn't increase pierce strength
 			final int actionableStrength = Mth.fastFloor(getStrength(data, false));
 			switch (getMode(data))
 			{

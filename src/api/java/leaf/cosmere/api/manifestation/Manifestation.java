@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 16 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.manifestation;
@@ -150,6 +150,8 @@ public class Manifestation implements IManifestationProvider
 		{
 			//remove the current instance of this effect's attributes from the data
 			data.removeEffect(effectInstance.getUUID());
+			//reset the duration
+			effectInstance.setDuration(93);
 		}
 		return effectInstance;
 	}
