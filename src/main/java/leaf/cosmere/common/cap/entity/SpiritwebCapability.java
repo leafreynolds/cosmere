@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 16 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.cap.entity;
@@ -319,6 +319,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 	//get the sum total strength of all matching effects in list of effects affecting target
 	@Override
+	@OnlyIn(Dist.DEDICATED_SERVER)
 	public int totalStrengthOfEffect(CosmereEffect cosmereEffect)
 	{
 		return this.activeEffects.values().stream().filter(effectInstance -> effectInstance.getEffect() == cosmereEffect).mapToInt(o -> (int) o.getStrength()).sum();

@@ -70,6 +70,7 @@ public class EntityMixin
 			SpiritwebCapability.get(livingEntity).ifPresent(data ->
 			{
 				CosmereEffect iron = FeruchemyEffects.STORING_EFFECTS.get(Metals.MetalType.IRON).get();
+				//todo check this is still working, as the related function only works on server
 				if (data.totalStrengthOfEffect(iron) > 2)
 				{
 					cir.setReturnValue(true);
