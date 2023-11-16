@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 16 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -183,7 +183,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 	{
 		//Damage Sources
 		add("death.attack.pewter_delayed_damage", "%1$s stopped burning pewter and succumbed to their wounds");
-		add("death.attack.pewter_delayed_damage.player", "%1$s ran out of pewter while fighting %2$s");
+		add("death.attack.pewter_delayed_damage.player", "%1$s stopped burning pewter while fighting %2$s and succumbed to their wounds");
 	}
 
 	private void addMobEffects()

@@ -54,7 +54,7 @@
   "allomancy.tineye": "Tineye",
   "config.jade.plugin_allomancy.bronze_seeker_tooltip": "Seeker Tooltip",
   "death.attack.pewter_delayed_damage": "%1$s stopped burning pewter and succumbed to their wounds",
-  "death.attack.pewter_delayed_damage.player": "%1$s ran out of pewter while fighting %2$s",
+  "death.attack.pewter_delayed_damage.player": "%1$s stopped burning pewter while fighting %2$s and succumbed to their wounds",
   "effect.allomancy.allomancy_boost": "Allomancy Boost",
   "effect.allomancy.allomantic_pewter": "Allomantic Pewter",
   "effect.allomancy.copper_cloud": "Copper Cloud",
