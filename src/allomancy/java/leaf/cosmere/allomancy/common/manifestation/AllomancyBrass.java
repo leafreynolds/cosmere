@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -78,30 +78,33 @@ public class AllomancyBrass extends AllomancyManifestation
 					//todo, replace x * mode with config based value
 					double allomanticStrength = getStrength(data, false);
 
-					lock.lock();
-					entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
-
-					for (LivingEntity e : entitiesToAffect)
+					//put on a different tick to zinc
+					boolean isActiveTick = getActiveTick(data) % 2 == 0;
+					if (isActiveTick && lock.tryLock())
 					{
-						if (e instanceof Mob mob)
+						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
+
+						for (LivingEntity e : entitiesToAffect)
 						{
-							mob.setNoAi(mode == 3 && allomanticStrength > 15);
-
-							switch (mode)
+							if (e instanceof Mob mob)
 							{
-								case 2:
-									mob.setTarget(null);
-								case 1:
-									mob.setAggressive(false);
-								default:
-									//stop angry targets from attacking things
-									e.setLastHurtByMob(null);
+								mob.setNoAi(mode == 3 && allomanticStrength > 15);
 
+								switch (mode)
+								{
+									case 2:
+										mob.setTarget(null);
+									case 1:
+										mob.setAggressive(false);
+									default:
+										//stop angry targets from attacking things
+										e.setLastHurtByMob(null);
+
+								}
 							}
 						}
+						lock.unlock();
 					}
-					lock.unlock();
-
 					// sleep thread for 1 tick (50ms)
 					Thread.sleep(50);
 				}

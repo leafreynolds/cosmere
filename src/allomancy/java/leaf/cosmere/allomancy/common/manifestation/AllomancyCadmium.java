@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -77,10 +77,10 @@ public class AllomancyCadmium extends AllomancyManifestation
 						break;
 					}
 
-					lock.lock();
-					//tick entities around user
-					if (data.getLiving().tickCount % 6 == 0)
+					boolean isActiveTick = getActiveTick(data) % 6 == 0;
+					if (isActiveTick && lock.tryLock())
 					{
+						//tick entities around user
 						int range = getRange(data);
 						int x = (int) (data.getLiving().getX() + (data.getLiving().getRandomX(range * 2 + 1) - range));
 						int z = (int) (data.getLiving().getZ() + (data.getLiving().getRandomZ(range * 2 + 1) - range));
@@ -120,9 +120,8 @@ public class AllomancyCadmium extends AllomancyManifestation
 								}
 							}
 						}
+						lock.unlock();
 					}
-					lock.unlock();
-
 					// sleep thread for 1 tick (50ms)
 					Thread.sleep(50);
 				}

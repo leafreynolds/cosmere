@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -169,7 +169,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 	{
 		int mode = getMode(data);
 		CosmereEffect effect = getEffect(mode);
-		CosmereEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, data.getLiving(), Math.abs(mode) - 1);//todo check this strength
+		CosmereEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, data.getLiving(), Math.abs(mode));//todo check this strength
 
 		data.addEffect(currentEffect);
 	}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -29,6 +29,12 @@ public class AllomancyBendalloy extends AllomancyManifestation
 	{
 		int mode = getMode(data);
 
+		if (AllomancyEntityThread.serverShutdown)
+		{
+			//don't start up new threads if the server is shutting down
+			return;
+		}
+
 		String uuid = data.getLiving().getStringUUID();
 		if (mode > 0 && !playerThreadMap.containsKey(uuid))
 		{
@@ -51,7 +57,6 @@ public class AllomancyBendalloy extends AllomancyManifestation
 		@Override
 		public void run()
 		{
-			LivingEntity livingEntity = data.getLiving();
 			List<LivingEntity> entitiesToAffect;
 			while (true)
 			{
@@ -75,14 +80,14 @@ public class AllomancyBendalloy extends AllomancyManifestation
 					{
 						break;
 					}
-					boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+					//offload to power's tick
+					boolean isActiveTick = getActiveTick(data) % 20 == 0;
 
 					//Slows Down Time for the entities around the user
-					if (isActiveTick)
+					if (isActiveTick && lock.tryLock())
 					{
 						int range = getRange(data);
 
-						lock.lock();
 						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, false);
 
 						for (LivingEntity e : entitiesToAffect)

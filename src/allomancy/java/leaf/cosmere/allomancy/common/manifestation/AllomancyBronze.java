@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 11 - 2023 ~ Leaf
+ * File updated ~ 16 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -109,6 +109,7 @@ public class AllomancyBronze extends AllomancyManifestation
 			//powers not active, don't bother
 			return false;
 		}
+		//do not multiply strength by mode here, flaring doesn't help you pierce copper, and copper flare doesn't increase cognitive concealment
 		final double bronzeStrength = bronzeAllomancyManifestation.getStrength(seeker, false);
 
 		//todo range to config

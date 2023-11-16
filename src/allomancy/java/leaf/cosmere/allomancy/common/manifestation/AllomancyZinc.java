@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -77,41 +77,44 @@ public class AllomancyZinc extends AllomancyManifestation
 						break;
 					}
 
-					lock.lock();
-					entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
-
-					for (LivingEntity e : entitiesToAffect)
+					//put on a different tick to brass
+					boolean isActiveTick = getActiveTick(data) % 2 == 0;
+					if (isActiveTick && lock.tryLock())
 					{
-						if (e instanceof Mob mob)
+						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
+
+						for (LivingEntity e : entitiesToAffect)
 						{
-
-							//mob.targetSelector.enableFlag(Goal.Flag.TARGET);
-							mob.setNoAi(false);
-
-							switch (mode)
+							if (e instanceof Mob mob)
 							{
-								case 3:
-									if (mob.getTarget() == null)
-									{
-										LivingEntity attackTarget = entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size()));
-										mob.setTarget(attackTarget);
-									}
-								case 2:
-									if (mob.getLastHurtByMob() == null)
-									{
-										mob.setLastHurtByMob(mob.getTarget() != null
-										                     ? mob.getTarget()
-										                     : entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size())));
-									}
 
-								case 1:
-								default:
-									mob.setAggressive(true);
+								//mob.targetSelector.enableFlag(Goal.Flag.TARGET);
+								mob.setNoAi(false);
+
+								switch (mode)
+								{
+									case 3:
+										if (mob.getTarget() == null)
+										{
+											LivingEntity attackTarget = entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size()));
+											mob.setTarget(attackTarget);
+										}
+									case 2:
+										if (mob.getLastHurtByMob() == null)
+										{
+											mob.setLastHurtByMob(mob.getTarget() != null
+											                     ? mob.getTarget()
+											                     : entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size())));
+										}
+
+									case 1:
+									default:
+										mob.setAggressive(true);
+								}
 							}
 						}
+						lock.unlock();
 					}
-					lock.unlock();
-
 					// sleep thread for 1 tick (50ms)
 					Thread.sleep(50);
 				}
