@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.cosmereEffect;
@@ -225,7 +225,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 
 	public double getAttributeModifierValue(double strength, AttributeModifierInfo modifier)
 	{
-		return modifier.getAmount() * (strength + 1);
+		return modifier.getAmount() * strength;
 	}
 
 	//reuse memory where possible
@@ -248,5 +248,10 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	public void removeDynamicAttribute(Attribute attribute)
 	{
 		attributeModifiers.remove(attribute);
+	}
+
+	public void setDuration(int duration)
+	{
+		this.duration = duration;
 	}
 }
