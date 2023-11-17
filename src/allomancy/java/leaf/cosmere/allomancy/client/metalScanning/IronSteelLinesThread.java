@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -208,8 +209,7 @@ public class IronSteelLinesThread implements Runnable
 			}
 			catch (Exception e)
 			{
-				CosmereAPI.logger.info("Unexpected exception in lines thread");
-				e.getStackTrace();
+				CosmereAPI.logger.info("Unexpected exception in lines thread: \n" + Arrays.toString(e.getStackTrace()));
 
 				break;
 			}
