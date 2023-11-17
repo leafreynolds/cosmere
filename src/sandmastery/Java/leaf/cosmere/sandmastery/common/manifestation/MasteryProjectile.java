@@ -32,9 +32,13 @@ public class MasteryProjectile extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		super.tick(data);
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 		submodule.tickProjectileCooldown();
+		if (sandmasteryBlocked(data))
+		{
+			return false;
+		}
 		if (!submodule.projectileReady())
 		{
 			return false;
@@ -53,10 +57,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		ServerPlayer player = (ServerPlayer) data.getLiving();
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), false))
-		{
-			return false;
-		}
+
 		if (notEnoughChargedSand(data))
 		{
 			return false;
@@ -87,7 +88,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 			}
 		});
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), true, data.getLiving());
 		useChargedSand(data);
 		return true;
 	}

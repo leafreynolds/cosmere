@@ -10,6 +10,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.core.BlockPos;
@@ -77,9 +78,14 @@ public class QidoItem extends ChargeableItemBase
 				SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 
 				int playerHydration = sb.getHydrationLevel();
-				final int maxPlayerHydration = sb.MAX_HYDRATION;
+				final int maxPlayerHydration = SandmasteryConfigs.SERVER.MAX_HYDRATION.get();
 
-				if (playerHydration < maxPlayerHydration)
+				if (liquid + playerHydration > maxPlayerHydration)
+				{
+					sb.adjustHydration((maxPlayerHydration - playerHydration));
+					setCharge(itemStack, ((liquid + playerHydration) - maxPlayerHydration));
+				}
+				else
 				{
 					pPlayer.startUsingItem(pUsedHand);
 				}

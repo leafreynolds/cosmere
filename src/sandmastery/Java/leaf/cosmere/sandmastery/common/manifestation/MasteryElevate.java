@@ -25,7 +25,12 @@ public class MasteryElevate extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
+		if (sandmasteryBlocked(data))
+		{
+			return false;
+		}
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.ELEVATE_HOTKEY_FLAG);
+		super.tick(data);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
 			return performEffectServer(data);
@@ -35,14 +40,8 @@ public class MasteryElevate extends SandmasteryManifestation
 
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 		if (getMode(data) < 3)
-		{
-			return false;
-		}
-		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), false))
 		{
 			return false;
 		}
@@ -66,7 +65,7 @@ public class MasteryElevate extends SandmasteryManifestation
 		living.hurtMarked = true; // Allow the game to move the player
 		living.resetFallDistance();
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true, living);
 		useChargedSand(data);
 
 		return true;

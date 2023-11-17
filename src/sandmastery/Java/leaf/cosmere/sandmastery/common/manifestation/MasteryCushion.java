@@ -25,6 +25,11 @@ public class MasteryCushion extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
+		super.tick(data);
+		if (sandmasteryBlocked(data))
+		{
+			return false;
+		}
 		if (getMode(data) > 0)
 		{
 			return performEffectServer(data);
@@ -32,18 +37,9 @@ public class MasteryCushion extends SandmasteryManifestation
 		return false;
 	}
 
-	public void tickClient(ISpiritweb data)
-	{
-		if (MiscHelper.isClient(data))
-		{
-			performEffectClient(data);
-		}
-	}
-
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
 
 		LivingEntity living = data.getLiving();
 		Vec3 movement = living.getDeltaMovement();
@@ -57,10 +53,6 @@ public class MasteryCushion extends SandmasteryManifestation
 			return false;
 		}
 
-		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), false))
-		{
-			return false;
-		}
 		if (notEnoughChargedSand(data))
 		{
 			return false;
@@ -70,7 +62,7 @@ public class MasteryCushion extends SandmasteryManifestation
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
 		living.hurtMarked = true;
 		living.resetFallDistance();
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true, living);
 		useChargedSand(data);
 		return true;
 	}

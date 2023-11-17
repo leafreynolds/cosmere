@@ -14,6 +14,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
@@ -70,6 +71,7 @@ public class MiscHelper
 					}
 
 					final boolean targetIsPlayer = target instanceof Player;
+
 					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
 						continue; //sandmastery uses charged sand, and as such won't charge it either
 
@@ -104,7 +106,7 @@ public class MiscHelper
 		int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition(), false))
 		{
-			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 1, 0, maxCharge));
+			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 100, 0, maxCharge));
 		}
 	}
 
@@ -220,5 +222,12 @@ public class MiscHelper
 	public static int randomSlot(ItemStackHandler itemStackHandler)
 	{
 		return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
+	}
+
+	public static SandmasterySpiritwebSubmodule getSandmasterySubmodule(ISpiritweb data)
+	{
+		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
+		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		return submodule;
 	}
 }

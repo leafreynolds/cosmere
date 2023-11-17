@@ -27,14 +27,14 @@ public class MasteryPlatform extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-
-		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PLATFORM_HOTKEY_FLAG);
-		if (!submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), false))
+		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
+		super.tick(data);
+		if (sandmasteryBlocked(data))
 		{
 			return false;
 		}
+		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PLATFORM_HOTKEY_FLAG);
+
 		if (notEnoughChargedSand(data))
 		{
 			return false;
@@ -73,7 +73,7 @@ public class MasteryPlatform extends SandmasteryManifestation
 			}
 			pos = pos.offset(0, 0, -(size * 2) - 1);
 		}
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), true);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), true, living);
 		return true;
 	}
 }

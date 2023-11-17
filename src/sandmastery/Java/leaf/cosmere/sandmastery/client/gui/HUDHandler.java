@@ -10,6 +10,8 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -52,7 +54,7 @@ public class HUDHandler
 						final int hydrationLevel = sbModule.getHydrationLevel();
 						if (hydrationLevel > 0)
 						{
-							renderHydrationBar(ms, hydrationLevel, sbModule.MAX_HYDRATION);
+							renderHydrationBar(ms, hydrationLevel, SandmasteryConfigs.SERVER.MAX_HYDRATION.get());
 						}
 					}
 

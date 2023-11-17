@@ -28,6 +28,17 @@ public class EffectsHelper
 		return effectInstance;
 	}
 
+	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier, int duration)
+	{
+		MobEffectInstance effectInstance = new MobEffectInstance(
+				effect,
+				duration,
+				Math.max(0, amplifier),
+				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
+				false, // definitely don't want particles.
+				true); // show icon though
+  }
+  
 	public static CosmereEffectInstance getNewEffect(CosmereEffect effect, Entity effectSource, double strength)
 	{
 		//generate uuid based on the effect, and the source it comes from

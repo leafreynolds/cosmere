@@ -20,6 +20,10 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue ELEVATE_HYDRATION_COST;
 	public final ForgeConfigSpec.IntValue CUSHION_HYDRATION_COST;
 	public final ForgeConfigSpec.IntValue CHARGE_COST_MULTIPLIER;
+	public final ForgeConfigSpec.IntValue STARTING_HYDRATION;
+	public final ForgeConfigSpec.IntValue MAX_HYDRATION;
+	public final ForgeConfigSpec.IntValue OVERMASTERY_DURATION;
+	public final ForgeConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
 
 
 	SandmasteryServerConfig()
@@ -36,6 +40,13 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		CUSHION_HYDRATION_COST = builder.comment("How much hydration is used per tick for cushion").defineInRange("cushionHydrationCost", 10, 1, 1000);
 
 		CHARGE_COST_MULTIPLIER = builder.comment("Charge cost multiplier is multiplied by the mode to determine charge cost per tick").defineInRange("chargeCostMultiplier", 2, 1, 1000);
+
+		STARTING_HYDRATION = builder.comment("Starting hydration a player has when they spawn into the world for the first time").defineInRange("startingHydration", 10000, 1, 100000);
+		MAX_HYDRATION = builder.comment("Max hydration a player can have").defineInRange("maxHydration", 10000, 1, 100000);
+
+		OVERMASTERY_DURATION = builder.comment("How long overmastery lasts in minutes").defineInRange("overmasteryDuration", 120, 1, 720);
+
+		DEHYDRATION_THRESHOLD = builder.comment("The threshold at which a player will start to become dehydrated (percentage of max)").defineInRange("dehydrationThreshold", 0.01, 0.1, 100.0);
 
 		builder.pop();
 		configSpec = builder.build();

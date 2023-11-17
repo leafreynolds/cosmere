@@ -7,15 +7,19 @@ package leaf.cosmere.sandmastery.common.capabilities;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,9 +30,8 @@ import java.util.List;
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	private CompoundTag sandmasteryTag = null;
-	private int hydrationLevel = 10000;
+	private int hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
 	private int projectileCooldown = 0;
-	public final int MAX_HYDRATION = 10000;
 	private final LinkedList<SandmasteryManifestation> ribbonsInUse = new LinkedList<>();
 
 	private int hotkeyFlags = 0;
@@ -148,20 +151,25 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		return hydrationLevel;
 	}
 
-	public boolean adjustHydration(int amountToAdjust, boolean doAdjust)
+	public boolean adjustHydration(int amountToAdjust, boolean allowOvermastery, LivingEntity entity)
 	{
 		int hydration = getHydrationLevel();
 		final int newHydrationValue = hydration + amountToAdjust;
-		if (newHydrationValue >= 0)
+		hydrationLevel = Math.max(0, newHydrationValue);
+
+		if (allowOvermastery && newHydrationValue < 0)
 		{
-			if (doAdjust)
-			{
-				hydrationLevel = newHydrationValue;
-			}
-			return true;
+			entity.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERY_INSTANT_EFFECT.get(), 0, 1));
+			entity.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERED_EFFECT.get(), 0, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60)); //  * 20 * 60 to convert minutes to ticks
 		}
 
-		return false;
+		return true;
+	}
+
+	public void adjustHydration(int amountToAdjust)
+	{
+		int hydration = getHydrationLevel();
+		hydrationLevel = hydration + amountToAdjust;
 	}
 
 	public void tickProjectileCooldown()
