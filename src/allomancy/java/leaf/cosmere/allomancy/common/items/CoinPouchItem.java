@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 7 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -14,6 +14,7 @@ import leaf.cosmere.allomancy.common.network.packets.PlayerShootProjectileMessag
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.CosmereTags;
+import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.ItemsRegistry;
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -47,7 +49,8 @@ public class CoinPouchItem extends ProjectileWeaponItem
 	{
 		final boolean isNugget = itemStack.is(Tags.Items.NUGGETS);
 		final boolean containsMetal = itemStack.is(CosmereTags.Items.CONTAINS_METAL);
-		return isNugget && containsMetal;
+		final boolean isCommonMetal = itemStack.getItem() instanceof IHasMetalType metalType && metalType.getMetalType().getRarity() == Rarity.COMMON;
+		return isNugget && containsMetal && isCommonMetal;
 	};
 
 	public CoinPouchItem(Properties p_40660_)
