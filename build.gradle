@@ -433,6 +433,8 @@ dependencies {
 	compileOnly fg.deobf("curse.maven:jade-api-324717:${jade_api_id}")
 	runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
 
+	runtimeOnly fg.deobf("curse.maven:soulhome-574511:${soulhome_id}")
+
 	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
 	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
 
@@ -628,9 +630,9 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					optionalDependency "jade"
 					optionalDependency "jei"
 					optionalDependency "patchouli"
-					optionalDependency "allomancy-cosmere"
-					optionalDependency "feruchemy-cosmere"
-					optionalDependency "hemalurgy-cosmere"
+					optionalDependency "allomancer"
+					optionalDependency "feruchemist"
+					optionalDependency "hemalurgy"
 					optionalDependency "surgebinding"
 					optionalDependency "sandmastery"
 				}
@@ -650,8 +652,8 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 				relations {
 					requiredDependency "cosmere"
 					optionalDependency "patchouli"
-					optionalDependency "hemalurgy-cosmere"
-					optionalDependency "feruchemy-cosmere"
+					optionalDependency "feruchemist"
+					optionalDependency "hemalurgy"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -669,8 +671,8 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					requiredDependency "cosmere"
 					requiredDependency "curios"
 					optionalDependency "patchouli"
-					optionalDependency "hemalurgy-cosmere"
-					optionalDependency "allomancy-cosmere"
+					optionalDependency "allomancer"
+					optionalDependency "hemalurgy"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -688,9 +690,9 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					requiredDependency "cosmere"
 					requiredDependency "curios"
 					optionalDependency "patchouli"
-					requiredDependency "feruchemy-cosmere"
-					requiredDependency "allomancy-cosmere"
-					incompatible "hemalurgy"
+					requiredDependency "allomancer"
+					requiredDependency "feruchemist"
+					incompatible "hemalurgy-lego-allomancy"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -707,8 +709,8 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 				relations {
 					requiredDependency "cosmere"
 					optionalDependency "patchouli"
-					optionalDependency "hemalurgy-cosmere"
-					optionalDependency "allomancy-cosmere"
+					optionalDependency "hemalurgy"
+					optionalDependency "allomancer"
 					optionalDependency "surgebinding"
 				}
 			}
@@ -727,9 +729,9 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					requiredDependency "cosmere"
 					requiredDependency "curios"
 					optionalDependency "patchouli"
-					optionalDependency "allomancy-cosmere"
-					optionalDependency "feruchemy-cosmere"
-					optionalDependency "hemalurgy-cosmere"
+					optionalDependency "allomancer"
+					optionalDependency "feruchemist"
+					optionalDependency "hemalurgy"
 					optionalDependency "surgebinding"
 				}
 			}

@@ -1,57 +1,30 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
 
 public class ChromiumTapEffect extends FeruchemyEffectBase
 {
-	public ChromiumTapEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public ChromiumTapEffect(Metals.MetalType type)
 	{
-		super(type, effectType);
+		super(type);
 
 		addAttributeModifier(
 				Attributes.LUCK,
-				"7faaa8a8-fee1-422c-8f85-6794042e8f09",
 				1.0D,
 				AttributeModifier.Operation.ADDITION);
 
-		MinecraftForge.EVENT_BUS.addListener(this::onLootingLevelEvent);
-	}
-
-	public void onLootingLevelEvent(LootingLevelEvent event)
-	{
-		boolean isRemote = event.getEntity().level.isClientSide;
-		boolean entityNotLiving = event.getDamageSource() == null || !(event.getDamageSource().getEntity() instanceof LivingEntity);
-
-		if (isRemote || entityNotLiving)
-		{
-			return;
-		}
-
-		MobEffectInstance effectInstance = ((LivingEntity) event.getDamageSource().getEntity()).getEffect(this);
-		if (effectInstance != null && effectInstance.getDuration() > 0)
-		{
-			event.setLootingLevel(event.getLootingLevel() + effectInstance.getAmplifier());
-		}
-	}
-
-
-	@Override
-	public void addAttributeModifiers(LivingEntity entityLivingBaseIn, AttributeMap attributeMapIn, int amplifier)
-	{
-		super.addAttributeModifiers(entityLivingBaseIn, attributeMapIn, amplifier);
+		addAttributeModifier(
+				AttributesRegistry.COSMERE_FORTUNE.getAttribute(),
+				1.0D,
+				AttributeModifier.Operation.ADDITION);
 	}
 }

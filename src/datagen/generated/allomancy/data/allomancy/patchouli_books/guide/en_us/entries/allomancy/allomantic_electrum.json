@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\". (The rest of the page is missing...)"
+      "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\". The rest of the page is missing... (Not yet implemented)"
     }
   ],
   "priority": false,

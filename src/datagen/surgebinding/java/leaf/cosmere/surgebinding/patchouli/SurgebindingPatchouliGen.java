@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 18 - 9 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.patchouli;
@@ -40,7 +40,7 @@ public class SurgebindingPatchouliGen extends PatchouliProvider
 		//  -                                       //
 		//------------------------------------------//
 
-		//PatchouliBasics.collect(this.categories, this.entries);
+		PatchouliSurgebindingCategory.collect(this.categories, this.entries);
 
 
 	}
@@ -50,7 +50,7 @@ public class SurgebindingPatchouliGen extends PatchouliProvider
 	 */
 	public String getName()
 	{
-		return "Cosmere PatchouliGeneration";
+		return "Surgebinding PatchouliGeneration";
 	}
 
 }

@@ -1,28 +1,17 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 7 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
 
-import leaf.cosmere.allomancy.client.render.renderer.MistcloakRenderer;
 import leaf.cosmere.allomancy.common.Allomancy;
-import leaf.cosmere.client.render.CosmereRenderers;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 public class MistcloakItem extends ArmorItem
 {
@@ -31,6 +20,8 @@ public class MistcloakItem extends ArmorItem
 		super(material, slot, properties);
 	}
 
+	//todo increase dodge chance while in the mists
+
 	@Nonnull
 	@Override
 	public final String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
@@ -38,6 +29,9 @@ public class MistcloakItem extends ArmorItem
 		return Allomancy.MODID + ":" + "textures/models/armor/mistcloak.png";
 	}
 
+/* If we were to not use curios, this is what we would attempt to use.
+	There's a weird interaction with some vanilla code that gets run afterward, resetting some of the values we set
+	Ideally don't deal with it.
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void initializeClient(Consumer<IClientItemExtensions> consumer)
@@ -53,20 +47,19 @@ public class MistcloakItem extends ArmorItem
 				if (armorModel.isPresent() && armorModel.get() instanceof MistcloakRenderer armorRenderer)
 				{
 					var model = armorRenderer.model;
-					model.head.visible = equipmentSlot == EquipmentSlot.HEAD;
 					model.hat.visible = false;
+					model.head.visible = true;
+					model.body.visible = true;
 
-					model.body.visible = equipmentSlot == EquipmentSlot.CHEST;
-					model.rightArm.visible = equipmentSlot == EquipmentSlot.CHEST;
-					model.leftArm.visible = equipmentSlot == EquipmentSlot.CHEST;
-
-					model.rightLeg.visible = equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET;
-					model.leftLeg.visible = equipmentSlot == EquipmentSlot.LEGS || equipmentSlot == EquipmentSlot.FEET;
+					model.rightArm.visible = false;
+					model.leftArm.visible = false;
+					model.rightLeg.visible = false;
+					model.leftLeg.visible = false;
 
 					return model;
 				}
 				return null;
 			}
 		});
-	}
+	}*/
 }

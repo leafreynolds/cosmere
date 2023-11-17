@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common;
@@ -42,6 +42,7 @@ public class Sandmastery implements IModModule
 		SandmasteryConfigs.registerConfigs(ModLoadingContext.get());
 
 		modBus.addListener(this::onConfigLoad);
+		modBus.addListener(this::onConfigReload);
 		modBus.addListener(this::commonSetup);
 
 		SandmasteryItems.ITEMS.register(modBus);
@@ -90,6 +91,15 @@ public class Sandmastery implements IModModule
 	}
 
 	private void onConfigLoad(ModConfigEvent configEvent)
+	{
+		ModConfig config = configEvent.getConfig();
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		{
+			cosmereModConfig.clearCache();
+		}
+	}
+
+	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
 		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)

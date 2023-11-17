@@ -1,10 +1,10 @@
 /*
- * File updated ~ 28 - 7 - 2023 ~ Leaf
+ * File updated ~ 15 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
-import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
+import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
 import leaf.cosmere.api.CosmereAPI;
@@ -12,21 +12,18 @@ import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
-import leaf.cosmere.api.helpers.EntityHelper;
-import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -34,33 +31,50 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
+	public static final HashMap<Material, Double> materialResistanceMap = initHashMap();
+
 	private final boolean isPush;
 	private static Set<String> s_whiteList = null;
+	private static Set<String> s_blackList = null;
 
 	public AllomancyIronSteel(Metals.MetalType metalType)
 	{
 		super(metalType);
 		this.isPush = metalType == Metals.MetalType.STEEL;
+	}
+
+	private static HashMap<Material, Double> initHashMap()
+	{
+		HashMap<Material, Double> output = new HashMap<>();
+
+		// map definitely isn't done, but this is a good start
+		output.put(Material.STONE, 0.5);
+		output.put(Material.DIRT, 0.2);
+		output.put(Material.WOOD, 0.25);
+		output.put(Material.METAL, 0.5);
+		output.put(Material.PISTON, 0.5);
+		output.put(Material.SAND, 0.2);
+		output.put(Material.CLAY, 0.2);
+
+		return output;
 	}
 
 	@Override
@@ -79,20 +93,32 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	@Override
 	public void onModeChange(ISpiritweb cap, int lastMode)
 	{
-		super.onModeChange(cap, lastMode);
-
-		if (getMode(cap) != 0)
+		if (cap.getLiving().level.isClientSide)
 		{
-			return;
+
+			super.onModeChange(cap, lastMode);
+
+			if (getMode(cap) != 0)
+			{
+				if (getMode(cap) > 0)
+				{
+					IronSteelLinesThread.startThread();
+				}
+				else if (getMode(cap) <= 0)
+				{
+					IronSteelLinesThread.stopThread();
+				}
+				return;
+			}
+
+			SpiritwebCapability data = (SpiritwebCapability) cap;
+
+			List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
+			List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
+
+			blocks.clear();
+			entities.clear();
 		}
-
-		SpiritwebCapability data = (SpiritwebCapability) cap;
-
-		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
-		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
-
-		blocks.clear();
-		entities.clear();
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -103,6 +129,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 
+		TagKey<Block> aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+		TagKey<Block> aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+		TagKey<Block> aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
+		TagKey<Block> aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
+
 		if (s_whiteList == null)
 		{
 			createWhitelist(cap.getLiving());
@@ -111,15 +142,84 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		//Pushes/Pulls on Nearby Metals
 		if (getKeyBinding().isDown())
 		{
-			Minecraft mc = Minecraft.getInstance();
-			HitResult ray = PlayerHelper.pickWithRange(cap.getLiving(), getRange(cap));
+			final Minecraft mc = Minecraft.getInstance();
+			Player player = mc.player;
+			Level level = mc.level;
 
-			if (ray.getType() == HitResult.Type.BLOCK && !blocks.contains(((BlockHitResult) ray).getBlockPos()))
+			Vec3 lerpAngle = player.getLookAngle();
+			Vec3 currPos = player.getEyePosition();
+			float resistance = 0.0F;
+			boolean hitEntity = false;
+			Entity entityHitResult = null;
+
+			// lerp forward within range
+			for (int i = 0; i < getRange(cap); i++)
 			{
-				BlockPos pos = ((BlockHitResult) ray).getBlockPos();
+				BlockState blockAtPos = level.getBlockState(new BlockPos(currPos));
+
+				// if block is air, might be entity. check.
+				if (blockAtPos.isAir())
+				{
+					try
+					{
+						AABB aabb = new AABB(new BlockPos(currPos));
+						Entity firstMetalEntity = null;
+						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator()))
+						{
+							if (entityContainsMetal(ent))
+							{
+								firstMetalEntity = ent;
+								break;
+							}
+						}
+						hitEntity = firstMetalEntity != null && entityContainsMetal(firstMetalEntity);
+						if (hitEntity)
+						{
+							entityHitResult = firstMetalEntity;
+							break;
+						}
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+						hitEntity = false;
+					}
+				}
+
+				// if resistance is 100+% or the currently targeted block has metal; exit
+				if (resistance >= 1.0F || containsMetal(blockAtPos.getBlock()))
+				{
+					break;
+				}
+
+				// if block isn't air, add material resistance value
+				if (!blockAtPos.isAir())
+				{
+					Block currBlock = level.getBlockState(new BlockPos(currPos)).getBlock();
+
+					if (blockAtPos.is(aluminumOre) || blockAtPos.is(aluminumStorage) || blockAtPos.is(aluminumSheet) || blockAtPos.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+					{
+						// aluminum completely blocks steelsight
+						resistance += 1.0F;
+					}
+					else
+					{
+						resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
+					}
+				}
+
+				// lerp to next position (1 block forward)
+				currPos = currPos.add(lerpAngle);
+			}
+
+			if (resistance < 1.0F && !hitEntity)
+			{
+				BlockPos pos = new BlockPos(currPos);
 				//todo check block is of ihasmetal type
 				BlockState state = mc.level.getBlockState(pos);
-				if (state.getBlock() instanceof IHasMetalType || containsMetal(state.getBlock()))
+				Block block = state.getBlock();
+				final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
+				if (validMetalBlock || containsMetal(state.getBlock()))
 				{
 					blocks.add(pos.immutable());
 
@@ -131,12 +231,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				}
 			}
 
-			if (ray instanceof EntityHitResult entityHitResult)
+			if (hitEntity)
 			{
-				final Entity hitResultEntity = entityHitResult.getEntity();
 				//tracks entity if it meets requirements
 				//eg must contain metal
-				hasChanged = trackValidEntity(data, hitResultEntity);
+				hasChanged = trackValidEntity(data, entityHitResult);
 			}
 		}
 		else
@@ -329,62 +428,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		living.hurtMarked = true;
 	}
 
-	private static final ScanResult scanResult = new ScanResult();
-
-	@OnlyIn(Dist.CLIENT)
-	public static ScanResult getDrawLines(int range)
-	{
-		final Minecraft mc = Minecraft.getInstance();
-		final ProfilerFiller profiler = mc.getProfiler();
-		LocalPlayer playerEntity = mc.player;
-		//only update box list every so often
-		if (playerEntity.tickCount % 15 != 0)
-		{
-			return scanResult;
-		}
-		scanResult.Clear();
-
-		//find all the things that we want to draw a line to from the player
-
-		//metal blocks
-		profiler.push("cosmere-getBlocksInRange");
-		{
-			BlockPos.withinManhattanStream(playerEntity.blockPosition(), range, range, range)
-					.filter(blockPos ->
-					{
-						Block block = playerEntity.level.getBlockState(blockPos).getBlock();
-						final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-						return validMetalBlock || containsMetal(block);
-					})
-					.forEach(blockPos -> scanResult.addBlock(blockPos.immutable()));
-
-			scanResult.finalizeClusters();
-		}
-
-		profiler.pop();
-
-		//entities with metal armor/tools
-		profiler.push("cosmere-getEntitiesInRange");
-		{
-			EntityHelper.getEntitiesInRange(playerEntity, range, false).forEach(entity ->
-			{
-				if (entityContainsMetal(entity))
-				{
-					scanResult.foundEntities.add(
-							entity.position().add(
-									0,
-									entity.getBoundingBox().getYsize() / 2,
-									0));
-				}
-			});
-		}
-		profiler.pop();
-
-		return scanResult;
-	}
-
-
-	private static boolean entityContainsMetal(Entity entity)
+	public static boolean entityContainsMetal(Entity entity)
 	{
 		if (entity instanceof LivingEntity livingEntity)
 		{
@@ -441,12 +485,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		return false;
 	}
 
-	private static boolean containsMetal(ItemStack itemStack)
+	public static boolean containsMetal(ItemStack itemStack)
 	{
 		return containsMetal(itemStack.getItem());
 	}
 
-	private static boolean containsMetal(Item item)
+	public static boolean containsMetal(Item item)
 	{
 		if (item.builtInRegistryHolder().is(CosmereTags.Items.CONTAINS_METAL))
 		{
@@ -460,7 +504,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 
-	private static boolean containsMetal(Block block)
+	public static boolean containsMetal(Block block)
 	{
 		if (block.builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL))
 		{
@@ -473,7 +517,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		return s_whiteList.contains(ResourceLocationHelper.get(block).getPath());
 	}
 
-	private static boolean containsMetal(Entity entity)
+	public static boolean containsMetal(Entity entity)
 	{
 		if (entity.getType().is(CosmereTags.EntityTypes.CONTAINS_METAL))
 		{
@@ -499,6 +543,50 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			return;
 		}
 
+		//generate blacklist
+		//reset each time, because it's not working properly for some reason
+		{
+			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
+			s_blackList = new HashSet<>();
+			s_blackList.add(ResourceLocationHelper.get(Blocks.AIR).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.WATER).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LAVA).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GRASS_BLOCK).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.FARMLAND).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS_PANE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BLACK_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BROWN_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.RED_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.CYAN_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GRAY_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.GREEN_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_BLUE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_GRAY_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.LIME_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.MAGENTA_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.ORANGE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.PINK_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.PURPLE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.WHITE_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.YELLOW_BED).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.TORCH).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.SHULKER_BOX).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.FROSTED_ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Blocks.PACKED_ICE).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Items.DIAMOND).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Items.EMERALD).getPath());
+			s_blackList.add(ResourceLocationHelper.get(Items.AIR).getPath());
+			s_blackList.add("philosophers_stone");//problem child
+		}
+		for (var itemInList : s_blackList)
+		{
+			CosmereAPI.logger.info("[MetalWhitelist] %s has been blacklisted from containing metal".formatted(itemInList));
+		}
+
 		s_whiteList = new HashSet<>();
 
 		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
@@ -508,6 +596,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		for (var recipe : recipes)
 		{
 			final ItemStack resultItem = recipe.getResultItem();
+
+			// check if is blacklisted, and if is, skip
+			if (s_blackList.contains(ResourceLocationHelper.get(resultItem.getItem()).getPath()))
+			{
+				continue;
+			}
 
 			if (resultItem.is(containsMetal))
 			{
@@ -519,26 +613,37 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	}
 
 
-	public static void CheckRecipeForMetal(TagKey<Item> containsMetal, Recipe<?> recipe, ItemStack resultItem)
+	public static void CheckRecipeForMetal(TagKey<Item> containsMetal, Recipe<?> recipe, ItemStack resultItemStack)
 	{
 		for (Ingredient ingredient : recipe.getIngredients())
 		{
-			for (ItemStack itemStack : ingredient.getItems())
+			for (ItemStack ingredientStack : ingredient.getItems())
 			{
-				if (itemStack.is(containsMetal))
+				final Item ingredientItem = ingredientStack.getItem();
+				final ResourceLocation ingredientItemRL = ResourceLocationHelper.get(ingredientItem);
+				if (s_blackList.contains(ingredientItemRL.getPath()))
+				{
+					continue;
+				}
+
+				if (ingredientStack.is(containsMetal))
 				{
 					//found one
-					final Holder.Reference<Item> itemReference = resultItem.getItem().builtInRegistryHolder();
-					List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
-					allTags.add(CosmereTags.Items.CONTAINS_METAL);
-					itemReference.bindTags(allTags);
+					final Item resultItem = resultItemStack.getItem();
+					final ResourceLocation resultItemRL = ResourceLocationHelper.get(resultItem);
+					// final Holder.Reference<Item> itemReference = resultItem.builtInRegistryHolder();
+					// List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
+					// allTags.add(CosmereTags.Items.CONTAINS_METAL);
+					// itemReference.bindTags(allTags);
 
-					CosmereAPI.logger.info(itemReference + " has been identified as containing metal.");
+					CosmereAPI.logger.info("[MetalWhitelist] %s has been identified as containing metal, thanks to %s in recipe"
+							.formatted(resultItemRL, ingredientItemRL));
 
-					s_whiteList.add(ResourceLocationHelper.get(resultItem.getItem()).getPath());
+					s_whiteList.add(resultItemRL.getPath());
 					return;
 				}
 			}
 		}
 	}
 }
+

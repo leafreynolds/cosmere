@@ -12,6 +12,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
@@ -27,6 +28,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -43,45 +46,38 @@ public class MiscHelper
 {
 	public static boolean checkIfNearbyInvestiture(ServerLevel pLevel, BlockPos pPos, boolean includeMobs)
 	{
-		boolean allomancyLoaded = Cosmere.isModuleLoaded("Allomancy");
-
 		int range = 6;
 		AABB areaOfEffect = new AABB(pPos).inflate(range, range, range);
 		List<LivingEntity> entitiesToCheckForInvesiture = pLevel.getEntitiesOfClass(LivingEntity.class, areaOfEffect, e -> true);
 
 		AtomicBoolean foundSomething = new AtomicBoolean(false);
 
-		MobEffect mobEffect;
-		if (allomancyLoaded)
-		{
-			mobEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("allomancy", "copper_cloud"));
-		}
-		else
-		{
-			mobEffect = null;
-		}
 		for (LivingEntity target : entitiesToCheckForInvesiture)
 		{
 			SpiritwebCapability.get(target).ifPresent(targetSpiritweb -> {
-				MobEffectInstance copperEffect;
-				if (mobEffect == null)
+				boolean concealed = false;
+				final AttributeMap targetAttributes = target.getAttributes();
+				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 				{
-					copperEffect = null;
+					concealed = targetAttributes.getValue(cognitiveConcealmentAttr) > 0;
 				}
-				else
-				{
-					copperEffect = target.getEffect(mobEffect);
-				}
-				if (copperEffect != null && copperEffect.getDuration() > 0)
-				{
-					return; //skip clouded entities.
-				}
-
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 				{
+					if (concealed)
+					{
+						foundSomething.set(false);
+						break;
+					}
+
 					final boolean targetIsPlayer = target instanceof Player;
-					if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.SANDMASTERY)
+
+					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
 						continue; //sandmastery uses charged sand, and as such won't charge it either
+
+					boolean test = targetSpiritweb.hasManifestation(manifestation);
+					boolean test2 = manifestation.isActive(targetSpiritweb);
+					Manifestation test3 = manifestation;
 
 					//if target is not a player and has any manifestations at all
 					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation) && includeMobs)

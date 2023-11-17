@@ -1,22 +1,20 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects;
 
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.common.effects.MobEffectBase;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 
-public class FeruchemyEffectBase extends MobEffectBase implements IHasMetalType
+public class FeruchemyEffectBase extends CosmereEffect implements IHasMetalType
 {
 	protected final Metals.MetalType metalType;
 
-	public FeruchemyEffectBase(Metals.MetalType type, MobEffectCategory effectType)
+	public FeruchemyEffectBase(Metals.MetalType type)
 	{
-		super(effectType, type.getColorValue());
+		super();
 		metalType = type;
 	}
 
@@ -26,14 +24,10 @@ public class FeruchemyEffectBase extends MobEffectBase implements IHasMetalType
 		return this.metalType;
 	}
 
-
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	protected int getTickOffset()
 	{
-		if (entityLivingBaseIn.level.isClientSide)
-		{
-			//client side only?
-		}
+		return metalType.getID();
 	}
 
 }

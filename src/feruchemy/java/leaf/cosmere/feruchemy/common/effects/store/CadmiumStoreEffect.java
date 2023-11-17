@@ -1,37 +1,66 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.store;
 
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 // air
 public class CadmiumStoreEffect extends FeruchemyEffectBase
 {
-	public CadmiumStoreEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public CadmiumStoreEffect(Metals.MetalType type)
 	{
-		super(type, effectType);
+		super(type);
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	protected boolean isActiveTick(ISpiritweb data)
 	{
-		if (entityLivingBaseIn.level.isClientSide)
+		//just make cadmium always run effect tick.
+		return true;
+	}
+
+	@Override
+	protected int getActiveTick()
+	{
+		return 50;
+	}
+
+	@Override
+	public void applyEffectTick(ISpiritweb data, double strength)
+	{
+		final LivingEntity living = data.getLiving();
+		if (living.level.isClientSide)
 		{
 			return;
 		}
 
-		entityLivingBaseIn.setAirSupply(Mth.clamp(entityLivingBaseIn.getAirSupply() - 4 - (amplifier), -20, entityLivingBaseIn.getMaxAirSupply()));
+		final int minAirSupply = -20;
+		final int maxAirSupply = living.getMaxAirSupply();
+		final double potentialNextVal = living.getAirSupply() - 4 - (strength);
 
-		if (entityLivingBaseIn.getAirSupply() < -10 && entityLivingBaseIn.tickCount % 50 == 0)
+		if (strength >= 0.0)
 		{
-			entityLivingBaseIn.hurt(DamageSource.DROWN, 2.0F);
+			// set to just low enough that bubbles appear in the hud, or potentialNextVal, whichever is lower
+			living.setAirSupply((int) Math.min(potentialNextVal, maxAirSupply-10));
+		}
+		else
+		{
+			living.setAirSupply((int) Mth.clamp(potentialNextVal, minAirSupply, maxAirSupply));
+		}
+
+		//every 2.5 seconds
+		if (living.getAirSupply() < -10 && (getTickToCheck(data) % getActiveTick() == 0))
+		{
+			living.hurt(DamageSource.DROWN, 2.0F);
 		}
 	}
 }

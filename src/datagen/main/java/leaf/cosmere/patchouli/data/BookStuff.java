@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 18 - 9 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.patchouli.data;
@@ -271,7 +271,7 @@ public class BookStuff
 		}
 	}
 
-	static class EmptyPage extends Page
+	public static class EmptyPage extends Page
 	{
 		public boolean draw_filler = true;
 
@@ -297,7 +297,7 @@ public class BookStuff
 		}
 	}
 
-	static class EntityPage extends Page
+	public static class EntityPage extends Page
 	{
 		public String name = "";
 		public String entity = "";
@@ -341,7 +341,7 @@ public class BookStuff
 		}
 	}
 
-	static class ImagePage extends Page
+	public static class ImagePage extends Page
 	{
 		public String[] images;
 		public boolean border = false;
@@ -386,7 +386,7 @@ public class BookStuff
 		}
 	}
 
-	static class QuestPage extends Page
+	public static class QuestPage extends Page
 	{
 		public String trigger;
 
@@ -413,7 +413,7 @@ public class BookStuff
 		}
 	}
 
-	static class RelationsPage extends Page
+	public static class RelationsPage extends Page
 	{
 		public String[] entries;
 
@@ -450,7 +450,7 @@ public class BookStuff
 
 	}
 
-	static class SmeltingPage extends Page
+	public static class SmeltingPage extends Page
 	{
 		public String recipe;
 		public String recipe2 = "";

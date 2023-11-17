@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common;
@@ -44,6 +44,7 @@ public class Hemalurgy implements IModModule
 
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigLoad);
+		modBus.addListener(this::onConfigReload);
 		modBus.addListener(this::imcQueue);
 
 		HemalurgyAttributes.ATTRIBUTES.register(modBus);
@@ -87,6 +88,15 @@ public class Hemalurgy implements IModModule
 	}
 
 	private void onConfigLoad(ModConfigEvent configEvent)
+	{
+		ModConfig config = configEvent.getConfig();
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		{
+			cosmereModConfig.clearCache();
+		}
+	}
+
+	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
 		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)

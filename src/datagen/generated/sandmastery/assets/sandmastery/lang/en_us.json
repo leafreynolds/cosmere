@@ -1,4 +1,6 @@
 {
+  "advancements.sandmastery.sandmastery.description": "Test description: Sandmastery",
+  "advancements.sandmastery.sandmastery.title": "Sandmastery",
   "block.sandmastery.charged_taldain_sand": "Charged Taldain Sand",
   "block.sandmastery.charged_taldain_sand_layer": "Charged Taldain Sand Layer",
   "block.sandmastery.sand_jar_block": "Sand Jar Block",

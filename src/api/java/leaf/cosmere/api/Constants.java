@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 2 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -21,6 +21,7 @@ public class Constants
 		public static final ResourceLocation JEI_HEMALURGY = new ResourceLocation("hemalurgy", "jei");
 		public static final ResourceLocation SPIRITWEB_CAP = new ResourceLocation(CosmereAPI.COSMERE_MODID, "spiritweb");
 		public static final ResourceLocation ROSHAR_CAP = new ResourceLocation("surgebinding", "roshar");
+		public static final ResourceLocation SCADRIAL_CAP = new ResourceLocation("allomancy", "scadrial");
 		public static final ResourceLocation HEMALURGY_WORLD_CAP = new ResourceLocation("hemalurgy", "world_cap");
 	}
 

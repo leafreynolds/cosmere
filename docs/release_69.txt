@@ -1,0 +1,40 @@
+Good News Everyone!
+
+Welcome to build 69 (nice). This is primarily a TLC (tender loving care) update for the physical metals of the allomancy mod.
+
+- Allomantic Iron and Steel big overhaul! Thanks to Gerbagel, we've had huge improvements to performance. It now scans for metal on a completely different thread, which by itself is amazing. On top of that, we've revamped how it draws on the screen, single lines for groups of metal in world next to eachother, blocks should be outlined in blue and all together running smoothly.
+- Tin also gets some love, in addition to helping improve your vision at night (which now smoothly transitions as you change burn modes), we have added some visual effects to the world. While burning, you will see sculk particles towards you for sounds in the world, as well as a note icon at the position where the sound is coming from. This is a work in progress, please provide feedback after you've tried it out. On top of that, I've added the beginnings of The Mists, available only in the overworld and happening only on nights of prime numbers (should reset every 100 days). Tin will help you see through the mists, but it's still a work in progress.
+- Pewter! Finally, after all this time, it takes your strength in the metal into account when improving your different stats. No more having to share with potion effects. There's also delayed damage, so maybe don't stop burning pewter after a fight till your body has had some time to recover. This is separate from your normal health. The more damage that pewter mitigates, the more damage you will have to deal with when you stop burning pewter. Again, feedback requested.
+
+This leads us into another big change, we no longer use the mob effects system! This gives us a lot more control over how powers add and subtract from your attributes, and means people will no longer have an idea of what powers your using by looking at the effects you have in Jade. It does also mean that old worlds will have issues, and it's not something we can fix. Sorry about that. Use old worlds at your own risk.
+
+Other than the physical metals TLC, we have other changes too!
+- Bronze and Copper have had some pretty significant changes to how they work. Like the fact that they actually work now. Copper should now more accurately protect from bronze, and multiple copper clouds can pool their strength together to help defend against it. Bronze should also be giving a proper thump sound when there's someone nearby with powers too.
+- There's also a way to get bronze now too, but it's not easy. Hope you like the Warden.
+- Zinc, brass, cadmium and electrum should now be more efficient in how they scan for entities nearby (Thanks Gerbagel!). This is a performance change only, my bad code for how they work has remained the same.
+- Hope you are prepared for Koloss! Thanks to Hawk, these friendly fellows (to illagers only) are now in the mod and head out on patrols regularly. They come in three different sizes from small to huge.
+- Feruchemical nicrosil has had sooooooome fixes. You won't be able to compound right now, but you can store and tap your investiture, letting someone else use your powers for a time, or make yourself twice as strong in your own powers. It should now also properly give and take away your powers based on store and tap and not last forever oops. It's a work in progress, but it's a start.
+- Lerasium was too common, so now the rates have been drastically lowered. More changes to come in future as we're still unhappy with how it works at the moment.
+- Max strength increased from 20 to 32. Thanks to the above performance improvements, I'm happier to increase the max strength. Give it a good stress test, and let me know if you find any issues.
+- With help from AngelOfCreation, from discord, we now have more spike locations! Spikes are going to more closely follow canon, in that certain spike metals go into certain bind points. God metal spikes can go in any slot. Check out the official hemalurgy poster and this wob for more details: https://wob.coppermind.net/events/377/#e12283
+
+Unrelated to the metallic arts:
+
+- Thanks to Gerbagel, we've got some visual improvements to the spiritweb menu, feruchemy even tells you how much of each attribute you have stored. Exciting!
+- We've also added configs! We're in the process of adding more to it, but feel free to take a look and customise as you like. Some things are server side only, others client side only, all should have it listed in the name. Please be understanding that not all suggestions for configs can go in these files, due to software limitations or that they would instead need to be datapacks.
+- Some general improvements across the board for the guide book! Special thanks go to Luke for helping out with this. It's not quite where I want it yet, but every update I'm hoping to improve it a little bit more, it's important to me that people can use it as a point of truth on how the mod works at that exact moment.
+
+Other than that, there's some small changes for surgebinding:
+- Feel free to take a peek at the chull entity (Thanks Hawk for the model and texture). They don't do much yet, but you can feed them wheat and ride them around!
+- As well as the cryptic and a few new plants that we will be using in the future (Thanks goes to Eliot and the stormcraft team for donating their assets).
+- Fixed a bug where gemstones would float in the world that isn't roshar. How'd that even happen?
+
+Sand Mastery!
+- Hope you like drinking, as there's now the ability to make a qido, a type of water bottle. This will be the resource needed for your sand mastery based abilities.
+
+Some known issues (unfortunately):
+- Incompatible with old worlds! Unfortunately by changing the way we handle the mob effects, we had to change the way we store the data. This means that old worlds will not work with this update. Sorry about that. Use old worlds at your own risk.
+- Occasionally the metal sight and tin sight will bug out and not draw on top of other blocks or things in the way. This is due to another mod in your pack. If you figure out which one, let me know so we can fix our compatibility with it :)
+- Some things may declare themselves as containing metal when they shouldn't. Please provide latest.log file in a bug report in discord, or on the github.
+
+Other commits for this updated mod suite version:

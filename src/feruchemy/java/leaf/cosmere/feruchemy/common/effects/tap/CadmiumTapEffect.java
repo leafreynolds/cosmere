@@ -1,13 +1,13 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -15,32 +15,40 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class CadmiumTapEffect extends FeruchemyEffectBase
 {
-	public CadmiumTapEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public CadmiumTapEffect(Metals.MetalType type)
 	{
-		super(type, effectType);
+		super(type);
 
 		this.addAttributeModifier(
 				Attributes.ATTACK_SPEED,
-				"019c1754-d7a2-4c78-9e14-896ecc7ed0e2",
 				0.01F,
 				AttributeModifier.Operation.MULTIPLY_TOTAL);
 
 		this.addAttributeModifier(
 				Attributes.MOVEMENT_SPEED,
-				"019c1754-d7a2-4c78-9e14-896ecc7ed0e2",
 				0.02F,
 				AttributeModifier.Operation.MULTIPLY_TOTAL);
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	protected boolean isActiveTick(ISpiritweb data)
 	{
-		if (entityLivingBaseIn.level.isClientSide)
+		//just make cadmium always run effect tick.
+		return true;
+	}
+
+	@Override
+	public void applyEffectTick(ISpiritweb data, double strength)
+	{
+		final LivingEntity living = data.getLiving();
+		if (living.level.isClientSide)
 		{
 			return;
 		}
-
-		entityLivingBaseIn.setAirSupply(Mth.clamp(entityLivingBaseIn.getAirSupply() + 3 + (amplifier), entityLivingBaseIn.getAirSupply(), entityLivingBaseIn.getMaxAirSupply()));
+		final int minAirSupply = living.getAirSupply();
+		final int maxAirSupply = living.getMaxAirSupply();
+		final double potentialNextVal = minAirSupply + 3 + (strength);//todo find out what 3 means here.
+		living.setAirSupply((int) Mth.clamp(potentialNextVal, minAirSupply, maxAirSupply));
 
 	}
 }

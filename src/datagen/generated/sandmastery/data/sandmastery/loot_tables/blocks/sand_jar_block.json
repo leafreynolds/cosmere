@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "sandmastery:sand_jar_block"
+          "name": "sandmastery:sand_jar"
         }
       ],
       "rolls": 1.0

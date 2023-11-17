@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common;
@@ -43,12 +43,13 @@ public class Feruchemy implements IModModule
 
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigLoad);
+		modBus.addListener(this::onConfigReload);
 		FeruchemyItems.ITEMS.register(modBus);
-		FeruchemyEffects.EFFECTS.register(modBus);
 		FeruchemyAttributes.ATTRIBUTES.register(modBus);
 		FeruchemyManifestations.MANIFESTATIONS.register(modBus);
 		FeruchemyLootFunctions.LOOT_FUNCTIONS.register(modBus);
 		FeruchemyLootModifiers.LOOT_MODIFIERS.register(modBus);
+		FeruchemyEffects.EFFECTS.register(modBus);
 
 		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
@@ -85,6 +86,15 @@ public class Feruchemy implements IModModule
 	}
 
 	private void onConfigLoad(ModConfigEvent configEvent)
+	{
+		ModConfig config = configEvent.getConfig();
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		{
+			cosmereModConfig.clearCache();
+		}
+	}
+
+	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
 		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)

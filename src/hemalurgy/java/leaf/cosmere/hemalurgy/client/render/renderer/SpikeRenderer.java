@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 8 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.client.render.renderer;
@@ -43,7 +43,6 @@ public class SpikeRenderer implements ICurioRenderer
 			float netHeadYaw,
 			float headPitch)
 	{
-
 		LivingEntity entity = slotContext.entity();
 
 		MobEffectInstance effectInstance = entity.getEffect(MobEffects.INVISIBILITY);
@@ -56,8 +55,6 @@ public class SpikeRenderer implements ICurioRenderer
 		this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
 		ICurioRenderer.followBodyRotations(entity, this.model);
-
 		this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
-
 	}
 }

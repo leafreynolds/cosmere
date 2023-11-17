@@ -1,18 +1,17 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.registries;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.common.registration.impl.MobEffectDeferredRegister;
-import leaf.cosmere.common.registration.impl.MobEffectRegistryObject;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.common.registration.impl.CosmereEffectDeferredRegister;
+import leaf.cosmere.common.registration.impl.CosmereEffectRegistryObject;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import leaf.cosmere.feruchemy.common.effects.store.*;
 import leaf.cosmere.feruchemy.common.effects.tap.*;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -22,9 +21,9 @@ import java.util.stream.Collectors;
 public class FeruchemyEffects
 {
 
-	public static final MobEffectDeferredRegister EFFECTS = new MobEffectDeferredRegister(Feruchemy.MODID);
+	public static final CosmereEffectDeferredRegister EFFECTS = new CosmereEffectDeferredRegister(Feruchemy.MODID);
 
-	public static final Map<Metals.MetalType, MobEffectRegistryObject<MobEffect>> TAPPING_EFFECTS =
+	public static final Map<Metals.MetalType, CosmereEffectRegistryObject<CosmereEffect>> TAPPING_EFFECTS =
 			Arrays.stream(Metals.MetalType.values())
 					.filter(Metals.MetalType::hasFeruchemicalEffect)
 					.collect(Collectors.toMap(
@@ -35,7 +34,7 @@ public class FeruchemyEffects
 							)
 					);
 
-	public static final Map<Metals.MetalType, MobEffectRegistryObject<MobEffect>> STORING_EFFECTS =
+	public static final Map<Metals.MetalType, CosmereEffectRegistryObject<CosmereEffect>> STORING_EFFECTS =
 			Arrays.stream(Metals.MetalType.values())
 					.filter(Metals.MetalType::hasFeruchemicalEffect)
 					.collect(Collectors.toMap(
@@ -46,70 +45,73 @@ public class FeruchemyEffects
 							)
 					);
 
-
-	private static MobEffect makeStoringEffect(Metals.MetalType metalType)
+	private static CosmereEffect makeStoringEffect(Metals.MetalType metalType)
 	{
 		switch (metalType)
 		{
 			case IRON:
-				return new IronStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new IronStoreEffect(metalType);
 			case STEEL:
-				return (new SteelStoreEffect(metalType, MobEffectCategory.NEUTRAL));
+				return (new SteelStoreEffect(metalType));
 			case PEWTER:
-				return new PewterStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new PewterStoreEffect(metalType);
 			case ZINC:
-				return new ZincStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new ZincStoreEffect(metalType);
 			case BRASS:
-				return new BrassStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new BrassStoreEffect(metalType);
+			case ALUMINUM:
+				return new AluminumStoreEffect(metalType);
 			case DURALUMIN:
-				return new DuraluminStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new DuraluminStoreEffect(metalType);
 			case CHROMIUM:
-				return new ChromiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
-			case NICROSIL:
-				return new NicrosilStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new ChromiumStoreEffect(metalType);
 			case GOLD:
-				return new GoldStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new GoldStoreEffect(metalType);
+			case ELECTRUM:
+				return new ElectrumStoreEffect(metalType);
 			case CADMIUM:
-				return new CadmiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new CadmiumStoreEffect(metalType);
 			case BENDALLOY:
-				return new BendalloyStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new BendalloyStoreEffect(metalType);
 			case ATIUM:
-				return new AtiumStoreEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new AtiumStoreEffect(metalType);
 			default:
-				return new FeruchemyEffectBase(metalType, MobEffectCategory.NEUTRAL);
+				return new FeruchemyEffectBase(metalType);
 		}
 	}
 
-	private static MobEffect makeTappingEffect(Metals.MetalType metalType)
+	private static CosmereEffect makeTappingEffect(Metals.MetalType metalType)
 	{
 		switch (metalType)
 		{
 			case IRON:
-				return new IronTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new IronTapEffect(metalType);
 			case STEEL:
-				return new SteelTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new SteelTapEffect(metalType);
 			case PEWTER:
-				return new PewterTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new PewterTapEffect(metalType);
 			case ZINC:
-				return new ZincTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new ZincTapEffect(metalType);
 			case BRASS:
-				return new BrassTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new BrassTapEffect(metalType);
+			case ALUMINUM:
+				return new AluminumTapEffect(metalType);
 			case DURALUMIN:
-				return new DuraluminTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new DuraluminTapEffect(metalType);
 			case CHROMIUM:
-				return new ChromiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
-			case NICROSIL:
-				return new NicrosilTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new ChromiumTapEffect(metalType);
 			case GOLD:
-				return new GoldTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new GoldTapEffect(metalType);
+			case ELECTRUM:
+				return new ElectrumTapEffect(metalType);
 			case CADMIUM:
-				return new CadmiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new CadmiumTapEffect(metalType);
 			case BENDALLOY:
-				return new BendalloyTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new BendalloyTapEffect(metalType);
 			case ATIUM:
-				return new AtiumTapEffect(metalType, MobEffectCategory.NEUTRAL);
+				return new AtiumTapEffect(metalType);
 			default:
-				return new FeruchemyEffectBase(metalType, MobEffectCategory.NEUTRAL);
+				return new FeruchemyEffectBase(metalType);
 		}
 	}
 }

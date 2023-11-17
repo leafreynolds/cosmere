@@ -1,11 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 4 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.registries;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.registration.impl.ManifestationDeferredRegister;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.feruchemy.common.Feruchemy;
@@ -22,7 +21,7 @@ public class FeruchemyManifestations
 
 
 	// Feruchemy powers
-	public static final Map<Metals.MetalType, ManifestationRegistryObject<Manifestation>> FERUCHEMY_POWERS =
+	public static final Map<Metals.MetalType, ManifestationRegistryObject<FeruchemyManifestation>> FERUCHEMY_POWERS =
 			Arrays.stream(Metals.MetalType.values())
 					.filter(Metals.MetalType::hasAssociatedManifestation)
 					.collect(Collectors.toMap(
@@ -47,8 +46,6 @@ public class FeruchemyManifestations
 				return new FeruchemyNicrosil(metalType);
 			case GOLD:
 				return new FeruchemyGold(metalType);
-			case ELECTRUM:
-				return new FeruchemyElectrum(metalType);
 			case BENDALLOY:
 				return new FeruchemyBendalloy(metalType);
 			case ATIUM:

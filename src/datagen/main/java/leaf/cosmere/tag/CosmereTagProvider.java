@@ -1,5 +1,5 @@
 /*
- * File updated ~ 25 - 7 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.tag;
@@ -190,6 +190,12 @@ public class CosmereTagProvider extends BaseTagProvider
 		//Our metals
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
+			if (metalType == Metals.MetalType.ALUMINUM)
+			{
+				//skip aluminum
+				continue;
+			}
+
 			//Items
 			final TagKey<Item> metalRawTag = CosmereTags.Items.METAL_RAW_TAGS.get(metalType);
 			final TagKey<Item> metalBlendTag = CosmereTags.Items.METAL_DUST_TAGS.get(metalType);
@@ -200,7 +206,10 @@ public class CosmereTagProvider extends BaseTagProvider
 			final TagKey<Block> oreBlockTag = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType);
 			final TagKey<Block> storageBlockTag = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(metalType);
 
-			if (metalType.hasOre())
+			if (metalType.hasOre()
+					|| metalType == Metals.MetalType.IRON
+					|| metalType == Metals.MetalType.COPPER
+					|| metalType == Metals.MetalType.GOLD)
 			{
 				itemTagBuilder.add(metalRawTag);
 				blockTagBuilder.add(oreBlockTag);

@@ -16,6 +16,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
@@ -36,6 +37,10 @@ public class HemalurgyItemModelsGen extends ItemModelProvider
 			String path = itemRegistryObject.getRegistryName().getPath();
 			Item item = itemRegistryObject.asItem();
 
+			if (item instanceof ForgeSpawnEggItem)
+			{
+				continue;
+			}
 			if (item instanceof HemalurgicSpikeItem)
 			{
 				this.getBuilder(path)

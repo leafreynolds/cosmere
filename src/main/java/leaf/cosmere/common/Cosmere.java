@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 5 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common;
@@ -52,6 +52,7 @@ public class Cosmere
 		modBus.addListener(this::loadComplete);
 		modBus.addListener(this::onAddCaps);
 		modBus.addListener(this::onConfigLoad);
+		modBus.addListener(this::onConfigReload);
 
 		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
@@ -63,6 +64,7 @@ public class Cosmere
 		EntityTypeRegistry.ENTITY_TYPES.register(modBus);
 		AttributesRegistry.ATTRIBUTES.register(modBus);
 		ManifestationRegistry.MANIFESTATIONS.createAndRegisterManifestation(modBus);
+		CosmereEffectsRegistry.EFFECTS.createAndRegister(modBus);
 		PoiTypesRegistry.POINT_OF_INTERESTS.register(modBus);
 		VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
 		BiomeModifierRegistry.BIOME_MODIFIER_SERIALIZERS.register(modBus);
@@ -122,6 +124,9 @@ public class Cosmere
 					case "Feruchemy":
 						maniType = Manifestations.ManifestationTypes.FERUCHEMY;
 						break;
+					case "Hemalurgy":
+						maniType = Manifestations.ManifestationTypes.HEMALURGY;
+						break;
 					case "Surgebinding":
 						maniType = Manifestations.ManifestationTypes.SURGEBINDING;
 						break;
@@ -152,6 +157,15 @@ public class Cosmere
 	}
 
 	private void onConfigLoad(ModConfigEvent configEvent)
+	{
+		ModConfig config = configEvent.getConfig();
+		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		{
+			cosmereModConfig.clearCache();
+		}
+	}
+
+	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
 		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)

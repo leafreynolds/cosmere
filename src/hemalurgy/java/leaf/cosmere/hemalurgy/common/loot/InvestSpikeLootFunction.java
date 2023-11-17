@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.loot;
@@ -60,9 +60,16 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 				? Optional.empty()
 				: hemalurgyStealWhitelist
 						.stream()
-						.filter(metalType -> metalType.hasAssociatedManifestation())
+						.filter(Metals.MetalType::hasAssociatedManifestation)
 						.skip(lootContext.getRandom().nextInt(hemalurgyStealWhitelist.size()))
 						.findFirst();
+
+		//todo metal types that aren't able to store powers.
+		if (stealType.isEmpty())
+		{
+			CosmereAPI.logger.error(spikeMetalType + " has empty Stealtype on trying to invest spike loot");
+			return stack;
+		}
 
 		final float strengthLevel = Mth.clamp(5 + lootContext.getLuck(), 1, 10);
 		Manifestation allomancyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", stealType.get().getName()));
@@ -70,6 +77,8 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 
 		switch (spikeMetalType)
 		{
+			//todo metal types that aren't able to store powers.
+			/*
 			case IRON:
 				// add strength
 				item.Invest(stack, spikeMetalType, strengthLevel, UUID.randomUUID());
@@ -81,7 +90,7 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 			{
 				item.Invest(stack, spikeMetalType, strengthLevel / 10, UUID.randomUUID());
 			}
-			break;
+			break;*/
 			//steals allomantic abilities
 			case STEEL:
 			case BRONZE:

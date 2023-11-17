@@ -1,16 +1,14 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
 
 public class AllomancyDuralumin extends AllomancyManifestation
 {
@@ -23,17 +21,17 @@ public class AllomancyDuralumin extends AllomancyManifestation
 	@Override
 	public void applyEffectTick(ISpiritweb data)
 	{
-		LivingEntity livingEntity = data.getLiving();
-		boolean isActiveTick = livingEntity.tickCount % 20 == 0;
+		boolean isActiveTick = isActiveTick(data);
 
 		if (isActiveTick)
 		{
 			//apply the effect regardless, because duralumin is currently active.
-			MobEffectInstance newEffect = EffectsHelper.getNewEffect(
+			CosmereEffectInstance newEffect = EffectsHelper.getNewEffect(
 					AllomancyEffects.ALLOMANCY_BOOST.get(),
-					Mth.floor(getStrength(data, false))
+					data.getLiving(),
+					getStrength(data, false)
 			);
-			data.getLiving().addEffect(newEffect);
+			data.addEffect(newEffect);
 		}
 	}
 }

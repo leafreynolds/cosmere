@@ -1,7 +1,7 @@
-// 1.19.2	2023-07-25T19:42:40.6174142	Tags: cosmere
-2aa1c85d3aadfd1ffdf1c8f3f70f40a57256c681 data/cosmere/tags/blocks/contains_metal.json
+// 1.19.2	2023-11-12T09:46:50.838269	Tags: cosmere
+22892348b7c9b1ae120b0d154815212882db2906 data/cosmere/tags/blocks/contains_metal.json
 29671cfa11d074462c259806e9d60468451e3cdb data/cosmere/tags/entity_types/contains_metal.json
-c18a8a5cb73d87682f2faed3e3c35ddf69cf87b3 data/cosmere/tags/items/contains_metal.json
+09dea08ab07afd676fd127be1ad67dd3fcb25f55 data/cosmere/tags/items/contains_metal.json
 2535fa6b2630ad09c3a98c8df7a89b6de3276819 data/forge/tags/blocks/ores/aluminum.json
 8a55b8e8e7325d8a829173ccfc5afe9c8962ffcc data/forge/tags/blocks/ores/cadmium.json
 9404f97aea7bc2f029fab25dda2ef4f9d750d890 data/forge/tags/blocks/ores/chromium.json

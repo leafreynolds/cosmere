@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 7 - 2023 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.client;
@@ -7,6 +7,7 @@ package leaf.cosmere.client;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.fog.FogManager;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.ChangeSelectedManifestationMessage;
 import leaf.cosmere.common.network.packets.DeactivateManifestationsMessage;
@@ -19,10 +20,12 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -122,7 +125,7 @@ public class ClientEvents
 		renderSpiritwebHUD(event);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onRenderLevelLastEvent(final RenderLevelStageEvent event)
 	{
 		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
@@ -130,26 +133,18 @@ public class ClientEvents
 			return;
 		}
 
-
 		Minecraft mc = Minecraft.getInstance();
 		ProfilerFiller profiler = mc.getProfiler();
 		LocalPlayer playerEntity = mc.player;
 		{
-			profiler.push("cosmere-hud");
-
-			//if (Minecraft.getInstance().gameMode.canHurtPlayer())
+			profiler.push("cosmere-world-effects");
 			{
 				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
 				{
-					profiler.push(spiritweb.getSelectedManifestation().getName());
 					spiritweb.renderWorldEffects(event);
-					profiler.pop();
-
 				});
 			}
 			profiler.pop();
-
-			//RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 		}
 
 	}
@@ -167,5 +162,11 @@ public class ClientEvents
 			SpiritwebMenu.instance.postRender(event, spiritweb);
 		});
 
+	}
+
+	@SubscribeEvent
+	public static void onClientPlayerClone(ClientPlayerNetworkEvent.Clone event)
+	{
+		FogManager.resetFog();
 	}
 }

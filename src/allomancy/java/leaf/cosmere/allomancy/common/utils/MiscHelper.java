@@ -1,10 +1,11 @@
 /*
- * File updated ~ 15 - 2 - 2023 ~ Leaf
+ * File updated ~ 29 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.utils;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
+import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
@@ -47,11 +48,13 @@ public class MiscHelper
 					{
 						//todo allomancy godmetal strength
 						final double strength = manifestation.getStrength(iSpiritweb, true);
-						spiritweb.giveManifestation(manifestation, strength < 13 ? 13 : (int) (strength + 1));
+						final int minimum = AllomancyConfigs.SERVER.GOD_METAL_EAT_STRENGTH_MINIMUM.get();
+
+						spiritweb.giveManifestation(manifestation, strength < minimum ? minimum : (int) (strength + 1));
 					}
 				}
 			}
-			else
+			else if (metalType != Metals.MetalType.LERASATIUM)//ignore lerasatium, that's handled in feruchemy
 			{
 				//add to metal stored
 				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;

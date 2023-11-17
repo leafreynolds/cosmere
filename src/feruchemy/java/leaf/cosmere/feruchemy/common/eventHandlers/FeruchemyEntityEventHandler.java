@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.eventHandlers;
@@ -10,7 +10,6 @@ import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.effects.store.BrassStoreEffect;
 import leaf.cosmere.feruchemy.common.effects.tap.GoldTapEffect;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
-import leaf.cosmere.feruchemy.common.manifestation.FeruchemyElectrum;
 import leaf.cosmere.feruchemy.common.utils.MiscHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -102,7 +101,6 @@ public class FeruchemyEntityEventHandler
 	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
 		BrassStoreEffect.onLivingHurtEvent(event);
-		FeruchemyElectrum.onLivingHurtEvent(event);
 		GoldTapEffect.onLivingHurtEvent(event);
 	}
 

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 2 - 6 - 2023 ~ Leaf
+ * File updated ~ 27 - 10 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -21,7 +21,6 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -50,17 +49,6 @@ public class SandmasteryManifestation extends Manifestation
 			living.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.DEHYDRATED_EFFECT.get(), 0, 30));
 		}
 		return false;
-	}
-
-	@Override
-	public double getStrength(ISpiritweb data, boolean getBaseStrength)
-	{
-		AttributeInstance attribute = data.getLiving().getAttribute(getAttribute());
-		if (attribute != null)
-		{
-			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
-		}
-		return 0;
 	}
 
 	@Override

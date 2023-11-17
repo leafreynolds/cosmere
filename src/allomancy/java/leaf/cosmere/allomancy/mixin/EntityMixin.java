@@ -1,18 +1,14 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 12 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.mixin;
 
-import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
-import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
-import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyBronze;
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,31 +37,16 @@ public class EntityMixin
 
 		SpiritwebCapability.get(clientPlayer).ifPresent(playerSpiritweb ->
 		{
-			final AllomancyManifestation bronzeAllomancyManifestation = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
-			//if the player does not have bronze, early exit
-			if (!bronzeAllomancyManifestation.isActive(playerSpiritweb))
+			if (!AllomancyBronze.isValidSeekTarget(playerSpiritweb, target))
 			{
+				//close out of consumer, does not meet requirements for seeking.
+				//either not using bronze, not in range, or not strong enough
 				return;
 			}
-			final double bronzeStrength = bronzeAllomancyManifestation.getStrength(playerSpiritweb, false);
 
+			//okay, now we can actually check if they have powers we care about
 			SpiritwebCapability.get(target).ifPresent(targetSpiritweb ->
 			{
-				//if target has copper and it's active, early exit
-				MobEffectInstance effect = targetSpiritweb.getLiving().getEffect(AllomancyEffects.ALLOMANTIC_COPPER.get());
-				final double copperCloudStrength =
-						effect != null && effect.getDuration() > 0
-						? effect.getAmplifier() : 0;
-
-				if (copperCloudStrength >= bronzeStrength)
-				{
-					return;
-				}
-
-				//get allomantic strength of
-
-				//todo range to config
-				double range = bronzeAllomancyManifestation.getRange(playerSpiritweb);
 				boolean found = false;
 
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
@@ -86,7 +67,7 @@ public class EntityMixin
 					}
 				}
 
-				if ((clientPlayer != null && clientPlayer.distanceTo(target) < range) && found)
+				if (found)
 				{
 					cir.setReturnValue(true);
 				}

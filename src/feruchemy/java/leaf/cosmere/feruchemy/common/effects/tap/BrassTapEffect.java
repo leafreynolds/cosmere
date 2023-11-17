@@ -1,16 +1,17 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
-import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,9 +21,13 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Feruchemy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BrassTapEffect extends FeruchemyEffectBase
 {
-	public BrassTapEffect(Metals.MetalType type, MobEffectCategory effectType)
+	public BrassTapEffect(Metals.MetalType type)
 	{
-		super(type, effectType);
+		super(type);
+		addAttributeModifier(
+				AttributesRegistry.WARMTH.get(),
+				1,//warmer when tapping
+				AttributeModifier.Operation.ADDITION);
 
 		//reduce frost damage? theres no cold damage in base minecraft is there?
 
@@ -30,17 +35,14 @@ public class BrassTapEffect extends FeruchemyEffectBase
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		if (!isActiveTick(entityLivingBaseIn))
-		{
-			return;
-		}
-
-		if (!entityLivingBaseIn.level.isClientSide && amplifier >= 5 && !entityLivingBaseIn.isInWater())
+		//todo move to config
+		final LivingEntity living = data.getLiving();
+		if (!living.level.isClientSide && strength >= 5 && !living.isInWater())
 		{
 			//set user on fire
-			entityLivingBaseIn.setSecondsOnFire(3);
+			living.setSecondsOnFire(3);
 		}
 
 	}
@@ -50,11 +52,11 @@ public class BrassTapEffect extends FeruchemyEffectBase
 	{
 		if (event.getSource().getEntity() instanceof LivingEntity livingEntity)
 		{
-			MobEffectInstance effectInstance = livingEntity.getEffect(FeruchemyEffects.TAPPING_EFFECTS.get(Metals.MetalType.BRASS).get());
-
-			if (effectInstance != null && effectInstance.getDuration() > 0 && effectInstance.getAmplifier() > 3)
+			final int total = (int) EntityHelper.getAttributeValue(livingEntity, AttributesRegistry.WARMTH.getAttribute());
+			if (total > 4)//todo move to config
 			{
-				event.getEntity().setSecondsOnFire(effectInstance.getAmplifier());
+				//set entity being hit on fire
+				event.getEntity().setSecondsOnFire(total);
 			}
 		}
 	}
