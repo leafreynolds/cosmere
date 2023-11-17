@@ -87,12 +87,12 @@ public class DrawHelper
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
 		// set up texture and buffer
-		final ResourceLocation icon = new ResourceLocation("minecraft", "textures/particle/note.png");
+		final ResourceLocation icon = new ResourceLocation("allomancy", "textures/particle/tin_sound_particle.png");
 		final RenderType RENDER_TYPE = CosmereAPIRenderTypes.SQUARE_TEX_OVERLAY(icon);
 		final MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 		final VertexConsumer bufferIn = bufferSource.getBuffer(RENDER_TYPE);
 
-		final float size = 0.2F;
+		final float size = 0.3F;
 		for (Vec3 pos : squarePosList)
 		{
 			Vec3 directionalVec = pos.subtract(destinationVec).normalize();
@@ -149,7 +149,7 @@ public class DrawHelper
 	private static void squareTexVertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, int uv2, float pX, float pY, float pZ, int pU, int pV, Color color)
 	{
 		vertexConsumer.vertex(matrix4f, pX, pY, pZ)
-				.color(color.getRed(), color.getGreen(), color.getBlue(), 255).uv((float) pU, (float) pV)
+				.uv((float) pU, (float) pV).color(color.getRed(), color.getGreen(), color.getBlue(), 127)
 				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2)
 				.normal(matrix3f, 0.0F, 1.0F, 0.0F)
 				.endVertex();

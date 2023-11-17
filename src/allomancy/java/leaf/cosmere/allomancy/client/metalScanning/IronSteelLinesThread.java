@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -141,7 +142,6 @@ public class IronSteelLinesThread implements Runnable
 		{
 			try
 			{
-
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
 				nextScan = new ScanResult();
@@ -159,24 +159,15 @@ public class IronSteelLinesThread implements Runnable
 
 								if (isGood)
 								{
-									try
+									Player player = Minecraft.getInstance().player;
+									Level level = Minecraft.getInstance().level;
+									// if level is null, the player has no world loaded, so stop
+									if (player == null || mc.level == null)
 									{
-										Player player = Minecraft.getInstance().player;
-										Level level = Minecraft.getInstance().level;
-										// if level is null, the player has no world loaded, so stop
-										if (player == null || mc.level == null)
-										{
-											stopThread();
-											return false;
-										}
-										isGood = !isBlockObscured(blockPos, player, level);
+										stopThread();
+										return false;
 									}
-									catch (Exception e)
-									{
-										e.printStackTrace();
-
-										isGood = false;
-									}
+									isGood = !isBlockObscured(blockPos, player, level);
 								}
 
 								return isGood;
@@ -212,31 +203,15 @@ public class IronSteelLinesThread implements Runnable
 
 				if (lock.tryLock())
 				{
-					try
-					{
-						setScanResult(nextScan);
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
+					setScanResult(nextScan);
 					lock.unlock();
 				}
 			}
 			catch (Exception e)
 			{
-				CosmereAPI.logger.info("Issue with lines thread");
-				Player player = Minecraft.getInstance().player;
-				Level level = Minecraft.getInstance().level;
+				CosmereAPI.logger.info("Unexpected exception in lines thread: \n" + Arrays.toString(e.getStackTrace()));
 
-				// if this check doesn't happen, the thread gets stuck in a loop when exiting worlds
-				if (player == null || level == null)
-				{
-					stopThread();
-					break;
-				}
-
-				e.printStackTrace();
+				break;
 			}
 		}
 		stopThread();
