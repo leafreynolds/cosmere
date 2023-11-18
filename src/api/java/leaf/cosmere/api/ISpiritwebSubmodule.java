@@ -50,4 +50,8 @@ public interface ISpiritwebSubmodule
 	{
 	}
 
+	default void resetOnDeath(ISpiritweb spiritweb)
+	{
+
+	}
 }

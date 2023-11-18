@@ -443,6 +443,13 @@ public class SpiritwebCapability implements ISpiritweb
 		//forcibly serialize the old web, then deserialize it into the new one
 		//before, it was just a copy of whatever was saved the last time it was synced.
 		deserializeNBT(oldWeb.serializeNBT().copy());
+
+
+
+		for (ISpiritwebSubmodule spiritwebSubmodule : spiritwebSubmodules.values())
+		{
+			spiritwebSubmodule.resetOnDeath(this);
+		}
 	}
 
 	@OnlyIn(Dist.CLIENT)

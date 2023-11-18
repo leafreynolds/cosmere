@@ -157,6 +157,12 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
+	public void resetOnDeath(ISpiritweb spiritweb)
+	{
+		hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
+	}
+
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void collectMenuInfo(List<String> m_infoText)
 	{
