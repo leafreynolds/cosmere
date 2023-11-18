@@ -1,14 +1,12 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
 
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
@@ -26,11 +24,6 @@ public class MasteryLaunch extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		super.tick(data);
-		if (sandmasteryBlocked(data))
-		{
-			return false;
-		}
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.LAUNCH_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
@@ -41,7 +34,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
+		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
 
 		int scaleFactor = getMode(data);
 		if (notEnoughChargedSand(data))
@@ -59,7 +52,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 		data.setMode(this, getMode(data) - 1);
 		data.syncToClients(null);
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), true, living);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), true, data);
 		useChargedSand(data);
 		return true;
 	}

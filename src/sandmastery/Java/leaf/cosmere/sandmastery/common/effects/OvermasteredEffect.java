@@ -1,31 +1,19 @@
+/*
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.effects;
 
-import leaf.cosmere.common.effects.MobEffectBase;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OvermasteredEffect extends MobEffectBase
+public class OvermasteredEffect extends CosmereEffect
 {
-	public OvermasteredEffect(MobEffectCategory mobEffectCategory, int colorValue)
+	public OvermasteredEffect()
 	{
-		super(mobEffectCategory, colorValue);
-	}
+		super();
 
-	@Override
-	public void applyEffectTick(LivingEntity livingEntity, int amplifier)
-	{
-
-	}
-
-	@Override
-	public List<ItemStack> getCurativeItems()
-	{
-		// Create and return an empty cure list, the user shouldn't be able to remove this effect without commands
-		ArrayList<ItemStack> ret = new ArrayList<>();
-		return ret;
+		addAttributeModifier(SandmasteryAttributes.RIBBONS.get(), -1000d, AttributeModifier.Operation.ADDITION);
 	}
 }

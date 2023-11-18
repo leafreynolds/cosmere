@@ -1,15 +1,15 @@
+/*
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.registries;
 
-import leaf.cosmere.api.Taldain;
 import leaf.cosmere.common.registration.impl.AttributeDeferredRegister;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 public class SandmasteryAttributes
 {
@@ -23,4 +23,7 @@ public class SandmasteryAttributes
 					0,
 					24
 			);
+	//UUIDs for permanent modifier to player's ribbon attribute
+	public static final UUID OVERMASTERY_UUID = UUID.nameUUIDFromBytes("Overmastery".getBytes());
+	public static final UUID OVERMASTERY_SECONDARY_UUID = UUID.nameUUIDFromBytes("Overmastery".getBytes());
 }

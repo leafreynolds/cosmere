@@ -1,10 +1,9 @@
 /*
- * File updated ~ 13 - 2 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.items;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
@@ -61,7 +60,9 @@ public class QidoItem extends ChargeableItemBase
 		}
 		else
 		{
-			if(getCharge(itemStack) <= 0) {
+			final int liquid = getCharge(itemStack);
+			if (liquid <= 0)
+			{
 				InteractionResultHolder.pass(itemStack);
 			}
 			SpiritwebCapability.get(pPlayer).ifPresent(spiritweb ->
@@ -113,13 +114,18 @@ public class QidoItem extends ChargeableItemBase
 
 				int increasePerTick = Math.min(50, availableWater);
 				int playerHydration = sb.getHydrationLevel();
-				final int maxPlayerHydration = sb.MAX_HYDRATION;
+				final int maxPlayerHydration = SandmasteryConfigs.SERVER.MAX_HYDRATION.get();
 
-				if (playerHydration == maxPlayerHydration) return;
+				if (playerHydration == maxPlayerHydration)
+				{
+					return;
+				}
 				if ((increasePerTick + playerHydration) > maxPlayerHydration)
+				{
 					increasePerTick = maxPlayerHydration - playerHydration;
+				}
 
-				sb.adjustHydration(increasePerTick, true);
+				sb.adjustHydration(increasePerTick);
 				setCharge(pStack, availableWater - increasePerTick);
 			});
 		}

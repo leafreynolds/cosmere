@@ -1,13 +1,11 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
 
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
@@ -25,10 +23,6 @@ public class MasteryElevate extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		if (sandmasteryBlocked(data))
-		{
-			return false;
-		}
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.ELEVATE_HOTKEY_FLAG);
 		super.tick(data);
 		if (getMode(data) > 0 && enabledViaHotkey)
@@ -40,7 +34,7 @@ public class MasteryElevate extends SandmasteryManifestation
 
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
+		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
 		if (getMode(data) < 3)
 		{
 			return false;
@@ -65,7 +59,7 @@ public class MasteryElevate extends SandmasteryManifestation
 		living.hurtMarked = true; // Allow the game to move the player
 		living.resetFallDistance();
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true, living);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true, data);
 		useChargedSand(data);
 
 		return true;

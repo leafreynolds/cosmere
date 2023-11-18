@@ -1,16 +1,13 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
 
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -25,11 +22,6 @@ public class MasteryCushion extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		super.tick(data);
-		if (sandmasteryBlocked(data))
-		{
-			return false;
-		}
 		if (getMode(data) > 0)
 		{
 			return performEffectServer(data);
@@ -39,7 +31,7 @@ public class MasteryCushion extends SandmasteryManifestation
 
 	protected boolean performEffectServer(ISpiritweb data)
 	{
-		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
+		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
 
 		LivingEntity living = data.getLiving();
 		Vec3 movement = living.getDeltaMovement();
@@ -62,7 +54,7 @@ public class MasteryCushion extends SandmasteryManifestation
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
 		living.hurtMarked = true;
 		living.resetFallDistance();
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true, living);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true, data);
 		useChargedSand(data);
 		return true;
 	}
