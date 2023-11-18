@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -10,7 +10,6 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
@@ -18,8 +17,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypePreset;
-import top.theillusivec4.curios.api.type.capability.ICurio;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 public class MasteryProjectile extends SandmasteryManifestation
@@ -33,12 +30,9 @@ public class MasteryProjectile extends SandmasteryManifestation
 	public boolean tick(ISpiritweb data)
 	{
 		super.tick(data);
-		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
+		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
 		submodule.tickProjectileCooldown();
-		if (sandmasteryBlocked(data))
-		{
-			return false;
-		}
+
 		if (!submodule.projectileReady())
 		{
 			return false;
@@ -72,7 +66,8 @@ public class MasteryProjectile extends SandmasteryManifestation
 			}
 		}
 
-		CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(handler -> {
+		CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(handler ->
+		{
 			ICurioStacksHandler stacksHandler = handler.getCurios().get(SlotTypePreset.BELT.getIdentifier());
 			if (stacksHandler != null)
 			{
@@ -88,7 +83,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 			}
 		});
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), true, data.getLiving());
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), true, data);
 		useChargedSand(data);
 		return true;
 	}

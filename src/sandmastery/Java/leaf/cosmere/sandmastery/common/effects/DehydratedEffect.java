@@ -1,35 +1,39 @@
+/*
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.effects;
 
-import leaf.cosmere.common.effects.MobEffectBase;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class DehydratedEffect extends MobEffectBase
+public class DehydratedEffect extends CosmereEffect
 {
 	public static final DamageSource DEHYDRATED = (new DamageSource("dehydrated")).bypassArmor().bypassMagic().bypassEnchantments();
 
-	public DehydratedEffect(MobEffectCategory mobEffectCategory, int colorValue)
+	public DehydratedEffect()
 	{
-		super(mobEffectCategory, colorValue);
+		super();
 	}
 
 	@Override
 	protected int getActiveTick()
 	{
+		//every 4 seconds
 		return 80;
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity livingEntity, int amplifier)
+	protected int getTickOffset()
 	{
-		if (isActiveTick(livingEntity))
-		{
-			livingEntity.hurt(DEHYDRATED, 4.0F);
-		}
+		//offset tick to living tick count + 19
+		return -1;
+	}
+
+	@Override
+	public void applyEffectTick(ISpiritweb data, double strength)
+	{
+		data.getLiving().hurt(DEHYDRATED, 4.0F);
 	}
 }

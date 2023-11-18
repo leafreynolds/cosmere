@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "mixins.cosmere.sandmastery.refmap.json",
   "mixins": [
+    "EffectInstanceMixin"
   ],
   "client": [
   ],

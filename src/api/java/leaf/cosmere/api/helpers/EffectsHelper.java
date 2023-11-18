@@ -1,5 +1,5 @@
 /*
- * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.helpers;
@@ -37,14 +37,20 @@ public class EffectsHelper
 				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
 				false, // definitely don't want particles.
 				true); // show icon though
-  }
-  
+		return effectInstance;
+	}
+
 	public static CosmereEffectInstance getNewEffect(CosmereEffect effect, Entity effectSource, double strength)
+	{
+		return getNewEffect(effect, effectSource, strength, 93);
+	}
+
+	public static CosmereEffectInstance getNewEffect(CosmereEffect effect, Entity effectSource, double strength, int duration)
 	{
 		//generate uuid based on the effect, and the source it comes from
 		//surely nothing will go wrong with this, right? then we can have multiple effects from the same source entity
 		UUID uuid = getEffectUUID(effect, effectSource);
-		return getNewEffect(effect, uuid, strength);
+		return getNewEffect(effect, uuid, strength, duration);
 	}
 
 	@NotNull
@@ -55,13 +61,13 @@ public class EffectsHelper
 		return uuid;
 	}
 
-	public static CosmereEffectInstance getNewEffect(CosmereEffect effect, UUID uuid, double strength)
+	public static CosmereEffectInstance getNewEffect(CosmereEffect effect, UUID uuid, double strength, int duration)
 	{
 		CosmereEffectInstance effectInstance = new CosmereEffectInstance(
 				effect,
 				uuid,
 				Math.max(0, strength),
-				93);
+				duration);
 
 		return effectInstance;
 	}

@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Manifestations;
@@ -11,7 +15,6 @@ import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -27,12 +30,6 @@ public class MasteryPlatform extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		SandmasterySpiritwebSubmodule submodule = MiscHelper.getSandmasterySubmodule(data);
-		super.tick(data);
-		if (sandmasteryBlocked(data))
-		{
-			return false;
-		}
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PLATFORM_HOTKEY_FLAG);
 
 		if (notEnoughChargedSand(data))
@@ -49,7 +46,10 @@ public class MasteryPlatform extends SandmasteryManifestation
 	private void setBlockIfAir(Level level, BlockPos pos, BlockState state)
 	{
 		Block block = level.getBlockState(pos).getBlock();
-		if (block != Blocks.AIR && block != SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock()) return;
+		if (block != Blocks.AIR && block != SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock())
+		{
+			return;
+		}
 		level.setBlockAndUpdate(pos, state);
 	}
 
@@ -73,7 +73,7 @@ public class MasteryPlatform extends SandmasteryManifestation
 			}
 			pos = pos.offset(0, 0, -(size * 2) - 1);
 		}
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), true, living);
+		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), true, data);
 		return true;
 	}
 }

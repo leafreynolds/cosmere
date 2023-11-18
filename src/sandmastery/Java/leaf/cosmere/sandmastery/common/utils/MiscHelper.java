@@ -1,31 +1,28 @@
 /*
- * File updated ~ 26 - 5 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.utils;
 
-import leaf.cosmere.api.*;
+import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.sandmastery.common.Sandmastery;
-import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -36,7 +33,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -54,7 +50,8 @@ public class MiscHelper
 
 		for (LivingEntity target : entitiesToCheckForInvesiture)
 		{
-			SpiritwebCapability.get(target).ifPresent(targetSpiritweb -> {
+			SpiritwebCapability.get(target).ifPresent(targetSpiritweb ->
+			{
 				boolean concealed = false;
 				final AttributeMap targetAttributes = target.getAttributes();
 				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
@@ -73,7 +70,9 @@ public class MiscHelper
 					final boolean targetIsPlayer = target instanceof Player;
 
 					if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
+					{
 						continue; //sandmastery uses charged sand, and as such won't charge it either
+					}
 
 					boolean test = targetSpiritweb.hasManifestation(manifestation);
 					boolean test2 = manifestation.isActive(targetSpiritweb);
@@ -222,12 +221,5 @@ public class MiscHelper
 	public static int randomSlot(ItemStackHandler itemStackHandler)
 	{
 		return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
-	}
-
-	public static SandmasterySpiritwebSubmodule getSandmasterySubmodule(ISpiritweb data)
-	{
-		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
-		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-		return submodule;
 	}
 }

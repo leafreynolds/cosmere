@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 18 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.config;
@@ -74,5 +74,15 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public void clearCache()
 	{
 		PROJECTILE_COOLDOWN.clearCache();
+		PROJECTILE_HYDRATION_COST.clearCache();
+		PLATFORM_HYDRATION_COST.clearCache();
+		LAUNCH_HYDRATION_COST.clearCache();
+		ELEVATE_HYDRATION_COST.clearCache();
+		CUSHION_HYDRATION_COST.clearCache();
+		CHARGE_COST_MULTIPLIER.clearCache();
+		STARTING_HYDRATION.clearCache();
+		MAX_HYDRATION.clearCache();
+		OVERMASTERY_DURATION.clearCache();
+		DEHYDRATION_THRESHOLD.clearCache();
 	}
 }
