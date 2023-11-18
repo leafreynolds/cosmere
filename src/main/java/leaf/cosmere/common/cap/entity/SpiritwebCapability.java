@@ -41,6 +41,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -409,7 +410,7 @@ public class SpiritwebCapability implements ISpiritweb
 	//Copy things from an old spiritweb into the new one.
 	//Eg a player has died and we need to make sure they get their stormlight and breaths back.
 	@Override
-	public void transferFrom(ISpiritweb oldSpiritWeb)
+	public void onPlayerClone(PlayerEvent.Clone event, ISpiritweb oldSpiritWeb)
 	{
 		var oldWeb = (SpiritwebCapability) oldSpiritWeb;
 
@@ -444,11 +445,12 @@ public class SpiritwebCapability implements ISpiritweb
 		//before, it was just a copy of whatever was saved the last time it was synced.
 		deserializeNBT(oldWeb.serializeNBT().copy());
 
-
-
-		for (ISpiritwebSubmodule spiritwebSubmodule : spiritwebSubmodules.values())
+		if (event.isWasDeath())
 		{
-			spiritwebSubmodule.resetOnDeath(this);
+			for (ISpiritwebSubmodule spiritwebSubmodule : spiritwebSubmodules.values())
+			{
+				spiritwebSubmodule.resetOnDeath(this);
+			}
 		}
 	}
 

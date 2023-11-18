@@ -31,7 +31,7 @@ public class PlayerEventHandler
 					//Metals ingested?
 					//Stormlight?
 
-					newSpiritWeb.transferFrom(oldSpiritWeb);
+					newSpiritWeb.onPlayerClone(event, oldSpiritWeb);
 				}));
 	}
 

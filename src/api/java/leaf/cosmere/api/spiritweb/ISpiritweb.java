@@ -15,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -66,7 +67,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	void setSelectedManifestation(Manifestation manifestation);
 
 
-	void transferFrom(ISpiritweb oldSpiritWeb);
+	void onPlayerClone(PlayerEvent.Clone event, ISpiritweb oldSpiritWeb);
 
 	CompoundTag getCompoundTag();
 
