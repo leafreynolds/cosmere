@@ -186,6 +186,7 @@ public class SpiritwebCapability implements ISpiritweb
 				if (cosmereEffectInstance != null)
 				{
 					this.activeEffects.put(cosmereEffectInstance.getUUID(), cosmereEffectInstance);
+					this.onEffectUpdated(cosmereEffectInstance, true, (Entity) null);
 				}
 			}
 		}
@@ -432,21 +433,16 @@ public class SpiritwebCapability implements ISpiritweb
 
 				if (newAttr != null && oldAttr != null)
 				{
-					// make sure that they match what the old player entity had.
-					if (oldAttr.getBaseValue() > 0)
-					{
-						newAttr.setBaseValue(oldAttr.getBaseValue());
-					}
-					//clear out the attributes that were placed on the newly cloned player at creation
-					else if (newAttr.getBaseValue() > 0)
-					{
-						newAttr.setBaseValue(0);
-					}
+					//copy all changes to the entity attribute instance
+					//this should clear out any attributes applied at cloning and replace with copies of the old ones
+					newAttr.load(oldAttr.save());
 				}
 			}
 		}
 
-		deserializeNBT(oldWeb.nbt.copy());
+		//forcibly serialize the old web, then deserialize it into the new one
+		//before, it was just a copy of whatever was saved the last time it was synced.
+		deserializeNBT(oldWeb.serializeNBT().copy());
 	}
 
 	@OnlyIn(Dist.CLIENT)

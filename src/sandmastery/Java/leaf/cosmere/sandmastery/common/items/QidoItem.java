@@ -11,6 +11,7 @@ import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -69,14 +70,12 @@ public class QidoItem extends ChargeableItemBase
 			{
 				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
 
-				boolean isMaster = SandmasteryManifestations.SANDMASTERY_POWERS.values().stream().anyMatch((manifestation -> spiritweb.hasManifestation(manifestation.getManifestation())));
-
-				if (!isMaster)
+				if (data.getLiving().getAttribute(SandmasteryAttributes.RIBBONS.get()).getBaseValue() < 1)
 				{
 					return;
 				}
 
-				SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+				SandmasterySpiritwebSubmodule sb = SandmasterySpiritwebSubmodule.get(data);
 
 				int playerHydration = sb.getHydrationLevel();
 				final int maxPlayerHydration = SandmasteryConfigs.SERVER.MAX_HYDRATION.get();
