@@ -87,7 +87,7 @@ public class DrawHelper
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
 		// set up texture and buffer
-		final ResourceLocation icon = new ResourceLocation("allomancy", "textures/particle/tin_sound_particle.png");
+		final ResourceLocation icon = new ResourceLocation("minecraft", "textures/particle/note.png");
 		final RenderType RENDER_TYPE = CosmereAPIRenderTypes.SQUARE_TEX_OVERLAY(icon);
 		final MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 		final VertexConsumer bufferIn = bufferSource.getBuffer(RENDER_TYPE);
