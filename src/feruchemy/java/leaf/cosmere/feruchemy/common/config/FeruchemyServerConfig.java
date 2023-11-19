@@ -32,7 +32,7 @@ public class FeruchemyServerConfig implements ICosmereConfig
 
 		STARTING_METALMIND_RANDOMISED_MAX_FILL_AMOUNT = builder
 				.comment("What is the max amount a starting metalmind can be filled with attribute? The value is randomised, with this set as the max.")
-				.defineInRange("fullFeruchemistStartingMetalmindCount", 0.6667, 0, 1);
+				.defineInRange("fullFeruchemistStartingMetalmindFillAmount", 0.6667, 0, 1);
 
 		builder.pop();
 		configSpec = builder.build();
