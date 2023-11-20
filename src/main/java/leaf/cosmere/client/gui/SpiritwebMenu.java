@@ -85,16 +85,17 @@ public class SpiritwebMenu extends Screen
 	}
 
 
-	public void postRender(RenderGuiOverlayEvent.Post event, SpiritwebCapability spiritweb)
+	public void postRender(SpiritwebCapability spiritweb)
 	{
 		if (Keybindings.MANIFESTATION_MENU.consumeClick())
 		{
-			final Window window = event.getWindow();
-			init(Minecraft.getInstance(), window.getGuiScaledWidth(), window.getGuiScaledHeight());
+			final Minecraft mc = getMinecraft();
+			final Window window = mc.getWindow();
+			init(mc, window.getGuiScaledWidth(), window.getGuiScaledHeight());
 			setScaledResolution(window.getGuiScaledWidth(), window.getGuiScaledHeight());
 			this.spiritweb = spiritweb;
-			getMinecraft().screen = SpiritwebMenu.instance;
-			getMinecraft().mouseHandler.releaseMouse();
+			mc.screen = SpiritwebMenu.instance;
+			mc.mouseHandler.releaseMouse();
 			visibility = 0;
 			lastChange = Stopwatch.createStarted();
 

@@ -4,20 +4,26 @@
 
 package leaf.cosmere.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.client.render.CosmereRenderers;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ClientSetup
+public class ClientModEvents
 {
 
 
@@ -53,4 +59,33 @@ public class ClientSetup
 
 	}
 
+
+	@SubscribeEvent
+	public static void registerGuiOverlays(RegisterGuiOverlaysEvent event)
+	{
+		event.registerBelow(
+				VanillaGuiOverlay.DEBUG_TEXT.id(),
+				"hud",
+				(gui, poseStack, partialTick, width, height) -> renderSpiritwebHUD(poseStack)
+		);
+	}
+
+	public static void renderSpiritwebHUD(final PoseStack poseStack)
+	{
+		final Minecraft mc = Minecraft.getInstance();
+		SpiritwebCapability.get(mc.player).ifPresent(cap ->
+		{
+			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
+
+			//normal hud stuff
+			if (mc.screen != SpiritwebMenu.instance)
+			{
+				spiritweb.renderSelectedHUD(poseStack);
+			}
+
+			//actual menu stuff
+			SpiritwebMenu.instance.postRender(spiritweb);
+		});
+
+	}
 }

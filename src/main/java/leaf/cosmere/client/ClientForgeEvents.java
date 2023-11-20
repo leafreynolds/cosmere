@@ -20,17 +20,15 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT)
-public class ClientEvents
+public class ClientForgeEvents
 {
 
 	@SubscribeEvent
@@ -119,12 +117,6 @@ public class ClientEvents
 		return event.getKey() == keyBinding.getKey().getValue() && keyBinding.consumeClick();
 	}
 
-	@SubscribeEvent
-	public static void onRenderGUI(final RenderGuiOverlayEvent.Post event)
-	{
-		renderSpiritwebHUD(event);
-	}
-
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onRenderLevelLastEvent(final RenderLevelStageEvent event)
 	{
@@ -146,21 +138,6 @@ public class ClientEvents
 			}
 			profiler.pop();
 		}
-
-	}
-
-	public static void renderSpiritwebHUD(final RenderGuiOverlayEvent.Post event)
-	{
-		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(cap ->
-		{
-			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
-
-			//normal hud stuff
-			spiritweb.renderSelectedHUD(event.getPoseStack());
-
-			//actual menu stuff
-			SpiritwebMenu.instance.postRender(event, spiritweb);
-		});
 
 	}
 
