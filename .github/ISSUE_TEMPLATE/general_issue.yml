@@ -40,7 +40,7 @@ body:
     id: cosmere-version
     attributes:
       label: Cosmere version
-      description: What version of Cosmere are you using?
+      description: What version of Cosmere are you using? You can copy paste the file name of the Cosmere mod if needed.
       placeholder: e.g. build 72
     validations:
       required: true
