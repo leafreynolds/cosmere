@@ -1,0 +1,7 @@
+{
+  "description": "Birds and Bonds.",
+  "icon": "example:bird",
+  "name": "Example",
+  "secret": true,
+  "sortnum": 3
+}
