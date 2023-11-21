@@ -1,14 +1,14 @@
 {
   "values": [
-    "surgebinding:sapphire_block",
-    "surgebinding:smokestone_block",
-    "surgebinding:ruby_block",
-    "surgebinding:diamond_block",
-    "surgebinding:emerald_block",
-    "surgebinding:garnet_block",
-    "surgebinding:zircon_block",
-    "surgebinding:amethyst_block",
-    "surgebinding:topaz_block",
-    "surgebinding:heliodor_block"
+    "#forge:storage_blocks/sapphire",
+    "#forge:storage_blocks/smokestone",
+    "#forge:storage_blocks/ruby",
+    "#forge:storage_blocks/diamond",
+    "#forge:storage_blocks/emerald",
+    "#forge:storage_blocks/garnet",
+    "#forge:storage_blocks/zircon",
+    "#forge:storage_blocks/amethyst",
+    "#forge:storage_blocks/topaz",
+    "#forge:storage_blocks/heliodor"
   ]
 }
