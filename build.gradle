@@ -425,6 +425,7 @@ dependencies {
 	hemalurgyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	surgebindingAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	sandmasteryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	aviarAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -452,6 +453,7 @@ mixin {
 	add sourceSets.hemalurgy, 'mixins.cosmere.hemalurgy.refmap.json'
 	add sourceSets.surgebinding, 'mixins.cosmere.surgebinding.refmap.json'
 	add sourceSets.sandmastery, 'mixins.cosmere.sandmastery.refmap.json'
+	add sourceSets.aviar, 'mixins.cosmere.aviar.refmap.json'
 
 	config 'cosmere.mixins.json'
 	//config 'cosmere.mixins.api.json'
@@ -459,6 +461,8 @@ mixin {
 	config 'feruchemy.mixins.json'
 	config 'hemalurgy.mixins.json'
 	config 'surgebinding.mixins.json'
+	config 'sandmastery.mixins.json'
+	config 'aviar.mixins.json'
 }
 
 def getManifestAttributes(String title)
@@ -632,7 +636,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Main - Cosmere
 		project {
 			id = '475343'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(jar) {
@@ -655,7 +659,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Allomancy
 		project {
 			id = '678468'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(allomancyJar.get()) {
@@ -673,7 +677,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Feruchemy
 		project {
 			id = '678466'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(feruchemyJar.get()) {
@@ -692,7 +696,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Hemalurgy
 		project {
 			id = '678469'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(hemalurgyJar.get()) {
@@ -712,7 +716,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Surgebinding
 		project {
 			id = '624998'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(surgebindingJar.get()) {
@@ -731,7 +735,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//SandMastery
 		project {
 			id = '695387'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(sandmasteryJar.get()) {
@@ -752,7 +756,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Aviar
 		project {
 			id = '822584'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(aviarJar.get()) {
