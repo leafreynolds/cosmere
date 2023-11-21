@@ -755,7 +755,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 			changelogType = "html"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
-			mainArtifact(surgebindingJar.get()) {
+			mainArtifact(aviarJar.get()) {
 				relations {
 					requiredDependency "cosmere"
 					optionalDependency "patchouli"
