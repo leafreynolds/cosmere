@@ -80,15 +80,7 @@ public class QidoItem extends ChargeableItemBase
 				int playerHydration = sb.getHydrationLevel();
 				final int maxPlayerHydration = SandmasteryConfigs.SERVER.MAX_HYDRATION.get();
 
-				if (liquid + playerHydration > maxPlayerHydration)
-				{
-					sb.adjustHydration((maxPlayerHydration - playerHydration));
-					setCharge(itemStack, ((liquid + playerHydration) - maxPlayerHydration));
-				}
-				else
-				{
-					pPlayer.startUsingItem(pUsedHand);
-				}
+				pPlayer.startUsingItem(pUsedHand);
 			});
 		}
 
