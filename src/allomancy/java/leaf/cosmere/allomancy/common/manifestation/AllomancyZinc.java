@@ -4,6 +4,7 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.math.MathHelper;
@@ -11,7 +12,8 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class AllomancyZinc extends AllomancyManifestation
 				playerThreadMap.put(uuid, new ZincThread(data));
 			}
 
-			playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
+			playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown || entry.getValue() == null);
 		}
 
 		// data processing
@@ -60,6 +62,10 @@ public class AllomancyZinc extends AllomancyManifestation
 			boolean isActiveTick = getActiveTick(data) % 2 == 0;
 			if (isActiveTick)
 			{
+				if (playerThreadMap.get(uuid) == null)
+				{
+					playerThreadMap.put(uuid, new ZincThread(data));
+				}
 				List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
 				for (LivingEntity e : entitiesToAffect)
 				{
@@ -113,16 +119,23 @@ public class AllomancyZinc extends AllomancyManifestation
 			List<LivingEntity> newEntityList;
 			while (true)
 			{
+				int mode = getMode(data);
 				if (serverShutdown)
 				{
 					break;
 				}
+
+				if (mode <= 0)
+				{
+					break;
+				}
+
 				try
 				{
-					int range = getRange(data);
-
 					if (lock.tryLock())
 					{
+						int range = getRange(data);
+
 						newEntityList = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
 						setEntityList(newEntityList);
 						lock.unlock();
@@ -133,7 +146,13 @@ public class AllomancyZinc extends AllomancyManifestation
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					CosmereAPI.logger.debug(Arrays.toString(e.getStackTrace()));
+
+					if (e instanceof ConcurrentModificationException)
+					{
+						lock.unlock();
+					}
+
 					break;
 				}
 			}

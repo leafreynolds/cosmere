@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AllomancyEntityThread implements Runnable
 {
 	private final List<LivingEntity> entityList = new ArrayList<>();
-	private final Lock localLock = new ReentrantLock();
+	public final Lock localLock = new ReentrantLock();
 	public static boolean serverShutdown = false;
 	public static final Lock lock = new ReentrantLock();
 	public final ISpiritweb data;
@@ -33,7 +33,7 @@ public class AllomancyEntityThread implements Runnable
 		localLock.lock();
 		try
 		{
-			return entityList;
+			return new ArrayList<>(entityList);
 		}
 		catch (Exception e)
 		{
@@ -56,7 +56,5 @@ public class AllomancyEntityThread implements Runnable
 	}
 
 	@Override
-	public void run()
-	{
-	}
+	public void run() {}
 }

@@ -4,12 +4,15 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 
+import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,6 +63,11 @@ public class AllomancyBrass extends AllomancyManifestation
 			boolean isActiveTick = getActiveTick(data) % 2 == 0;
 			if (isActiveTick)
 			{
+				if (playerThreadMap.get(uuid) == null)
+				{
+					playerThreadMap.put(uuid, new BrassThread(data));
+				}
+
 				List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
 				for (LivingEntity e : entitiesToAffect)
 				{
@@ -80,6 +88,7 @@ public class AllomancyBrass extends AllomancyManifestation
 						}
 					}
 				}
+				playerThreadMap.get(uuid).releaseEntityList();
 			}
 		}
 	}
@@ -98,20 +107,28 @@ public class AllomancyBrass extends AllomancyManifestation
 		@Override
 		public void run()
 		{
-			List<LivingEntity> entitiesToAffect;
+			List<LivingEntity> newEntityList;
 			while (true)
 			{
+				int mode = getMode(data);
 				if (serverShutdown)
 				{
 					break;
 				}
+
+				if (mode <= 0)
+				{
+					break;
+				}
+
 				try
 				{
-					int range = getRange(data);
 					if (lock.tryLock())
 					{
-						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
-						setEntityList(entitiesToAffect);
+						int range = getRange(data);
+
+						newEntityList = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
+						setEntityList(newEntityList);
 						lock.unlock();
 					}
 
@@ -120,7 +137,13 @@ public class AllomancyBrass extends AllomancyManifestation
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					CosmereAPI.logger.debug(Arrays.toString(e.getStackTrace()));
+
+					if (e instanceof ConcurrentModificationException)
+					{
+						lock.unlock();
+					}
+
 					break;
 				}
 			}
