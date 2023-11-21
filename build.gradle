@@ -531,7 +531,7 @@ artifacts {
 	archives sourcesJar
 	//archives awakeningJar
 	//archives aondorJar
-	//archives aviarJar
+	archives aviarJar
 	//archives soulforgeryJar
 	//archives exampleJar
 }
@@ -719,9 +719,9 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 				relations {
 					requiredDependency "cosmere"
 					optionalDependency "patchouli"
-					optionalDependency "hemalurgy"
 					optionalDependency "allomancer"
-					optionalDependency "surgebinding"
+					optionalDependency "hemalurgy"
+					optionalDependency "sandmastery"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -743,6 +743,27 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					optionalDependency "feruchemist"
 					optionalDependency "hemalurgy"
 					optionalDependency "surgebinding"
+				}
+			}
+			addGameVersion "Java ${java_version}"
+			addGameVersion "${minecraft_version}"
+		}
+
+		//Aviar
+		project {
+			id = '822584'
+			changelogType = "html"
+			changelog = changeLogResolver
+			releaseType = "${release_type}"
+			mainArtifact(surgebindingJar.get()) {
+				relations {
+					requiredDependency "cosmere"
+					optionalDependency "patchouli"
+					optionalDependency "allomancer"
+					optionalDependency "feruchemist"
+					optionalDependency "hemalurgy"
+					optionalDependency "surgebinding"
+					optionalDependency "sandmastery"
 				}
 			}
 			addGameVersion "Java ${java_version}"

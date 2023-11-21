@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 21 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.example.patchouli;
@@ -15,9 +15,9 @@ public class PatchouliExampleCategory
 	{
 		BookStuff.Category example = new BookStuff.Category(
 				"example",
-				"Birds and Bonds.",
-				"example:bird");
-		example.sortnum = 3;
+				"Example description that says some stuff.",
+				"minecraft:paper");
+		example.sortnum = 99;
 		example.secret = true;
 		categories.add(example);
 
@@ -25,22 +25,24 @@ public class PatchouliExampleCategory
 		List<BookStuff.Page> pages = new ArrayList<>();
 
 		//example basics entry
-		BookStuff.Entry exampleBasics = new BookStuff.Entry("example_basics", example, example.icon).setDisplayTitle("Example (For Dummies)");
-		exampleBasics.priority = true;
+		{
+			BookStuff.Entry entry = new BookStuff.Entry("example_basics", example, example.icon).setDisplayTitle("Example (For Dummies)");
+			entry.priority = true;
 
 
-		BookStuff.Page terminologyPage = new BookStuff.TextPage();
-		terminologyPage.setTitle("Terminology");
-		terminologyPage.setText(
-				"In this journal, I shall explain all I have discovered about Example. $(br)" +
-						"Firstly, some terminology:"
-						+ "$(li) Example: A species of bird, native to the planet 'First of the Sun', in the Drominad system..");
-		pages.add(terminologyPage);
+			BookStuff.Page terminologyPage = new BookStuff.TextPage();
+			terminologyPage.setTitle("Terminology");
+			terminologyPage.setText(
+					"In this journal, I shall explain all I have discovered about Example. $(br)" +
+							"Firstly, some terminology:"
+							+ "$(li) Example: A species of bird, native to the planet 'First of the Sun', in the Drominad system..");
+			pages.add(terminologyPage);
 
 
-		exampleBasics.pages = pages.toArray(BookStuff.Page[]::new);
-		pages.clear();
-		entries.add(exampleBasics);
+			entry.pages = pages.toArray(BookStuff.Page[]::new);
+			pages.clear();
+			entries.add(entry);
+		}
 
 	}
 }

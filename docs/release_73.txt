@@ -1,0 +1,30 @@
+Good News Everyone!
+
+Welcome to build 73 and most importantly, Aviar!
+
+[Aviar](https://coppermind.net/wiki/Aviar) are companion birds that grant different abilities to the player based on their breed. As this mod is part of the Cosmere Mod Suite, it uses the [Cosmere library mod](https://legacy.curseforge.com/minecraft/mc-mods/cosmere). 
+
+## Disclaimer!
+
+Because we only know about 2 breeds of aviar in the canon lore (and because we can pretend that minecraft parrots are different breeds from those on Patji), the abilities granted in the mod may not completely be canon accurate. We plan to update this over time as more lore becomes available, or learn how to better convert aviar abilities to satisfying minecraft gameplay.
+
+## How To:
+To get an aviar, you will need two things.
+
+The fruit of patji, which can be rarely found in the wandering trader's list of trades. It's expensive! Costing both emeralds and a nether star, but this is a very rare, off-world piece of fruit we are talking about here!
+A minecraft parrot. The breed of which determines what bonus you will get when the companion is nearby.
+Once you have both, right-click the fruit of patji on the parrot to convert it into an Aviar.
+
+And that's it! You will now passively get a bonus when they are nearby. "But what bonuses will I get?", I hear you ask. Well here you go, depending on the breed, you will get one of the following per companion.
+
+[list]
+[*] Cognitive concealment (hide from the Warden or other players when using your other Cosmere based abilities).
+[*] Increased block fortune and entity looting.
+[*] Doubled XP gain.
+[*] Decrease damage from all sources by
+[*] See what mobs are targeting you (makes them glow), as a sort of potentially hostile life-sense.
+[/list]
+
+Should you need any extra info, such as what each breed grants what power, check out the ars arcanum guide book when you're in game. Each player is given one on entering a world for the first time :)
+
+Other commits for this updated mod suite version:

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 19 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -20,6 +20,7 @@ public class Manifestations
 	public final static int AONDOR_ID = 4;
 	public final static int AWAKENING_ID = 5;
 	public final static int SANDMASTERY_ID = 6;
+	public final static int AVIAR_ID = 8;
 
 	public enum ManifestationTypes
 	{
@@ -43,7 +44,10 @@ public class Manifestations
 		AWAKENING(AWAKENING_ID),
 
 		// Taldain's Sand Mastery
-		SANDMASTERY(SANDMASTERY_ID);
+		SANDMASTERY(SANDMASTERY_ID),
+
+		// Aviar
+		AVIAR(AVIAR_ID);
 
 
 		ManifestationTypes(int id)

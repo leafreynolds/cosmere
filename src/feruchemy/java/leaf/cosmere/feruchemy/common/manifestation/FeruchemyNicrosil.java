@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 11 - 2023 ~ Leaf
+ * File updated ~ 19 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -132,7 +132,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			nbt.putUUID("identity", data.getLiving().getUUID());
 		}
 
-		final CosmereEffectInstance effectInstance = getOrCreateEffect(getStoringEffect(), data, 1);
+		final CosmereEffectInstance effectInstance = CosmereEffectInstance.getOrCreateEffect(getStoringEffect(), data, data.getLiving(), 1);
 
 		//for each power the user has access to
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
@@ -178,7 +178,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		//for each power the user has access to
 		//todo add the stored investiture identity to spiritweb data if not there already?
 
-		final CosmereEffectInstance effectInstance = getOrCreateEffect(getTappingEffect(), data, 1);
+		final CosmereEffectInstance effectInstance = CosmereEffectInstance.getOrCreateEffect(getTappingEffect(), data, data.getLiving(), 1);
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
