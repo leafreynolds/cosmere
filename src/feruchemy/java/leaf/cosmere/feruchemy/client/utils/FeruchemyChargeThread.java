@@ -73,83 +73,95 @@ public class FeruchemyChargeThread implements Runnable {
 
         while (!isStopping)
         {
-            // no serverside action, unloaded levels, or non-existent players allowed >:(
-            if (mc.level == null || mc.player == null || !mc.level.isClientSide)
+            try
             {
-                stop();
-                break;
-            }
-
-            if (mc.player.tickCount % 2 != 0)
-            {
-                try {
-                    Thread.sleep(50);       // 20 ticks per 1000ms, 1000/20 = 50, rest for 1 tick
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                continue;
-            }
-
-            metalmindCharges.clear();
-
-            // all inventory metalminds are counted
-            for (ItemStack stack : mc.player.getInventory().items)
-            {
-                if (stack.getItem() instanceof ChargeableMetalCurioItem item)
+                // no serverside action, unloaded levels, or non-existent players allowed >:(
+                if (mc.level == null || mc.player == null || !mc.level.isClientSide)
                 {
-                    // is either f-item or h-item
-                    if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
+                    break;
+                }
+
+                if (mc.player.tickCount % 2 != 0)
+                {
+                    try
                     {
-                        Double chargeToAdd = (double) item.getCharge(stack);
-                        if (metalmindCharges.containsKey(item.getMetalType()))
+                        Thread.sleep(50);       // 20 ticks per 1000ms, 1000/20 = 50, rest for 1 tick
+                    }
+                    catch (InterruptedException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    continue;
+                }
+
+                metalmindCharges.clear();
+
+                // all inventory metalminds are counted
+                for (ItemStack stack : mc.player.getInventory().items)
+                {
+                    if (stack.getItem() instanceof ChargeableMetalCurioItem item)
+                    {
+                        // is either f-item or h-item
+                        if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
                         {
-                            metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
-                        }
-                        else
-                        {
-                            metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                            Double chargeToAdd = (double) item.getCharge(stack);
+                            if (metalmindCharges.containsKey(item.getMetalType()))
+                            {
+                                metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+                            }
+                            else
+                            {
+                                metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                            }
                         }
                     }
                 }
-            }
 
-            // all curio metalminds are counted
-            CuriosApi.getCuriosHelper().getEquippedCurios(mc.player)
-                    .map(mapper ->
-                    {
-                        for (int i = 0; i < mapper.getSlots(); i++)
+                // all curio metalminds are counted
+                CuriosApi.getCuriosHelper().getEquippedCurios(mc.player)
+                        .map(mapper ->
                         {
-                            if (mapper.getStackInSlot(i).getItem() instanceof ChargeableMetalCurioItem item)
+                            for (int i = 0; i < mapper.getSlots(); i++)
                             {
-                                if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
+                                if (mapper.getStackInSlot(i).getItem() instanceof ChargeableMetalCurioItem item)
                                 {
-                                    Double chargeToAdd = (double) item.getCharge(mapper.getStackInSlot(i));
-                                    if (metalmindCharges.containsKey(item.getMetalType()))
+                                    if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
                                     {
-                                        metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
-                                    }
-                                    else
-                                    {
-                                        metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                                        Double chargeToAdd = (double) item.getCharge(mapper.getStackInSlot(i));
+                                        if (metalmindCharges.containsKey(item.getMetalType()))
+                                        {
+                                            metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+                                        }
+                                        else
+                                        {
+                                            metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        return true;
-                    });
+                            return true;
+                        });
 
-            lock.lock();
-            try {
-                feruchemyChargeMap.clear();
-                feruchemyChargeMap.putAll(metalmindCharges);
+                lock.lock();
+                try
+                {
+                    feruchemyChargeMap.clear();
+                    feruchemyChargeMap.putAll(metalmindCharges);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                finally
+                {
+                    lock.unlock();
+                }
             }
             catch (Exception e)
             {
-                e.printStackTrace();
-            }
-            finally {
-                lock.unlock();
+                CosmereAPI.logger.warn(Arrays.toString(e.getStackTrace()));
             }
         }
+        stop();
     }
 }
