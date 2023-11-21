@@ -463,11 +463,18 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			ISpiritwebSubmodule spiritwebSubmodule = set.getValue();
 
-			profiler.push(set.getKey().getName());
+			final boolean isDebugModule = set.getKey() == null;
+			if (!isDebugModule)
 			{
-				spiritwebSubmodule.renderWorldEffects(this, event);
+				profiler.push(set.getKey().getName());
 			}
-			profiler.pop();
+
+			spiritwebSubmodule.renderWorldEffects(this, event);
+
+			if (!isDebugModule)
+			{
+				profiler.pop();
+			}
 		}
 	}
 

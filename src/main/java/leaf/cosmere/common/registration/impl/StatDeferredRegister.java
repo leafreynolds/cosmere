@@ -1,13 +1,23 @@
+/*
+ * File updated ~ 17 - 11 - 2023 ~ Leaf
+ */
+
 package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class StatDeferredRegister extends WrappedDeferredRegister<ResourceLocation>
 {
+
+	private final List<StatRegistryObject> allItems = new ArrayList<>();
+
 	public StatDeferredRegister(String modid)
 	{
 		super(modid, Registry.CUSTOM_STAT_REGISTRY);
@@ -21,7 +31,13 @@ public class StatDeferredRegister extends WrappedDeferredRegister<ResourceLocati
 
 	public StatRegistryObject register(String name, Supplier<ResourceLocation> supplier)
 	{
-		return register(name, supplier, StatRegistryObject::new);
+		final StatRegistryObject statRegistryObject = register(name, supplier, StatRegistryObject::new);
+		allItems.add(statRegistryObject);
+		return statRegistryObject;
 	}
 
+	public List<StatRegistryObject> getAllItems()
+	{
+		return Collections.unmodifiableList(allItems);
+	}
 }

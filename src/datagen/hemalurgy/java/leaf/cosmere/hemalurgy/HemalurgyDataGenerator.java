@@ -1,16 +1,13 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 17 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
 
 import leaf.cosmere.hemalurgy.advancements.HemalurgyAdvancementGen;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
-import leaf.cosmere.hemalurgy.items.HemalurgyItemModelsGen;
-import leaf.cosmere.hemalurgy.items.HemalurgyItemTagsGen;
 import leaf.cosmere.hemalurgy.patchouli.HemalurgyPatchouliGen;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,7 +24,7 @@ public class HemalurgyDataGenerator
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		generator.addProvider(true, new HemalurgyEngLangGen(generator));
-		generator.addProvider(true, new HemalurgyItemTagsGen(generator, new BlockTagsProvider(generator, Hemalurgy.MODID, existingFileHelper), existingFileHelper));
+		generator.addProvider(true, new HemalurgyItemTagsProvider(generator, existingFileHelper));
 		generator.addProvider(true, new HemalurgyItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new HemalurgyRecipeGen(generator));
 		generator.addProvider(true, new HemalurgyPatchouliGen(generator));

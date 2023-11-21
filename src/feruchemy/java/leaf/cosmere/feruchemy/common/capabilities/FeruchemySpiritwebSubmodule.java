@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 19 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.capabilities;
@@ -9,11 +9,11 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
+import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
-import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -49,7 +49,8 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
-	public void collectMenuInfo(List<String> m_infoText) {
+	public void collectMenuInfo(List<String> m_infoText)
+	{
 		HashMap<Metals.MetalType, Double> metalmindChargesMap = FeruchemyChargeThread.getInstance().getCharges();
 
 		if (!metalmindChargesMap.isEmpty())

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 19 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common;
@@ -118,6 +118,9 @@ public class Cosmere
 				Manifestations.ManifestationTypes maniType = null;
 				switch (iModModule.getName())
 				{
+					case "Example":
+						maniType = Manifestations.ManifestationTypes.NONE;
+						break;
 					case "Allomancy":
 						maniType = Manifestations.ManifestationTypes.ALLOMANCY;
 						break;
@@ -132,6 +135,9 @@ public class Cosmere
 						break;
 					case "Sandmastery":
 						maniType = Manifestations.ManifestationTypes.SANDMASTERY;
+						break;
+					case "Aviar":
+						maniType = Manifestations.ManifestationTypes.AVIAR;
 						break;
 				}
 

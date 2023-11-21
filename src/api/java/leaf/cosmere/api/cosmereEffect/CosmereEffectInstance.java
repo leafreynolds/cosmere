@@ -1,11 +1,12 @@
 /*
- * File updated ~ 15 - 11 - 2023 ~ Leaf
+ * File updated ~ 20 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.cosmereEffect;
 
 import com.google.common.collect.Maps;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -253,5 +255,37 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	public void setDuration(int duration)
 	{
 		this.duration = duration;
+	}
+
+	private void setStrength(double strength)
+	{
+		this.strength = strength;
+	}
+
+	@NotNull
+	public static CosmereEffectInstance getOrCreateEffect(CosmereEffect cosmereEffect, ISpiritweb data, LivingEntity sourceEntity, double strength)
+	{
+		return getOrCreateEffect(cosmereEffect, data, sourceEntity.getStringUUID(), strength);
+	}
+
+	public static CosmereEffectInstance getOrCreateEffect(CosmereEffect cosmereEffect, ISpiritweb data, String uuid, double strength)
+	{
+		final CosmereEffect effect = cosmereEffect;
+		CosmereEffectInstance effectInstance = data.getEffect(EffectsHelper.getEffectUUID(effect, uuid));
+
+		//if no effect with this UUID was found, we know we need to make one
+		if (effectInstance == null)
+		{
+			effectInstance = EffectsHelper.getNewEffect(effect, data.getLiving(), strength);
+		}
+		else
+		{
+			//remove the current instance of this effect's attributes from the data
+			data.removeEffect(effectInstance.getUUID());
+			//reset the duration
+			effectInstance.setDuration(93);
+			effectInstance.setStrength(strength);
+		}
+		return effectInstance;
 	}
 }

@@ -136,7 +136,6 @@ public class CosmereTagProvider extends BaseTagProvider
 			final BlockRegistryObject<MetalBlock, BlockItem> metalBlock = BlocksRegistry.METAL_BLOCKS.get(metalType);
 
 			final TagKey<Block> metalBlockTag = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(metalType);
-			addToTag(metalBlockTag, metalBlock);
 			addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, metalBlock);
 			addToTag(BlockTags.NEEDS_IRON_TOOL, metalBlock);
 

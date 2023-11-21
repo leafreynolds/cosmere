@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 11 - 2023 ~ Leaf
+ * File updated ~ 21 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.mixin;
@@ -27,7 +27,7 @@ public class EntityMixin
 
 		final boolean isServerSide = !(e.level.isClientSide);
 		final boolean isInanimateEntity = !(e instanceof LivingEntity);
-		if (isServerSide || isInanimateEntity)
+		if (isServerSide || isInanimateEntity || cir.getReturnValue())
 		{
 			return;
 		}

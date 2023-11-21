@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 20 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.api.helpers;
@@ -56,7 +56,13 @@ public class EffectsHelper
 	@NotNull
 	public static UUID getEffectUUID(CosmereEffect effect, Entity effectSource)
 	{
-		String sourceAndEffect = effectSource.getStringUUID() + effect.getRegistryName();
+		return getEffectUUID(effect, effectSource.getStringUUID());
+	}
+
+	@NotNull
+	public static UUID getEffectUUID(CosmereEffect effect, String uuidSource)
+	{
+		String sourceAndEffect = uuidSource + effect.getRegistryName();
 		UUID uuid = UUID.nameUUIDFromBytes(sourceAndEffect.getBytes());
 		return uuid;
 	}

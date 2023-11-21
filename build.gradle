@@ -58,7 +58,7 @@ def full_mod_version = mod_version + "." + build_number
 def release_type = System.env.TC_RELEASE_TYPE ?: "alpha"
 
 ext {
-	secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding', 'sandmastery']
+	secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding', 'sandmastery', 'awakening', 'aondor', 'aviar', 'soulforgery', 'example']
 	extraTypes = ['datagen', 'gameTest']
 	jsonPatterns = ["**/*.json", "**/*.mcmeta"]
 	//version properties here automatically update versions in all the mods.toml files
@@ -425,6 +425,7 @@ dependencies {
 	hemalurgyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	surgebindingAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	sandmasteryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	aviarAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -452,6 +453,7 @@ mixin {
 	add sourceSets.hemalurgy, 'mixins.cosmere.hemalurgy.refmap.json'
 	add sourceSets.surgebinding, 'mixins.cosmere.surgebinding.refmap.json'
 	add sourceSets.sandmastery, 'mixins.cosmere.sandmastery.refmap.json'
+	add sourceSets.aviar, 'mixins.cosmere.aviar.refmap.json'
 
 	config 'cosmere.mixins.json'
 	//config 'cosmere.mixins.api.json'
@@ -459,6 +461,8 @@ mixin {
 	config 'feruchemy.mixins.json'
 	config 'hemalurgy.mixins.json'
 	config 'surgebinding.mixins.json'
+	config 'sandmastery.mixins.json'
+	config 'aviar.mixins.json'
 }
 
 def getManifestAttributes(String title)
@@ -509,6 +513,11 @@ def feruchemyJar = secondaryJar(sourceSets.feruchemy, 'Feruchemy')
 def hemalurgyJar = secondaryJar(sourceSets.hemalurgy, 'Hemalurgy')
 def surgebindingJar = secondaryJar(sourceSets.surgebinding, 'Surgebinding')
 def sandmasteryJar = secondaryJar(sourceSets.sandmastery, 'Sandmastery')
+def awakeningJar = secondaryJar(sourceSets.awakening, 'Awakening')
+def aondorJar = secondaryJar(sourceSets.aondor, 'AonDor')
+def aviarJar = secondaryJar(sourceSets.aviar, 'Aviar')
+def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'Forgery')
+def exampleJar = secondaryJar(sourceSets.example, 'Example')
 
 tasks.withType(JavaCompile).configureEach({
 	options.encoding = 'UTF-8'
@@ -524,6 +533,11 @@ artifacts {
 	archives surgebindingJar
 	archives sandmasteryJar
 	archives sourcesJar
+	//archives awakeningJar
+	//archives aondorJar
+	archives aviarJar
+	//archives soulforgeryJar
+	//archives exampleJar
 }
 
 
@@ -622,7 +636,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Main - Cosmere
 		project {
 			id = '475343'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(jar) {
@@ -645,7 +659,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Allomancy
 		project {
 			id = '678468'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(allomancyJar.get()) {
@@ -663,7 +677,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Feruchemy
 		project {
 			id = '678466'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(feruchemyJar.get()) {
@@ -682,7 +696,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Hemalurgy
 		project {
 			id = '678469'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(hemalurgyJar.get()) {
@@ -702,16 +716,16 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//Surgebinding
 		project {
 			id = '624998'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(surgebindingJar.get()) {
 				relations {
 					requiredDependency "cosmere"
 					optionalDependency "patchouli"
-					optionalDependency "hemalurgy"
 					optionalDependency "allomancer"
-					optionalDependency "surgebinding"
+					optionalDependency "hemalurgy"
+					optionalDependency "sandmastery"
 				}
 			}
 			addGameVersion "Java ${java_version}"
@@ -721,7 +735,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		//SandMastery
 		project {
 			id = '695387'
-			changelogType = "html"
+			changelogType = "text"
 			changelog = changeLogResolver
 			releaseType = "${release_type}"
 			mainArtifact(sandmasteryJar.get()) {
@@ -733,6 +747,27 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					optionalDependency "feruchemist"
 					optionalDependency "hemalurgy"
 					optionalDependency "surgebinding"
+				}
+			}
+			addGameVersion "Java ${java_version}"
+			addGameVersion "${minecraft_version}"
+		}
+
+		//Aviar
+		project {
+			id = '822584'
+			changelogType = "text"
+			changelog = changeLogResolver
+			releaseType = "${release_type}"
+			mainArtifact(aviarJar.get()) {
+				relations {
+					requiredDependency "cosmere"
+					optionalDependency "patchouli"
+					optionalDependency "allomancer"
+					optionalDependency "feruchemist"
+					optionalDependency "hemalurgy"
+					optionalDependency "surgebinding"
+					optionalDependency "sandmastery"
 				}
 			}
 			addGameVersion "Java ${java_version}"
