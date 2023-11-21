@@ -27,14 +27,61 @@ public class AllomancyBrass extends AllomancyManifestation
 	protected void applyEffectTick(ISpiritweb data)
 	{
 		int mode = getMode(data);
-
 		String uuid = data.getLiving().getStringUUID();
-		if (mode > 0 && !playerThreadMap.containsKey(uuid))
+
+		// data thread management
 		{
-			playerThreadMap.put(uuid, new BrassThread(data));
+			if (mode > 0 && !playerThreadMap.containsKey(uuid))
+			{
+				playerThreadMap.put(uuid, new BrassThread(data));
+			}
+
+			playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
 		}
 
-		playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown);
+		// data processing
+		{
+			// check if brass is off or compounding
+			if (mode <= 0)
+			{
+				return;
+			}
+
+			// this is the only way to check if the player is still online, thanks forge devs
+			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+			{
+				return;
+			}
+
+			//todo, replace x * mode with config based value
+			double allomanticStrength = getStrength(data, false);
+
+			//put on a different tick to zinc
+			boolean isActiveTick = getActiveTick(data) % 2 == 0;
+			if (isActiveTick)
+			{
+				List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+				for (LivingEntity e : entitiesToAffect)
+				{
+					if (e instanceof Mob mob)
+					{
+						mob.setNoAi(mode == 3 && allomanticStrength > 15);
+
+						switch (mode)
+						{
+							case 2:
+								mob.setTarget(null);
+							case 1:
+								mob.setAggressive(false);
+							default:
+								//stop angry targets from attacking things
+								e.setLastHurtByMob(null);
+
+						}
+					}
+				}
+			}
+		}
 	}
 
 	class BrassThread extends AllomancyEntityThread
@@ -60,51 +107,14 @@ public class AllomancyBrass extends AllomancyManifestation
 				}
 				try
 				{
-					int mode = getMode(data);
 					int range = getRange(data);
-
-					// check if brass is off or compounding
-					if (mode <= 0)
-					{
-						break;
-					}
-
-					// this is the only way to check if the player is still online, thanks forge devs
-					if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
-					{
-						break;
-					}
-
-					//todo, replace x * mode with config based value
-					double allomanticStrength = getStrength(data, false);
-
-					//put on a different tick to zinc
-					boolean isActiveTick = getActiveTick(data) % 2 == 0;
-					if (isActiveTick && lock.tryLock())
+					if (lock.tryLock())
 					{
 						entitiesToAffect = EntityHelper.getLivingEntitiesInRange(data.getLiving(), range, true);
-
-						for (LivingEntity e : entitiesToAffect)
-						{
-							if (e instanceof Mob mob)
-							{
-								mob.setNoAi(mode == 3 && allomanticStrength > 15);
-
-								switch (mode)
-								{
-									case 2:
-										mob.setTarget(null);
-									case 1:
-										mob.setAggressive(false);
-									default:
-										//stop angry targets from attacking things
-										e.setLastHurtByMob(null);
-
-								}
-							}
-						}
+						setEntityList(entitiesToAffect);
 						lock.unlock();
 					}
+
 					// sleep thread for 1 tick (50ms)
 					Thread.sleep(50);
 				}
