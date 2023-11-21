@@ -1,8 +1,8 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 17 - 11 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.feruchemy.items;
+package leaf.cosmere.feruchemy;
 
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.feruchemy.common.Feruchemy;

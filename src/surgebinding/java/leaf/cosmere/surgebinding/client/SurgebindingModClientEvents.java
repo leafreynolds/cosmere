@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 2 - 2023 ~ Leaf
+ * File updated ~ 17 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -26,7 +26,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import java.util.Locale;
 
 @Mod.EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class SurgebindingClientEventsMod
+public class SurgebindingModClientEvents
 {
 
 	@SubscribeEvent

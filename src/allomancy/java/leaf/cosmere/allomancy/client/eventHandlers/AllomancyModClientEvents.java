@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 17 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.client.eventHandlers;
@@ -32,7 +32,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import java.util.Locale;
 
 @Mod.EventBusSubscriber(modid = Allomancy.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class AllomancyClientSetup
+public class AllomancyModClientEvents
 {
 
 	@SubscribeEvent

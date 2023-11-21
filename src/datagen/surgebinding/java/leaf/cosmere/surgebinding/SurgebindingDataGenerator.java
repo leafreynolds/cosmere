@@ -1,16 +1,12 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 17 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
 
 import leaf.cosmere.surgebinding.biome.SurgebindingBiomeModifierGen;
 import leaf.cosmere.surgebinding.biome.SurgebindingBiomeTagsProvider;
-import leaf.cosmere.surgebinding.blocks.SurgebindingBlockModelsGen;
-import leaf.cosmere.surgebinding.blocks.SurgebindingBlockTagsGen;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.items.SurgebindingItemModelsGen;
-import leaf.cosmere.surgebinding.items.SurgebindingItemTagsGen;
 import leaf.cosmere.surgebinding.loottables.SurgebindingLootTableGen;
 import leaf.cosmere.surgebinding.patchouli.SurgebindingPatchouliGen;
 import net.minecraft.data.DataGenerator;
@@ -32,9 +28,7 @@ public class SurgebindingDataGenerator
 
 		generator.addProvider(true, new SurgebindingEngLangGen(generator));
 
-		SurgebindingBlockTagsGen blockTags = new SurgebindingBlockTagsGen(generator, existingFileHelper);
-		generator.addProvider(true, blockTags);
-		generator.addProvider(true, new SurgebindingItemTagsGen(generator, blockTags, existingFileHelper));
+		generator.addProvider(true, new SurgebindingTagsProvider(generator, existingFileHelper));
 
 		generator.addProvider(true, new SurgebindingItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new SurgebindingBlockModelsGen(generator, existingFileHelper));

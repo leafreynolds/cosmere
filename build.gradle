@@ -58,7 +58,7 @@ def full_mod_version = mod_version + "." + build_number
 def release_type = System.env.TC_RELEASE_TYPE ?: "alpha"
 
 ext {
-	secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding', 'sandmastery']
+	secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding', 'sandmastery', 'awakening', 'aondor', 'aviar', 'soulforgery', 'example']
 	extraTypes = ['datagen', 'gameTest']
 	jsonPatterns = ["**/*.json", "**/*.mcmeta"]
 	//version properties here automatically update versions in all the mods.toml files
@@ -509,6 +509,11 @@ def feruchemyJar = secondaryJar(sourceSets.feruchemy, 'Feruchemy')
 def hemalurgyJar = secondaryJar(sourceSets.hemalurgy, 'Hemalurgy')
 def surgebindingJar = secondaryJar(sourceSets.surgebinding, 'Surgebinding')
 def sandmasteryJar = secondaryJar(sourceSets.sandmastery, 'Sandmastery')
+def awakeningJar = secondaryJar(sourceSets.awakening, 'Awakening')
+def aondorJar = secondaryJar(sourceSets.aondor, 'AonDor')
+def aviarJar = secondaryJar(sourceSets.aviar, 'Aviar')
+def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'Forgery')
+def exampleJar = secondaryJar(sourceSets.example, 'Example')
 
 tasks.withType(JavaCompile).configureEach({
 	options.encoding = 'UTF-8'
@@ -524,6 +529,11 @@ artifacts {
 	archives surgebindingJar
 	archives sandmasteryJar
 	archives sourcesJar
+	//archives awakeningJar
+	//archives aondorJar
+	//archives aviarJar
+	//archives soulforgeryJar
+	//archives exampleJar
 }
 
 

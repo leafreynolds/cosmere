@@ -1,8 +1,8 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 17 - 11 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.surgebinding.blocks;
+package leaf.cosmere.surgebinding;
 
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IBlockProvider;

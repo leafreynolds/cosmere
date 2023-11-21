@@ -1,8 +1,8 @@
 /*
- * File updated ~ 15 - 6 - 2023 ~ Leaf
+ * File updated ~ 19 - 11 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.hemalurgy.items;
+package leaf.cosmere.hemalurgy;
 
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IItemProvider;
@@ -39,6 +39,7 @@ public class HemalurgyItemModelsGen extends ItemModelProvider
 
 			if (item instanceof ForgeSpawnEggItem)
 			{
+				getBuilder(item.toString()).parent(new ModelFile.UncheckedModelFile("item/template_spawn_egg"));
 				continue;
 			}
 			if (item instanceof HemalurgicSpikeItem)
