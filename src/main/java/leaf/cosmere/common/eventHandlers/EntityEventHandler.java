@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 21 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -261,12 +261,13 @@ public class EntityEventHandler
 			return;
 		}
 
-		int total = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.DETERMINATION.getAttribute());
+		//inverted determination
+		int total = -(int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.DETERMINATION.getAttribute());
 
 		//take less damage when tapping
 		//always reduce damage by something
 		//always increase damage by something
-		final int i = Math.abs(total) + 1;
+		final int i = Math.abs(total);
 		//never able to reduce by 100%
 		// 76% ish max? eg tap10 / 13 = 0.76
 		//store 3 is the max so never able to increase damage to self by more than 23%?
