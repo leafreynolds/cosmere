@@ -27,7 +27,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
 
-		PROJECTILE_COOLDOWN = builder.comment("How many ticks between projectiles at 1 ribbon allocated in ticks. (1 second = 20 ticks)").defineInRange("projectileCooldown", 100, 1, 1000);
+		PROJECTILE_COOLDOWN = builder.comment("How many ticks between projectiles at 1 ribbon allocated in ticks. (1 second = 20 ticks)").defineInRange("projectileCooldown", 100, 24, 1000);
 
 		HYDRATION_COST_MULTIPLIER = builder.comment("Hydration cost is tied to sand cost, how many units of hydration are used per unit of sand charge").defineInRange("hydrationCostMultiploer", 1.5, 0.5, 100);
 
