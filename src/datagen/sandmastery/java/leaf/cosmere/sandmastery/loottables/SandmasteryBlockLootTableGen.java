@@ -11,7 +11,9 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
@@ -45,6 +47,10 @@ public class SandmasteryBlockLootTableGen extends BlockLoot
 				Block whiteLayer = SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock();
 				this.add(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock(), (layer) -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(TaldainBlackSandLayerBlock.LAYERS.getPossibleValues(), (layers) -> LootItem.lootTableItem(blackLayer.asItem()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(layer).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TaldainBlackSandLayerBlock.LAYERS, layers))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(layers.intValue())))))));
 				this.add(SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock(), (layer) -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(TaldainWhiteSandLayerBlock.LAYERS.getPossibleValues(), (layers) -> LootItem.lootTableItem(whiteLayer.asItem()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(layer).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TaldainWhiteSandLayerBlock.LAYERS, layers))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(layers.intValue())))))));
+			}
+			else if (block instanceof TemporarySandBlock)
+			{
+				this.dropOther(block, Items.AIR);
 			}
 			else
 			{

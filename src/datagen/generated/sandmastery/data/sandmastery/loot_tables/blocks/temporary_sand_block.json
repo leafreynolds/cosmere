@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "sandmastery:temporary_sand_block"
+          "name": "minecraft:air"
         }
       ],
       "rolls": 1.0
