@@ -27,6 +27,11 @@ public class MasteryProjectile extends SandmasteryManifestation
 	}
 
 	@Override
+	protected int getBaseCost() {
+		return 100;
+	}
+
+	@Override
 	public boolean tick(ISpiritweb data)
 	{
 		super.tick(data);

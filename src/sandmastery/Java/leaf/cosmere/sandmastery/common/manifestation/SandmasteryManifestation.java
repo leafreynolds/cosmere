@@ -5,6 +5,7 @@
 package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.helpers.StackNBTHelper;
@@ -16,6 +17,7 @@ import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodul
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -132,10 +134,14 @@ public class SandmasteryManifestation extends Manifestation
 		return curios;
 	}
 
+	protected int getBaseCost() {
+		return 10;
+	}
+
 	public int getCost(ISpiritweb data)
 	{
-		int mode = data.getMode(this);
-		return mode * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
+		int preModifiedCost = MiscHelper.distanceFromGround(data.getLiving()) * getBaseCost();
+		return preModifiedCost * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
 	}
 
 	private static Predicate<ItemStack> getIsItemInvalid()
