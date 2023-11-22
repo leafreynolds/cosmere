@@ -45,7 +45,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PROJECTILE_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
-			submodule.setProjectileCooldown(SandmasteryConfigs.SERVER.PROJECTILE_COOLDOWN.get());
+			submodule.setProjectileCooldown(SandmasteryConfigs.SERVER.PROJECTILE_COOLDOWN.get() / getMode(data));
 			return performEffectServer(data);
 		}
 		return false;
@@ -88,7 +88,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 			}
 		});
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PROJECTILE_HYDRATION_COST.get(), true, data);
+		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		useChargedSand(data);
 		return true;
 	}

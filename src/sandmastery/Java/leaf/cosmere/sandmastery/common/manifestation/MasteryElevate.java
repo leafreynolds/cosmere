@@ -59,7 +59,7 @@ public class MasteryElevate extends SandmasteryManifestation
 		living.hurtMarked = true; // Allow the game to move the player
 		living.resetFallDistance();
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.ELEVATE_HYDRATION_COST.get(), true, data);
+		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		useChargedSand(data);
 
 		return true;

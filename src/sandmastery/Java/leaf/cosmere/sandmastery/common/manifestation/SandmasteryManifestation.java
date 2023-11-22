@@ -5,7 +5,6 @@
 package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.helpers.StackNBTHelper;
@@ -73,7 +72,7 @@ public class SandmasteryManifestation extends Manifestation
 		if (data.getLiving() instanceof Player player)
 		{
 			List<ItemStack> allPouches = getSandPouches(player);
-			int required = getCost(data);
+			int required = getSandCost(data);
 
 			if (allPouches.isEmpty())
 			{
@@ -99,7 +98,7 @@ public class SandmasteryManifestation extends Manifestation
 		{
 			List<ItemStack> allPouches = getSandPouches(player);
 
-			int changeLeft = getCost(data);
+			int changeLeft = getSandCost(data);
 			for (ItemStack stack : allPouches)
 			{
 				int startingCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
@@ -138,10 +137,15 @@ public class SandmasteryManifestation extends Manifestation
 		return 10;
 	}
 
-	public int getCost(ISpiritweb data)
+	public int getSandCost(ISpiritweb data)
 	{
 		int preModifiedCost = MiscHelper.distanceFromGround(data.getLiving()) * getBaseCost();
 		return preModifiedCost * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
+	}
+
+	public int getHydrationCost(ISpiritweb data)
+	{
+		return (int) Math.round(getSandCost(data) * SandmasteryConfigs.SERVER.HYDRATION_COST_MULTIPLIER.get());
 	}
 
 	private static Predicate<ItemStack> getIsItemInvalid()
