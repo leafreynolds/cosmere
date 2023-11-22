@@ -319,6 +319,12 @@ public class SpiritwebCapability implements ISpiritweb
 		return this.activeEffects.get(uuid);
 	}
 
+	@Override
+	public Set<Map.Entry<UUID, CosmereEffectInstance>> getEffects()
+	{
+		return this.activeEffects.entrySet();
+	}
+
 	//get the sum total strength of all matching effects in list of effects affecting target
 	@Override
 	public int totalStrengthOfEffect(CosmereEffect cosmereEffect)

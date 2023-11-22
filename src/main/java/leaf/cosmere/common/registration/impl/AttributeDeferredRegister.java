@@ -32,7 +32,7 @@ public class AttributeDeferredRegister extends WrappedDeferredRegister<Attribute
 		return register(
 				registryName,
 				() -> new RangedAttribute(
-						"manifestation." + modid + "." + registryName,
+						"manifestation." + modid + "." + registryName,//todo update manifestation to attribute on porting
 						defaultVal,
 						min,
 						max)
