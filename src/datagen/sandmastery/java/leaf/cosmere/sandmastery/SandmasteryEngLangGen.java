@@ -144,6 +144,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	private void addDamageSources()
 	{
 		//Damage Sources
+		add("death.attack.dehydrated", "%1$s died of dehydration");
 	}
 
 	private void addMobEffects()
