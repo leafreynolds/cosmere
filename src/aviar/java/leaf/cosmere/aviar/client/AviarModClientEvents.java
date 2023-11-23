@@ -6,7 +6,11 @@ package leaf.cosmere.aviar.client;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.aviar.client.render.AviarRenderers;
+import leaf.cosmere.aviar.client.render.layers.AviarOnShoulderLayer;
 import leaf.cosmere.aviar.common.Aviar;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,4 +33,21 @@ public class AviarModClientEvents
 		//evt.registerLayerDefinition(AviarLayerDefinitions.AVIAR, ParrotModel::createBodyLayer);
 	}
 
+	@SubscribeEvent
+	public static void addLayers(EntityRenderersEvent.AddLayers evt)
+	{
+		addPlayerLayer(evt, "default");
+		addPlayerLayer(evt, "slim");
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private static void addPlayerLayer(EntityRenderersEvent.AddLayers evt, String skin)
+	{
+		EntityRenderer<? extends Player> renderer = evt.getSkin(skin);
+
+		if (renderer instanceof LivingEntityRenderer livingRenderer)
+		{
+			livingRenderer.addLayer(new AviarOnShoulderLayer(livingRenderer, evt.getEntityModels()));
+		}
+	}
 }
