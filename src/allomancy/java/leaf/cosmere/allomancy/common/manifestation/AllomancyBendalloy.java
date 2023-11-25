@@ -41,7 +41,7 @@ public class AllomancyBendalloy extends AllomancyManifestation
 
 		// data thread management
 		{
-			if (mode > 0 && !playerThreadMap.containsKey(uuid))
+			if (!playerThreadMap.containsKey(uuid))
 			{
 				playerThreadMap.put(uuid, new BendalloyThread(data));
 			}
@@ -51,36 +51,25 @@ public class AllomancyBendalloy extends AllomancyManifestation
 
 		// data processing
 		{
-			// check if bendalloy is off or compounding
-			if (mode <= 0)
-			{
-				return;
-			}
-
 			// this is the only way to check if the player is still online, thanks forge devs
 			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 			{
 				return;
 			}
-			//offload to power's tick
-			boolean isActiveTick = getActiveTick(data) % 20 == 0;
 
 			//Slows Down Time for the entities around the user
-			if (isActiveTick)
+			if (playerThreadMap.get(uuid) == null)
 			{
-				if (playerThreadMap.get(uuid) == null)
-				{
-					playerThreadMap.put(uuid, new BendalloyThread(data));
-				}
-				List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
-				for (LivingEntity e : entitiesToAffect)
-				{
-					e.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode));
-				}
-
-
-				//todo slow tile entities? not sure how to do that. cadmium just calls tick more often.
+				playerThreadMap.put(uuid, new BendalloyThread(data));
 			}
+			List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+			for (LivingEntity e : entitiesToAffect)
+			{
+				e.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode));
+			}
+
+
+			//todo slow tile entities? not sure how to do that. cadmium just calls tick more often.
 
 		}
 	}

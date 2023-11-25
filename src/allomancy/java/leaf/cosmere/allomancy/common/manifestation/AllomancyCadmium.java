@@ -36,7 +36,7 @@ public class AllomancyCadmium extends AllomancyManifestation
 
 		// data thread management
 		{
-			if (mode > 0 && !playerThreadMap.containsKey(uuid))
+			if (!playerThreadMap.containsKey(uuid))
 			{
 				playerThreadMap.put(uuid, new CadmiumThread(data));
 			}
@@ -46,67 +46,57 @@ public class AllomancyCadmium extends AllomancyManifestation
 
 		// data processing
 		{
-			// check if cadmium is off or compounding
-			if (mode <= 0)
-			{
-				return;
-			}
-
 			// this is the only way to check if the player is still online, thanks forge devs
 			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 			{
 				return;
 			}
 
-			boolean isActiveTick = getActiveTick(data) % 6 == 0;
-			if (isActiveTick)
+			if (playerThreadMap.get(uuid) == null)
 			{
-				if (playerThreadMap.get(uuid) == null)
-				{
-					playerThreadMap.put(uuid, new CadmiumThread(data));
-				}
-				//tick entities around user
-				int range = getRange(data);
-				int x = (int) (data.getLiving().getX() + (data.getLiving().getRandomX(range * 2 + 1) - range));
-				int z = (int) (data.getLiving().getZ() + (data.getLiving().getRandomZ(range * 2 + 1) - range));
-
-				for (int i = 4; i > -2; i--)
-				{
-					int y = data.getLiving().blockPosition().getY() + i;
-					BlockPos pos = new BlockPos(x, y, z);
-					Level world = data.getLiving().level;
-
-					if (world.isEmptyBlock(pos))
-					{
-						continue;
-					}
-
-					BlockState state = world.getBlockState(pos);
-					state.randomTick((ServerLevel) world, pos, world.random);
-
-					break;
-				}
-
-				//todo tick living entities?
-
-				List<LivingEntity> entitiesToCheck = playerThreadMap.get(uuid).requestEntityList();
-
-				for (LivingEntity e : entitiesToCheck)
-				{
-					try
-					{
-						e.aiStep();
-					}
-					catch (Exception err)
-					{
-						if (!(err instanceof NullPointerException))
-						{
-							err.printStackTrace();
-						}
-					}
-				}
-				playerThreadMap.get(uuid).releaseEntityList();
+				playerThreadMap.put(uuid, new CadmiumThread(data));
 			}
+			//tick entities around user
+			int range = getRange(data);
+			int x = (int) (data.getLiving().getX() + (data.getLiving().getRandomX(range * 2 + 1) - range));
+			int z = (int) (data.getLiving().getZ() + (data.getLiving().getRandomZ(range * 2 + 1) - range));
+
+			for (int i = 4; i > -2; i--)
+			{
+				int y = data.getLiving().blockPosition().getY() + i;
+				BlockPos pos = new BlockPos(x, y, z);
+				Level world = data.getLiving().level;
+
+				if (world.isEmptyBlock(pos))
+				{
+					continue;
+				}
+
+				BlockState state = world.getBlockState(pos);
+				state.randomTick((ServerLevel) world, pos, world.random);
+
+				break;
+			}
+
+			//todo tick living entities?
+
+			List<LivingEntity> entitiesToCheck = playerThreadMap.get(uuid).requestEntityList();
+
+			for (LivingEntity e : entitiesToCheck)
+			{
+				try
+				{
+					e.aiStep();
+				}
+				catch (Exception err)
+				{
+					if (!(err instanceof NullPointerException))
+					{
+						err.printStackTrace();
+					}
+				}
+			}
+			playerThreadMap.get(uuid).releaseEntityList();
 		}
 	}
 

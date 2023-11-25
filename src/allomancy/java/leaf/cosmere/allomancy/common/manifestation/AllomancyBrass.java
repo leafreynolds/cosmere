@@ -34,7 +34,7 @@ public class AllomancyBrass extends AllomancyManifestation
 
 		// data thread management
 		{
-			if (mode > 0 && !playerThreadMap.containsKey(uuid))
+			if (!playerThreadMap.containsKey(uuid))
 			{
 				playerThreadMap.put(uuid, new BrassThread(data));
 			}
@@ -44,12 +44,6 @@ public class AllomancyBrass extends AllomancyManifestation
 
 		// data processing
 		{
-			// check if brass is off or compounding
-			if (mode <= 0)
-			{
-				return;
-			}
-
 			// this is the only way to check if the player is still online, thanks forge devs
 			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 			{
@@ -59,37 +53,30 @@ public class AllomancyBrass extends AllomancyManifestation
 			//todo, replace x * mode with config based value
 			double allomanticStrength = getStrength(data, false);
 
-			//put on a different tick to zinc
-			boolean isActiveTick = getActiveTick(data) % 2 == 0;
-			if (isActiveTick)
+			if (playerThreadMap.get(uuid) == null)
 			{
-				if (playerThreadMap.get(uuid) == null)
-				{
-					playerThreadMap.put(uuid, new BrassThread(data));
-				}
+				playerThreadMap.put(uuid, new BrassThread(data));
+			}
 
-				List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
-				for (LivingEntity e : entitiesToAffect)
+			List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+			for (LivingEntity e : entitiesToAffect)
+			{
+				if (e instanceof Mob mob)
 				{
-					if (e instanceof Mob mob)
+					mob.setNoAi(mode == 3 && allomanticStrength > 15);
+
+					switch (mode)
 					{
-						mob.setNoAi(mode == 3 && allomanticStrength > 15);
-
-						switch (mode)
-						{
-							case 2:
-								mob.setTarget(null);
-							case 1:
-								mob.setAggressive(false);
-							default:
-								//stop angry targets from attacking things
-								e.setLastHurtByMob(null);
-
-						}
+						case 2:
+							mob.setTarget(null);
+						case 1:
+							mob.setAggressive(false);
+						default://stop angry targets from attacking things
+							e.setLastHurtByMob(null);
 					}
 				}
-				playerThreadMap.get(uuid).releaseEntityList();
 			}
+			playerThreadMap.get(uuid).releaseEntityList();
 		}
 	}
 

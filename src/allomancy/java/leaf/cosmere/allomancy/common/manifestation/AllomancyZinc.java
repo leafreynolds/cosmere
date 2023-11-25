@@ -36,7 +36,7 @@ public class AllomancyZinc extends AllomancyManifestation
 
 		// data thread management
 		{
-			if (mode > 0 && !playerThreadMap.containsKey(uuid))
+			if (!playerThreadMap.containsKey(uuid))
 			{
 				playerThreadMap.put(uuid, new ZincThread(data));
 			}
@@ -46,59 +46,47 @@ public class AllomancyZinc extends AllomancyManifestation
 
 		// data processing
 		{
-			// check if zinc is off or compounding
-			if (mode <= 0)
-			{
-				return;
-			}
-
 			// this is the only way to check if the player is still online, thanks forge devs
 			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 			{
 				return;
 			}
 
-			//put on a different tick to brass
-			boolean isActiveTick = getActiveTick(data) % 2 == 0;
-			if (isActiveTick)
+			if (playerThreadMap.get(uuid) == null)
 			{
-				if (playerThreadMap.get(uuid) == null)
+				playerThreadMap.put(uuid, new ZincThread(data));
+			}
+			List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+			for (LivingEntity e : entitiesToAffect)
+			{
+				if (e instanceof Mob mob)
 				{
-					playerThreadMap.put(uuid, new ZincThread(data));
-				}
-				List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
-				for (LivingEntity e : entitiesToAffect)
-				{
-					if (e instanceof Mob mob)
+
+					//mob.targetSelector.enableFlag(Goal.Flag.TARGET);
+					mob.setNoAi(false);
+
+					switch (mode)
 					{
-
-						//mob.targetSelector.enableFlag(Goal.Flag.TARGET);
-						mob.setNoAi(false);
-
-						switch (mode)
-						{
-							case 3:
-								if (mob.getTarget() == null)
-								{
-									LivingEntity attackTarget = entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size()));
-									mob.setTarget(attackTarget);
-								}
-							case 2:
-								if (mob.getLastHurtByMob() == null)
-								{
-									mob.setLastHurtByMob(mob.getTarget() != null
-									                     ? mob.getTarget()
-									                     : entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size())));
-								}
-
-							case 1:
-							default:
-								mob.setAggressive(true);
-						}
+						case 3:
+							if (mob.getTarget() == null)
+							{
+								LivingEntity attackTarget = entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size()));
+								mob.setTarget(attackTarget);
+							}
+						case 2:
+							if (mob.getLastHurtByMob() == null)
+							{
+								mob.setLastHurtByMob(mob.getTarget() != null
+								                     ? mob.getTarget()
+								                     : entitiesToAffect.get(MathHelper.RANDOM.nextInt(entitiesToAffect.size())));
+							}
+						case 1:
+						default:
+							mob.setAggressive(true);
 					}
 				}
-				playerThreadMap.get(uuid).releaseEntityList();
 			}
+			playerThreadMap.get(uuid).releaseEntityList();
 		}
 	}
 
