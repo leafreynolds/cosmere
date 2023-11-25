@@ -176,7 +176,6 @@ public class SpiritwebCapability implements ISpiritweb
 
 		if (compoundTag.contains("ActiveEffects"))
 		{
-			//I think when you use 9 as a tag type, it means list of compound
 			ListTag listtag = (ListTag) compoundTag.get("ActiveEffects");
 			for (int i = 0; i < listtag.size(); ++i)
 			{

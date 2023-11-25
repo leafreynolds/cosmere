@@ -118,8 +118,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 
 			if (compoundtag.contains("dynamic_attributes"))
 			{
-				//I think when you use 9 as a tag type, it means list of compound
-				ListTag listtag = compoundtag.getList("dynamic_attributes", 9);
+				ListTag listtag = (ListTag) compoundtag.get("dynamic_attributes");
 
 				for (int i = 0; i < listtag.size(); ++i)
 				{
