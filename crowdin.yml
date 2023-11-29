@@ -1,6 +1,6 @@
 project_identifier: cosmere
 api_key_env: CROWDIN_API_KEY
-commit_message: "[ci skip]"
+commit_message: "[Translations]"
 base_path: .
 files:
   - source: /src/datagen/generated/cosmere/assets/cosmere/lang/en_us.json
