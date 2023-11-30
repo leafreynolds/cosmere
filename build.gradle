@@ -533,11 +533,11 @@ artifacts {
 	archives surgebindingJar
 	archives sandmasteryJar
 	archives sourcesJar
-	//archives awakeningJar
-	//archives aondorJar
+	archives awakeningJar
+	archives aondorJar
 	archives aviarJar
-	//archives soulforgeryJar
-	//archives exampleJar
+	archives soulforgeryJar
+	archives exampleJar
 }
 
 
