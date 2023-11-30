@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "leaf.cosmere.aondor.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.cosmere.aondor.refmap.json",
+  "mixins": [
+    "EntityMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,23 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "MIT"
+
+[[mods]]
+modId = "aondor"
+version = "${version}"
+displayName = "Cosmere: AonDor"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+authors = "Leaf"
+credits = '''
+
+'''
+logoFile = "logo.png"
+description = '''AonDor module for Cosmere.'''
+
+[[dependencies.aondor]]
+modId = "cosmere"
+mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
