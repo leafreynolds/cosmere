@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "MIT"
+
+[[mods]]
+modId = "awakening"
+version = "${version}"
+displayName = "Cosmere: Awakening"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+authors = "Leaf"
+credits = '''
+
+Special thanks go to:
+Ridanisaurus - For many item and block textures.
+'''
+logoFile = "logo.png"
+description = '''Awakening module for Cosmere.'''
+
+[[dependencies.awakening]]
+modId = "cosmere"
+mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
