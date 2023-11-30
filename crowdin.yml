@@ -853,7 +853,7 @@ files:
         ry: ry_ua
   - source: /src/datagen/generated/allomancy/data/allomancy/patchouli_books/guide/en_us/categories/*.json
     translation: >-
-      /src/allomancy/resources/data/allomancy/patchouli_books/guide/%locale_with_underscore%/categories/%original_file_name%.json
+      /src/allomancy/resources/data/allomancy/patchouli_books/guide/%locale_with_underscore%/categories/%original_file_name%
     languages_mapping:
       locale_with_underscore:
         af: af_za
