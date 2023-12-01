@@ -105,7 +105,7 @@ public class MiscHelper
 		int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition(), false))
 		{
-			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 100, 0, maxCharge));
+			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 10, 0, maxCharge));
 		}
 	}
 
@@ -122,7 +122,7 @@ public class MiscHelper
 		for (double i = y; i >= e.level.getMinBuildHeight(); i--)
 		{
 			BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
-			if (!block.isAir())
+			if (!block.isAir() && !block.is(SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock()))
 			{
 				return dist;
 			}

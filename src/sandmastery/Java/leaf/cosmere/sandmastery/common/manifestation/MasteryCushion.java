@@ -29,6 +29,11 @@ public class MasteryCushion extends SandmasteryManifestation
 		return false;
 	}
 
+	@Override
+	protected int getBaseCost() {
+		return 1;
+	}
+
 	protected boolean performEffectServer(ISpiritweb data)
 	{
 		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
@@ -54,7 +59,7 @@ public class MasteryCushion extends SandmasteryManifestation
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
 		living.hurtMarked = true;
 		living.resetFallDistance();
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.CUSHION_HYDRATION_COST.get(), true, data);
+		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		useChargedSand(data);
 		return true;
 	}

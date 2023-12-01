@@ -14,11 +14,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	private final ForgeConfigSpec configSpec;
 
 	public final ForgeConfigSpec.IntValue PROJECTILE_COOLDOWN;
-	public final ForgeConfigSpec.IntValue PROJECTILE_HYDRATION_COST;
-	public final ForgeConfigSpec.IntValue PLATFORM_HYDRATION_COST;
-	public final ForgeConfigSpec.IntValue LAUNCH_HYDRATION_COST;
-	public final ForgeConfigSpec.IntValue ELEVATE_HYDRATION_COST;
-	public final ForgeConfigSpec.IntValue CUSHION_HYDRATION_COST;
+	public final ForgeConfigSpec.DoubleValue HYDRATION_COST_MULTIPLIER;
 	public final ForgeConfigSpec.IntValue CHARGE_COST_MULTIPLIER;
 	public final ForgeConfigSpec.IntValue STARTING_HYDRATION;
 	public final ForgeConfigSpec.IntValue MAX_HYDRATION;
@@ -31,15 +27,11 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
 
-		PROJECTILE_COOLDOWN = builder.comment("How many ticks between each projectile").defineInRange("projectileCooldown", 30, 1, 1000);
+		PROJECTILE_COOLDOWN = builder.comment("How many ticks between projectiles at 1 ribbon allocated in ticks. (1 second = 20 ticks)").defineInRange("projectileCooldown", 100, 24, 1000);
 
-		PROJECTILE_HYDRATION_COST = builder.comment("How much hydration is used per projectile").defineInRange("projectileHydrationCost", 30, 1, 1000);
-		PLATFORM_HYDRATION_COST = builder.comment("How much hydration is used per tick for platform").defineInRange("platformHydrationCost", 60, 1, 1000);
-		LAUNCH_HYDRATION_COST = builder.comment("How much hydration is used per tick for launch").defineInRange("launchHydrationCost", 10, 1, 1000);
-		ELEVATE_HYDRATION_COST = builder.comment("How much hydration is used per tick for elevate").defineInRange("elevateHydrationCost", 10, 1, 1000);
-		CUSHION_HYDRATION_COST = builder.comment("How much hydration is used per tick for cushion").defineInRange("cushionHydrationCost", 10, 1, 1000);
+		HYDRATION_COST_MULTIPLIER = builder.comment("Hydration cost is tied to sand cost, how many units of hydration are used per unit of sand charge").defineInRange("hydrationCostMultiploer", 1.5, 0.5, 100);
 
-		CHARGE_COST_MULTIPLIER = builder.comment("Charge cost multiplier is multiplied by the mode to determine charge cost per tick").defineInRange("chargeCostMultiplier", 2, 1, 1000);
+		CHARGE_COST_MULTIPLIER = builder.comment("Charge cost multiplier is multiplied by the base cost to determine charge cost per tick").defineInRange("chargeCostMultiplier", 2, 1, 1000);
 
 		STARTING_HYDRATION = builder.comment("Starting hydration a player has when they spawn into the world for the first time").defineInRange("startingHydration", 10000, 1, 100000);
 		MAX_HYDRATION = builder.comment("Max hydration a player can have").defineInRange("maxHydration", 10000, 1, 100000);
@@ -74,11 +66,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public void clearCache()
 	{
 		PROJECTILE_COOLDOWN.clearCache();
-		PROJECTILE_HYDRATION_COST.clearCache();
-		PLATFORM_HYDRATION_COST.clearCache();
-		LAUNCH_HYDRATION_COST.clearCache();
-		ELEVATE_HYDRATION_COST.clearCache();
-		CUSHION_HYDRATION_COST.clearCache();
+		HYDRATION_COST_MULTIPLIER.clearCache();
 		CHARGE_COST_MULTIPLIER.clearCache();
 		STARTING_HYDRATION.clearCache();
 		MAX_HYDRATION.clearCache();

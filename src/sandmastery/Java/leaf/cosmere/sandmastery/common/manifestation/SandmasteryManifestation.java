@@ -16,6 +16,7 @@ import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodul
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -71,7 +72,7 @@ public class SandmasteryManifestation extends Manifestation
 		if (data.getLiving() instanceof Player player)
 		{
 			List<ItemStack> allPouches = getSandPouches(player);
-			int required = getCost(data);
+			int required = getSandCost(data);
 
 			if (allPouches.isEmpty())
 			{
@@ -97,7 +98,7 @@ public class SandmasteryManifestation extends Manifestation
 		{
 			List<ItemStack> allPouches = getSandPouches(player);
 
-			int changeLeft = getCost(data);
+			int changeLeft = getSandCost(data);
 			for (ItemStack stack : allPouches)
 			{
 				int startingCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
@@ -132,10 +133,19 @@ public class SandmasteryManifestation extends Manifestation
 		return curios;
 	}
 
-	public int getCost(ISpiritweb data)
+	protected int getBaseCost() {
+		return 10;
+	}
+
+	public int getSandCost(ISpiritweb data)
 	{
-		int mode = data.getMode(this);
-		return mode * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
+		int preModifiedCost = MiscHelper.distanceFromGround(data.getLiving()) * getBaseCost();
+		return preModifiedCost * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
+	}
+
+	public int getHydrationCost(ISpiritweb data)
+	{
+		return (int) Math.round(getSandCost(data) * SandmasteryConfigs.SERVER.HYDRATION_COST_MULTIPLIER.get());
 	}
 
 	private static Predicate<ItemStack> getIsItemInvalid()

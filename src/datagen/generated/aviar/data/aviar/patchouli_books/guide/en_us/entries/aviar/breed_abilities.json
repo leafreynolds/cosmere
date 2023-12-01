@@ -50,7 +50,7 @@
       "offset": 0.0,
       "rotate": false,
       "scale": 1.0,
-      "text": "Allows you to detect when monsters and animals are targeting you"
+      "text": "Allows you to detect when mobs are targeting you"
     }
   ],
   "priority": false,

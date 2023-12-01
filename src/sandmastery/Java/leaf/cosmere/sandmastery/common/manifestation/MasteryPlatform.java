@@ -73,7 +73,7 @@ public class MasteryPlatform extends SandmasteryManifestation
 			}
 			pos = pos.offset(0, 0, -(size * 2) - 1);
 		}
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.PLATFORM_HYDRATION_COST.get(), true, data);
+		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		return true;
 	}
 }

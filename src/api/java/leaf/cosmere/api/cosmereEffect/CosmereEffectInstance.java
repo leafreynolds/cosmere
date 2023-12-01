@@ -46,7 +46,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	 */
 	private int duration;
 
-	private final Map<Attribute, AttributeModifierInfo> attributeModifiers = Maps.newHashMap();
+	private final Map<Attribute, AttributeModifierInfo> dynamicAttributeModifiers = Maps.newHashMap();
 
 	public CosmereEffectInstance()
 	{
@@ -87,11 +87,11 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 		compoundTag.putDouble("strength", strength);
 		compoundTag.putInt("duration", duration);
 
-		if (!this.attributeModifiers.isEmpty())
+		if (!this.dynamicAttributeModifiers.isEmpty())
 		{
 			ListTag listtag = new ListTag();
 
-			for (AttributeModifierInfo info : this.attributeModifiers.values())
+			for (AttributeModifierInfo info : this.dynamicAttributeModifiers.values())
 			{
 				listtag.add(info.save(new CompoundTag()));
 			}
@@ -118,8 +118,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 
 			if (compoundtag.contains("dynamic_attributes"))
 			{
-				//I think when you use 9 as a tag type, it means list of compound
-				ListTag listtag = compoundtag.getList("dynamic_attributes", 9);
+				ListTag listtag = (ListTag) compoundtag.get("dynamic_attributes");
 
 				for (int i = 0; i < listtag.size(); ++i)
 				{
@@ -128,7 +127,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 
 					if (ami != null)
 					{
-						effectInstance.attributeModifiers.put(ami.getAttribute(), ami);
+						effectInstance.dynamicAttributeModifiers.put(ami.getAttribute(), ami);
 					}
 				}
 			}
@@ -181,7 +180,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 			}
 		}
 
-		for (Map.Entry<Attribute, AttributeModifierInfo> entry : attributeModifiers.entrySet())
+		for (Map.Entry<Attribute, AttributeModifierInfo> entry : dynamicAttributeModifiers.entrySet())
 		{
 			AttributeInstance attributeinstance = pAttributeMap.getInstance(entry.getKey());
 			if (attributeinstance != null)
@@ -215,7 +214,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 		}
 
 		//remove dynamic attribute changes specific to this instance;
-		for (Map.Entry<Attribute, AttributeModifierInfo> entry : attributeModifiers.entrySet())
+		for (Map.Entry<Attribute, AttributeModifierInfo> entry : dynamicAttributeModifiers.entrySet())
 		{
 			AttributeInstance attributeinstance = attributeMap.getInstance(entry.getKey());
 			if (attributeinstance != null)
@@ -234,9 +233,9 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	public void setDynamicAttribute(Attribute attribute, double strength, AttributeModifier.Operation operation)
 	{
 		AttributeModifierInfo ami;
-		if (attributeModifiers.containsKey(attribute))
+		if (dynamicAttributeModifiers.containsKey(attribute))
 		{
-			ami = attributeModifiers.get(attribute);
+			ami = dynamicAttributeModifiers.get(attribute);
 			ami.update(strength, operation);
 		}
 		else
@@ -244,12 +243,12 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 			ami = new AttributeModifierInfo(attribute, strength, operation);
 		}
 
-		attributeModifiers.put(attribute, ami);
+		dynamicAttributeModifiers.put(attribute, ami);
 	}
 
 	public void removeDynamicAttribute(Attribute attribute)
 	{
-		attributeModifiers.remove(attribute);
+		dynamicAttributeModifiers.remove(attribute);
 	}
 
 	public void setDuration(int duration)
@@ -287,5 +286,10 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 			effectInstance.setStrength(strength);
 		}
 		return effectInstance;
+	}
+
+	public Map<Attribute, AttributeModifierInfo> getDynamicModifiers()
+	{
+		return dynamicAttributeModifiers;
 	}
 }

@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "MIT"
+
+[[mods]]
+modId = "soulforgery"
+version = "${version}"
+displayName = "Cosmere: Soulforgery"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+authors = "Leaf"
+credits = '''
+
+Special thanks go to:
+Ridanisaurus - For many item and block textures.
+'''
+logoFile = "logo.png"
+description = '''Soulforgery module for Cosmere.'''
+
+[[dependencies.soulforgery]]
+modId = "cosmere"
+mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"

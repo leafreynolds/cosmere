@@ -61,9 +61,11 @@ public class ManifestationCommand extends ModCommand
 			for (Manifestation manifestation : spiritweb.getAvailableManifestations())
 			{
 				powersFound.append(leftBracketTextComponent);
+				final double baseStrength = manifestation.getStrength(spiritweb, true);
+				final double totalStrength = manifestation.getStrength(spiritweb, false);
 				powersFound.append(TextHelper.createTextWithTooltip(
 						(MutableComponent) manifestation.getTextComponent(),
-						Component.literal("Strength" + manifestation.getStrength(spiritweb, false))));//todo translatable
+						Component.translatable(Constants.Strings.POWER_STRENGTH, baseStrength, totalStrength)));
 				powersFound.append(rightBracketTextComponent);
 				powersFound.append(space);
 			}

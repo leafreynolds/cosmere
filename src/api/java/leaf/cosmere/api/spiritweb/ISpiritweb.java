@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public interface ISpiritweb extends INBTSerializable<CompoundTag>
@@ -92,4 +93,6 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	int totalStrengthOfEffect(CosmereEffect cosmereEffect);
 
 	CosmereEffectInstance getEffect(UUID uuid);
+
+	Set<Map.Entry<UUID, CosmereEffectInstance>> getEffects();
 }
