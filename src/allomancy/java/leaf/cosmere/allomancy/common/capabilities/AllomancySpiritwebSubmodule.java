@@ -186,6 +186,12 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
+	public void resetOnDeath(ISpiritweb spiritweb)
+	{
+		pewterDelayedDamage = 0f;
+	}
+
+	@Override
 	public void renderWorldEffects(ISpiritweb spiritweb, RenderLevelStageEvent event)
 	{
 		AllomancyIronSteel ironAllomancy = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.IRON).get();

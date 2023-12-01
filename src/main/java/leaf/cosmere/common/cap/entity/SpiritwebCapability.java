@@ -125,7 +125,6 @@ public class SpiritwebCapability implements ISpiritweb
 		else
 		{
 			ListTag listtag = new ListTag();
-
 			for (CosmereEffectInstance cosmereEffectInstance : this.activeEffects.values())
 			{
 				listtag.add(cosmereEffectInstance.save(new CompoundTag()));
@@ -177,9 +176,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		if (compoundTag.contains("ActiveEffects"))
 		{
-			//I think when you use 9 as a tag type, it means list of compound
-			ListTag listtag = compoundTag.getList("ActiveEffects", 9);
-
+			ListTag listtag = (ListTag) compoundTag.get("ActiveEffects");
 			for (int i = 0; i < listtag.size(); ++i)
 			{
 				CompoundTag compoundtag = listtag.getCompound(i);
@@ -317,6 +314,12 @@ public class SpiritwebCapability implements ISpiritweb
 	public CosmereEffectInstance getEffect(UUID uuid)
 	{
 		return this.activeEffects.get(uuid);
+	}
+
+	@Override
+	public Set<Map.Entry<UUID, CosmereEffectInstance>> getEffects()
+	{
+		return this.activeEffects.entrySet();
 	}
 
 	//get the sum total strength of all matching effects in list of effects affecting target

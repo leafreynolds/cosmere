@@ -194,6 +194,8 @@ public class EngLangGen extends LanguageProvider
 		add(POWER_STRENGTH, "Base Strength: %s \nTotal Strength: %s");
 
 		add(POWERS_FOUND, "Powers found for: %s \n");
+		add(EFFECTS_FOUND, "Effects found for: %s \n");
+		add(EFFECTS_CLEAR, "Effects cleared for: %s \n");
 	}
 
 	private void addKeybindings()

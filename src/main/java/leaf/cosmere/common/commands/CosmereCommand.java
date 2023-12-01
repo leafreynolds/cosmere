@@ -11,6 +11,7 @@ package leaf.cosmere.common.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.commands.arguments.ManifestationsArgumentType;
+import leaf.cosmere.common.commands.subcommands.CosmereEffectCommand;
 import leaf.cosmere.common.commands.subcommands.EyeCommand;
 import leaf.cosmere.common.commands.subcommands.ManifestationCommand;
 import leaf.cosmere.common.commands.subcommands.SummonCommand;
@@ -29,6 +30,7 @@ public class CosmereCommand
 				.then(EyeCommand.register(dispatcher))
 				.then(ManifestationCommand.register(dispatcher))
 				.then(SummonCommand.register(dispatcher))
+				.then(CosmereEffectCommand.register(dispatcher))
 		);
 	}
 

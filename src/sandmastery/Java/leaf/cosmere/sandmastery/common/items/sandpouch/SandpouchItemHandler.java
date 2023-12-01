@@ -70,18 +70,18 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 	protected void onContentsChanged(int slot, int count, MODES mode)
 	{
 		ItemStack changedStack = getStackInSlot(slot);
-		Item sandBlock = SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem();
-		Item sandLayer = SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem();
+		boolean sandBlock = changedStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem() || changedStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.asItem();
+		boolean sandLayer = changedStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem() || changedStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.asItem();
 
 		switch (slot)
 		{
 			case 0:
 				if (mode != MODES.ADD) break; // This slot is input, and can accept both, don't update if it's removed
-				if (changedStack.getItem() == sandBlock)
+				if (sandBlock)
 				{
 					layers += 8 * count; // Blocks are worth 8 layers
 				}
-				else if (changedStack.getItem() == sandLayer)
+				else if (sandLayer)
 				{
 					layers += count;
 				}

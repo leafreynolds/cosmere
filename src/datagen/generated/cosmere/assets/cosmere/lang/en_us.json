@@ -39,6 +39,8 @@
   "block.cosmere.tin_ore": "Tin Ore",
   "block.cosmere.zinc_block": "Zinc Block",
   "block.cosmere.zinc_ore": "Zinc Ore",
+  "command.cosmere.effects.clear": "Effects cleared for: %s \n",
+  "command.cosmere.effects.found": "Effects found for: %s \n",
   "command.cosmere.power.clear.success": "Cleared powers on player: %s",
   "command.cosmere.power.found": "Powers found for: %s \n",
   "command.cosmere.power.set.fail": "Failed to update power",

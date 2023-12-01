@@ -109,6 +109,8 @@ public class Constants
 		public static final String POWERS_FOUND = "command.cosmere.power.found";
 		public static final String POWER_STRENGTH = "command.cosmere.power.strength";
 		public static final String SET_EYE_HEIGHT_SUCCESS = "command.cosmere.eyeheight.set.success";
+		public static final String EFFECTS_FOUND = "command.cosmere.effects.found";
+		public static final String EFFECTS_CLEAR = "command.cosmere.effects.clear";
 
 
 		public static final String CONTAINED_METALS = "tooltip.cosmere.metals.contained";

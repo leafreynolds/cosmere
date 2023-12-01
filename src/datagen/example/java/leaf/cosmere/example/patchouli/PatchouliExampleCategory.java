@@ -1,5 +1,5 @@
 /*
- * File updated ~ 21 - 11 - 2023 ~ Leaf
+ * File updated ~ 22 - 11 - 2023 ~ Leaf
  */
 
 package leaf.cosmere.example.patchouli;
@@ -34,8 +34,7 @@ public class PatchouliExampleCategory
 			terminologyPage.setTitle("Terminology");
 			terminologyPage.setText(
 					"In this journal, I shall explain all I have discovered about Example. $(br)" +
-							"Firstly, some terminology:"
-							+ "$(li) Example: A species of bird, native to the planet 'First of the Sun', in the Drominad system..");
+							"Firstly, some terminology:");
 			pages.add(terminologyPage);
 
 

@@ -1,0 +1,7 @@
+{
+  "description": "Soulforgery description that says some stuff.",
+  "icon": "minecraft:paper",
+  "name": "Soulforgery",
+  "secret": true,
+  "sortnum": 99
+}

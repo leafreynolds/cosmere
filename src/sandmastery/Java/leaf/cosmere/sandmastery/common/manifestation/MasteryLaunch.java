@@ -52,7 +52,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 		data.setMode(this, getMode(data) - 1);
 		data.syncToClients(null);
 
-		submodule.adjustHydration(-SandmasteryConfigs.SERVER.LAUNCH_HYDRATION_COST.get(), true, data);
+		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		useChargedSand(data);
 		return true;
 	}

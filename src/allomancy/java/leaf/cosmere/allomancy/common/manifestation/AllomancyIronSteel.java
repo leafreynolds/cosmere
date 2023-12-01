@@ -598,7 +598,10 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			final ItemStack resultItem = recipe.getResultItem();
 
 			// check if is blacklisted, and if is, skip
-			if (s_blackList.contains(ResourceLocationHelper.get(resultItem.getItem()).getPath()))
+			//if it says result item is never null, ignore it,
+			//we have one confirmed bug report that it _can_ be null
+			// https://github.com/leafreynolds/cosmere/issues/58
+			if (resultItem == null || resultItem.isEmpty() || s_blackList.contains(ResourceLocationHelper.get(resultItem.getItem()).getPath()))
 			{
 				continue;
 			}

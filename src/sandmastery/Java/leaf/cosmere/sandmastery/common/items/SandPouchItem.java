@@ -158,7 +158,7 @@ public class SandPouchItem extends ChargeableItemBase
 							player.getXRot(),
 							player.getYRot(),
 							0.0F,
-							mode * 0.5F + 3F,
+							3F,
 							1.0F);
 
 					sandProjectile.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
