@@ -426,6 +426,9 @@ dependencies {
 	surgebindingAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	sandmasteryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	aviarAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	awakeningAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	aondorAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	soulforgeryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -454,6 +457,9 @@ mixin {
 	add sourceSets.surgebinding, 'mixins.cosmere.surgebinding.refmap.json'
 	add sourceSets.sandmastery, 'mixins.cosmere.sandmastery.refmap.json'
 	add sourceSets.aviar, 'mixins.cosmere.aviar.refmap.json'
+	add sourceSets.awakening, 'mixins.cosmere.awakening.refmap.json'
+	add sourceSets.aondor, 'mixins.cosmere.aondor.refmap.json'
+	add sourceSets.soulforgery, 'mixins.cosmere.soulforgery.refmap.json'
 
 	config 'cosmere.mixins.json'
 	//config 'cosmere.mixins.api.json'
@@ -463,6 +469,9 @@ mixin {
 	config 'surgebinding.mixins.json'
 	config 'sandmastery.mixins.json'
 	config 'aviar.mixins.json'
+	config 'awakening.mixins.json'
+	config 'aondor.mixins.json'
+	config 'soulforgery.mixins.json'
 }
 
 def getManifestAttributes(String title)
