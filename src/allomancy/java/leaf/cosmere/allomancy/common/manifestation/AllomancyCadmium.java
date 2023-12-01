@@ -34,16 +34,6 @@ public class AllomancyCadmium extends AllomancyManifestation
 		int mode = getMode(data);
 		String uuid = data.getLiving().getStringUUID();
 
-		// data thread management
-		{
-			if (!playerThreadMap.containsKey(uuid))
-			{
-				playerThreadMap.put(uuid, new CadmiumThread(data));
-			}
-
-			playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown || entry.getValue() == null);
-		}
-
 		// data processing
 		{
 			// this is the only way to check if the player is still online, thanks forge devs
@@ -98,6 +88,35 @@ public class AllomancyCadmium extends AllomancyManifestation
 			}
 			playerThreadMap.get(uuid).releaseEntityList();
 		}
+	}
+
+	@Override
+	public void onModeChange(ISpiritweb data, int lastMode)
+	{
+		String uuid = data.getLiving().getStringUUID();
+		if (getMode(data) <= 0)
+		{
+			playerThreadMap.remove(uuid);
+		}
+
+		super.onModeChange(data, lastMode);
+	}
+
+	@Override
+	public boolean tick(ISpiritweb data)
+	{
+		// data thread management
+		{
+			String uuid = data.getLiving().getStringUUID();
+			if (!playerThreadMap.containsKey(uuid))
+			{
+				playerThreadMap.put(uuid, new CadmiumThread(data));
+			}
+
+			playerThreadMap.entrySet().removeIf(entry -> !entry.getValue().isRunning || AllomancyEntityThread.serverShutdown || entry.getValue() == null);
+		}
+
+		return super.tick(data);
 	}
 
 	class CadmiumThread extends AllomancyEntityThread
