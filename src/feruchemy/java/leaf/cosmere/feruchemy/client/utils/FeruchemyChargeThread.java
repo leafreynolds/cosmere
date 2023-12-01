@@ -31,10 +31,14 @@ public class FeruchemyChargeThread implements Runnable {
 
     public HashMap<Metals.MetalType, Double> getCharges()
     {
-        lock.lock();
-        try {
-            HashMap<Metals.MetalType, Double> retVal = new HashMap<>(feruchemyChargeMap);
-            lock.unlock();
+        try
+        {
+            HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
+            if (lock.tryLock())
+            {
+                retVal.putAll(feruchemyChargeMap);
+                lock.unlock();
+            }
             return retVal;
         }
         catch (Exception e)
@@ -73,83 +77,95 @@ public class FeruchemyChargeThread implements Runnable {
 
         while (!isStopping)
         {
-            // no serverside action, unloaded levels, or non-existent players allowed >:(
-            if (mc.level == null || mc.player == null || !mc.level.isClientSide)
+            try
             {
-                stop();
-                break;
-            }
-
-            if (mc.player.tickCount % 2 != 0)
-            {
-                try {
-                    Thread.sleep(50);       // 20 ticks per 1000ms, 1000/20 = 50, rest for 1 tick
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                continue;
-            }
-
-            metalmindCharges.clear();
-
-            // all inventory metalminds are counted
-            for (ItemStack stack : mc.player.getInventory().items)
-            {
-                if (stack.getItem() instanceof ChargeableMetalCurioItem item)
+                // no serverside action, unloaded levels, or non-existent players allowed >:(
+                if (mc.level == null || mc.player == null || !mc.level.isClientSide)
                 {
-                    // is either f-item or h-item
-                    if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
+                    break;
+                }
+
+                if (mc.player.tickCount % 2 != 0)   // only run on even ticks
+                {
+                    try
                     {
-                        Double chargeToAdd = (double) item.getCharge(stack);
-                        if (metalmindCharges.containsKey(item.getMetalType()))
+                        Thread.sleep(50);       // 20 ticks per 1000ms, 1000/20 = 50, rest for 1 tick
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
+
+                metalmindCharges.clear();
+
+                // all inventory metalminds are counted
+                for (ItemStack stack : mc.player.getInventory().items)
+                {
+                    if (stack.getItem() instanceof ChargeableMetalCurioItem item)
+                    {
+                        // is either f-item or h-item
+                        if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
                         {
-                            metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
-                        }
-                        else
-                        {
-                            metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                            Double chargeToAdd = (double) item.getCharge(stack);
+                            if (metalmindCharges.containsKey(item.getMetalType()))
+                            {
+                                metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+                            }
+                            else
+                            {
+                                metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                            }
                         }
                     }
                 }
-            }
 
-            // all curio metalminds are counted
-            CuriosApi.getCuriosHelper().getEquippedCurios(mc.player)
-                    .map(mapper ->
-                    {
-                        for (int i = 0; i < mapper.getSlots(); i++)
+                // all curio metalminds are counted
+                CuriosApi.getCuriosHelper().getEquippedCurios(mc.player)
+                        .map(mapper ->
                         {
-                            if (mapper.getStackInSlot(i).getItem() instanceof ChargeableMetalCurioItem item)
+                            for (int i = 0; i < mapper.getSlots(); i++)
                             {
-                                if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
+                                if (mapper.getStackInSlot(i).getItem() instanceof ChargeableMetalCurioItem item)
                                 {
-                                    Double chargeToAdd = (double) item.getCharge(mapper.getStackInSlot(i));
-                                    if (metalmindCharges.containsKey(item.getMetalType()))
+                                    if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
                                     {
-                                        metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
-                                    }
-                                    else
-                                    {
-                                        metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                                        Double chargeToAdd = (double) item.getCharge(mapper.getStackInSlot(i));
+                                        if (metalmindCharges.containsKey(item.getMetalType()))
+                                        {
+                                            metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+                                        }
+                                        else
+                                        {
+                                            metalmindCharges.put(item.getMetalType(), chargeToAdd);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        return true;
-                    });
+                            return true;
+                        });
 
-            lock.lock();
-            try {
-                feruchemyChargeMap.clear();
-                feruchemyChargeMap.putAll(metalmindCharges);
+                try
+                {
+                    if (lock.tryLock())
+                    {
+                        feruchemyChargeMap.clear();
+                        feruchemyChargeMap.putAll(metalmindCharges);
+                        lock.unlock();
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    lock.unlock();
+                }
             }
             catch (Exception e)
             {
-                e.printStackTrace();
-            }
-            finally {
-                lock.unlock();
+                CosmereAPI.logger.warn(Arrays.toString(e.getStackTrace()));
             }
         }
+        stop();
     }
 }
