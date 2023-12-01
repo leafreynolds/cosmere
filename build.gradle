@@ -525,7 +525,7 @@ def sandmasteryJar = secondaryJar(sourceSets.sandmastery, 'Sandmastery')
 def awakeningJar = secondaryJar(sourceSets.awakening, 'Awakening')
 def aondorJar = secondaryJar(sourceSets.aondor, 'AonDor')
 def aviarJar = secondaryJar(sourceSets.aviar, 'Aviar')
-def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'Forgery')
+def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'SoulForgery')
 def exampleJar = secondaryJar(sourceSets.example, 'Example')
 
 tasks.withType(JavaCompile).configureEach({
