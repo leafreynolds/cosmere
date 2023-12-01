@@ -31,10 +31,14 @@ public class FeruchemyChargeThread implements Runnable {
 
     public HashMap<Metals.MetalType, Double> getCharges()
     {
-        lock.lock();
-        try {
-            HashMap<Metals.MetalType, Double> retVal = new HashMap<>(feruchemyChargeMap);
-            lock.unlock();
+        try
+        {
+            HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
+            if (lock.tryLock())
+            {
+                retVal.putAll(feruchemyChargeMap);
+                lock.unlock();
+            }
             return retVal;
         }
         catch (Exception e)
@@ -81,15 +85,15 @@ public class FeruchemyChargeThread implements Runnable {
                     break;
                 }
 
-                if (mc.player.tickCount % 2 != 0)
+                if (mc.player.tickCount % 2 != 0)   // only run on even ticks
                 {
                     try
                     {
                         Thread.sleep(50);       // 20 ticks per 1000ms, 1000/20 = 50, rest for 1 tick
                     }
-                    catch (InterruptedException e)
+                    catch (Exception e)
                     {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                     continue;
                 }
@@ -142,18 +146,18 @@ public class FeruchemyChargeThread implements Runnable {
                             return true;
                         });
 
-                lock.lock();
                 try
                 {
-                    feruchemyChargeMap.clear();
-                    feruchemyChargeMap.putAll(metalmindCharges);
+                    if (lock.tryLock())
+                    {
+                        feruchemyChargeMap.clear();
+                        feruchemyChargeMap.putAll(metalmindCharges);
+                        lock.unlock();
+                    }
                 }
                 catch (Exception e)
                 {
                     e.printStackTrace();
-                }
-                finally
-                {
                     lock.unlock();
                 }
             }

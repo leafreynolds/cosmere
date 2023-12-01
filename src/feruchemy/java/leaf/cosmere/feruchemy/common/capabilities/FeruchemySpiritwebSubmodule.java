@@ -14,14 +14,18 @@ import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 {
+	private static final HashMap<Metals.MetalType, Double> metalmindChargesMap = new HashMap<>();
 	@Override
 	public void GiveStartingItem(Player player)
 	{
@@ -49,9 +53,14 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void collectMenuInfo(List<String> m_infoText)
 	{
-		HashMap<Metals.MetalType, Double> metalmindChargesMap = FeruchemyChargeThread.getInstance().getCharges();
+		if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.tickCount % 2 == 1)    // only do on odd tick
+		{
+			metalmindChargesMap.clear();
+			metalmindChargesMap.putAll(FeruchemyChargeThread.getInstance().getCharges());
+		}
 
 		if (!metalmindChargesMap.isEmpty())
 		{
