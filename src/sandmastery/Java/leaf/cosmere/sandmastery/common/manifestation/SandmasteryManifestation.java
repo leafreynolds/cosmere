@@ -140,6 +140,7 @@ public class SandmasteryManifestation extends Manifestation
 	public int getSandCost(ISpiritweb data)
 	{
 		int preModifiedCost = MiscHelper.distanceFromGround(data.getLiving()) * getBaseCost();
+		if(preModifiedCost < 0) preModifiedCost = 1000000000; // If the cost is less than 0, I am over the void. Cost should be high enough cost that you can't reasonably use the power
 		return preModifiedCost * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
 	}
 
