@@ -4,17 +4,16 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class AllomancyBrass extends AllomancyManifestation
 {
@@ -53,16 +52,22 @@ public class AllomancyBrass extends AllomancyManifestation
 			{
 				if (e instanceof Mob mob)
 				{
-					mob.setNoAi(mode == 3 && allomanticStrength > 15);
-
 					switch (mode)
 					{
 						case 2:
+							if (allomanticStrength > 15 && !mob.isNoAi())
+							{
+								mob.addEffect(EffectsHelper.getNewEffect(
+										AllomancyEffects.ALLOMANTIC_BRASS_STUN.getMobEffect(),
+										0,      // no amplification system in place
+										20*5
+								));
+							}
 							mob.setTarget(null);
 						case 1:
 							mob.setAggressive(false);
 						default://stop angry targets from attacking things
-							e.setLastHurtByMob(null);
+							mob.setLastHurtByMob(null);
 					}
 				}
 			}

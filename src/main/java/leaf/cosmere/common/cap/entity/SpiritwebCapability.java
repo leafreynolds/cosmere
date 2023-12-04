@@ -317,6 +317,14 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
+	public boolean hasEffect(CosmereEffect effect)
+	{
+		List<CosmereEffectInstance> effectList = this.activeEffects.values().stream().filter(effectInstance ->
+				effectInstance.getEffect().equals(effect)).toList();
+		return !effectList.isEmpty();
+	}
+
+	@Override
 	public Set<Map.Entry<UUID, CosmereEffectInstance>> getEffects()
 	{
 		return this.activeEffects.entrySet();

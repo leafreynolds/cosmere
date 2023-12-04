@@ -47,6 +47,7 @@ public class Allomancy implements IModModule
 		AllomancyItems.ITEMS.register(modBus);
 		AllomancyAttributes.ATTRIBUTES.register(modBus);
 		AllomancyEffects.EFFECTS.register(modBus);
+		AllomancyEffects.MOB_EFFECTS.register(modBus);
 		AllomancyEntityTypes.ENTITY_TYPES.register(modBus);
 		AllomancyManifestations.MANIFESTATIONS.register(modBus);
 		AllomancyMenuTypes.MENU_TYPES.register(modBus);

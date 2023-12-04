@@ -94,5 +94,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	CosmereEffectInstance getEffect(UUID uuid);
 
+	boolean hasEffect(CosmereEffect effect);
+
 	Set<Map.Entry<UUID, CosmereEffectInstance>> getEffects();
 }

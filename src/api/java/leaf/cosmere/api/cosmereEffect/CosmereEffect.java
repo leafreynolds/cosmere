@@ -83,7 +83,6 @@ public abstract class CosmereEffect implements ICosmereEffectProvider
 		return this;
 	}
 
-
 	@Override
 	public String getTranslationKey()
 	{
