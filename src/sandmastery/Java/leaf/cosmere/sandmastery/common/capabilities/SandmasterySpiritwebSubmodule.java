@@ -44,7 +44,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private CompoundTag sandmasteryTag = null;
 	private int hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
 	private int projectileCooldown = 0;
-	private final LinkedList<SandmasteryManifestation> ribbonsInUse = new LinkedList<>();
+	private int numRibbonsInUse = 0;
 
 	private int hotkeyFlags = 0;
 
@@ -60,28 +60,28 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		{
 			final int isActivatedAndActive =
 					Keybindings.MANIFESTATION_USE_ACTIVE.isDown()
-					? 1
-					: 0;
+							? 1
+							: 0;
 
 			final int elevateFlag =
 					SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown()
-					? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
+							: 0;
 
 			final int launchFlag =
 					SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown()
-					? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
+							: 0;
 
 			final int projectileFlag =
 					SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown()
-					? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
+							: 0;
 
 			final int platformFlag =
 					SandmasteryKeybindings.SANDMASTERY_PLATFORM.isDown()
-					? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
+							: 0;
 
 			int currentFlags = 0;
 			currentFlags = currentFlags + isActivatedAndActive;
@@ -140,6 +140,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		hydrationLevel = sandmasteryTag.getInt(SandmasteryConstants.HYDRATION_TAG);
 		projectileCooldown = sandmasteryTag.getInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG);
 		hotkeyFlags = sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
+		numRibbonsInUse = sandmasteryTag.getInt(SandmasteryConstants.RIBBONS_IN_USE_TAG);
 	}
 
 	@Override
@@ -155,6 +156,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		sandmasteryTag.putInt(SandmasteryConstants.HYDRATION_TAG, hydrationLevel);
 		sandmasteryTag.putInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG, projectileCooldown);
 		sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
+		sandmasteryTag.putInt(SandmasteryConstants.RIBBONS_IN_USE_TAG, numRibbonsInUse);
 
 		//this shouldn't be necessary, as the spiritweb tag should already have the reference
 		//but we are hunting a null ref, so maybe something gets unassigned somewhere
@@ -179,7 +181,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void GiveStartingItem(Player player)
 	{
-		if(SandmasteryConfigs.SERVER.GIVE_QIDO_ON_FIRST_LOGIN.get()) {
+		if (SandmasteryConfigs.SERVER.GIVE_QIDO_ON_FIRST_LOGIN.get())
+		{
 			Random r = new Random();
 			ItemStack qido = SandmasteryItems.QIDO_ITEM.asItem().getChargedQido(r.nextFloat());
 			PlayerHelper.addItem(player, qido);
@@ -304,33 +307,45 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		return this.projectileCooldown <= 0;
 	}
 
-
-	public void useRibbon(ISpiritweb data, SandmasteryManifestation manifestation)
+	public int requstRibbons(ISpiritweb data, SandmasteryManifestation manifestation, int requestedRibbons)
 	{
+		int change = 0;
 		int maxRibbons = (int) manifestation.getStrength(data, false);
-		if (ribbonsInUse.size() >= maxRibbons)
+
+		if (numRibbonsInUse >= maxRibbons)
 		{
-			SandmasteryManifestation ribbon = ribbonsInUse.getLast();
-			data.setMode(ribbon, data.getMode(ribbon) - 1);
+			change = 0;
+			this.numRibbonsInUse = maxRibbons;
 		}
-		ribbonsInUse.addFirst(manifestation);
-		data.syncToClients(null);
+		else
+		{
+			change = requestedRibbons - (requestedRibbons % manifestation.getRibbonsPerLevel());
+		}
+		this.numRibbonsInUse += change;
+		return change;
 	}
 
-	public void releaseRibbon(ISpiritweb data, SandmasteryManifestation manifestation)
+	public int returnRibbons(ISpiritweb data, SandmasteryManifestation manifestation, int returnedRibbons)
 	{
-		int index = ribbonsInUse.indexOf(manifestation);
-		if (index > -1)
-		{
-			ribbonsInUse.remove(index);
-		}
-		data.syncToClients(null);
+		int oldRibbons = this.numRibbonsInUse;
+		int newRibbons = Math.max(0, this.numRibbonsInUse - returnedRibbons);
+		this.numRibbonsInUse = newRibbons;
+		return oldRibbons - newRibbons;
+	}
+
+	public int getUsedRibbons()
+	{
+		return this.numRibbonsInUse;
+	}
+
+	public void setUsedRibbons(int ribbons)
+	{
+		this.numRibbonsInUse = ribbons;
 	}
 
 	public void debugRibbonUsage()
 	{
-		CosmereAPI.logger.info("Ribbons in use ");
-		CosmereAPI.logger.info(ribbonsInUse.toString());
+		CosmereAPI.logger.info("Ribbons in use: " + numRibbonsInUse);
 	}
 
 	public void updateFlags(int flags)

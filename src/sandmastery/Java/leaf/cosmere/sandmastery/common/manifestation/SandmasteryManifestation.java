@@ -5,6 +5,7 @@
 package leaf.cosmere.sandmastery.common.manifestation;
 
 import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.helpers.StackNBTHelper;
@@ -16,6 +17,7 @@ import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodul
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
@@ -53,18 +55,47 @@ public class SandmasteryManifestation extends Manifestation
 	}
 
 	@Override
-	public void onModeChange(ISpiritweb data, int lastMode)
+	public int getModeModifier(ISpiritweb data, int requestedModifier)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-		if (getMode(data) > lastMode)
+		Manifestation selected = data.getSelectedManifestation();
+		sanityCheckRibbons(data); //todo: find a better way of doing this, I don't want to loop over the manifestations every time
+
+		if (requestedModifier > 0)
 		{
-			submodule.useRibbon(data, this);
+			if (selected.getMode(data) >= modeMax(data)) return 0;
+			return submodule.requstRibbons(data, this, requestedModifier);
 		}
-		else if (getMode(data) < lastMode)
+		else if (requestedModifier < 0)
 		{
-			submodule.releaseRibbon(data, this);
+			if (selected.getMode(data) <= modeMin(data)) return 0;
+			return -submodule.returnRibbons(data, this, -requestedModifier); // function expects the number of returned ribbons to be positive, and returns the number of ribbons returned as a positive integer.
 		}
+		return requestedModifier;
+	}
+
+	public void sanityCheckRibbons(ISpiritweb data)
+	{
+		int ribbons = 0;
+		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+		{
+			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
+			{
+				ribbons += data.getMode(manifestation);
+			}
+		}
+		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
+		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+		if (ribbons != submodule.getUsedRibbons())
+		{
+			submodule.setUsedRibbons(ribbons);
+		}
+	}
+
+	public int getRibbonsPerLevel()
+	{
+		return 1;
 	}
 
 	protected boolean notEnoughChargedSand(ISpiritweb data)
@@ -133,14 +164,16 @@ public class SandmasteryManifestation extends Manifestation
 		return curios;
 	}
 
-	protected int getBaseCost() {
+	protected int getBaseCost()
+	{
 		return 10;
 	}
 
 	public int getSandCost(ISpiritweb data)
 	{
 		int preModifiedCost = MiscHelper.distanceFromGround(data.getLiving()) * getBaseCost();
-		if(preModifiedCost < 0) preModifiedCost = 1000000000; // If the cost is less than 0, I am over the void. Cost should be high enough cost that you can't reasonably use the power
+		if (preModifiedCost < 0)
+			preModifiedCost = 1000000000; // If the cost is less than 0, I am over the void. Cost should be high enough cost that you can't reasonably use the power
 		return preModifiedCost * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
 	}
 

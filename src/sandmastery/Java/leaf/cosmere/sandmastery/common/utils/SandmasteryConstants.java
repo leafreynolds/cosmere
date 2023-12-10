@@ -13,6 +13,7 @@ public class SandmasteryConstants
 	public static final String HYDRATION_TAG = "hydration_level";
 	public static final String PROJECTILE_COOLDOWN_TAG = "projectile_cooldown";
 	public static final String HOTKEY_TAG = "hotkeys";
+	public static final String RIBBONS_IN_USE_TAG = "ribbons_in_use";
 	public static final int CHARGE_PER_SAND_LAYER = 100;
 	public static final int ELEVATE_HOTKEY_FLAG = 2;
 	public static final int LAUNCH_HOTKEY_FLAG = 4;
