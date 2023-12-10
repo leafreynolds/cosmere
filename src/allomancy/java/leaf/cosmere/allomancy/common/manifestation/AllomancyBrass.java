@@ -9,9 +9,13 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.*;
 
@@ -47,20 +51,25 @@ public class AllomancyBrass extends AllomancyManifestation
 				playerThreadMap.put(uuid, new BrassThread(data));
 			}
 
-			List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
-			for (LivingEntity e : entitiesToAffect)
+			// don't remove old code comments yet, still testing
+			//List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+			//for (LivingEntity e : entitiesToAffect)
+			//{
+			HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), getRange(data));
+			if (ray instanceof EntityHitResult entityHitResult)
 			{
+				Entity e = entityHitResult.getEntity();
 				if (e instanceof Mob mob)
 				{
 					switch (mode)
 					{
 						case 2:
-							if (allomanticStrength > 15 && !mob.isNoAi())
+							if (allomanticStrength > 15 )//&& !mob.isNoAi())
 							{
 								mob.addEffect(EffectsHelper.getNewEffect(
 										AllomancyEffects.ALLOMANTIC_BRASS_STUN.getMobEffect(),
 										0,      // no amplification system in place
-										20*5
+										20 * 5
 								));
 							}
 							mob.setTarget(null);
@@ -71,7 +80,8 @@ public class AllomancyBrass extends AllomancyManifestation
 					}
 				}
 			}
-			playerThreadMap.get(uuid).releaseEntityList();
+			//}
+			//playerThreadMap.get(uuid).releaseEntityList();
 		}
 	}
 
