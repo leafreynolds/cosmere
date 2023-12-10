@@ -4,6 +4,7 @@
 
 package leaf.cosmere.client;
 
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -64,6 +65,7 @@ public class ClientForgeEvents
 
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
+			Manifestation selected = spiritweb.getSelectedManifestation();
 			if (isKeyPressed(event, Keybindings.MANIFESTATIONS_DEACTIVATE))
 			{
 				//if crouching, only turn off.
@@ -93,21 +95,20 @@ public class ClientForgeEvents
 
 			if (modeIncreasePressed || modeDecreasedPressed)
 			{
-				int dir;
+				int modifier;
 				if (Screen.hasShiftDown())
 				{
-					dir = 5;
+					modifier = 5;
 				}
 				else if (Screen.hasControlDown())
 				{
-					dir = 10;
+					modifier = 10;
 				}
 				else
 				{
-					dir = 1;
+					modifier = 1;
 				}
-				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(spiritweb.getSelectedManifestation(), dir * (
-						modeIncreasePressed ? 1 : -1)));
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(selected, modeIncreasePressed ? modifier : -modifier));
 			}
 		});
 	}
