@@ -38,10 +38,20 @@ public class QidoItem extends ChargeableItemBase
 		super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
 	}
 
+	/**
+	 * @param fillPercent ranges from 0 to 1
+	 * @return ItemStack of a qido with specified fill percentage
+	 */
+	public ItemStack getChargedQido(float fillPercent) {
+		ItemStack qido = new ItemStack(this);
+		setCharge(qido, Math.round(fillPercent * SandmasteryConfigs.SERVER.QIDO_MAX_FILL.get()));
+		return qido;
+	}
+
 	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
-		return Mth.floor(10000 * getMaxChargeModifier());
+		return SandmasteryConfigs.SERVER.QIDO_MAX_FILL.get();
 	}
 
 	@Override

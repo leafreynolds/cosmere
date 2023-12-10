@@ -20,7 +20,8 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue MAX_HYDRATION;
 	public final ForgeConfigSpec.IntValue OVERMASTERY_DURATION;
 	public final ForgeConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
-
+	public final ForgeConfigSpec.BooleanValue GIVE_QIDO_ON_FIRST_LOGIN;
+	public final ForgeConfigSpec.IntValue QIDO_MAX_FILL;
 
 	SandmasteryServerConfig()
 	{
@@ -39,6 +40,10 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		OVERMASTERY_DURATION = builder.comment("How long overmastery lasts in minutes").defineInRange("overmasteryDuration", 120, 1, 720);
 
 		DEHYDRATION_THRESHOLD = builder.comment("The threshold at which a player will start to become dehydrated (percentage of max)").defineInRange("dehydrationThreshold", 0.01, 0.1, 100.0);
+
+		GIVE_QIDO_ON_FIRST_LOGIN = builder.comment("Should the player be given a qido on first login?").define("qidoOnFirstLogin", false);
+
+		QIDO_MAX_FILL = builder.comment("How much hydration should a qido restore in a single fill?").defineInRange("qidoMaxFill", 10000, 1, 1000000);
 
 		builder.pop();
 		configSpec = builder.build();
