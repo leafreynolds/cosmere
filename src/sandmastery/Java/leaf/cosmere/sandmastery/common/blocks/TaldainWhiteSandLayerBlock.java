@@ -101,7 +101,7 @@ public class TaldainWhiteSandLayerBlock extends BaseFallingBlock
 	public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos)
 	{
 		if (touchesLiquid(pLevel, pCurrentPos, pState))
-			return this.defaultBlockState().setValue(LAYERS, pState.getValue(LAYERS));
+			return SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock().defaultBlockState().setValue(LAYERS, pState.getValue(LAYERS));
 		return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
 	}
 
