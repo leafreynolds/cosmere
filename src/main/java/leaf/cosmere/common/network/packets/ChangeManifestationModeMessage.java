@@ -4,6 +4,7 @@
 
 package leaf.cosmere.common.network.packets;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
@@ -31,7 +32,7 @@ public class ChangeManifestationModeMessage implements ICosmerePacket
 		MinecraftServer server = sender.getServer();
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((data) ->
 		{
-			int finalModifier = manifestation.getModeModifier(data, modifier);
+			int finalModifier = manifestation.getModeModifier(data, manifestation, modifier);
 			if (finalModifier == 1)
 			{
 				data.nextMode(manifestation);

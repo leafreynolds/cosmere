@@ -58,7 +58,7 @@ public class Manifestation implements IManifestationProvider
 		return data.getMode(this);
 	}
 
-	public int getModeModifier(ISpiritweb data, int requestedModifier)
+	public int getModeModifier(ISpiritweb data, Manifestation manifestation, int requestedModifier)
 	{
 		return requestedModifier;
 	}

@@ -55,21 +55,20 @@ public class SandmasteryManifestation extends Manifestation
 	}
 
 	@Override
-	public int getModeModifier(ISpiritweb data, int requestedModifier)
+	public int getModeModifier(ISpiritweb data, Manifestation manifestation, int requestedModifier)
 	{
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-		Manifestation selected = data.getSelectedManifestation();
 		sanityCheckRibbons(data); //todo: find a better way of doing this, I don't want to loop over the manifestations every time
-
+		requestedModifier *= ((SandmasteryManifestation) manifestation).getRibbonsPerLevel();
 		if (requestedModifier > 0)
 		{
-			if (selected.getMode(data) >= modeMax(data)) return 0;
+			if (manifestation.getMode(data) >= modeMax(data)) return 0;
 			return submodule.requstRibbons(data, this, requestedModifier);
 		}
 		else if (requestedModifier < 0)
 		{
-			if (selected.getMode(data) <= modeMin(data)) return 0;
+			if (manifestation.getMode(data) <= modeMin(data)) return 0;
 			return -submodule.returnRibbons(data, this, -requestedModifier); // function expects the number of returned ribbons to be positive, and returns the number of ribbons returned as a positive integer.
 		}
 		return requestedModifier;

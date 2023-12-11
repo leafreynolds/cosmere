@@ -44,6 +44,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private CompoundTag sandmasteryTag = null;
 	private int hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
 	private int projectileCooldown = 0;
+	private int launchCooldown = 0;
 	private int numRibbonsInUse = 0;
 
 	private int hotkeyFlags = 0;
@@ -307,6 +308,11 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		return this.projectileCooldown <= 0;
 	}
 
+	public boolean launchReady()
+	{
+		return this.launchCooldown <= 0;
+	}
+
 	public int requstRibbons(ISpiritweb data, SandmasteryManifestation manifestation, int requestedRibbons)
 	{
 		int change = 0;
@@ -319,7 +325,11 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 		else
 		{
-			change = requestedRibbons - (requestedRibbons % manifestation.getRibbonsPerLevel());
+			int changeAttempt = requestedRibbons;
+			if ((this.numRibbonsInUse + changeAttempt) <= maxRibbons)
+			{
+				change = changeAttempt;
+			}
 		}
 		this.numRibbonsInUse += change;
 		return change;

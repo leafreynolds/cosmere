@@ -22,6 +22,12 @@ public class MasteryLaunch extends SandmasteryManifestation
 	}
 
 	@Override
+	public int getRibbonsPerLevel()
+	{
+		return 3;
+	}
+
+	@Override
 	public boolean tick(ISpiritweb data)
 	{
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.LAUNCH_HOTKEY_FLAG);
