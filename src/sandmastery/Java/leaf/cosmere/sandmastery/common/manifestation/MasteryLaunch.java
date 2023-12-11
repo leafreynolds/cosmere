@@ -4,19 +4,17 @@
 
 package leaf.cosmere.sandmastery.common.manifestation;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
-import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class MasteryLaunch extends SandmasteryManifestation
@@ -76,7 +74,9 @@ public class MasteryLaunch extends SandmasteryManifestation
 			submodule.resetLaunches();
 			launch(player);
 		}
-		CosmereAPI.logger.info("Launches since ground: " + submodule.getLaunches());
+
+		BlockPos groundPos = MiscHelper.blockPosAtGround(data.getLiving());
+		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level, data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
 
 		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		useChargedSand(data);
