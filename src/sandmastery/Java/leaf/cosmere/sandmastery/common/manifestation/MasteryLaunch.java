@@ -85,7 +85,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 
 	protected void launch(ServerPlayer player)
 	{
-		float scaleFactor = 3; // todo: find a good value
+		float scaleFactor = 2f; // todo: find a good value
 		Vec3 direction = player.getForward();
 		Vec3 add = player.getDeltaMovement().add(direction.multiply(scaleFactor, scaleFactor, scaleFactor));
 		player.setDeltaMovement(VectorHelper.ClampMagnitude(add, 10));
