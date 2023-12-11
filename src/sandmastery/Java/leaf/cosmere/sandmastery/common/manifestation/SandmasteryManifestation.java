@@ -60,7 +60,7 @@ public class SandmasteryManifestation extends Manifestation
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 		sanityCheckRibbons(data); //todo: find a better way of doing this, I don't want to loop over the manifestations every time
-		requestedModifier *= ((SandmasteryManifestation) manifestation).getRibbonsPerLevel();
+		requestedModifier *= ((SandmasteryManifestation) manifestation).getRibbonsPerLevel(data);
 		if (requestedModifier > 0)
 		{
 			if (manifestation.getMode(data) >= modeMax(data)) return 0;
@@ -92,7 +92,7 @@ public class SandmasteryManifestation extends Manifestation
 		}
 	}
 
-	public int getRibbonsPerLevel()
+	public int getRibbonsPerLevel(ISpiritweb data)
 	{
 		return 1;
 	}

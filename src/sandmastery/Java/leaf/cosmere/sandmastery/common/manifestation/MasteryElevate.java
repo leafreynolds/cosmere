@@ -32,6 +32,18 @@ public class MasteryElevate extends SandmasteryManifestation
 		return false;
 	}
 
+	@Override
+	public int getBaseCost()
+	{
+		return 1;
+	}
+
+	@Override
+	public int getRibbonsPerLevel(ISpiritweb data)
+	{
+		return getMode(data) < 3 ? 3 : 1;
+	}
+
 	protected boolean performEffectServer(ISpiritweb data)
 	{
 		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
@@ -52,8 +64,9 @@ public class MasteryElevate extends SandmasteryManifestation
 			return false;
 		}
 
+		double speed = (maxLift - distFromGround) > 3 ? scaleSpeedToMode(getMode(data)) : 0.15;
 
-		Vec3 direction = (maxLift - distFromGround) > 3 ? new Vec3(0, 0.75, 0) : new Vec3(0, 0.15, 0);
+		Vec3 direction = new Vec3(0, speed, 0);
 
 		living.setDeltaMovement(direction);
 		living.hurtMarked = true; // Allow the game to move the player
@@ -63,5 +76,10 @@ public class MasteryElevate extends SandmasteryManifestation
 		useChargedSand(data);
 
 		return true;
+	}
+
+	double scaleSpeedToMode(double mode)
+	{
+		return (mode * 0.025) + 0.15;
 	}
 }

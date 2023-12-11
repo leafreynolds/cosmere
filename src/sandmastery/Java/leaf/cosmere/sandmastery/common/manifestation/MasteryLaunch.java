@@ -27,7 +27,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 	}
 
 	@Override
-	public int getRibbonsPerLevel()
+	public int getRibbonsPerLevel(ISpiritweb data)
 	{
 		return 3;
 	}
