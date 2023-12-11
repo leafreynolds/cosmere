@@ -14,11 +14,13 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class MasteryPlatform extends SandmasteryManifestation
 {
@@ -73,6 +75,10 @@ public class MasteryPlatform extends SandmasteryManifestation
 			}
 			pos = pos.offset(0, 0, -(size * 2) - 1);
 		}
+
+		BlockPos groundPos = MiscHelper.blockPosAtGround(data.getLiving());
+		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level, data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
+
 		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		return true;
 	}
