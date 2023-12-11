@@ -272,15 +272,15 @@ public class MiscHelper
 		double xDist = pos1.x - pos2.x;
 		double yDist = pos1.y - pos2.y;
 		double zDist = pos1.z - pos2.z;
-		double xStepSize = pos1.x / xDist;
-		double yStepSize = pos1.y / yDist;
-		double zStepSize = pos1.z / zDist;
+		double xStepSize = xDist / steps;
+		double yStepSize = yDist / steps;
+		double zStepSize = zDist / steps;
 
 		for (int i = 0; i < steps; i++)
 		{
-			double x = pos1.x + (xStepSize * i);
-			double y = pos1.y + (yStepSize * i);
-			double z = pos1.z + (zStepSize * i);
+			double x = pos1.x - (xStepSize * i);
+			double y = pos1.y - (yStepSize * i);
+			double z = pos1.z - (zStepSize * i);
 			array.add(new Vec3(x, y, z));
 		}
 
