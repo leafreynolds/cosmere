@@ -45,6 +45,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private int hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
 	private int projectileCooldown = 0;
 	private int launchCooldown = 0;
+	private int launchesSinceLeftGround = 0;
 	private int numRibbonsInUse = 0;
 
 	private int hotkeyFlags = 0;
@@ -140,6 +141,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		//unload the player specific fields
 		hydrationLevel = sandmasteryTag.getInt(SandmasteryConstants.HYDRATION_TAG);
 		projectileCooldown = sandmasteryTag.getInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG);
+		launchCooldown = sandmasteryTag.getInt(SandmasteryConstants.LAUNCH_COOLDOWN_TAG);
+		launchesSinceLeftGround = sandmasteryTag.getInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG);
 		hotkeyFlags = sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
 		numRibbonsInUse = sandmasteryTag.getInt(SandmasteryConstants.RIBBONS_IN_USE_TAG);
 	}
@@ -156,6 +159,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 		sandmasteryTag.putInt(SandmasteryConstants.HYDRATION_TAG, hydrationLevel);
 		sandmasteryTag.putInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG, projectileCooldown);
+		sandmasteryTag.putInt(SandmasteryConstants.LAUNCH_COOLDOWN_TAG, launchCooldown);
+		sandmasteryTag.putInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG, launchesSinceLeftGround);
 		sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
 		sandmasteryTag.putInt(SandmasteryConstants.RIBBONS_IN_USE_TAG, numRibbonsInUse);
 
@@ -298,9 +303,19 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		this.projectileCooldown -= this.projectileCooldown < 1 ? 0 : 1;
 	}
 
+	public void tickLaunchCooldown()
+	{
+		this.launchCooldown -= this.launchCooldown < 1 ? 0 : 1;
+	}
+
 	public void setProjectileCooldown(int cooldown)
 	{
 		this.projectileCooldown = cooldown;
+	}
+
+	public void setLaunchCooldown(int cooldown)
+	{
+		this.launchCooldown = cooldown;
 	}
 
 	public boolean projectileReady()
@@ -311,6 +326,21 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	public boolean launchReady()
 	{
 		return this.launchCooldown <= 0;
+	}
+
+	public void addLaunch()
+	{
+		this.launchesSinceLeftGround += 1;
+	}
+
+	public int getLaunches()
+	{
+		return this.launchesSinceLeftGround;
+	}
+
+	public void resetLaunches()
+	{
+		this.launchesSinceLeftGround = 0;
 	}
 
 	public int requstRibbons(ISpiritweb data, SandmasteryManifestation manifestation, int requestedRibbons)

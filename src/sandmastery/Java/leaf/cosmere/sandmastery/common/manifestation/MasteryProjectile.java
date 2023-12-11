@@ -34,7 +34,6 @@ public class MasteryProjectile extends SandmasteryManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		super.tick(data);
 		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
 		submodule.tickProjectileCooldown();
 
@@ -42,6 +41,7 @@ public class MasteryProjectile extends SandmasteryManifestation
 		{
 			return false;
 		}
+
 		boolean enabledViaHotkey = MiscHelper.enabledViaHotkey(data, SandmasteryConstants.PROJECTILE_HOTKEY_FLAG);
 		if (getMode(data) > 0 && enabledViaHotkey)
 		{
