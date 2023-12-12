@@ -10,9 +10,7 @@ import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.items.MetalVialItem;
-import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
-import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
-import leaf.cosmere.allomancy.common.manifestation.AllomancyTin;
+import leaf.cosmere.allomancy.common.manifestation.*;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.ISpiritwebSubmodule;
@@ -92,6 +90,28 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			if (tinActive && !tin.isCompounding(spiritweb))
 			{
 				tin.applyEffectTick(spiritweb);
+			}
+		}
+
+		//brass allomancy
+		{
+			AllomancyBrass brass = (AllomancyBrass) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.BRASS).get();
+			final boolean brassActive = brass.isActive(spiritweb);
+
+			if (brassActive && !brass.isCompounding(spiritweb))
+			{
+				brass.applyEffectTick(spiritweb);
+			}
+		}
+
+		//brass allomancy
+		{
+			AllomancyZinc zinc = (AllomancyZinc) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.ZINC).get();
+			final boolean zincActive = zinc.isActive(spiritweb);
+
+			if (zincActive && !zinc.isCompounding(spiritweb))
+			{
+				zinc.applyEffectTick(spiritweb);
 			}
 		}
 	}

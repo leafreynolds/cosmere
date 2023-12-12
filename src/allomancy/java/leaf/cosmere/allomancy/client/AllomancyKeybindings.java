@@ -18,14 +18,18 @@ import static leaf.cosmere.api.Constants.Strings.*;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Allomancy.MODID, bus = Bus.MOD)
 public class AllomancyKeybindings
 {
-	public static KeyMapping ALLOMANCY_PUSH;
-	public static KeyMapping ALLOMANCY_PULL;
+	public static KeyMapping ALLOMANCY_STEEL_PUSH;
+	public static KeyMapping ALLOMANCY_IRON_PULL;
+	public static KeyMapping ALLOMANCY_SOOTHE;
+	public static KeyMapping ALLOMANCY_RIOT;
 
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
-		event.register(ALLOMANCY_PUSH = new KeyMapping(KEY_ALLOMANCY_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
-		event.register(ALLOMANCY_PULL = new KeyMapping(KEY_ALLOMANCY_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
+		event.register(ALLOMANCY_STEEL_PUSH = new KeyMapping(KEY_ALLOMANCY_STEEL_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
+		event.register(ALLOMANCY_IRON_PULL = new KeyMapping(KEY_ALLOMANCY_IRON_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
+		event.register(ALLOMANCY_SOOTHE = new KeyMapping(KEY_ALLOMANCY_SOOTHE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+		event.register(ALLOMANCY_RIOT = new KeyMapping(KEY_ALLOMANCY_RIOT, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
 	}
 
 }

@@ -4,22 +4,27 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.allomancy.client.AllomancyKeybindings;
+import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.network.packets.EntityAllomancyActivateMessage;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class AllomancyZinc extends AllomancyManifestation
 {
-	private static final HashMap<String, ZincThread> playerThreadMap = new HashMap<>();
+	public static final HashMap<String, ZincThread> playerThreadMap = new HashMap<>();
 
 	public AllomancyZinc(Metals.MetalType metalType)
 	{
@@ -29,10 +34,36 @@ public class AllomancyZinc extends AllomancyManifestation
 	//Inflames Emotions
 	//make hostiles target you but also make non-hostiles target hostiles?
 	@Override
-	protected void applyEffectTick(ISpiritweb data)
+	public void applyEffectTick(ISpiritweb data)
+	{
+		if (data.getLiving().level.isClientSide())
+		{
+			boolean isSingleTarget = Keybindings.MANIFESTATION_USE_ACTIVE.isDown() || AllomancyKeybindings.ALLOMANCY_RIOT.isDown();
+			int singleTargetEntityId = 0;
+
+			if (isSingleTarget)
+			{
+				HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), (int) Math.floor(getRange(data) * CosmereConfigs.SERVER_CONFIG.EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.get()));
+				if (ray instanceof EntityHitResult entityHitResult)
+				{
+					singleTargetEntityId = entityHitResult.getEntity().getId();
+				}
+			}
+
+			Allomancy.packetHandler().sendToServer(new EntityAllomancyActivateMessage(Metals.MetalType.ZINC, isSingleTarget, singleTargetEntityId));
+		}
+		else
+		{
+			performEffectServer(data);
+		}
+	}
+
+	private void performEffectServer(ISpiritweb data)
 	{
 		int mode = getMode(data);
 		String uuid = data.getLiving().getStringUUID();
+
+		boolean isSingleTarget = playerThreadMap.get(data.getLiving().getStringUUID()).isSingleTarget;
 
 		// data processing
 		{
@@ -46,7 +77,20 @@ public class AllomancyZinc extends AllomancyManifestation
 			{
 				playerThreadMap.put(uuid, new ZincThread(data));
 			}
-			List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+			List<LivingEntity> entitiesToAffect = new ArrayList<>();
+
+			if (isSingleTarget)
+			{
+				if (data.getLiving().level.getEntity(playerThreadMap.get(uuid).singleTargetEntityID) instanceof LivingEntity entity)
+				{
+					entitiesToAffect.add(entity);
+				}
+			}
+			else
+			{
+				entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+			}
+
 			for (LivingEntity e : entitiesToAffect)
 			{
 				if (e instanceof Mob mob)
@@ -76,7 +120,11 @@ public class AllomancyZinc extends AllomancyManifestation
 					}
 				}
 			}
-			playerThreadMap.get(uuid).releaseEntityList();
+
+			if (!isSingleTarget)
+			{
+				playerThreadMap.get(uuid).releaseEntityList();
+			}
 		}
 	}
 
@@ -109,8 +157,10 @@ public class AllomancyZinc extends AllomancyManifestation
 		return super.tick(data);
 	}
 
-	class ZincThread extends AllomancyEntityThread
+	public class ZincThread extends AllomancyEntityThread
 	{
+		public boolean isSingleTarget = false;
+		public int singleTargetEntityID = 0;
 
 		public ZincThread(ISpiritweb data)
 		{
