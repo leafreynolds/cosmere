@@ -10,8 +10,13 @@
 //	That meant I didn't need the groovy-script MergeJars
 //
 
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.dependencies.ModDependency
+import com.modrinth.minotaur.dependencies.VersionDependency
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import net.darkhax.curseforgegradle.UploadArtifact
 import net.minecraftforge.gradle.common.util.RunConfig
 import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 
@@ -25,7 +30,8 @@ buildscript {
 }
 
 plugins {
-	id "com.matthewprenger.cursegradle" version '1.4.0'
+	id 'net.darkhax.curseforgegradle' version '1.0.14'
+	id "com.modrinth.minotaur" version "2.+"
 	id 'java'
 	id 'eclipse'
 	id 'idea'
@@ -35,10 +41,9 @@ plugins {
 	id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-
 tasks.named('wrapper', Wrapper).configure {
 	//Define wrapper values here so as to not have to always do so when updating gradlew.properties
-	gradleVersion = '7.5.1'
+	gradleVersion = '8.1.1'
 	distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -496,10 +501,33 @@ tasks.named('jar', Jar).configure {
 }
 
 tasks.named('sourcesJar', Jar).configure {
-	dependsOn(classes, apiClasses, allomancyClasses, feruchemyClasses, hemalurgyClasses, surgebindingClasses, sandmasteryClasses)
+	dependsOn(
+			classes,
+			apiClasses,
+			allomancyClasses,
+			feruchemyClasses,
+			hemalurgyClasses,
+			surgebindingClasses,
+			sandmasteryClasses,
+			aviarClasses,
+			awakeningClasses,
+			aondorClasses,
+			soulforgeryClasses,
+	)
 	duplicatesStrategy(DuplicatesStrategy.FAIL)
 	//Note: Already contains main source set's sources by default
-	from(sourceSets.api.allJava, sourceSets.allomancy.allJava, sourceSets.feruchemy.allJava, sourceSets.hemalurgy.allJava, sourceSets.surgebinding.allJava, sourceSets.sandmastery.allJava)
+	from(
+			sourceSets.api.allJava,
+			sourceSets.allomancy.allJava,
+			sourceSets.feruchemy.allJava,
+			sourceSets.hemalurgy.allJava,
+			sourceSets.surgebinding.allJava,
+			sourceSets.sandmastery.allJava,
+			sourceSets.aviar.allJava,
+			sourceSets.awakening.allJava,
+			sourceSets.aondor.allJava,
+			sourceSets.soulforgery.allJava,
+	)
 	manifest.attributes(getManifestAttributes("Cosmere"))
 }
 
@@ -623,165 +651,192 @@ def changeLogResolver = { ->
 	if (releaseNotesFile.exists()) {
 		//Add any version specific changelog stuff
 		def releaseNotes = releaseNotesFile.getText()
-		generatedChangelog = "$releaseNotes<br>-<br> $generatedChangelog"
+		generatedChangelog = "$releaseNotes \n\n $generatedChangelog"
 	}
 
 
 	generatedChangelog =
 			"Cosmere and related sub module mods are considered to be in an alpha state! You have been warned :)" +
-					"<br><br> $generatedChangelog"
+					"\n\n$generatedChangelog"
 	resolvedChangelog = generatedChangelog
 	return generatedChangelog
 }
 
-
 if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('curseforge_api_token')) {
 	println "Enabling Curseforge config"
-	tasks.named('curseforge').configure { dependsOn(jar, allomancyJar, feruchemyJar, hemalurgyJar, surgebindingJar, sandmasteryJar, apiJar) }
-	curseforge {
-		//https://authors.curseforge.com/account/api-tokens
-		apiKey = System.getenv("CURSEFORGE_API_TOKEN") ?: project.findProperty("curseforge_api_token")
+	tasks.register("curseforge", TaskPublishCurseForge, { task ->
+		setGroup("publishing")
+		setDescription("Upload to CurseForge")
 
-		//Main - Cosmere
-		project {
-			id = '475343'
-			changelogType = "text"
-			changelog = changeLogResolver
-			releaseType = "${release_type}"
-			mainArtifact(jar) {
-				relations {
-					optionalDependency "jade"
-					optionalDependency "jei"
-					optionalDependency "patchouli"
-					optionalDependency "allomancer"
-					optionalDependency "feruchemist"
-					optionalDependency "hemalurgy"
-					optionalDependency "surgebinding"
-					optionalDependency "sandmastery"
-				}
-			}
-			addArtifact apiJar.get()
-			addGameVersion "Java ${java_version}"
-			addGameVersion "${minecraft_version}"
+		apiToken = System.getenv("CURSEFORGE_API_TOKEN") ?: project.findProperty("curseforge_api_token")
+
+		def changelog = changeLogResolver.call()
+
+		//Main Project
+		task.upload(475343, jar) { main ->
+			setGenericCurseArtifactData(main, changelog, release_type)
+			//Include the API jar as a secondary file to the main file
+			withAdditionalFile(apiJar)
+			//Add optional deps
+			addOptional(
+					'jade',
+					'curios',
+					'patchouli',
+					'jei',
+					'allomancer',
+					'feruchemist',
+					'hemalurgy',
+					'surgebinding',
+					'sandmastery',
+					'aviar'
+			)
 		}
 
-		//Allomancy
-		project {
-			id = '678468'
-			changelogType = "text"
-			changelog = changeLogResolver
-			releaseType = "${release_type}"
-			mainArtifact(allomancyJar.get()) {
-				relations {
-					requiredDependency "cosmere"
-					optionalDependency "patchouli"
-					optionalDependency "feruchemist"
-					optionalDependency "hemalurgy"
-				}
-			}
-			addGameVersion "Java ${java_version}"
-			addGameVersion "${minecraft_version}"
-		}
+		//Secondary modules/projects
+		uploadSecondaryCurseProject(task, 678468, changelog, allomancyJar, release_type)
+		uploadSecondaryCurseProject(task, 678466, changelog, feruchemyJar, release_type)
+		uploadSecondaryCurseProject(task, 678469, changelog, hemalurgyJar, release_type)
+		uploadSecondaryCurseProject(task, 624998, changelog, surgebindingJar, release_type)
+		uploadSecondaryCurseProject(task, 695387, changelog, sandmasteryJar, release_type)
+		uploadSecondaryCurseProject(task, 822584, changelog, aviarJar, release_type)
 
-		//Feruchemy
-		project {
-			id = '678466'
-			changelogType = "text"
-			changelog = changeLogResolver
-			releaseType = "${release_type}"
-			mainArtifact(feruchemyJar.get()) {
-				relations {
-					requiredDependency "cosmere"
-					requiredDependency "curios"
-					optionalDependency "patchouli"
-					optionalDependency "allomancer"
-					optionalDependency "hemalurgy"
-				}
-			}
-			addGameVersion "Java ${java_version}"
-			addGameVersion "${minecraft_version}"
-		}
+		//not yet ready
+		//uploadSecondaryCurseProject(task, 822581, changelog, aondorJar)
+		//uploadSecondaryCurseProject(task, 822580, changelog, awakeningJar)
+		//uploadSecondaryCurseProject(task, 822593, changelog, soulforgeryJar)
+		//uploadSecondaryCurseProject(task, 822596, changelog, bloodsealingJar)
+	})
+}
 
-		//Hemalurgy
-		project {
-			id = '678469'
-			changelogType = "text"
-			changelog = changeLogResolver
-			releaseType = "${release_type}"
-			mainArtifact(hemalurgyJar.get()) {
-				relations {
-					requiredDependency "cosmere"
-					requiredDependency "curios"
-					optionalDependency "patchouli"
-					requiredDependency "allomancer"
-					requiredDependency "feruchemist"
-					incompatible "hemalurgy-lego-allomancy"
-				}
-			}
-			addGameVersion "Java ${java_version}"
-			addGameVersion "${minecraft_version}"
-		}
+void setGenericCurseArtifactData(UploadArtifact artifact, String changelog, String release_type)
+{
+	artifact.changelog = changelog
+	artifact.changelogType = 'text'
+	artifact.releaseType = "${release_type}"
+	artifact.addModLoader("forge")
+}
 
-		//Surgebinding
-		project {
-			id = '624998'
-			changelogType = "text"
-			changelog = changeLogResolver
-			releaseType = "${release_type}"
-			mainArtifact(surgebindingJar.get()) {
-				relations {
-					requiredDependency "cosmere"
-					optionalDependency "patchouli"
-					optionalDependency "allomancer"
-					optionalDependency "hemalurgy"
-					optionalDependency "sandmastery"
-				}
-			}
-			addGameVersion "Java ${java_version}"
-			addGameVersion "${minecraft_version}"
-		}
-
-		//SandMastery
-		project {
-			id = '695387'
-			changelogType = "text"
-			changelog = changeLogResolver
-			releaseType = "${release_type}"
-			mainArtifact(sandmasteryJar.get()) {
-				relations {
-					requiredDependency "cosmere"
-					requiredDependency "curios"
-					optionalDependency "patchouli"
-					optionalDependency "allomancer"
-					optionalDependency "feruchemist"
-					optionalDependency "hemalurgy"
-					optionalDependency "surgebinding"
-				}
-			}
-			addGameVersion "Java ${java_version}"
-			addGameVersion "${minecraft_version}"
-		}
-
-		//Aviar
-		project {
-			id = '822584'
-			changelogType = "text"
-			changelog = changeLogResolver
-			releaseType = "${release_type}"
-			mainArtifact(aviarJar.get()) {
-				relations {
-					requiredDependency "cosmere"
-					optionalDependency "patchouli"
-					optionalDependency "allomancer"
-					optionalDependency "feruchemist"
-					optionalDependency "hemalurgy"
-					optionalDependency "surgebinding"
-					optionalDependency "sandmastery"
-				}
-			}
-			addGameVersion "Java ${java_version}"
-			addGameVersion "${minecraft_version}"
-		}
+void uploadSecondaryCurseProject(TaskPublishCurseForge task, long projectId, String changelog, TaskProvider<Jar> sourceSetJar, String release_type)
+{
+	task.upload(projectId, sourceSetJar) { artifact ->
+		setGenericCurseArtifactData(artifact, changelog, release_type)
+		addRequirement('cosmere')
+		addOptional(
+				'jade',
+				'curios',
+				'patchouli',
+				'jei',
+				'allomancer',
+				'feruchemist',
+				'hemalurgy',
+				'surgebinding',
+				'sandmastery',
+				'aviar'
+		)
+		addIncompatibility(
+				'hemalurgy-lego-allomancy'
+		)
 	}
 }
 
+if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth_api_token')) {
+	println "Enabling Modrinth config"
+	def allomancyModrinth = createSecondaryModrinthUpload("allomancy", "u1pejmgA", allomancyJar)
+	def feruchemyModrinth = createSecondaryModrinthUpload("feruchemy", "OX40vFNo", feruchemyJar)
+	def hemalurgyModrinth = createSecondaryModrinthUpload("hemalurgy", "McOcm9tD", hemalurgyJar)
+	def surgebindingModrinth = createSecondaryModrinthUpload("surgebinding", "ohwrIsCO", surgebindingJar)
+	def sandmasteryModrinth = createSecondaryModrinthUpload("sandmastery", "9EJFLSYm", sandmasteryJar)
+	def aviarModrinth = createSecondaryModrinthUpload("aviar", "75FFkvaX", aviarJar)
+
+	//not yet ready
+	//def aondorModrinth = createSecondaryModrinthUpload("aondor", "E92whAPB", aondorJar)
+	//def awakeningModrinth = createSecondaryModrinthUpload("awakening", "WZZ5m3YI", awakeningJar)
+	//def soulforgeryModrinth = createSecondaryModrinthUpload("soulforgery", "26ErEJqz", soulforgeryJar)
+	//def bloodsealingModrinth = createSecondaryModrinthUpload("bloodsealing", "lmdH7wUj", bloodsealingJar)
+
+	tasks.named('modrinth').configure {
+		dependsOn(jar, apiJar)
+		finalizedBy(
+				allomancyModrinth,
+				feruchemyModrinth,
+				hemalurgyModrinth,
+				surgebindingModrinth,
+				sandmasteryModrinth,
+				aviarModrinth
+		)
+	}
+
+	modrinth {
+		if (System.getenv("modrinth_api_token") == null) {
+			//Defaults to modrinth_api_token so we only have to check for a token via gradle properties if there isn't a system property
+			getToken().value((String) project.findProperty("MODRINTH_API_TOKEN"))
+		} else {
+			token = System.getenv("modrinth_api_token")
+		}
+		projectId = "SEABTDiK"
+		versionNumber = "${full_mod_version}"
+		versionType = "${release_type}"
+		changelog = changeLogResolver.call()
+		uploadFile = jar
+		getAdditionalFiles().value([apiJar.get()])
+		//Note: Can't use nested dependency configuration as we have no way to clear it for the secondary uploads
+		getDependencies().value([
+				new ModDependency("vvuO3ImH", "required"),//Curios
+				new ModDependency("nU0bVIaL", "optional"),//Patchouli
+				new ModDependency("nvQzSEkH", "optional"),//Jade
+				new ModDependency("u6dRKJwZ", "optional"),//JEI
+				new ModDependency("u1pejmgA", "optional"),//allomancy
+				new ModDependency("OX40vFNo", "optional"),//feruchemy
+				new ModDependency("McOcm9tD", "optional"),//hemalurgy
+				new ModDependency("ohwrIsCO", "optional"),//surgebinding
+				new ModDependency("9EJFLSYm", "optional"),//sandmastery
+				new ModDependency("75FFkvaX", "optional"),//aviar
+		])
+	}
+}
+
+def createSecondaryModrinthUpload(String output, String targetProjectId, TaskProvider<Jar> sourceSetJar)
+{
+	return tasks.register("${output}Modrinth", TaskModrinthUpload, {
+		setGroup("publishing")
+		setDescription("Upload ${output} to Modrinth")
+		dependsOn(tasks.named("modrinth"), sourceSetJar)
+		doFirst {
+			//Run in do first to change the configured extension values before it starts applying
+			modrinth {
+				projectId = targetProjectId
+				uploadFile = sourceSetJar.get()
+				//Clear additional upload files as this is a modification of what things are set to from before
+				getAdditionalFiles().empty()
+
+				//Mark that the addon requires the build of Cosmere that we just uploaded (and override it to clear all optional dependencies)
+				def generalCosmereDependency =
+						(tasks.modrinth.newVersion == null || tasks.modrinth.newVersion.getId() == null) //If we failed to find the upload version
+								// just set it to Cosmere in general
+								? new ModDependency("SEABTDiK", "required")
+								// else use the specific version
+								: new VersionDependency(tasks.modrinth.newVersion.getId(), "required")
+
+				getDependencies().value([
+						generalCosmereDependency,
+						new ModDependency("vvuO3ImH", "required"),//Curios
+						new ModDependency("nU0bVIaL", "optional"),//Patchouli
+						new ModDependency("nvQzSEkH", "optional"),//Jade
+						new ModDependency("u6dRKJwZ", "optional"),//JEI
+						new ModDependency("u1pejmgA", "optional"),//allomancy
+						new ModDependency("OX40vFNo", "optional"),//feruchemy
+						new ModDependency("McOcm9tD", "optional"),//hemalurgy
+						new ModDependency("ohwrIsCO", "optional"),//surgebinding
+						new ModDependency("9EJFLSYm", "optional"),//sandmastery
+						new ModDependency("75FFkvaX", "optional"),//aviar
+				])
+			}
+			println "Updated Modrinth extension"
+		}
+	})
+}
+
+tasks.register('publishToModSites') {
+	publishToModSites.dependsOn modrinth
+	publishToModSites.dependsOn curseforge
+}
