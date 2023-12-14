@@ -19,6 +19,9 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -32,8 +35,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemStackHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -114,6 +119,11 @@ public class MiscHelper
 		return pLevel.dimension().equals(SandmasteryDimensions.DAYSIDE_TALDAIN_DIM_KEY);
 	}
 
+	/**
+	 *
+	 * @param e Living Entity
+	 * @return the distance between the entity and the first block below it. Returns -1 if above void
+	 */
 	public static int distanceFromGround(LivingEntity e)
 	{
 		BlockPos pos = e.blockPosition();
@@ -130,6 +140,30 @@ public class MiscHelper
 		}
 
 		return -1;
+	}
+
+	/**
+	 *
+	 * @param e Living Entity
+	 * @return If above ground, returns the block position of the first block directly below entity, otherwise returns eye position
+	 */
+	public static BlockPos blockPosAtGround(LivingEntity e)
+	{
+		BlockPos pos = e.blockPosition();
+		double y = pos.getY();
+		int dist = 0;
+		for (double i = y; i >= e.level.getMinBuildHeight(); i--)
+		{
+			BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
+			if (!block.isAir() && !block.is(SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock()))
+			{
+				return pos.offset(0, -dist, 0);
+			}
+			dist++;
+		}
+
+		Vec3 eyePos = e.getEyePosition();
+		return new BlockPos(eyePos);
 	}
 
 	public static boolean isActivatedAndActive(ISpiritweb data, Manifestation manifestation)
@@ -221,5 +255,35 @@ public class MiscHelper
 	public static int randomSlot(ItemStackHandler itemStackHandler)
 	{
 		return ThreadLocalRandom.current().nextInt(0, itemStackHandler.getSlots());
+	}
+
+	public static void spawnMasteredSandLine(ServerLevel level, Vec3 pos1, Vec3 pos2)
+	{
+		ParticleOptions particleOptions = new BlockParticleOption(ParticleTypes.FALLING_DUST, SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock().defaultBlockState());
+		int dist = Mth.floor(pos1.distanceTo(pos2));
+		for( Vec3 vector : vectorsBetweenPositions(pos1, pos2, dist)) {
+			level.sendParticles(particleOptions, vector.x, vector.y, vector.z, 2, 0, 0, 0, 1);
+		}
+	}
+
+	public static ArrayList<Vec3> vectorsBetweenPositions(Vec3 pos1, Vec3 pos2, int steps)
+	{
+		ArrayList array = new ArrayList<Vec3>();
+		double xDist = pos1.x - pos2.x;
+		double yDist = pos1.y - pos2.y;
+		double zDist = pos1.z - pos2.z;
+		double xStepSize = xDist / steps;
+		double yStepSize = yDist / steps;
+		double zStepSize = zDist / steps;
+
+		for (int i = 0; i < steps; i++)
+		{
+			double x = pos1.x - (xStepSize * i);
+			double y = pos1.y - (yStepSize * i);
+			double z = pos1.z - (zStepSize * i);
+			array.add(new Vec3(x, y, z));
+		}
+
+		return array;
 	}
 }

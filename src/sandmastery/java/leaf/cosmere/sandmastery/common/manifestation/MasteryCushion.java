@@ -9,6 +9,8 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -55,6 +57,8 @@ public class MasteryCushion extends SandmasteryManifestation
 			return false;
 		}
 
+		BlockPos groundPos = MiscHelper.blockPosAtGround(data.getLiving());
+		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level, data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
 
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
 		living.hurtMarked = true;

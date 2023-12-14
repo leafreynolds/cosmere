@@ -7,9 +7,10 @@ package leaf.cosmere.sandmastery.common.manifestation;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
-import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -32,6 +33,18 @@ public class MasteryElevate extends SandmasteryManifestation
 		return false;
 	}
 
+	@Override
+	public int getBaseCost()
+	{
+		return 1;
+	}
+
+	@Override
+	public int getRibbonsPerLevel(ISpiritweb data)
+	{
+		return getMode(data) < 3 ? 3 : 1;
+	}
+
 	protected boolean performEffectServer(ISpiritweb data)
 	{
 		SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
@@ -52,16 +65,25 @@ public class MasteryElevate extends SandmasteryManifestation
 			return false;
 		}
 
+		double speed = (maxLift - distFromGround) > 3 ? scaleSpeedToMode(getMode(data)) : 0.15;
 
-		Vec3 direction = (maxLift - distFromGround) > 3 ? new Vec3(0, 0.75, 0) : new Vec3(0, 0.15, 0);
+		Vec3 direction = new Vec3(0, speed, 0);
 
 		living.setDeltaMovement(direction);
 		living.hurtMarked = true; // Allow the game to move the player
 		living.resetFallDistance();
 
+		BlockPos groundPos = MiscHelper.blockPosAtGround(data.getLiving());
+		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level, data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
+
 		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		useChargedSand(data);
 
 		return true;
+	}
+
+	double scaleSpeedToMode(double mode)
+	{
+		return (mode * 0.025) + 0.15;
 	}
 }

@@ -9,6 +9,7 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
@@ -16,22 +17,26 @@ import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.effects.DehydratedEffect;
+import leaf.cosmere.sandmastery.common.items.QidoItem;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
@@ -39,7 +44,9 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private CompoundTag sandmasteryTag = null;
 	private int hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
 	private int projectileCooldown = 0;
-	private final LinkedList<SandmasteryManifestation> ribbonsInUse = new LinkedList<>();
+	private int launchCooldown = 0;
+	private int launchesSinceLeftGround = 0;
+	private int numRibbonsInUse = 0;
 
 	private int hotkeyFlags = 0;
 
@@ -55,28 +62,28 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		{
 			final int isActivatedAndActive =
 					Keybindings.MANIFESTATION_USE_ACTIVE.isDown()
-					? 1
-					: 0;
+							? 1
+							: 0;
 
 			final int elevateFlag =
 					SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown()
-					? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
+							: 0;
 
 			final int launchFlag =
 					SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown()
-					? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
+							: 0;
 
 			final int projectileFlag =
 					SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown()
-					? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
+							: 0;
 
 			final int platformFlag =
 					SandmasteryKeybindings.SANDMASTERY_PLATFORM.isDown()
-					? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
-					: 0;
+							? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
+							: 0;
 
 			int currentFlags = 0;
 			currentFlags = currentFlags + isActivatedAndActive;
@@ -134,7 +141,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		//unload the player specific fields
 		hydrationLevel = sandmasteryTag.getInt(SandmasteryConstants.HYDRATION_TAG);
 		projectileCooldown = sandmasteryTag.getInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG);
+		launchCooldown = sandmasteryTag.getInt(SandmasteryConstants.LAUNCH_COOLDOWN_TAG);
+		launchesSinceLeftGround = sandmasteryTag.getInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG);
 		hotkeyFlags = sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
+		numRibbonsInUse = sandmasteryTag.getInt(SandmasteryConstants.RIBBONS_IN_USE_TAG);
 	}
 
 	@Override
@@ -149,7 +159,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 		sandmasteryTag.putInt(SandmasteryConstants.HYDRATION_TAG, hydrationLevel);
 		sandmasteryTag.putInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG, projectileCooldown);
+		sandmasteryTag.putInt(SandmasteryConstants.LAUNCH_COOLDOWN_TAG, launchCooldown);
+		sandmasteryTag.putInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG, launchesSinceLeftGround);
 		sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
+		sandmasteryTag.putInt(SandmasteryConstants.RIBBONS_IN_USE_TAG, numRibbonsInUse);
 
 		//this shouldn't be necessary, as the spiritweb tag should already have the reference
 		//but we are hunting a null ref, so maybe something gets unassigned somewhere
@@ -174,6 +187,12 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void GiveStartingItem(Player player)
 	{
+		if (SandmasteryConfigs.SERVER.GIVE_QIDO_ON_FIRST_LOGIN.get())
+		{
+			Random r = new Random();
+			ItemStack qido = SandmasteryItems.QIDO_ITEM.asItem().getChargedQido(r.nextFloat());
+			PlayerHelper.addItem(player, qido);
+		}
 	}
 
 	@Override
@@ -284,9 +303,19 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		this.projectileCooldown -= this.projectileCooldown < 1 ? 0 : 1;
 	}
 
+	public void tickLaunchCooldown()
+	{
+		this.launchCooldown -= this.launchCooldown < 1 ? 0 : 1;
+	}
+
 	public void setProjectileCooldown(int cooldown)
 	{
 		this.projectileCooldown = cooldown;
+	}
+
+	public void setLaunchCooldown(int cooldown)
+	{
+		this.launchCooldown = cooldown;
 	}
 
 	public boolean projectileReady()
@@ -294,33 +323,69 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		return this.projectileCooldown <= 0;
 	}
 
-
-	public void useRibbon(ISpiritweb data, SandmasteryManifestation manifestation)
+	public boolean launchReady()
 	{
-		int maxRibbons = (int) manifestation.getStrength(data, false);
-		if (ribbonsInUse.size() >= maxRibbons)
-		{
-			SandmasteryManifestation ribbon = ribbonsInUse.getLast();
-			data.setMode(ribbon, data.getMode(ribbon) - 1);
-		}
-		ribbonsInUse.addFirst(manifestation);
-		data.syncToClients(null);
+		return this.launchCooldown <= 0;
 	}
 
-	public void releaseRibbon(ISpiritweb data, SandmasteryManifestation manifestation)
+	public void addLaunch()
 	{
-		int index = ribbonsInUse.indexOf(manifestation);
-		if (index > -1)
+		this.launchesSinceLeftGround += 1;
+	}
+
+	public int getLaunches()
+	{
+		return this.launchesSinceLeftGround;
+	}
+
+	public void resetLaunches()
+	{
+		this.launchesSinceLeftGround = 0;
+	}
+
+	public int requstRibbons(ISpiritweb data, SandmasteryManifestation manifestation, int requestedRibbons)
+	{
+		int change = 0;
+		int maxRibbons = (int) manifestation.getStrength(data, false);
+
+		if (numRibbonsInUse >= maxRibbons)
 		{
-			ribbonsInUse.remove(index);
+			change = 0;
+			this.numRibbonsInUse = maxRibbons;
 		}
-		data.syncToClients(null);
+		else
+		{
+			int changeAttempt = requestedRibbons;
+			if ((this.numRibbonsInUse + changeAttempt) <= maxRibbons)
+			{
+				change = changeAttempt;
+			}
+		}
+		this.numRibbonsInUse += change;
+		return change;
+	}
+
+	public int returnRibbons(ISpiritweb data, SandmasteryManifestation manifestation, int returnedRibbons)
+	{
+		int oldRibbons = this.numRibbonsInUse;
+		int newRibbons = Math.max(0, this.numRibbonsInUse - returnedRibbons);
+		this.numRibbonsInUse = newRibbons;
+		return oldRibbons - newRibbons;
+	}
+
+	public int getUsedRibbons()
+	{
+		return this.numRibbonsInUse;
+	}
+
+	public void setUsedRibbons(int ribbons)
+	{
+		this.numRibbonsInUse = ribbons;
 	}
 
 	public void debugRibbonUsage()
 	{
-		CosmereAPI.logger.info("Ribbons in use ");
-		CosmereAPI.logger.info(ribbonsInUse.toString());
+		CosmereAPI.logger.info("Ribbons in use: " + numRibbonsInUse);
 	}
 
 	public void updateFlags(int flags)

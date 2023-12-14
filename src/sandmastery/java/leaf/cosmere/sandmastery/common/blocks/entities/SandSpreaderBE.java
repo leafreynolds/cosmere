@@ -165,7 +165,9 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 		{
 			ItemStack item = this.itemHandler.getStackInSlot(i);
 			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem()) return true;
+			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.asItem()) return true;
 			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem()) return true;
+			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.asItem()) return true;
 		}
 		return false;
 	}

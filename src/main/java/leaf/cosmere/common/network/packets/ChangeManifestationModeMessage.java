@@ -4,6 +4,7 @@
 
 package leaf.cosmere.common.network.packets;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
@@ -16,12 +17,12 @@ import net.minecraftforge.network.NetworkEvent;
 public class ChangeManifestationModeMessage implements ICosmerePacket
 {
 	Manifestation manifestation;
-	int dir;
+	int modifier;
 
 	public ChangeManifestationModeMessage(Manifestation manifestation, int dir)
 	{
 		this.manifestation = manifestation;
-		this.dir = dir;
+		this.modifier = dir;
 	}
 
 	@Override
@@ -31,18 +32,18 @@ public class ChangeManifestationModeMessage implements ICosmerePacket
 		MinecraftServer server = sender.getServer();
 		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((data) ->
 		{
-
-			if (dir == 1)
+			int finalModifier = manifestation.getModeModifier(data, manifestation, modifier);
+			if (finalModifier == 1)
 			{
 				data.nextMode(manifestation);
 			}
-			else if (dir == -1)
+			else if (finalModifier == -1)
 			{
 				data.previousMode(manifestation);
 			}
-			else if (dir != 0)
+			else if (finalModifier != 0)
 			{
-				int newMode = dir + manifestation.getMode(data);
+				int newMode = finalModifier + manifestation.getMode(data);
 				data.setMode(manifestation, newMode);
 			}
 
@@ -56,7 +57,7 @@ public class ChangeManifestationModeMessage implements ICosmerePacket
 	{
 		String namespace = manifestation.getRegistryName().toString();
 		buf.writeUtf(namespace);
-		buf.writeInt(dir);
+		buf.writeInt(modifier);
 	}
 
 	public static ChangeManifestationModeMessage decode(FriendlyByteBuf buf)
