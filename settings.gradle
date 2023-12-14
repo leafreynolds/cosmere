@@ -1,27 +1,32 @@
 pluginManagement {
-	repositories {
-		gradlePluginPortal()
-		maven {
-			name "forge"
-			url "https://maven.minecraftforge.net/"
-		}
-		maven {
-			name 'parchment'
-			url 'https://maven.parchmentmc.org'
-		}
-	}
-	resolutionStrategy {
-		eachPlugin {
-			switch (requested.id.toString()) {
-				case "net.minecraftforge.gradle": {
-					useModule("${requested.id}:ForgeGradle:${requested.version}")
-					break
-				}
-				case "org.spongepowered.mixin": {
-					useModule("org.spongepowered:mixingradle:${requested.version}")
-					break;
-				}
-			}
-		}
-	}
+    repositories {
+        maven {
+            name "forge"
+            url "https://maven.minecraftforge.net/"
+        }
+        maven {
+            name 'parchment'
+            url 'https://maven.parchmentmc.org'
+        }
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://maven.architectury.dev/" }
+        gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            switch (requested.id.toString()) {
+                case "net.minecraftforge.gradle": {
+                    useModule("${requested.id}:ForgeGradle:${requested.version}")
+                    break
+                }
+                case "org.spongepowered.mixin": {
+                    useModule("org.spongepowered:mixingradle:${requested.version}")
+                    break;
+                }
+            }
+        }
+    }
 }
+
+include("common")
+include("forge")

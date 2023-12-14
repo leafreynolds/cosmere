@@ -1,0 +1,187 @@
+archivesBaseName = getArtifactId("common")
+
+architectury {
+    common(project.enabled_platforms.split(","))
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/cosmere.accesswidener")
+}
+
+def build_number = System.env.BUILD_NUMBER ?: 1
+def full_mod_version = mod_version + "." + build_number
+def release_type = System.env.TC_RELEASE_TYPE ?: "alpha"
+
+ext {
+    secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding', 'sandmastery', 'awakening', 'aondor', 'aviar', 'soulforgery', 'example']
+    extraTypes = ['datagen', 'gameTest']
+    jsonPatterns = ["**/*.json", "**/*.mcmeta"]
+    //version properties here automatically update versions in all the mods.toml files
+    //we want that because updating every time something changes is tedious
+    versionProperties = [
+            "version"          : full_mod_version,
+            "mc_version"       : minecraft_version_range,
+            "forge_version"    : forge_version_range,
+            "loader_version"   : loader_version_range,
+            "patchouli_version": patchouli_version_range,
+            "jade_version"     : jade_version_range,
+            "jei_version"      : jei_version_range,
+            "curios_version"   : curios_version_range
+    ]
+}
+
+sourceSets {
+    api {
+        //API is code only and does not have resources.
+        resources.srcDirs = []
+    }
+    main {
+        resources {
+            include '**/**'
+            // copy everything else, but blender and bbmodel files.
+            exclude '**/*.blend'
+            exclude '**/*.bbmodel'
+            //Add the generated main module resources
+            srcDirs += ['src/datagen/generated/cosmere']
+            //But exclude the cache of the generated data from what gets built
+            exclude '.cache'
+        }
+        compileClasspath += api.output
+        runtimeClasspath += api.output
+    }
+    test {
+        //The test module has no resources
+        resources.srcDirs = []
+        //Add the api to the output, all other ones that need to will get added via setupExtraSourceSets
+        compileClasspath += api.output
+        runtimeClasspath += api.output
+    }
+}
+
+//Add all extra source sets that the main sourceSet should have
+setupExtraSourceSets(sourceSets.main)
+
+configurations {
+    //Make sure all our sub source set stuff extends the proper base methods so that
+    // they can see all the dependencies we have in dependencies including forge
+    extendConfigurations(implementation, apiImplementation, testImplementation)
+    extendConfigurations(compileOnly, apiCompileOnly, testCompileOnly)
+    extendConfigurations(runtimeOnly, apiRuntimeOnly)
+}
+
+//Create sourceSets and configurations for each of the additional modules in src/$name and adds a reference to
+// the corresponding data gen's resource directory excluding the cache. It also adds the api and main cosmere
+// module to the dependencies of the source set we are setting up, and sets up all extra source sets that are
+// based on the primary added source set
+for (def name : secondaryModules) {
+    def sourceSet = sourceSets.create(name)
+    sourceSet.resources {
+        //Add the generated module resources
+        srcDirs += ["src/datagen/generated/${name}"]
+        //But exclude the cache of the generated data from what gets built
+        exclude '.cache'
+    }
+    sourceSet.compileClasspath += sourceSets.api.output
+    sourceSet.compileClasspath += sourceSets.main.output
+    //Create all secondary sourceSets for this module
+    setupExtraSourceSets(sourceSet)
+}
+
+//Setup the UPDATE_SOURCESET property in case we are doing any remappings
+project.ext."UPDATE_SOURCESETS" = project.sourceSets.collect { it.name }.join(';')
+
+def setupExtraSourceSets(SourceSet base)
+{
+    project.sourceSets.test.compileClasspath += base.output
+    project.sourceSets.test.runtimeClasspath += base.output
+    //Setup and extend configurations for alternate modules. First by making the implementation, compileOnly, runtimeOnly equivalents
+    // for those modules extend the main ones
+    def baseImplementation = project.configurations.maybeCreate(base.getTaskName(null, "implementation"))
+    def baseCompileOnly = project.configurations.maybeCreate(base.getTaskName(null, "compileOnly"))
+    def baseRuntimeOnly = project.configurations.maybeCreate(base.getTaskName(null, "runtimeOnly"))
+    if (base != project.sourceSets.main) {
+        // If this is a secondary module then make the base tasks extend the builtin ones
+        baseImplementation.extendsFrom(project.configurations.getByName("implementation"))
+        baseCompileOnly.extendsFrom(project.configurations.getByName("compileOnly"))
+        baseRuntimeOnly.extendsFrom(project.configurations.getByName("runtimeOnly"))
+    }
+    //And then setup and have all the extra sourceSets have their configurations extend the ones for the base module so that they can
+    // properly access the dependency
+    for (def extraType : extraTypes) {
+        //Setup a source set in extraType/$name
+        def extraSourceSet = setupExtraSourceSet(base, extraType)
+        //And then setup the configurations for it
+        project.configurations.maybeCreate(extraSourceSet.getTaskName(null, "implementation")).extendsFrom(baseImplementation)
+        project.configurations.maybeCreate(extraSourceSet.getTaskName(null, "compileOnly")).extendsFrom(baseCompileOnly)
+        project.configurations.maybeCreate(extraSourceSet.getTaskName(null, "runtimeOnly")).extendsFrom(baseRuntimeOnly)
+    }
+}
+
+SourceSet setupExtraSourceSet(SourceSet baseSourceSet, String extra)
+{
+    def name = baseSourceSet.getName()
+    def extraSourceSet = sourceSets.create(baseSourceSet.getTaskName(extra, null))
+    extraSourceSet.java.srcDirs = ["src/${extra}/${name}/java"]
+    //Resources folder for if we have anything get created by our annotation processors or in the case of game tests, for any nbt presets
+    extraSourceSet.resources.srcDirs = ["src/${extra}/${name}/resources"]
+    extraSourceSet.compileClasspath += project.sourceSets.api.output
+    extraSourceSet.compileClasspath += project.sourceSets.main.output
+    if (baseSourceSet != project.sourceSets.main) {
+        //If the base sourceSet is main it already is the extra source set and has a reference to the base one from before this if statement
+        extraSourceSet.compileClasspath += getExtraSourceSet(project.sourceSets.main, extra).output
+        extraSourceSet.compileClasspath += baseSourceSet.output
+    }
+    return extraSourceSet
+}
+
+static void extendConfigurations(Configuration base, Configuration... configurations)
+{
+    for (def configuration : configurations) {
+        configuration.extendsFrom(base)
+    }
+}
+
+SourceSet getExtraSourceSet(String base, String name)
+{
+    return getExtraSourceSet(project.sourceSets.getByName(base), name)
+}
+
+SourceSet getExtraSourceSet(SourceSet base, String name)
+{
+    return project.sourceSets.getByName(base.getTaskName(name, null))
+}
+
+//Update book build number
+processResources {
+    // Exclude datagenerator .cache directory
+    exclude '.cache'
+
+    filesMatching('data/cosmere/patchouli_books/guide/book.json') {
+        filter {
+            it.replaceAll("buildNumber", "${build_number}")
+        }
+    }
+}
+
+//setupTasks(sourceSets.main)
+//for (def name : secondaryModules) {
+//    setupTasks(sourceSets.getByName(name))
+//}
+
+group = 'leaf.cosmere'
+version = "${minecraft_version}-${forge_version}-" + full_mod_version
+
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+
+dependencies {
+    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
+    // Do NOT use other classes from fabric loader
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_version}"
+    modApi "dev.architectury:architectury:${project.architectury_version}"
+
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2' // for @Nonnull
+}
+
+repositories {
+    mavenCentral()
+}

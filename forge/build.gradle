@@ -1,0 +1,97 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    forge {
+        convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+//        mixinConfig "examplemod-common.mixins.json" todo figure out dynamic mixins
+//        mixinConfig "examplemod.mixins.json"
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    // Remove the next line if you don't want to depend on the API
+    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    apiAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    allomancyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    feruchemyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    hemalurgyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    surgebindingAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    sandmasteryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    aviarAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    awakeningAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    aondorAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    soulforgeryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+
+    compileOnly "curse.maven:jade-api-324717:${jade_api_id}"
+    runtimeOnly "curse.maven:jade-324717:${jade_id}"
+
+    runtimeOnly "curse.maven:soulhome-574511:${soulhome_id}"
+
+    runtimeOnly "top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}"
+    compileOnly "top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api"
+
+    compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}:api"
+    runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
