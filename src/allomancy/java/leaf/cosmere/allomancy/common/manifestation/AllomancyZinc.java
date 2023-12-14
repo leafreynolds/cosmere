@@ -8,6 +8,7 @@ import leaf.cosmere.allomancy.client.AllomancyKeybindings;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.network.packets.EntityAllomancyActivateMessage;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
@@ -38,19 +39,22 @@ public class AllomancyZinc extends AllomancyManifestation
 	{
 		if (data.getLiving().level.isClientSide())
 		{
-			boolean isSingleTarget = Keybindings.MANIFESTATION_USE_ACTIVE.isDown() || AllomancyKeybindings.ALLOMANCY_RIOT.isDown();
-			int singleTargetEntityId = 0;
-
-			if (isSingleTarget)
+			if (isActiveTick(data))
 			{
-				HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), (int) Math.floor(getRange(data) * CosmereConfigs.SERVER_CONFIG.EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.get()));
-				if (ray instanceof EntityHitResult entityHitResult)
-				{
-					singleTargetEntityId = entityHitResult.getEntity().getId();
-				}
-			}
+				boolean isSingleTarget = (data.getSelectedManifestation().equals(getManifestation()) && Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) || AllomancyKeybindings.ALLOMANCY_RIOT.isDown();
+				int singleTargetEntityId = 0;
 
-			Allomancy.packetHandler().sendToServer(new EntityAllomancyActivateMessage(Metals.MetalType.ZINC, isSingleTarget, singleTargetEntityId));
+				if (isSingleTarget)
+				{
+					HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), (int) Math.floor(getRange(data) * CosmereConfigs.SERVER_CONFIG.EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.get()));
+					if (ray instanceof EntityHitResult entityHitResult)
+					{
+						singleTargetEntityId = entityHitResult.getEntity().getId();
+					}
+				}
+
+				Allomancy.packetHandler().sendToServer(new EntityAllomancyActivateMessage(Metals.MetalType.ZINC, isSingleTarget, singleTargetEntityId));
+			}
 		}
 		else
 		{

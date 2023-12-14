@@ -38,19 +38,20 @@ public class AllomancyBrass extends AllomancyManifestation
 	{
 		if (data.getLiving().level.isClientSide())
 		{
-			boolean isSingleTarget = Keybindings.MANIFESTATION_USE_ACTIVE.isDown() || AllomancyKeybindings.ALLOMANCY_SOOTHE.isDown();
-			int singleTargetEntityId = 0;
-
-			if (isSingleTarget)
+			if (isActiveTick(data))
 			{
-				HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), (int) Math.floor(getRange(data) * CosmereConfigs.SERVER_CONFIG.EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.get()));
-				if (ray instanceof EntityHitResult entityHitResult)
-				{
-					singleTargetEntityId = entityHitResult.getEntity().getId();
-				}
-			}
+				boolean isSingleTarget = (data.getSelectedManifestation().equals(getManifestation()) && Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) || AllomancyKeybindings.ALLOMANCY_SOOTHE.isDown();
+				int singleTargetEntityId = 0;
 
-			Allomancy.packetHandler().sendToServer(new EntityAllomancyActivateMessage(Metals.MetalType.BRASS, isSingleTarget, singleTargetEntityId));
+				if (isSingleTarget) {
+					HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), (int) Math.floor(getRange(data) * CosmereConfigs.SERVER_CONFIG.EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.get()));
+					if (ray instanceof EntityHitResult entityHitResult) {
+						singleTargetEntityId = entityHitResult.getEntity().getId();
+					}
+				}
+
+				Allomancy.packetHandler().sendToServer(new EntityAllomancyActivateMessage(Metals.MetalType.BRASS, isSingleTarget, singleTargetEntityId));
+			}
 		}
 		else
 		{

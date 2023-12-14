@@ -27,8 +27,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.Arrays;
 import java.util.Locale;
 
-import static leaf.cosmere.api.Constants.Strings.KEY_ALLOMANCY_IRON_PULL;
-import static leaf.cosmere.api.Constants.Strings.KEY_ALLOMANCY_STEEL_PUSH;
+import static leaf.cosmere.api.Constants.Strings.*;
 
 public class AllomancyEngLangGen extends LanguageProvider
 {
@@ -214,6 +213,8 @@ public class AllomancyEngLangGen extends LanguageProvider
 		//KeyBindings
 		add(KEY_ALLOMANCY_STEEL_PUSH, "Push");
 		add(KEY_ALLOMANCY_IRON_PULL, "Pull");
+		add(KEY_ALLOMANCY_RIOT, "Riot");
+		add(KEY_ALLOMANCY_SOOTHE, "Soothe");
 	}
 
 	private void addStats()
