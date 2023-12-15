@@ -41,7 +41,7 @@ public class AllomancyZinc extends AllomancyManifestation
 		{
 			if (isActiveTick(data))
 			{
-				boolean isSingleTarget = (data.getSelectedManifestation().equals(getManifestation()) && Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) || AllomancyKeybindings.ALLOMANCY_RIOT.isDown();
+				boolean isSingleTarget = AllomancyKeybindings.ALLOMANCY_RIOT.isDown() || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation().equals(getManifestation()));
 				int singleTargetEntityId = 0;
 
 				if (isSingleTarget)
