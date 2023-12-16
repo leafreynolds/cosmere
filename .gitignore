@@ -5,6 +5,7 @@ output
 *.ipr
 *.iws
 out
+*/.gradle*
 
 Cosmere*.jar
 MDK.zip
