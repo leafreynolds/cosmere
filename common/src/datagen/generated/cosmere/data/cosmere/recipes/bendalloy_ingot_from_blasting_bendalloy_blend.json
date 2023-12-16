@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 100,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "cosmere:bendalloy_blend"
-  },
-  "result": "cosmere:bendalloy_ingot"
-}

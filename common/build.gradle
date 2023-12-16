@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 archivesBaseName = getArtifactId("common")
 
 architectury {
@@ -163,10 +165,78 @@ processResources {
     }
 }
 
-//setupTasks(sourceSets.main)
-//for (def name : secondaryModules) {
-//    setupTasks(sourceSets.getByName(name))
-//}
+setupTasks(sourceSets.main)
+for (def name : secondaryModules) {
+    setupTasks(sourceSets.getByName(name))
+}
+
+def setupTasks(SourceSet sourceSet)
+{
+    def sourceSetName = sourceSet.name
+    def compileTask = tasks.named(sourceSet.getCompileJavaTaskName(), JavaCompile)
+    def replaceResourceTask = tasks.register(sourceSet.getTaskName("replace", "resources"), Copy, {
+        setGroup("replace resources")
+        outputs.upToDateWhen { false }
+        def modsToml = copySpec {
+            from(sourceSet.resources) {
+                include "META-INF/mods.toml"
+                expand versionProperties
+            }
+        }
+        def packMcMeta = copySpec {
+            from(sourceSet.resources) {
+                include "pack.mcmeta"
+                // I don't want to auto-replace pack format values since I don't want
+                // to adopt the datagen core mod pack filter suppressor in mekanism
+                //expand packProperties
+            }
+        }
+        //Copy it into the build dir
+        with(modsToml, packMcMeta)
+        into "$buildDir/resources/${sourceSetName}/"
+        //If IntelliJ's output dir exists, copy it there as well
+        def intellijPath = sourceSet == project.sourceSets.main ? "production" : sourceSetName
+        if (new File("$rootDir/out/${intellijPath}/resources/").exists()) {
+            copy {
+                with(modsToml, packMcMeta)
+                into "$rootDir/out/${intellijPath}/resources/"
+            }
+        }
+        //If Eclipse's output dir exists, copy it there as well
+        if (new File("$rootDir/bin/${sourceSetName}/").exists()) {
+            copy {
+                with(modsToml, packMcMeta)
+                into "$rootDir/bin/${sourceSetName}/"
+            }
+        }
+    })
+    //Set the various variables/settings for the different process resources tasks
+    tasks.named(sourceSet.getProcessResourcesTaskName(), ProcessResources).configure {
+        setGroup("process resources")
+        duplicatesStrategy(DuplicatesStrategy.FAIL)
+        exclude('META-INF/mods.toml', 'pack.mcmeta')
+        from("${projectDir}") { include 'logo.png' }
+        //Depend on the compile task so that we can map the computer methods as needed
+        dependsOn(compileTask)
+        finalizedBy(replaceResourceTask)
+        doLast {
+            fileTree(dir: getOutputs().getFiles().getAsPath(), includes: jsonPatterns).each {
+                File file -> file.setText(JsonOutput.toJson(new JsonSlurper().parse(file)))
+            }
+        }
+    }
+    tasks.named(sourceSet.getCompileJavaTaskName(), JavaCompile).configure { setGroup("compile") }
+    for (def extraType : extraTypes) {
+        def extraSourceSet = getExtraSourceSet(sourceSet, extraType)
+        tasks.named(extraSourceSet.getProcessResourcesTaskName(), ProcessResources).configure {
+            setGroup("process resources")
+            dependsOn(compileTask)
+        }
+        tasks.named(extraSourceSet.getCompileJavaTaskName(), JavaCompile).configure { setGroup("compile") }
+    }
+    //Make the various classes tasks depend on the corresponding replaceResources tasks in addition to the default processResources tasks they depend on
+    tasks.named(sourceSet.getClassesTaskName()).configure { dependsOn(replaceResourceTask) }
+}
 
 group = 'leaf.cosmere'
 version = "${minecraft_version}-${forge_version}-" + full_mod_version

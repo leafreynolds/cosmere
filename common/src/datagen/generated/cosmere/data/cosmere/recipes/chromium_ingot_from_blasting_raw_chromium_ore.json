@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 100,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "cosmere:raw_chromium_ore"
-  },
-  "result": "cosmere:chromium_ingot"
-}

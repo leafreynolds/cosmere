@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 100,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "cosmere:deepslate_nickel_ore"
-  },
-  "result": "cosmere:nickel_ingot"
-}

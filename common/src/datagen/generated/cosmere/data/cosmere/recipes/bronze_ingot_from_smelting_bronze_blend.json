@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "cookingtime": 200,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "cosmere:bronze_blend"
-  },
-  "result": "cosmere:bronze_ingot"
-}

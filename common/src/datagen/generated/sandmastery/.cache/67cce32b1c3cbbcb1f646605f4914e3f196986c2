@@ -1,8 +1,0 @@
-// 1.19.2	2023-11-22T15:59:28.2439155	LootTables
-a4f19e6641619da5a5ce5d264a22ca3435d3a0c2 data/sandmastery/loot_tables/blocks/charged_taldain_sand.json
-d8518b407d56839cf21643fbdfa6551974299895 data/sandmastery/loot_tables/blocks/charged_taldain_sand_layer.json
-6fce3be489666c689565e320da6552a31f0e119c data/sandmastery/loot_tables/blocks/sand_jar_block.json
-acf29fe54bb26c83c092694f8c8be01f701928ab data/sandmastery/loot_tables/blocks/sand_spreading_tub.json
-e8eb1066cde54d9eed9ad91650db67ed35f57948 data/sandmastery/loot_tables/blocks/taldain_sand.json
-18be8450e65285a0c91459985622cb8d1c578615 data/sandmastery/loot_tables/blocks/taldain_sand_layer.json
-2b2a4bde1a1c86393b28fa3ff9b81ef1ddeed22d data/sandmastery/loot_tables/blocks/temporary_sand_block.json

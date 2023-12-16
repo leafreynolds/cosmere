@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 500,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "surgebinding:ruby_ore"
-  },
-  "result": "surgebinding:ruby_mark"
-}

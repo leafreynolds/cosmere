@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "cookingtime": 1000,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "surgebinding:deepslate_zircon_ore"
-  },
-  "result": "surgebinding:zircon_broam"
-}

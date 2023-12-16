@@ -1,6 +1,0 @@
-{
-  "parent": "cosmere:block/shapes/cube_all_tinted",
-  "textures": {
-    "all": "cosmere:block/metal_block"
-  }
-}

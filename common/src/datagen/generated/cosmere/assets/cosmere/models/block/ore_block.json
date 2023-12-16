@@ -1,7 +1,0 @@
-{
-  "parent": "cosmere:block/shapes/cube_with_tint_overlay",
-  "textures": {
-    "all": "cosmere:block/ore_block",
-    "overlay": "cosmere:block/ore_block_tint_overlay"
-  }
-}

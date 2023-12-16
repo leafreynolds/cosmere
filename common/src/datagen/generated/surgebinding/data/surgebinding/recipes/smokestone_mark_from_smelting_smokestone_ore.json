@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "cookingtime": 1000,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "surgebinding:smokestone_ore"
-  },
-  "result": "surgebinding:smokestone_mark"
-}
