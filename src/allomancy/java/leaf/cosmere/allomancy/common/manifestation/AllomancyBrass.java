@@ -43,9 +43,11 @@ public class AllomancyBrass extends AllomancyManifestation
 				boolean isSingleTarget = AllomancyKeybindings.ALLOMANCY_SOOTHE.isDown() || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation().equals(getManifestation()));
 				int singleTargetEntityId = 0;
 
-				if (isSingleTarget) {
+				if (isSingleTarget)
+				{
 					HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), (int) Math.floor(getRange(data) * CosmereConfigs.SERVER_CONFIG.EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.get()));
-					if (ray instanceof EntityHitResult entityHitResult) {
+					if (ray instanceof EntityHitResult entityHitResult)
+					{
 						singleTargetEntityId = entityHitResult.getEntity().getId();
 					}
 				}
