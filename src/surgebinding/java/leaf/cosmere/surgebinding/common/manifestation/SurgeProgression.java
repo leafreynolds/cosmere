@@ -15,10 +15,15 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import org.apache.commons.compress.compressors.lz77support.LZ77Compressor;
 
 public class SurgeProgression extends SurgebindingManifestation
 {
@@ -126,6 +131,28 @@ public class SurgeProgression extends SurgebindingManifestation
 						{
 							BoneMealItem.addGrowthParticles(event.getLevel(), blockPos, 0);
 						}
+					}
+				}
+			});
+		}
+		else if (blockState.getBlock().getDescriptionId().equals(Blocks.DIRT.getDescriptionId()))   // if dirt, make grass
+		{
+			SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
+			{
+				SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
+				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+
+				final int stormlightBonemealCostMultiplier = SurgebindingConfigs.SERVER.PROGRESSION_BONEMEAL_COST.get();
+				if (submodule.adjustStormlight(-stormlightBonemealCostMultiplier, true))
+				{
+					if (event.getLevel() instanceof ServerLevel)
+					{
+						BlockState newState = Blocks.GRASS_BLOCK.defaultBlockState();
+						event.getLevel().setBlock(blockPos, newState, 0);
+					}
+					else
+					{
+						BoneMealItem.addGrowthParticles(event.getLevel(), blockPos, 0);
 					}
 				}
 			});
