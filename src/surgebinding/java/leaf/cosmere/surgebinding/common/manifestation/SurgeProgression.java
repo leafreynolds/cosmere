@@ -4,6 +4,7 @@
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -15,15 +16,15 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.BoneMealItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import org.apache.commons.compress.compressors.lz77support.LZ77Compressor;
+
+import java.util.HashMap;
 
 public class SurgeProgression extends SurgebindingManifestation
 {
@@ -31,6 +32,7 @@ public class SurgeProgression extends SurgebindingManifestation
 	{
 		super(surge);
 	}
+	private static final HashMap<Block, Block> progressionBlockMap = new HashMap<>();
 
 
 	//alter growth and healing
@@ -135,27 +137,60 @@ public class SurgeProgression extends SurgebindingManifestation
 				}
 			});
 		}
-		else if (blockState.getBlock().getDescriptionId().equals(Blocks.DIRT.getDescriptionId()))   // if dirt, make grass
+		else
 		{
-			SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
+			if (progressionBlockMap.isEmpty())
 			{
-				SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
-				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+				progressionBlockMap.put(Blocks.DIRT, Blocks.GRASS_BLOCK);
+				progressionBlockMap.put(Blocks.COARSE_DIRT, Blocks.DIRT);
+				progressionBlockMap.put(Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE);
+				progressionBlockMap.put(Blocks.COBBLESTONE_SLAB, Blocks.MOSSY_COBBLESTONE_SLAB);
+				progressionBlockMap.put(Blocks.COBBLESTONE_STAIRS, Blocks.MOSSY_COBBLESTONE_STAIRS);
+				progressionBlockMap.put(Blocks.COBBLESTONE_WALL, Blocks.MOSSY_COBBLESTONE_WALL);
+			}
 
-				final int stormlightBonemealCostMultiplier = SurgebindingConfigs.SERVER.PROGRESSION_BONEMEAL_COST.get();
-				if (submodule.adjustStormlight(-stormlightBonemealCostMultiplier, true))
+			final Block targetBlockType = progressionBlockMap.getOrDefault(blockState.getBlock(), null);
+
+			if (targetBlockType != null)
+			{
+				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
-					if (event.getLevel() instanceof ServerLevel)
+					SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
+					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+
+					final int stormlightBonemealCostMultiplier = SurgebindingConfigs.SERVER.PROGRESSION_BONEMEAL_COST.get();
+					if (submodule.adjustStormlight(-stormlightBonemealCostMultiplier, true))
 					{
-						BlockState newState = Blocks.GRASS_BLOCK.defaultBlockState();
-						event.getLevel().setBlock(blockPos, newState, 0);
+						if (event.getLevel() instanceof ServerLevel)
+						{
+							BlockState newState = targetBlockType.defaultBlockState();
+
+							// copy over all block properties
+							for (Property<?> prop : blockState.getProperties())
+							{
+								if (newState.hasProperty(prop))
+								{
+									newState = copyProperty(blockState, newState, prop);
+								}
+							}
+
+							event.getLevel().setBlock(blockPos, newState, 0);
+						}
+						else
+						{
+							BoneMealItem.addGrowthParticles(event.getLevel(), blockPos, 0);
+						}
 					}
-					else
-					{
-						BoneMealItem.addGrowthParticles(event.getLevel(), blockPos, 0);
-					}
-				}
-			});
+				});
+			}
 		}
+	}
+
+	// forge forums were useful for once
+	// borrowed from https://forums.minecraftforge.net/topic/117047-copy-all-property-values-from-one-blockstate-to-another/
+	// required because the compiler can't otherwise be sure ? and ? are the same type
+	private static <T extends Comparable<T>> BlockState copyProperty(BlockState from, BlockState to, Property<T> property)
+	{
+		return to.setValue(property, from.getValue(property));
 	}
 }
