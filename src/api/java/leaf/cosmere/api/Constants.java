@@ -90,8 +90,10 @@ public class Constants
 		public static final String KEY_DEACTIVATE_ALL_POWERS = "key.cosmere.powers.toggle";
 		public static final String KEY_MANIFESTATION_MENU = "key.cosmere.powers.menu";
 
-		public static final String KEY_ALLOMANCY_PUSH = "key.cosmere.allomancy.push";
-		public static final String KEY_ALLOMANCY_PULL = "key.cosmere.allomancy.pull";
+		public static final String KEY_ALLOMANCY_STEEL_PUSH = "key.cosmere.allomancy.push";
+		public static final String KEY_ALLOMANCY_IRON_PULL = "key.cosmere.allomancy.pull";
+		public static final String KEY_ALLOMANCY_SOOTHE = "key.cosmere.allomancy.soothe";
+		public static final String KEY_ALLOMANCY_RIOT = "key.cosmere.allomancy.riot";
 
 		public static final String KEY_SHARDBLADE = "key.cosmere.stormlight.shardblade";
 		public static final String TOOLTIP_ITEM_INFO = "tooltip.item.info.";

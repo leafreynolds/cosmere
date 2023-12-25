@@ -4,21 +4,28 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import leaf.cosmere.allomancy.client.AllomancyKeybindings;
+import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.network.packets.EntityAllomancyActivateMessage;
+import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
+import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class AllomancyBrass extends AllomancyManifestation
 {
-	private static final HashMap<String, BrassThread> playerThreadMap = new HashMap<>();
+	public static final HashMap<String, BrassThread> playerThreadMap = new HashMap<>();
 
 	public AllomancyBrass(Metals.MetalType metalType)
 	{
@@ -27,10 +34,38 @@ public class AllomancyBrass extends AllomancyManifestation
 
 	//Dampens Emotions
 	@Override
-	protected void applyEffectTick(ISpiritweb data)
+	public void applyEffectTick(ISpiritweb data)
+	{
+		if (data.getLiving().level.isClientSide())
+		{
+			if (isActiveTick(data))
+			{
+				boolean isSingleTarget = AllomancyKeybindings.ALLOMANCY_SOOTHE.isDown() || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation().equals(getManifestation()));
+				int singleTargetEntityId = 0;
+
+				if (isSingleTarget)
+				{
+					HitResult ray = PlayerHelper.pickWithRange(data.getLiving(), (int) Math.floor(getRange(data) * CosmereConfigs.SERVER_CONFIG.EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.get()));
+					if (ray instanceof EntityHitResult entityHitResult)
+					{
+						singleTargetEntityId = entityHitResult.getEntity().getId();
+					}
+				}
+
+				Allomancy.packetHandler().sendToServer(new EntityAllomancyActivateMessage(Metals.MetalType.BRASS, isSingleTarget, singleTargetEntityId));
+			}
+		}
+		else
+		{
+			performEffectServer(data);
+		}
+	}
+
+	private void performEffectServer(ISpiritweb data)
 	{
 		int mode = getMode(data);
 		String uuid = data.getLiving().getStringUUID();
+		boolean isSingleTarget = playerThreadMap.get(data.getLiving().getStringUUID()).isSingleTarget;
 
 		// data processing
 		{
@@ -48,25 +83,47 @@ public class AllomancyBrass extends AllomancyManifestation
 				playerThreadMap.put(uuid, new BrassThread(data));
 			}
 
-			List<LivingEntity> entitiesToAffect = playerThreadMap.get(uuid).requestEntityList();
+			// don 't remove old code comments yet, still testing
+			List<LivingEntity> entitiesToAffect = new ArrayList<>();
+
+			if (isSingleTarget)
+			{
+				if (data.getLiving().level.getEntity(playerThreadMap.get(uuid).singleTargetEntityID) instanceof LivingEntity entity)
+				{
+					entitiesToAffect.add(entity);
+				}
+			}
+			else
+			{
+				entitiesToAffect.addAll(playerThreadMap.get(uuid).requestEntityList());
+			}
+
 			for (LivingEntity e : entitiesToAffect)
 			{
 				if (e instanceof Mob mob)
 				{
-					mob.setNoAi(mode == 3 && allomanticStrength > 15);
-
 					switch (mode)
 					{
 						case 2:
+							if (allomanticStrength > 15)
+								mob.addEffect(EffectsHelper.getNewEffect(
+										AllomancyEffects.ALLOMANTIC_BRASS_STUN.getMobEffect(),
+										0,      // no amplification system in place
+										20 * 5
+								));
 							mob.setTarget(null);
 						case 1:
 							mob.setAggressive(false);
 						default://stop angry targets from attacking things
-							e.setLastHurtByMob(null);
+							mob.setLastHurtByMob(null);
 					}
 				}
 			}
-			playerThreadMap.get(uuid).releaseEntityList();
+
+			if (!isSingleTarget)
+			{
+				playerThreadMap.get(uuid).releaseEntityList();
+			}
 		}
 	}
 
@@ -99,8 +156,10 @@ public class AllomancyBrass extends AllomancyManifestation
 		return super.tick(data);
 	}
 
-	class BrassThread extends AllomancyEntityThread
+	public class BrassThread extends AllomancyEntityThread
 	{
+		public boolean isSingleTarget = false;
+		public int singleTargetEntityID = 0;
 
 		public BrassThread(ISpiritweb data)
 		{

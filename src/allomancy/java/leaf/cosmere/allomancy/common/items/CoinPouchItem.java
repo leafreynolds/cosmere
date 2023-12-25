@@ -91,7 +91,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
 			}
 		}
-		else if (player.level.isClientSide && AllomancyKeybindings.ALLOMANCY_PUSH.isDown())
+		else if (player.level.isClientSide && AllomancyKeybindings.ALLOMANCY_STEEL_PUSH.isDown())
 		{
 			//assume they wanna shoot a projectile
 			//so let them tell the server

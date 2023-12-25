@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common.network;
 
 import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.network.packets.EntityAllomancyActivateMessage;
 import leaf.cosmere.allomancy.common.network.packets.PlayerShootProjectileMessage;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.BasePacketHandler;
@@ -26,7 +27,7 @@ public class AllomancyPacketHandler extends BasePacketHandler
 	{
 		registerClientToServer(PlayerShootProjectileMessage.class, PlayerShootProjectileMessage::decode);
 		registerClientToServer(SyncPushPullMessage.class, SyncPushPullMessage::decode);
-
+		registerClientToServer(EntityAllomancyActivateMessage.class, EntityAllomancyActivateMessage::decode);
 	}
 
 
