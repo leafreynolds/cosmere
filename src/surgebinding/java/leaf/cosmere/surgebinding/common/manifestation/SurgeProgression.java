@@ -4,7 +4,6 @@
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -15,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.level.block.Block;
@@ -70,6 +70,36 @@ public class SurgeProgression extends SurgebindingManifestation
 				});
 			}
 		}
+
+		if (event.getTarget() instanceof AgeableMob ageableMob && ageableMob.getLevel() instanceof ServerLevel)
+		{
+			if (ageableMob.isBaby())
+			{
+				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
+				{
+					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()))
+					{
+						int ageUpAmount = (int) Math.floor(-(ageableMob.getAge()/20D) * 0.1);       // get age in seconds, then 10% of that
+						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
+						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+
+						final int stormlightAgeUpCostMultiplier = SurgebindingConfigs.SERVER.PROGRESSION_AGE_UP_COST.get();
+						if (submodule.adjustStormlight(-(stormlightAgeUpCostMultiplier), true))
+						{
+							ageUp(ageableMob, ageUpAmount);
+						}
+						else
+						{
+							final int affordableAge = (int) ((float) submodule.getStormlight() / (float) (stormlightAgeUpCostMultiplier)) * ageUpAmount;
+							if (submodule.adjustStormlight(-submodule.getStormlight(), true))
+							{
+								ageUp(ageableMob, affordableAge);
+							}
+						}
+					}
+				});
+			}
+		}
 	}
 
 	public static void heal(LivingEntity livingEntity, float setHealthTo)
@@ -101,6 +131,26 @@ public class SurgeProgression extends SurgebindingManifestation
 				livingEntity.getSoundSource(),
 				0.25F,
 				1.0F);*/
+	}
+
+	public static void ageUp(AgeableMob ageableMob, int ageUpAmount)
+	{
+		ageableMob.ageUp(ageUpAmount);
+
+		for (int i = 0; i < 20; ++i)
+		{
+			double xSpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
+			double ySpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
+			double zSpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
+
+			ageableMob.level.addParticle(ParticleTypes.HAPPY_VILLAGER,
+					ageableMob.getX(1.0D) - xSpeed * 10.0D,
+					ageableMob.getRandomY() - ySpeed * 10.0D,
+					ageableMob.getRandomZ(1.0D) - zSpeed * 10.0D,
+					xSpeed,
+					ySpeed,
+					zSpeed);
+		}
 	}
 
 	//bonemeal crops

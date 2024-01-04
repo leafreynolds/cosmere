@@ -18,6 +18,7 @@ public class SurgebindingServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue STORMLIGHT_DRAIN_RATE;
 	public final ForgeConfigSpec.IntValue PROGRESSION_BONEMEAL_COST;
 	public final ForgeConfigSpec.IntValue PROGRESSION_HEAL_COST;
+	public final ForgeConfigSpec.IntValue PROGRESSION_AGE_UP_COST;
 
 
 	SurgebindingServerConfig()
@@ -30,6 +31,7 @@ public class SurgebindingServerConfig implements ICosmereConfig
 		STORMLIGHT_DRAIN_RATE = builder.comment("How many points of stormlight drain per second").defineInRange("stormlightDrainRate", 5, 1, 100);
 		PROGRESSION_BONEMEAL_COST = builder.comment("How many points of stormlight to trigger the bonemeal effect").defineInRange("progressionBonemealStormlightCost", 20, 1, 1000);
 		PROGRESSION_HEAL_COST = builder.comment("How many points of stormlight per half a heart healed").defineInRange("progressionHealStormlightCost", 20, 1, 1000);
+		PROGRESSION_AGE_UP_COST = builder.comment("How many points of stormlight per age up on a baby mob").defineInRange("progressionAgeUpCost", 50, 1, 1000);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -61,5 +63,6 @@ public class SurgebindingServerConfig implements ICosmereConfig
 		STORMLIGHT_DRAIN_RATE.clearCache();
 		PROGRESSION_BONEMEAL_COST.clearCache();
 		PROGRESSION_HEAL_COST.clearCache();
+		PROGRESSION_AGE_UP_COST.clearCache();
 	}
 }
