@@ -18,6 +18,7 @@ public class CosmereServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue TWINBORN_POWERS_CHANCE;
 	public final ForgeConfigSpec.IntValue RAIDER_POWERS_CHANCE;
 	public final ForgeConfigSpec.IntValue MOB_POWERS_CHANCE;
+	public final ForgeConfigSpec.DoubleValue EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER;
 
 
 	CosmereServerConfig()
@@ -33,6 +34,8 @@ public class CosmereServerConfig implements ICosmereConfig
 
 		FULLBORN_POWERS_CHANCE = builder.comment("1 in how many should powered individuals should have full powers of one type").defineInRange("fullPowersChance", 16, 1, 123456);
 		TWINBORN_POWERS_CHANCE = builder.comment("If not full born, 1 in how many powered mobs should be twinborn? Players are twinborn as a minimum.").defineInRange("twinbornPowersChance", 16, 1, 123456);
+
+		EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER = builder.comment("Multiplier for emotional allomancy range when singe-targeting").defineInRange("emotionalAllomancySingleTargetRange", 1.5D, 1D, 123456D);
 
 		builder.pop();
 		configSpec = builder.build();

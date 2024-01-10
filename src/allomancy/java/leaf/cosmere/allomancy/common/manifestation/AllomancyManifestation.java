@@ -235,11 +235,11 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	{
 		if (getMetalType().isPullMetal())
 		{
-			return AllomancyKeybindings.ALLOMANCY_PULL;
+			return AllomancyKeybindings.ALLOMANCY_IRON_PULL;
 		}
 		else if (getMetalType().isPushMetal())
 		{
-			return AllomancyKeybindings.ALLOMANCY_PUSH;
+			return AllomancyKeybindings.ALLOMANCY_STEEL_PUSH;
 		}
 
 		return null;
