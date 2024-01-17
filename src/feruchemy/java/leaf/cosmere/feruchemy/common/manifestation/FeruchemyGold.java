@@ -7,7 +7,6 @@ package leaf.cosmere.feruchemy.common.manifestation;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
-import net.minecraft.world.entity.LivingEntity;
 
 public class FeruchemyGold extends FeruchemyManifestation
 {
@@ -28,16 +27,8 @@ public class FeruchemyGold extends FeruchemyManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		//don't check every tick.
-		LivingEntity livingEntity = data.getLiving();
-
 		//don't heal more than needed.
 		if (!isActiveTick(data))
-		{
-			return false;
-		}
-
-		if (isTapping(data) && livingEntity.getHealth() >= livingEntity.getMaxHealth())
 		{
 			return false;
 		}
@@ -55,5 +46,10 @@ public class FeruchemyGold extends FeruchemyManifestation
 			return isTapping(data);
 		}
 		return false;
+	}
+
+	public static int getHealActiveTick(int strength)
+	{
+		return (int) Math.floor(200*Math.pow(strength, -1.5D));
 	}
 }

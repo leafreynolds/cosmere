@@ -9,8 +9,10 @@ import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
+import leaf.cosmere.feruchemy.common.manifestation.FeruchemyGold;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -29,37 +31,53 @@ public class GoldTapEffect extends FeruchemyEffectBase
 	@Override
 	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		var living = data.getLiving();
-
+		final LivingEntity living = data.getLiving();
 		final int i = (int) (strength);
-		if (living.getHealth() < living.getMaxHealth())
+		boolean isHealTick;
+
+		// at min tap (1) should be active every 10 seconds     // 10 seconds is 200 ticks
+		int healActiveTick = FeruchemyGold.getHealActiveTick(i);
+		healActiveTick = Math.max(1, healActiveTick);   // can't tick more often than every tick
+		isHealTick = living.tickCount % healActiveTick == 0;
+
+		if (isHealTick)
 		{
-			living.heal(i);
+			final int amountToHeal = 1;
+			living.heal(amountToHeal);
 		}
 
-		//todo move to config
-		final int timeToReduceByInTicks = i * 40;
-		final int ticksNeededLeftToReduce = 5;
-
-		//remove harmful effects over time
-		for (MobEffectInstance activeEffect : living.getActiveEffects())
+		if (living.tickCount % (getActiveTick() + getTickOffset()) == 0)
 		{
-			if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
+			//todo move to config
+			final int timeToReduceByInTicks = i * 40;
+			final int ticksNeededLeftToReduce = 5;
+
+			//remove harmful effects over time
+			for (MobEffectInstance activeEffect : living.getActiveEffects())
 			{
-				//never reduce down below 5 ticks
-				final double clamped = Math.max(ticksNeededLeftToReduce, activeEffect.getDuration() - timeToReduceByInTicks);
-				final int duration = Mth.floor(clamped);
-				MobEffectInstance newInstance = new MobEffectInstance(
-						activeEffect.getEffect(),
-						duration,
-						activeEffect.getAmplifier(),
-						activeEffect.isAmbient(),
-						activeEffect.isVisible(),
-						activeEffect.showIcon());
-				living.removeEffectNoUpdate(activeEffect.getEffect());
-				living.addEffect(newInstance);
+				if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
+				{
+					//never reduce down below 5 ticks
+					final double clamped = Math.max(ticksNeededLeftToReduce, activeEffect.getDuration() - timeToReduceByInTicks);
+					final int duration = Mth.floor(clamped);
+					MobEffectInstance newInstance = new MobEffectInstance(
+							activeEffect.getEffect(),
+							duration,
+							activeEffect.getAmplifier(),
+							activeEffect.isAmbient(),
+							activeEffect.isVisible(),
+							activeEffect.showIcon());
+					living.removeEffectNoUpdate(activeEffect.getEffect());
+					living.addEffect(newInstance);
+				}
 			}
 		}
+	}
+
+	@Override
+	protected boolean isActiveTick(ISpiritweb data)
+	{
+		return true;
 	}
 
 	public static void onLivingHurtEvent(LivingHurtEvent event)
