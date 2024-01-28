@@ -8,6 +8,12 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 
+// Todo for TLC:
+//      - rebalance death resistance
+//      - 1 tap should be half a heart every 10-20 seconds
+//      - max tap (32?) will be half a heart every tick // VERY EXPENSIVE, should drain faster than max compounding
+//      - keep tapping at max health (sorry all y'all bloodmakers) buff max health instead at a high enough tap rate (3+?). Half a heart per tap level above?
+
 public class FeruchemyGold extends FeruchemyManifestation
 {
 	public FeruchemyGold(Metals.MetalType metalType)

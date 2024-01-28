@@ -19,6 +19,10 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class GoldTapEffect extends FeruchemyEffectBase
 {
+	private static final int MIN_TAP_FOR_ABSORPTION = 5;
+	private float absorbtionLastHealTick = 0F;
+	private boolean isHealInit = false;
+
 	public GoldTapEffect(Metals.MetalType type)
 	{
 		super(type);
@@ -43,7 +47,20 @@ public class GoldTapEffect extends FeruchemyEffectBase
 		if (isHealTick)
 		{
 			final int amountToHeal = 1;
-			living.heal(amountToHeal);
+			if (living.getHealth() >= living.getMaxHealth() && i >= MIN_TAP_FOR_ABSORPTION)  // if health is at max and tapping 7+
+			{
+				float maxAbsorption = i - MIN_TAP_FOR_ABSORPTION + 1F;
+				float absorptionAmount = living.getAbsorptionAmount();
+
+				if (absorptionAmount < maxAbsorption)
+				{
+					living.setAbsorptionAmount(absorptionAmount + 0.5F);
+				}
+			}
+			else
+			{
+				living.heal(amountToHeal);
+			}
 		}
 
 		if (living.tickCount % (getActiveTick() + getTickOffset()) == 0)
