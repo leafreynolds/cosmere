@@ -38,7 +38,7 @@ public class IronSteelLinesThread implements Runnable
 	private static Thread t;
 	private static final Lock lock = new ReentrantLock();
 	private static ScanResult scanResult = new ScanResult();
-	private static Vec3 closestObjectOnLookVector;
+	private static Vec3 closestMetalObjectInLookVector;
 	private final double tolerance = 0.32D;
 	private static int scanRange = 0;
 	private static boolean isStopping = false;
@@ -113,13 +113,13 @@ public class IronSteelLinesThread implements Runnable
 
 	public Vec3 getClosestMetalObject()
 	{
-		if (closestObjectOnLookVector == null)
+		if (closestMetalObjectInLookVector == null)
 		{
 			return null;
 		}
 
 		// return copy
-		return new Vec3(closestObjectOnLookVector.x, closestObjectOnLookVector.y, closestObjectOnLookVector.z);
+		return new Vec3(closestMetalObjectInLookVector.x, closestMetalObjectInLookVector.y, closestMetalObjectInLookVector.z);
 	}
 
 	public void start()
@@ -148,7 +148,7 @@ public class IronSteelLinesThread implements Runnable
 
 	private void setClosestMetalObject(Vec3 vector)
 	{
-		closestObjectOnLookVector = vector;
+		closestMetalObjectInLookVector = vector;
 	}
 
 	// this should be threaded to avoid lag spikes on the render thread when flaring metals

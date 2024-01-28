@@ -128,11 +128,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 
-		TagKey<Block> aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-		TagKey<Block> aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-		TagKey<Block> aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
-		TagKey<Block> aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
-
 		if (s_whiteList == null)
 		{
 			createWhitelist(cap.getLiving());
@@ -197,97 +192,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					hasChanged = true;
 				}
 			}
-//			Vec3 lerpAngle = player.getLookAngle();
-//			Vec3 currPos = player.getEyePosition();
-//			float resistance = 0.0F;
-//			boolean hitEntity = false;
-//			Entity entityHitResult = null;
-//
-//			// lerp forward within range
-//			for (int i = 0; i < getRange(cap); i++)
-//			{
-//				BlockState blockAtPos = level.getBlockState(new BlockPos(currPos));
-//
-//				// if block is air, might be entity. check.
-//				if (blockAtPos.isAir())
-//				{
-//					try
-//					{
-//						AABB aabb = new AABB(new BlockPos(currPos));
-//						Entity firstMetalEntity = null;
-//						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator()))
-//						{
-//							if (entityContainsMetal(ent))
-//							{
-//								firstMetalEntity = ent;
-//								break;
-//							}
-//						}
-//						hitEntity = firstMetalEntity != null && entityContainsMetal(firstMetalEntity);
-//						if (hitEntity)
-//						{
-//							entityHitResult = firstMetalEntity;
-//							break;
-//						}
-//					}
-//					catch (Exception e)
-//					{
-//						e.printStackTrace();
-//						hitEntity = false;
-//					}
-//				}
-//
-//				// if resistance is 100+% or the currently targeted block has metal; exit
-//				if (resistance >= 1.0F || containsMetal(blockAtPos.getBlock()))
-//				{
-//					break;
-//				}
-//
-//				// if block isn't air, add material resistance value
-//				if (!blockAtPos.isAir())
-//				{
-//					Block currBlock = level.getBlockState(new BlockPos(currPos)).getBlock();
-//
-//					if (blockAtPos.is(aluminumOre) || blockAtPos.is(aluminumStorage) || blockAtPos.is(aluminumSheet) || blockAtPos.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
-//					{
-//						// aluminum completely blocks steelsight
-//						resistance += 1.0F;
-//					}
-//					else
-//					{
-//						resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
-//					}
-//				}
-//
-//				// lerp to next position (1 block forward)
-//				currPos = currPos.add(lerpAngle);
-//			}
-//
-//			if (resistance < 1.0F && !hitEntity)
-//			{
-//				BlockPos pos = new BlockPos(currPos);
-//				//todo check block is of ihasmetal type
-//				BlockState state = mc.level.getBlockState(pos);
-//				Block block = state.getBlock();
-//				final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-//				if (validMetalBlock || containsMetal(state.getBlock()))
-//				{
-//					blocks.add(pos.immutable());
-//
-//					if (blocks.size() > 5)
-//					{
-//						blocks.remove(0);
-//					}
-//					hasChanged = true;
-//				}
-//			}
-//
-//			if (hitEntity)
-//			{
-//				//tracks entity if it meets requirements
-//				//eg must contain metal
-//				hasChanged = trackValidEntity(data, entityHitResult);
-//			}
 		}
 		else
 		{
