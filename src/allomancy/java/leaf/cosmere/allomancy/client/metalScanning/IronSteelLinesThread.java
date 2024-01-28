@@ -39,7 +39,7 @@ public class IronSteelLinesThread implements Runnable
 	private static final Lock lock = new ReentrantLock();
 	private static ScanResult scanResult = new ScanResult();
 	private static Vec3 closestObjectOnLookVector;
-	private double tolerance = 0.32D;
+	private final double tolerance = 0.32D;
 	private static int scanRange = 0;
 	private static boolean isStopping = false;
 
@@ -198,9 +198,13 @@ public class IronSteelLinesThread implements Runnable
 
 								return isGood;
 							})
-							.forEach(blockPos -> nextScan.addBlock(blockPos.immutable()));
+							.forEach(blockPos -> nextScan.addBlock(blockPos.immutable(), closestMetalThingLookedAt.get()));
 
-					nextScan.finalizeClusters();
+					Vec3 possibleClosestMetalObject = nextScan.finalizeClusters();
+					if (possibleClosestMetalObject != null)
+					{
+						closestMetalThingLookedAt.set(possibleClosestMetalObject);
+					}
 				}
 
 				//entities with metal armor/tools
@@ -224,7 +228,7 @@ public class IronSteelLinesThread implements Runnable
 											entity.getBoundingBox().getYsize() / 2,
 											0));
 
-							closestMetalThingLookedAt.set(compareVectors(entity.blockPosition(), player, closestMetalThingLookedAt.get()));
+							closestMetalThingLookedAt.set(compareVectors(entity.position().add(0, entity.getBoundingBox().getYsize() / 2, 0), player, closestMetalThingLookedAt.get()));
 						}
 					});
 				}
@@ -346,7 +350,7 @@ public class IronSteelLinesThread implements Runnable
 		return true;
 	}
 
-	private Vec3 compareVectors(BlockPos blockPos, Player player, Vec3 currentClosestBlock)
+	private Vec3 compareVectors(BlockPos blockPos, Player player, Vec3 currentClosestMetalObject)
 	{
 		Vec3 lookVector = player.getLookAngle();
 		Vec3 vectorToPos = new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5).subtract(player.getEyePosition());
@@ -354,17 +358,17 @@ public class IronSteelLinesThread implements Runnable
 
 		if (vectorToPos.distanceTo(lookVector) < tolerance)
 		{
-			if (currentClosestBlock == null)
+			if (currentClosestMetalObject == null)
 			{
 				return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 			}
 
-			Vec3 currentVector = currentClosestBlock.subtract(player.getEyePosition());
+			Vec3 currentVector = currentClosestMetalObject.subtract(player.getEyePosition());
 			currentVector = currentVector.normalize();
 
 			if (vectorToPos.distanceTo(lookVector) > currentVector.distanceTo(lookVector))
 			{
-				return currentClosestBlock;
+				return currentClosestMetalObject;
 			}
 			else
 			{
@@ -372,6 +376,35 @@ public class IronSteelLinesThread implements Runnable
 			}
 		}
 
-		return currentClosestBlock;
+		return currentClosestMetalObject;
+	}
+
+	private Vec3 compareVectors(Vec3 pos, Player player, Vec3 currentClosestMetalObject)
+	{
+		Vec3 lookVector = player.getLookAngle();
+		Vec3 vectorToPos = pos.subtract(player.getEyePosition());
+		vectorToPos = vectorToPos.normalize();
+
+		if (vectorToPos.distanceTo(lookVector) < tolerance)
+		{
+			if (currentClosestMetalObject == null)
+			{
+				return pos;
+			}
+
+			Vec3 currentVector = currentClosestMetalObject.subtract(player.getEyePosition());
+			currentVector = currentVector.normalize();
+
+			if (vectorToPos.distanceTo(lookVector) > currentVector.distanceTo(lookVector))
+			{
+				return currentClosestMetalObject;
+			}
+			else
+			{
+				return pos;
+			}
+		}
+
+		return currentClosestMetalObject;
 	}
 }
