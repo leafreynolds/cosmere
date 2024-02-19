@@ -101,7 +101,4 @@ public class GoldTapEffect extends FeruchemyEffectBase
 			}
 		}
 	}
-
-
-
 }

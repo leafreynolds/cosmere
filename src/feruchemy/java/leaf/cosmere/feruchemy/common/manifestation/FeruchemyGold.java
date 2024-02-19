@@ -1,5 +1,5 @@
 /*
- * File updated ~ 14 - 02 - 2024 ~ Gerbagel
+ * File updated ~ 19er - 02 - 2024 ~ Gerbagel
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -38,7 +38,7 @@ public class FeruchemyGold extends FeruchemyManifestation
 	public boolean tick(ISpiritweb data)
 	{
 		//don't heal more than needed.
-		if (!isActiveTick(data))
+		if (!isHealActiveTick(data))
 		{
 			return false;
 		}
@@ -76,6 +76,12 @@ public class FeruchemyGold extends FeruchemyManifestation
 
 		// this updates health immediately rather than waiting for a health update
 		data.getLiving().setHealth(data.getLiving().getHealth());
+	}
+
+	public boolean isHealActiveTick(ISpiritweb data)
+	{
+		int healTick = Math.max(1, getHealActiveTick(-getMode(data)));
+		return data.getLiving().tickCount % healTick == 0;
 	}
 
 	public static int getHealActiveTick(int strength)
