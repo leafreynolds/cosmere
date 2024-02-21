@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:advancement_location",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cosmere:lerasium_nugget"
+        }
+      ]
+    }
+  ]
+}
