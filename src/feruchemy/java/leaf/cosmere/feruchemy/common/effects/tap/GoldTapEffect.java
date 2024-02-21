@@ -103,7 +103,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
 			{
 				// the cost of not dying should be all the extra damage * 50
 				int amount = (int) (event.getAmount() - player.getHealth()) * 50;
-				final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(player, Metals.MetalType.GOLD, amount, true, true);
+				final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(player, Metals.MetalType.GOLD, -amount, true, true);
 
 				if (!metalmind.isEmpty())
 				{
