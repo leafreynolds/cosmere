@@ -1,5 +1,5 @@
 /*
- * File updated ~ 14 - 02 - 2024 ~ Gerbagel
+ * File updated ~ 21 - 02 - 2024 ~ Gerbagel
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
@@ -7,6 +7,7 @@ package leaf.cosmere.feruchemy.common.effects.tap;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.charge.MetalmindChargeHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyGold;
@@ -14,6 +15,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 
@@ -94,10 +97,18 @@ public class GoldTapEffect extends FeruchemyEffectBase
 		if (event.getAmount() > event.getEntity().getHealth())
 		{
 			int strength = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.HEALING_STRENGTH.getAttribute(), 0);
+
 			//take less damage when tapping
-			if (strength > 6)
+			if (strength > 6 && event.getEntity() instanceof Player player)
 			{
-				event.setAmount(event.getEntity().getHealth() - 1);
+				// the cost of not dying should be all the extra damage * 50
+				int amount = (int) (event.getAmount() - player.getHealth()) * 50;
+				final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(player, Metals.MetalType.GOLD, amount, true, true);
+
+				if (!metalmind.isEmpty())
+				{
+					event.setAmount((float) Math.floor(player.getHealth() - 1));
+				}
 			}
 		}
 	}

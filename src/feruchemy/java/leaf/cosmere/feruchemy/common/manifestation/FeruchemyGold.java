@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19er - 02 - 2024 ~ Gerbagel
+ * File updated ~ 21 - 02 - 2024 ~ Gerbagel
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -12,10 +12,6 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-
-// Todo for TLC:
-//      - rebalance death resistance
-//      - max tap (32?) will be half a heart every tick // VERY EXPENSIVE, should drain faster than max compounding
 
 public class FeruchemyGold extends FeruchemyManifestation
 {
