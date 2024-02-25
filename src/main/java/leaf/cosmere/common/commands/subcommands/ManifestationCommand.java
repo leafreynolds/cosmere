@@ -45,7 +45,7 @@ public class ManifestationCommand extends ModCommand
 		return SINGLE_SUCCESS;
 	}
 
-	private static void ReportPowersFoundOnPlayer(CommandContext<CommandSourceStack> context, ServerPlayer player)
+	public static void ReportPowersFoundOnPlayer(CommandContext<CommandSourceStack> context, ServerPlayer player)
 	{
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{

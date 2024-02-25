@@ -15,6 +15,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -67,9 +68,18 @@ public class EntityEventHandler
 			if (eventEntity instanceof Player)
 			{
 				//todo choose based on planet? eg scadrial gets twinborn, roshar gets surgebinding etc?
+				if (!CosmereConfigs.SERVER_CONFIG.ALLOW_METALBORN_CHOICE.get())
 				{
 					//give random power
 					giveEntityStartingManifestation(livingEntity, spiritweb);
+					spiritweb.setHasBeenInitialized();
+				}
+				else
+				{
+					// spiritweb not initialized yet in this case
+					Player player = (Player) eventEntity;
+
+					player.sendSystemMessage(Component.literal("To choose powers, use §6/cosmere choose_metalborn_powers allomancy feruchemy"));
 				}
 			}
 			else if (canStartWithPowers(eventEntity))
@@ -86,6 +96,7 @@ public class EntityEventHandler
 					giveEntityStartingManifestation(livingEntity, spiritweb);
 				}
 
+				spiritweb.setHasBeenInitialized();
 			}
 			else if (eventEntity instanceof Warden warden)
 			{
@@ -101,12 +112,10 @@ public class EntityEventHandler
 				{
 					manifestationAttribute.setBaseValue(9);
 				}
+
+				spiritweb.setHasBeenInitialized();
 			}
-
-			spiritweb.setHasBeenInitialized();
 		});
-
-
 	}
 
 	public static boolean canStartWithPowers(Entity entity)
@@ -215,6 +224,11 @@ public class EntityEventHandler
 		}
 
 		// TODO We wanna change how powers are granted, as cosmere library mod shouldn't be in charge of this
+		addOtherPowers(spiritwebCapability);
+	}
+
+	public static void addOtherPowers(SpiritwebCapability spiritwebCapability)
+	{
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
 			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)

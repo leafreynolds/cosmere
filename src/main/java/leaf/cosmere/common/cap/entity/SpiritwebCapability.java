@@ -590,7 +590,6 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 		}
 
-		setHasBeenInitialized();
 		return false;
 	}
 
