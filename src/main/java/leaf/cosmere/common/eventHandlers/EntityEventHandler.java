@@ -15,7 +15,10 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -79,7 +82,12 @@ public class EntityEventHandler
 					// spiritweb not initialized yet in this case
 					Player player = (Player) eventEntity;
 
-					player.sendSystemMessage(Component.literal("To choose powers, use §6/cosmere choose_metalborn_powers allomancy feruchemy"));
+					String command = "/cosmere choose_metalborn_powers ";
+					MutableComponent instructionComponent = Component.literal("To choose powers, use ");
+					instructionComponent.append(Component.literal("§6§n/cosmere choose_metalborn_powers [allomancy] [feruchemy]")
+													.setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command))));
+
+					player.sendSystemMessage(instructionComponent);
 				}
 			}
 			else if (canStartWithPowers(eventEntity))

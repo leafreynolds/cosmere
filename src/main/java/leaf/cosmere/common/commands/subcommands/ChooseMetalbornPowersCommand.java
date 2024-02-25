@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -67,7 +68,9 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 
 			boolean allomanticIsValid = allomanticPower.getManifestationType().equals(Manifestations.ManifestationTypes.ALLOMANCY) || allomanticPower.getManifestationType().equals(Manifestations.ManifestationTypes.NONE);
 			boolean feruchemicalIsValid = feruchemicalPower.getManifestationType().equals(Manifestations.ManifestationTypes.FERUCHEMY) || feruchemicalPower.getManifestationType().equals(Manifestations.ManifestationTypes.NONE);
-			boolean isCompoundingPair = allomanticPower.getName().equals(feruchemicalPower.getName());
+			boolean isCompoundingPair = allomanticPower.getName().equals(feruchemicalPower.getName())
+					|| (allomanticPower.getName().equals(Metals.MetalType.ELECTRUM.getName()) && feruchemicalPower.getName().equals(Metals.MetalType.ATIUM.getName()))
+					|| (allomanticPower.getName().equals(Metals.MetalType.ATIUM.getName()) && feruchemicalPower.getName().equals(Metals.MetalType.ELECTRUM.getName()));
 
 			if (allomanticIsValid && feruchemicalIsValid && !isCompoundingPair)
 			{
