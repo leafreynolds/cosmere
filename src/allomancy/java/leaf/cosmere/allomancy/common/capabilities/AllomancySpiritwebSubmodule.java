@@ -242,11 +242,11 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
 				if (drawMetalLines && !scanResult.foundEntities.isEmpty())
 				{
-					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.foundEntities, closestMetalObject);
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, range, Color.BLUE, scanResult.foundEntities, closestMetalObject);
 				}
 				if (drawMetalLines && !scanResult.clusterResults.isEmpty())
 				{
-					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.clusterCenters, closestMetalObject);
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, range, Color.BLUE, scanResult.clusterCenters, closestMetalObject);
 				}
 				if (AllomancyConfigs.CLIENT.drawMetalBoxes.get() && !scanResult.foundBlocks.isEmpty())
 				{

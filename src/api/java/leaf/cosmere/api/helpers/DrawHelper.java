@@ -36,7 +36,7 @@ public class DrawHelper
 {
 
 	//Draw our allomancy lines
-	public static void drawLinesFromPoint(PoseStack poseStack, Vec3 originPoint, Color color, List<Vec3> lineEndPositions, Vec3 highlightVector)
+	public static void drawLinesFromPoint(PoseStack poseStack, Vec3 originPoint, float range, Color color, List<Vec3> lineEndPositions, Vec3 highlightVector)
 	{
 		poseStack.pushPose();
 
@@ -66,16 +66,17 @@ public class DrawHelper
 				}
 			}
 
+			int alpha = (int) Math.max(0, Math.floor((1 - (originPoint.distanceTo(endPos) / range)) * finalColor.getAlpha()));  // distance dims the lines until out of range
 			Matrix4f matrix = poseStack.last().pose();
 			final Matrix3f normal = poseStack.last().normal();
 
 			bufferIn.vertex(matrix, (float) originPoint.x(), (float) originPoint.y(), (float) originPoint.z())
-					.color(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), finalColor.getAlpha())
+					.color(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), alpha)
 					.normal(normal, 0, 1, 0)
 					.endVertex();
 
 			bufferIn.vertex(matrix, (float) endPos.x(), (float) endPos.y(), (float) endPos.z())
-					.color(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), finalColor.getAlpha())
+					.color(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), alpha)
 					.normal(normal, 0, 1, 0)
 					.endVertex();
 		}
