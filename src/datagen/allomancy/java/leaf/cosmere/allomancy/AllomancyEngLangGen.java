@@ -16,6 +16,7 @@ import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
+import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import net.minecraft.data.DataGenerator;
@@ -191,6 +192,11 @@ public class AllomancyEngLangGen extends LanguageProvider
 		for (ICosmereEffectProvider effect : AllomancyEffects.EFFECTS.getEffectsInRegistry())
 		{
 			add(effect.getEffect().getTranslationKey(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
+		}
+
+		for (IMobEffectProvider effect : AllomancyEffects.MOB_EFFECTS.getAllMobEffects())
+		{
+			add(effect.getMobEffect().getDescriptionId(), StringHelper.fixCapitalisation(effect.getRegistryName().getPath()));
 		}
 	}
 
