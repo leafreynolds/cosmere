@@ -567,6 +567,11 @@ public class SpiritwebCapability implements ISpiritweb
 		hasBeenInitialized = true;
 	}
 
+	public void setHasNotBeenInitialized()
+	{
+		hasBeenInitialized = false;
+	}
+
 	public boolean hasAnyPowers()
 	{
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())

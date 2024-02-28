@@ -14,12 +14,15 @@ import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.eventHandlers.EntityEventHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
+import org.apache.logging.log4j.core.jmx.Server;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,7 +36,6 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		return Commands.literal("choose_metalborn_powers")
-				.requires(CommandSourceStack::isPlayer)
 				.then(Commands.argument("allomanticPower", ManifestationsArgumentType.createArgument())
 						.requires(CommandSourceStack::isPlayer)
 						.executes(ChooseMetalbornPowersCommand::addMetalbornPowers)
@@ -45,7 +47,12 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 						.executes(ChooseMetalbornPowersCommand::confirmMetalbornPowers))
 				.then(Commands.literal("random")
 						.requires(CommandSourceStack::isPlayer)
-						.executes(ChooseMetalbornPowersCommand::random));
+						.executes(ChooseMetalbornPowersCommand::random))
+				.then(Commands.literal("reset")
+						.requires(context -> context.hasPermission(2))
+						.executes(ChooseMetalbornPowersCommand::resetPowers)
+						.then(Commands.argument("target", EntityArgument.players())
+								.executes(ChooseMetalbornPowersCommand::resetPowers)));
 	}
 
 	private static int addMetalbornPowers(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
@@ -181,6 +188,26 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 
 			source.sendSystemMessage(Component.literal("You have chosen to receive §arandom powers"));
 			sendConfirmationMessage(source);
+		}
+
+		return SINGLE_SUCCESS;
+	}
+
+	private static int resetPowers(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
+	{
+
+		Collection<ServerPlayer> players = getPlayers(context, 3);
+
+		for (ServerPlayer player : players)
+		{
+			SpiritwebCapability.get(player).ifPresent(spiritweb ->
+			{
+				spiritweb.clearManifestations();
+				((SpiritwebCapability) spiritweb).setHasNotBeenInitialized();
+				spiritweb.syncToClients(null);
+
+				context.getSource().sendSuccess(Component.literal("Successfully reset player " + player.getName().getString()), false);
+			});
 		}
 
 		return SINGLE_SUCCESS;
