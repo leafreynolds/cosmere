@@ -10,9 +10,9 @@
 //	That meant I didn't need the groovy-script MergeJars
 //
 
+
 import com.modrinth.minotaur.TaskModrinthUpload
 import com.modrinth.minotaur.dependencies.ModDependency
-import com.modrinth.minotaur.dependencies.VersionDependency
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
@@ -810,15 +810,16 @@ def createSecondaryModrinthUpload(String output, String targetProjectId, TaskPro
 				getAdditionalFiles().empty()
 
 				//Mark that the addon requires the build of Cosmere that we just uploaded (and override it to clear all optional dependencies)
-				def generalCosmereDependency =
+				//todo fix this because it doesn't appear to work anymore. fails on .getId() as some other version is null??
+/*				def generalCosmereDependency =
 						(tasks.modrinth.newVersion == null || tasks.modrinth.newVersion.getId() == null) //If we failed to find the upload version
 								// just set it to Cosmere in general
 								? new ModDependency("SEABTDiK", "required")
 								// else use the specific version
-								: new VersionDependency(tasks.modrinth.newVersion.getId(), "required")
+								: new VersionDependency(tasks.modrinth.newVersion.getId(), "required")*/
 
 				getDependencies().value([
-						generalCosmereDependency,
+						new ModDependency("SEABTDiK", "required"),//generalCosmereDependency,
 						new ModDependency("vvuO3ImH", "required"),//Curios
 						new ModDependency("nU0bVIaL", "optional"),//Patchouli
 						new ModDependency("nvQzSEkH", "optional"),//Jade
