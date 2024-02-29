@@ -11,10 +11,7 @@ package leaf.cosmere.common.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.commands.arguments.ManifestationsArgumentType;
-import leaf.cosmere.common.commands.subcommands.CosmereEffectCommand;
-import leaf.cosmere.common.commands.subcommands.EyeCommand;
-import leaf.cosmere.common.commands.subcommands.ManifestationCommand;
-import leaf.cosmere.common.commands.subcommands.SummonCommand;
+import leaf.cosmere.common.commands.subcommands.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
@@ -31,6 +28,7 @@ public class CosmereCommand
 				.then(ManifestationCommand.register(dispatcher))
 				.then(SummonCommand.register(dispatcher))
 				.then(CosmereEffectCommand.register(dispatcher))
+				.then(ChooseMetalbornPowersCommand.register(dispatcher))
 		);
 	}
 

@@ -19,6 +19,7 @@ public class CosmereServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue RAIDER_POWERS_CHANCE;
 	public final ForgeConfigSpec.IntValue MOB_POWERS_CHANCE;
 	public final ForgeConfigSpec.DoubleValue EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER;
+	public final ForgeConfigSpec.BooleanValue ALLOW_METALBORN_CHOICE;
 
 
 	CosmereServerConfig()
@@ -36,6 +37,8 @@ public class CosmereServerConfig implements ICosmereConfig
 		TWINBORN_POWERS_CHANCE = builder.comment("If not full born, 1 in how many powered mobs should be twinborn? Players are twinborn as a minimum.").defineInRange("twinbornPowersChance", 16, 1, 123456);
 
 		EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER = builder.comment("Multiplier for emotional allomancy range when singe-targeting").defineInRange("emotionalAllomancySingleTargetRange", 1.5D, 1D, 123456D);
+
+		ALLOW_METALBORN_CHOICE = builder.comment("Allow players to choose allomantic and feruchemical abilities for themselves using commands").define("allowMetalbornChoice", false);
 
 		builder.pop();
 		configSpec = builder.build();
