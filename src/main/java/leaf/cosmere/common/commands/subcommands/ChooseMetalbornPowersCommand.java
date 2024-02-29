@@ -9,7 +9,8 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.commands.arguments.ManifestationsArgumentType;
+import leaf.cosmere.common.commands.arguments.AllomancyArgumentType;
+import leaf.cosmere.common.commands.arguments.FeruchemyArgumentType;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.eventHandlers.EntityEventHandler;
 import net.minecraft.commands.CommandSourceStack;
@@ -20,7 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,10 +36,10 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		return Commands.literal("choose_metalborn_powers")
-				.then(Commands.argument("allomanticPower", ManifestationsArgumentType.createArgument())
+				.then(Commands.argument("allomanticPower", AllomancyArgumentType.createArgument())
 						.requires(CommandSourceStack::isPlayer)
 						.executes(ChooseMetalbornPowersCommand::addMetalbornPowers)
-						.then(Commands.argument("feruchemicalPower", ManifestationsArgumentType.createArgument())
+						.then(Commands.argument("feruchemicalPower", FeruchemyArgumentType.createArgument())
 								.requires(CommandSourceStack::isPlayer)
 								.executes(ChooseMetalbornPowersCommand::addMetalbornPowers)))
 				.then(Commands.literal("confirm")
@@ -73,8 +73,9 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 			Manifestation allomanticPower = context.getArgument("allomanticPower", Manifestation.class);
 			Manifestation feruchemicalPower = context.getArgument("feruchemicalPower", Manifestation.class);
 
-			boolean allomanticIsValid = allomanticPower.getManifestationType().equals(Manifestations.ManifestationTypes.ALLOMANCY) || allomanticPower.getManifestationType().equals(Manifestations.ManifestationTypes.NONE);
-			boolean feruchemicalIsValid = feruchemicalPower.getManifestationType().equals(Manifestations.ManifestationTypes.FERUCHEMY) || feruchemicalPower.getManifestationType().equals(Manifestations.ManifestationTypes.NONE);
+			// hate using string compares, but it's the only way as the NONE ManifestationType includes aviars and other undefined manifestations
+			boolean allomanticIsValid = allomanticPower.getManifestationType().equals(Manifestations.ManifestationTypes.ALLOMANCY) || allomanticPower.getName().equals("none");
+			boolean feruchemicalIsValid = feruchemicalPower.getManifestationType().equals(Manifestations.ManifestationTypes.FERUCHEMY) || feruchemicalPower.getName().equals("none");
 			boolean isCompoundingPair = allomanticPower.getName().equals(feruchemicalPower.getName())
 					|| (allomanticPower.getName().equals(Metals.MetalType.ELECTRUM.getName()) && feruchemicalPower.getName().equals(Metals.MetalType.ATIUM.getName()))
 					|| (allomanticPower.getName().equals(Metals.MetalType.ATIUM.getName()) && feruchemicalPower.getName().equals(Metals.MetalType.ELECTRUM.getName()));

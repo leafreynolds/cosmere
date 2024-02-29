@@ -10,6 +10,8 @@ package leaf.cosmere.common.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.commands.arguments.AllomancyArgumentType;
+import leaf.cosmere.common.commands.arguments.FeruchemyArgumentType;
 import leaf.cosmere.common.commands.arguments.ManifestationsArgumentType;
 import leaf.cosmere.common.commands.subcommands.*;
 import net.minecraft.commands.CommandSourceStack;
@@ -37,5 +39,11 @@ public class CosmereCommand
 		ArgumentTypeInfos.registerByClass(
 				ManifestationsArgumentType.class,
 				SingletonArgumentInfo.contextFree(ManifestationsArgumentType::createArgument));
+		ArgumentTypeInfos.registerByClass(
+				AllomancyArgumentType.class,
+				SingletonArgumentInfo.contextFree(AllomancyArgumentType::createArgument));
+		ArgumentTypeInfos.registerByClass(
+				FeruchemyArgumentType.class,
+				SingletonArgumentInfo.contextFree(FeruchemyArgumentType::createArgument));
 	}
 }
