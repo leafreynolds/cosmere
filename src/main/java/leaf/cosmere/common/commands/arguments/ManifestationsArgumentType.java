@@ -71,7 +71,7 @@ public class ManifestationsArgumentType implements ArgumentType<Manifestation>
 	{
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
-			builder.suggest(manifestation.getRegistryName().toString(), Component.translatable("").withStyle((style) -> style.withColor(ChatFormatting.GREEN)));
+			builder.suggest(manifestation.getRegistryName().toString(), Component.translatable(manifestation.getTranslationKey()).withStyle((style) -> style.withColor(ChatFormatting.GREEN)));
 		}
 
 		builder.buildFuture();

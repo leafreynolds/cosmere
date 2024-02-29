@@ -38,7 +38,7 @@ public class FeruchemyArgumentType implements ArgumentType<Manifestation>
 		{
 			if (manifestation.getManifestationType().equals(Manifestations.ManifestationTypes.FERUCHEMY) || manifestation.getName().equals("none"))
 			{
-				builder.suggest(manifestation.getRegistryName().toString(), Component.translatable("").withStyle((style) -> style.withColor(ChatFormatting.GREEN)));
+				builder.suggest(manifestation.getRegistryName().toString(), Component.translatable(manifestation.getTranslationKey()).withStyle((style) -> style.withColor(ChatFormatting.GREEN)));
 			}
 		}
 

@@ -33,17 +33,4 @@ public class CosmereCommand
 				.then(ChooseMetalbornPowersCommand.register(dispatcher))
 		);
 	}
-
-	public static void registerCustomArgumentTypes()
-	{
-		ArgumentTypeInfos.registerByClass(
-				ManifestationsArgumentType.class,
-				SingletonArgumentInfo.contextFree(ManifestationsArgumentType::createArgument));
-		ArgumentTypeInfos.registerByClass(
-				AllomancyArgumentType.class,
-				SingletonArgumentInfo.contextFree(AllomancyArgumentType::createArgument));
-		ArgumentTypeInfos.registerByClass(
-				FeruchemyArgumentType.class,
-				SingletonArgumentInfo.contextFree(FeruchemyArgumentType::createArgument));
-	}
 }

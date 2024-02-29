@@ -6,7 +6,6 @@ package leaf.cosmere.common;
 
 import leaf.cosmere.api.*;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.commands.CosmereCommand;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.common.config.CosmereConfigs;
@@ -70,6 +69,7 @@ public class Cosmere
 		BiomeModifierRegistry.BIOME_MODIFIER_SERIALIZERS.register(modBus);
 		LootFunctionRegistry.LOOT_FUNCTIONS.register(modBus);
 		GameEventRegistry.GAME_EVENTS.register(modBus);
+		ArgumentTypeRegistry.ARGUMENT_TYPE_INFOS.register(modBus);
 
 		BiomeRegistry.BIOMES.register(modBus);
 		FeatureRegistry.CONFIGURED_FEATURES.register(modBus);
@@ -152,12 +152,6 @@ public class Cosmere
 	{
 		//Initialization notification
 		CosmereAPI.logger.info("Cosmere Version {} initializing...", versionNumber);
-
-		event.enqueueWork(() ->
-		{
-			CosmereCommand.registerCustomArgumentTypes();
-			//StatsRegistry.register();
-		});
 
 		packetHandler.initialize();
 	}
