@@ -1,5 +1,5 @@
 /*
- * File updated ~ 14 - 11 - 2023 ~ Leaf
+ * File updated ~ 29 - 2 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.config;
@@ -64,5 +64,10 @@ public class CosmereServerConfig implements ICosmereConfig
 	{
 		CHARGEABLE_MAX_VALUE.clearCache();
 		SCULK_CAN_HEAR_KINETIC_INVESTITURE.clearCache();
+		MOB_POWERS_CHANCE.clearCache();
+		RAIDER_POWERS_CHANCE.clearCache();
+		FULLBORN_POWERS_CHANCE.clearCache();
+		TWINBORN_POWERS_CHANCE.clearCache();
+		EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER.clearCache();
 	}
 }
