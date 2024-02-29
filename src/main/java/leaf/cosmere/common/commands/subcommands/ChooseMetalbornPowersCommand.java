@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.fml.ModList;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -58,6 +59,13 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 	private static int addMetalbornPowers(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
 	{
 		CommandSourceStack source = context.getSource();
+		if (!ModList.get().isLoaded("allomancy") || !ModList.get().isLoaded("feruchemy"))
+		{
+			source.sendFailure(Component.literal("Allomancer or Feruchemist not installed; cannot choose powers"));
+
+			return SINGLE_SUCCESS;
+		}
+
 		ServerPlayer player = source.getPlayerOrException();
 		AtomicBoolean isInitialized = new AtomicBoolean(false);
 
