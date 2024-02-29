@@ -767,11 +767,11 @@ if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth
 	}
 
 	modrinth {
-		if (System.getenv("modrinth_api_token") == null) {
+		if (System.getenv("MODRINTH_API_TOKEN") == null) {
 			//Defaults to modrinth_api_token so we only have to check for a token via gradle properties if there isn't a system property
-			getToken().value((String) project.findProperty("MODRINTH_API_TOKEN"))
+			getToken().value((String) project.findProperty("modrinth_api_token"))
 		} else {
-			token = System.getenv("modrinth_api_token")
+			token = System.getenv("MODRINTH_API_TOKEN")
 		}
 		projectId = "SEABTDiK"
 		versionNumber = "${full_mod_version}"
@@ -837,6 +837,6 @@ def createSecondaryModrinthUpload(String output, String targetProjectId, TaskPro
 }
 
 tasks.register('publishToModSites') {
-	publishToModSites.dependsOn modrinth
-	publishToModSites.dependsOn curseforge
+	publishToModSites.dependsOn tasks.named("modrinth")
+	publishToModSites.dependsOn tasks.named("curseforge")
 }
