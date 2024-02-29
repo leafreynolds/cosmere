@@ -1,7 +1,5 @@
 {
   "advancements.allomancy.allomancy.aluminum.description": "Test description: Allomantic Aluminum",
-  "advancements.allomancy.allomancy.lerasium.title":  "LERASIUM!",
-  "advancements.allomancy.allomancy.lerasium.description":  "Reach the Well of Ascension",
   "advancements.allomancy.allomancy.aluminum.title": "Allomantic Aluminum",
   "advancements.allomancy.allomancy.atium.description": "Test description: Allomantic Atium",
   "advancements.allomancy.allomancy.atium.title": "Allomantic Atium",
@@ -58,6 +56,7 @@
   "death.attack.pewter_delayed_damage": "%1$s stopped burning pewter and succumbed to their wounds",
   "death.attack.pewter_delayed_damage.player": "%1$s stopped burning pewter while fighting %2$s and succumbed to their wounds",
   "effect.allomancy.allomancy_boost": "Allomancy Boost",
+  "effect.allomancy.allomantic_brass_stun": "Allomantic Brass Stun",
   "effect.allomancy.allomantic_pewter": "Allomantic Pewter",
   "effect.allomancy.copper_cloud": "Copper Cloud",
   "entity.allomancy.coin_projectile": "Coin Projectile",
