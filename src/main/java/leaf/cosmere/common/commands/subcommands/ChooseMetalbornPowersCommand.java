@@ -189,14 +189,28 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 	private static int random(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
 	{
 		CommandSourceStack source = context.getSource();
+		AtomicBoolean isInitialized = new AtomicBoolean(false);
 
-		if (source.getEntity() instanceof ServerPlayer player)
+		SpiritwebCapability.get(source.getPlayerOrException()).ifPresent(spiritweb ->
 		{
-			CommandQueueItem queueItem = new CommandQueueItem(null, null, true);
-			commandConfirmationQueue.put(player.getUUID(), queueItem);
+			SpiritwebCapability spiritwebCap = (SpiritwebCapability) spiritweb;
+			isInitialized.set(spiritwebCap.hasBeenInitialized());
+		});
 
-			source.sendSystemMessage(Component.literal("You have chosen to receive §arandom powers"));
-			sendConfirmationMessage(source);
+		if (!isInitialized.get())
+		{
+			if (source.getEntity() instanceof ServerPlayer player)
+			{
+				CommandQueueItem queueItem = new CommandQueueItem(null, null, true);
+				commandConfirmationQueue.put(player.getUUID(), queueItem);
+
+				source.sendSystemMessage(Component.literal("You have chosen to receive §arandom powers"));
+				sendConfirmationMessage(source);
+			}
+		}
+		else
+		{
+			source.sendFailure(Component.literal("Powers already chosen; cannot choose again"));   // todo translatable string
 		}
 
 		return SINGLE_SUCCESS;
