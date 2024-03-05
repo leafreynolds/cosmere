@@ -39,7 +39,7 @@ public class IronSteelLinesThread implements Runnable
 	private static final Lock lock = new ReentrantLock();
 	private static ScanResult scanResult = new ScanResult();
 	private static Vec3 closestMetalObjectInLookVector;
-	private final double tolerance = 0.32D;
+	private final double tolerance = 1.8D;
 	private static int scanRange = 0;
 	private static boolean isStopping = false;
 
@@ -354,9 +354,12 @@ public class IronSteelLinesThread implements Runnable
 	{
 		Vec3 lookVector = player.getLookAngle();
 		Vec3 vectorToPos = new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5).subtract(player.getEyePosition());
+		Vec3 playerPos = player.getEyePosition();
 		vectorToPos = vectorToPos.normalize();
 
-		if (vectorToPos.distanceTo(lookVector) < tolerance)
+		double dynamicTolerance = tolerance / playerPos.distanceTo(new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
+
+		if (vectorToPos.distanceTo(lookVector) < dynamicTolerance)
 		{
 			if (currentClosestMetalObject == null)
 			{
@@ -383,9 +386,12 @@ public class IronSteelLinesThread implements Runnable
 	{
 		Vec3 lookVector = player.getLookAngle();
 		Vec3 vectorToPos = pos.subtract(player.getEyePosition());
+		Vec3 playerPos = player.getEyePosition();
 		vectorToPos = vectorToPos.normalize();
 
-		if (vectorToPos.distanceTo(lookVector) < tolerance)
+		double dynamicTolerance = tolerance / playerPos.distanceTo(pos);
+
+		if (vectorToPos.distanceTo(lookVector) < dynamicTolerance)
 		{
 			if (currentClosestMetalObject == null)
 			{
