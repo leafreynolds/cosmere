@@ -195,9 +195,8 @@ public class DrawHelper
 				{
 					finalColor = Color.decode("#66b2ff");
 				}
-				else if (!targetedClusterBlockList.isEmpty())
+				else if (targetedClusterBlockList.contains(blockPos))
 				{
-					targetedClusterBlockList.contains(blockPos);
 					finalColor = Color.decode("#66b2ff");
 				}
 			}
