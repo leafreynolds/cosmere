@@ -1,16 +1,21 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 21 - 02 - 2024 ~ Gerbagel
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class FeruchemyGold extends FeruchemyManifestation
 {
+	private static final int MIN_TAP_FOR_EXTRA_HEALTH = 5;
 	public FeruchemyGold(Metals.MetalType metalType)
 	{
 		super(metalType);
@@ -28,16 +33,8 @@ public class FeruchemyGold extends FeruchemyManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		//don't check every tick.
-		LivingEntity livingEntity = data.getLiving();
-
 		//don't heal more than needed.
-		if (!isActiveTick(data))
-		{
-			return false;
-		}
-
-		if (isTapping(data) && livingEntity.getHealth() >= livingEntity.getMaxHealth())
+		if (!isHealActiveTick(data))
 		{
 			return false;
 		}
@@ -55,5 +52,36 @@ public class FeruchemyGold extends FeruchemyManifestation
 			return isTapping(data);
 		}
 		return false;
+	}
+
+	@Override
+	public void applyEffectTick(ISpiritweb data)
+	{
+		int mode = getMode(data);
+		CosmereEffect effect = getEffect(mode);
+		CosmereEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, data.getLiving(), Math.abs(mode));//todo check this strength
+
+		if (mode <= 0)
+		{
+			int bonusHealth = Math.max(0, -mode - MIN_TAP_FOR_EXTRA_HEALTH + 1);
+
+			currentEffect.setDynamicAttribute(Attributes.MAX_HEALTH, (double) bonusHealth / -mode, AttributeModifier.Operation.ADDITION);
+		}
+
+		data.addEffect(currentEffect);
+
+		// this updates health immediately rather than waiting for a health update
+		data.getLiving().setHealth(data.getLiving().getHealth());
+	}
+
+	public boolean isHealActiveTick(ISpiritweb data)
+	{
+		int healTick = Math.max(1, getHealActiveTick(-getMode(data)));
+		return data.getLiving().tickCount % healTick == 0;
+	}
+
+	public static int getHealActiveTick(int strength)
+	{
+		return (int) Math.floor(200*Math.pow(strength, -1.5D));
 	}
 }
