@@ -776,6 +776,7 @@ if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth
 		projectId = "SEABTDiK"
 		versionNumber = "${full_mod_version}"
 		versionType = "${release_type}"
+		gameVersions = ["1.19.2"] // Must be an array, even with only one version
 		changelog = changeLogResolver.call()
 		uploadFile = jar
 		getAdditionalFiles().value([apiJar.get()])
@@ -806,6 +807,7 @@ def createSecondaryModrinthUpload(String output, String targetProjectId, TaskPro
 			modrinth {
 				projectId = targetProjectId
 				uploadFile = sourceSetJar.get()
+				gameVersions = ["1.19.2"] // Must be an array, even with only one version
 				//Clear additional upload files as this is a modification of what things are set to from before
 				getAdditionalFiles().empty()
 

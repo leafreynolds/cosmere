@@ -1,11 +1,12 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.patchouli.data;
 
 import java.util.Locale;
 
+//https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/text-formatting/
 public class PatchouliTextFormat
 {
 	private static final StringBuilder s_stringBuilder = new StringBuilder();

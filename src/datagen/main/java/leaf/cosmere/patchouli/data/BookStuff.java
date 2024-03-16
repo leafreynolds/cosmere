@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 9 - 2023 ~ Leaf
+ * File updated ~ 2 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.patchouli.data;
@@ -11,6 +11,7 @@ import leaf.cosmere.api.text.StringHelper;
 
 import java.util.Map;
 
+//https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
 public class BookStuff
 {
 	public static class Category

@@ -1,4 +1,4 @@
-// 1.19.2	2023-10-02T12:37:11.1369821	PatchouliGeneration
+// 1.19.2	2024-03-16T13:15:24.2699141	PatchouliGeneration
 9a35dabf30aea20c86f3776639599f4c047a8992 data/allomancy/patchouli_books/guide/en_us/categories/allomancy.json
 dfe7406fcada2113c29faddd0c1a879991cedd46 data/allomancy/patchouli_books/guide/en_us/entries/allomancy/allomancy_basics.json
 1b9b2cc277e6326b4f00ef38d581057dbd50ca00 data/allomancy/patchouli_books/guide/en_us/entries/allomancy/allomantic_aluminum.json
@@ -18,3 +18,4 @@ cab1c7c7130a10d0346428f70eb34268be2271e6 data/allomancy/patchouli_books/guide/en
 d1d4ee0c1dc9214177151f27c7e2b3cec429da1d data/allomancy/patchouli_books/guide/en_us/entries/allomancy/allomantic_steel.json
 8a5c37ac2c5f89041d8009dcc2021beed43af962 data/allomancy/patchouli_books/guide/en_us/entries/allomancy/allomantic_tin.json
 789690417b0861ba752ffb80a9d3786d95b2533b data/allomancy/patchouli_books/guide/en_us/entries/allomancy/allomantic_zinc.json
+4bbcc49230ab6bc6ab33af9d86cd86316286951e data/allomancy/patchouli_books/guide/en_us/entries/allomancy/coin_pouch.json
