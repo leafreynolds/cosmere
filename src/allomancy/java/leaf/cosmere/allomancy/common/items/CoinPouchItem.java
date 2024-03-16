@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 16 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -49,13 +49,13 @@ public class CoinPouchItem extends ProjectileWeaponItem
 	{
 		final boolean isNugget = itemStack.is(Tags.Items.NUGGETS);
 		final boolean containsMetal = itemStack.is(CosmereTags.Items.CONTAINS_METAL);
-		final boolean isCommonMetal = itemStack.getItem() instanceof IHasMetalType metalType && metalType.getMetalType().getRarity() == Rarity.COMMON;
-		return isNugget && containsMetal && isCommonMetal;
+		final boolean isUncommonMetal = (itemStack.getItem() instanceof IHasMetalType metalType) && metalType.getMetalType().getRarity() != Rarity.COMMON;
+		return isNugget && containsMetal && !isUncommonMetal;
 	};
 
-	public CoinPouchItem(Properties p_40660_)
+	public CoinPouchItem(Properties properties)
 	{
-		super(p_40660_);
+		super(properties);
 	}
 
 	@Override
