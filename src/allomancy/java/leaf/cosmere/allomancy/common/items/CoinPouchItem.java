@@ -1,5 +1,5 @@
 /*
- * File updated ~ 16 - 3 - 2024 ~ Leaf
+ * File updated ~ 17 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -26,6 +26,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -206,9 +207,31 @@ public class CoinPouchItem extends ProjectileWeaponItem
 		return (IItemHandlerModifiable) coinPouchStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 	}
 
-	public static boolean onPickupItem(ItemEntity entity, Player player)
+	public static boolean onPickupItem(Entity entity, Player player)
 	{
-		ItemStack entityStack = entity.getItem();
+		//icky
+		ItemEntity itemEntity = entity instanceof ItemEntity ? (ItemEntity) entity : null;
+		CoinProjectile coinProjectile = entity instanceof CoinProjectile ? (CoinProjectile) entity : null;
+
+		final boolean isItemEntity = itemEntity != null;
+		final boolean isCoinProjectile = coinProjectile != null;
+
+		if (!isItemEntity && !isCoinProjectile)
+		{
+			return false;
+		}
+
+		ItemStack entityStack;
+
+		if (isItemEntity)
+		{
+			entityStack = itemEntity.getItem();
+		}
+		else //ick, why do these classes not share an item provider type
+		{
+			entityStack = coinProjectile.getItem();
+		}
+
 		int originalCount = entityStack.getCount();
 
 		if (CoinPouchItem.SUPPORTED_PROJECTILES.test(entityStack))
@@ -238,10 +261,18 @@ public class CoinPouchItem extends ProjectileWeaponItem
 					final int amountTaken = originalCount - entityStack.getCount();
 					if (amountTaken > 0)
 					{
-						//here's what we couldn't fit (if any)
-						entity.setItem(entityStack);
-						//do the take animation where the entity flies into the player
-						player.take(entity, amountTaken);
+						if (isItemEntity)
+						{
+							//here's what we couldn't fit (if any)
+							itemEntity.setItem(entityStack);
+							//do the take animation where the entity flies into the player
+							player.take(itemEntity, amountTaken);
+						}
+						else// if (isCoinProjectile)
+						{
+							//coin projectiles are always stack size 1 (?) so should be fine to delete if we get here.
+							coinProjectile.discard();
+						}
 						return true;
 					}
 				}
