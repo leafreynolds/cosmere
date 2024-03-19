@@ -1,5 +1,5 @@
 /*
- * File updated ~ 21 - 11 - 2023 ~ Leaf
+ * File updated ~ 20 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aviar.common.eventHandlers;
@@ -69,7 +69,7 @@ public class AviarCommonForgeEvents
 		final ItemStack price2 = new ItemStack(Items.NETHER_STAR);
 		final ItemStack forSale = new ItemStack(AviarItems.PATJIS_FRUIT);
 
-		event.getRareTrades().add(
+		event.getGenericTrades().add(
 				new BasicItemListing(
 						price,
 						price2,
