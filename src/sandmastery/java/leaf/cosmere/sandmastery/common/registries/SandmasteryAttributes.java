@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 19 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.registries;
@@ -25,5 +25,5 @@ public class SandmasteryAttributes
 			);
 	//UUIDs for permanent modifier to player's ribbon attribute
 	public static final UUID OVERMASTERY_UUID = UUID.nameUUIDFromBytes("Overmastery".getBytes());
-	public static final UUID OVERMASTERY_SECONDARY_UUID = UUID.nameUUIDFromBytes("Overmastery".getBytes());
+	public static final UUID OVERMASTERY_SECONDARY_UUID = UUID.nameUUIDFromBytes("Overmastery2".getBytes());
 }
