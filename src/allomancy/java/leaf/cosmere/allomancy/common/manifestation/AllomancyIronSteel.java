@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 11 - 2023 ~ Leaf
+ * File updated ~ 17 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -7,6 +7,7 @@ package leaf.cosmere.allomancy.common.manifestation;
 import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
+import leaf.cosmere.allomancy.common.items.CoinPouchItem;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.IHasMetalType;
@@ -325,7 +326,14 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					//move small things
 					if (targetEntity instanceof ItemEntity itemEntity)
 					{
-						moveEntityTowards(itemEntity, dataLiving.blockPosition());
+						if (dataLiving instanceof Player player)
+						{
+							itemEntity.playerTouch(player);
+						}
+						else
+						{
+							moveEntityTowards(itemEntity, dataLiving.blockPosition());
+						}
 					}
 					//affect both entities
 					else if (targetEntity instanceof LivingEntity livingEntity)
@@ -344,10 +352,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 						//if not push, then check if we should pull coin projectiles back to player
 						else if (dataLiving instanceof Player player && targetEntity instanceof CoinProjectile coinProjectile)
 						{
-							//technically we could do this with item entities, but I like how those currently work
-							//Doing this with projectiles meansa I don't have to mess with the physics of un-sticking
-							//the coin projectiles from whatever surface they may be attached to
-							coinProjectile.playerTouch(player);
+							CoinPouchItem.onPickupItem(coinProjectile, player);
 						}
 					}
 				}
