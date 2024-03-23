@@ -22,6 +22,8 @@ public final class ScanResult
 {
 	public final List<Vec3> foundEntities = new ArrayList<>();
 	public final List<BlockPos> foundBlocks = new ArrayList<>();
+	public BlockScanResult targetedCluster = null;
+	public boolean hasTargetedCluster = false;
 
 	public final List<BlockScanResult> clusterResults = new ArrayList<>();
 	private final Map<BlockPos, BlockScanResult> clusters = new HashMap<>();
@@ -37,12 +39,12 @@ public final class ScanResult
 		clusters.clear();
 	}
 
-	public void addBlock(BlockPos blockPos)
+	public void addBlock(BlockPos blockPos, Vec3 currentClosestMetalObject)
 	{
 		foundBlocks.add(blockPos);
 
 		//Has a cluster been made nearby already?
-		if (!tryAddToCluster(clusters, blockPos))
+		if (!tryAddToCluster(clusters, blockPos, currentClosestMetalObject))
 		{
 			//if not, make a new cluster
 			final BlockScanResult result = new BlockScanResult(blockPos);
@@ -51,7 +53,7 @@ public final class ScanResult
 		}
 	}
 
-	private boolean tryAddToCluster(final Map<BlockPos, BlockScanResult> clusters, final BlockPos pos)
+	private boolean tryAddToCluster(final Map<BlockPos, BlockScanResult> clusters, final BlockPos pos, Vec3 currentClosestMetalObject)
 	{
 		BlockScanResult root = null;
 
@@ -97,6 +99,14 @@ public final class ScanResult
 		root = tryAddToCluster(clusters, pos, westSouth.above(), root);
 		root = tryAddToCluster(clusters, pos, westSouth.below(), root);
 
+		if (root != null)
+		{
+			if (new Vec3(pos.getX(), pos.getY(), pos.getZ()).equals(currentClosestMetalObject))
+			{
+				targetedCluster = root;
+				hasTargetedCluster = true;
+			}
+		}
 
 		return root != null;
 	}
@@ -124,8 +134,14 @@ public final class ScanResult
 		return root;
 	}
 
-	public void finalizeClusters()
+	public Vec3 finalizeClusters()
 	{
 		clusterCenters = clusterResults.stream().map(BlockScanResult::getPosition).toList();
+
+		if (hasTargetedCluster)
+		{
+			return targetedCluster.getPosition();
+		}
+		return null;
 	}
 }

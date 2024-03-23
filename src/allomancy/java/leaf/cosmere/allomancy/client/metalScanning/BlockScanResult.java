@@ -10,6 +10,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -77,6 +78,11 @@ public final class BlockScanResult
 	public Vec3 getPosition()
 	{
 		return bounds.getCenter();
+	}
+
+	public ArrayList<BlockPos> getBlocks()
+	{
+		return new ArrayList<>(blocks);
 	}
 
 }

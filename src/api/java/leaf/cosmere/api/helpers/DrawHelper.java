@@ -26,6 +26,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.function.BiFunction;
@@ -35,7 +36,7 @@ public class DrawHelper
 {
 
 	//Draw our allomancy lines
-	public static void drawLinesFromPoint(PoseStack poseStack, Vec3 originPoint, Color color, List<Vec3> lineEndPositions)
+	public static void drawLinesFromPoint(PoseStack poseStack, Vec3 originPoint, float range, Color color, List<Vec3> lineEndPositions, Vec3 highlightVector)
 	{
 		poseStack.pushPose();
 
@@ -55,16 +56,27 @@ public class DrawHelper
 		//For all found things, draw the line
 		for (Vec3 endPos : lineEndPositions)
 		{
+			Color finalColor = color;
+
+			if (highlightVector != null)
+			{
+				if (new Vec3(endPos.x - 0.5, endPos.y - 0.5, endPos.z - 0.5).equals(highlightVector) || endPos.equals(highlightVector))
+				{
+					finalColor = Color.decode("#66b2ff");
+				}
+			}
+
+			int alpha = (int) Math.max(0, Math.floor((1 - (originPoint.distanceTo(endPos) / range)) * finalColor.getAlpha()));  // distance dims the lines until out of range
 			Matrix4f matrix = poseStack.last().pose();
 			final Matrix3f normal = poseStack.last().normal();
 
 			bufferIn.vertex(matrix, (float) originPoint.x(), (float) originPoint.y(), (float) originPoint.z())
-					.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
+					.color(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), alpha)
 					.normal(normal, 0, 1, 0)
 					.endVertex();
 
 			bufferIn.vertex(matrix, (float) endPos.x(), (float) endPos.y(), (float) endPos.z())
-					.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
+					.color(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), alpha)
 					.normal(normal, 0, 1, 0)
 					.endVertex();
 		}
@@ -155,7 +167,7 @@ public class DrawHelper
 				.endVertex();
 	}
 
-	public static void drawBlocksAtPoint(PoseStack poseStack, Color color, List<BlockPos> blockPosList)
+	public static void drawBlocksAtPoint(PoseStack poseStack, Color color, List<BlockPos> blockPosList, Vec3 highlightVector, ArrayList<BlockPos> targetedClusterBlockList)
 	{
 		poseStack.pushPose();
 
@@ -176,7 +188,20 @@ public class DrawHelper
 		//For all found things, draw the line
 		for (BlockPos blockPos : blockPosList)
 		{
-			renderColoredBlock(poseStack, bufferIn, color, blockPos);
+			Color finalColor = color;
+			if (highlightVector != null)
+			{
+				if (new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ()).equals(highlightVector))
+				{
+					finalColor = Color.decode("#66b2ff");
+				}
+				else if (targetedClusterBlockList.contains(blockPos))
+				{
+					finalColor = Color.decode("#66b2ff");
+				}
+			}
+
+			renderColoredBlock(poseStack, bufferIn, finalColor, blockPos);
 		}
 
 		//we are meant to end batches... but if I don't, then the boxes draw over other boxes.
