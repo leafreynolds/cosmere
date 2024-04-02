@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 3 - 4 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -41,7 +41,7 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
-		return Mth.floor(10000 * getMaxChargeModifier());
+		return Mth.floor(10000 * getMaxChargeModifier()) * itemStack.getCount();
 	}
 
 	@Override
