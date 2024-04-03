@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 2 - 2023 ~ Leaf
+ * File updated ~ 24 - 3 - 2024 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -172,23 +172,53 @@ public class RecipeGen extends RecipeProvider implements IConditionBuilder
 	}
 
 
-	protected static void addBasicArmorRecipes(Consumer<FinishedRecipe> consumer, TagKey<Item> inputMaterial, @Nullable Item head, @Nullable Item chest, @Nullable Item legs, @Nullable Item feet)
+	protected static void addArmorRecipes(Consumer<FinishedRecipe> consumer, TagKey<Item> inputMaterial, @Nullable Item head, @Nullable Item chest, @Nullable Item legs, @Nullable Item feet)
 	{
 		if (head != null)
 		{
-			ShapedRecipeBuilder.shaped(head).define('X', inputMaterial).pattern("XXX").pattern("X X").group("helmets").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder
+					.shaped(head)
+					.define('X', inputMaterial)
+					.pattern("XXX")
+					.pattern("X X")
+					.group("helmets")
+					.unlockedBy("has_material", has(inputMaterial))
+					.save(consumer);
 		}
 		if (chest != null)
 		{
-			ShapedRecipeBuilder.shaped(chest).define('X', inputMaterial).pattern("X X").pattern("XXX").pattern("XXX").group("chestplates").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder
+					.shaped(chest)
+					.define('X', inputMaterial)
+					.pattern("X X")
+					.pattern("XXX")
+					.pattern("XXX")
+					.group("chestplates")
+					.unlockedBy("has_material", has(inputMaterial))
+					.save(consumer);
 		}
 		if (legs != null)
 		{
-			ShapedRecipeBuilder.shaped(legs).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern("X X").group("leggings").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder
+					.shaped(legs)
+					.define('X', inputMaterial)
+					.pattern("XXX")
+					.pattern("X X")
+					.pattern("X X")
+					.group("leggings")
+					.unlockedBy("has_material", has(inputMaterial))
+					.save(consumer);
 		}
 		if (feet != null)
 		{
-			ShapedRecipeBuilder.shaped(feet).define('X', inputMaterial).pattern("X X").pattern("X X").group("boots").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder
+					.shaped(feet)
+					.define('X', inputMaterial)
+					.pattern("X X")
+					.pattern("X X")
+					.group("boots")
+					.unlockedBy("has_material", has(inputMaterial))
+					.save(consumer);
 		}
 	}
 

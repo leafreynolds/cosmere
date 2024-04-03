@@ -63,7 +63,19 @@ def full_mod_version = mod_version + "." + build_number
 def release_type = System.env.TC_RELEASE_TYPE ?: "alpha"
 
 ext {
-	secondaryModules = ['allomancy', 'feruchemy', 'hemalurgy', 'surgebinding', 'sandmastery', 'awakening', 'aondor', 'aviar', 'soulforgery', 'example']
+	secondaryModules = [
+			'allomancy',
+			'feruchemy',
+			'hemalurgy',
+			'surgebinding',
+			'sandmastery',
+			'awakening',
+			'aondor',
+			'aviar',
+			'soulforgery',
+			'example',
+			'cosmeretools']
+
 	extraTypes = ['datagen', 'gameTest']
 	jsonPatterns = ["**/*.json", "**/*.mcmeta"]
 	//version properties here automatically update versions in all the mods.toml files
@@ -434,6 +446,7 @@ dependencies {
 	awakeningAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	aondorAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	soulforgeryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	cosmeretoolsAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -465,6 +478,7 @@ mixin {
 	add sourceSets.awakening, 'mixins.cosmere.awakening.refmap.json'
 	add sourceSets.aondor, 'mixins.cosmere.aondor.refmap.json'
 	add sourceSets.soulforgery, 'mixins.cosmere.soulforgery.refmap.json'
+	add sourceSets.cosmeretools, 'mixins.cosmere.cosmeretools.refmap.json'
 
 	config 'cosmere.mixins.json'
 	//config 'cosmere.mixins.api.json'
@@ -477,6 +491,7 @@ mixin {
 	config 'awakening.mixins.json'
 	config 'aondor.mixins.json'
 	config 'soulforgery.mixins.json'
+	config 'cosmeretools.mixins.json'
 }
 
 def getManifestAttributes(String title)
@@ -513,6 +528,7 @@ tasks.named('sourcesJar', Jar).configure {
 			awakeningClasses,
 			aondorClasses,
 			soulforgeryClasses,
+			cosmeretoolsClasses,
 	)
 	duplicatesStrategy(DuplicatesStrategy.FAIL)
 	//Note: Already contains main source set's sources by default
@@ -527,6 +543,7 @@ tasks.named('sourcesJar', Jar).configure {
 			sourceSets.awakening.allJava,
 			sourceSets.aondor.allJava,
 			sourceSets.soulforgery.allJava,
+			sourceSets.cosmeretools.allJava,
 	)
 	manifest.attributes(getManifestAttributes("Cosmere"))
 }
@@ -555,6 +572,7 @@ def aondorJar = secondaryJar(sourceSets.aondor, 'AonDor')
 def aviarJar = secondaryJar(sourceSets.aviar, 'Aviar')
 def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'SoulForgery')
 def exampleJar = secondaryJar(sourceSets.example, 'Example')
+def cosmeretoolsJar = secondaryJar(sourceSets.cosmeretools, 'Tools')
 
 tasks.withType(JavaCompile).configureEach({
 	options.encoding = 'UTF-8'
@@ -575,6 +593,7 @@ artifacts {
 	archives aviarJar
 	archives soulforgeryJar
 	archives exampleJar
+	archives cosmeretoolsJar
 }
 
 
@@ -688,7 +707,8 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					'hemalurgy',
 					'surgebinding',
 					'sandmastery',
-					'aviar'
+					'aviar',
+					'cosmere-tools'
 			)
 		}
 
@@ -699,6 +719,7 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 		uploadSecondaryCurseProject(task, 624998, changelog, surgebindingJar, release_type)
 		uploadSecondaryCurseProject(task, 695387, changelog, sandmasteryJar, release_type)
 		uploadSecondaryCurseProject(task, 822584, changelog, aviarJar, release_type)
+		uploadSecondaryCurseProject(task, 990661, changelog, cosmeretoolsJar, release_type)
 
 		//not yet ready
 		//uploadSecondaryCurseProject(task, 822581, changelog, aondorJar)
@@ -731,7 +752,8 @@ void uploadSecondaryCurseProject(TaskPublishCurseForge task, long projectId, Str
 				'hemalurgy',
 				'surgebinding',
 				'sandmastery',
-				'aviar'
+				'aviar',
+				'cosmere-tools'
 		)
 		addIncompatibility(
 				'hemalurgy-lego-allomancy'
@@ -747,6 +769,7 @@ if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth
 	def surgebindingModrinth = createSecondaryModrinthUpload("surgebinding", "ohwrIsCO", surgebindingJar)
 	def sandmasteryModrinth = createSecondaryModrinthUpload("sandmastery", "9EJFLSYm", sandmasteryJar)
 	def aviarModrinth = createSecondaryModrinthUpload("aviar", "75FFkvaX", aviarJar)
+	def cosmeretoolsModrinth = createSecondaryModrinthUpload("tools", "T0u6rdso", cosmeretoolsJar)
 
 	//not yet ready
 	//def aondorModrinth = createSecondaryModrinthUpload("aondor", "E92whAPB", aondorJar)
@@ -762,7 +785,8 @@ if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth
 				hemalurgyModrinth,
 				surgebindingModrinth,
 				sandmasteryModrinth,
-				aviarModrinth
+				aviarModrinth,
+				cosmeretoolsModrinth
 		)
 	}
 
@@ -792,6 +816,7 @@ if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth
 				new ModDependency("ohwrIsCO", "optional"),//surgebinding
 				new ModDependency("9EJFLSYm", "optional"),//sandmastery
 				new ModDependency("75FFkvaX", "optional"),//aviar
+				new ModDependency("T0u6rdso", "optional"),//cosmeretools
 		])
 	}
 }
@@ -832,6 +857,7 @@ def createSecondaryModrinthUpload(String output, String targetProjectId, TaskPro
 						new ModDependency("ohwrIsCO", "optional"),//surgebinding
 						new ModDependency("9EJFLSYm", "optional"),//sandmastery
 						new ModDependency("75FFkvaX", "optional"),//aviar
+						new ModDependency("T0u6rdso", "optional"),//cosmeretools
 				])
 			}
 			println "Updated Modrinth extension"
@@ -840,6 +866,10 @@ def createSecondaryModrinthUpload(String output, String targetProjectId, TaskPro
 }
 
 tasks.register('publishToModSites') {
-	publishToModSites.dependsOn tasks.named("modrinth")
-	publishToModSites.dependsOn tasks.named("curseforge")
+	if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth_api_token')) {
+		publishToModSites.dependsOn tasks.named("modrinth")
+	}
+	if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('curseforge_api_token')) {
+		publishToModSites.dependsOn tasks.named("curseforge")
+	}
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cosmeretools:item/metal_sword",
+    "layer1": "cosmeretools:item/metal_sword_0"
+  }
+}

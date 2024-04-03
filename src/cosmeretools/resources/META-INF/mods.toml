@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "MIT"
+
+[[mods]]
+modId = "cosmeretools"
+version = "${version}"
+displayName = "Cosmere: Tools"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere-tools"
+authors = "Leaf"
+credits = '''
+
+Special thanks go to:
+Ridanisaurus - For many item and block textures.
+'''
+logoFile = "logo.png"
+description = '''Tools module for Cosmere.'''
+
+[[dependencies.cosmeretools]]
+modId = "cosmere"
+mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
