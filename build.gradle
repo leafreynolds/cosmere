@@ -555,7 +555,10 @@ def secondaryJar(SourceSet sourceSet, String title)
 		archiveClassifier.set(sourceSet.name)
 		from sourceSet.output
 		if (!title.isEmpty()) {
-			archiveFileName.set("Cosmere${title}-${project.version}.jar")
+			def filename = "${title}-${project.version}.jar"
+			//basically don't add cosmere if it already has cosmere in it
+			final def prependTitle = (title.contains("Cosmere") ? "" : "Cosmere") + filename
+			archiveFileName.set(prependTitle)
 		}
 		manifest.attributes(getManifestAttributes(title.isEmpty() ? "Cosmere" : title))
 	})
@@ -572,7 +575,7 @@ def aondorJar = secondaryJar(sourceSets.aondor, 'AonDor')
 def aviarJar = secondaryJar(sourceSets.aviar, 'Aviar')
 def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'SoulForgery')
 def exampleJar = secondaryJar(sourceSets.example, 'Example')
-def cosmeretoolsJar = secondaryJar(sourceSets.cosmeretools, 'Tools')
+def cosmeretoolsJar = secondaryJar(sourceSets.cosmeretools, 'CosmereTools')
 
 tasks.withType(JavaCompile).configureEach({
 	options.encoding = 'UTF-8'
