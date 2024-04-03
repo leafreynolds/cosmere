@@ -710,8 +710,8 @@ if (System.getenv("CURSEFORGE_API_TOKEN") != null || project.hasProperty('cursef
 					'hemalurgy',
 					'surgebinding',
 					'sandmastery',
-					'aviar'//,
-					//'cosmere-tools'
+					'aviar',
+					'cosmere-tools'
 			)
 		}
 
@@ -755,8 +755,8 @@ void uploadSecondaryCurseProject(TaskPublishCurseForge task, long projectId, Str
 				'hemalurgy',
 				'surgebinding',
 				'sandmastery',
-				'aviar'//,
-				//'cosmere-tools'
+				'aviar',
+				'cosmere-tools'
 		)
 		addIncompatibility(
 				'hemalurgy-lego-allomancy'
@@ -819,7 +819,7 @@ if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth
 				new ModDependency("ohwrIsCO", "optional"),//surgebinding
 				new ModDependency("9EJFLSYm", "optional"),//sandmastery
 				new ModDependency("75FFkvaX", "optional"),//aviar
-				//new ModDependency("T0u6rdso", "optional"),//cosmeretools
+				new ModDependency("T0u6rdso", "optional"),//cosmeretools
 		])
 	}
 }
@@ -860,7 +860,7 @@ def createSecondaryModrinthUpload(String output, String targetProjectId, TaskPro
 						new ModDependency("ohwrIsCO", "optional"),//surgebinding
 						new ModDependency("9EJFLSYm", "optional"),//sandmastery
 						new ModDependency("75FFkvaX", "optional"),//aviar
-						//new ModDependency("T0u6rdso", "optional"),//cosmeretools
+						new ModDependency("T0u6rdso", "optional"),//cosmeretools
 				])
 			}
 			println "Updated Modrinth extension"
