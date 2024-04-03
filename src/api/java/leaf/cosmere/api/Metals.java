@@ -1,13 +1,16 @@
 /*
- * File updated ~ 11 - 11 - 2023 ~ Leaf
+ * File updated ~ 3 - 4 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.api;
 
 import leaf.cosmere.api.helpers.TimeHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -22,12 +25,10 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -49,53 +50,64 @@ import java.util.stream.Collectors;
 public class Metals
 {
 
-	public enum MetalType implements Tier
+	public enum MetalType implements Tier, ArmorMaterial
 	{
 		//Physical/Physical
-		IRON(0),
-		STEEL(1),//alloy of iron and carbon (coal/charcoal) 1/4 ?
-		TIN(2),
-		PEWTER(3),//alloy of tin and lead 4/1
+		IRON(0, 0, 0, 0, 0, 0),//ignore tier data
+		STEEL(1, 3, 1024, 8f, 4f, 8),//alloy of iron and carbon (coal/charcoal) 1/4 ?
+		TIN(2, 0, 159, 6f, 1.2f, 10),
+		PEWTER(3, 2, 202, 5f, 3f, 10),//alloy of tin and lead 4/1
 
 		//Mental/Cognitive
-		ZINC(4),
-		BRASS(5),//allot of zinc and copper 50/50 ?
-		COPPER(6),
-		BRONZE(7),//alloy of copper and tin? 3/1 ?
+		ZINC(4, 2, 276, 16f, 0.5f, 12),
+		BRASS(5, 2, 142, 10f, 0f, 16),//alloy of zinc and copper 50/50 ?
+		COPPER(6, 2, 131, 9f, 2.0f, 32),
+		BRONZE(7, 2, 400, 8f, 1.8f, 16),//alloy of copper and tin? 3/1 ?
 
 		//Enhancement/spiritual
-		ALUMINUM(8),
-		DURALUMIN(9),//alloy of aluminum and copper 4/1
-		CHROMIUM(10),
-		NICROSIL(11),//alloy of chromium and nickel 1/3
+		ALUMINUM(8, 0, 50, 8f, 1f, -100),
+		DURALUMIN(9, 2, 1500, 6f, 5.8f, 28),//alloy of aluminum and copper 4/1
+		CHROMIUM(10, 2, 1500, 5f, 2.8f, 10),
+		NICROSIL(11, 2, 1250, 3f, 3.8f, 28),//alloy of chromium and nickel 1/3
 
 		//temporal/hybrid
-		CADMIUM(12),
-		BENDALLOY(13),//alloy of 70% lead, 20% tin, and 10% cadmium by mass
-		GOLD(14),
-		ELECTRUM(15),//alloy of gold and silver 1/1
+		CADMIUM(12, 2, 32, 12f, 1f, 20),
+		BENDALLOY(13, 2, 60, 6f, 2f, 16),//alloy of 70% lead, 20% tin, and 10% cadmium by mass
+		GOLD(14, 0, 0, 0, 0, 0),//ignore tier data
+		ELECTRUM(15, 2, 45, 17f, 0f, 20),//alloy of gold and silver 1/1
 
 		//god metals
-		ATIUM(16),
-		LERASIUM(17),
-		HARMONIUM(18),
+		ATIUM(16, 3, 3000, 14f, 6f, 1),
+		LERASIUM(17, 3, 6000, 12f, 4.8f, 0),
+		HARMONIUM(18, 3, 1, 99f, 16f, 0),
 
 		//god metal alloys
-		MALATIUM(19),//atium and gold?
-		LERASATIUM(20),// atium and lerasium
+		MALATIUM(19, 3, 300, 10f, 2.8f, 3),//atium and gold?
+		LERASATIUM(20, 3, 5000, 12f, 4.3f, 0),// atium and lerasium
 
 
 		//non-allomantic metals
 
-		NICKEL(21),
-		LEAD(22),
-		SILVER(23);
+		NICKEL(21, 2, 350, 6f, 1.8f, 14),
+		LEAD(22, 2, 16, 6f, 12f, 2),
+		SILVER(23, 2, 32, 12f, 0f, 15);
 
 		private final int id;
 
-		MetalType(int id)
+		private final int level;
+		private final int uses;
+		private final float speed;
+		private final float damage;
+		private final int enchantmentValue;
+
+		MetalType(int id, int level, int uses, float speed, float damage, int enchantmentValue)
 		{
 			this.id = id;
+			this.level = level;
+			this.uses = uses;
+			this.speed = speed;
+			this.damage = damage;
+			this.enchantmentValue = enchantmentValue;
 		}
 
 		public static Optional<MetalType> valueOf(int value)
@@ -858,54 +870,85 @@ public class Metals
 			return "Unknown...";
 		}
 
-		//todo implement item tiers
-
 		@Override
 		public int getUses()
 		{
-			return 0;
+			return this.uses;
 		}
 
 		@Override
 		public float getSpeed()
 		{
-			return 0;
+			return this.speed;
 		}
 
 		@Override
 		public float getAttackDamageBonus()
 		{
-			return 0;
+			return this.damage;
 		}
 
 		@Override
 		public int getLevel()
 		{
-			return 0;
+			return this.level;
 		}
 
 		@Override
 		public int getEnchantmentValue()
 		{
-			return 0;
+			return this.enchantmentValue;
 		}
 
 		@Override
-		public Ingredient getRepairIngredient()
+		public @NotNull Ingredient getRepairIngredient()
 		{
 			return Ingredient.of(getMetalIngotTag());
 		}
 
-		public boolean hasAttribute()
+		@Override
+		public SoundEvent getEquipSound()
 		{
-			switch (this)
+			return SoundEvents.ARMOR_EQUIP_IRON;
+		}
+
+		@Override
+		public float getToughness()
+		{
+			return 0;
+		}
+
+		@Override
+		public float getKnockbackResistance()
+		{
+			return 0;
+		}
+
+		@Override
+		public int getDurabilityForSlot(EquipmentSlot pSlot)
+		{
+			float multiplier = switch (pSlot)
 			{
-				case TIN, COPPER, ATIUM ->
-				{
-					return true;
-				}
-			}
-			return false;
+				default -> 0.0F;
+				case HEAD -> 0.3F;
+				case CHEST -> 0.5F;
+				case LEGS -> 0.4F;
+				case FEET -> 0.25F;
+			};
+
+			return Mth.floor(getUses() * multiplier);
+		}
+
+		@Override
+		public int getDefenseForSlot(EquipmentSlot pSlot)
+		{
+			return getLevel() + switch (pSlot)
+			{
+				default -> 0;
+				case HEAD, FEET -> 0;
+				case LEGS -> 3;
+				case CHEST -> 4;
+			};
 		}
 
 		//todo do something better than sticking this in enum api
