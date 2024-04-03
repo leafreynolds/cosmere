@@ -26,6 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -37,6 +38,8 @@ public class IronSteelLinesThread implements Runnable
 	private static Thread t;
 	private static final Lock lock = new ReentrantLock();
 	private static ScanResult scanResult = new ScanResult();
+	private static Vec3 closestMetalObjectInLookVector;
+	private final double tolerance = 1.8D;
 	private static int scanRange = 0;
 	private static boolean isStopping = false;
 
@@ -108,6 +111,17 @@ public class IronSteelLinesThread implements Runnable
 		scanRange = range;
 	}
 
+	public Vec3 getClosestMetalObject()
+	{
+		if (closestMetalObjectInLookVector == null)
+		{
+			return null;
+		}
+
+		// return copy
+		return new Vec3(closestMetalObjectInLookVector.x, closestMetalObjectInLookVector.y, closestMetalObjectInLookVector.z);
+	}
+
 	public void start()
 	{
 		if (t == null || isStopping)
@@ -132,6 +146,11 @@ public class IronSteelLinesThread implements Runnable
 		scanResult = result;
 	}
 
+	private void setClosestMetalObject(Vec3 vector)
+	{
+		closestMetalObjectInLookVector = vector;
+	}
+
 	// this should be threaded to avoid lag spikes on the render thread when flaring metals
 	@Override
 	@OnlyIn(Dist.CLIENT)
@@ -142,6 +161,7 @@ public class IronSteelLinesThread implements Runnable
 		{
 			try
 			{
+				AtomicReference<Vec3> closestMetalThingLookedAt = new AtomicReference<>(null);
 				ScanResult nextScan;
 				LocalPlayer playerEntity = mc.player;
 				nextScan = new ScanResult();
@@ -168,13 +188,23 @@ public class IronSteelLinesThread implements Runnable
 										return false;
 									}
 									isGood = !isBlockObscured(blockPos, player, level);
+
+									if (isGood)
+									{
+										// compare player look vector to directional vector
+										closestMetalThingLookedAt.set(compareVectors(blockPos, player, closestMetalThingLookedAt.get()));
+									}
 								}
 
 								return isGood;
 							})
-							.forEach(blockPos -> nextScan.addBlock(blockPos.immutable()));
+							.forEach(blockPos -> nextScan.addBlock(blockPos.immutable(), closestMetalThingLookedAt.get()));
 
-					nextScan.finalizeClusters();
+					Vec3 possibleClosestMetalObject = nextScan.finalizeClusters();
+					if (possibleClosestMetalObject != null)
+					{
+						closestMetalThingLookedAt.set(possibleClosestMetalObject);
+					}
 				}
 
 				//entities with metal armor/tools
@@ -197,6 +227,8 @@ public class IronSteelLinesThread implements Runnable
 											0,
 											entity.getBoundingBox().getYsize() / 2,
 											0));
+
+							closestMetalThingLookedAt.set(compareVectors(entity.position().add(0, entity.getBoundingBox().getYsize() / 2, 0), player, closestMetalThingLookedAt.get()));
 						}
 					});
 				}
@@ -204,6 +236,7 @@ public class IronSteelLinesThread implements Runnable
 				if (lock.tryLock())
 				{
 					setScanResult(nextScan);
+					setClosestMetalObject(closestMetalThingLookedAt.get());
 					lock.unlock();
 				}
 			}
@@ -315,5 +348,69 @@ public class IronSteelLinesThread implements Runnable
 
 		//entity obscured
 		return true;
+	}
+
+	private Vec3 compareVectors(BlockPos blockPos, Player player, Vec3 currentClosestMetalObject)
+	{
+		Vec3 lookVector = player.getLookAngle();
+		Vec3 vectorToPos = new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5).subtract(player.getEyePosition());
+		Vec3 playerPos = player.getEyePosition();
+		vectorToPos = vectorToPos.normalize();
+
+		double dynamicTolerance = tolerance / playerPos.distanceTo(new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
+
+		if (vectorToPos.distanceTo(lookVector) < dynamicTolerance)
+		{
+			if (currentClosestMetalObject == null)
+			{
+				return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+			}
+
+			Vec3 currentVector = currentClosestMetalObject.subtract(player.getEyePosition());
+			currentVector = currentVector.normalize();
+
+			if (vectorToPos.distanceTo(lookVector) > currentVector.distanceTo(lookVector))
+			{
+				return currentClosestMetalObject;
+			}
+			else
+			{
+				return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+			}
+		}
+
+		return currentClosestMetalObject;
+	}
+
+	private Vec3 compareVectors(Vec3 pos, Player player, Vec3 currentClosestMetalObject)
+	{
+		Vec3 lookVector = player.getLookAngle();
+		Vec3 vectorToPos = pos.subtract(player.getEyePosition());
+		Vec3 playerPos = player.getEyePosition();
+		vectorToPos = vectorToPos.normalize();
+
+		double dynamicTolerance = tolerance / playerPos.distanceTo(pos);
+
+		if (vectorToPos.distanceTo(lookVector) < dynamicTolerance)
+		{
+			if (currentClosestMetalObject == null)
+			{
+				return pos;
+			}
+
+			Vec3 currentVector = currentClosestMetalObject.subtract(player.getEyePosition());
+			currentVector = currentVector.normalize();
+
+			if (vectorToPos.distanceTo(lookVector) > currentVector.distanceTo(lookVector))
+			{
+				return currentClosestMetalObject;
+			}
+			else
+			{
+				return pos;
+			}
+		}
+
+		return currentClosestMetalObject;
 	}
 }

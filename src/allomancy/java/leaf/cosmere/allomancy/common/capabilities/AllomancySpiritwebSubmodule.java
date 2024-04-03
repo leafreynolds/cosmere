@@ -31,6 +31,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -232,6 +233,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				//todo - does this mean it's wrong on the first check? probably doesn't matter
 				IronSteelLinesThread.getInstance().setScanRange(range);
 				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
+				Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 
@@ -240,15 +242,22 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
 				if (drawMetalLines && !scanResult.foundEntities.isEmpty())
 				{
-					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.foundEntities);
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, range, Color.BLUE, scanResult.foundEntities, closestMetalObject);
 				}
 				if (drawMetalLines && !scanResult.clusterResults.isEmpty())
 				{
-					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, Color.BLUE, scanResult.clusterCenters);
+					DrawHelper.drawLinesFromPoint(viewModelStack, originPoint, range, Color.BLUE, scanResult.clusterCenters, closestMetalObject);
 				}
 				if (AllomancyConfigs.CLIENT.drawMetalBoxes.get() && !scanResult.foundBlocks.isEmpty())
 				{
-					DrawHelper.drawBlocksAtPoint(viewModelStack, Color.BLUE, scanResult.foundBlocks);
+					if (scanResult.hasTargetedCluster && scanResult.targetedCluster.getPosition().equals(closestMetalObject))
+					{
+						DrawHelper.drawBlocksAtPoint(viewModelStack, Color.BLUE, scanResult.foundBlocks, closestMetalObject, scanResult.targetedCluster.getBlocks());
+					}
+					else
+					{
+						DrawHelper.drawBlocksAtPoint(viewModelStack, Color.BLUE, scanResult.foundBlocks, closestMetalObject, new ArrayList<>());
+					}
 				}
 
 				Minecraft.getInstance().getProfiler().pop();

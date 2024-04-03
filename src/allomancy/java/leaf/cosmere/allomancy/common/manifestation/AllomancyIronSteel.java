@@ -10,7 +10,6 @@ import leaf.cosmere.allomancy.common.entities.CoinProjectile;
 import leaf.cosmere.allomancy.common.items.CoinPouchItem;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.CosmereTags;
-import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.ResourceLocationHelper;
@@ -130,11 +129,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
 
-		TagKey<Block> aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-		TagKey<Block> aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-		TagKey<Block> aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
-		TagKey<Block> aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
-
 		if (s_whiteList == null)
 		{
 			createWhitelist(cap.getLiving());
@@ -147,23 +141,19 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			Player player = mc.player;
 			Level level = mc.level;
 
-			Vec3 lerpAngle = player.getLookAngle();
-			Vec3 currPos = player.getEyePosition();
-			float resistance = 0.0F;
 			boolean hitEntity = false;
 			Entity entityHitResult = null;
 
-			// lerp forward within range
-			for (int i = 0; i < getRange(cap); i++)
+			Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
+			if (closestMetalObject != null)
 			{
-				BlockState blockAtPos = level.getBlockState(new BlockPos(currPos));
+				BlockState blockAtPos = level.getBlockState(new BlockPos(closestMetalObject));
 
-				// if block is air, might be entity. check.
 				if (blockAtPos.isAir())
 				{
 					try
 					{
-						AABB aabb = new AABB(new BlockPos(currPos));
+						AABB aabb = new AABB(new BlockPos(closestMetalObject));
 						Entity firstMetalEntity = null;
 						for (Entity ent : level.getEntities(player, aabb, potentialEntityHit -> !potentialEntityHit.isSpectator()))
 						{
@@ -177,7 +167,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 						if (hitEntity)
 						{
 							entityHitResult = firstMetalEntity;
-							break;
 						}
 					}
 					catch (Exception e)
@@ -187,42 +176,15 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					}
 				}
 
-				// if resistance is 100+% or the currently targeted block has metal; exit
-				if (resistance >= 1.0F || containsMetal(blockAtPos.getBlock()))
+				if (hitEntity)
 				{
-					break;
+					//tracks entity if it meets requirements
+					//eg must contain metal
+					hasChanged = trackValidEntity(data, entityHitResult);
 				}
-
-				// if block isn't air, add material resistance value
-				if (!blockAtPos.isAir())
+				else
 				{
-					Block currBlock = level.getBlockState(new BlockPos(currPos)).getBlock();
-
-					if (blockAtPos.is(aluminumOre) || blockAtPos.is(aluminumStorage) || blockAtPos.is(aluminumSheet) || blockAtPos.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
-					{
-						// aluminum completely blocks steelsight
-						resistance += 1.0F;
-					}
-					else
-					{
-						resistance += materialResistanceMap.getOrDefault(blockAtPos.getMaterial(), 0.0D);
-					}
-				}
-
-				// lerp to next position (1 block forward)
-				currPos = currPos.add(lerpAngle);
-			}
-
-			if (resistance < 1.0F && !hitEntity)
-			{
-				BlockPos pos = new BlockPos(currPos);
-				//todo check block is of ihasmetal type
-				BlockState state = mc.level.getBlockState(pos);
-				Block block = state.getBlock();
-				final boolean validMetalBlock = block instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() != Metals.MetalType.ALUMINUM;
-				if (validMetalBlock || containsMetal(state.getBlock()))
-				{
-					blocks.add(pos.immutable());
+					blocks.add(new BlockPos(closestMetalObject));
 
 					if (blocks.size() > 5)
 					{
@@ -230,13 +192,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 					}
 					hasChanged = true;
 				}
-			}
-
-			if (hitEntity)
-			{
-				//tracks entity if it meets requirements
-				//eg must contain metal
-				hasChanged = trackValidEntity(data, entityHitResult);
 			}
 		}
 		else
