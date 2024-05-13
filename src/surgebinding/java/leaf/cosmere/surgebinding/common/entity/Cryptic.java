@@ -81,33 +81,43 @@ public class Cryptic extends TamableAnimal {
                 itemstack.shrink(1);
             }
 
-            if (!this.isSilent()) {
-                this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), SoundEvents.PARROT_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            }
+			if (!this.isSilent())
+			{
+				this.level().playSound((Player) null, this.getX(), this.getY(), this.getZ(), SoundEvents.PARROT_EAT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+			}
 
-            if (!this.level.isClientSide) {
-                if (this.random.nextInt(10) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, pPlayer)) {
+			if (!this.level().isClientSide)
+			{
+				if (this.random.nextInt(10) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, pPlayer))
+				{
 //                    System.out.println("Cryptic#mobInteract isClient, setOwner:" + pPlayer);
-                    this.tame(pPlayer);
-                    this.level.broadcastEntityEvent(this, (byte)7);
-                } else {
+					this.tame(pPlayer);
+					this.level().broadcastEntityEvent(this, (byte) 7);
+				}
+				else
+				{
 //                    System.out.println("Cryptic#mobInteract isClient, tame FAIL");
-                    this.level.broadcastEntityEvent(this, (byte)6);
-                }
-            }
+					this.level().broadcastEntityEvent(this, (byte) 6);
+				}
+			}
 
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
-        } else if (this.isTame() && this.isOwnedBy(pPlayer)) {
-            if (!this.level.isClientSide) {
+			return InteractionResult.sidedSuccess(this.level().isClientSide);
+		}
+		else if (this.isTame() && this.isOwnedBy(pPlayer))
+		{
+			if (!this.level().isClientSide)
+			{
 //                System.out.println("Cryptic#mobInteract setOrderedToSit");
                 this.setOrderedToSit(!this.isOrderedToSit());
             }
 
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
-        } else {
-            return super.mobInteract(pPlayer, pHand);
-        }
-    }
+			return InteractionResult.sidedSuccess(this.level().isClientSide);
+		}
+		else
+		{
+			return super.mobInteract(pPlayer, pHand);
+		}
+	}
 
     @Override
     public boolean isFood(ItemStack pStack) {
