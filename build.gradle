@@ -30,20 +30,21 @@ buildscript {
 }
 
 plugins {
+	id 'org.ajoberstar.grgit.service' version '5.2.0'
 	id 'net.darkhax.curseforgegradle' version '1.0.14'
 	id "com.modrinth.minotaur" version "2.+"
 	id 'java'
 	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
-	id 'net.minecraftforge.gradle' version '5.1.+'
+	id 'net.neoforged.gradle' version '[6.0.18,6.2)'
 	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 	id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 tasks.named('wrapper', Wrapper).configure {
 	//Define wrapper values here so as to not have to always do so when updating gradlew.properties
-	gradleVersion = '8.1.1'
+	gradleVersion = '8.4'
 	distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -357,8 +358,6 @@ minecraft {
 def setupRunConfig(RunConfig runConfig, boolean supportsGameTests, String directory = "run")
 {
 	runConfig.workingDirectory(file(directory))
-	//We aren't a multi-project config so we can disable the forced exit to allow gradle run tasks to stop gracefully
-	runConfig.forceExit = false
 	//This fixes Mixin application problems from other mods because their refMaps are SRG-based, but we're in a MCP env
 	runConfig.property 'mixin.env.remapRefMap', 'true'
 	runConfig.property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
@@ -399,7 +398,7 @@ repositories {
 	}
 	maven {
 		//curio
-		url = "https://maven.theillusivec4.top/"
+		url "https://maven.theillusivec4.top/"
 	}
 	maven {
 		//curios
@@ -434,8 +433,10 @@ repositories {
 }
 
 dependencies {
-	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+	minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
+
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
 	apiAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	allomancyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	feruchemyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -455,13 +456,13 @@ dependencies {
 	compileOnly fg.deobf("curse.maven:jade-api-324717:${jade_api_id}")
 	runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
 
-	runtimeOnly fg.deobf("curse.maven:soulhome-574511:${soulhome_id}")
+	//runtimeOnly fg.deobf("curse.maven:soulhome-574511:${soulhome_id}")
 
-	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
-	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
+	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
-	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}-FORGE:api")
+	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}-FORGE")
 
 }
 
