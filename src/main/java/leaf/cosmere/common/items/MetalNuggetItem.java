@@ -5,9 +5,13 @@
 package leaf.cosmere.common.items;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.common.registry.CosmereDamageTypesRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +22,6 @@ import javax.annotation.Nonnull;
 
 public class MetalNuggetItem extends MetalItem
 {
-	public static final DamageSource EAT_METAL = (new DamageSource("eat_metal")).bypassArmor().bypassMagic();
-
 	public MetalNuggetItem(Metals.MetalType metalType)
 	{
 		super(metalType);
@@ -67,7 +69,7 @@ public class MetalNuggetItem extends MetalItem
 			itemstack.shrink(1);
 		}
 
-		pLivingEntity.hurt(EAT_METAL, 1);
+		pLivingEntity.hurt(CosmereDamageTypesRegistry.damageSource(pLevel, CosmereDamageTypesRegistry.EAT_METAL),  1);
 
 		return itemstack;
 	}

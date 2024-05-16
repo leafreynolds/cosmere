@@ -3,6 +3,7 @@ package leaf.cosmere.common.registration.impl;
 import com.google.common.collect.ImmutableSet;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
@@ -13,7 +14,7 @@ public class POITypeDeferredRegister extends WrappedDeferredRegister<PoiType>
 {
 	public POITypeDeferredRegister(String modid)
 	{
-		super(modid, Registry.POINT_OF_INTEREST_TYPE_REGISTRY);
+		super(modid, Registries.POINT_OF_INTEREST_TYPE);
 	}
 
 	private PoiType registerPOIType(Block block)

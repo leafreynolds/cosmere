@@ -2,6 +2,7 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
@@ -12,7 +13,7 @@ public class LootFunctionDeferredRegister extends WrappedDeferredRegister<LootIt
 
 	public LootFunctionDeferredRegister(String modid)
 	{
-		super(modid, Registry.LOOT_FUNCTION_REGISTRY);
+		super(modid, Registries.LOOT_FUNCTION_TYPE);
 	}
 
 	public LootItemFunctionTypeRegistryObject<LootItemFunctionType> registerType(String name, Supplier<LootItemConditionalFunction.Serializer<?>> sup)

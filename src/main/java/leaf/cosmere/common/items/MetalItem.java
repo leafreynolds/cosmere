@@ -20,7 +20,7 @@ public class MetalItem extends BaseItem implements IHasMetalType
 
 	public MetalItem(Metals.MetalType metalType)
 	{
-		super(PropTypes.Items.SIXTY_FOUR.get().tab(CosmereItemGroups.ITEMS).rarity(metalType.getRarity()));
+		super(PropTypes.Items.SIXTY_FOUR.get().rarity(metalType.getRarity()));
 
 		this.metalType = metalType;
 	}

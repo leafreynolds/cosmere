@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Arrays;
@@ -171,7 +172,7 @@ public class CosmereTags
 
 		private static TagKey<Biome> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(Registry.BIOME_REGISTRY, resourceLocation);
+			return TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), resourceLocation);
 		}
 	}
 
@@ -186,7 +187,7 @@ public class CosmereTags
 
 		private static TagKey<EntityType<?>> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, resourceLocation);
+			return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), resourceLocation);
 		}
 	}
 }

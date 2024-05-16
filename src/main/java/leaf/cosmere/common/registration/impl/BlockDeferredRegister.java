@@ -42,7 +42,7 @@ public class BlockDeferredRegister extends DoubleDeferredRegister<Block, Item>
 	public <BLOCK extends Block, ITEM extends BlockItem> BlockRegistryObject<BLOCK, ITEM> registerDefaultProperties(String name, Supplier<? extends BLOCK> blockSupplier,
 	                                                                                                                BiFunction<BLOCK, Item.Properties, ITEM> itemCreator, Rarity rarity)
 	{
-		return register(name, blockSupplier, block -> itemCreator.apply(block, new Item.Properties().tab(CosmereItemGroups.BLOCKS).rarity(rarity)));
+		return register(name, blockSupplier, block -> itemCreator.apply(block, new Item.Properties().rarity(rarity)));
 	}
 
 	public <BLOCK extends Block, ITEM extends BlockItem> BlockRegistryObject<BLOCK, ITEM> register(String name, Supplier<? extends BLOCK> blockSupplier,

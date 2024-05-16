@@ -28,7 +28,7 @@ public class ItemDeferredRegister extends WrappedDeferredRegister<Item>
 
 	public static Item.Properties getCosmereDefaultProperties()
 	{
-		return new Item.Properties().tab(CosmereItemGroups.ITEMS);
+		return new Item.Properties();
 	}
 
 	public ItemRegistryObject<Item> register(String name)

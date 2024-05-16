@@ -49,7 +49,7 @@ public class EntityEventHandler
 	{
 		Entity eventEntity = event.getEntity();
 
-		if (eventEntity.level.isClientSide || !(eventEntity instanceof LivingEntity livingEntity))
+		if (eventEntity.level().isClientSide || !(eventEntity instanceof LivingEntity livingEntity))
 		{
 			return;
 		}
@@ -265,7 +265,7 @@ public class EntityEventHandler
 		{
 			return;
 		}
-		if (!event.getEntity().level.isClientSide && event.getDamageSource().getEntity() instanceof LivingEntity sourceLiving)
+		if (!event.getEntity().level().isClientSide && event.getDamageSource().getEntity() instanceof LivingEntity sourceLiving)
 		{
 			int total = (int) EntityHelper.getAttributeValue(sourceLiving, AttributesRegistry.COSMERE_FORTUNE.getAttribute());
 			if (total != 0)

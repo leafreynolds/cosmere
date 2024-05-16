@@ -13,7 +13,7 @@ public class BaseItem extends Item
 {
 	public BaseItem()
 	{
-		super(PropTypes.Items.SIXTY_FOUR.get().tab(CosmereItemGroups.ITEMS));
+		super(PropTypes.Items.SIXTY_FOUR.get());
 	}
 
 	public BaseItem(Properties prop)

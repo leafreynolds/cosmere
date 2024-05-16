@@ -9,10 +9,11 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import leaf.cosmere.api.CosmereAPI;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -115,8 +116,8 @@ public class DrawHelper
 			double pitch = Math.asin(-directionalVec.y);
 			double yaw = Math.atan2(directionalVec.x, directionalVec.z);
 
-			Quaternion rotQuat = Vector3f.YP.rotationDegrees((float) Math.toDegrees(yaw));
-			rotQuat.mul(Vector3f.XP.rotationDegrees((float) Math.toDegrees(pitch) + 90));
+			Quaternionf rotQuat = Axis.YP.rotationDegrees((float) Math.toDegrees(yaw));
+			rotQuat.mul(Axis.XP.rotationDegrees((float) Math.toDegrees(pitch) + 90));
 
 			float[] vertices = {
 					-size, 0, -size,
@@ -139,7 +140,7 @@ public class DrawHelper
 				float vertexZ = vertices[i + 2];
 
 				Vector3f rotQuatVec = new Vector3f(vertexX, vertexY, vertexZ);
-				rotQuatVec.transform(rotQuat);
+				rotQuatVec.rotate(rotQuat);
 
 				float finalX = (float) (rotQuatVec.x() + pos.x());
 				float finalY = (float) (rotQuatVec.y() + pos.y());

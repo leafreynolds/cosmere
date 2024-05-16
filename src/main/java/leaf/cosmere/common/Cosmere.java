@@ -13,6 +13,7 @@ import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.common.eventHandlers.ColorHandler;
 import leaf.cosmere.common.network.NetworkPacketHandler;
 import leaf.cosmere.common.registry.*;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;

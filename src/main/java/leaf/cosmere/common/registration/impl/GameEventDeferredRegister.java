@@ -2,6 +2,7 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 import java.util.function.Supplier;
@@ -11,7 +12,7 @@ public class GameEventDeferredRegister extends WrappedDeferredRegister<GameEvent
 
 	public GameEventDeferredRegister(String modid)
 	{
-		super(modid, Registry.GAME_EVENT_REGISTRY);
+		super(modid, Registries.GAME_EVENT);
 	}
 
 	public GameEventRegistryObject<GameEvent> register(String name)

@@ -64,7 +64,7 @@ public class CosmereEffectCommand extends ModCommand
 		{
 			CommandSourceStack source = context.getSource();
 
-			MutableComponent found = Component.translatable(Constants.Strings.EFFECTS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
+			MutableComponent found = Component.translatable(Constants.Strings.EFFECTS_FOUND, TextHelper.getPlayerTextObject(player.serverLevel(), player.getUUID()));
 
 			final MutableComponent leftBracketTextComponent = Component.literal("[");
 			final MutableComponent rightBracketTextComponent = Component.literal("]");
@@ -116,7 +116,7 @@ public class CosmereEffectCommand extends ModCommand
 				found.append(rightBracketTextComponent);
 				found.append(space);
 			}
-			source.sendSuccess(found, true);
+			source.sendSuccess(() -> found, true);
 		});
 	}
 
@@ -140,7 +140,7 @@ public class CosmereEffectCommand extends ModCommand
 
 				iSpiritweb.syncToClients(null);
 				MutableComponent playerTextObject = TextHelper.getPlayerTextObject(context.getSource().getLevel(), player.getUUID());
-				source.sendSuccess(Component.translatable(Constants.Strings.EFFECTS_CLEAR, playerTextObject), false);
+				source.sendSuccess(() -> Component.translatable(Constants.Strings.EFFECTS_CLEAR, playerTextObject), false);
 			});
 		}
 

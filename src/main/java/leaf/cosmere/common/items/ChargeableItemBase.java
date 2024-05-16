@@ -28,18 +28,19 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 		super(prop);
 	}
 
-	@Override
-	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
-	{
-		if (allowedIn(tab))
-		{
-			stacks.add(new ItemStack(this));
-
-			ItemStack fullPower = new ItemStack(this);
-			setCharge(fullPower, getMaxCharge(fullPower));
-			stacks.add(fullPower);
-		}
-	}
+	// todo: move somewhere more appropriate
+//	@Override
+//	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
+//	{
+//		if (allowedIn(tab))
+//		{
+//			stacks.add(new ItemStack(this));
+//
+//			ItemStack fullPower = new ItemStack(this);
+//			setCharge(fullPower, getMaxCharge(fullPower));
+//			stacks.add(fullPower);
+//		}
+//	}
 
 	@Override
 	public int getEntityLifespan(ItemStack itemStack, Level world)

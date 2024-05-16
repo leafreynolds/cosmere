@@ -11,6 +11,7 @@ import leaf.cosmere.client.render.CosmereRenderers;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,22 +43,21 @@ public class ClientModEvents
 
 
 	//special thank you to the chisels and bits team who have an example of how to register other sprites
-	@SubscribeEvent
-	public static void registerIconTextures(TextureStitchEvent.Pre event)
-	{
-		final TextureAtlas map = event.getAtlas();
-		if (!map.location().equals(InventoryMenu.BLOCK_ATLAS))
-		{
-			return;
-		}
-
-		event.addSprite(Cosmere.rl("icon/blank"));
-		event.addSprite(Cosmere.rl("icon/arrow_up"));
-		event.addSprite(Cosmere.rl("icon/arrow_down"));
-		event.addSprite(Cosmere.rl("icon/on"));
-		event.addSprite(Cosmere.rl("icon/off"));
-
-	}
+//	@SubscribeEvent
+//	public static void registerIconTextures(TextureStitchEvent event)
+//	{
+//		final TextureAtlas map = event.getAtlas();
+//		if (!map.location().equals(InventoryMenu.BLOCK_ATLAS))
+//		{
+//			return;
+//		}
+//
+//		event.addSprite(Cosmere.rl("icon/blank"));
+//		event.addSprite(Cosmere.rl("icon/arrow_up"));
+//		event.addSprite(Cosmere.rl("icon/arrow_down"));
+//		event.addSprite(Cosmere.rl("icon/on"));
+//		event.addSprite(Cosmere.rl("icon/off"));
+//	}
 
 
 	@SubscribeEvent
@@ -66,11 +66,11 @@ public class ClientModEvents
 		event.registerBelow(
 				VanillaGuiOverlay.DEBUG_TEXT.id(),
 				"hud",
-				(gui, poseStack, partialTick, width, height) -> renderSpiritwebHUD(poseStack)
+				(gui, guiGraphics, partialTick, width, height) -> renderSpiritwebHUD(guiGraphics)
 		);
 	}
 
-	public static void renderSpiritwebHUD(final PoseStack poseStack)
+	public static void renderSpiritwebHUD(final GuiGraphics guiGraphics)
 	{
 		final Minecraft mc = Minecraft.getInstance();
 		SpiritwebCapability.get(mc.player).ifPresent(cap ->
@@ -80,7 +80,7 @@ public class ClientModEvents
 			//normal hud stuff
 			if (mc.screen != SpiritwebMenu.instance)
 			{
-				spiritweb.renderSelectedHUD(poseStack);
+				spiritweb.renderSelectedHUD(guiGraphics);
 			}
 
 			//actual menu stuff

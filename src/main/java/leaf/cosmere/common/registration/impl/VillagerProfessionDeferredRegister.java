@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -15,7 +16,7 @@ public class VillagerProfessionDeferredRegister extends WrappedDeferredRegister<
 {
 	public VillagerProfessionDeferredRegister(String modid)
 	{
-		super(modid, Registry.VILLAGER_PROFESSION_REGISTRY);
+		super(modid, Registries.VILLAGER_PROFESSION);
 	}
 
 	private static VillagerProfession registerProfession(String name, POITypeRegistryObject<PoiType> poi, SoundEvent workSound)

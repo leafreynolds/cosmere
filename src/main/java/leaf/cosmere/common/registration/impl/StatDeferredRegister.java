@@ -6,6 +6,7 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class StatDeferredRegister extends WrappedDeferredRegister<ResourceLocati
 
 	public StatDeferredRegister(String modid)
 	{
-		super(modid, Registry.CUSTOM_STAT_REGISTRY);
+		super(modid, Registries.CUSTOM_STAT);
 	}
 
 

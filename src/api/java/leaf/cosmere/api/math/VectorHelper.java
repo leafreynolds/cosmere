@@ -15,7 +15,7 @@ public class VectorHelper
 	public static final float kEpsilon = 0.00001F;
 
 	// Makes this vector have a magnitude of 1.
-	public static Vec3i Normalize(Vec3i vec)
+	public static Vec3 Normalize(Vec3 vec)
 	{
 		float mag = Magnitude(vec);
 		if (mag > kEpsilon)
@@ -24,22 +24,22 @@ public class VectorHelper
 		}
 		else
 		{
-			vec = Vec3i.ZERO;
+			vec = Vec3.ZERO;
 		}
 
 		return vec;
 	}
 
 	//
-	public static float Magnitude(Vec3i vector)
+	public static float Magnitude(Vec3 vector)
 	{
-		return Mth.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY() + vector.getZ() * vector.getZ());
+		return Mth.sqrt((float) (vector.x() * vector.x() + vector.y() * vector.y() + vector.z() * vector.z()));
 	}
 
 
-	public static Vec3i divide(Vec3i a, float d)
+	public static Vec3 divide(Vec3 a, float d)
 	{
-		return new Vec3i(a.getX() / d, a.getY() / d, a.getZ() / d);
+		return new Vec3(a.x() / d, a.y() / d, a.x() / d);
 	}
 
 

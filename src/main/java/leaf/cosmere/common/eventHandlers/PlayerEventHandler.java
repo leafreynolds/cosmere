@@ -47,7 +47,7 @@ public class PlayerEventHandler
 	@SubscribeEvent
 	public void onItemTossEvent(ItemTossEvent event)
 	{
-		if (!event.getPlayer().level.isClientSide)
+		if (!event.getPlayer().level().isClientSide)
 		{
 			//if (event.getEntityItem().getItem().getItem() instanceof ItemShardBlade)
 			{
@@ -74,7 +74,7 @@ public class PlayerEventHandler
 	@SubscribeEvent
 	public void onXPChange(PlayerXpEvent.XpChange event)
 	{
-		boolean isRemote = event.getEntity().level.isClientSide;
+		boolean isRemote = event.getEntity().level().isClientSide;
 		if (isRemote)
 		{
 			return;

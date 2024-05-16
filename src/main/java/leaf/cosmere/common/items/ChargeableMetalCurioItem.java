@@ -25,7 +25,7 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 
 	public ChargeableMetalCurioItem(Metals.MetalType metalType, CreativeModeTab group)
 	{
-		super(PropTypes.Items.ONE.get().rarity(metalType.getRarity()).tab(group));
+		super(PropTypes.Items.ONE.get().rarity(metalType.getRarity()));
 		this.metalType = metalType;
 	}
 

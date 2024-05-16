@@ -147,7 +147,7 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 					if (!queueItem.allomanticPower.getManifestationType().equals(Manifestations.ManifestationTypes.NONE))
 					{
 						spiritweb.giveManifestation(queueItem.allomanticPower, 9);
-						source.sendSuccess(Component.literal("Successfully added allomantic " + queueItem.allomanticPower.getName() + " to " + player.getName().getString()), false);   // todo localisation string
+						source.sendSuccess(() -> Component.literal("Successfully added allomantic " + queueItem.allomanticPower.getName() + " to " + player.getName().getString()), false);   // todo localisation string
 
 						// give player metal vial according to what they chose
 						spiritwebCap.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY).GiveStartingItem(player, queueItem.allomanticPower);
@@ -155,7 +155,7 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 					if (!queueItem.feruchemicalPower.getManifestationType().equals(Manifestations.ManifestationTypes.NONE))
 					{
 						spiritweb.giveManifestation(queueItem.feruchemicalPower, 9);
-						source.sendSuccess(Component.literal("Successfully added feruchemical " + queueItem.feruchemicalPower.getName() + " to " + player.getName().getString()), false);   // todo localisation string
+						source.sendSuccess(() -> Component.literal("Successfully added feruchemical " + queueItem.feruchemicalPower.getName() + " to " + player.getName().getString()), false);   // todo localisation string
 
 						// give player metal vial according to what they chose
 						spiritwebCap.getSubmodule(Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, queueItem.feruchemicalPower);
@@ -229,7 +229,7 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 				((SpiritwebCapability) spiritweb).setHasNotBeenInitialized();
 				spiritweb.syncToClients(null);
 
-				context.getSource().sendSuccess(Component.literal("Successfully reset player " + player.getName().getString()), false);
+				context.getSource().sendSuccess(() -> Component.literal("Successfully reset player " + player.getName().getString()), false);
 			});
 		}
 
@@ -246,7 +246,7 @@ public class ChooseMetalbornPowersCommand extends ModCommand
 				Component.literal("Confirm")));
 		confirmComponent.append(Component.literal("§6to confirm power choice"));
 
-		source.sendSuccess(confirmComponent, false);
+		source.sendSuccess(() -> confirmComponent, false);
 	}
 
 	@Override
