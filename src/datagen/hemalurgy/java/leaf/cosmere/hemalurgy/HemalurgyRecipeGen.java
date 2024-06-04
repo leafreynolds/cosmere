@@ -1,36 +1,41 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
 
+import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
-public class HemalurgyRecipeGen extends RecipeProvider implements IConditionBuilder
+public class HemalurgyRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public HemalurgyRecipeGen(DataGenerator generatorIn)
+	public HemalurgyRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
 	{
-		super(generatorIn);
+		super(output, existingFileHelper);
 	}
 
 	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+	protected ResourceLocation makeRL(String path)
+	{
+		return Hemalurgy.rl(path);
+	}
+
+	@Override
+	protected void addRecipes(Consumer<FinishedRecipe> consumer)
 	{
 		addOreSmeltingRecipes(consumer, HemalurgyItems.METAL_SPIKE.get(Metals.MetalType.IRON), ItemsRegistry.GUIDE.get(), 1.0f, 200);
 
@@ -46,16 +51,14 @@ public class HemalurgyRecipeGen extends RecipeProvider implements IConditionBuil
 
 		if (metalType.hasHemalurgicEffect())
 		{
-			ShapedRecipeBuilder.shaped(HemalurgyItems.METAL_SPIKE.get(metalType)).define('X', inputMaterial).pattern("X").pattern("X").group("spike").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder
+					.shaped(RecipeCategory.TOOLS, HemalurgyItems.METAL_SPIKE.get(metalType))
+					.define('X', inputMaterial)
+					.pattern("X")
+					.pattern("X")
+					.group("spike")
+					.unlockedBy("has_material", has(inputMaterial)).save(consumer);
 		}
-	}
-
-	protected static void addOreSmeltingRecipes(Consumer<FinishedRecipe> consumer, ItemLike ore, Item result, float experience, int time)
-	{
-		String name = ResourceLocationHelper.get(result).getPath();
-		String path = ResourceLocationHelper.get(ore.asItem()).getPath();
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, Hemalurgy.rl(name + "_from_smelting_" + path));
-		SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, Hemalurgy.rl(name + "_from_blasting_" + path));
 	}
 
 }

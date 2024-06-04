@@ -1,22 +1,21 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.patchouli.data;
 
 import com.google.common.collect.Sets;
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.text.StringHelper;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 //
@@ -40,10 +39,12 @@ public abstract class PatchouliProvider implements DataProvider
 
 	/**
 	 * Performs this provider's action.
+	 *
+	 * @return
 	 */
-	public void run(@NotNull CachedOutput cache) throws IOException
+	public CompletableFuture<?> run(@NotNull CachedOutput cache)
 	{
-		Path path = this.generator.getOutputFolder();
+		Path path = this.generator.getPackOutput().getOutputFolder();
 		Set<String> entryIDs = Sets.newHashSet();
 
 		Consumer<BookStuff.Entry> entryConsumer = getEntryConsumer(cache, path, entryIDs);
@@ -62,6 +63,7 @@ public abstract class PatchouliProvider implements DataProvider
 			entryConsumer.accept(entryToConsume);
 		}
 
+		return null;
 	}
 
 	protected abstract void collectInfoForBook();
@@ -77,16 +79,7 @@ public abstract class PatchouliProvider implements DataProvider
 			else
 			{
 				Path path1 = getCategoryPath(path, category);
-
-				try
-				{
-					DataProvider.saveStable(cache, category.serialize(), path1);
-				}
-				catch (IOException ioexception)
-				{
-					CosmereAPI.logger.error("Couldn't save page {}", path1, ioexception);
-				}
-
+				DataProvider.saveStable(cache, category.serialize(), path1);
 			}
 		};
 	}
@@ -103,14 +96,7 @@ public abstract class PatchouliProvider implements DataProvider
 			{
 				Path path1 = getEntryPath(path, entry);
 
-				try
-				{
-					DataProvider.saveStable(cache, entry.serialize(modid), path1);
-				}
-				catch (IOException ioexception)
-				{
-					CosmereAPI.logger.error("Couldn't save page {}", path1, ioexception);
-				}
+				DataProvider.saveStable(cache, entry.serialize(modid), path1);
 
 			}
 		};

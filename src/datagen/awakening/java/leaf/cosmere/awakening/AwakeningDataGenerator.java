@@ -30,7 +30,7 @@ public class AwakeningDataGenerator
 		generator.addProvider(true, new AwakeningTagProvider(generator, existingFileHelper));
 		generator.addProvider(true, new AwakeningLootTableGen(generator));
 		generator.addProvider(true, new AwakeningItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new AwakeningRecipeGen(output));
+		generator.addProvider(true, new AwakeningRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new AwakeningPatchouliGen(generator));
 		generator.addProvider(true, new AwakeningAdvancementGen(generator));
 	}
