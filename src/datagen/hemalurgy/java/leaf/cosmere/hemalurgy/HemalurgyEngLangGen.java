@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -10,10 +10,9 @@ import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
-import leaf.cosmere.hemalurgy.common.itemgroups.HemalurgyItemGroups;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -23,9 +22,9 @@ import static leaf.cosmere.api.Constants.Strings.CONTAINED_POWERS_FOUND;
 
 public class HemalurgyEngLangGen extends LanguageProvider
 {
-	public HemalurgyEngLangGen(DataGenerator gen)
+	public HemalurgyEngLangGen(PackOutput output)
 	{
-		super(gen, Hemalurgy.MODID, "en_us");
+		super(output, Hemalurgy.MODID, "en_us");
 	}
 
 	@Override
@@ -38,7 +37,6 @@ public class HemalurgyEngLangGen extends LanguageProvider
 		addAttributes();
 		addPatchouli();
 		addTooltips();
-		addItemGroups();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -117,12 +115,6 @@ public class HemalurgyEngLangGen extends LanguageProvider
 		add("tooltip.cosmere.attribute.nicrosil", "");//todo hemalurgic investiture
 
 		add(CONTAINED_POWERS_FOUND, "Hemalurgic Charge:");
-	}
-
-	private void addItemGroups()
-	{
-		//ItemGroups/Tabs
-		add("itemGroup." + HemalurgyItemGroups.HEMALURGIC_SPIKES.getRecipeFolderName(), "Hemalurgic Spikes");
 	}
 
 	private void addDamageSources()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 4 - 2024 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools;
@@ -8,9 +8,8 @@ import leaf.cosmere.api.helpers.ResourceLocationHelper;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.tools.common.CosmereTools;
-import leaf.cosmere.tools.common.items.ToolsItemGroups;
 import leaf.cosmere.tools.common.registries.ToolsEntityTypes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -18,9 +17,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ToolsEngLangGen extends LanguageProvider
 {
-	public ToolsEngLangGen(DataGenerator gen)
+	public ToolsEngLangGen(PackOutput output)
 	{
-		super(gen, CosmereTools.MODID, "en_us");
+		super(output, CosmereTools.MODID, "en_us");
 	}
 
 	@Override
@@ -33,7 +32,6 @@ public class ToolsEngLangGen extends LanguageProvider
 		addAttributes();
 		addPatchouli();
 		addTooltips();
-		addItemGroups();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -90,12 +88,6 @@ public class ToolsEngLangGen extends LanguageProvider
 	private void addTooltips()
 	{
 
-	}
-
-	private void addItemGroups()
-	{
-		//ItemGroups/Tabs
-		add("itemGroup." + ToolsItemGroups.TOOLS_TAB.getRecipeFolderName(), "Cosmere tools");
 	}
 
 	private void addDamageSources()

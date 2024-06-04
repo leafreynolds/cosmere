@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening;
@@ -9,7 +9,7 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.awakening.common.Awakening;
 import leaf.cosmere.awakening.common.registries.AwakeningEntityTypes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -17,9 +17,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class AwakeningEngLangGen extends LanguageProvider
 {
-	public AwakeningEngLangGen(DataGenerator gen)
+	public AwakeningEngLangGen(PackOutput output)
 	{
-		super(gen, Awakening.MODID, "en_us");
+		super(output, Awakening.MODID, "en_us");
 	}
 
 	@Override

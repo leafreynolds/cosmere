@@ -1,5 +1,5 @@
 /*
- * File updated ~ 16 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -19,7 +19,7 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -35,9 +35,9 @@ public class AllomancyEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.allomancy.%s.title";
 	final String advancementDescriptionFormat = "advancements.allomancy.%s.description";
 
-	public AllomancyEngLangGen(DataGenerator gen)
+	public AllomancyEngLangGen(PackOutput output)
 	{
-		super(gen, Allomancy.MODID, "en_us");
+		super(output, Allomancy.MODID, "en_us");
 	}
 
 	@Override

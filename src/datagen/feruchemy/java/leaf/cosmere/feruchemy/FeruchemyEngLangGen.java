@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -14,10 +14,9 @@ import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
-import leaf.cosmere.feruchemy.common.itemgroups.FeruchemyItemGroups;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -33,9 +32,9 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.feruchemy.%s.title";
 	final String advancementDescriptionFormat = "advancements.feruchemy.%s.description";
 
-	public FeruchemyEngLangGen(DataGenerator gen)
+	public FeruchemyEngLangGen(PackOutput output)
 	{
-		super(gen, Feruchemy.MODID, "en_us");
+		super(output, Feruchemy.MODID, "en_us");
 	}
 
 	@Override
@@ -48,7 +47,6 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		addAttributes();
 		addPatchouli();
 		addTooltips();
-		addItemGroups();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -192,12 +190,6 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		add("tooltip.cosmere.attribute.duralumin", "");//todo hemalurgic connection/identity
 		add("tooltip.cosmere.attribute.chromium", "%s%s Luck");
 		add("tooltip.cosmere.attribute.nicrosil", "");//todo hemalurgic investiture
-	}
-
-	private void addItemGroups()
-	{
-		//ItemGroups/Tabs
-		add("itemGroup." + FeruchemyItemGroups.METALMINDS.getRecipeFolderName(), "Feruchemical Metalminds");
 	}
 
 	private void addDamageSources()

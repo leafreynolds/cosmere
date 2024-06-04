@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -15,7 +15,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -28,9 +28,9 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.surgebinding.%s.title";
 	final String advancementDescriptionFormat = "advancements.surgebinding.%s.description";
 
-	public SurgebindingEngLangGen(DataGenerator gen)
+	public SurgebindingEngLangGen(PackOutput output)
 	{
-		super(gen, Surgebinding.MODID, "en_us");
+		super(output, Surgebinding.MODID, "en_us");
 	}
 
 	@Override
@@ -43,7 +43,6 @@ public class SurgebindingEngLangGen extends LanguageProvider
 		addAttributes();
 		addPatchouli();
 		addTooltips();
-		addItemGroups();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -138,11 +137,6 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	}
 
 	private void addTooltips()
-	{
-
-	}
-
-	private void addItemGroups()
 	{
 
 	}

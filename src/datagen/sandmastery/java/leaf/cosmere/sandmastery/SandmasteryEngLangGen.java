@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery;
@@ -14,7 +14,7 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -30,9 +30,9 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.sandmastery.%s.title";
 	final String advancementDescriptionFormat = "advancements.sandmastery.%s.description";
 
-	public SandmasteryEngLangGen(DataGenerator gen)
+	public SandmasteryEngLangGen(PackOutput output)
 	{
-		super(gen, Sandmastery.MODID, "en_us");
+		super(output, Sandmastery.MODID, "en_us");
 	}
 
 	@Override

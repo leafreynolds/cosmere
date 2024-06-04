@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aviar;
@@ -9,7 +9,7 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.aviar.common.registries.AviarEntityTypes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -17,9 +17,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class AviarEngLangGen extends LanguageProvider
 {
-	public AviarEngLangGen(DataGenerator gen)
+	public AviarEngLangGen(PackOutput output)
 	{
-		super(gen, Aviar.MODID, "en_us");
+		super(output, Aviar.MODID, "en_us");
 	}
 
 	@Override
