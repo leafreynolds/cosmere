@@ -11,6 +11,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.properties.PropTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+
+import java.util.List;
 
 public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHasMetalType, ICurioItem
 {
@@ -36,12 +39,17 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 	}
 
 
-	@Override
-	public boolean showAttributesTooltip(String identifier, ItemStack stack)
-	{
-		return false;
-	}
+	//@Override
+	//public boolean showAttributesTooltip(String identifier, ItemStack stack)
+	//{
+	//	return false;
+	//}
 
+	@Override
+	public List<Component> getAttributesTooltip(List<Component> tooltips, ItemStack stack)
+	{
+		return ICurioItem.super.getAttributesTooltip(tooltips, stack);
+	}
 
 	@Override
 	public boolean makesPiglinsNeutral(SlotContext slotContext, ItemStack stack)
