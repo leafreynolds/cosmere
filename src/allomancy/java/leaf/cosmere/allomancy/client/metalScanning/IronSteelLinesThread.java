@@ -4,6 +4,7 @@
 
 package leaf.cosmere.allomancy.client.metalScanning;
 
+import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.IHasMetalType;
@@ -289,8 +290,7 @@ public class IronSteelLinesThread implements Runnable
 			}
 			else
 			{
-				resistance += (materialResistanceMap.containsKey(bState.getMaterial()))
-				              ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+				resistance += AllomancyIronSteel.getResistance(bState);
 			}
 
 			double distance = currVec.distanceTo(endPos);
@@ -331,8 +331,7 @@ public class IronSteelLinesThread implements Runnable
 				}
 				else
 				{
-					resistance += (materialResistanceMap.containsKey(bState.getMaterial()))
-					              ? materialResistanceMap.get(bState.getMaterial()) : 0.0F;
+					resistance += AllomancyIronSteel.getResistance(bState);
 				}
 
 				double distance = currVec.distanceTo(endPos);

@@ -4,6 +4,7 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
+import joptsimple.util.KeyValuePair;
 import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
@@ -20,7 +21,6 @@ import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
@@ -71,6 +71,22 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		output.put(BlockTags.MINEABLE_WITH_AXE, 0.25);
 
 		return output;
+	}
+
+	public static Double getResistance(BlockState blockState)
+	{
+		Double retValue = 0D;
+
+		for (TagKey<Block> tagKey : materialResistanceMap.keySet())
+		{
+			if (blockState.is(tagKey))
+			{
+				retValue = materialResistanceMap.get(tagKey);
+				break;
+			}
+		}
+
+		return retValue;
 	}
 
 	@Override
