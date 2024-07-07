@@ -203,7 +203,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 			//max should be around 30. 50 was way too much
 
 			final double compoundStrength = getStrength(data, false) * Mth.abs(allomanticSecondsUsed);
-			int secondsOfFeruchemyToAdd = Mth.absFloor(compoundStrength) - 5;
+			int secondsOfFeruchemyToAdd = (int) (Mth.abs((float) Math.floor(compoundStrength)) - 5);    // all this just because Mth#absFloor was removed...
 
 			if (secondsOfFeruchemyToAdd > 0)
 			{

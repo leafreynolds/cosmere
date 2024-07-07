@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -45,7 +46,7 @@ public class AllomancyModClientEvents
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void registerContainers(RegisterEvent event)
 	{
-		event.register(Registry.MENU_REGISTRY, helper ->
+		event.register(Registries.MENU, helper ->
 		{
 			MenuScreens.register((MenuType<CoinPouchContainerMenu>) AllomancyMenuTypes.COIN_POUCH.get(), CoinPouchContainerScreen::new);
 			CosmereAPI.logger.info("Allomancy registered menutypes!");
@@ -64,29 +65,4 @@ public class AllomancyModClientEvents
 		//shardplate
 		evt.registerLayerDefinition(AllomancyLayerDefinitions.MISTCLOAK, MistcloakModel::createBodyLayer);
 	}
-
-	//special thank you to the chisels and bits team who have an example of how to register other sprites
-	@SubscribeEvent
-	public static void registerIconTextures(TextureStitchEvent.Pre event)
-	{
-		final TextureAtlas map = event.getAtlas();
-		if (!map.location().equals(InventoryMenu.BLOCK_ATLAS))
-		{
-			return;
-		}
-
-		event.addSprite(Allomancy.rl("icon/allomancy"));
-
-		for (final Metals.MetalType metalType : Metals.MetalType.values())
-		{
-			if (!metalType.hasAssociatedManifestation())
-			{
-				continue;
-			}
-
-			String metalToLower = metalType.toString().toLowerCase(Locale.ROOT);
-			event.addSprite(Allomancy.rl("icon/allomancy/" + metalToLower));
-		}
-	}
-
 }

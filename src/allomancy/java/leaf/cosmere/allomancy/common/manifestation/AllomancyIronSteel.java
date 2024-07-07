@@ -19,6 +19,8 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +41,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +50,7 @@ import java.util.*;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
-	public static final HashMap<Material, Double> materialResistanceMap = initHashMap();
+	public static final HashMap<TagKey<Block>, Double> materialResistanceMap = initHashMap();
 
 	private final boolean isPush;
 	private static Set<String> s_whiteList = null;
@@ -61,18 +62,13 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		this.isPush = metalType == Metals.MetalType.STEEL;
 	}
 
-	private static HashMap<Material, Double> initHashMap()
+	private static HashMap<TagKey<Block>, Double> initHashMap()
 	{
-		HashMap<Material, Double> output = new HashMap<>();
+		HashMap<TagKey<Block>, Double> output = new HashMap<>();
 
-		// map definitely isn't done, but this is a good start
-		output.put(Material.STONE, 0.5);
-		output.put(Material.DIRT, 0.2);
-		output.put(Material.WOOD, 0.25);
-		output.put(Material.METAL, 0.5);
-		output.put(Material.PISTON, 0.5);
-		output.put(Material.SAND, 0.2);
-		output.put(Material.CLAY, 0.2);
+		output.put(BlockTags.MINEABLE_WITH_PICKAXE, 0.5);
+		output.put(BlockTags.MINEABLE_WITH_SHOVEL, 0.2);
+		output.put(BlockTags.MINEABLE_WITH_AXE, 0.25);
 
 		return output;
 	}
@@ -80,7 +76,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	@Override
 	public void applyEffectTick(ISpiritweb data)
 	{
-		if (data.getLiving().level.isClientSide)
+		if (data.getLiving().level().isClientSide)
 		{
 			performEffectClient(data);
 		}
@@ -93,7 +89,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	@Override
 	public void onModeChange(ISpiritweb cap, int lastMode)
 	{
-		if (cap.getLiving().level.isClientSide)
+		if (cap.getLiving().level().isClientSide)
 		{
 
 			super.onModeChange(cap, lastMode);
@@ -144,7 +140,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			boolean hitEntity = false;
 			Entity entityHitResult = null;
 
-			Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
+			Vec3i closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 			if (closestMetalObject != null)
 			{
 				BlockState blockAtPos = level.getBlockState(new BlockPos(closestMetalObject));
@@ -273,7 +269,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			int entityID = entities.get(i);
 			final LivingEntity dataLiving = data.getLiving();
-			Entity targetEntity = dataLiving.level.getEntity(entityID);
+			Entity targetEntity = dataLiving.level().getEntity(entityID);
 			if (targetEntity != null)
 			{
 				if (targetEntity.blockPosition().closerThan(dataLiving.blockPosition(), getRange(data)))
@@ -550,7 +546,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		s_whiteList = new HashSet<>();
 
 		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
-		final RecipeManager recipeManager = entity.level.getRecipeManager();
+		final RecipeManager recipeManager = entity.level().getRecipeManager();
 		final Collection<Recipe<?>> recipes = recipeManager.getRecipes();
 
 		for (var recipe : recipes)
