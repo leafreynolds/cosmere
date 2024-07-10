@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
+import net.minecraft.core.Vec3i;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -37,7 +38,7 @@ public class DrawHelper
 {
 
 	//Draw our allomancy lines
-	public static void drawLinesFromPoint(PoseStack poseStack, Vec3 originPoint, float range, Color color, List<Vec3> lineEndPositions, Vec3 highlightVector)
+	public static void drawLinesFromPoint(PoseStack poseStack, Vec3 originPoint, float range, Color color, List<Vec3> lineEndPositions, Vec3i highlightVector)
 	{
 		poseStack.pushPose();
 
@@ -168,7 +169,7 @@ public class DrawHelper
 				.endVertex();
 	}
 
-	public static void drawBlocksAtPoint(PoseStack poseStack, Color color, List<BlockPos> blockPosList, Vec3 highlightVector, ArrayList<BlockPos> targetedClusterBlockList)
+	public static void drawBlocksAtPoint(PoseStack poseStack, Color color, List<BlockPos> blockPosList, Vec3i highlightVector, ArrayList<BlockPos> targetedClusterBlockList)
 	{
 		poseStack.pushPose();
 

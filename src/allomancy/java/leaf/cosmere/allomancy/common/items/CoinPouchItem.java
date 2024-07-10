@@ -86,13 +86,13 @@ public class CoinPouchItem extends ProjectileWeaponItem
 		if (interactionHand == InteractionHand.MAIN_HAND && player.isCrouching())
 		{
 			//open inventory
-			if (!player.level.isClientSide && player instanceof ServerPlayer)
+			if (!player.level().isClientSide && player instanceof ServerPlayer)
 			{
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyr) -> new CoinPouchContainerMenu(windowID, playerInv, coinPouchStack), coinPouchStack.getHoverName());
 				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
 			}
 		}
-		else if (player.level.isClientSide && AllomancyKeybindings.ALLOMANCY_STEEL_PUSH.isDown())
+		else if (player.level().isClientSide && AllomancyKeybindings.ALLOMANCY_STEEL_PUSH.isDown())
 		{
 			//assume they wanna shoot a projectile
 			//so let them tell the server
@@ -123,9 +123,9 @@ public class CoinPouchItem extends ProjectileWeaponItem
 					}
 					//shoot?
 
-					if (!player.level.isClientSide)
+					if (!player.level().isClientSide)
 					{
-						AbstractArrow coinProjectile = new CoinProjectile(player.level, player, stackToShoot);
+						AbstractArrow coinProjectile = new CoinProjectile(player.level(), player, stackToShoot);
 						coinProjectile.setCritArrow(true);
 						coinProjectile.shootFromRotation(
 								player,
@@ -139,12 +139,12 @@ public class CoinPouchItem extends ProjectileWeaponItem
 						                        ? AbstractArrow.Pickup.DISALLOWED
 						                        : AbstractArrow.Pickup.ALLOWED;
 
-						player.level.addFreshEntity(coinProjectile);
+						player.level().addFreshEntity(coinProjectile);
 
 						steelManifestation.trackValidEntity(data, coinProjectile);
 					}
 
-					player.level.playSound(
+					player.level().playSound(
 							null,
 							player.getX(),
 							player.getY(),
@@ -152,7 +152,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 							SoundEvents.ARROW_SHOOT,
 							SoundSource.PLAYERS,
 							1.0F,
-							1.0F / (player.level.getRandom().nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+							1.0F / (player.level().getRandom().nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 
 				}
 			}

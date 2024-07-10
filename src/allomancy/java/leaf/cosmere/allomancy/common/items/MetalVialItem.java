@@ -43,21 +43,22 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	private static final String metal_amounts = "metalAmounts";
 	private static final int MAX_METALS_COUNT = 16;
 
-	@Override
-	public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems)
-	{
-		super.fillItemCategory(pCategory, pItems);
+	// no longer exists, will need to manually assign to creative mode tab elsewhere
+	//@Override
+	//public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems)
+	//{
+	//	super.fillItemCategory(pCategory, pItems);
 
-		if (allowedIn(pCategory))
-		{
-			final ItemStack filled = new ItemStack(this);
-			for (int i = 0; i < 16; i++)
-			{
-				addMetals(filled, i, 1);
-			}
-			pItems.add(filled);
-		}
-	}
+	//	if (allowedIn(pCategory))
+	//	{
+	//		final ItemStack filled = new ItemStack(this);
+	//		for (int i = 0; i < 16; i++)
+	//		{
+	//			addMetals(filled, i, 1);
+	//		}
+	//		pItems.add(filled);
+	//	}
+	//}
 
 	private static CompoundTag getContainedMetalsTag(ItemStack stack)
 	{

@@ -32,7 +32,7 @@ public class AllomancyChromium extends AllomancyManifestation
 			int range = getRange(data);
 
 			LivingEntity living = data.getLiving();
-			Level world = living.level;
+			Level world = living.level();
 			boolean isActiveTick = isActiveTick(data);
 			if (!world.isClientSide && isActiveTick)
 			{

@@ -37,7 +37,7 @@ public class AllomancyZinc extends AllomancyManifestation
 	@Override
 	public void applyEffectTick(ISpiritweb data)
 	{
-		if (data.getLiving().level.isClientSide())
+		if (data.getLiving().level().isClientSide())
 		{
 			if (isActiveTick(data))
 			{
@@ -72,7 +72,7 @@ public class AllomancyZinc extends AllomancyManifestation
 		// data processing
 		{
 			// this is the only way to check if the player is still online, thanks forge devs
-			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+			if (data.getLiving().level().getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 			{
 				return;
 			}
@@ -85,7 +85,7 @@ public class AllomancyZinc extends AllomancyManifestation
 
 			if (isSingleTarget)
 			{
-				if (data.getLiving().level.getEntity(playerThreadMap.get(uuid).singleTargetEntityID) instanceof LivingEntity entity)
+				if (data.getLiving().level().getEntity(playerThreadMap.get(uuid).singleTargetEntityID) instanceof LivingEntity entity)
 				{
 					entitiesToAffect.add(entity);
 				}

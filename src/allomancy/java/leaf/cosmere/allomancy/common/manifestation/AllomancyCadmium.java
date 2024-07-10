@@ -37,7 +37,7 @@ public class AllomancyCadmium extends AllomancyManifestation
 		// data processing
 		{
 			// this is the only way to check if the player is still online, thanks forge devs
-			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+			if (data.getLiving().level().getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 			{
 				return;
 			}
@@ -55,7 +55,7 @@ public class AllomancyCadmium extends AllomancyManifestation
 			{
 				int y = data.getLiving().blockPosition().getY() + i;
 				BlockPos pos = new BlockPos(x, y, z);
-				Level world = data.getLiving().level;
+				Level world = data.getLiving().level();
 
 				if (world.isEmptyBlock(pos))
 				{
@@ -152,7 +152,7 @@ public class AllomancyCadmium extends AllomancyManifestation
 					}
 
 					// this is the only way to check if the player is still online, thanks forge devs
-					if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+					if (data.getLiving().level().getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 					{
 						break;
 					}

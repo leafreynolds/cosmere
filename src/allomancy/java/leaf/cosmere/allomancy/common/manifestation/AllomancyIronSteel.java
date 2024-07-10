@@ -567,7 +567,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 		for (var recipe : recipes)
 		{
-			final ItemStack resultItem = recipe.getResultItem();
+			final ItemStack resultItem = recipe.getResultItem(entity.level().registryAccess());
 
 			// check if is blacklisted, and if is, skip
 			//if it says result item is never null, ignore it,
