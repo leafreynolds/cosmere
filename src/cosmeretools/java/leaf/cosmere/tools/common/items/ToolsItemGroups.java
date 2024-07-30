@@ -4,25 +4,25 @@
 
 package leaf.cosmere.tools.common.items;
 
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.registries.ToolsItems;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
 public class ToolsItemGroups
 {
-	public static final Supplier<Item.Properties> TOOL = () -> new Item.Properties().tab(ToolsItemGroups.TOOLS_TAB).stacksTo(1);
+	public static final Supplier<Item.Properties> TOOL = () -> new Item.Properties();
 
-	public static CreativeModeTab TOOLS_TAB = new CreativeModeTab(CosmereTools.MODID + ".tools")
-	{
-		@Override
-		public ItemStack makeIcon()
-		{
-			return new ItemStack(ToolsItems.METAL_PICKAXES.entrySet().stream().findAny().get().getValue().get());
-		}
-	};
+	public static CreativeModeTab TOOLS_TAB = CreativeModeTab.builder()
+			.icon(() -> new ItemStack(ToolsItems.METAL_PICKAXES.entrySet().stream().findAny().get().getValue().get()))
+			// todo: populate with .displayItems()
+			.build();
 
 }

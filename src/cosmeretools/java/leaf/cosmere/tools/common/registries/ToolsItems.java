@@ -10,6 +10,7 @@ import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.items.*;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class ToolsItems
 											type,
 											1,
 											-2.8F,
-											ToolsItemGroups.TOOL.get().rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB)
+											ToolsItemGroups.TOOL.get().rarity(type.getRarity())
 									)
 							)));
 
@@ -49,7 +50,7 @@ public class ToolsItems
 											type,
 											5,
 											-3.1F,
-											ToolsItemGroups.TOOL.get().rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB)
+											ToolsItemGroups.TOOL.get().rarity(type.getRarity())
 									)
 							)));
 
@@ -65,7 +66,7 @@ public class ToolsItems
 											type,
 											1.5f,
 											-3.0F,
-											ToolsItemGroups.TOOL.get().rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB)
+											ToolsItemGroups.TOOL.get().rarity(type.getRarity())
 									)
 							)));
 
@@ -81,7 +82,7 @@ public class ToolsItems
 											type,
 											0,
 											-3.0F,
-											ToolsItemGroups.TOOL.get().rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB)
+											ToolsItemGroups.TOOL.get().rarity(type.getRarity())
 									)
 							)));
 
@@ -97,7 +98,7 @@ public class ToolsItems
 											type,
 											3,
 											-2.4F,
-											ToolsItemGroups.TOOL.get().rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB)
+											ToolsItemGroups.TOOL.get().rarity(type.getRarity())
 									)
 							)));
 
@@ -109,8 +110,8 @@ public class ToolsItems
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_helmet",
-									() -> new TArmorItem(type, EquipmentSlot.HEAD, (new Item.Properties()).rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB))
-							)));
+									() -> new TArmorItem(type, ArmorItem.Type.HELMET, (new Item.Properties()).rarity(type.getRarity())
+							))));
 
 
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_CHESTPLATES =
@@ -120,8 +121,8 @@ public class ToolsItems
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_chestplate",
-									() -> new TArmorItem(type, EquipmentSlot.CHEST, (new Item.Properties()).rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB))
-							)));
+									() -> new TArmorItem(type, ArmorItem.Type.CHESTPLATE, (new Item.Properties()).rarity(type.getRarity())
+							))));
 
 
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_LEGGINGS =
@@ -131,8 +132,8 @@ public class ToolsItems
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_leggings",
-									() -> new TArmorItem(type, EquipmentSlot.LEGS, (new Item.Properties()).rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB))
-							)));
+									() -> new TArmorItem(type, ArmorItem.Type.LEGGINGS, (new Item.Properties()).rarity(type.getRarity())
+							))));
 
 
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_BOOTS =
@@ -142,8 +143,8 @@ public class ToolsItems
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_boots",
-									() -> new TArmorItem(type, EquipmentSlot.FEET, (new Item.Properties()).rarity(type.getRarity()).tab(ToolsItemGroups.TOOLS_TAB))
-							)));
+									() -> new TArmorItem(type, ArmorItem.Type.BOOTS, (new Item.Properties()).rarity(type.getRarity())
+							))));
 
 
 }
