@@ -12,7 +12,7 @@ import leaf.cosmere.allomancy.common.registries.AllomancyEntityTypes;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
@@ -67,7 +67,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Allomancy.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

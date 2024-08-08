@@ -4,7 +4,6 @@
 
 package leaf.cosmere.allomancy.common.manifestation;
 
-import joptsimple.util.KeyValuePair;
 import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
@@ -13,7 +12,7 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -472,7 +471,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			return false;
 		}
-		return s_whiteList.contains(ResourceLocationHelper.get(item).getPath());
+		return s_whiteList.contains(RegistryHelper.get(item).getPath());
 	}
 
 
@@ -486,7 +485,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			return false;
 		}
-		return s_whiteList.contains(ResourceLocationHelper.get(block).getPath());
+		return s_whiteList.contains(RegistryHelper.get(block).getPath());
 	}
 
 	public static boolean containsMetal(Entity entity)
@@ -499,7 +498,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			return false;
 		}
-		return s_whiteList.contains(ResourceLocationHelper.get(entity).getPath());
+		return s_whiteList.contains(RegistryHelper.get(entity).getPath());
 	}
 
 	public static void invalidateWhitelist()
@@ -520,38 +519,38 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
 			s_blackList = new HashSet<>();
-			s_blackList.add(ResourceLocationHelper.get(Blocks.AIR).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.WATER).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LAVA).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GRASS_BLOCK).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.FARMLAND).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS_PANE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BLACK_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BROWN_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.RED_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.CYAN_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GRAY_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GREEN_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_BLUE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_GRAY_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LIME_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.MAGENTA_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.ORANGE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.PINK_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.PURPLE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.WHITE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.YELLOW_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.TORCH).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.SHULKER_BOX).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.FROSTED_ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.PACKED_ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Items.DIAMOND).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Items.EMERALD).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Items.AIR).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.AIR).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.WATER).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LAVA).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GRASS_BLOCK).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.FARMLAND).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GLASS).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GLASS_PANE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BLACK_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BROWN_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BLUE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.RED_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.CYAN_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GRAY_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GREEN_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LIGHT_BLUE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LIGHT_GRAY_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LIME_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.MAGENTA_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.ORANGE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.PINK_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.PURPLE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.WHITE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.YELLOW_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.TORCH).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.SHULKER_BOX).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BLUE_ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.FROSTED_ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.PACKED_ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Items.DIAMOND).getPath());
+			s_blackList.add(RegistryHelper.get(Items.EMERALD).getPath());
+			s_blackList.add(RegistryHelper.get(Items.AIR).getPath());
 			s_blackList.add("philosophers_stone");//problem child
 		}
 		for (var itemInList : s_blackList)
@@ -573,7 +572,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			//if it says result item is never null, ignore it,
 			//we have one confirmed bug report that it _can_ be null
 			// https://github.com/leafreynolds/cosmere/issues/58
-			if (resultItem == null || resultItem.isEmpty() || s_blackList.contains(ResourceLocationHelper.get(resultItem.getItem()).getPath()))
+			if (resultItem == null || resultItem.isEmpty() || s_blackList.contains(RegistryHelper.get(resultItem.getItem()).getPath()))
 			{
 				continue;
 			}
@@ -595,7 +594,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			for (ItemStack ingredientStack : ingredient.getItems())
 			{
 				final Item ingredientItem = ingredientStack.getItem();
-				final ResourceLocation ingredientItemRL = ResourceLocationHelper.get(ingredientItem);
+				final ResourceLocation ingredientItemRL = RegistryHelper.get(ingredientItem);
 				if (s_blackList.contains(ingredientItemRL.getPath()))
 				{
 					continue;
@@ -605,7 +604,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				{
 					//found one
 					final Item resultItem = resultItemStack.getItem();
-					final ResourceLocation resultItemRL = ResourceLocationHelper.get(resultItem);
+					final ResourceLocation resultItemRL = RegistryHelper.get(resultItem);
 					// final Holder.Reference<Item> itemReference = resultItem.builtInRegistryHolder();
 					// List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
 					// allTags.add(CosmereTags.Items.CONTAINS_METAL);

@@ -4,7 +4,7 @@
 
 package leaf.cosmere.awakening;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.awakening.common.Awakening;
 import leaf.cosmere.awakening.common.registries.AwakeningItems;
@@ -61,7 +61,7 @@ public class AwakeningItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

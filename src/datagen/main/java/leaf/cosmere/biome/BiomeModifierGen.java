@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.biome;
@@ -16,10 +16,9 @@ import leaf.cosmere.common.registry.FeatureRegistry;
 import leaf.cosmere.common.world.MetalOreBiomeFeatureModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -32,11 +31,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.holdersets.OrHolderSet;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
-public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvider
+public record BiomeModifierGen(net.minecraft.data.PackOutput dataGenerator) implements DataProvider
 {
 	@Override
 	public @NotNull String getName()
@@ -50,17 +49,17 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 	}
 
 	@Override
-	public void run(@NotNull CachedOutput cachedOutput)
+	public CompletableFuture<?> run(@NotNull CachedOutput cachedOutput)
 	{
 		RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.BUILTIN.get());
 		final Path outputFolder = this.dataGenerator.getOutputFolder();
 
 		// Biome Modifiers
 		final HolderSet.Named<Biome> overworld = new HolderSet.Named<>(
-				ops.registry(Registry.BIOME_REGISTRY).get(),
+				ops.registry(Registries.BIOME).get(),
 				BiomeTags.IS_OVERWORLD);
 		final HolderSet.Named<Biome> roshar = new HolderSet.Named<>(
-				ops.registry(Registry.BIOME_REGISTRY).get(),
+				ops.registry(Registries.BIOME).get(),
 				CosmereTags.Biomes.IS_ROSHAR);
 
 		for (Metals.MetalType type : Metals.MetalType.values())
@@ -84,6 +83,7 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 					cachedOutput);
 		}
 
+		return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
 	}
 
 	public static void generate(RegistryOps<JsonElement> ops, BiomeModifier modifier, Path outputFolder, String saveName, CachedOutput cache)
@@ -97,15 +97,8 @@ public record BiomeModifierGen(DataGenerator dataGenerator) implements DataProvi
 				.resultOrPartial(msg -> CosmereAPI.logger.error("Failed to encode {}: {}", biomeModifierPathString, msg))
 				.ifPresent(json ->
 				{
-					try
-					{
-						final Path biomeModifierPath = outputFolder.resolve(biomeModifierPathString);
-						DataProvider.saveStable(cache, json, biomeModifierPath);
-					}
-					catch (IOException e)
-					{
-						CosmereAPI.logger.error("Failed to save " + biomeModifierPathString, e);
-					}
+					final Path biomeModifierPath = outputFolder.resolve(biomeModifierPathString);
+					DataProvider.saveStable(cache, json, biomeModifierPath);
 				});
 	}
 

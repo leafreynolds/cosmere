@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 11 - 2023 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tag;
@@ -15,7 +15,8 @@ import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.GameEventTags;
 import net.minecraft.tags.TagKey;
@@ -28,13 +29,14 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class CosmereTagProvider extends BaseTagProvider
 {
 
-	public CosmereTagProvider(DataGenerator gen, @Nullable ExistingFileHelper existingFileHelper)
+	public CosmereTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(gen, Cosmere.MODID, existingFileHelper);
+		super(packOutput, lookupProvider, Cosmere.MODID, existingFileHelper);
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class CosmereTagProvider extends BaseTagProvider
 	}
 
 	@Override
-	protected void registerTags()
+	protected void registerTags(HolderLookup.Provider registries)
 	{
 		addItems();
 		addBlocks();

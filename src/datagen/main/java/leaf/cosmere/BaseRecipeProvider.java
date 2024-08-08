@@ -4,7 +4,7 @@
 
 package leaf.cosmere;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import net.minecraft.data.PackOutput;
@@ -76,15 +76,15 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 
 	protected void addOreSmeltingRecipes(Consumer<FinishedRecipe> consumer, ItemLike ore, Item result, float experience, int time)
 	{
-		String name = ResourceLocationHelper.get(result).getPath();
-		String path = ResourceLocationHelper.get(ore.asItem()).getPath();
+		String name = RegistryHelper.get(result).getPath();
+		String path = RegistryHelper.get(ore.asItem()).getPath();
 		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), RecipeCategory.MISC, result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, makeRL(name + "_from_smelting_" + path));
 		SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), RecipeCategory.MISC, result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, makeRL(name + "_from_blasting_" + path));
 	}
 
 	protected void addCookingRecipes(Consumer<FinishedRecipe> consumer, ItemLike inputItem, Item result, float experience, int time)
 	{
-		String name = ResourceLocationHelper.get(result).getPath();
+		String name = RegistryHelper.get(result).getPath();
 
 		SimpleCookingRecipeBuilder.smelting(
 						Ingredient.of(inputItem),

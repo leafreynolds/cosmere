@@ -4,7 +4,7 @@
 
 package leaf.cosmere.surgebinding;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.surgebinding.common.Surgebinding;
@@ -43,7 +43,7 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 			{
 				//Special thanks to @Random & @sciwhiz12  on discord who helped me get these running
 				//To get the overlay working, you need to tell the blocks they have transparency, which I've donne in the ClientSetup script.
-				final boolean deepslate = ResourceLocationHelper.get(block).getPath().contains("deepslate");
+				final boolean deepslate = RegistryHelper.get(block).getPath().contains("deepslate");
 
 				final String stoneType = deepslate ? "block/gem_ore_block_deepslate" : "block/gem_ore_block";
 				final String stoneFileName = deepslate ? "gem_ore_block_deepslate" : "gem_ore_block";
@@ -55,7 +55,8 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 				simpleBlock(block, blockModel);
 				continue;
 			}
-			else if (block instanceof LavisPolypBlock || block instanceof PrickletacBlock || block instanceof RockbudVariantBlock || block instanceof VinebudBlock) {
+			else if (block instanceof LavisPolypBlock || block instanceof PrickletacBlock || block instanceof RockbudVariantBlock || block instanceof VinebudBlock)
+			{
 				continue;
 			}
 

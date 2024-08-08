@@ -4,7 +4,7 @@
 
 package leaf.cosmere.tools;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.registries.ToolsItems;
@@ -95,7 +95,7 @@ public class ToolsItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

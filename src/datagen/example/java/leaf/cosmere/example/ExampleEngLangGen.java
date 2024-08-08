@@ -4,7 +4,7 @@
 
 package leaf.cosmere.example;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.example.common.Example;
@@ -49,7 +49,7 @@ public class ExampleEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Example.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

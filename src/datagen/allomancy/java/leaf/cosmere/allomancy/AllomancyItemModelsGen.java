@@ -6,7 +6,7 @@ package leaf.cosmere.allomancy;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -49,7 +49,7 @@ public class AllomancyItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

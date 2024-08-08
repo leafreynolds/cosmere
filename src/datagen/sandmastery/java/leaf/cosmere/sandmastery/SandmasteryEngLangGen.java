@@ -6,7 +6,7 @@ package leaf.cosmere.sandmastery;
 
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
@@ -62,7 +62,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Sandmastery.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

@@ -4,7 +4,7 @@
 
 package leaf.cosmere.aviar.items;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.aviar.common.registries.AviarItems;
@@ -50,7 +50,7 @@ public class AviarItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

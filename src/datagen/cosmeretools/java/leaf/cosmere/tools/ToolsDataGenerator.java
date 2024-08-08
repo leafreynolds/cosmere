@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools;
 
-import leaf.cosmere.tools.advancements.ToolsAdvancementGen;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.loottables.ToolsLootTableGen;
 import leaf.cosmere.tools.patchouli.ToolsPatchouliGen;
@@ -32,7 +31,6 @@ public class ToolsDataGenerator
 		generator.addProvider(true, new ToolsItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new ToolsRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new ToolsPatchouliGen(generator));
-		generator.addProvider(true, new ToolsAdvancementGen(generator));
 	}
 
 }

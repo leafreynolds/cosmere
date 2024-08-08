@@ -5,7 +5,7 @@
 package leaf.cosmere;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.providers.IItemProvider;
@@ -56,7 +56,7 @@ public class EngLangGen extends LanguageProvider
 		for (IItemProvider item : ItemsRegistry.ITEMS.getAllItems())
 		{
 			final Item currentItem = item.asItem();
-			final ResourceLocation registryName = ResourceLocationHelper.get(currentItem);
+			final ResourceLocation registryName = RegistryHelper.get(currentItem);
 			if (registryName.getNamespace().contentEquals(Cosmere.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -75,7 +75,7 @@ public class EngLangGen extends LanguageProvider
 		for (IItemProvider item : BlocksRegistry.BLOCKS.getAllBlocks())
 		{
 			final Item currentItem = item.asItem();
-			final ResourceLocation registryName = ResourceLocationHelper.get(currentItem);
+			final ResourceLocation registryName = RegistryHelper.get(currentItem);
 			String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
 			add(currentItem.getDescriptionId(), localisedString);
 		}

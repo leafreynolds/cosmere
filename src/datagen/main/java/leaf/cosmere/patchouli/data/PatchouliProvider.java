@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 6 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.patchouli.data;
@@ -7,8 +7,8 @@ package leaf.cosmere.patchouli.data;
 import com.google.common.collect.Sets;
 import leaf.cosmere.api.text.StringHelper;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -24,16 +24,16 @@ import java.util.function.Consumer;
 public abstract class PatchouliProvider implements DataProvider
 {
 	public static final String GUIDE_NAME = "guide";
-	private final DataGenerator generator;
+	private final PackOutput packOutput;
 	private final String modid;
 
 
 	protected final List<BookStuff.Category> categories = new ArrayList<>();
 	protected final List<BookStuff.Entry> entries = new ArrayList<>();
 
-	public PatchouliProvider(DataGenerator generatorIn, String modid)
+	public PatchouliProvider(PackOutput packOutput, String modid)
 	{
-		this.generator = generatorIn;
+		this.packOutput = packOutput;
 		this.modid = modid;
 	}
 
@@ -44,7 +44,7 @@ public abstract class PatchouliProvider implements DataProvider
 	 */
 	public CompletableFuture<?> run(@NotNull CachedOutput cache)
 	{
-		Path path = this.generator.getPackOutput().getOutputFolder();
+		Path path = this.packOutput.getOutputFolder();
 		Set<String> entryIDs = Sets.newHashSet();
 
 		Consumer<BookStuff.Entry> entryConsumer = getEntryConsumer(cache, path, entryIDs);

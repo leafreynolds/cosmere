@@ -4,7 +4,7 @@
 
 package leaf.cosmere.soulforgery;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.soulforgery.common.Soulforgery;
 import leaf.cosmere.soulforgery.common.registries.SoulforgeryItems;
@@ -61,7 +61,7 @@ public class SoulforgeryItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

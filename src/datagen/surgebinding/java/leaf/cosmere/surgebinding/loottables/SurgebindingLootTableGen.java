@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.loottables;
@@ -31,7 +31,7 @@ public class SurgebindingLootTableGen extends LootTableProvider
 	}
 
 	@Override
-	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, Builder>>>, LootContextParamSet>> getTables()
+	public List<LootTableProvider.SubProviderEntry> getTables()
 	{
 		return this.loot_tables;
 	}

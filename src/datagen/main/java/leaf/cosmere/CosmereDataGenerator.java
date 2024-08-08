@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -33,23 +33,23 @@ public class CosmereDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 
-		generator.addProvider(true, new EngLangGen(output));
+		generator.addProvider(true, new EngLangGen(packOutput));
 
-		generator.addProvider(true, new ItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new BlockModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new LootTableGen(generator));
-		generator.addProvider(true, new RecipeGen(output, existingFileHelper));
+		generator.addProvider(true, new ItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new BlockModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new LootTableGen(packOutput));
+		generator.addProvider(true, new RecipeGen(packOutput, existingFileHelper));
 
-		generator.addProvider(true, new PatchouliGen(generator));
+		generator.addProvider(true, new PatchouliGen(packOutput));
 
-		generator.addProvider(true, new BiomeModifierGen(generator));
-		generator.addProvider(true, new BiomeTagsProvider(generator, existingFileHelper));
+		generator.addProvider(true, new BiomeModifierGen(packOutput));
+		generator.addProvider(true, new BiomeTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 
-		generator.addProvider(true, new CosmereTagProvider(generator, existingFileHelper));
+		generator.addProvider(true, new CosmereTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 
 	}
 

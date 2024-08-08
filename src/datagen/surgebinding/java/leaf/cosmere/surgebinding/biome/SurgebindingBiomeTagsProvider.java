@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.biome;
@@ -7,6 +7,7 @@ package leaf.cosmere.surgebinding.biome;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBiomes;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -21,7 +22,7 @@ public class SurgebindingBiomeTagsProvider extends net.minecraft.data.tags.Biome
 	}
 
 	@Override
-	protected void addTags()
+	protected void addTags(HolderLookup.Provider pProvider)
 	{
 		tag(SurgebindingBiomes.ROSHAR_BIOME_KEY, CosmereTags.Biomes.IS_ROSHAR);
 	}

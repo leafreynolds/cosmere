@@ -7,7 +7,7 @@ package leaf.cosmere.feruchemy;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
@@ -63,7 +63,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Feruchemy.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

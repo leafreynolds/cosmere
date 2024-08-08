@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
 
-import leaf.cosmere.feruchemy.advancements.FeruchemyAdvancementGen;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.patchouli.FeruchemyPatchouliGen;
 import net.minecraft.data.DataGenerator;
@@ -30,7 +29,6 @@ public class FeruchemyDataGenerator
 		generator.addProvider(true, new FeruchemyTagProvider(generator, existingFileHelper));
 		generator.addProvider(true, new FeruchemyRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new FeruchemyPatchouliGen(generator));
-		generator.addProvider(true, new FeruchemyAdvancementGen(generator));
 	}
 
 }

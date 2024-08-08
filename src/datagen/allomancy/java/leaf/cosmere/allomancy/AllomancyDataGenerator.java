@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
 
-import leaf.cosmere.allomancy.advancements.AllomancyAdvancementGen;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.patchouli.AllomancyPatchouliGen;
 import net.minecraft.data.DataGenerator;
@@ -29,7 +28,6 @@ public class AllomancyDataGenerator
 		generator.addProvider(true, new AllomancyItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new AllomancyRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new AllomancyPatchouliGen(generator));
-		generator.addProvider(true, new AllomancyAdvancementGen(generator));
 		generator.addProvider(true, new AllomancyTagProvider(generator, existingFileHelper));
 	}
 

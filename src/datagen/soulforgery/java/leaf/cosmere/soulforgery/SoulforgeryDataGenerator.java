@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.soulforgery;
 
-import leaf.cosmere.soulforgery.advancements.SoulforgeryAdvancementGen;
 import leaf.cosmere.soulforgery.common.Soulforgery;
 import leaf.cosmere.soulforgery.loottables.SoulforgeryLootTableGen;
 import leaf.cosmere.soulforgery.patchouli.SoulforgeryPatchouliGen;
@@ -32,7 +31,6 @@ public class SoulforgeryDataGenerator
 		generator.addProvider(true, new SoulforgeryItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new SoulforgeryRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new SoulforgeryPatchouliGen(generator));
-		generator.addProvider(true, new SoulforgeryAdvancementGen(generator));
 	}
 
 }

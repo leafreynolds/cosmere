@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aviar;
 
-import leaf.cosmere.aviar.advancements.AviarAdvancementGen;
 import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.aviar.items.AviarItemModelsGen;
 import leaf.cosmere.aviar.loottables.AviarLootTableGen;
@@ -33,7 +32,6 @@ public class AviarDataGenerator
 		generator.addProvider(true, new AviarItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new AviarRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new AviarPatchouliGen(generator));
-		generator.addProvider(true, new AviarAdvancementGen(generator));
 	}
 
 }

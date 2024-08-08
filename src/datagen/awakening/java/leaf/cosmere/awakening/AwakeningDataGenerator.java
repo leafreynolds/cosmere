@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening;
 
-import leaf.cosmere.awakening.advancements.AwakeningAdvancementGen;
 import leaf.cosmere.awakening.common.Awakening;
 import leaf.cosmere.awakening.loottables.AwakeningLootTableGen;
 import leaf.cosmere.awakening.patchouli.AwakeningPatchouliGen;
@@ -32,7 +31,6 @@ public class AwakeningDataGenerator
 		generator.addProvider(true, new AwakeningItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new AwakeningRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new AwakeningPatchouliGen(generator));
-		generator.addProvider(true, new AwakeningAdvancementGen(generator));
 	}
 
 }

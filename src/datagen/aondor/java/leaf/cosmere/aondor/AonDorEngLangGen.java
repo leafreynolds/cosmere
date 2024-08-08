@@ -6,7 +6,7 @@ package leaf.cosmere.aondor;
 
 import leaf.cosmere.aondor.common.AonDor;
 import leaf.cosmere.aondor.common.registries.AonDorEntityTypes;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import net.minecraft.data.PackOutput;
@@ -49,7 +49,7 @@ public class AonDorEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(AonDor.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());

@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aondor;
 
-import leaf.cosmere.aondor.advancements.AonDorAdvancementGen;
 import leaf.cosmere.aondor.common.AonDor;
 import leaf.cosmere.aondor.loottables.AonDorLootTableGen;
 import leaf.cosmere.aondor.patchouli.AonDorPatchouliGen;
@@ -32,7 +31,6 @@ public class AonDorDataGenerator
 		generator.addProvider(true, new AonDorItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new AonDorRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new AonDorPatchouliGen(generator));
-		generator.addProvider(true, new AonDorAdvancementGen(generator));
 	}
 
 }

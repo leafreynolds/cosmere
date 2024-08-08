@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.loottables;
@@ -8,13 +8,12 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.blocks.MetalOreBlock;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
-import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.level.block.Block;
 
-public class BlockLootTableGen extends BlockLoot
+public class BlockLootTableGen extends BaseBlockLootTables
 {
 	@Override
-	protected void addTables()
+	protected void generate()
 	{
 		for (IBlockProvider itemRegistryObject : BlocksRegistry.BLOCKS.getAllBlocks())
 		{
@@ -29,11 +28,5 @@ public class BlockLootTableGen extends BlockLoot
 				this.dropSelf(block);
 			}
 		}
-	}
-
-	@Override
-	protected Iterable<Block> getKnownBlocks()
-	{
-		return BlocksRegistry.BLOCKS.getAllBlocks().stream().map(IBlockProvider::getBlock)::iterator;
 	}
 }

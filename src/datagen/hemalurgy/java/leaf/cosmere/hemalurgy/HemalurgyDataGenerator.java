@@ -1,10 +1,9 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
 
-import leaf.cosmere.hemalurgy.advancements.HemalurgyAdvancementGen;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.patchouli.HemalurgyPatchouliGen;
 import net.minecraft.data.DataGenerator;
@@ -30,7 +29,6 @@ public class HemalurgyDataGenerator
 		generator.addProvider(true, new HemalurgyItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new HemalurgyRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new HemalurgyPatchouliGen(generator));
-		generator.addProvider(true, new HemalurgyAdvancementGen(generator));
 	}
 
 }

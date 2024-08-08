@@ -1,17 +1,17 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 6 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.blocks;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.blocks.MetalBlock;
 import leaf.cosmere.common.blocks.MetalOreBlock;
 import leaf.cosmere.common.blocks.MetalworkingTableBlock;
 import leaf.cosmere.common.registry.BlocksRegistry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -22,9 +22,9 @@ import java.util.function.Supplier;
 
 public class BlockModelsGen extends BlockStateProvider
 {
-	public BlockModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public BlockModelsGen(PackOutput packOutput, ExistingFileHelper existingFileHelper)
 	{
-		super(generator, Cosmere.MODID, existingFileHelper);
+		super(packOutput, Cosmere.MODID, existingFileHelper);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class BlockModelsGen extends BlockStateProvider
 			{
 				//Special thanks to @Random & @sciwhiz12  on discord who helped me get these running
 				//To get the overlay working, you need to tell the blocks they have transparency, which I've donne in the ClientSetup script.
-				final boolean deepslate = ResourceLocationHelper.get(block).getPath().contains("deepslate");
+				final boolean deepslate = RegistryHelper.get(block).getPath().contains("deepslate");
 
 				final String stoneType = deepslate ? "block/ore_block_deepslate" : "block/ore_block";
 				final String stoneFileName = deepslate ? "ore_block_deepslate" : "ore_block";

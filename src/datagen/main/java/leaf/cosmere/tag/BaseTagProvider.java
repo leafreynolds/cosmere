@@ -1,56 +1,62 @@
 /*
- * File updated ~ 21 - 7 - 2023 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tag;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.common.registration.impl.GameEventRegistryObject;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeRegistryTagsProvider;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 //Based off of Mekanism's implementation of BaseTagProvider, obtained 1st June, 2023
 //This lets us make data jsons much easier, so todo is to move to this implementation for other tags and things
 public abstract class BaseTagProvider implements DataProvider
 {
-
-	private final Map<TagType<?>, Map<TagKey<?>, TagBuilder>> supportedTagTypes = new Object2ObjectLinkedOpenHashMap<>();
-	private final Set<Block> knownHarvestRequirements = new HashSet<>();
+	private final Map<ResourceKey<? extends Registry<?>>, Map<TagKey<?>, TagBuilder>> supportedTagTypes = new Object2ObjectLinkedOpenHashMap<>();
+	private final Set<Block> knownHarvestRequirements = new ReferenceOpenHashSet<>();
+	private final CompletableFuture<HolderLookup.Provider> lookupProvider;
 	private final ExistingFileHelper existingFileHelper;
-	private final DataGenerator gen;
+	private final PackOutput output;
 	private final String modid;
 
-	protected BaseTagProvider(DataGenerator gen, String modid, @Nullable ExistingFileHelper existingFileHelper)
+	protected BaseTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		this.gen = gen;
+		this.output = output;
 		this.modid = modid;
+		this.lookupProvider = lookupProvider;
 		this.existingFileHelper = existingFileHelper;
-		addTagType(TagType.ITEM);
-		addTagType(TagType.BLOCK);
-		addTagType(TagType.ENTITY_TYPE);
-		addTagType(TagType.FLUID);
-		addTagType(TagType.BLOCK_ENTITY_TYPE);
-		addTagType(TagType.GAME_EVENT);
 	}
 
 	@NotNull
@@ -60,13 +66,7 @@ public abstract class BaseTagProvider implements DataProvider
 		return "Tags: " + modid;
 	}
 
-	//Protected to allow for extensions to add their own supported types if they have one
-	protected <TYPE> void addTagType(TagType<TYPE> tagType)
-	{
-		supportedTagTypes.computeIfAbsent(tagType, type -> new Object2ObjectLinkedOpenHashMap<>());
-	}
-
-	protected abstract void registerTags();
+	protected abstract void registerTags(HolderLookup.Provider registries);
 
 	protected List<IBlockProvider> getAllBlocks()
 	{
@@ -78,98 +78,115 @@ public abstract class BaseTagProvider implements DataProvider
 		knownHarvestRequirements.add(block);
 	}
 
+	@NotNull
 	@Override
-	public void run(@NotNull CachedOutput cache)
+	public CompletableFuture<?> run(@NotNull CachedOutput cache)
 	{
-		supportedTagTypes.values().forEach(Map::clear);
-		registerTags();
-		//todo eventually migrate all tags to use CosmereTagProvider
-		for (IBlockProvider blockProvider : getAllBlocks())
+		return this.lookupProvider.thenApply(registries ->
 		{
-			Block block = blockProvider.getBlock();
-			if (block.defaultBlockState().requiresCorrectToolForDrops() && !knownHarvestRequirements.contains(block))
+			supportedTagTypes.values().forEach(Map::clear);
+			registerTags(registries);
+			return registries;
+		}).thenCompose(registries ->
+		{
+			for (IBlockProvider blockProvider : getAllBlocks())
 			{
-				throw new IllegalStateException("Missing harvest tool type for block '" + ResourceLocationHelper.get(block) + "' that requires the correct tool for drops.");
+				Block block = blockProvider.getBlock();
+				if (block.defaultBlockState().requiresCorrectToolForDrops() && !knownHarvestRequirements.contains(block))
+				{
+					throw new IllegalStateException("Missing harvest tool type for block '" + RegistryHelper.getName(block) + "' that requires the correct tool for drops.");
+				}
 			}
-		}
-		supportedTagTypes.forEach((tagType, tagTypeMap) -> act(cache, tagType, tagTypeMap));
-	}
-
-	private <TYPE> void act(@NotNull CachedOutput cache, TagType<TYPE> tagType, Map<TagKey<?>, TagBuilder> tagTypeMap)
-	{
-		if (!tagTypeMap.isEmpty())
-		{
-			//Create a dummy provider and pass all our collected data through to it
-			tagType.getRegistry().map(forgeRegistry -> new ForgeRegistryTagsProvider<>(gen, forgeRegistry, modid, existingFileHelper)
+			List<CompletableFuture<?>> futures = new ArrayList<>();
+			supportedTagTypes.forEach((registry, tagTypeMap) ->
 			{
-				@Override
-				protected void addTags()
+				if (!tagTypeMap.isEmpty())
 				{
-					//Add each tag builder to the wrapped provider's builder
-					tagTypeMap.forEach((tag, tagBuilder) -> builders.put(tag.location(), tagBuilder));
+					//Create a dummy provider and pass all our collected data through to it
+					futures.add(new TagsProvider(output, registry, lookupProvider, modid, existingFileHelper)
+					{
+						@Override
+						protected void addTags(@NotNull HolderLookup.Provider lookupProvider)
+						{
+							//Add each tag builder to the wrapped provider's builder
+							tagTypeMap.forEach((tag, tagBuilder) -> builders.put(tag.location(), tagBuilder));
+						}
+					}.run(cache));
 				}
-
-				@NotNull
-				@Override
-				public String getName()
-				{
-					return tagType.name() + " Tags: " + modid;
-				}
-			}, vanillaRegistry -> new TagsProvider<>(gen, vanillaRegistry, modid, existingFileHelper)
-			{
-				@Override
-				protected void addTags()
-				{
-					//Add each tag builder to the wrapped provider's builder
-					tagTypeMap.forEach((tag, tagBuilder) -> builders.put(tag.location(), tagBuilder));
-				}
-
-				@NotNull
-				@Override
-				public String getName()
-				{
-					return tagType.name() + " Tags: " + modid;
-				}
-			}).run(cache);
-		}
+			});
+			return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
+		});
 	}
 
-	//Protected to allow for extensions to add retrieve their own supported types if they have any
-	protected <TYPE> ForgeRegistryTagBuilder<TYPE> getBuilder(TagType<TYPE> tagType, TagKey<TYPE> tag)
+	private <TYPE> Map<TagKey<?>, TagBuilder> getTagTypeMap(ResourceKey<? extends Registry<TYPE>> registry)
 	{
-		return new ForgeRegistryTagBuilder<>(tagType.getRegistry(), supportedTagTypes.get(tagType).computeIfAbsent(tag, ignored -> TagBuilder.create()), modid);
+		return supportedTagTypes.computeIfAbsent(registry, type -> new Object2ObjectLinkedOpenHashMap<>());
 	}
 
-	protected ForgeRegistryTagBuilder<Item> getItemBuilder(TagKey<Item> tag)
+	private <TYPE> TagBuilder getTagBuilder(ResourceKey<? extends Registry<TYPE>> registry, TagKey<TYPE> tag)
 	{
-		return getBuilder(TagType.ITEM, tag);
+		return getTagTypeMap(registry).computeIfAbsent(tag, ignored -> TagBuilder.create());
 	}
 
-	protected ForgeRegistryTagBuilder<Block> getBlockBuilder(TagKey<Block> tag)
+	protected <TYPE> CosmereTagBuilder<TYPE, ?> getBuilder(ResourceKey<? extends Registry<TYPE>> registry, TagKey<TYPE> tag)
 	{
-		return getBuilder(TagType.BLOCK, tag);
+		return new CosmereTagBuilder<>(getTagBuilder(registry, tag), modid);
 	}
 
-	protected ForgeRegistryTagBuilder<EntityType<?>> getEntityTypeBuilder(TagKey<EntityType<?>> tag)
+	protected <TYPE> IntrinsicCosmereTagBuilder<TYPE> getBuilder(ResourceKey<? extends Registry<TYPE>> registry, Function<TYPE, ResourceKey<TYPE>> keyExtractor, TagKey<TYPE> tag)
 	{
-		return getBuilder(TagType.ENTITY_TYPE, tag);
+		return new IntrinsicCosmereTagBuilder<>(keyExtractor, getTagBuilder(registry, tag), modid);
 	}
 
-	protected ForgeRegistryTagBuilder<Fluid> getFluidBuilder(TagKey<Fluid> tag)
+	protected <TYPE> IntrinsicCosmereTagBuilder<TYPE> getBuilder(IForgeRegistry<TYPE> registry, TagKey<TYPE> tag)
 	{
-		return getBuilder(TagType.FLUID, tag);
+		return new IntrinsicCosmereTagBuilder<>(element -> registry.getResourceKey(element).orElseThrow(), getTagBuilder(registry.getRegistryKey(), tag), modid);
 	}
 
-	protected ForgeRegistryTagBuilder<BlockEntityType<?>> getTileEntityTypeBuilder(TagKey<BlockEntityType<?>> tag)
+	protected IntrinsicCosmereTagBuilder<Item> getItemBuilder(TagKey<Item> tag)
 	{
-		return getBuilder(TagType.BLOCK_ENTITY_TYPE, tag);
+		return getBuilder(ForgeRegistries.ITEMS, tag);
 	}
 
-	protected ForgeRegistryTagBuilder<GameEvent> getGameEventBuilder(TagKey<GameEvent> tag)
+	protected IntrinsicCosmereTagBuilder<Block> getBlockBuilder(TagKey<Block> tag)
 	{
-		return getBuilder(TagType.GAME_EVENT, tag);
+		return getBuilder(ForgeRegistries.BLOCKS, tag);
 	}
 
+	protected IntrinsicCosmereTagBuilder<EntityType<?>> getEntityTypeBuilder(TagKey<EntityType<?>> tag)
+	{
+		return getBuilder(ForgeRegistries.ENTITY_TYPES, tag);
+	}
+
+	protected IntrinsicCosmereTagBuilder<Fluid> getFluidBuilder(TagKey<Fluid> tag)
+	{
+		return getBuilder(ForgeRegistries.FLUIDS, tag);
+	}
+
+	protected IntrinsicCosmereTagBuilder<BlockEntityType<?>> getTileEntityTypeBuilder(TagKey<BlockEntityType<?>> tag)
+	{
+		return getBuilder(ForgeRegistries.BLOCK_ENTITY_TYPES, tag);
+	}
+
+	protected IntrinsicCosmereTagBuilder<GameEvent> getGameEventBuilder(TagKey<GameEvent> tag)
+	{
+		return getBuilder(Registries.GAME_EVENT, gameEvent -> gameEvent.builtInRegistryHolder().key(), tag);
+	}
+
+	protected CosmereTagBuilder<DamageType, ?> getDamageTypeBuilder(TagKey<DamageType> tag)
+	{
+		return getBuilder(Registries.DAMAGE_TYPE, tag);
+	}
+
+	protected CosmereTagBuilder<Biome, ?> getBiomeBuilder(TagKey<Biome> tag)
+	{
+		return getBuilder(Registries.BIOME, tag);
+	}
+
+	protected IntrinsicCosmereTagBuilder<MobEffect> getMobEffectBuilder(TagKey<MobEffect> tag)
+	{
+		return getBuilder(ForgeRegistries.MOB_EFFECTS, tag);
+	}
 
 	protected void addToTag(TagKey<Item> tag, ItemLike... itemProviders)
 	{
@@ -184,7 +201,7 @@ public abstract class BaseTagProvider implements DataProvider
 	@SafeVarargs
 	protected final void addToTag(TagKey<Block> blockTag, Map<?, ? extends IBlockProvider>... blockProviders)
 	{
-		ForgeRegistryTagBuilder<Block> tagBuilder = getBlockBuilder(blockTag);
+		IntrinsicCosmereTagBuilder<Block> tagBuilder = getBlockBuilder(blockTag);
 		for (Map<?, ? extends IBlockProvider> blockProvider : blockProviders)
 		{
 			for (IBlockProvider value : blockProvider.values())
@@ -196,7 +213,7 @@ public abstract class BaseTagProvider implements DataProvider
 
 	protected void addToHarvestTag(TagKey<Block> tag, IBlockProvider... blockProviders)
 	{
-		ForgeRegistryTagBuilder<Block> tagBuilder = getBlockBuilder(tag);
+		IntrinsicCosmereTagBuilder<Block> tagBuilder = getBlockBuilder(tag);
 		for (IBlockProvider blockProvider : blockProviders)
 		{
 			Block block = blockProvider.getBlock();
@@ -208,7 +225,7 @@ public abstract class BaseTagProvider implements DataProvider
 	@SafeVarargs
 	protected final void addToHarvestTag(TagKey<Block> blockTag, Map<?, ? extends IBlockProvider>... blockProviders)
 	{
-		ForgeRegistryTagBuilder<Block> tagBuilder = getBlockBuilder(blockTag);
+		IntrinsicCosmereTagBuilder<Block> tagBuilder = getBlockBuilder(blockTag);
 		for (Map<?, ? extends IBlockProvider> blockProvider : blockProviders)
 		{
 			for (IBlockProvider value : blockProvider.values())
@@ -222,8 +239,8 @@ public abstract class BaseTagProvider implements DataProvider
 
 	protected void addToTags(TagKey<Item> itemTag, TagKey<Block> blockTag, IBlockProvider... blockProviders)
 	{
-		ForgeRegistryTagBuilder<Item> itemTagBuilder = getItemBuilder(itemTag);
-		ForgeRegistryTagBuilder<Block> blockTagBuilder = getBlockBuilder(blockTag);
+		IntrinsicCosmereTagBuilder<Item> itemTagBuilder = getItemBuilder(itemTag);
+		IntrinsicCosmereTagBuilder<Block> blockTagBuilder = getBlockBuilder(blockTag);
 		for (IBlockProvider blockProvider : blockProviders)
 		{
 			itemTagBuilder.add(blockProvider.asItem());
