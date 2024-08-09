@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.fog;
@@ -63,7 +63,7 @@ public class FogManager
 		{
 			return;
 		}
-		boolean isFogDense = this.mc.level.effects().isFoggyAt(pos.getX(), pos.getZ()) || this.mc.gui.getBossOverlay().shouldCreateWorldFog();
+		boolean isFogDense = this.mc.level().effects().isFoggyAt(pos.getX(), pos.getZ()) || this.mc.gui.getBossOverlay().shouldCreateWorldFog();
 		float density = isFogDense ? 0.9F : 1.0F;
 
 		ClientLevel pLevel = this.mc.level;

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.mixin;
@@ -74,7 +74,7 @@ public class GameRendererMixin
 
 				final int i = Mth.abs(tinF.getMode(playerSpiritweb));
 				final double pow = Math.pow(2, i);
-				final int floor = Mth.fastFloor(pow);
+				final int floor = Mth.floor(pow);
 				final float v = renderDistance / floor;
 
 				info.setReturnValue(v);

@@ -1,14 +1,14 @@
 /*
- * File updated ~ 23 - 10 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.client;
 
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
-import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -133,7 +133,7 @@ public class FeruchemyClientEvents
 	@SubscribeEvent
 	public static void onEntityJoinLevelEvent(EntityJoinLevelEvent event)
 	{
-		if (event.getEntity().level.isClientSide && event.getEntity() instanceof Player)
+		if (event.getEntity().level().isClientSide && event.getEntity() instanceof Player)
 		{
 			FeruchemyChargeThread.getInstance().start();
 		}

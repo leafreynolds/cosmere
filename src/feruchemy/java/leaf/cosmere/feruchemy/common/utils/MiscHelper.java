@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.utils;
@@ -18,7 +18,7 @@ public class MiscHelper
 
 	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType)
 	{
-		if (metalType == null || livingEntity.level.isClientSide)
+		if (metalType == null || livingEntity.level().isClientSide)
 		{
 			return;
 		}

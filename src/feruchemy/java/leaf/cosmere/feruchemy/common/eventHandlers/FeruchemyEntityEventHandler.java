@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 10 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.eventHandlers;
@@ -28,7 +28,7 @@ public class FeruchemyEntityEventHandler
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
 	{
-		if (!(event.getTarget() instanceof LivingEntity target) || event.getEntity().level.isClientSide)
+		if (!(event.getTarget() instanceof LivingEntity target) || event.getEntity().level().isClientSide)
 		{
 			return;
 		}

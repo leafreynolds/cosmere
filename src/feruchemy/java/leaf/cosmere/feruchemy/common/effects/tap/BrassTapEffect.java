@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 3 - 2024 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
@@ -39,7 +39,7 @@ public class BrassTapEffect extends FeruchemyEffectBase
 	{
 		//todo move to config
 		final LivingEntity living = data.getLiving();
-		if (!living.level.isClientSide && strength >= 6 && !living.isInWater())
+		if (!living.level().isClientSide && strength >= 6 && !living.isInWater())
 		{
 			//set user on fire
 			living.setSecondsOnFire(3);

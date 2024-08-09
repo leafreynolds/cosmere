@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.items;
@@ -7,19 +7,15 @@ package leaf.cosmere.feruchemy.common.items;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
-import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class BandsOfMourningItem extends BraceletMetalmindItem
@@ -28,7 +24,7 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 	{
 		super(Metals.MetalType.HARMONIUM);
 	}
-
+/*todo setup filled bands of mourning for creative
 	@Override
 	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
 	{
@@ -51,7 +47,7 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 
 			stacks.add(fullPower);
 		}
-	}
+	}*/
 
 	@Override
 	public float getMaxChargeModifier()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
@@ -41,7 +41,7 @@ public class CadmiumTapEffect extends FeruchemyEffectBase
 	public void applyEffectTick(ISpiritweb data, double strength)
 	{
 		final LivingEntity living = data.getLiving();
-		if (living.level.isClientSide)
+		if (living.level().isClientSide)
 		{
 			return;
 		}

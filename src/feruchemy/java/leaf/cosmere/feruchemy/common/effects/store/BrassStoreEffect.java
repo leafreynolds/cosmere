@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 10 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.store;
@@ -8,6 +8,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -26,7 +27,7 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 
 	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
-		if (!event.getSource().isFire() || event.isCanceled())
+		if (!event.getSource().is(DamageTypes.ON_FIRE) || event.isCanceled())
 		{
 			return;
 		}
@@ -59,7 +60,9 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 
 	public static void onLivingAttackEvent(LivingAttackEvent event)
 	{
-		if (!event.getSource().isFire() || event.isCanceled())
+		//todo - check if on fire is what this is meant to be
+		//and whether we should actually be cancelling damage outright is correct
+		if (!event.getSource().is(DamageTypes.ON_FIRE) || event.isCanceled())
 		{
 			return;
 		}

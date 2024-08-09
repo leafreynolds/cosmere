@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -132,7 +132,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			}
 		}
 
-		if (player.level instanceof ServerLevel serverLevel)
+		if (player.level() instanceof ServerLevel serverLevel)
 		{
 			serverLevel.updateSleepingPlayerList();
 		}
@@ -155,11 +155,11 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			return false;//(PlayerEntity.SleepResult.OTHER_PROBLEM);
 		}
 
-		if (!player.level.dimensionType().natural())
+		if (!player.level().dimensionType().natural())
 		{
 			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_HERE);
 		}
-		if (player.level.isDay())
+		if (player.level().isDay())
 		{
 			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
 		}
@@ -172,7 +172,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 		if (!player.isCreative())
 		{
 			Vec3 vector3d = player.position();
-			List<Monster> list = player.level.getEntitiesOfClass(
+			List<Monster> list = player.level().getEntitiesOfClass(
 					Monster.class,
 					new AABB(
 							vector3d.x() - 8D,
