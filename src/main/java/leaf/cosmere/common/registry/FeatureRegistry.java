@@ -5,28 +5,17 @@
 package leaf.cosmere.common.registry;
 
 import com.google.common.collect.ImmutableList;
-import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registration.impl.ConfiguredFeatureDeferredRegister;
-import leaf.cosmere.common.registration.impl.ConfiguredFeatureRegistryObject;
 import leaf.cosmere.common.registration.impl.PlacedFeatureDeferredRegister;
-import leaf.cosmere.common.registration.impl.PlacedFeatureRegistryObject;
-import net.minecraft.core.Holder;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class FeatureRegistry
 {
@@ -37,7 +26,7 @@ public class FeatureRegistry
 
 	// todo: might need to be redone? ore and placed features are already in the generated jsons, so might be fine
 	// hard to tell while it doesn't build
-	public static final Map<Metals.MetalType, ConfiguredFeatureRegistryObject<ConfiguredFeature<?, ?>>> CONFIGURED_METAL_ORE_FEATURES =
+	/*public static final Map<Metals.MetalType, ConfiguredFeatureRegistryObject<ConfiguredFeature<?, ?>>> CONFIGURED_METAL_ORE_FEATURES =
 			Arrays.stream(Metals.MetalType.values())
 					.filter(Metals.MetalType::hasOre)
 					.collect(Collectors.toMap(
@@ -70,7 +59,7 @@ public class FeatureRegistry
 											)
 									)
 					));
-
+*/
 
 	private static List<OreConfiguration.TargetBlockState> makeTarget(Metals.MetalType metalType)
 	{
