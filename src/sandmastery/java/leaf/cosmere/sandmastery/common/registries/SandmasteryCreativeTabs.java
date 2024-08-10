@@ -27,6 +27,7 @@ public class SandmasteryCreativeTabs
 									.displayItems((displayParameters, output) ->
 									{
 										CreativeTabDeferredRegister.addToDisplay(SandmasteryItems.ITEMS, output);
+										SandmasteryItems.QIDO_ITEM.get().addFilled(output);
 										CreativeTabDeferredRegister.addToDisplay(SandmasteryBlocks.BLOCKS, output);
 									})
 			);
