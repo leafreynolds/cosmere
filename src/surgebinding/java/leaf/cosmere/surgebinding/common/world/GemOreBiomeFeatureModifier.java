@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.world;
@@ -54,7 +54,7 @@ public record GemOreBiomeFeatureModifier(HolderSet<Biome> biomes, GenerationStep
 		}
 		catch (Exception e)
 		{
-			return DataResult.error("Not a decoration stage: " + name);
+			return DataResult.error(() -> "Not a decoration stage: " + name);
 		}
 	}
 }

@@ -1,14 +1,17 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
 
+import leaf.cosmere.common.registry.BiomeRegistry;
 import leaf.cosmere.surgebinding.biome.SurgebindingBiomeModifierGen;
 import leaf.cosmere.surgebinding.biome.SurgebindingBiomeTagsProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.loottables.SurgebindingLootTableGen;
 import leaf.cosmere.surgebinding.patchouli.SurgebindingPatchouliGen;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -20,6 +23,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 @EventBusSubscriber(modid = Surgebinding.MODID, bus = Bus.MOD)
 public class SurgebindingDataGenerator
 {
+	private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
+			.add(Registries.BIOME, BiomeRegistry::bootstrapBiomes);
+
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event)
 	{
