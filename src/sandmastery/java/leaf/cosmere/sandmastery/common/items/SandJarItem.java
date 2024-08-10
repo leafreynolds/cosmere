@@ -10,7 +10,7 @@ import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandLayerBlock;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
@@ -105,7 +105,7 @@ public class SandJarItem extends ChargeableItemBase
 			inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected : -106, ItemStack.EMPTY);
 			BlockPos pos2 = pos.offset(dir.getNormal());
 			pLevel.setBlockAndUpdate(pos2,
-					SandmasteryBlocksRegistry.SAND_JAR_BLOCK.getBlock()
+					SandmasteryBlocks.SAND_JAR_BLOCK.getBlock()
 							.defaultBlockState()
 							.setValue(SandJarBlock.INVESTITURE, StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0))
 			);
@@ -114,7 +114,7 @@ public class SandJarItem extends ChargeableItemBase
 		{
 			inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected
 			                                                   : -106, new ItemStack(SandmasteryItems.JAR_ITEM));
-			if (state.is(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock()) && state.getValue(TaldainBlackSandLayerBlock.LAYERS) < 8)
+			if (state.is(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock()) && state.getValue(TaldainBlackSandLayerBlock.LAYERS) < 8)
 			{
 				int layers = state.getValue(TaldainBlackSandLayerBlock.LAYERS);
 				pLevel.setBlockAndUpdate(pos,
@@ -122,7 +122,7 @@ public class SandJarItem extends ChargeableItemBase
 								.setValue(TaldainBlackSandLayerBlock.LAYERS, layers + 1)
 				);
 			}
-			else if (state.is(SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock()) && state.getValue(TaldainBlackSandLayerBlock.LAYERS) < 8)
+			else if (state.is(SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock()) && state.getValue(TaldainBlackSandLayerBlock.LAYERS) < 8)
 			{
 				int layers = state.getValue(TaldainBlackSandLayerBlock.LAYERS);
 				pLevel.setBlockAndUpdate(pos,
@@ -136,7 +136,7 @@ public class SandJarItem extends ChargeableItemBase
 				{
 					BlockPos pos2 = pos.offset(dir.getNormal());
 					pLevel.setBlockAndUpdate(pos2,
-							SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock()
+							SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock()
 									.defaultBlockState()
 									.setValue(TaldainBlackSandLayerBlock.LAYERS, 1)
 					);
@@ -146,7 +146,7 @@ public class SandJarItem extends ChargeableItemBase
 
 					BlockPos pos2 = pos.offset(dir.getNormal());
 					pLevel.setBlockAndUpdate(pos2,
-							SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock()
+							SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock()
 									.defaultBlockState()
 									.setValue(TaldainBlackSandLayerBlock.LAYERS, 1)
 					);

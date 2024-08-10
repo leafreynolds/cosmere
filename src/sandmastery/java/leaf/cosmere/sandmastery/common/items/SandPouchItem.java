@@ -1,5 +1,5 @@
 /*
- * File updated ~ 13 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.items;
@@ -11,13 +11,11 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.entities.SandProjectile;
-import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchInventory;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -29,7 +27,6 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -39,24 +36,23 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
 public class SandPouchItem extends ChargeableItemBase
 {
 	public SandPouchItem()
 	{
-		super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
+		super(PropTypes.Items.ONE.get());
 	}
 
 	private SandPouchInventory sandPouchInventory;
 
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
-		return itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem() ||
-				itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.asItem() ||
-				itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem() ||
-				itemStack.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.asItem();
+		return itemStack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem() ||
+				itemStack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.asItem() ||
+				itemStack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem() ||
+				itemStack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND.asItem();
 	};
 
 	@Override
@@ -89,14 +85,14 @@ public class SandPouchItem extends ChargeableItemBase
 		return res;
 	}
 
-	@Override
+	/*@Override
 	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
 	{
 		if (allowedIn(tab))
 		{
 			stacks.add(new ItemStack(this));
 		}
-	}
+	}*/
 
 	@Override
 	public boolean isFoil(@NotNull ItemStack stack)
@@ -110,7 +106,7 @@ public class SandPouchItem extends ChargeableItemBase
 		ItemStack pouchStack = player.getItemInHand(interactionHand);
 		if (interactionHand == InteractionHand.MAIN_HAND)
 		{
-			if (!player.level.isClientSide() && player instanceof ServerPlayer)
+			if (!player.level().isClientSide() && player instanceof ServerPlayer)
 			{
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyer) ->
 						new SandPouchContainerMenu(windowID, playerInv, pouchStack), pouchStack.getHoverName());
@@ -149,9 +145,9 @@ public class SandPouchItem extends ChargeableItemBase
 				ammo.shrink(1);
 				//shoot?
 
-				if (!player.level.isClientSide)
+				if (!player.level().isClientSide)
 				{
-					AbstractArrow sandProjectile = new SandProjectile(player.level, player, stackToShoot);
+					AbstractArrow sandProjectile = new SandProjectile(player.level(), player, stackToShoot);
 					sandProjectile.setCritArrow(true);
 					sandProjectile.shootFromRotation(
 							player,
@@ -163,10 +159,10 @@ public class SandPouchItem extends ChargeableItemBase
 
 					sandProjectile.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 
-					player.level.addFreshEntity(sandProjectile);
+					player.level().addFreshEntity(sandProjectile);
 				}
 
-				player.level.playSound(
+				player.level().playSound(
 						null,
 						player.getX(),
 						player.getY(),
@@ -174,7 +170,7 @@ public class SandPouchItem extends ChargeableItemBase
 						SoundEvents.ARROW_SHOOT,
 						SoundSource.PLAYERS,
 						1.0F,
-						1.0F / (player.level.getRandom().nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+						1.0F / (player.level().getRandom().nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 
 			}
 		});

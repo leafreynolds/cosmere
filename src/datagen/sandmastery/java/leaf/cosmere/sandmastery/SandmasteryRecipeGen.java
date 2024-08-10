@@ -1,12 +1,12 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery;
 
 import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.sandmastery.common.Sandmastery;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -65,7 +65,7 @@ public class SandmasteryRecipeGen extends BaseRecipeProvider implements IConditi
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
 				.save(consumer);
 
-		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock())
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SandmasteryBlocks.SAND_SPREADING_TUB_BLOCK.getBlock())
 				.define('W', ItemTags.WOODEN_SLABS)
 				.pattern("W W")
 				.pattern("WWW")
@@ -73,13 +73,13 @@ public class SandmasteryRecipeGen extends BaseRecipeProvider implements IConditi
 				.save(consumer);
 
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, SandmasteryItems.SAND_JAR_ITEM.get())
-				.requires(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem())
+				.requires(SandmasteryBlocks.SAND_JAR_BLOCK.asItem())
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
 				.save(consumer);
 
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem())
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, SandmasteryBlocks.SAND_JAR_BLOCK.asItem())
 				.requires(SandmasteryItems.SAND_JAR_ITEM)
-				.unlockedBy("has_material", has(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem()))
+				.unlockedBy("has_material", has(SandmasteryBlocks.SAND_JAR_BLOCK.asItem()))
 				.save(consumer);
 	}
 }

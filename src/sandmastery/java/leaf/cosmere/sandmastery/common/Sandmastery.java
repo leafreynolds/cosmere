@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common;
@@ -46,7 +46,7 @@ public class Sandmastery implements IModModule
 		modBus.addListener(this::commonSetup);
 
 		SandmasteryItems.ITEMS.register(modBus);
-		SandmasteryBlocksRegistry.BLOCKS.register(modBus);
+		SandmasteryBlocks.BLOCKS.register(modBus);
 		SandmasteryBlockEntitiesRegistry.BLOCK_ENTITIES.register(modBus);
 		SandmasteryAttributes.ATTRIBUTES.register(modBus);
 		SandmasteryEffects.EFFECTS.register(modBus);

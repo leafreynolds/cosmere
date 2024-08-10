@@ -1,10 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.entities;
 
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEntityTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 public class SandProjectile extends AbstractArrow implements ItemSupplier
 {
-	private ItemStack projectileStack = SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getItemStack();
+	private ItemStack projectileStack = SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getItemStack();
 
 	public SandProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack)
 	{

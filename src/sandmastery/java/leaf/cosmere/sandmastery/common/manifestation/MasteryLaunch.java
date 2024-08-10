@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -76,7 +76,7 @@ public class MasteryLaunch extends SandmasteryManifestation
 		}
 
 		BlockPos groundPos = MiscHelper.blockPosAtGround(data.getLiving());
-		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level, data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
+		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level(), data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
 
 		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		useChargedSand(data);

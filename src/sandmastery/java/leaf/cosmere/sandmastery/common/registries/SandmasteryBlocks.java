@@ -13,7 +13,7 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.blocks.*;
 import net.minecraft.world.item.BlockItem;
 
-public class SandmasteryBlocksRegistry
+public class SandmasteryBlocks
 {
 	public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(Sandmastery.MODID);
 	public static final BlockRegistryObject<TaldainBlackSandLayerBlock, BlockItem> TALDAIN_BLACK_SAND_LAYER = BLOCKS.register("taldain_sand_layer", TaldainBlackSandLayerBlock::new);

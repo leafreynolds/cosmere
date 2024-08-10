@@ -1,7 +1,11 @@
+/*
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.blocks;
 
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
@@ -19,10 +23,10 @@ public class SandmasteryBlockTagsGen extends BlockTagsProvider
 	@Override
 	protected void addTags()
 	{
-		add(BlockTags.MINEABLE_WITH_SHOVEL, SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.getBlock());
-		add(BlockTags.SAND, SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.getBlock());
-		add(BlockTags.MINEABLE_WITH_PICKAXE, SandmasteryBlocksRegistry.SAND_JAR_BLOCK.getBlock());
-		add(BlockTags.MINEABLE_WITH_AXE, SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock());
+		add(BlockTags.MINEABLE_WITH_SHOVEL, SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock());
+		add(BlockTags.SAND, SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock());
+		add(BlockTags.MINEABLE_WITH_PICKAXE, SandmasteryBlocks.SAND_JAR_BLOCK.getBlock());
+		add(BlockTags.MINEABLE_WITH_AXE, SandmasteryBlocks.SAND_SPREADING_TUB_BLOCK.getBlock());
 
 	}
 
