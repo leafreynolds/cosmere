@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 11 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.items;
@@ -7,7 +7,6 @@ package leaf.cosmere.common.items;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.charge.IChargeable;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +16,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,19 +26,13 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 		super(prop);
 	}
 
-	// todo: move somewhere more appropriate
-//	@Override
-//	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
-//	{
-//		if (allowedIn(tab))
-//		{
-//			stacks.add(new ItemStack(this));
-//
-//			ItemStack fullPower = new ItemStack(this);
-//			setCharge(fullPower, getMaxCharge(fullPower));
-//			stacks.add(fullPower);
-//		}
-//	}
+	public void addFilled(CreativeModeTab.Output output)
+	{
+		output.accept(new ItemStack(this));
+		ItemStack fullPower = new ItemStack(this);
+		setCharge(fullPower, getMaxCharge(fullPower));
+		output.accept(fullPower);
+	}
 
 	@Override
 	public int getEntityLifespan(ItemStack itemStack, Level world)
