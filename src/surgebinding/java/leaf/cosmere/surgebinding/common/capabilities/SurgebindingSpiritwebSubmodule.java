@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities;
@@ -42,7 +42,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		//tick stormlight
 		if (anySurges)
 		{
-			if (livingEntity.level.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY) && livingEntity.level.isThundering() && livingEntity.level.isRainingAt(livingEntity.blockPosition()))
+			if (livingEntity.level().dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY) && livingEntity.level().isThundering() && livingEntity.level().isRainingAt(livingEntity.blockPosition()))
 			{
 				//todo how much stormlight per tick?
 				//if player has max of 1000, it will take just under a minute to
@@ -66,7 +66,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				//otherwise conditional effects
 				else
 				{
-					if (livingEntity.getCombatTracker().isInCombat())
+					if (livingEntity.getCombatTracker().inCombat)
 					{
 						//todo combat effect cost
 						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, 0));
