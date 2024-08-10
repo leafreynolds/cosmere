@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.capabilities;
@@ -16,8 +16,6 @@ import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.effects.DehydratedEffect;
-import leaf.cosmere.sandmastery.common.items.QidoItem;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
@@ -26,6 +24,7 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +33,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -62,28 +60,28 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		{
 			final int isActivatedAndActive =
 					Keybindings.MANIFESTATION_USE_ACTIVE.isDown()
-							? 1
-							: 0;
+					? 1
+					: 0;
 
 			final int elevateFlag =
 					SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown()
-							? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
-							: 0;
+					? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
+					: 0;
 
 			final int launchFlag =
 					SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown()
-							? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
-							: 0;
+					? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
+					: 0;
 
 			final int projectileFlag =
 					SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown()
-							? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
-							: 0;
+					? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
+					: 0;
 
 			final int platformFlag =
 					SandmasteryKeybindings.SANDMASTERY_PLATFORM.isDown()
-							? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
-							: 0;
+					? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
+					: 0;
 
 			int currentFlags = 0;
 			currentFlags = currentFlags + isActivatedAndActive;
@@ -225,7 +223,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 
 	private static void overmaster(ISpiritweb data)
 	{
-		AttributeInstance availableRibbons = data.getLiving().getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
+		final LivingEntity living = data.getLiving();
+		AttributeInstance availableRibbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
 
 		if (availableRibbons == null)
 		{
@@ -282,8 +281,9 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		//damage and disable powers regardless
-		data.getLiving().hurt(DehydratedEffect.DEHYDRATED, 10F);
-		data.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERED_EFFECT.get(), data.getLiving(), 1, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60)); //  * 20 * 60 to convert minutes to ticks
+		//todo replace dryout
+		living.hurt(living.damageSources().dryOut(), 10F);
+		data.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERED_EFFECT.get(), living, 1, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60)); //  * 20 * 60 to convert minutes to ticks
 	}
 
 	@NotNull

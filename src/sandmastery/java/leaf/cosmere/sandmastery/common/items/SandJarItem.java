@@ -33,7 +33,7 @@ public class SandJarItem extends ChargeableItemBase
 {
 	public SandJarItem()
 	{
-		super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
+		super(PropTypes.Items.ONE.get());
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class SandJarItem extends ChargeableItemBase
 		MiscHelper.chargeItemFromInvestiture(pStack, pLevel, pEntity, getMaxCharge(pStack));
 	}
 
-	@Override
+	/*@Override
 	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
 	{
 		if (allowedIn(tab))
@@ -69,7 +69,7 @@ public class SandJarItem extends ChargeableItemBase
 			setCharge(fullPower, getMaxCharge(fullPower));
 			stacks.add(fullPower);
 		}
-	}
+	}*/
 
 	@Override
 	public boolean isFoil(@NotNull ItemStack stack)

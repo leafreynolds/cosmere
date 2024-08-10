@@ -96,7 +96,7 @@ public class QidoItem extends ChargeableItemBase
 	}
 
 	@Override
-	public void onUsingTick(ItemStack pStack, LivingEntity pLivingEntity, int pRemainingUseDuration)
+	public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration)
 	{
 		if (!pLivingEntity.isCrouching())
 		{
@@ -128,7 +128,7 @@ public class QidoItem extends ChargeableItemBase
 				setCharge(pStack, availableWater - increasePerTick);
 			});
 		}
-		super.onUsingTick(pStack, pLivingEntity, pRemainingUseDuration);
+		super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 	}
 
 	@Nonnull
