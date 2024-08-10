@@ -1,17 +1,15 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;

@@ -1,11 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.coinpouch.CoinPouchContainerMenu;
 import net.minecraft.client.Minecraft;
@@ -19,6 +18,8 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class CoinPouchContainerScreen extends AbstractContainerScreen<CoinPouchContainerMenu>
 {
+	final ResourceLocation resourceLocation = new ResourceLocation(Allomancy.MODID, "textures/gui/coin_pouch.png");
+
 	public CoinPouchContainerScreen(CoinPouchContainerMenu container, Inventory playerInv, Component title)
 	{
 		super(container, playerInv, title);
@@ -47,11 +48,11 @@ public class CoinPouchContainerScreen extends AbstractContainerScreen<CoinPouchC
 	{
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, new ResourceLocation(Allomancy.MODID, "textures/gui/coin_pouch.png"));
+		RenderSystem.setShaderTexture(0, resourceLocation);
 
 		int xPos = (width - imageWidth) / 2;
 		int yPos = (height / 2) - (imageHeight / 2);
-		guiGraphics.blit(new ResourceLocation(Allomancy.MODID, "textures/gui/coin_pouch.png"), xPos, yPos, 0, 0, imageWidth, imageHeight);
+		guiGraphics.blit(resourceLocation, xPos, yPos, 0, 0, imageWidth, imageHeight);
 
 	}
 
