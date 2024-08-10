@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.mixin;
@@ -25,7 +25,7 @@ public interface IForgeEntityMixin
 	{
 		final Entity self = (Entity) this;
 		//todo replace this mixin completely with just using the attribute
-		float vanillaStep = self.getStepHeight();
+		float vanillaStep = self.maxUpStep();
 		if (self instanceof LivingEntity living)
 		{
 			AttributeInstance stepHeightAttribute = living.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
