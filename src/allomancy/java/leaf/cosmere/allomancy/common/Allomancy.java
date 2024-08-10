@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 11 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common;
@@ -53,6 +53,7 @@ public class Allomancy implements IModModule
 		AllomancyMenuTypes.MENU_TYPES.register(modBus);
 		AllomancyRecipes.SPECIAL_RECIPES.register(modBus);
 		AllomancyStats.STATS.register(modBus);
+		AllomancyCreativeTabs.CREATIVE_TABS.register(modBus);
 
 		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
