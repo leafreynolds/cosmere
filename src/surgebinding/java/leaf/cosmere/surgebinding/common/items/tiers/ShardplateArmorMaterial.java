@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items.tiers;
@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -48,9 +49,9 @@ public enum ShardplateArmorMaterial implements ArmorMaterial
 		this.repairIngredient = new LazyLoadedValue<>(pRepairIngredient);
 	}
 
-	public int getDurabilityForSlot(EquipmentSlot pSlot)
+	public int getDurabilityForType(ArmorItem.Type pType)
 	{
-		return HEALTH_PER_SLOT[pSlot.getIndex()] * this.durabilityMultiplier;
+		return HEALTH_PER_SLOT[pType.getSlot().getIndex()] * this.durabilityMultiplier;
 	}
 
 	public int getDefenseForSlot(EquipmentSlot pSlot)

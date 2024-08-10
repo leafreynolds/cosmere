@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -26,9 +26,9 @@ import java.util.function.Consumer;
 
 public class ShardplateItem extends ArmorItem
 {
-	public ShardplateItem(ShardplateArmorMaterial material, EquipmentSlot slot, Properties properties)
+	public ShardplateItem(ShardplateArmorMaterial material, ArmorItem.Type pType, Properties properties)
 	{
-		super(material, slot, properties);
+		super(material, pType, properties);
 	}
 
 	@Nonnull
