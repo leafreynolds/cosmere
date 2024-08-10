@@ -34,7 +34,8 @@ public class CreativeTabsRegistry
 			);
 
 	public static final CreativeTabRegistryObject BLOCKS =
-			CREATIVE_TABS.registerMain(
+			CREATIVE_TABS.register(
+					"cosmere.blocks",
 					Component.translatable("itemGroups." + Cosmere.MODID + ".blocks"),
 					BlocksRegistry.METAL_ORE.entrySet().stream().findAny().get().getValue(),
 					builder ->
@@ -97,7 +98,7 @@ public class CreativeTabsRegistry
 		}
 		else if (tabKey == CreativeModeTabs.SPAWN_EGGS)
 		{
-			
+
 		}
 		else if (tabKey == CreativeModeTabs.INGREDIENTS)
 		{
