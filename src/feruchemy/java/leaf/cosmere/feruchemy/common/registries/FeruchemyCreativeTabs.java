@@ -8,7 +8,9 @@ import leaf.cosmere.common.registration.impl.CreativeTabDeferredRegister;
 import leaf.cosmere.common.registration.impl.CreativeTabRegistryObject;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.feruchemy.common.Feruchemy;
+import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.NecklaceMetalmindItem;
+import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
@@ -38,11 +40,11 @@ public class FeruchemyCreativeTabs
 		{
 			item.get().addFilled(output);
 		}
-		for (ItemRegistryObject<NecklaceMetalmindItem> item : FeruchemyItems.METAL_NECKLACES.values())
+		for (ItemRegistryObject<BraceletMetalmindItem> item : FeruchemyItems.METAL_BRACELETS.values())
 		{
 			item.get().addFilled(output);
 		}
-		for (ItemRegistryObject<NecklaceMetalmindItem> item : FeruchemyItems.METAL_NECKLACES.values())
+		for (ItemRegistryObject<RingMetalmindItem> item : FeruchemyItems.METAL_RINGS.values())
 		{
 			item.get().addFilled(output);
 		}
