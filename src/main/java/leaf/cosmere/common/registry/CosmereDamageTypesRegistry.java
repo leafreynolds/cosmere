@@ -1,25 +1,74 @@
+/*
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
+ */
+
 package leaf.cosmere.common.registry;
 
+import leaf.cosmere.api.text.IHasTranslationKey;
 import leaf.cosmere.common.Cosmere;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CosmereDamageTypesRegistry
 {
-	public static final ResourceKey<DamageType> EAT_METAL = createKey("eat_metal");
+	private static final Map<String, CosmereDamageType> INTERNAL_DAMAGE_TYPES = new HashMap<>();
+	public static final Map<String, CosmereDamageType> DAMAGE_TYPES = Collections.unmodifiableMap(INTERNAL_DAMAGE_TYPES);
 
-	// special thanks to the aether mod team for inspiration
-	private static ResourceKey<DamageType> createKey(String name)
-	{
-		return ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Cosmere.MODID, name));
-	}
+	public static final CosmereDamageType EAT_METAL = new CosmereDamageType("eat_metal");
+	public static final CosmereDamageType SPIKED = new CosmereDamageType("spiked");
 
-	public static DamageSource damageSource(Level level, ResourceKey<DamageType> key)
+	public record CosmereDamageType(ResourceKey<DamageType> key, float exhaustion) implements IHasTranslationKey
 	{
-		return new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key));
+		public CosmereDamageType
+		{
+			INTERNAL_DAMAGE_TYPES.put(key.location().toString(), this);
+		}
+
+		private CosmereDamageType(String name)
+		{
+			this(name, 0);
+		}
+
+		private CosmereDamageType(String name, float exhaustion)
+		{
+			this(ResourceKey.create(Registries.DAMAGE_TYPE, Cosmere.rl(name)), exhaustion);
+		}
+
+		public String getMsgId()
+		{
+			return registryName().getNamespace() + "." + registryName().getPath();
+		}
+
+		public ResourceLocation registryName()
+		{
+			return key.location();
+		}
+
+		@NotNull
+		@Override
+		public String getTranslationKey()
+		{
+			return "death.attack." + getMsgId();
+		}
+
+		public DamageSource source(Level level)
+		{
+			return source(level.registryAccess());
+		}
+
+		public DamageSource source(RegistryAccess registryAccess)
+		{
+			return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key()));
+		}
 	}
 }

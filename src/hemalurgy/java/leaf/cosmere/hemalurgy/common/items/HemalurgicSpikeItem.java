@@ -34,19 +34,20 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
+
+import static leaf.cosmere.common.registry.CosmereDamageTypesRegistry.SPIKED;
 
 //Other ideas?
 //Spike Guns?
@@ -59,9 +60,6 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 	 * Modifiers applied when the item is in the mainhand of a user. copied from sword item
 	 */
 	private final Multimap<Attribute, AttributeModifier> attributeModifiers;
-
-
-	public static final DamageSource SPIKED = (new DamageSource("spiked")).bypassArmor().bypassMagic();
 
 	public HemalurgicSpikeItem(Metals.MetalType metalType)
 	{
@@ -361,9 +359,18 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 
 					return matchingSpikeIdentity || onlyOneIronAllowed;
 				};
-				final Optional<ImmutableTriple<String, Integer, ItemStack>> curioSpike = CuriosApi.getCuriosHelper().findEquippedCurio(spikePredicate, player);
 
-				return curioSpike.isEmpty();
+
+				final LazyOptional<ICuriosItemHandler> curiosInventory = CuriosApi.getCuriosInventory(player);
+
+				if (!curiosInventory.isPresent())
+				{
+					return false;
+				}
+
+				ICuriosItemHandler curiosInv = curiosInventory.resolve().get();
+
+				return curiosInv.findFirstCurio(spikePredicate).isEmpty();
 			}
 		}
 		return true;
@@ -381,7 +388,7 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 			//then do hemalurgy spike logic
 			//hurt the user
 			//spiritweb attributes are handled in metalmind
-			slotContext.entity().hurt(SPIKED, 4);
+			slotContext.entity().hurt(SPIKED.source(slotContext.entity().level()), 4);
 		}
 
 	}
@@ -395,7 +402,7 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 		boolean isUnequipping = newStack.isEmpty() || !newStack.is(stack.getItem());
 		if (isUnequipping)
 		{
-			slotContext.entity().hurt(SPIKED, 4);
+			slotContext.entity().hurt(SPIKED.source(slotContext.entity().level()), 4);
 		}
 	}
 }
