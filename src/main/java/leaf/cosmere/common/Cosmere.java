@@ -73,6 +73,7 @@ public class Cosmere
 
 		CreativeTabsRegistry.CREATIVE_TABS.register(modBus);
 		BiomeRegistry.BIOMES.register(modBus);
+		LootModifiersRegistry.LOOT_MODIFIERS.register(modBus);
 		FeatureRegistry.CONFIGURED_FEATURES.register(modBus);
 		FeatureRegistry.PLACED_FEATURES.register(modBus);
 

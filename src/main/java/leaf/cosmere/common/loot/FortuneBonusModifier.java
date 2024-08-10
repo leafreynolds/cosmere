@@ -1,8 +1,8 @@
 /*
- * File updated ~ 23 - 10 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
-package leaf.cosmere.feruchemy.common.loot;
+package leaf.cosmere.common.loot;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
@@ -19,10 +19,12 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +63,7 @@ public class FortuneBonusModifier extends LootModifier
 		{
 			Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
 			BlockState blockState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
+			Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
 
 			if (blockState != null && entity instanceof LivingEntity livingEntity)
 			{
@@ -79,13 +82,17 @@ public class FortuneBonusModifier extends LootModifier
 
 					EnchantmentHelper.setEnchantments(enchantments, fakeTool);
 
-					LootContext.Builder builder = new LootContext.Builder(context);
-					builder.withParameter(LootContextParams.TOOL, fakeTool);
+					LootParams lootparams = (new LootParams.Builder(context.getLevel()))
+							.withParameter(LootContextParams.ORIGIN, origin)
+							.withParameter(LootContextParams.THIS_ENTITY, entity)
+							.withParameter(LootContextParams.BLOCK_STATE, blockState)
+							.withParameter(LootContextParams.TOOL, fakeTool)
+							.create(LootContextParamSets.BLOCK);
 
-					LootContext newContext = builder.create(LootContextParamSets.BLOCK);
-					LootTable lootTable = context.getLevel().getServer().getLootTables().get(blockState.getBlock().getLootTable());
 
-					return lootTable.getRandomItems(newContext);
+					LootTable lootTable = context.getLevel().getServer().getLootData().getLootTable(blockState.getBlock().getLootTable());
+
+					return lootTable.getRandomItems(lootparams);
 				}
 			}
 		}

@@ -48,7 +48,6 @@ public class Feruchemy implements IModModule
 		FeruchemyAttributes.ATTRIBUTES.register(modBus);
 		FeruchemyManifestations.MANIFESTATIONS.register(modBus);
 		FeruchemyLootFunctions.LOOT_FUNCTIONS.register(modBus);
-		FeruchemyLootModifiers.LOOT_MODIFIERS.register(modBus);
 		FeruchemyEffects.EFFECTS.register(modBus);
 		FeruchemyCreativeTabs.CREATIVE_TABS.register(modBus);
 
