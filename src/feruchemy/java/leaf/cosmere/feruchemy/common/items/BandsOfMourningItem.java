@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 8 - 2024 ~ Leaf
+ * File updated ~ 11 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.items;
@@ -7,12 +7,14 @@ package leaf.cosmere.feruchemy.common.items;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -24,30 +26,27 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 	{
 		super(Metals.MetalType.HARMONIUM);
 	}
-/*todo setup filled bands of mourning for creative
+
 	@Override
-	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
+	public void addFilled(CreativeModeTab.Output output)
 	{
-		if (allowedIn(tab))
+		ItemStack fullPower = new ItemStack(this);
+		setCharge(fullPower, getMaxCharge(fullPower));
+
+		CompoundTag nbt = fullPower.getOrCreateTagElement("StoredInvestiture");
+
+		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
-			ItemStack fullPower = new ItemStack(this);
-			setCharge(fullPower, getMaxCharge(fullPower));
+			final String attributeRegistryName = manifestation.getRegistryName().toString();
 
-			CompoundTag nbt = fullPower.getOrCreateTagElement("StoredInvestiture");
-
-			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+			if (manifestation instanceof IHasMetalType)
 			{
-				final String attributeRegistryName = manifestation.getRegistryName().toString();
-
-				if (manifestation instanceof IHasMetalType)
-				{
-					nbt.putDouble(attributeRegistryName, 20);
-				}
+				nbt.putDouble(attributeRegistryName, 20);
 			}
-
-			stacks.add(fullPower);
 		}
-	}*/
+
+		output.accept(fullPower);
+	}
 
 	@Override
 	public float getMaxChargeModifier()

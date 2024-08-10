@@ -1,12 +1,14 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 11 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.registries;
 
 import leaf.cosmere.common.registration.impl.CreativeTabDeferredRegister;
 import leaf.cosmere.common.registration.impl.CreativeTabRegistryObject;
+import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.feruchemy.common.Feruchemy;
+import leaf.cosmere.feruchemy.common.items.NecklaceMetalmindItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
@@ -17,7 +19,6 @@ public class FeruchemyCreativeTabs
 {
 	public static final CreativeTabDeferredRegister CREATIVE_TABS = new CreativeTabDeferredRegister(Feruchemy.MODID, FeruchemyCreativeTabs::addToExistingTabs);
 
-
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
 					Component.translatable("itemGroups." + Feruchemy.MODID + ".items"),
@@ -27,9 +28,27 @@ public class FeruchemyCreativeTabs
 									.displayItems((displayParameters, output) ->
 									{
 										CreativeTabDeferredRegister.addToDisplay(FeruchemyItems.ITEMS, output);
+										addFilledMetalminds(output);
 									})
 			);
 
+	private static void addFilledMetalminds(CreativeModeTab.Output output)
+	{
+		for (ItemRegistryObject<NecklaceMetalmindItem> item : FeruchemyItems.METAL_NECKLACES.values())
+		{
+			item.get().addFilled(output);
+		}
+		for (ItemRegistryObject<NecklaceMetalmindItem> item : FeruchemyItems.METAL_NECKLACES.values())
+		{
+			item.get().addFilled(output);
+		}
+		for (ItemRegistryObject<NecklaceMetalmindItem> item : FeruchemyItems.METAL_NECKLACES.values())
+		{
+			item.get().addFilled(output);
+		}
+
+		FeruchemyItems.BANDS_OF_MOURNING.get().addFilled(output);
+	}
 
 	private static void addToExistingTabs(BuildCreativeModeTabContentsEvent event)
 	{
