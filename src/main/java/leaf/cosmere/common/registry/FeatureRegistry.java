@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
@@ -32,8 +32,8 @@ public class FeatureRegistry
 {
 	public static final ConfiguredFeatureDeferredRegister CONFIGURED_FEATURES = new ConfiguredFeatureDeferredRegister(Cosmere.MODID);
 	public static final PlacedFeatureDeferredRegister PLACED_FEATURES = new PlacedFeatureDeferredRegister(Cosmere.MODID);
-	private static final RuleTest ruletest1 = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
-	private static final RuleTest ruletest2 = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
+	public static final RuleTest STONE_ORE_REPLACEABLES = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
+	public static final RuleTest DEEPSLATE_ORE_REPLACEABLES = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
 
 	// todo: might need to be redone? ore and placed features are already in the generated jsons, so might be fine
 	// hard to tell while it doesn't build
@@ -77,10 +77,10 @@ public class FeatureRegistry
 
 		return ImmutableList.of(
 				OreConfiguration.target(
-						ruletest1,
+						STONE_ORE_REPLACEABLES,
 						BlocksRegistry.METAL_ORE.get(metalType).getBlock().defaultBlockState()),
 				OreConfiguration.target(
-						ruletest2,
+						DEEPSLATE_ORE_REPLACEABLES,
 						BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType).getBlock().defaultBlockState())
 		);
 	}
@@ -91,17 +91,17 @@ public class FeatureRegistry
 
 
 	//copied from OrePlacements.java, since they're private methods that should really be public
-	private static List<PlacementModifier> commonOrePlacement(int pCount, PlacementModifier pHeightRange)
+	public static List<PlacementModifier> commonOrePlacement(int pCount, PlacementModifier pHeightRange)
 	{
 		return orePlacement(CountPlacement.of(pCount), pHeightRange);
 	}
 
-	private static List<PlacementModifier> rareOrePlacement(int pCount, PlacementModifier pHeightRange)
+	public static List<PlacementModifier> rareOrePlacement(int pCount, PlacementModifier pHeightRange)
 	{
 		return orePlacement(RarityFilter.onAverageOnceEvery(pCount), pHeightRange);
 	}
 
-	private static List<PlacementModifier> orePlacement(PlacementModifier countPlacement, PlacementModifier heightRange)
+	public static List<PlacementModifier> orePlacement(PlacementModifier countPlacement, PlacementModifier heightRange)
 	{
 		return List.of(countPlacement, InSquarePlacement.spread(), heightRange, BiomeFilter.biome());
 	}

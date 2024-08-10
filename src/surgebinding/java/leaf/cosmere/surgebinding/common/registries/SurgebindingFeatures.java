@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.registries;
@@ -11,14 +11,15 @@ import leaf.cosmere.common.registration.impl.ConfiguredFeatureDeferredRegister;
 import leaf.cosmere.common.registration.impl.ConfiguredFeatureRegistryObject;
 import leaf.cosmere.common.registration.impl.PlacedFeatureDeferredRegister;
 import leaf.cosmere.common.registration.impl.PlacedFeatureRegistryObject;
+import leaf.cosmere.common.registry.FeatureRegistry;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.core.Holder;
-import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +53,7 @@ public class SurgebindingFeatures
 									PLACED_FEATURES.register(
 											type.getName() + Constants.RegNameStubs.ORE,
 											() -> new PlacedFeature(Holder.direct(CONFIGURED_GEM_ORE_FEATURES.get(type).get()),
-													commonOrePlacement(
+													FeatureRegistry.commonOrePlacement(
 															8,//width?
 															HeightRangePlacement.triangle(
 																	VerticalAnchor.aboveBottom(-80),
@@ -68,32 +69,12 @@ public class SurgebindingFeatures
 	{
 		return ImmutableList.of(
 				OreConfiguration.target(
-						OreFeatures.STONE_ORE_REPLACEABLES,
+						FeatureRegistry.STONE_ORE_REPLACEABLES,
 						SurgebindingBlocks.GEM_ORE.get(type).getBlock().defaultBlockState()),
 				OreConfiguration.target(
-						OreFeatures.DEEPSLATE_ORE_REPLACEABLES,
+						FeatureRegistry.DEEPSLATE_ORE_REPLACEABLES,
 						SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(type).getBlock().defaultBlockState())
 		);
-	}
-
-	// The "New Tardis Mod" code says we should register configured versions of the features in FMLCommonSetup
-	// since it helps prevent mod incompatibility issues. No need to delete other mod's world gen. Thank you 50!
-
-
-	//copied from OrePlacements.java, since they're private methods that should really be public
-	private static List<PlacementModifier> commonOrePlacement(int pCount, PlacementModifier pHeightRange)
-	{
-		return orePlacement(CountPlacement.of(pCount), pHeightRange);
-	}
-
-	private static List<PlacementModifier> rareOrePlacement(int pCount, PlacementModifier pHeightRange)
-	{
-		return orePlacement(RarityFilter.onAverageOnceEvery(pCount), pHeightRange);
-	}
-
-	private static List<PlacementModifier> orePlacement(PlacementModifier p_195347_, PlacementModifier p_195348_)
-	{
-		return List.of(p_195347_, InSquarePlacement.spread(), p_195348_, BiomeFilter.biome());
 	}
 
 }
