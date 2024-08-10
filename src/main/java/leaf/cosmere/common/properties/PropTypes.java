@@ -1,15 +1,12 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.properties;
 
-import leaf.cosmere.common.itemgroups.CosmereItemGroups;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.function.Supplier;

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 4 - 2024 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
@@ -9,7 +9,6 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.ItemChargeHelper;
-import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
@@ -33,7 +32,7 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 
 	public GemstoneItem(Roshar.Gemstone gemstone, Roshar.GemSize gemSize)
 	{
-		super(PropTypes.Items.SIXTY_FOUR.get().tab(CosmereItemGroups.ITEMS).rarity(Rarity.UNCOMMON));
+		super(PropTypes.Items.SIXTY_FOUR.get().rarity(Rarity.UNCOMMON));
 		this.gemstone = gemstone;
 		this.gemSize = gemSize;
 	}
@@ -65,9 +64,9 @@ public class GemstoneItem extends ChargeableItemBase implements IHasGemType
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entityItem)
 	{
-		if (entityItem.level.dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
+		if (entityItem.level().dimension().equals(SurgebindingDimensions.ROSHAR_DIM_KEY))
 		{
-			if (entityItem.level.isRainingAt(entityItem.blockPosition()) && entityItem.level.isThundering())
+			if (entityItem.level().isRainingAt(entityItem.blockPosition()) && entityItem.level().isThundering())
 			{
 				if (getCharge(stack) < getMaxCharge(stack))
 				{

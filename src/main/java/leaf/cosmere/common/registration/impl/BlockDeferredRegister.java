@@ -1,7 +1,10 @@
+/*
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
+ */
+
 package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.api.providers.IBlockProvider;
-import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.registration.DoubleDeferredRegister;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;

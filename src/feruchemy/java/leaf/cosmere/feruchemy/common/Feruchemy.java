@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common;
@@ -50,6 +50,7 @@ public class Feruchemy implements IModModule
 		FeruchemyLootFunctions.LOOT_FUNCTIONS.register(modBus);
 		FeruchemyLootModifiers.LOOT_MODIFIERS.register(modBus);
 		FeruchemyEffects.EFFECTS.register(modBus);
+		FeruchemyCreativeTabs.CREATIVE_TABS.register(modBus);
 
 		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());

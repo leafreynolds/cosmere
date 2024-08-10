@@ -1,10 +1,9 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.items;
 
-import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;

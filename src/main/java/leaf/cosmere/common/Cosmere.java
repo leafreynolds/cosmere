@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common;
@@ -13,7 +13,6 @@ import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.common.eventHandlers.ColorHandler;
 import leaf.cosmere.common.network.NetworkPacketHandler;
 import leaf.cosmere.common.registry.*;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -72,6 +71,7 @@ public class Cosmere
 		GameEventRegistry.GAME_EVENTS.register(modBus);
 		ArgumentTypeRegistry.ARGUMENT_TYPE_INFOS.register(modBus);
 
+		CreativeTabsRegistry.CREATIVE_TABS.register(modBus);
 		BiomeRegistry.BIOMES.register(modBus);
 		FeatureRegistry.CONFIGURED_FEATURES.register(modBus);
 		FeatureRegistry.PLACED_FEATURES.register(modBus);

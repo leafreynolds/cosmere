@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.items;
@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
@@ -26,7 +25,7 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 {
 	private final Metals.MetalType metalType;
 
-	public ChargeableMetalCurioItem(Metals.MetalType metalType, CreativeModeTab group)
+	public ChargeableMetalCurioItem(Metals.MetalType metalType)
 	{
 		super(PropTypes.Items.ONE.get().rarity(metalType.getRarity()));
 		this.metalType = metalType;
