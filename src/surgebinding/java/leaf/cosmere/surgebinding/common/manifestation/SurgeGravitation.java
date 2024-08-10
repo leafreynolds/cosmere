@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.manifestation;
@@ -10,6 +10,7 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -28,7 +29,7 @@ public class SurgeGravitation extends SurgebindingManifestation
 
 	public static void onLivingAttackEvent(LivingAttackEvent event)
 	{
-		if (event.getSource().getEntity() instanceof Player player && !event.getSource().isProjectile() && player.getMainHandItem().isEmpty())
+		if (event.getSource().getEntity() instanceof Player player && !event.getSource().is(DamageTypeTags.IS_PROJECTILE) && player.getMainHandItem().isEmpty())
 		{
 			SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
 			{
