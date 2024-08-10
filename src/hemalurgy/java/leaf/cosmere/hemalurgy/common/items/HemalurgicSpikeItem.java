@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 8 - 2023 ~ Leaf
+ * File updated ~ 11 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.items;
@@ -14,11 +14,8 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
-import leaf.cosmere.hemalurgy.common.itemgroups.HemalurgyItemGroups;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,6 +40,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -63,7 +61,7 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 
 	public HemalurgicSpikeItem(Metals.MetalType metalType)
 	{
-		super(metalType, HemalurgyItemGroups.HEMALURGIC_SPIKES);
+		super(metalType);
 
 		//todo decide on damage
 		float attackDamage = 2f + 1f;//tier.getAttackDamage();
@@ -108,6 +106,98 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 		return (0.5f / 9f);
 	}
 
+	@Override
+	public void addFilled(CreativeModeTab.Output output)
+	{
+		super.addFilled(output);
+
+		if (getMetalType().hasFeruchemicalEffect())
+		{
+			//what powers can this metal type contain
+
+			if (this.getMetalType() == Metals.MetalType.IRON)
+			{
+				ItemStack filledIronSpike = new ItemStack(this);
+				//steals physical strength
+				//don't steal modified values, only base value
+				//todo decide how much strength is reasonable to steal and how much goes to waste
+				//currently will try 70%
+				double strengthToAdd = 15 * 0.7D;// Iron golems have the most base attack damage of normal mods (giants have 50??). Ravagers have
+
+
+				Invest(filledIronSpike, this.getMetalType(), strengthToAdd, UUID.randomUUID());
+
+				output.accept(filledIronSpike);
+			}
+			else if (this.getMetalType() == Metals.MetalType.TIN)
+			{
+				ItemStack filledIronSpike = new ItemStack(this);
+				Invest(filledIronSpike, this.getMetalType(), 0.25f, UUID.randomUUID());
+				output.accept(filledIronSpike);
+			}
+
+
+			Collection<Metals.MetalType> hemalurgyStealWhitelist = getMetalType().getHemalurgyStealWhitelist();
+			if (hemalurgyStealWhitelist != null)
+			{
+				for (Metals.MetalType stealType : hemalurgyStealWhitelist)
+				{
+					if (!stealType.hasAssociatedManifestation())
+					{
+						continue;
+					}
+					try
+					{
+
+						//then we've found something to steal!
+						switch (this.getMetalType())
+						{
+							//steals allomantic abilities
+							case STEEL, BRONZE, CADMIUM, ELECTRUM ->
+							{
+								ItemStack allomancySpike = new ItemStack(this);
+								Manifestation allomancyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", stealType.getName()));
+								Invest(allomancySpike, allomancyMani, 7, UUID.randomUUID());
+								output.accept(allomancySpike);
+							}
+							//steals feruchemical abilities
+							case PEWTER, BRASS, BENDALLOY, GOLD ->
+							{
+								ItemStack feruchemySpike = new ItemStack(this);
+								Manifestation feruchemyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", stealType.getName()));
+								Invest(feruchemySpike, feruchemyMani, 7, UUID.randomUUID());
+								output.accept(feruchemySpike);
+							}
+						}
+
+
+					}
+					catch (Exception e)
+					{
+						CosmereAPI.logger.info(String.format("remove %s from whitelist for %s spikes", stealType, getMetalType()));
+					}
+				}
+			}
+		}
+
+		if (this.getMetalType() == Metals.MetalType.LERASATIUM)
+		{
+			ItemStack bound = new ItemStack(this);
+			final UUID identity = UUID.randomUUID();
+			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+			{
+				//lerasatium creative mode hide surge powers for now
+				if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SURGEBINDING)
+				{
+					continue;
+				}
+
+				Invest(bound, manifestation, 5, identity);
+			}
+
+			output.accept(bound);
+		}
+	}
 
 	//todo hemalurgic decay
 	//https://wob.coppermind.net/events/332/#e9534
@@ -167,7 +257,7 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 	@SubscribeEvent
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		if (event.getEntity().level.isClientSide())
+		if (event.getEntity().level().isClientSide())
 		{
 			return;
 		}
