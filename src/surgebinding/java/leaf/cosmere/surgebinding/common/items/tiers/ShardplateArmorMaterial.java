@@ -8,7 +8,6 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
@@ -54,9 +53,9 @@ public enum ShardplateArmorMaterial implements ArmorMaterial
 		return HEALTH_PER_SLOT[pType.getSlot().getIndex()] * this.durabilityMultiplier;
 	}
 
-	public int getDefenseForSlot(EquipmentSlot pSlot)
+	public int getDefenseForType(ArmorItem.Type pType)
 	{
-		return this.slotProtections[pSlot.getIndex()];
+		return this.slotProtections[pType.getSlot().getIndex()];
 	}
 
 	public int getEnchantmentValue()
