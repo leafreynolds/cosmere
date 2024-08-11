@@ -4,9 +4,9 @@
 
 package leaf.cosmere.hemalurgy.common.registries;
 
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.registration.impl.CreativeTabDeferredRegister;
 import leaf.cosmere.common.registration.impl.CreativeTabRegistryObject;
-import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import net.minecraft.network.chat.Component;
@@ -82,9 +82,13 @@ public class HemalurgyCreativeTabs
 
 	private static void addFilledSpikes(CreativeModeTab.Output output)
 	{
-		for (ItemRegistryObject<HemalurgicSpikeItem> spike : HemalurgyItems.METAL_SPIKE.values())
+		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
-			spike.asItem().addFilled(output);
+			if (metalType.hasHemalurgicEffect())
+			{
+				final HemalurgicSpikeItem item = HemalurgyItems.METAL_SPIKE.get(metalType).get();
+				item.addFilled(output);
+			}
 		}
 	}
 }

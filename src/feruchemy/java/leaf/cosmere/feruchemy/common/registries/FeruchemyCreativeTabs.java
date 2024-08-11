@@ -4,9 +4,9 @@
 
 package leaf.cosmere.feruchemy.common.registries;
 
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.registration.impl.CreativeTabDeferredRegister;
 import leaf.cosmere.common.registration.impl.CreativeTabRegistryObject;
-import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.NecklaceMetalmindItem;
@@ -36,20 +36,34 @@ public class FeruchemyCreativeTabs
 
 	private static void addFilledMetalminds(CreativeModeTab.Output output)
 	{
-		for (ItemRegistryObject<NecklaceMetalmindItem> item : FeruchemyItems.METAL_NECKLACES.values())
-		{
-			item.get().addFilled(output);
-		}
-		for (ItemRegistryObject<BraceletMetalmindItem> item : FeruchemyItems.METAL_BRACELETS.values())
-		{
-			item.get().addFilled(output);
-		}
-		for (ItemRegistryObject<RingMetalmindItem> item : FeruchemyItems.METAL_RINGS.values())
-		{
-			item.get().addFilled(output);
-		}
-
 		FeruchemyItems.BANDS_OF_MOURNING.get().addFilled(output);
+
+		//I don't like the multiple for loops,
+		// but this is how we have them ordered nicely in the creative menu
+		for (Metals.MetalType metalType : Metals.MetalType.values())
+		{
+			if (metalType.hasFeruchemicalEffect())
+			{
+				final RingMetalmindItem item = FeruchemyItems.METAL_RINGS.get(metalType).get();
+				item.addFilled(output);
+			}
+		}
+		for (Metals.MetalType metalType : Metals.MetalType.values())
+		{
+			if (metalType.hasFeruchemicalEffect())
+			{
+				final BraceletMetalmindItem item = FeruchemyItems.METAL_BRACELETS.get(metalType).get();
+				item.addFilled(output);
+			}
+		}
+		for (Metals.MetalType metalType : Metals.MetalType.values())
+		{
+			if (metalType.hasFeruchemicalEffect())
+			{
+				final NecklaceMetalmindItem item = FeruchemyItems.METAL_NECKLACES.get(metalType).get();
+				item.addFilled(output);
+			}
+		}
 	}
 
 	private static void addToExistingTabs(BuildCreativeModeTabContentsEvent event)
