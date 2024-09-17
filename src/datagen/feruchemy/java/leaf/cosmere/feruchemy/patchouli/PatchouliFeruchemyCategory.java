@@ -43,7 +43,7 @@ public class PatchouliFeruchemyCategory
 		BookStuff.Entry Compounding = new BookStuff.Entry("Compounding", feruchemy, feruchemy.icon);
 		pages.add(new BookStuff.TextPage("A curious loophole in the systems of investiture on this planet has been discovered. It involves a metalborn with the allomantic and feruchemical " +
 				"abilities of the same metal to burn one of their feruchemical metalminds, essentially creating a new allomantic metal that releases the stored feruchemical charge tenfold."));
-		pages.add(new BookStuff.TextPage("This is activated by setting your allomantic power to a negative mode called Compounding and Flared Compounding, which spends allomantic charges to gain feruchemical stores quickly."));
+		pages.add(new BookStuff.TextPage("This is activated by setting your allomantic power to a negative mode called Compounding and Flared Compounding, which spends allomantic charges to gain feruchemical stores quickly. " + "This is only accessible to Twinborn who have the same Allomantic and Feruchemic metals."));
 		Compounding.pages = pages.toArray(BookStuff.Page[]::new);
 		pages.clear();
 		entries.add(Compounding);
@@ -123,7 +123,7 @@ public class PatchouliFeruchemyCategory
 					break;
 				case CADMIUM:
 					pages.add(new BookStuff.TextPage("A ferring who taps " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(ferringName) + "\", and stores Breaths. " +
-							"While storing, a Gasper will find it difficult to breath. Storing too much may make them suffocate. tapping allows them to hold their breath for far longer periods of time."));
+							"While storing, a Gasper will find it difficult to breathe. Storing too much may make them suffocate. tapping allows them to hold their breath for far longer periods of time."));
 					break;
 				case BENDALLOY:
 					pages.add(new BookStuff.TextPage("A ferring who taps " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(ferringName) + "\", and stores Saturation. " +
