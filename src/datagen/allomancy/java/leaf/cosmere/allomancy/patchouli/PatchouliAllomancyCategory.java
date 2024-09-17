@@ -9,6 +9,7 @@ import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.text.StringHelper;
+import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.patchouli.data.BookStuff;
 import leaf.cosmere.patchouli.data.PatchouliTextFormat;
@@ -105,11 +106,15 @@ public class PatchouliAllomancyCategory
 				case IRON:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"Ironpulling is affected by the normal laws of physics. If a lurcher were to pull on something that weighs more than them, they'd be pulled towards it. If they pulled on something lighter, the object would move. If both were of similar weight, they'd both move."));
+					pages.add(new BookStuff.TextPage("A lurcher can pull on items that contain metal by pressing " + PatchouliTextFormat.Keybind("key.cosmere.allomancy.pull")));
+					// Not sure the right keybinding format. You should fact-check this.
 					break;
 				case STEEL:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to push against nearby metal objects. Steelpushing is affected by the laws of physics. If a coinshot were to push on something that weighs more than them, they'd be pushed away. "));
-					pages.add(new BookStuff.TextPage("If they pushed on something lighter, the object would move. Clever use of Steelpushing can lead to a pseudo flight through use of small metal objects, such as coins or nuggets. Many coinshots generally carry around a pouch of coins, for ease of access."));
-					pages.add(new BookStuff.CraftingPage("allomancy:coin_pouch"));
+					pages.add(new BookStuff.TextPage("If they pushed on something lighter, the object would move. Clever use of Steelpushing can lead to a pseudo flight through use of small metal objects, such as coins or nuggets. Many coinshots generally carry around a pouch of coins, for ease of access. A Coinshot can access their abilities by pressing " + PatchouliTextFormat.Keybind( "key.cosmere.allomancy.push")));
+					// Check Keybinding
+					//pages.add(new BookStuff.CraftingPage("allomancy:coin_pouch")); -- redirect to coin pouch page instead.
+					pages.add(new BookStuff.RelationsPage("Coin Pouch", "coinPouchEntry"));
 					break;
 				case TIN:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
@@ -117,16 +122,19 @@ public class PatchouliAllomancyCategory
 					break;
 				case PEWTER:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment."));
+							"While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment. However, they need to be careful because if they run out of pewter to burn, they will immediately feel all the pain they were shrugging off. This can mean instant death in extreme cases."));
 					//"The major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()";
 					break;
 				case ZINC:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"A creature being manipulated by a rioter will act far more aggressive, turning even the most pacified of animals into bloodthirsty beasts."));
+							"A creature being manipulated by a rioter will act far more aggressive, turning even the most pacified of animals into bloodthirsty beasts." + " A rioter can use their powers by pressing either " + PatchouliTextFormat.Keybind("key.cosmere.allomacy.riot") + " or " + PatchouliTextFormat.Keybind("key.cosmere.manifestation.use.active") + "."));
+					pages.add(new BookStuff.TextPage("Rioters have reported recently that their allomancy has been acting different, resulting in creatures that seem confused. (This feature is bugged.)"));
 					break;
 				case BRASS:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"A creature being manipulated by a soother will act far more pacified, reducing their willingness to engage in combat."));
+							"A creature being manipulated by a soother will act far more pacified, reducing their willingness to engage in combat." +
+							" A soother can use their powers by pressing either " + PatchouliTextFormat.Keybind("k:cosmere.allomacy.soothe") + " or " + PatchouliTextFormat.Keybind("key.cosmere.manifestation.use.active") + "."));
+					pages.add(new BookStuff.TextPage("Soothers have reported recently that their allomancy has been acting different, resulting in creatures that seem confused. (This feature is bugged.)"));
 					break;
 				case COPPER:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
@@ -139,7 +147,8 @@ public class PatchouliAllomancyCategory
 					break;
 				case ALUMINUM:
 					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal. " +
-							"A mistborn burning aluminum will wipe all their metal reserves, including aluminum."));
+							"A mistborn burning aluminum will wipe all their metal reserves, including aluminum." + "I have heard rumors that an Aluminum Gnat of considerable power could clear the effects of other sources of investiture or impurities from their bodies, " +
+							"but this has not been confirmed to me. (Not yet implemented)"));
 					break;
 				case DURALUMIN:
 					//add extra note so that these people will know of their shame.
@@ -148,19 +157,19 @@ public class PatchouliAllomancyCategory
 					break;
 				case CHROMIUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"A leecher gazing upon an allomancer can deplete their metal reserves, as if they were burning aluminum themselves."));
+							"A leecher gazing upon an allomancer can deplete their metal reserves, as if the target were burning aluminum themselves."));
 					break;
 				case NICROSIL:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"A nicroburst can empower the allomancy of another with physical contact, as if they were burning duralumin themselves."));
+							"A nicroburst can empower the allomancy of another with physical contact, as if the target were burning duralumin themselves."));
 					break;
 				case CADMIUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"a pulser creates a bubble around them in which everyone moves faster around them."));
+							"a pulser creates a bubble around them in which time slows down. To anyone inside this time bubble, everything outside appears to move faster."));
 					break;
 				case BENDALLOY:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"A slider creates a bubble around them in which everyone moves slower around them."));
+							"A slider creates a bubble around them in which time speeds up. To anyone inside of the time bubble, everything outside appears to move much more slowly."));
 					break;
 				case GOLD:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
