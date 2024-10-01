@@ -155,6 +155,11 @@ public class IronSteelLinesThread implements Runnable
 
 	private Vec3i toVec3i(Vec3 vector)
 	{
+		if (vector == null)
+		{
+			return null;
+		}
+
 		return new Vec3i((int) vector.x(), (int) vector.y(), (int) vector.z());
 	}
 
