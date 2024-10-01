@@ -220,7 +220,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 		AllomancyIronSteel steelAllomancy = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
 		AllomancyTin tinAllomancy = (AllomancyTin) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
 
-		PoseStack viewModelStack = new PoseStack();
+		PoseStack viewModelStack = event.getPoseStack();
 
 		//if user has iron or steel manifestation
 		if (spiritweb.hasManifestation(ironAllomancy) || spiritweb.hasManifestation(steelAllomancy))
@@ -237,8 +237,6 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				Vec3i closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
-
-				viewModelStack.last().pose().get(event.getPoseStack().last().pose());   // not sure that get() is correct here
 
 				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
 				if (drawMetalLines && !scanResult.foundEntities.isEmpty())
