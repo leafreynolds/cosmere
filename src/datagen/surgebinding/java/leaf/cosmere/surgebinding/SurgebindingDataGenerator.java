@@ -40,13 +40,13 @@ public class SurgebindingDataGenerator
 
 		generator.addProvider(true, new SurgebindingItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SurgebindingBlockModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new SurgebindingLootTableGen(generator));
+		generator.addProvider(true, new SurgebindingLootTableGen(packOutput));
 		generator.addProvider(true, new SurgebindingRecipeGen(packOutput, existingFileHelper));
 
 		generator.addProvider(true, new SurgebindingPatchouliGen(packOutput));
 
 		generator.addProvider(true, new SurgebindingBiomeModifierGen(generator));
-		generator.addProvider(true, new SurgebindingBiomeTagsProvider(generator, existingFileHelper));
+		generator.addProvider(true, new SurgebindingBiomeTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 	}
 
 }
