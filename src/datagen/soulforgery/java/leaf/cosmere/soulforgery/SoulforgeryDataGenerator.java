@@ -27,7 +27,7 @@ public class SoulforgeryDataGenerator
 
 		generator.addProvider(true, new SoulforgeryEngLangGen(packOutput));
 		generator.addProvider(true, new SoulforgeryTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new SoulforgeryLootTableGen(generator));
+		generator.addProvider(true, new SoulforgeryLootTableGen(packOutput));
 		generator.addProvider(true, new SoulforgeryItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SoulforgeryRecipeGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SoulforgeryPatchouliGen(packOutput));

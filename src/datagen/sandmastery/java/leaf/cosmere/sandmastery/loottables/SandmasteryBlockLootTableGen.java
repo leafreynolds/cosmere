@@ -1,10 +1,11 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.loottables;
 
 import leaf.cosmere.api.providers.IBlockProvider;
+import leaf.cosmere.loottables.BaseBlockLootTables;
 import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandLayerBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainWhiteSandLayerBlock;
@@ -12,7 +13,6 @@ import leaf.cosmere.sandmastery.common.blocks.TemporarySandBlock;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -25,10 +25,10 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePrope
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
-public class SandmasteryBlockLootTableGen extends BlockLoot
+public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 {
 	@Override
-	protected void addTables()
+	protected void generate()
 	{
 		for (IBlockProvider itemRegistryObject : SandmasteryBlocks.BLOCKS.getAllBlocks())
 		{
@@ -59,6 +59,7 @@ public class SandmasteryBlockLootTableGen extends BlockLoot
 	@Override
 	protected Iterable<Block> getKnownBlocks()
 	{
+		//todo delete this when moving generate function to use BaseBlockLootTables functions
 		return SandmasteryBlocks.BLOCKS.getAllBlocks().stream().map(IBlockProvider::getBlock)::iterator;
 	}
 }

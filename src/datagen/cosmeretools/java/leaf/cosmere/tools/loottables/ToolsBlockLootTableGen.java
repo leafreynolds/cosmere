@@ -1,39 +1,29 @@
 /*
- * File updated ~ 22 - 3 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools.loottables;
 
 import leaf.cosmere.api.providers.IBlockProvider;
+import leaf.cosmere.loottables.BaseBlockLootTables;
 import leaf.cosmere.tools.common.registries.ToolsBlocks;
-import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.level.block.Block;
 
-public class ToolsBlockLootTableGen extends BlockLoot
+public class ToolsBlockLootTableGen extends BaseBlockLootTables
 {
 	@Override
-	protected void addTables()
+	protected void generate()
 	{
 		for (IBlockProvider itemRegistryObject : ToolsBlocks.BLOCKS.getAllBlocks())
 		{
 			final Block block = itemRegistryObject.getBlock();
 			//if (block instanceof MetalOreBlock oreBlock)
 			//{
-			//	this.add(oreBlock, (ore) ->
-			//	{
-			//		return createOreDrop(ore, ToolsItems.ITEM.get());
-			//	});
+			//      this.add(oreBlock, (ore) -> createOreDrop(ore, ItemsRegistry.METAL_RAW_ORE.get(oreBlock.getMetalType())));
 			//}
-			//else
-			{
-				this.dropSelf(block);
-			}
 		}
-	}
 
-	@Override
-	protected Iterable<Block> getKnownBlocks()
-	{
-		return ToolsBlocks.BLOCKS.getAllBlocks().stream().map(IBlockProvider::getBlock)::iterator;
+		//then make the rest drop themselves.
+		dropSelf(ToolsBlocks.BLOCKS.getAllBlocks());
 	}
 }

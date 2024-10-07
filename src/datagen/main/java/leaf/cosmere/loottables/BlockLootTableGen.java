@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.loottables;
@@ -15,18 +15,17 @@ public class BlockLootTableGen extends BaseBlockLootTables
 	@Override
 	protected void generate()
 	{
+		//first catch any blocks that don't drop self, like ores
 		for (IBlockProvider itemRegistryObject : BlocksRegistry.BLOCKS.getAllBlocks())
 		{
 			final Block block = itemRegistryObject.getBlock();
 			if (block instanceof MetalOreBlock oreBlock)
 			{
-
-				this.add(oreBlock, (ore) -> createOreDrop(ore, ItemsRegistry.METAL_RAW_ORE.get(oreBlock.getMetalType()).asItem()));
-			}
-			else
-			{
-				this.dropSelf(block);
+				this.add(oreBlock, (ore) -> createOreDrop(ore, ItemsRegistry.METAL_RAW_ORE.get(oreBlock.getMetalType())));
 			}
 		}
+
+		//then make the rest drop themselves.
+		dropSelf(BlocksRegistry.BLOCKS.getAllBlocks());
 	}
 }

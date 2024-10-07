@@ -27,7 +27,7 @@ public class ExampleDataGenerator
 
 		generator.addProvider(true, new ExampleEngLangGen(packOutput));
 		generator.addProvider(true, new ExampleTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new ExampleLootTableGen(generator));
+		generator.addProvider(true, new ExampleLootTableGen(packOutput));
 		generator.addProvider(true, new ExampleItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new ExampleRecipeGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new ExamplePatchouliGen(packOutput));

@@ -27,7 +27,7 @@ public class AonDorDataGenerator
 
 		generator.addProvider(true, new AonDorEngLangGen(packOutput));
 		generator.addProvider(true, new AonDorTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new AonDorLootTableGen(generator));
+		generator.addProvider(true, new AonDorLootTableGen(packOutput));
 		generator.addProvider(true, new AonDorItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new AonDorRecipeGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new AonDorPatchouliGen(packOutput));

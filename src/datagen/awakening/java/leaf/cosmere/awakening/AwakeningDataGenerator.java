@@ -27,7 +27,7 @@ public class AwakeningDataGenerator
 
 		generator.addProvider(true, new AwakeningEngLangGen(packOutput));
 		generator.addProvider(true, new AwakeningTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new AwakeningLootTableGen(generator));
+		generator.addProvider(true, new AwakeningLootTableGen(packOutput));
 		generator.addProvider(true, new AwakeningItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new AwakeningRecipeGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new AwakeningPatchouliGen(packOutput));

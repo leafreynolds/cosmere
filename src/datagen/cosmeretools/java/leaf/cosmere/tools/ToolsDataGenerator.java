@@ -27,7 +27,7 @@ public class ToolsDataGenerator
 
 		generator.addProvider(true, new ToolsEngLangGen(packOutput));
 		generator.addProvider(true, new ToolsTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new ToolsLootTableGen(generator));
+		generator.addProvider(true, new ToolsLootTableGen(packOutput));
 		generator.addProvider(true, new ToolsItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new ToolsRecipeGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new ToolsPatchouliGen(packOutput));

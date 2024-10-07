@@ -28,7 +28,7 @@ public class AviarDataGenerator
 
 		generator.addProvider(true, new AviarEngLangGen(packOutput));
 		generator.addProvider(true, new AviarTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new AviarLootTableGen(generator));
+		generator.addProvider(true, new AviarLootTableGen(packOutput));
 		generator.addProvider(true, new AviarItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new AviarRecipeGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new AviarPatchouliGen(packOutput));
