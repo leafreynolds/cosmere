@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -21,14 +21,14 @@ public class AllomancyDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new AllomancyEngLangGen(output));
-		generator.addProvider(true, new AllomancyItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new AllomancyRecipeGen(output, existingFileHelper));
-		generator.addProvider(true, new AllomancyPatchouliGen(generator));
-		generator.addProvider(true, new AllomancyTagProvider(generator, existingFileHelper));
+		generator.addProvider(true, new AllomancyEngLangGen(packOutput));
+		generator.addProvider(true, new AllomancyItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AllomancyRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AllomancyPatchouliGen(packOutput));
+		generator.addProvider(true, new AllomancyTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 	}
 
 }

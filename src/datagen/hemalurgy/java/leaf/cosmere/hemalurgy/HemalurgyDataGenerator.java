@@ -21,14 +21,14 @@ public class HemalurgyDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new HemalurgyEngLangGen(output));
-		generator.addProvider(true, new HemalurgyTagsProvider(output, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new HemalurgyItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new HemalurgyRecipeGen(output, existingFileHelper));
-		generator.addProvider(true, new HemalurgyPatchouliGen(generator));
+		generator.addProvider(true, new HemalurgyEngLangGen(packOutput));
+		generator.addProvider(true, new HemalurgyTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
+		generator.addProvider(true, new HemalurgyItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new HemalurgyRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new HemalurgyPatchouliGen(packOutput));
 	}
 
 }

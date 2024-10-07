@@ -1,19 +1,19 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.patchouli;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class AllomancyPatchouliGen extends PatchouliProvider
 {
-	public AllomancyPatchouliGen(DataGenerator generatorIn)
+	public AllomancyPatchouliGen(PackOutput generatorIn)
 	{
 		super(generatorIn, Allomancy.MODID);
 	}

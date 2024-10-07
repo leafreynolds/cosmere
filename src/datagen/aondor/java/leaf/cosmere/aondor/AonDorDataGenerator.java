@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aondor;
@@ -22,15 +22,15 @@ public class AonDorDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new AonDorEngLangGen(output));
-		generator.addProvider(true, new AonDorTagProvider(generator, existingFileHelper));
+		generator.addProvider(true, new AonDorEngLangGen(packOutput));
+		generator.addProvider(true, new AonDorTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 		generator.addProvider(true, new AonDorLootTableGen(generator));
-		generator.addProvider(true, new AonDorItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new AonDorRecipeGen(output, existingFileHelper));
-		generator.addProvider(true, new AonDorPatchouliGen(generator));
+		generator.addProvider(true, new AonDorItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AonDorRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AonDorPatchouliGen(packOutput));
 	}
 
 }

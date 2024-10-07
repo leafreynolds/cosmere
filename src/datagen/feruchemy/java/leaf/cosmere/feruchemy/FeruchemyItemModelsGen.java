@@ -1,5 +1,5 @@
 /*
- * File updated ~ 17 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -10,7 +10,7 @@ import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.NecklaceMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public class FeruchemyItemModelsGen extends ItemModelProvider
 {
 
-	public FeruchemyItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public FeruchemyItemModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Feruchemy.MODID, existingFileHelper);
 	}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aviar;
@@ -23,15 +23,15 @@ public class AviarDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new AviarEngLangGen(output));
-		generator.addProvider(true, new AviarTagProvider(generator, existingFileHelper));
+		generator.addProvider(true, new AviarEngLangGen(packOutput));
+		generator.addProvider(true, new AviarTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 		generator.addProvider(true, new AviarLootTableGen(generator));
-		generator.addProvider(true, new AviarItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new AviarRecipeGen(output, existingFileHelper));
-		generator.addProvider(true, new AviarPatchouliGen(generator));
+		generator.addProvider(true, new AviarItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AviarRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AviarPatchouliGen(packOutput));
 	}
 
 }

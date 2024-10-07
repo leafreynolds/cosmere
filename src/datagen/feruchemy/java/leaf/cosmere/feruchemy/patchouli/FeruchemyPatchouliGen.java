@@ -1,19 +1,19 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.patchouli;
 
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class FeruchemyPatchouliGen extends PatchouliProvider
 {
-	public FeruchemyPatchouliGen(DataGenerator generatorIn)
+	public FeruchemyPatchouliGen(PackOutput generatorIn)
 	{
 		super(generatorIn, Feruchemy.MODID);
 	}

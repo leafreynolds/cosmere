@@ -1,19 +1,19 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.example.patchouli;
 
 import leaf.cosmere.example.common.Example;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class ExamplePatchouliGen extends PatchouliProvider
 {
-	public ExamplePatchouliGen(DataGenerator generatorIn)
+	public ExamplePatchouliGen(PackOutput generatorIn)
 	{
 		super(generatorIn, Example.MODID);
 	}

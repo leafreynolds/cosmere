@@ -1,5 +1,5 @@
 /*
- * File updated ~ 17 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -10,7 +10,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.*;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 public class SurgebindingBlockModelsGen extends BlockStateProvider
 {
-	public SurgebindingBlockModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public SurgebindingBlockModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Surgebinding.MODID, existingFileHelper);
 	}

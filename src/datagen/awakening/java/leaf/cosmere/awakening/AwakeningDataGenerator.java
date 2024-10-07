@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening;
@@ -22,15 +22,15 @@ public class AwakeningDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new AwakeningEngLangGen(output));
-		generator.addProvider(true, new AwakeningTagProvider(generator, existingFileHelper));
+		generator.addProvider(true, new AwakeningEngLangGen(packOutput));
+		generator.addProvider(true, new AwakeningTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 		generator.addProvider(true, new AwakeningLootTableGen(generator));
-		generator.addProvider(true, new AwakeningItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new AwakeningRecipeGen(output, existingFileHelper));
-		generator.addProvider(true, new AwakeningPatchouliGen(generator));
+		generator.addProvider(true, new AwakeningItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AwakeningRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AwakeningPatchouliGen(packOutput));
 	}
 
 }

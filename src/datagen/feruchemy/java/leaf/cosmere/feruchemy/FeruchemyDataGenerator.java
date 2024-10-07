@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -21,14 +21,14 @@ public class FeruchemyDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new FeruchemyEngLangGen(output));
-		generator.addProvider(true, new FeruchemyItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new FeruchemyTagProvider(generator, existingFileHelper));
-		generator.addProvider(true, new FeruchemyRecipeGen(output, existingFileHelper));
-		generator.addProvider(true, new FeruchemyPatchouliGen(generator));
+		generator.addProvider(true, new FeruchemyEngLangGen(packOutput));
+		generator.addProvider(true, new FeruchemyItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new FeruchemyTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
+		generator.addProvider(true, new FeruchemyRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new FeruchemyPatchouliGen(packOutput));
 	}
 
 }

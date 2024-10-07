@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools;
@@ -22,15 +22,15 @@ public class ToolsDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new ToolsEngLangGen(output));
-		generator.addProvider(true, new ToolsTagProvider(generator, existingFileHelper));
+		generator.addProvider(true, new ToolsEngLangGen(packOutput));
+		generator.addProvider(true, new ToolsTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 		generator.addProvider(true, new ToolsLootTableGen(generator));
-		generator.addProvider(true, new ToolsItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new ToolsRecipeGen(output, existingFileHelper));
-		generator.addProvider(true, new ToolsPatchouliGen(generator));
+		generator.addProvider(true, new ToolsItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new ToolsRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new ToolsPatchouliGen(packOutput));
 	}
 
 }

@@ -28,11 +28,11 @@ public class SandmasteryDataGenerator
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		generator.addProvider(true, new SandmasteryEngLangGen(packOutput));
-		generator.addProvider(true, new SandmasteryItemModelsGen(generator, existingFileHelper));
+		generator.addProvider(true, new SandmasteryItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SandmasteryTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 		generator.addProvider(true, new SandmasteryRecipeGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SandmasteryLootTableGen(generator));
-		generator.addProvider(true, new SandmasteryPatchouliGen(generator));
+		generator.addProvider(true, new SandmasteryPatchouliGen(packOutput));
 	}
 
 }

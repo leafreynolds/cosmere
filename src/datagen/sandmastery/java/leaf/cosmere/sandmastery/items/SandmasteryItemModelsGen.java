@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.items;
@@ -9,7 +9,7 @@ import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.items.SandJarItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 public class SandmasteryItemModelsGen extends ItemModelProvider
 {
 
-	public SandmasteryItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public SandmasteryItemModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Sandmastery.MODID, existingFileHelper);
 	}

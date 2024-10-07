@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -30,20 +30,20 @@ public class SurgebindingDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
-		PackOutput output = generator.getPackOutput();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 
-		generator.addProvider(true, new SurgebindingEngLangGen(output));
+		generator.addProvider(true, new SurgebindingEngLangGen(packOutput));
 
-		generator.addProvider(true, new SurgebindingTagsProvider(generator, existingFileHelper));
+		generator.addProvider(true, new SurgebindingTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 
-		generator.addProvider(true, new SurgebindingItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new SurgebindingBlockModelsGen(generator, existingFileHelper));
+		generator.addProvider(true, new SurgebindingItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new SurgebindingBlockModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SurgebindingLootTableGen(generator));
-		generator.addProvider(true, new SurgebindingRecipeGen(output, existingFileHelper));
+		generator.addProvider(true, new SurgebindingRecipeGen(packOutput, existingFileHelper));
 
-		generator.addProvider(true, new SurgebindingPatchouliGen(generator));
+		generator.addProvider(true, new SurgebindingPatchouliGen(packOutput));
 
 		generator.addProvider(true, new SurgebindingBiomeModifierGen(generator));
 		generator.addProvider(true, new SurgebindingBiomeTagsProvider(generator, existingFileHelper));
