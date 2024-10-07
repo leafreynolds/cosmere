@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.soulforgery;
@@ -8,17 +8,19 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.soulforgery.common.Soulforgery;
 import leaf.cosmere.soulforgery.common.registries.SoulforgeryBlocks;
 import leaf.cosmere.tag.BaseTagProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class SoulforgeryTagProvider extends BaseTagProvider
 {
-	public SoulforgeryTagProvider(DataGenerator dataGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public SoulforgeryTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(dataGenerator, Soulforgery.MODID, existingFileHelper);
+		super(packOutput, lookupProvider, Soulforgery.MODID, existingFileHelper);
 	}
 
 
@@ -30,7 +32,7 @@ public class SoulforgeryTagProvider extends BaseTagProvider
 
 
 	@Override
-	protected void registerTags()
+	protected void registerTags(HolderLookup.Provider registries)
 	{
 		//getItemBuilder(CosmereTags.Items.CURIO_HEAD).add(Soulforgery.Item.asItem());
 

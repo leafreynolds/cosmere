@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -10,20 +10,22 @@ import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import leaf.cosmere.tag.BaseTagProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
-public class HemalurgyItemTagsProvider extends BaseTagProvider
+public class HemalurgyTagsProvider extends BaseTagProvider
 {
-	public HemalurgyItemTagsProvider(DataGenerator dataGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public HemalurgyTagsProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(dataGenerator, Hemalurgy.MODID, existingFileHelper);
+		super(packOutput, lookupProvider, Hemalurgy.MODID, existingFileHelper);
 	}
 
 	@Override
-	protected void registerTags()
+	protected void registerTags(HolderLookup.Provider registries)
 	{
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{

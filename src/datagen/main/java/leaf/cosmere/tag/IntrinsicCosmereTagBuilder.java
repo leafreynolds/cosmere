@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tag;
@@ -11,6 +11,7 @@ import net.minecraft.tags.TagBuilder;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+//Special thanks to Mekanism for showing how this works
 //Based off of IntrinsicHolderTagsProvider.IntrinsicTagAppender but with a few shortcuts for forge registry entries and also a few more helpers and addition of SafeVarargs annotations
 public class IntrinsicCosmereTagBuilder<TYPE> extends CosmereTagBuilder<TYPE, IntrinsicCosmereTagBuilder<TYPE>>
 {

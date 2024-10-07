@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tag;
@@ -159,8 +159,8 @@ public class CosmereTagProvider extends BaseTagProvider
 
 	private void addStorageBlocks()
 	{
-		final ForgeRegistryTagBuilder<Item> itemBuilder = getItemBuilder(Tags.Items.STORAGE_BLOCKS);
-		final ForgeRegistryTagBuilder<Block> blockBuilder = getBlockBuilder(Tags.Blocks.STORAGE_BLOCKS);
+		final IntrinsicCosmereTagBuilder<Item> itemBuilder = getItemBuilder(Tags.Items.STORAGE_BLOCKS);
+		final IntrinsicCosmereTagBuilder<Block> blockBuilder = getBlockBuilder(Tags.Blocks.STORAGE_BLOCKS);
 
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
@@ -182,9 +182,9 @@ public class CosmereTagProvider extends BaseTagProvider
 
 	private void addContainsMetal()
 	{
-		final ForgeRegistryTagBuilder<Item> itemTagBuilder = getItemBuilder(CosmereTags.Items.CONTAINS_METAL);
-		final ForgeRegistryTagBuilder<Block> blockTagBuilder = getBlockBuilder(CosmereTags.Blocks.CONTAINS_METAL);
-		final ForgeRegistryTagBuilder<EntityType<?>> entityTagBuilder = getEntityTypeBuilder(CosmereTags.EntityTypes.CONTAINS_METAL);
+		final IntrinsicCosmereTagBuilder<Item> itemTagBuilder = getItemBuilder(CosmereTags.Items.CONTAINS_METAL);
+		final IntrinsicCosmereTagBuilder<Block> blockTagBuilder = getBlockBuilder(CosmereTags.Blocks.CONTAINS_METAL);
+		final IntrinsicCosmereTagBuilder<EntityType<?>> entityTagBuilder = getEntityTypeBuilder(CosmereTags.EntityTypes.CONTAINS_METAL);
 
 		itemTagBuilder.addOptionalTag(CosmereTags.Items.METAL_SPIKE);
 

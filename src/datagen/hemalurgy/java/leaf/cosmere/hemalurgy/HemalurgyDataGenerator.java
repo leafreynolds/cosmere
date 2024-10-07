@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -25,7 +25,7 @@ public class HemalurgyDataGenerator
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		generator.addProvider(true, new HemalurgyEngLangGen(output));
-		generator.addProvider(true, new HemalurgyItemTagsProvider(generator, existingFileHelper));
+		generator.addProvider(true, new HemalurgyTagsProvider(output, event.getLookupProvider(), existingFileHelper));
 		generator.addProvider(true, new HemalurgyItemModelsGen(generator, existingFileHelper));
 		generator.addProvider(true, new HemalurgyRecipeGen(output, existingFileHelper));
 		generator.addProvider(true, new HemalurgyPatchouliGen(generator));

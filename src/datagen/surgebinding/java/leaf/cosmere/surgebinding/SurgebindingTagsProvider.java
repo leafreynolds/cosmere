@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -17,8 +17,9 @@ import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.tag.BaseTagProvider;
-import leaf.cosmere.tag.ForgeRegistryTagBuilder;
-import net.minecraft.data.DataGenerator;
+import leaf.cosmere.tag.IntrinsicCosmereTagBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
@@ -29,12 +30,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class SurgebindingTagsProvider extends BaseTagProvider
 {
-	public SurgebindingTagsProvider(DataGenerator dataGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public SurgebindingTagsProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(dataGenerator, Surgebinding.MODID, existingFileHelper);
+		super(packOutput, lookupProvider, Surgebinding.MODID, existingFileHelper);
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 	}
 
 	@Override
-	protected void registerTags()
+	protected void registerTags(HolderLookup.Provider registries)
 	{
 		addItems();
 		addBlocks();
@@ -101,8 +103,8 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 
 	private void addStorageBlocks()
 	{
-		final ForgeRegistryTagBuilder<Item> itemBuilder = getItemBuilder(Tags.Items.STORAGE_BLOCKS);
-		final ForgeRegistryTagBuilder<Block> blockBuilder = getBlockBuilder(Tags.Blocks.STORAGE_BLOCKS);
+		final IntrinsicCosmereTagBuilder<Item> itemBuilder = getItemBuilder(Tags.Items.STORAGE_BLOCKS);
+		final IntrinsicCosmereTagBuilder<Block> blockBuilder = getBlockBuilder(Tags.Blocks.STORAGE_BLOCKS);
 
 		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
