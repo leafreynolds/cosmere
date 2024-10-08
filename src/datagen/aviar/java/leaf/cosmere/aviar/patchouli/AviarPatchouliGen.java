@@ -1,9 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aviar.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import net.minecraft.data.PackOutput;
@@ -15,7 +16,7 @@ public class AviarPatchouliGen extends PatchouliProvider
 {
 	public AviarPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Aviar.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

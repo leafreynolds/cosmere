@@ -1,9 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.data.PackOutput;
@@ -15,7 +16,7 @@ public class SurgebindingPatchouliGen extends PatchouliProvider
 {
 	public SurgebindingPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Surgebinding.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

@@ -1,9 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import net.minecraft.data.PackOutput;
@@ -15,7 +16,7 @@ public class FeruchemyPatchouliGen extends PatchouliProvider
 {
 	public FeruchemyPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Feruchemy.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 

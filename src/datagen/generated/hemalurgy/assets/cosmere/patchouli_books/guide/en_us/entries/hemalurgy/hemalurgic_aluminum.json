@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:hemalurgy",
+  "icon": "hemalurgy:aluminum_spike",
+  "name": "Hemalurgic Aluminum",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Prevents recipient from using their powers."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hemalurgy:aluminum_spike"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 8
+}

@@ -1,9 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.soulforgery.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import leaf.cosmere.soulforgery.common.Soulforgery;
 import net.minecraft.data.PackOutput;
@@ -15,7 +16,7 @@ public class SoulforgeryPatchouliGen extends PatchouliProvider
 {
 	public SoulforgeryPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Soulforgery.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

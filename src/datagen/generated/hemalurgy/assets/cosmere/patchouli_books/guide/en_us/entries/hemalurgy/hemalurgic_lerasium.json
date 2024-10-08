@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:hemalurgy",
+  "icon": "hemalurgy:lerasium_spike",
+  "name": "Hemalurgic Lerasium",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Lerasium Spikes steals all Attributes from a donor."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hemalurgy:lerasium_spike"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 17
+}

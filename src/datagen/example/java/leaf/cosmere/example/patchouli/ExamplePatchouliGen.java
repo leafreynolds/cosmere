@@ -1,9 +1,10 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.example.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.example.common.Example;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import net.minecraft.data.PackOutput;
@@ -15,7 +16,7 @@ public class ExamplePatchouliGen extends PatchouliProvider
 {
 	public ExamplePatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Example.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

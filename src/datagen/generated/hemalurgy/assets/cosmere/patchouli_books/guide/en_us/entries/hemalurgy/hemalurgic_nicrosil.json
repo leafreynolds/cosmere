@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:hemalurgy",
+  "icon": "hemalurgy:nicrosil_spike",
+  "name": "Hemalurgic Nicrosil",
+  "pages": [
+    {
+      "type": "text",
+      "text": "[Not Yet Implemented] $(p)Some theorise, due to the similarities hemalurgy shares with feruchemy, that nicrosil spikes steal investiture, potentially similarly to how soulbearer ferrings store investiture $(p)(The rest of this page has ink spilled on it, obscuring the writing)"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hemalurgy:nicrosil_spike"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 11
+}

@@ -1,0 +1,27 @@
+{
+  "category": "cosmere:feruchemy",
+  "icon": "feruchemy:copper_bracelet_metalmind",
+  "name": "Feruchemical Copper",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A ferring who taps $(thing)copper$() is known as a \"$(thing)Archivist$()\", and stores Memories. While storing, the Archivist is able to store their memories and experiences away. Tapping allows them to regain their stored knowledge."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "feruchemy:copper_ring_metalmind"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "feruchemy:copper_bracelet_metalmind"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "feruchemy:copper_necklace_metalmind"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 6
+}

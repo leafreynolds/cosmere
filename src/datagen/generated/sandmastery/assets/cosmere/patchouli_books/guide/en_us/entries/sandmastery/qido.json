@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:sandmastery",
+  "icon": "sandmastery:qido",
+  "name": "Qido",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "sandmastery:qido"
+    },
+    {
+      "type": "text",
+      "text": "As any good Mastrell knows, hydration is one of the most important aspects of sand mastery. The Qido is the most common way of carrying water on dayside. Crouch ($(k:key.sneak)$()) and use ($(k:key.use)$()) on a water source to fill it, and use it like any other bottle to drink from it."
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}

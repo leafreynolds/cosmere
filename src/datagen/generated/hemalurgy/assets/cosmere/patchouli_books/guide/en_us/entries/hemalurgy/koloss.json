@@ -1,0 +1,42 @@
+{
+  "category": "cosmere:hemalurgy",
+  "icon": "hemalurgy:atium_spike",
+  "name": "Koloss",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Koloss are hemalurgic creations involving the use of iron spikes. This robbed the spiked individual of nearly all their humanity, instead replacing it with incredible strength and bloodthirsty rage. They should be approached with extreme caution."
+    },
+    {
+      "type": "entity",
+      "default_rotation": -45.0,
+      "entity": "hemalurgy:koloss_small",
+      "name": "Immature Koloss",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 1.0
+    },
+    {
+      "type": "entity",
+      "default_rotation": -45.0,
+      "entity": "hemalurgy:koloss_medium",
+      "name": "Mature Koloss",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 1.0
+    },
+    {
+      "type": "entity",
+      "default_rotation": -45.0,
+      "entity": "hemalurgy:koloss_large",
+      "name": "Elder Koloss",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 1.0
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}
