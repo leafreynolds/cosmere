@@ -1,5 +1,5 @@
 /*
- * File updated ~ 1 - 5 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -604,6 +604,7 @@ public class Metals
 			return null;
 		}
 
+		@SuppressWarnings("DuplicateBranchesInSwitch")
 		public int getAllomancyBurnTimeSeconds()
 		{
 			//todo convert to config item

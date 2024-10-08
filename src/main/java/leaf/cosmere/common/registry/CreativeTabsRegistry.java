@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
@@ -37,7 +37,7 @@ public class CreativeTabsRegistry
 			CREATIVE_TABS.register(
 					"cosmere.blocks",
 					Component.translatable("itemGroups." + Cosmere.MODID + ".blocks"),
-					BlocksRegistry.METAL_ORE.entrySet().stream().findAny().get().getValue(),
+					BlocksRegistry.METAL_ORE.entrySet().stream().findAny().get().getValue().stone(),
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes
 									.displayItems((displayParameters, output) ->
@@ -62,11 +62,8 @@ public class CreativeTabsRegistry
 		{
 			for (var ore : BlocksRegistry.METAL_ORE.values())
 			{
-				CreativeTabDeferredRegister.addToDisplay(event, ore);
-			}
-			for (var ore : BlocksRegistry.METAL_ORE_DEEPSLATE.values())
-			{
-				CreativeTabDeferredRegister.addToDisplay(event, ore);
+				CreativeTabDeferredRegister.addToDisplay(event, ore.stone());
+				CreativeTabDeferredRegister.addToDisplay(event, ore.deepslate());
 			}
 		}
 		else if (tabKey == CreativeModeTabs.FUNCTIONAL_BLOCKS)

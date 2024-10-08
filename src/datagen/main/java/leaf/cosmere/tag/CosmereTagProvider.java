@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tag;
@@ -9,14 +9,15 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.blocks.MetalBlock;
-import leaf.cosmere.common.blocks.MetalOreBlock;
 import leaf.cosmere.common.items.MetalIngotItem;
 import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
+import leaf.cosmere.common.resource.ore.OreBlockType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.GameEventTags;
 import net.minecraft.tags.TagKey;
@@ -53,6 +54,7 @@ public class CosmereTagProvider extends BaseTagProvider
 		addStorageBlocks();
 		addEntityTypes();
 		addGameEvents();
+		addBiomes();
 
 		addContainsMetal();
 	}
@@ -122,16 +124,15 @@ public class CosmereTagProvider extends BaseTagProvider
 
 			if (metalType.hasOre())
 			{
-				final BlockRegistryObject<MetalOreBlock, BlockItem> oreBlock = BlocksRegistry.METAL_ORE.get(metalType);
-				final BlockRegistryObject<MetalOreBlock, BlockItem> oreDeepslateBlock = BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType);
+				final OreBlockType oreBlockType = BlocksRegistry.METAL_ORE.get(metalType);
 
 				final TagKey<Block> oreBlockTag = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType);
-				addToTag(oreBlockTag, oreBlock, oreDeepslateBlock);
+				addToTag(oreBlockTag, oreBlockType.stone(), oreBlockType.deepslate());
 
-				addToTag(BlockTags.NEEDS_STONE_TOOL, oreBlock);
-				addToTag(BlockTags.NEEDS_IRON_TOOL, oreDeepslateBlock);
+				addToTag(BlockTags.NEEDS_STONE_TOOL, oreBlockType.stone());
+				addToTag(BlockTags.NEEDS_IRON_TOOL, oreBlockType.deepslate());
 
-				addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, oreBlock, oreDeepslateBlock);
+				addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, oreBlockType.stone(), oreBlockType.deepslate());
 			}
 
 			//put metal type tag on block
@@ -155,6 +156,11 @@ public class CosmereTagProvider extends BaseTagProvider
 	{
 		addToTag(GameEventTags.VIBRATIONS, GameEventRegistry.KINETIC_INVESTITURE);
 		addToTag(GameEventTags.WARDEN_CAN_LISTEN, GameEventRegistry.KINETIC_INVESTITURE);
+	}
+
+	private void addBiomes()
+	{
+		getBiomeBuilder(CosmereTags.Biomes.SPAWN_ORES).add(BiomeTags.IS_OVERWORLD);
 	}
 
 	private void addStorageBlocks()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -73,8 +73,8 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 
 			if (metalType.hasOre())
 			{
-				addOreSmeltingRecipes(consumer, BlocksRegistry.METAL_ORE.get(metalType).getBlock(), ItemsRegistry.METAL_INGOTS.get(metalType).asItem(), 1.0f, 200);
-				addOreSmeltingRecipes(consumer, BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType).getBlock(), ItemsRegistry.METAL_INGOTS.get(metalType).asItem(), 1.0f, 200);
+				addOreSmeltingRecipes(consumer, BlocksRegistry.METAL_ORE.get(metalType).stone().getBlock(), ItemsRegistry.METAL_INGOTS.get(metalType).asItem(), 1.0f, 200);
+				addOreSmeltingRecipes(consumer, BlocksRegistry.METAL_ORE.get(metalType).deepslate().getBlock(), ItemsRegistry.METAL_INGOTS.get(metalType).asItem(), 1.0f, 200);
 				addOreSmeltingRecipes(consumer, ItemsRegistry.METAL_RAW_ORE.get(metalType).get(), ItemsRegistry.METAL_INGOTS.get(metalType).asItem(), 1.0f, 200);
 			}
 
