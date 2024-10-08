@@ -1,5 +1,5 @@
 /*
- * File updated ~ 6 - 8 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.patchouli.data;
@@ -106,7 +106,7 @@ public abstract class PatchouliProvider implements DataProvider
 	{
 		return pathIn.resolve(
 				String.format(
-						"data/%s/patchouli_books/%s/en_us/categories/%s.json",
+						"assets/%s/patchouli_books/%s/en_us/categories/%s.json",
 						modid,
 						GUIDE_NAME,
 						StringHelper.fixPath(category.name)));
@@ -116,7 +116,7 @@ public abstract class PatchouliProvider implements DataProvider
 	{
 		return pathIn.resolve(
 				String.format(
-						"data/%s/patchouli_books/%s/en_us/entries/%s/%s.json",
+						"assets/%s/patchouli_books/%s/en_us/entries/%s/%s.json",
 						modid,
 						GUIDE_NAME,
 						StringHelper.fixPath(entry.category.name),
