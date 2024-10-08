@@ -14,6 +14,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.GemBlock;
 import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingBiomes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.tag.BaseTagProvider;
@@ -53,6 +54,7 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		addStorageBlocks();
 		addEntityTypes();
 		addGameEvents();
+		addBiomes();
 
 		addContainsMetal();
 	}
@@ -127,6 +129,13 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 	private void addGameEvents()
 	{
 
+	}
+
+	private void addBiomes()
+	{
+		getBiomeBuilder(CosmereTags.Biomes.SPAWN_ORES).add(CosmereTags.Biomes.IS_ROSHAR);
+
+		getBiomeBuilder(CosmereTags.Biomes.IS_ROSHAR).add(SurgebindingBiomes.ROSHAR_BIOME_KEY);
 	}
 
 

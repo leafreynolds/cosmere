@@ -5,8 +5,6 @@
 package leaf.cosmere.surgebinding;
 
 import leaf.cosmere.common.registry.BiomeRegistry;
-import leaf.cosmere.surgebinding.biome.SurgebindingBiomeModifierGen;
-import leaf.cosmere.surgebinding.biome.SurgebindingBiomeTagsProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.loottables.SurgebindingLootTableGen;
 import leaf.cosmere.surgebinding.patchouli.SurgebindingPatchouliGen;
@@ -44,9 +42,6 @@ public class SurgebindingDataGenerator
 		generator.addProvider(true, new SurgebindingRecipeGen(packOutput, existingFileHelper));
 
 		generator.addProvider(true, new SurgebindingPatchouliGen(packOutput));
-
-		generator.addProvider(true, new SurgebindingBiomeModifierGen(generator));
-		generator.addProvider(true, new SurgebindingBiomeTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 	}
 
 }
