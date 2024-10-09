@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools;
@@ -31,6 +31,7 @@ public class ToolsEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
 		addDamageSources();
 		addMobEffects();
@@ -82,6 +83,14 @@ public class ToolsEngLangGen extends LanguageProvider
 
 	private void addPatchouli()
 	{
+
+	}
+
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		//"itemGroup.cosmeretools.tools": "Cosmere tools"
+		add("itemGroup.cosmeretools.tools", "Cosmere Tools");
 
 	}
 

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aondor;
@@ -31,6 +31,7 @@ public class AonDorEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
 		addItemGroups();
 		addDamageSources();
@@ -86,6 +87,14 @@ public class AonDorEngLangGen extends LanguageProvider
 
 	}
 
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		// "itemGroup.aondor.items": "Aon Dor Items",
+		add("itemGroup.aondor.items", "Aon Dor Items");
+
+	}
+
 	private void addTooltips()
 	{
 
@@ -94,7 +103,7 @@ public class AonDorEngLangGen extends LanguageProvider
 	private void addItemGroups()
 	{
 		//ItemGroups/Tabs
-		//add("itemGroup." + AonDorItemGroups.GROUP.getRecipeFolderName(), "AonDor Group");
+		//todo aondor item group
 	}
 
 	private void addDamageSources()

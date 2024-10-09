@@ -43,7 +43,7 @@ public class PatchouliGen extends PatchouliProvider
 	 */
 	public String getName()
 	{
-		return "PatchouliGeneration";
+		return "Cosmere PatchouliGeneration";
 	}
 
 }

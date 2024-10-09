@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -46,6 +46,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
 		addDamageSources();
 		addMobEffects();
@@ -178,6 +179,14 @@ public class FeruchemyEngLangGen extends LanguageProvider
 
 			add(feruchemyGuide, StringHelper.fixCapitalisation(f));
 		}
+	}
+
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		// "itemGroup.feruchemy.metalminds": "Feruchemical Metalminds",
+		add("itemGroup.feruchemy.metalminds", "Feruchemical Metalminds");
+
 	}
 
 	private void addTooltips()

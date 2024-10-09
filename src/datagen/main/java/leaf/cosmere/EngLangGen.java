@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -46,7 +46,7 @@ public class EngLangGen extends LanguageProvider
 		addCommands();
 		addKeybindings();
 		addStats();
-
+		addCreativeTabs();
 	}
 
 
@@ -140,6 +140,14 @@ public class EngLangGen extends LanguageProvider
 	{
 		//ARS Arcanum
 		add("cosmere.landing", "The Cosmere is filled with many fantastical things. I have left my findings written within this book.");
+	}
+
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		//CreativeTabsRegistry.ITEMS.get().getDisplayName()
+		add("itemGroup.cosmere.items", "Cosmere Items");
+		add("itemGroup.cosmere.blocks", "Cosmere Blocks");
 	}
 
 	private void addTooltips()

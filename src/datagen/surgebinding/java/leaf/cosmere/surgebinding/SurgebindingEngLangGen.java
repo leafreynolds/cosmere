@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -42,6 +42,7 @@ public class SurgebindingEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
 		addDamageSources();
 		addMobEffects();
@@ -134,6 +135,15 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addPatchouli()
 	{
 		//todo surgebinding patchouli localisation
+	}
+
+
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		// "itemGroup.surgebinding.items": "Surgebinding Items",
+		add("itemGroup.surgebinding.items", "Surgebinding Items");
+
 	}
 
 	private void addTooltips()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -36,6 +36,7 @@ public class HemalurgyEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
 		addDamageSources();
 		addMobEffects();
@@ -102,6 +103,14 @@ public class HemalurgyEngLangGen extends LanguageProvider
 			String hemalurgyGuide = "entry." + hKey;
 			add(hemalurgyGuide, StringHelper.fixCapitalisation(name));
 		}
+	}
+
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		// "itemGroup.hemalurgy.spikes": "Hemalurgic Spikes",
+		add("itemGroup.hemalurgy.spikes", "Hemalurgic Spikes");
+
 	}
 
 	private void addTooltips()

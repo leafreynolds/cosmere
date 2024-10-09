@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -50,7 +50,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 		addAttributes();
 		addPatchouli();
 		addTooltips();
-		addItemGroups();
+		addCreativeTabs();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -174,9 +174,10 @@ public class AllomancyEngLangGen extends LanguageProvider
 		add("tooltip.cosmere.metals.contained", "Contained Metals:");
 	}
 
-	private void addItemGroups()
+	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
+		add("itemGroup.allomancy.items", "Allomancy Items");
 	}
 
 	private void addDamageSources()
