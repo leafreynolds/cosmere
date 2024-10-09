@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "group": "necklace",
   "key": {
     "X": {
@@ -13,5 +14,6 @@
   ],
   "result": {
     "item": "feruchemy:atium_necklace_metalmind"
-  }
+  },
+  "show_notification": true
 }

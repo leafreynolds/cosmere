@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "I": {
       "tag": "forge:nuggets/tin"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "cosmere:tin_ingot"
-  }
+  },
+  "show_notification": true
 }

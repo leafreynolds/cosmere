@@ -5,7 +5,11 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)zinc$() is known as a \"$(thing)Rioter$()\". A creature being manipulated by a rioter will act far more aggressive, turning even the most pacified of animals into bloodthirsty beasts."
+      "text": "A misting who burns $(thing)zinc$() is known as a \"$(thing)Rioter$()\". A creature being manipulated by a rioter will act far more aggressive, turning even the most pacified of animals into bloodthirsty beasts. A rioter can use their powers by pressing either $(k:key.cosmere.allomacy.riot)$() or $(k:key.cosmere.manifestation.use.active)$()."
+    },
+    {
+      "type": "text",
+      "text": "Rioters have reported recently that their allomancy has been acting different, resulting in creatures that seem confused. (This feature is bugged.)"
     }
   ],
   "priority": false,

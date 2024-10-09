@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)pewter$() is known as a \"$(thing)Thug$()\". While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment."
+      "text": "A misting who burns $(thing)pewter$() is known as a \"$(thing)Thug$()\". While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment. However, they need to be careful because if they run out of pewter to burn, they will immediately feel all the pain they were shrugging off. This can mean instant death in extreme cases."
     }
   ],
   "priority": false,

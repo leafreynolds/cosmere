@@ -1,7 +1,0 @@
-{
-  "parent": "cosmere:block/shapes/cube_with_tint_overlay",
-  "textures": {
-    "all": "surgebinding:block/gem_ore_block_deepslate",
-    "overlay": "surgebinding:block/gem_ore_block_tint_overlay"
-  }
-}

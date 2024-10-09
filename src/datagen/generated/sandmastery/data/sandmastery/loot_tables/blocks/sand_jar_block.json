@@ -14,7 +14,9 @@
           "name": "sandmastery:sand_jar"
         }
       ],
+      "name": "main",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "sandmastery:blocks/sand_jar_block"
 }

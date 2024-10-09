@@ -43,7 +43,9 @@
           ]
         }
       ],
+      "name": "main",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "cosmere:blocks/deepslate_silver_ore"
 }

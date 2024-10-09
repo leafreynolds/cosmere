@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "group": "spike",
   "key": {
     "X": {
@@ -12,5 +13,6 @@
   ],
   "result": {
     "item": "hemalurgy:aluminum_spike"
-  }
+  },
+  "show_notification": true
 }

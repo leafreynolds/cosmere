@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "I": {
       "tag": "forge:ingots/lerasium"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "cosmere:lerasium_block"
-  }
+  },
+  "show_notification": true
 }

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "I": {
       "tag": "forge:ingots/aluminum"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "cosmere:aluminum_block"
-  }
+  },
+  "show_notification": true
 }

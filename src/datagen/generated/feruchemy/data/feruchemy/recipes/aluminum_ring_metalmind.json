@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "group": "ring",
   "key": {
     "X": {
@@ -13,5 +14,6 @@
   ],
   "result": {
     "item": "feruchemy:aluminum_ring_metalmind"
-  }
+  },
+  "show_notification": true
 }

@@ -6,6 +6,10 @@
     {
       "type": "text",
       "text": "A misting who burns $(thing)iron$() is known as a \"$(thing)Lurcher$()\". Ironpulling is affected by the normal laws of physics. If a lurcher were to pull on something that weighs more than them, they'd be pulled towards it. If they pulled on something lighter, the object would move. If both were of similar weight, they'd both move."
+    },
+    {
+      "type": "text",
+      "text": "A lurcher can pull on items that contain metal by pressing $(k:key.cosmere.allomancy.pull)$()"
     }
   ],
   "priority": false,

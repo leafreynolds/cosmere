@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)nicrosil$() is known as a \"$(thing)Nicroburst$()\". A nicroburst can empower the allomancy of another with physical contact, as if they were burning duralumin themselves."
+      "text": "A misting who burns $(thing)nicrosil$() is known as a \"$(thing)Nicroburst$()\". A nicroburst can empower the allomancy of another with physical contact, as if the target were burning duralumin themselves."
     }
   ],
   "priority": false,

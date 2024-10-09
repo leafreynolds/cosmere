@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "W": {
       "tag": "minecraft:wooden_slabs"
@@ -11,5 +12,6 @@
   ],
   "result": {
     "item": "sandmastery:sand_spreading_tub"
-  }
+  },
+  "show_notification": true
 }

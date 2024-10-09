@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "B": {
       "item": "minecraft:lead"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "sandmastery:sand_pouch"
-  }
+  },
+  "show_notification": true
 }

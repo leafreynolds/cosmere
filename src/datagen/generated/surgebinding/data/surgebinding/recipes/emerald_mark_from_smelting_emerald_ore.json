@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "cookingtime": 1000,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "surgebinding:emerald_ore"
-  },
-  "result": "surgebinding:emerald_mark"
-}

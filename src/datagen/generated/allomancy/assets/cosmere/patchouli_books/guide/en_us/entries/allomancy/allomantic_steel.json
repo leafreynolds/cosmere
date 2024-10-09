@@ -9,11 +9,14 @@
     },
     {
       "type": "text",
-      "text": "If they pushed on something lighter, the object would move. Clever use of Steelpushing can lead to a pseudo flight through use of small metal objects, such as coins or nuggets. Many coinshots generally carry around a pouch of coins, for ease of access."
+      "text": "If they pushed on something lighter, the object would move. Clever use of Steelpushing can lead to a pseudo flight through use of small metal objects, such as coins or nuggets. Many coinshots generally carry around a pouch of coins, for ease of access. A Coinshot can access their abilities by pressing $(k:key.cosmere.allomancy.push)$()"
     },
     {
-      "type": "patchouli:crafting",
-      "recipe": "allomancy:coin_pouch"
+      "type": "relations",
+      "entries": [
+        "coinPouchEntry"
+      ],
+      "text": "Coin Pouch"
     }
   ],
   "priority": false,

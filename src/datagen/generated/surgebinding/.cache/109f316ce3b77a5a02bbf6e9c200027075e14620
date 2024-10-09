@@ -1,14 +1,5 @@
-// 1.19.2	2023-11-17T21:15:31.5666777	Tags: surgebinding
-4a68d2739dea5e3aa1c7e950b8a049a6e2abf791 data/forge/tags/blocks/ores/amethyst.json
-ee96541e7c1246fe42744a55885833ba8af85b6f data/forge/tags/blocks/ores/diamond.json
-82e6c8ac1f6c5ef9d95d79a14db847694f6a5894 data/forge/tags/blocks/ores/emerald.json
-535ffd326e438b4244fa9119ac3fc325a55e6769 data/forge/tags/blocks/ores/garnet.json
-1f7903a2e11f5238538de7da1ab2946070c410a9 data/forge/tags/blocks/ores/heliodor.json
-fddfc217c748332f34e8602149e67d66c19525a2 data/forge/tags/blocks/ores/ruby.json
-dd03f8860ebb03c5d4c4986a0602e0e13fb640c1 data/forge/tags/blocks/ores/sapphire.json
-7ffdd9e88bf56d3f794e79c9ae05bc91f15325f6 data/forge/tags/blocks/ores/smokestone.json
-6dca2386f961b8fbee3dc7c6a4536a1c53eafd48 data/forge/tags/blocks/ores/topaz.json
-4e4c8234d53c2b066461d445609ca6cdbecb5e1c data/forge/tags/blocks/ores/zircon.json
+// 1.20.1	2024-10-09T13:22:13.2757907	Tags: surgebinding
+1f4a893d33327a86f361b3e38f9dcf2af46287fc data/cosmere/tags/worldgen/biome/spawn_ores.json
 dc8ed69b241d772a977e7c0c34320929d00ab4fa data/forge/tags/blocks/storage_blocks.json
 e65d9a5c24c24dc049cce37538918e39cdeac5f8 data/forge/tags/blocks/storage_blocks/amethyst.json
 c9686858daba30ebceb8af773a05f2f597efe509 data/forge/tags/blocks/storage_blocks/diamond.json
@@ -43,8 +34,9 @@ aeaede227bae14370d9c20b5fa1fde9a29521ebb data/forge/tags/items/storage_blocks/he
 538b3e977ed89fbf5346bda5d9c2a31519709789 data/forge/tags/items/storage_blocks/topaz.json
 5ce6a2023aa95ada658bb30be3a2bf1a1ab729a3 data/forge/tags/items/storage_blocks/zircon.json
 f2b573e168f559409f9630291f07d290870822ad data/minecraft/tags/blocks/beacon_base_blocks.json
-7729d5097895bf6cadd82f791e864f42f6a6b538 data/minecraft/tags/blocks/dragon_immune.json
+f2b573e168f559409f9630291f07d290870822ad data/minecraft/tags/blocks/dragon_immune.json
 0fbe76a3ddfbc63868c74a6b5cabf897deea3795 data/minecraft/tags/blocks/mineable/axe.json
-82db041be3ec8c38e608b57082a1258cfcb93952 data/minecraft/tags/blocks/mineable/pickaxe.json
+22365aa2d53aa418dd7a0d8d3414afa4e65fe3d4 data/minecraft/tags/blocks/mineable/pickaxe.json
 0fbe76a3ddfbc63868c74a6b5cabf897deea3795 data/minecraft/tags/blocks/mineable/shovel.json
-7729d5097895bf6cadd82f791e864f42f6a6b538 data/minecraft/tags/blocks/needs_iron_tool.json
+f2b573e168f559409f9630291f07d290870822ad data/minecraft/tags/blocks/needs_iron_tool.json
+4bde5ce1e288cb84a5e6b1f49d60868cbb1fb7a0 data/surgebinding/tags/worldgen/biome/is_roshar.json

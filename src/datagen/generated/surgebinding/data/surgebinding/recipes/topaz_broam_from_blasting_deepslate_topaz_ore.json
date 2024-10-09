@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "cookingtime": 500,
-  "experience": 1.0,
-  "ingredient": {
-    "item": "surgebinding:deepslate_topaz_ore"
-  },
-  "result": "surgebinding:topaz_broam"
-}

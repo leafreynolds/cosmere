@@ -1,7 +1,7 @@
-// 1.19.2	2023-11-11T21:09:02.792878	PatchouliGeneration
-d4771d73d38f6e1c6d6980c5ed56d11dddcb3f61 data/sandmastery/patchouli_books/guide/en_us/categories/sandmastery.json
-7240c0a0233cff9fa51f236fbe1e102a3c8a7ab8 data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/qido.json
-50046cc055e45dae1f5b753f5f51ce6a7490886e data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sandmastery_basics.json
-231a4f7164669bdf1384ca3f79c4bb861f2f1e11 data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sand_jar.json
-42c91fd18b4d15fde03a5bd25178f9d8724c682b data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sand_pouch.json
-4c7cb35822ccaa0eece380af3a880566f27d60ce data/sandmastery/patchouli_books/guide/en_us/entries/sandmastery/sand_spreader.json
+// 1.20.1	2024-10-09T13:38:50.3827137	PatchouliGeneration
+d4771d73d38f6e1c6d6980c5ed56d11dddcb3f61 assets/cosmere/patchouli_books/guide/en_us/categories/sandmastery.json
+c6bb595d95b73133724fe97bde7e671baa336525 assets/cosmere/patchouli_books/guide/en_us/entries/sandmastery/qido.json
+8329a991b86a27abcc9f10aa07b41e0e276c52d8 assets/cosmere/patchouli_books/guide/en_us/entries/sandmastery/sandmastery_basics.json
+d59855771168beaa3cc8075a9f049a67f6e0a704 assets/cosmere/patchouli_books/guide/en_us/entries/sandmastery/sand_jar.json
+fec6b64740f851af7757b9b917236d47bba73397 assets/cosmere/patchouli_books/guide/en_us/entries/sandmastery/sand_pouch.json
+b13afbb7d55e5ca2304454b746503b7d40bedccc assets/cosmere/patchouli_books/guide/en_us/entries/sandmastery/sand_spreader.json

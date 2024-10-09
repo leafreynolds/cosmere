@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "group": "bracelet",
   "key": {
     "X": {
@@ -13,5 +14,6 @@
   ],
   "result": {
     "item": "feruchemy:bendalloy_bracelet_metalmind"
-  }
+  },
+  "show_notification": true
 }
