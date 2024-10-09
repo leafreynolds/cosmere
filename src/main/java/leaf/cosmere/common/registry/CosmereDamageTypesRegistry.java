@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
@@ -24,8 +24,8 @@ public class CosmereDamageTypesRegistry
 	private static final Map<String, CosmereDamageType> INTERNAL_DAMAGE_TYPES = new HashMap<>();
 	public static final Map<String, CosmereDamageType> DAMAGE_TYPES = Collections.unmodifiableMap(INTERNAL_DAMAGE_TYPES);
 
-	public static final CosmereDamageType EAT_METAL = new CosmereDamageType("eat_metal");
-	public static final CosmereDamageType SPIKED = new CosmereDamageType("spiked");
+	public static final CosmereDamageType EAT_METAL = new CosmereDamageType("eat_metal", 0.1f);
+	public static final CosmereDamageType SPIKED = new CosmereDamageType("spiked", 0.1f);
 
 	public record CosmereDamageType(ResourceKey<DamageType> key, float exhaustion) implements IHasTranslationKey
 	{
