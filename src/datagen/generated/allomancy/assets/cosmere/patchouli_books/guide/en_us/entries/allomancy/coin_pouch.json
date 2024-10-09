@@ -11,6 +11,12 @@
     {
       "type": "patchouli:crafting",
       "recipe": "allomancy:coin_pouch"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_steel"
+      ]
     }
   ],
   "priority": true,

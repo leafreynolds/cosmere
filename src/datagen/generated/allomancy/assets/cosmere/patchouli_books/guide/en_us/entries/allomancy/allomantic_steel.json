@@ -14,9 +14,8 @@
     {
       "type": "relations",
       "entries": [
-        "coinPouchEntry"
-      ],
-      "text": "Coin Pouch"
+        "cosmere:allomancy/coin_pouch"
+      ]
     }
   ],
   "priority": false,

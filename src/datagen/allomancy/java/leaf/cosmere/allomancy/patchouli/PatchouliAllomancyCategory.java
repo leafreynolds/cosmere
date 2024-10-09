@@ -1,5 +1,5 @@
 /*
- * File updated ~ 16 - 3 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.patchouli;
@@ -9,7 +9,6 @@ import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.text.StringHelper;
-import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.patchouli.data.BookStuff;
 import leaf.cosmere.patchouli.data.PatchouliTextFormat;
@@ -70,6 +69,7 @@ public class PatchouliAllomancyCategory
 			pages.add(firstPage);
 
 			pages.add(new BookStuff.CraftingPage("allomancy:coin_pouch"));
+			pages.add(new BookStuff.RelationsPage("", "cosmere:allomancy/allomantic_steel")); // links to cosmere book, coin_pouch entry
 			coinPouchEntry.pages = pages.toArray(BookStuff.Page[]::new);
 			pages.clear();
 			entries.add(coinPouchEntry);
@@ -111,10 +111,10 @@ public class PatchouliAllomancyCategory
 					break;
 				case STEEL:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to push against nearby metal objects. Steelpushing is affected by the laws of physics. If a coinshot were to push on something that weighs more than them, they'd be pushed away. "));
-					pages.add(new BookStuff.TextPage("If they pushed on something lighter, the object would move. Clever use of Steelpushing can lead to a pseudo flight through use of small metal objects, such as coins or nuggets. Many coinshots generally carry around a pouch of coins, for ease of access. A Coinshot can access their abilities by pressing " + PatchouliTextFormat.Keybind( "key.cosmere.allomancy.push")));
+					pages.add(new BookStuff.TextPage("If they pushed on something lighter, the object would move. Clever use of Steelpushing can lead to a pseudo flight through use of small metal objects, such as coins or nuggets. Many coinshots generally carry around a pouch of coins, for ease of access. A Coinshot can access their abilities by pressing " + PatchouliTextFormat.Keybind("key.cosmere.allomancy.push")));
 					// Check Keybinding
 					//pages.add(new BookStuff.CraftingPage("allomancy:coin_pouch")); -- redirect to coin pouch page instead.
-					pages.add(new BookStuff.RelationsPage("Coin Pouch", "coinPouchEntry"));
+					pages.add(new BookStuff.RelationsPage("", "cosmere:allomancy/coin_pouch")); // links to cosmere book, coin_pouch entry
 					break;
 				case TIN:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
