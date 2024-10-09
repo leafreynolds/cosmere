@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -12,8 +12,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -39,7 +37,7 @@ public class AllomancyRecipeGen extends BaseRecipeProvider implements ICondition
 				.save(consumer);
 
 		SpecialRecipeBuilder
-				.special((RecipeSerializer<? extends CraftingRecipe>) AllomancyRecipes.VIAL_RECIPE_SERIALIZER.get())
+				.special(AllomancyRecipes.VIAL_MIX.get())
 				.save(consumer, Allomancy.rl("vial_mixing").toString());
 
 	}

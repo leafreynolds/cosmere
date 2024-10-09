@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common;
@@ -51,7 +51,7 @@ public class Allomancy implements IModModule
 		AllomancyEntityTypes.ENTITY_TYPES.register(modBus);
 		AllomancyManifestations.MANIFESTATIONS.register(modBus);
 		AllomancyMenuTypes.MENU_TYPES.register(modBus);
-		AllomancyRecipes.SPECIAL_RECIPES.register(modBus);
+		AllomancyRecipes.RECIPE_SERIALIZERS.register(modBus);
 		AllomancyStats.STATS.register(modBus);
 		AllomancyCreativeTabs.CREATIVE_TABS.register(modBus);
 

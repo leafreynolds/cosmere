@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.recipes;
@@ -16,7 +16,10 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
@@ -160,16 +163,8 @@ public class VialMixingRecipe extends CustomRecipe
 	@Override
 	public @Nonnull RecipeSerializer<?> getSerializer()
 	{
-		return AllomancyRecipes.VIAL_RECIPE_SERIALIZER.get();
+		return AllomancyRecipes.VIAL_MIX.get();
 	}
 
-
-	public static class Serializer extends SimpleCraftingRecipeSerializer<VialMixingRecipe>
-	{
-		public Serializer()
-		{
-			super(VialMixingRecipe::new);
-		}
-	}
 
 }
