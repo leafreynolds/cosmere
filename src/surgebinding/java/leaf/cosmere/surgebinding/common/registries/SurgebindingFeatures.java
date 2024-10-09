@@ -1,18 +1,12 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.registries;
 
-import com.google.common.collect.ImmutableList;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.registration.impl.ConfiguredFeatureDeferredRegister;
 import leaf.cosmere.common.registration.impl.PlacedFeatureDeferredRegister;
-import leaf.cosmere.common.registry.FeatureRegistry;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-
-import java.util.List;
 
 public class SurgebindingFeatures
 {
@@ -49,7 +43,7 @@ public class SurgebindingFeatures
 													)
 											)
 									)
-					));*/
+					));
 
 
 	private static List<OreConfiguration.TargetBlockState> makeTarget(Roshar.Gemstone type)
@@ -63,5 +57,5 @@ public class SurgebindingFeatures
 						SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(type).getBlock().defaultBlockState())
 		);
 	}
-
+*/
 }

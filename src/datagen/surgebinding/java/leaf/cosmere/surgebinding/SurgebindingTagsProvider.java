@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -12,7 +12,6 @@ import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.GemBlock;
-import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBiomes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
@@ -79,10 +78,10 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		for (Roshar.Gemstone gemstone : Roshar.Gemstone.values())
 		{
 			final BlockRegistryObject<GemBlock, BlockItem> gemBlock = SurgebindingBlocks.GEM_BLOCKS.get(gemstone);
-			final BlockRegistryObject<GemOreBlock, BlockItem> gemOre = SurgebindingBlocks.GEM_ORE.get(gemstone);
-			final BlockRegistryObject<GemOreBlock, BlockItem> gemOreDeepslate = SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone);
+			//final BlockRegistryObject<GemOreBlock, BlockItem> gemOre = SurgebindingBlocks.GEM_ORE.get(gemstone);
+			//final BlockRegistryObject<GemOreBlock, BlockItem> gemOreDeepslate = SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone);
 
-			var list = ImmutableList.of(gemBlock, gemOre, gemOreDeepslate);
+			var list = ImmutableList.of(gemBlock);//, gemOre, gemOreDeepslate);
 
 			for (var block : list)
 			{
@@ -92,7 +91,7 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 			}
 
 			addToTag(BlockTags.BEACON_BASE_BLOCKS, gemBlock);
-			addToTag(CosmereTags.Blocks.GEM_ORE_BLOCK_TAGS.get(gemstone), gemOre, gemOreDeepslate);
+			//addToTag(CosmereTags.Blocks.GEM_ORE_BLOCK_TAGS.get(gemstone), gemOre, gemOreDeepslate);
 		}
 
 		for (BlockRegistryObject<?, BlockItem> plantBlock : SurgebindingBlocks.PLANT_BLOCKS)

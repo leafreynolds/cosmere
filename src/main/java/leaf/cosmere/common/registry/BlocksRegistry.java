@@ -54,7 +54,7 @@ public class BlocksRegistry
 										() -> new MetalOreBlock(metalType),
 										metalType.getRarity());
 								final BlockRegistryObject<MetalOreBlock, BlockItem> deepslateOre = BLOCKS.registerWithRarity(
-										metalType.getName() + Constants.RegNameStubs.ORE + Constants.RegNameStubs.DEEPSLATE,
+										Constants.RegNameStubs.DEEPSLATE + metalType.getName() + Constants.RegNameStubs.ORE,
 										() -> new MetalOreBlock(metalType),
 										metalType.getRarity());
 								return new OreBlockType(stoneOre, deepslateOre);

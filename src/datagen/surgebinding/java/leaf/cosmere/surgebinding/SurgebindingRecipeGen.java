@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -39,8 +39,9 @@ public class SurgebindingRecipeGen extends BaseRecipeProvider implements ICondit
 			compressRecipe(SurgebindingBlocks.GEM_BLOCKS.get(gemstone).getBlock(), CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone)).save(consumer);
 			decompressRecipe(consumer, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), SurgebindingBlocks.GEM_BLOCKS.get(gemstone), gemstone.getName() + "_block_deconstruct");
 
-			addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
-			addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), 1.0f, 1000);
+			//ores no longer obtained from blocks?
+			//addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
+			//addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), 1.0f, 1000);
 		}
 	}
 }

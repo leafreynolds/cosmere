@@ -50,7 +50,7 @@ public class Constants
 		public static final String BLOCK = "_block";
 		public static final String RAW = "raw_";
 		public static final String ORE = "_ore";
-		public static final String DEEPSLATE = "_deepslate";
+		public static final String DEEPSLATE = "deepslate_";
 		public static final String BLEND = "_blend";
 
 		public static final String METALMIND = "_metalmind";

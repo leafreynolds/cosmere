@@ -1,16 +1,13 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
 
-import com.google.common.collect.ImmutableList;
-import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registration.impl.ConfiguredFeatureDeferredRegister;
 import leaf.cosmere.common.registration.impl.PlacedFeatureDeferredRegister;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
@@ -59,7 +56,7 @@ public class FeatureRegistry
 											)
 									)
 					));
-*/
+
 
 	private static List<OreConfiguration.TargetBlockState> makeTarget(Metals.MetalType metalType)
 	{
@@ -73,7 +70,7 @@ public class FeatureRegistry
 						BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType).getBlock().defaultBlockState())
 		);
 	}
-
+*/
 
 	// The "New Tardis Mod" code says we should register configured versions of the features in FMLCommonSetup
 	// since it helps prevent mod incompatibility issues. No need to delete other mod's world gen. Thank you 50!

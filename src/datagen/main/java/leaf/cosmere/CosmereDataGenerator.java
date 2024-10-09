@@ -1,10 +1,9 @@
 /*
- * File updated ~ 7 - 8 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere;
 
-import leaf.cosmere.biome.BiomeModifierGen;
 import leaf.cosmere.biome.BiomeTagsProvider;
 import leaf.cosmere.blocks.BlockModelsGen;
 import leaf.cosmere.common.Cosmere;
@@ -46,7 +45,6 @@ public class CosmereDataGenerator
 
 		generator.addProvider(true, new PatchouliGen(packOutput));
 
-		generator.addProvider(true, new BiomeModifierGen(packOutput));
 		generator.addProvider(true, new BiomeTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 
 		generator.addProvider(true, new CosmereTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.registries;
@@ -32,7 +32,7 @@ public class SurgebindingBlocks
 									() -> new GemBlock(gemstone),
 									Rarity.UNCOMMON)));
 
-	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
+/*	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
 			Arrays.stream(Roshar.Gemstone.values())
 					.collect(Collectors.toMap(
 							Function.identity(),
@@ -48,7 +48,7 @@ public class SurgebindingBlocks
 							gemstone -> BLOCKS.registerWithRarity(
 									Constants.RegNameStubs.DEEPSLATE + gemstone.getName() + Constants.RegNameStubs.ORE,
 									() -> new GemOreBlock(gemstone),
-									Rarity.UNCOMMON)));
+									Rarity.UNCOMMON)));*/
 
 	public static final BlockRegistryObject<LavisPolypBlock, BlockItem> LAVIS_POLYP_BLOCK = BLOCKS.register("lavis_polyp", LavisPolypBlock::new);
 	public static final BlockRegistryObject<PrickletacBlock, BlockItem> PRICKLETAC_BLOCK = BLOCKS.register("prickletac", PrickletacBlock::new);
