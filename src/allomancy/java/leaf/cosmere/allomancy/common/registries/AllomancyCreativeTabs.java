@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.registries;
@@ -20,8 +20,8 @@ public class AllomancyCreativeTabs
 
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
-					Component.translatable("itemGroups." + Allomancy.MODID + ".items"),
-					AllomancyItems.METAL_VIAL,
+					Component.translatable("tabs." + Allomancy.MODID + ".items"),
+					AllomancyItems.COIN_POUCH,
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes
 									.displayItems((displayParameters, output) ->

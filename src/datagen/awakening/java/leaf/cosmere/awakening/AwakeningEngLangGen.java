@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening;
@@ -94,7 +94,7 @@ public class AwakeningEngLangGen extends LanguageProvider
 	private void addItemGroups()
 	{
 		//ItemGroups/Tabs
-		//add("itemGroup." + AwakeningItemGroups.GROUP.getRecipeFolderName(), "Awakening Group");
+		add("tabs.awakening.items", "Awakening");
 	}
 
 	private void addDamageSources()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere;
@@ -146,8 +146,7 @@ public class EngLangGen extends LanguageProvider
 	{
 		//ItemGroups/Tabs
 		//CreativeTabsRegistry.ITEMS.get().getDisplayName()
-		add("itemGroup.cosmere.items", "Cosmere Items");
-		add("itemGroup.cosmere.blocks", "Cosmere Blocks");
+		add("tabs.cosmere.items", "Cosmere");
 	}
 
 	private void addTooltips()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.example.common.registries;
@@ -21,7 +21,7 @@ public class ExampleCreativeTabs
 
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
-					Component.translatable("itemGroups." + Example.MODID + ".items"),
+					Component.translatable("tabs." + Example.MODID + ".items"),
 					ItemsRegistry.GUIDE,//ExampleItems.ITEMS.,
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes

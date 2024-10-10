@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery;
@@ -138,7 +138,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addItemGroups()
 	{
-		add("itemGroup.sandmastery", "Sandmastery Items");
+		add("tabs.sandmastery.items", "Sandmastery");
 	}
 
 	private void addDamageSources()

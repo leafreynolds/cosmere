@@ -22,7 +22,7 @@ public class SurgebindingCreativeTabs
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
 					Component.translatable("tabs." + Surgebinding.MODID + ".items"),
-					SurgebindingItems.HONORBLADES.get(Roshar.Gemstone.SAPPHIRE),
+					SurgebindingItems.HONORBLADES.get(Roshar.Gemstone.SMOKESTONE),
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes
 									.displayItems((displayParameters, output) ->

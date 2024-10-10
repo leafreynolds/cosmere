@@ -30,6 +30,8 @@ public class HemalurgyCuriosProvider extends CuriosDataProvider
 	@Override
 	public void generate(HolderLookup.Provider registries, ExistingFileHelper fileHelper)
 	{
+		//https://docs.illusivesoulworks.com/curios/slots/data-generation
+
 		this.createSlot("eyes")
 				.size(2)
 				.dropRule(ICurio.DropRule.ALWAYS_KEEP)

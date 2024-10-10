@@ -86,7 +86,6 @@
   "item.surgebinding.zircon_broam": "Zircon Broam",
   "item.surgebinding.zircon_chip": "Zircon Chip",
   "item.surgebinding.zircon_mark": "Zircon Mark",
-  "itemGroup.surgebinding.items": "Surgebinding Items",
   "key.cosmere.stormlight.shardblade": "Summon/Dismiss Shardblade",
   "manifestation.surgebinding.abrasion": "Abrasion",
   "manifestation.surgebinding.abrasion.description": "Needs description",
@@ -107,5 +106,6 @@
   "manifestation.surgebinding.transformation": "Transformation",
   "manifestation.surgebinding.transformation.description": "Needs description",
   "manifestation.surgebinding.transportation": "Transportation",
-  "manifestation.surgebinding.transportation.description": "Needs description"
+  "manifestation.surgebinding.transportation.description": "Needs description",
+  "tabs.surgebinding.items": "Surgebinding"
 }

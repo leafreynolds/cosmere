@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools;
@@ -89,8 +89,7 @@ public class ToolsEngLangGen extends LanguageProvider
 	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
-		//"itemGroup.cosmeretools.tools": "Cosmere tools"
-		add("itemGroup.cosmeretools.tools", "Cosmere Tools");
+		add("tabs.cosmeretools.items", "Cosmere Tools");
 
 	}
 

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -177,7 +177,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
-		add("itemGroup.allomancy.items", "Allomancy Items");
+		add("tabs.allomancy.items", "Allomancy");
 	}
 
 	private void addDamageSources()

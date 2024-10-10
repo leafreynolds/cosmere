@@ -87,7 +87,6 @@
   "item.allomancy.coin_pouch": "Coin Pouch",
   "item.allomancy.metal_vial": "Metal Vial",
   "item.allomancy.mistcloak": "Mistcloak",
-  "itemGroup.allomancy.items": "Allomancy Items",
   "key.cosmere.allomancy.pull": "Pull",
   "key.cosmere.allomancy.push": "Push",
   "key.cosmere.allomancy.riot": "Riot",
@@ -143,5 +142,6 @@
   "stat.minecraft.time_since_started_burning_steel": "Time since started burning steel",
   "stat.minecraft.time_since_started_burning_tin": "Time since started burning tin",
   "stat.minecraft.time_since_started_burning_zinc": "Time since started burning zinc",
+  "tabs.allomancy.items": "Allomancy",
   "tooltip.cosmere.metals.contained": "Contained Metals:"
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.example;
@@ -94,7 +94,7 @@ public class ExampleEngLangGen extends LanguageProvider
 	private void addItemGroups()
 	{
 		//ItemGroups/Tabs
-		//add("itemGroup." + ExampleItemGroups.GROUP.getRecipeFolderName(), "Example Group");
+		add("tabs.example.items", "Example");
 	}
 
 	private void addDamageSources()

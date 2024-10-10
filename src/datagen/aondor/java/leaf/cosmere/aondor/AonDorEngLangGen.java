@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aondor;
@@ -90,8 +90,7 @@ public class AonDorEngLangGen extends LanguageProvider
 	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
-		// "itemGroup.aondor.items": "Aon Dor Items",
-		add("itemGroup.aondor.items", "Aon Dor Items");
+		add("tabs.aondor.items", "Aon Dor");
 
 	}
 

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aviar;
@@ -94,7 +94,7 @@ public class AviarEngLangGen extends LanguageProvider
 	private void addItemGroups()
 	{
 		//ItemGroups/Tabs
-		//add("itemGroup." + AviarItemGroups.GROUP.getRecipeFolderName(), "Aviar Group");
+		add("tabs.aviar.items", "Aviar");
 	}
 
 	private void addDamageSources()

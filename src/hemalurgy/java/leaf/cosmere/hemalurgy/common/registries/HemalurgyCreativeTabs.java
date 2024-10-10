@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.registries;
@@ -21,7 +21,7 @@ public class HemalurgyCreativeTabs
 
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
-					Component.translatable("itemGroups." + Hemalurgy.MODID + ".items"),
+					Component.translatable("tabs." + Hemalurgy.MODID + ".items"),
 					HemalurgyItems.METAL_SPIKE.entrySet().stream().findAny().get().getValue(),
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.registries;
@@ -23,7 +23,7 @@ public class FeruchemyCreativeTabs
 
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
-					Component.translatable("itemGroups." + Feruchemy.MODID + ".items"),
+					Component.translatable("tabs." + Feruchemy.MODID + ".items"),
 					FeruchemyItems.BANDS_OF_MOURNING,
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes

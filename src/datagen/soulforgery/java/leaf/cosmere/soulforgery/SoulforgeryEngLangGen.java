@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 6 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.soulforgery;
@@ -94,7 +94,7 @@ public class SoulforgeryEngLangGen extends LanguageProvider
 	private void addItemGroups()
 	{
 		//ItemGroups/Tabs
-		//add("itemGroup." + SoulforgeryItemGroups.GROUP.getRecipeFolderName(), "Soulforgery Group");
+		add("tabs.soulforgery.items", "Soulforgery");
 	}
 
 	private void addDamageSources()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.registries;
@@ -20,7 +20,7 @@ public class SandmasteryCreativeTabs
 
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
-					Component.translatable("itemGroups." + Sandmastery.MODID + ".items"),
+					Component.translatable("tabs." + Sandmastery.MODID + ".items"),
 					SandmasteryItems.QIDO_ITEM,
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes

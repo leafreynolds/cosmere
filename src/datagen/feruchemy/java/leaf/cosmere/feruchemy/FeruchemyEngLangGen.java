@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -184,8 +184,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
-		// "itemGroup.feruchemy.metalminds": "Feruchemical Metalminds",
-		add("itemGroup.feruchemy.metalminds", "Feruchemical Metalminds");
+		add("tabs.feruchemy.items", "Feruchemy");
 
 	}
 

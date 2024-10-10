@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
@@ -23,25 +23,13 @@ public class CreativeTabsRegistry
 
 	public static final CreativeTabRegistryObject ITEMS =
 			CREATIVE_TABS.registerMain(
-					Component.translatable("itemGroups." + Cosmere.MODID + ".items"),
+					Component.translatable("tabs." + Cosmere.MODID + ".items"),
 					ItemsRegistry.GUIDE,
 					builder ->
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes
 									.displayItems((displayParameters, output) ->
 									{
 										CreativeTabDeferredRegister.addToDisplay(ItemsRegistry.ITEMS, output);
-									})
-			);
-
-	public static final CreativeTabRegistryObject BLOCKS =
-			CREATIVE_TABS.register(
-					"cosmere.blocks",
-					Component.translatable("itemGroups." + Cosmere.MODID + ".blocks"),
-					BlocksRegistry.METAL_ORE.entrySet().stream().findAny().get().getValue().stone(),
-					builder ->
-							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes
-									.displayItems((displayParameters, output) ->
-									{
 										CreativeTabDeferredRegister.addToDisplay(BlocksRegistry.BLOCKS, output);
 									})
 			);

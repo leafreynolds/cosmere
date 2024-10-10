@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -108,8 +108,7 @@ public class HemalurgyEngLangGen extends LanguageProvider
 	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
-		// "itemGroup.hemalurgy.spikes": "Hemalurgic Spikes",
-		add("itemGroup.hemalurgy.spikes", "Hemalurgic Spikes");
+		add("tabs.hemalurgy.items", "Hemalurgy");
 
 	}
 

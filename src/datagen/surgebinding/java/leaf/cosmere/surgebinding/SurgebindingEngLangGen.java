@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 10 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -141,8 +141,7 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
-		// "itemGroup.surgebinding.items": "Surgebinding Items",
-		add("itemGroup.surgebinding.items", "Surgebinding Items");
+		add("tabs.surgebinding.items", "Surgebinding");
 
 	}
 
