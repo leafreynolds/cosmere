@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common;
@@ -59,6 +59,7 @@ public class Surgebinding implements IModModule
 
 		SurgebindingFeatures.CONFIGURED_FEATURES.register(modBus);
 		SurgebindingFeatures.PLACED_FEATURES.register(modBus);
+		SurgebindingCreativeTabs.CREATIVE_TABS.register(modBus);
 
 		SurgebindingDimensions.register();
 

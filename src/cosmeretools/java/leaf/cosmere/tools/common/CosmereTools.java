@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 3 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools.common;
@@ -57,6 +57,7 @@ public class CosmereTools implements IModModule
 		ToolsMenuTypes.MENU_TYPES.register(modBus);
 		ToolsRecipes.SPECIAL_RECIPES.register(modBus);
 		ToolsStats.STATS.register(modBus);
+		ToolsCreativeTabs.CREATIVE_TABS.register(modBus);
 
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
 	}
