@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\". The rest of the page is missing... (Not yet implemented)"
+      "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\". Most of the page is missing... (Not yet fully implemented)The primary use for electrum is to counter the godmetal Atium's ability to see your attacks and thus dodge out of the way. This metal evens the playing field.Electrum is the internal pushing metal and one of four temporal metals (alongside Bendalloy, Cadmium, and Gold)"
     }
   ],
   "priority": false,

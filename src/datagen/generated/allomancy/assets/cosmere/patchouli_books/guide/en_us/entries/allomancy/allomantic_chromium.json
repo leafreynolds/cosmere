@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)chromium$() is known as a \"$(thing)Leecher$()\". A leecher gazing upon an allomancer can deplete their metal reserves, as if the target were burning aluminum themselves."
+      "text": "A misting who burns $(thing)chromium$() is known as a \"$(thing)Leecher$()\". A leecher can deplete the metal reserves of another allomancer with physical contact, as if the target were burning aluminum themselves.Chromium is the external pulling metal and one of four enhancement metals (alongside Aluminum, Duralumin, and Nicrosil)"
     }
   ],
   "priority": false,

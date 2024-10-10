@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)atium$() is known as a \"$(thing)Seer$()\". The rest of the page is blank... (Not yet implemented)"
+      "text": "A misting who burns $(thing)atium$() is known as a \"$(thing)Seer$()\". Most of the page is missing... (Not yet fully implemented)The metal atium is extraordinarily rare. Seers who can burn it can see into the future a small amount, and thus can dodge every attack that might befall them (unless the attacker is burning electrum of course).Interestingly atium doesnt fit the normal metal categories... I will have to further pursue the subject."
     }
   ],
   "priority": false,

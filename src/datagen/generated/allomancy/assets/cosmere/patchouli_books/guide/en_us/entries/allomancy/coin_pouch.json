@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "The coin pouch is the most common way of ammo for your steelpushing abilities. Crouch ($(k:key.sneak)$()) and use ($(k:key.use)$()) to add metal nuggets to it.$(br2)Don't crouch if you want to shoot ammo with steelpushes. Hold the steelpush keybind ($(k:key.cosmere.allomancy.push)$()) and then tap ($(k:key.use)$()) to shoot. If it gets stuck in a block, you will automatically get pushed away.",
+      "text": "The coin pouch is the most common way of ammo for your steelpushing abilities. Crouch ($(k:key.sneak)$()) and use ($(k:key.use)$()) to add metal nuggets to it. Don't crouch if you want to shoot ammo with steelpushes. Hold the steelpush keybind ($(k:key.cosmere.allomancy.push)$()) and then tap ($(k:key.use)$()) to shoot. If it gets stuck in a block, you will automatically get pushed away.If you hit a mob and keep pushing both you and the mob will be pushed away relative to your respective weights.",
       "title": "Coin Pouch"
     },
     {

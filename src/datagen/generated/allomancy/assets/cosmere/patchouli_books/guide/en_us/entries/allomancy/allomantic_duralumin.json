@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who can only burn $(thing)duralumin$() is known as a \"$(thing)Duralumin Gnat$()\" as they gain no discernible effect from burning their metal. The metal reserves of a mistborn burning duralumin will deplete faster, but will have a much more prominent effect."
+      "text": "A misting who can only burn $(thing)duralumin$() is known as a \"$(thing)Duralumin Gnat$()\" as they gain no discernible effect from burning their metal. The metal reserves of a misting burning duralumin will deplete faster, but will have a much more prominent effect. You might note that this feature is useless on its own, as it needs to be used in tandom with a second metal.Duralumin is the internal pushing metal and one of four enhancement metals (alongside Aluminum, Chromium, and Nicrosil"
     }
   ],
   "priority": false,

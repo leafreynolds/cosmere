@@ -14,7 +14,7 @@
       "offset": 0.0,
       "rotate": false,
       "scale": 1.0,
-      "text": "Grants Cognitive Concealment, hiding you from magic detection"
+      "text": "Grants Cognitive Concealment, hiding you from magic detection such as alllomantic bronze and white sand."
     },
     {
       "type": "entity",
@@ -41,7 +41,7 @@
       "offset": 0.0,
       "rotate": false,
       "scale": 1.0,
-      "text": "Decreases incoming damage"
+      "text": "Decreases incoming damage."
     },
     {
       "type": "entity",
@@ -50,7 +50,7 @@
       "offset": 0.0,
       "rotate": false,
       "scale": 1.0,
-      "text": "Allows you to detect when mobs are targeting you"
+      "text": "Allows you to detect when mobs are targeting you. [currently doesn't work]"
     }
   ],
   "priority": false,

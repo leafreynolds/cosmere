@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)cadmium$() is known as a \"$(thing)Pulser$()\". a pulser creates a bubble around them in which time slows down. To anyone inside this time bubble, everything outside appears to move faster."
+      "text": "A misting who burns $(thing)cadmium$() is known as a \"$(thing)Pulser$()\". a pulser creates a bubble around them in which time slows down. To anyone inside this time bubble, everything outside appears to move faster.Cadmium is the external pulling metal and one of four temporal metals (alongside Bendalloy, Electrum, and Gold)[Cadmium doesn't work properly yet and is still in development]"
     }
   ],
   "priority": false,

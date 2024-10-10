@@ -7,7 +7,7 @@
       "type": "spotlight",
       "item": "aviar:fruit_of_patji",
       "link_recipe": false,
-      "text": "A very rare fruit, native to the planet 'First of the Sun', in the Drominad system. $(br)It is said that the fruit contains a symbiote that can bond with a human, granting them their companions wondrous abilities.$(br)As this is not that planet, they're very hard to come by, with only the occaisional world hopper bringing them to this world."
+      "text": "A very rare fruit, native to the planet 'First of the Sun', in the Drominad system. It is said that the fruit contains a symbiote that can bond with a human, granting them their companions wondrous abilities.$(br)As this is not that planet, they're very hard to come by, with only the occaisional world hopper bringing them to this world.$(br)It is worth noting that the Fruit of Patji will not effect already tame parrots, rather you have to feed it to a parrot then tame the creature."
     },
     {
       "type": "entity",

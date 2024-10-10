@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who can only burn $(thing)aluminum$() is known as a \"$(thing)Aluminum Gnat$()\" as they gain no discernible effect from burning their metal. A mistborn burning aluminum will wipe all their metal reserves, including aluminum.I have heard rumors that an Aluminum Gnat of considerable power could clear the effects of other sources of investiture or impurities from their bodies, but this has not been confirmed to me. (Not yet implemented)"
+      "text": "A misting who can only burn $(thing)aluminum$() is known as a \"$(thing)Aluminum Gnat$()\" as they gain no discernible effect from burning their metal. Burning aluminum will wipe all their metal reserves, including aluminum.I have heard rumors that an Aluminum Gnat of considerable power could clear the effects of other sources of investiture or impurities from their bodies, but this has not been confirmed to me. (Not yet implemented)Aluminum is the internal pulling metal and one of four enhancement metals (alongside Duralumin, Chromium, and Nicrosil)"
     }
   ],
   "priority": false,

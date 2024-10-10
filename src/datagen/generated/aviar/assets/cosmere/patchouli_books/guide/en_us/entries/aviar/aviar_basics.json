@@ -1,11 +1,11 @@
 {
   "category": "cosmere:aviar",
   "icon": "minecraft:book",
-  "name": "Aviar (For Dummies)",
+  "name": "Aviar (Terminology)",
   "pages": [
     {
       "type": "text",
-      "text": "First, some terminology:$(li) Aviar: A bird who has bonded a symbiote native to the planet 'First of the Sun', in the Drominad system..$(li) Fruit of Patji: A fruit from off world. Contains the symbiote that grants birds their abilities, turning them into Aviar.$(li) Aviar Bond: A bond between an Aviar and a human. This bond allows the human to gain access to the Aviar's abilities.",
+      "text": "Some terminology:$(li) Aviar: A bird who has bonded a symbiote native to the planet 'First of the Sun', in the Drominad system..$(li) Fruit of Patji: A fruit from off world. Contains the symbiote that grants birds their abilities, turning them into Aviar.$(li) Aviar Bond: A bond between an Aviar and a human. This bond allows the human to gain access to the Aviar's abilities.",
       "title": "Terminology"
     },
     {
