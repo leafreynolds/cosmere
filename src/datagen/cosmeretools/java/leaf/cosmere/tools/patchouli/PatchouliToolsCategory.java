@@ -1,5 +1,5 @@
 /*
- * File updated ~ 22 - 3 - 2024 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools.patchouli;
@@ -16,7 +16,7 @@ public class PatchouliToolsCategory
 		BookStuff.Category tools = new BookStuff.Category(
 				"tools",
 				"Metalworkers recently discovered that other metals besides iron and gold can be worked to make tools and armor.",
-				"cosmere:pewter_pickaxe");
+				"cosmeretools:pewter_pickaxe");
 		tools.sortnum = 99;
 		tools.secret = true;
 		categories.add(tools);
