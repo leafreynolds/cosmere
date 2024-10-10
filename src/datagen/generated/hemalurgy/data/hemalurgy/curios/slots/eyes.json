@@ -1,0 +1,7 @@
+{
+  "add_cosmetic": true,
+  "drop_rule": "ALWAYS_KEEP",
+  "icon": "minecraft:item/empty_armor_slot_helmet",
+  "order": 0,
+  "size": 2
+}

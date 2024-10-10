@@ -1,0 +1,14 @@
+{
+  "entities": [
+    "minecraft:player",
+    "minecraft:armor_stand"
+  ],
+  "slots": [
+    "linchpin",
+    "spiritual",
+    "mental",
+    "physical",
+    "eyes",
+    "temporal"
+  ]
+}
