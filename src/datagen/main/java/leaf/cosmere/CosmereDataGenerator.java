@@ -5,6 +5,7 @@
 package leaf.cosmere;
 
 import leaf.cosmere.biome.BiomeTagsProvider;
+import leaf.cosmere.biome.CosmereDatapackRegistryProvider;
 import leaf.cosmere.blocks.BlockModelsGen;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registry.BiomeRegistry;
@@ -45,6 +46,7 @@ public class CosmereDataGenerator
 
 		generator.addProvider(true, new PatchouliGen(packOutput));
 
+		generator.addProvider(true, new CosmereDatapackRegistryProvider(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new BiomeTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 
 		generator.addProvider(true, new CosmereTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
