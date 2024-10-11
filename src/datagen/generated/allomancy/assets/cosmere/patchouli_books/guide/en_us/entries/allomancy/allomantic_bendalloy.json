@@ -5,7 +5,17 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)bendalloy$() is known as a \"$(thing)Slider$()\". A slider creates a bubble around them in which time speeds up. To anyone inside of the time bubble, everything outside appears to move much more slowly.Bendalloy is the external pushing metal and one of four temporal metals (alongside Cadmium, Electrum, and Gold)[Bendalloy doesn't work properly yet and is still in development]"
+      "text": "A misting who burns $(thing)bendalloy$() is known as a \"$(thing)Slider$()\". A slider creates a bubble around them in which time speeds up. To anyone inside of the time bubble, everything outside appears to move much more slowly. Bendalloy is the external pushing metal and one of four temporal metals (alongside Cadmium, Electrum, and Gold) [Bendalloy doesn't work properly yet and is still in development]"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_cadmium",
+        "cosmere:allomancy/allomantic_bendalloy",
+        "cosmere:allomancy/allomantic_gold",
+        "cosmere:allomancy/allomantic_electrum"
+      ],
+      "title": "The temporal metals:"
     }
   ],
   "priority": false,

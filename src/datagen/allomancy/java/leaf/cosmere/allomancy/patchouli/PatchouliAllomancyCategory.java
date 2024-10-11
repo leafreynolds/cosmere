@@ -13,7 +13,6 @@ import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.patchouli.data.BookStuff;
 import leaf.cosmere.patchouli.data.PatchouliTextFormat;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +101,30 @@ public class PatchouliAllomancyCategory
 
 			pages.clear();
 			String mistingName = StringHelper.fixCapitalisation(metalType.getMistingName());
-
+			String[] physicalMetals = {
+					"cosmere:allomancy/allomantic_steel",
+					"cosmere:allomancy/allomantic_iron",
+					"cosmere:allomancy/allomantic_pewter",
+					"cosmere:allomancy/allomantic_tin"
+			};
+			String[] mentalMetals = {
+					"cosmere:allomancy/allomantic_zinc",
+					"cosmere:allomancy/allomantic_brass",
+					"cosmere:allomancy/allomantic_copper",
+					"cosmere:allomancy/allomantic_bronze"
+			};
+			String[] enhancementMetals = {
+					"cosmere:allomancy/allomantic_aluminum",
+					"cosmere:allomancy/allomantic_duralumin",
+					"cosmere:allomancy/allomantic_chromium",
+					"cosmere:allomancy/allomantic_nicrosil"
+			};
+			String[] temporalMetals = {
+					"cosmere:allomancy/allomantic_cadmium",
+					"cosmere:allomancy/allomantic_bendalloy",
+					"cosmere:allomancy/allomantic_gold",
+					"cosmere:allomancy/allomantic_electrum"
+			};
 
 			switch (metalType)
 			{
@@ -112,7 +134,7 @@ public class PatchouliAllomancyCategory
 							"$(br2)Iron is the external pulling metal and one of four physical metals (Alongside Steel, Pewter, and Tin) "));
 					pages.add(new BookStuff.TextPage("Ironpulling is affected by the normal laws of physics. If a lurcher were to pull on something that weighs more than them, they'd be pulled towards it. If they pulled on something lighter, the object would move. If both were of similar weight, they'd both move." +
 							" A lurcher can pull on items that contain metal by pressing " + PatchouliTextFormat.Keybind("key.cosmere.allomancy.pull")));
-					pages.add(new BookStuff.RelationsPage("", "cosmere:allomancy/allomantic_steel"));
+					pages.add(new BookStuff.RelationsPage("", "The physical metals:",physicalMetals));
 					break;
 				case STEEL:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". Steel is an Allomantic metal and an alloy of Iron. When burnt, Steel allows the user to push against nearby metal objects. Steelpushing is affected by the laws of physics. If a coinshot were to push on something that weighs more than them, they'd be pushed away. "));
@@ -120,17 +142,19 @@ public class PatchouliAllomancyCategory
 							" Steel is the external pushing metal and one of four physical metals (alongside Iron, Pewter, and Tin)"));
 					//pages.add(new BookStuff.CraftingPage("allomancy:coin_pouch")); -- redirect to coin pouch page instead.
 					pages.add(new BookStuff.RelationsPage("", "cosmere:allomancy/coin_pouch")); // links to cosmere book, coin_pouch entry
+					pages.add(new BookStuff.RelationsPage("", "The physical metals:",physicalMetals));
 					break;
 				case TIN:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"In allomancy, Tin heightens the senses to super human levels. It allows you to see clearly in the dark, and the mists. There might be more here to discover..." +
 							" Tin is the internal pulling metal and one of four physical metals (alongside Iron, Pewter, and Steel)"));
+					pages.add(new BookStuff.RelationsPage("", "The physical metals:",physicalMetals));
 					break;
 				case PEWTER:
-					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment. However, they need to be careful because if they run out of pewter to burn, they will immediately feel all the pain they were shrugging off. This can mean instant death in extreme cases." +
-							"Pewter is the internal pushing metal and one of the four physical metals (alongside Tin, Iron, and Steel)" +
+					pages.add(new BookStuff.TextPage("A misting who burns" + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment. However, they need to be careful because if they run out of pewter to burn, they will immediately feel all the pain they were shrugging off. This can mean instant death in extreme cases. Pewter is the internal pushing metal and one of the four physical metals (alongside Tin, Iron, and Steel)" +
 							" [Do note that there isn't currently a way to tell how much damage you take when you stop burning pewter, be cautious.]"));
+					pages.add(new BookStuff.RelationsPage("", "The physical metals:",physicalMetals));
 					//"The major problem with pewter is that when it runs out, a large portion of the pain and injury that you resisted using the pewter hits you at once, potentially resulting in death. $(#f00)(NYI)$()";
 					break;
 				case ZINC:
@@ -138,6 +162,7 @@ public class PatchouliAllomancyCategory
 							"A creature being manipulated by a rioter will act far more aggressive, turning even the most pacified of animals into bloodthirsty beasts." + " A rioter can use their powers by pressing either " + PatchouliTextFormat.Keybind("key.cosmere.allomacy.riot") + " or " + PatchouliTextFormat.Keybind("key.cosmere.manifestation.use.active") + "."));
 					pages.add(new BookStuff.TextPage("Rioters have reported recently that their allomancy has been acting different, resulting in creatures that seem confused. (This feature is bugged.) " +
 							"Zinc is the external pulling metal and one of four mental metals (alongside Brass, Copper, and Bronze)"));
+					pages.add(new BookStuff.RelationsPage("", "The mental metals:",mentalMetals));
 					break;
 				case BRASS:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
@@ -145,69 +170,78 @@ public class PatchouliAllomancyCategory
 							" A soother can use their powers by pressing either " + PatchouliTextFormat.Keybind("k:cosmere.allomacy.soothe") + " or " + PatchouliTextFormat.Keybind("key.cosmere.manifestation.use.active") + "."));
 					pages.add(new BookStuff.TextPage("Soothers have reported recently that their allomancy has been acting different, resulting in creatures that seem confused. (This feature is bugged.) " +
 							"Brass is the external pushing metal and one of four mental metals (alongside Zinc, Copper, and Bronze)"));
+					pages.add(new BookStuff.RelationsPage("", "The mental metals:",mentalMetals));
 					break;
 				case COPPER:
-					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"A smoker burning copper generates a 'coppercloud,' which hides Allomancy from being detected by Bronze. Although I've never witnessed it, I've heard that a seeker of considerable strength could pierce a coppercloud. More research is required." +
-							" Copper is the internal pulling metal and one of four mental metals (alongside Zinc, Brass, and Bronze)"));
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + "is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
+							"$(br)A smoker burning copper generates a 'coppercloud,' which hides Allomancy from being detected by Bronze. Although I've never witnessed it, I've heard that a seeker of considerable strength could pierce a coppercloud. More research is required." +
+							"$(br)Copper is the internal pulling metal and one of four mental metals (alongside Zinc, Brass, and Bronze)"));
+					pages.add(new BookStuff.RelationsPage("", "The mental metals:",mentalMetals));
 					break;
 				case BRONZE:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"A seeker burning bronze is able to detect the nearby use of allomancy or feruchemy. A skilled seeker is capable of detecting what specific abilities are being used. Keep in mind that a smoker can neutralise the ability for a seeker to track allomancy or feruchemy. " +
-							"[If you use the Jade mod, it shows you the metal the creature is burning, though you can do this on sound alone]"));
-					pages.add(new BookStuff.TextPage(" Bronze is the internal pushing metal and one of four mental metals (alongside Brass, Copper, and Zinc)"));
+							"Bronze is the internal pushing metal and one of four mental metals (alongside Brass, Copper, and Zinc)"));
+					pages.add(new BookStuff.TextPage("[If you use the Jade mod, it shows you the metal the creature is burning, though you can do this on sound alone]"));
 					//"Copper neutralises the ability for a Seeker to track allomancy by hiding it in a copper cloud, but extremely powerful Seekers or Mistborn, may still be able to pierce said shields.";
+					pages.add(new BookStuff.RelationsPage("", "The mental metals:",mentalMetals));
 					break;
 				case ALUMINUM:
-					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal. " +
-							"Burning aluminum will wipe all their metal reserves, including aluminum." + "I have heard rumors that an Aluminum Gnat of considerable power could clear the effects of other sources of investiture or impurities from their bodies, " +
+					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as an $(br)\"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal." +
+							"$(br)Burning aluminum will wipe all their metal reserves, including aluminum." + "I have heard rumors that an Aluminum Gnat of considerable power could clear the effects of other sources of investiture or impurities from their bodies, " +
 							"but this has not been confirmed to me. (Not yet implemented)" +
-							" Aluminum is the internal pulling metal and one of four enhancement metals (alongside Duralumin, Chromium, and Nicrosil)"));
+							"$(br)Aluminum is the internal pulling metal and one of four enhancement metals (alongside Duralumin, Chromium, and Nicrosil)"));
+					pages.add(new BookStuff.RelationsPage("", "The enhancement metals:", enhancementMetals));
 					break;
 				case DURALUMIN:
 					//add extra note so that these people will know of their shame.
-					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal. " +
-							"The metal reserves of a misting burning duralumin will deplete faster, but will have a much more prominent effect. You might note that this feature is useless on its own, as it needs to be used in tandom with a second metal." +
-							" Duralumin is the internal pushing metal and one of four enhancement metals (alongside Aluminum, Chromium, and Nicrosil"));
+					pages.add(new BookStuff.TextPage("A misting who can only burn " + PatchouliTextFormat.Thing(metalName) + " is known as a $(br)\"" + PatchouliTextFormat.Thing(mistingName) + "\" as they gain no discernible effect from burning their metal. The metal reserves of a misting burning duralumin will deplete faster, but will have a much more prominent effect. You might note that this feature is useless on its own, as it needs to be used in tandom with a second metal."));
+					pages.add(new BookStuff.TextPage("Duralumin is the internal pushing metal and one of four enhancement metals (alongside Aluminum, Chromium, and Nicrosil"));
+					pages.add(new BookStuff.RelationsPage("", "The enhancement metals:", enhancementMetals));
 					break;
 				case CHROMIUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"A leecher can deplete the metal reserves of another allomancer with physical contact, as if the target were burning aluminum themselves." +
 							" Chromium is the external pulling metal and one of four enhancement metals (alongside Aluminum, Duralumin, and Nicrosil)"));
+					pages.add(new BookStuff.RelationsPage("", "The enhancement metals:", enhancementMetals));
 					break;
 				case NICROSIL:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\"." +
-							"A nicroburst can empower the allomancy of another with physical contact, as if the target were burning duralumin themselves. This can be used to throw other allomancers off, such as giving a coinshot a particularly strong steelpush when they don't expect it."+
+							"$(br)A nicroburst can empower the allomancy of another with physical contact, as if the target were burning duralumin themselves. This can be used to throw other allomancers off, such as giving a coinshot a particularly strong steelpush when they don't expect it."+
 							" Nicrosil is the external pushing metal and one of four enhancement metals (alongside Aluminum, Chromium, and Duralumin)"));
+					pages.add(new BookStuff.RelationsPage("", "The enhancement metals:", enhancementMetals));
 					break;
 				case CADMIUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"a pulser creates a bubble around them in which time slows down. To anyone inside this time bubble, everything outside appears to move faster." +
+							"A pulser creates a bubble around them in which time slows down. To anyone inside this time bubble, everything outside appears to move faster." +
 							" Cadmium is the external pulling metal and one of four temporal metals (alongside Bendalloy, Electrum, and Gold)" +
 							" [Cadmium doesn't work properly yet and is still in development]"));
+					pages.add(new BookStuff.RelationsPage("", "The temporal metals:", temporalMetals));
 					break;
 				case BENDALLOY:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"A slider creates a bubble around them in which time speeds up. To anyone inside of the time bubble, everything outside appears to move much more slowly." +
 							" Bendalloy is the external pushing metal and one of four temporal metals (alongside Cadmium, Electrum, and Gold)" +
 							" [Bendalloy doesn't work properly yet and is still in development]"));
+					pages.add(new BookStuff.RelationsPage("", "The temporal metals:", temporalMetals));
 					break;
 				case GOLD:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"Gold is the internal pulling metal and one of four temporal metals (alongside Bendalloy, Cadmium, and Electrum)"+
 							" The rest of the page is scratched out. (Not yet implemented)"));
+					pages.add(new BookStuff.RelationsPage("", "The temporal metals:", temporalMetals));
 					break;
 				case ELECTRUM:
 					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
 							"Most of the page is missing... (Not yet fully implemented)" +
 							" The primary use for electrum is to counter the godmetal Atium's ability to see your attacks and thus dodge out of the way. This metal evens the playing field." +
 							" Electrum is the internal pushing metal and one of four temporal metals (alongside Bendalloy, Cadmium, and Gold)"));
+					pages.add(new BookStuff.RelationsPage("", "The temporal metals:", temporalMetals));
 					break;
 				case ATIUM:
-					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". " +
-							"Most of the page is missing... (Not yet fully implemented)" +
-							" The metal atium is extraordinarily rare. Seers who can burn it can see into the future a small amount, and thus can dodge every attack that might befall them (unless the attacker is burning electrum of course)." +
-							" Interestingly atium doesnt fit the normal metal categories... I will have to further pursue the subject."));
+					pages.add(new BookStuff.TextPage("A misting who burns " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(mistingName) + "\". $(br)" +
+							"Most of the page is missing... (Not yet fully implemented)$(br)The metal atium is extraordinarily rare. Seers who can burn it can see into the future a small amount, and thus can dodge every attack that might befall them (unless the attacker is burning electrum of course)."));
+					pages.add(new BookStuff.TextPage("Interestingly atium doesnt fit the normal metal categories... $(br)I will have to further pursue the subject."));
 					break;
 			}
 			entryForThisPower.pages = pages.toArray(BookStuff.Page[]::new);

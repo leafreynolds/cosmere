@@ -5,7 +5,17 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)copper$() is known as a \"$(thing)Smoker$()\". A smoker burning copper generates a 'coppercloud,' which hides Allomancy from being detected by Bronze. Although I've never witnessed it, I've heard that a seeker of considerable strength could pierce a coppercloud. More research is required.Copper is the internal pulling metal and one of four mental metals (alongside Zinc, Brass, and Bronze)"
+      "text": "A misting who burns $(thing)copper$()is known as a \"$(thing)Smoker$()\". $(br)A smoker burning copper generates a 'coppercloud,' which hides Allomancy from being detected by Bronze. Although I've never witnessed it, I've heard that a seeker of considerable strength could pierce a coppercloud. More research is required.$(br)Copper is the internal pulling metal and one of four mental metals (alongside Zinc, Brass, and Bronze)"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_zinc",
+        "cosmere:allomancy/allomantic_brass",
+        "cosmere:allomancy/allomantic_copper",
+        "cosmere:allomancy/allomantic_bronze"
+      ],
+      "title": "The mental metals:"
     }
   ],
   "priority": false,

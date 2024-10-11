@@ -9,7 +9,17 @@
     },
     {
       "type": "text",
-      "text": "Rioters have reported recently that their allomancy has been acting different, resulting in creatures that seem confused. (This feature is bugged.)Zinc is the external pulling metal and one of four mental metals (alongside Brass, Copper, and Bronze)"
+      "text": "Rioters have reported recently that their allomancy has been acting different, resulting in creatures that seem confused. (This feature is bugged.) Zinc is the external pulling metal and one of four mental metals (alongside Brass, Copper, and Bronze)"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_zinc",
+        "cosmere:allomancy/allomantic_brass",
+        "cosmere:allomancy/allomantic_copper",
+        "cosmere:allomancy/allomantic_bronze"
+      ],
+      "title": "The mental metals:"
     }
   ],
   "priority": false,

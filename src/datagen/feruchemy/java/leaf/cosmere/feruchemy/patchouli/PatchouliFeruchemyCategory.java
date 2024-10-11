@@ -32,7 +32,7 @@ public class PatchouliFeruchemyCategory
 
 		BookStuff.Entry feruchemyBasics = new BookStuff.Entry("feruchemy_basics", feruchemy, feruchemy.icon);
 		feruchemyBasics.priority = true;
-		pages.add(new BookStuff.TextPage("If you entered this world with a feruchemical ability, you're called a $(6)ferring$(). Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap attributes.", feruchemy.icon));
+		pages.add(new BookStuff.TextPage("The art requires storing an attribute in a piece of metal. Depending on what kind of metal you have access to, a metalmind of the corresponding metal will let you store and tap different attributes.", feruchemy.icon));
 		pages.add(new BookStuff.CraftingPage("", "feruchemy:steel_ring_metalmind", "feruchemy:steel_bracelet_metalmind"));
 		pages.add(new BookStuff.CraftingPage("feruchemy:steel_necklace_metalmind").setText("Metalminds can store varying amounts of charges, depending on the size."));
 

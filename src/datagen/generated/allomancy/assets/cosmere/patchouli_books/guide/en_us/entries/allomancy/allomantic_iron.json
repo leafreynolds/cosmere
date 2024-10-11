@@ -14,8 +14,12 @@
     {
       "type": "relations",
       "entries": [
-        "cosmere:allomancy/allomantic_steel"
-      ]
+        "cosmere:allomancy/allomantic_steel",
+        "cosmere:allomancy/allomantic_iron",
+        "cosmere:allomancy/allomantic_pewter",
+        "cosmere:allomancy/allomantic_tin"
+      ],
+      "title": "The physical metals:"
     }
   ],
   "priority": false,

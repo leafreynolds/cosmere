@@ -5,7 +5,17 @@
   "pages": [
     {
       "type": "text",
-      "text": "A misting who burns $(thing)gold$() is known as a \"$(thing)Augur$()\". Gold is the internal pulling metal and one of four temporal metals (alongside Bendalloy, Cadmium, and Electrum)The rest of the page is scratched out. (Not yet implemented)"
+      "text": "A misting who burns $(thing)gold$() is known as a \"$(thing)Augur$()\". Gold is the internal pulling metal and one of four temporal metals (alongside Bendalloy, Cadmium, and Electrum) The rest of the page is scratched out. (Not yet implemented)"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_cadmium",
+        "cosmere:allomancy/allomantic_bendalloy",
+        "cosmere:allomancy/allomantic_gold",
+        "cosmere:allomancy/allomantic_electrum"
+      ],
+      "title": "The temporal metals:"
     }
   ],
   "priority": false,
