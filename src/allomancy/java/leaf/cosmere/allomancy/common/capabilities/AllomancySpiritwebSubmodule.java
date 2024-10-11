@@ -13,6 +13,7 @@ import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.manifestation.*;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
@@ -21,6 +22,7 @@ import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.Cosmere;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -234,7 +236,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				//todo - does this mean it's wrong on the first check? probably doesn't matter
 				IronSteelLinesThread.getInstance().setScanRange(range);
 				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
-				Vec3i closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
+				Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
 
@@ -249,7 +251,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				}
 				if (AllomancyConfigs.CLIENT.drawMetalBoxes.get() && !scanResult.foundBlocks.isEmpty())
 				{
-					if (scanResult.hasTargetedCluster && scanResult.targetedCluster.getPosition().equals(closestMetalObject))
+					if (scanResult.hasTargetedCluster)
 					{
 						DrawHelper.drawBlocksAtPoint(viewModelStack, Color.BLUE, scanResult.foundBlocks, closestMetalObject, scanResult.targetedCluster.getBlocks());
 					}

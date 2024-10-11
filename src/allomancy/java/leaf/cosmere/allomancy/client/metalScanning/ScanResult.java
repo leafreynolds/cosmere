@@ -4,6 +4,8 @@
 
 package leaf.cosmere.allomancy.client.metalScanning;
 
+import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.common.Cosmere;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 

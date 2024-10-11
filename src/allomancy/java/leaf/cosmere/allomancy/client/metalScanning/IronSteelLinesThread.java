@@ -40,7 +40,7 @@ public class IronSteelLinesThread implements Runnable
 	private static Thread t;
 	private static final Lock lock = new ReentrantLock();
 	private static ScanResult scanResult = new ScanResult();
-	private static Vec3i closestMetalObjectInLookVector;
+	private static Vec3 closestMetalObjectInLookVector;
 	private final double tolerance = 1.8D;
 	private static int scanRange = 0;
 	private static boolean isStopping = false;
@@ -113,15 +113,15 @@ public class IronSteelLinesThread implements Runnable
 		scanRange = range;
 	}
 
-	public Vec3i getClosestMetalObject()
+	public Vec3 getClosestMetalObject()
 	{
 		if (closestMetalObjectInLookVector == null)
 		{
 			return null;
 		}
 
-		// return copy
-		return new Vec3i(closestMetalObjectInLookVector.getX(), closestMetalObjectInLookVector.getY(), closestMetalObjectInLookVector.getZ());
+		// return copy adjusted for center
+		return new Vec3(closestMetalObjectInLookVector.x(), closestMetalObjectInLookVector.y(), closestMetalObjectInLookVector.z());
 	}
 
 	public void start()
@@ -150,7 +150,7 @@ public class IronSteelLinesThread implements Runnable
 
 	private void setClosestMetalObject(Vec3 vector)
 	{
-		closestMetalObjectInLookVector = toVec3i(vector);
+		closestMetalObjectInLookVector = vector;
 	}
 
 	private Vec3i toVec3i(Vec3 vector)

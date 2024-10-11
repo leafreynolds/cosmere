@@ -155,7 +155,13 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			boolean hitEntity = false;
 			Entity entityHitResult = null;
 
-			Vec3i closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
+			Vec3 closestMetalObjectVec3 = IronSteelLinesThread.getInstance().getClosestMetalObject();
+			Vec3i closestMetalObject = null;
+			if (closestMetalObjectVec3 != null)
+			{
+				closestMetalObject = new Vec3i((int) closestMetalObjectVec3.x(), (int) closestMetalObjectVec3.y(), (int) closestMetalObjectVec3.z());
+			}
+
 			if (closestMetalObject != null)
 			{
 				BlockState blockAtPos = level.getBlockState(new BlockPos(closestMetalObject));
