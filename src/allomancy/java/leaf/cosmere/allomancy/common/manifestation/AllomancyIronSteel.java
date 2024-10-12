@@ -12,13 +12,14 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +40,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +49,7 @@ import java.util.*;
 
 public class AllomancyIronSteel extends AllomancyManifestation
 {
-	public static final HashMap<Material, Double> materialResistanceMap = initHashMap();
+	public static final HashMap<TagKey<Block>, Double> materialResistanceMap = initHashMap();
 
 	private final boolean isPush;
 	private static Set<String> s_whiteList = null;
@@ -61,26 +61,37 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		this.isPush = metalType == Metals.MetalType.STEEL;
 	}
 
-	private static HashMap<Material, Double> initHashMap()
+	private static HashMap<TagKey<Block>, Double> initHashMap()
 	{
-		HashMap<Material, Double> output = new HashMap<>();
+		HashMap<TagKey<Block>, Double> output = new HashMap<>();
 
-		// map definitely isn't done, but this is a good start
-		output.put(Material.STONE, 0.5);
-		output.put(Material.DIRT, 0.2);
-		output.put(Material.WOOD, 0.25);
-		output.put(Material.METAL, 0.5);
-		output.put(Material.PISTON, 0.5);
-		output.put(Material.SAND, 0.2);
-		output.put(Material.CLAY, 0.2);
+		output.put(BlockTags.MINEABLE_WITH_PICKAXE, 0.5);
+		output.put(BlockTags.MINEABLE_WITH_SHOVEL, 0.2);
+		output.put(BlockTags.MINEABLE_WITH_AXE, 0.25);
 
 		return output;
+	}
+
+	public static Double getResistance(BlockState blockState)
+	{
+		Double retValue = 0D;
+
+		for (TagKey<Block> tagKey : materialResistanceMap.keySet())
+		{
+			if (blockState.is(tagKey))
+			{
+				retValue = materialResistanceMap.get(tagKey);
+				break;
+			}
+		}
+
+		return retValue;
 	}
 
 	@Override
 	public void applyEffectTick(ISpiritweb data)
 	{
-		if (data.getLiving().level.isClientSide)
+		if (data.getLiving().level().isClientSide)
 		{
 			performEffectClient(data);
 		}
@@ -93,7 +104,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	@Override
 	public void onModeChange(ISpiritweb cap, int lastMode)
 	{
-		if (cap.getLiving().level.isClientSide)
+		if (cap.getLiving().level().isClientSide)
 		{
 
 			super.onModeChange(cap, lastMode);
@@ -144,7 +155,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			boolean hitEntity = false;
 			Entity entityHitResult = null;
 
-			Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
+			Vec3i closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 			if (closestMetalObject != null)
 			{
 				BlockState blockAtPos = level.getBlockState(new BlockPos(closestMetalObject));
@@ -273,7 +284,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			int entityID = entities.get(i);
 			final LivingEntity dataLiving = data.getLiving();
-			Entity targetEntity = dataLiving.level.getEntity(entityID);
+			Entity targetEntity = dataLiving.level().getEntity(entityID);
 			if (targetEntity != null)
 			{
 				if (targetEntity.blockPosition().closerThan(dataLiving.blockPosition(), getRange(data)))
@@ -460,7 +471,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			return false;
 		}
-		return s_whiteList.contains(ResourceLocationHelper.get(item).getPath());
+		return s_whiteList.contains(RegistryHelper.get(item).getPath());
 	}
 
 
@@ -474,7 +485,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			return false;
 		}
-		return s_whiteList.contains(ResourceLocationHelper.get(block).getPath());
+		return s_whiteList.contains(RegistryHelper.get(block).getPath());
 	}
 
 	public static boolean containsMetal(Entity entity)
@@ -487,7 +498,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			return false;
 		}
-		return s_whiteList.contains(ResourceLocationHelper.get(entity).getPath());
+		return s_whiteList.contains(RegistryHelper.get(entity).getPath());
 	}
 
 	public static void invalidateWhitelist()
@@ -508,38 +519,38 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
 			s_blackList = new HashSet<>();
-			s_blackList.add(ResourceLocationHelper.get(Blocks.AIR).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.WATER).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LAVA).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GRASS_BLOCK).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.FARMLAND).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GLASS_PANE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BLACK_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BROWN_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.RED_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.CYAN_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GRAY_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.GREEN_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_BLUE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LIGHT_GRAY_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.LIME_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.MAGENTA_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.ORANGE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.PINK_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.PURPLE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.WHITE_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.YELLOW_BED).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.TORCH).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.SHULKER_BOX).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.BLUE_ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.FROSTED_ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Blocks.PACKED_ICE).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Items.DIAMOND).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Items.EMERALD).getPath());
-			s_blackList.add(ResourceLocationHelper.get(Items.AIR).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.AIR).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.WATER).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LAVA).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GRASS_BLOCK).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.FARMLAND).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GLASS).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GLASS_PANE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BLACK_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BROWN_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BLUE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.RED_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.CYAN_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GRAY_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.GREEN_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LIGHT_BLUE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LIGHT_GRAY_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.LIME_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.MAGENTA_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.ORANGE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.PINK_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.PURPLE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.WHITE_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.YELLOW_BED).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.TORCH).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.SHULKER_BOX).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.BLUE_ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.FROSTED_ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Blocks.PACKED_ICE).getPath());
+			s_blackList.add(RegistryHelper.get(Items.DIAMOND).getPath());
+			s_blackList.add(RegistryHelper.get(Items.EMERALD).getPath());
+			s_blackList.add(RegistryHelper.get(Items.AIR).getPath());
 			s_blackList.add("philosophers_stone");//problem child
 		}
 		for (var itemInList : s_blackList)
@@ -550,18 +561,18 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		s_whiteList = new HashSet<>();
 
 		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
-		final RecipeManager recipeManager = entity.level.getRecipeManager();
+		final RecipeManager recipeManager = entity.level().getRecipeManager();
 		final Collection<Recipe<?>> recipes = recipeManager.getRecipes();
 
 		for (var recipe : recipes)
 		{
-			final ItemStack resultItem = recipe.getResultItem();
+			final ItemStack resultItem = recipe.getResultItem(entity.level().registryAccess());
 
 			// check if is blacklisted, and if is, skip
 			//if it says result item is never null, ignore it,
 			//we have one confirmed bug report that it _can_ be null
 			// https://github.com/leafreynolds/cosmere/issues/58
-			if (resultItem == null || resultItem.isEmpty() || s_blackList.contains(ResourceLocationHelper.get(resultItem.getItem()).getPath()))
+			if (resultItem == null || resultItem.isEmpty() || s_blackList.contains(RegistryHelper.get(resultItem.getItem()).getPath()))
 			{
 				continue;
 			}
@@ -583,7 +594,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 			for (ItemStack ingredientStack : ingredient.getItems())
 			{
 				final Item ingredientItem = ingredientStack.getItem();
-				final ResourceLocation ingredientItemRL = ResourceLocationHelper.get(ingredientItem);
+				final ResourceLocation ingredientItemRL = RegistryHelper.get(ingredientItem);
 				if (s_blackList.contains(ingredientItemRL.getPath()))
 				{
 					continue;
@@ -593,7 +604,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				{
 					//found one
 					final Item resultItem = resultItemStack.getItem();
-					final ResourceLocation resultItemRL = ResourceLocationHelper.get(resultItem);
+					final ResourceLocation resultItemRL = RegistryHelper.get(resultItem);
 					// final Holder.Reference<Item> itemReference = resultItem.builtInRegistryHolder();
 					// List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
 					// allTags.add(CosmereTags.Items.CONTAINS_METAL);

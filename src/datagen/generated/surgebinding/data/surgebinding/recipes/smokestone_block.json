@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "I": {
       "tag": "forge:gems/smokestone"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "surgebinding:smokestone_block"
-  }
+  },
+  "show_notification": true
 }

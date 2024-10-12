@@ -1,16 +1,16 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardbladeItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 public class SurgebindingItemModelsGen extends ItemModelProvider
 {
 
-	public SurgebindingItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public SurgebindingItemModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Surgebinding.MODID, existingFileHelper);
 	}
@@ -84,7 +84,7 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

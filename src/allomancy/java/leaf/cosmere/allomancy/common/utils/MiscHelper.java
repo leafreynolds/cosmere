@@ -21,7 +21,7 @@ public class MiscHelper
 
 	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, int amount)
 	{
-		if (metalType == null || livingEntity.level.isClientSide)
+		if (metalType == null || livingEntity.level().isClientSide)
 		{
 			return;
 		}

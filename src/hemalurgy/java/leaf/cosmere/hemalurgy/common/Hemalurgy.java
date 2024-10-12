@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common;
@@ -12,10 +12,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.hemalurgy.common.capabilities.HemalurgySpiritwebSubmodule;
 import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
-import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
-import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
-import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
-import leaf.cosmere.hemalurgy.common.registries.HemalurgyLootFunctions;
+import leaf.cosmere.hemalurgy.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -51,6 +48,7 @@ public class Hemalurgy implements IModModule
 		HemalurgyItems.ITEMS.register(modBus);
 		HemalurgyLootFunctions.LOOT_FUNCTIONS.register(modBus);
 		HemalurgyEntityTypes.ENTITY_TYPES.register(modBus);
+		HemalurgyCreativeTabs.CREATIVE_TABS.register(modBus);
 
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
 	}

@@ -1,0 +1,16 @@
+{
+  "category": "cosmere:soulforgery",
+  "icon": "minecraft:paper",
+  "name": "Soulforgery (For Dummies)",
+  "pages": [
+    {
+      "type": "text",
+      "text": "In this journal, I shall explain all I have discovered about Soulforgery. $(br)Firstly, some terminology:",
+      "title": "Terminology"
+    }
+  ],
+  "priority": true,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}

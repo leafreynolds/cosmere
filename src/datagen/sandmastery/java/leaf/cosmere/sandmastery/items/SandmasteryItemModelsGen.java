@@ -1,15 +1,15 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.items;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.items.SandJarItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 public class SandmasteryItemModelsGen extends ItemModelProvider
 {
 
-	public SandmasteryItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public SandmasteryItemModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Sandmastery.MODID, existingFileHelper);
 	}
@@ -37,8 +37,14 @@ public class SandmasteryItemModelsGen extends ItemModelProvider
 			Item item = itemRegistryObject.asItem();
 
 			//blocks have their own model rules
-			if (item instanceof BlockItem) continue;
-			if (item instanceof SandJarItem) continue;
+			if (item instanceof BlockItem)
+			{
+				continue;
+			}
+			if (item instanceof SandJarItem)
+			{
+				continue;
+			}
 			//else normal item texture rules apply
 			simpleItem(path, path);
 		}
@@ -47,7 +53,7 @@ public class SandmasteryItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

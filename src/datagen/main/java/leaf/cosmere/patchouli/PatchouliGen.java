@@ -1,21 +1,21 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class PatchouliGen extends PatchouliProvider
 {
-	public PatchouliGen(DataGenerator generatorIn)
+	public PatchouliGen(PackOutput packOutput)
 	{
-		super(generatorIn, CosmereAPI.COSMERE_MODID);
+		super(packOutput, CosmereAPI.COSMERE_MODID);
 	}
 
 
@@ -43,7 +43,7 @@ public class PatchouliGen extends PatchouliProvider
 	 */
 	public String getName()
 	{
-		return "PatchouliGeneration";
+		return "Cosmere PatchouliGeneration";
 	}
 
 }

@@ -1,21 +1,22 @@
 /*
- * File updated ~ 22 - 3 - 2024 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import leaf.cosmere.tools.common.CosmereTools;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class ToolsPatchouliGen extends PatchouliProvider
 {
-	public ToolsPatchouliGen(DataGenerator generatorIn)
+	public ToolsPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, CosmereTools.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

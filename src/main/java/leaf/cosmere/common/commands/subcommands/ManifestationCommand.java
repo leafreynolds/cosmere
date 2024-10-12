@@ -51,7 +51,7 @@ public class ManifestationCommand extends ModCommand
 		{
 			CommandSourceStack source = context.getSource();
 
-			MutableComponent powersFound = Component.translatable(Constants.Strings.POWERS_FOUND, TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID()));
+			MutableComponent powersFound = Component.translatable(Constants.Strings.POWERS_FOUND, TextHelper.getPlayerTextObject(player.serverLevel(), player.getUUID()));
 
 			final MutableComponent leftBracketTextComponent = Component.literal("[");
 			final MutableComponent rightBracketTextComponent = Component.literal("]");
@@ -69,7 +69,7 @@ public class ManifestationCommand extends ModCommand
 				powersFound.append(rightBracketTextComponent);
 				powersFound.append(space);
 			}
-			source.sendSuccess(powersFound, true);
+			source.sendSuccess(() -> powersFound, true);
 		});
 	}
 
@@ -85,7 +85,7 @@ public class ManifestationCommand extends ModCommand
 				iSpiritweb.clearManifestations();
 				iSpiritweb.syncToClients(null);
 				MutableComponent playerTextObject = TextHelper.getPlayerTextObject(context.getSource().getLevel(), player.getUUID());
-				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
+				source.sendSuccess(() -> Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
 			});
 		}
 
@@ -106,8 +106,8 @@ public class ManifestationCommand extends ModCommand
 				//set to none so that it auto updates to the new available ones on sync
 				iSpiritweb.setSelectedManifestation(ManifestationRegistry.NONE.get());
 				iSpiritweb.syncToClients(null);
-				MutableComponent playerTextObject = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
-				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
+				MutableComponent playerTextObject = TextHelper.getPlayerTextObject(player.serverLevel(), player.getUUID());
+				source.sendSuccess(() -> Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerTextObject), false);
 				ReportPowersFoundOnPlayer(context, player);
 			});
 		}
@@ -126,7 +126,7 @@ public class ManifestationCommand extends ModCommand
 			CommandSourceStack source = context.getSource();
 			Manifestation manifestation = context.getArgument("manifestation", Manifestation.class);
 
-			MutableComponent playerText = TextHelper.getPlayerTextObject(player.getLevel(), player.getUUID());
+			MutableComponent playerText = TextHelper.getPlayerTextObject(player.serverLevel(), player.getUUID());
 
 			MutableComponent manifestationText = (MutableComponent) manifestation.getTextComponent();
 
@@ -134,7 +134,7 @@ public class ManifestationCommand extends ModCommand
 			{
 				//todo change this so that the user sets the strength in the command
 				spiritweb.giveManifestation(manifestation, 9);
-				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
+				source.sendSuccess(() -> Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 				ReportPowersFoundOnPlayer(context, player);
 				spiritweb.syncToClients(null);
 			});
@@ -159,7 +159,7 @@ public class ManifestationCommand extends ModCommand
 			{
 				spiritweb.removeManifestation(manifestation);
 				spiritweb.syncToClients(null);
-				source.sendSuccess(Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
+				source.sendSuccess(() -> Component.translatable(Constants.Strings.POWER_SET_SUCCESS, playerText, manifestationText), false);
 				ReportPowersFoundOnPlayer(context, player);
 			});
 		}

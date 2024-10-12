@@ -1,21 +1,22 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.awakening.common.Awakening;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class AwakeningPatchouliGen extends PatchouliProvider
 {
-	public AwakeningPatchouliGen(DataGenerator generatorIn)
+	public AwakeningPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Awakening.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

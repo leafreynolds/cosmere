@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 11 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -12,7 +12,6 @@ import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.items.BaseItem;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -43,20 +42,15 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	private static final String metal_amounts = "metalAmounts";
 	private static final int MAX_METALS_COUNT = 16;
 
-	@Override
-	public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems)
-	{
-		super.fillItemCategory(pCategory, pItems);
 
-		if (allowedIn(pCategory))
+	public void addFilled(CreativeModeTab.Output output)
+	{
+		final ItemStack filled = new ItemStack(this);
+		for (int i = 0; i < 16; i++)
 		{
-			final ItemStack filled = new ItemStack(this);
-			for (int i = 0; i < 16; i++)
-			{
-				addMetals(filled, i, 1);
-			}
-			pItems.add(filled);
+			addMetals(filled, i, 1);
 		}
+		output.accept(filled);
 	}
 
 	private static CompoundTag getContainedMetalsTag(ItemStack stack)

@@ -4,13 +4,13 @@
 
 package leaf.cosmere.feruchemy.common.effects.store;
 
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 
 // air
@@ -38,7 +38,7 @@ public class CadmiumStoreEffect extends FeruchemyEffectBase
 	public void applyEffectTick(ISpiritweb data, double strength)
 	{
 		final LivingEntity living = data.getLiving();
-		if (living.level.isClientSide)
+		if (living.level().isClientSide)
 		{
 			return;
 		}
@@ -60,7 +60,7 @@ public class CadmiumStoreEffect extends FeruchemyEffectBase
 		//every 2.5 seconds
 		if (living.getAirSupply() < -10 && (getTickToCheck(data) % getActiveTick() == 0))
 		{
-			living.hurt(DamageSource.DROWN, 2.0F);
+			living.hurt(new DamageSource(living.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DROWN)), 2.0F);
 		}
 	}
 }

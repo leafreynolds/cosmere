@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.store;
@@ -35,7 +35,7 @@ public class IronStoreEffect extends FeruchemyEffectBase
 	{
 		final LivingEntity living = data.getLiving();
 		//ensure the user has correct buffs at least as strong as their store effect
-		if (living.level.isClientSide)
+		if (living.level().isClientSide)
 		{
 			return;
 		}

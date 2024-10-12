@@ -1,0 +1,25 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:aluminum_nugget",
+  "name": "Allomantic Aluminum",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who can only burn $(thing)aluminum$() is known as an $(br)\"$(thing)Aluminum Gnat$()\" as they gain no discernible effect from burning their metal.$(br)Burning aluminum will wipe all their metal reserves, including aluminum.I have heard rumors that an Aluminum Gnat of considerable power could clear the effects of other sources of investiture or impurities from their bodies, but this has not been confirmed to me. (Not yet implemented)$(br)Aluminum is the internal pulling metal and one of four enhancement metals (alongside Duralumin, Chromium, and Nicrosil)"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_aluminum",
+        "cosmere:allomancy/allomantic_duralumin",
+        "cosmere:allomancy/allomantic_chromium",
+        "cosmere:allomancy/allomantic_nicrosil"
+      ],
+      "title": "The enhancement metals:"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 8
+}

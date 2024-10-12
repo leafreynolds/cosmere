@@ -1,20 +1,17 @@
 /*
- * File updated ~ 30 - 7 - 2023 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
 
 
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.blocks.MetalOreBlock;
 import leaf.cosmere.common.commands.CosmereCommand;
-import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import leaf.cosmere.common.registry.VillagerProfessionRegistry;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -113,11 +110,11 @@ public class CommonEvents
 
 	private static void addOreTrades(List<VillagerTrades.ItemListing> tradesForLevel, Rarity rarity)
 	{
-		for (BlockRegistryObject<MetalOreBlock, BlockItem> item : BlocksRegistry.METAL_ORE.values())
+		for (var oreType : BlocksRegistry.METAL_ORE.values())
 		{
-			if (item.getBlock().asItem().getRarity(ItemStack.EMPTY) == rarity)
+			if (oreType.stone().getBlock().asItem().getRarity(ItemStack.EMPTY) == rarity)
 			{
-				ItemStack itemStackForSale = new ItemStack(item.getBlock().asItem(), 1);
+				ItemStack itemStackForSale = new ItemStack(oreType.stone().getBlock().asItem(), 1);
 				tradesForLevel.add(makeTrade(itemStackForSale));
 			}
 		}

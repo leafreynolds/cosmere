@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:hemalurgy",
+  "icon": "hemalurgy:bendalloy_spike",
+  "name": "Hemalurgic Bendalloy",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Bendalloy spikes steal the spiritual feruchemical powers: $(p)Feruchemically storing and tapping $(l:feruchemy:feruchemy/feruchemical_aluminum)Aluminum$(), $(l:feruchemy:feruchemy/feruchemical_duralumin)Duralumin$(), $(l:feruchemy:feruchemy/feruchemical_chromium)Chromium$() and $(l:feruchemy:feruchemy/feruchemical_nicrosil)Nicrosil$(), the feruchemical attributes keyed to each of these are:  $(p)Identity(making identityless metalminds), Connection(Bad omen/Hero of the village), Fortune(Bad luck/luck), and Investiture(Charge can be used for tapping other metals)"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hemalurgy:bendalloy_spike"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 13
+}

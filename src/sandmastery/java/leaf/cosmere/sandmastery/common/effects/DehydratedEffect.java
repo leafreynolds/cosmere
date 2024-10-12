@@ -1,17 +1,15 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.effects;
 
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 
 public class DehydratedEffect extends CosmereEffect
 {
-	public static final DamageSource DEHYDRATED = (new DamageSource("dehydrated")).bypassArmor().bypassMagic().bypassEnchantments();
-
 	public DehydratedEffect()
 	{
 		super();
@@ -34,6 +32,8 @@ public class DehydratedEffect extends CosmereEffect
 	@Override
 	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		data.getLiving().hurt(DEHYDRATED, 4.0F);
+		final LivingEntity living = data.getLiving();
+		//todo swap out dryout damage source
+		living.hurt(living.damageSources().dryOut(), 4.0F);
 	}
 }

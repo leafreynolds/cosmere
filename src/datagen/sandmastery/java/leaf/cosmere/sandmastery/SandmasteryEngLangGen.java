@@ -1,12 +1,12 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery;
 
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
@@ -14,7 +14,7 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -30,9 +30,9 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.sandmastery.%s.title";
 	final String advancementDescriptionFormat = "advancements.sandmastery.%s.description";
 
-	public SandmasteryEngLangGen(DataGenerator gen)
+	public SandmasteryEngLangGen(PackOutput output)
 	{
-		super(gen, Sandmastery.MODID, "en_us");
+		super(output, Sandmastery.MODID, "en_us");
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Sandmastery.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -138,7 +138,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addItemGroups()
 	{
-		add("itemGroup.sandmastery", "Sandmastery Items");
+		add("tabs.sandmastery.items", "Sandmastery");
 	}
 
 	private void addDamageSources()

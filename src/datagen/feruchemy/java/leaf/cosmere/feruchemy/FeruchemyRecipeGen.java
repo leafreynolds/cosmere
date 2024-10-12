@@ -1,30 +1,40 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
 
+import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
-public class FeruchemyRecipeGen extends RecipeProvider implements IConditionBuilder
+public class FeruchemyRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public FeruchemyRecipeGen(DataGenerator generatorIn)
+	public FeruchemyRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
 	{
-		super(generatorIn);
+		super(output, existingFileHelper);
 	}
 
 	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+	protected ResourceLocation makeRL(String path)
+	{
+		return Feruchemy.rl(path);
+	}
+
+	@Override
+	protected void addRecipes(Consumer<FinishedRecipe> consumer)
 	{
 		for (Metals.MetalType metalType : Metals.MetalType.values())
 		{
@@ -38,9 +48,9 @@ public class FeruchemyRecipeGen extends RecipeProvider implements IConditionBuil
 
 		if (metalType.hasFeruchemicalEffect())
 		{
-			ShapedRecipeBuilder.shaped(FeruchemyItems.METAL_NECKLACES.get(metalType)).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern(" X ").group("necklace").unlockedBy("has_material", has(inputMaterial)).save(consumer);
-			ShapedRecipeBuilder.shaped(FeruchemyItems.METAL_RINGS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern(" X ").group("ring").unlockedBy("has_material", has(inputMaterial)).save(consumer);
-			ShapedRecipeBuilder.shaped(FeruchemyItems.METAL_BRACELETS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern("X X").group("bracelet").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_NECKLACES.get(metalType)).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern(" X ").group("necklace").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_RINGS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern(" X ").group("ring").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_BRACELETS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern("X X").group("bracelet").unlockedBy("has_material", has(inputMaterial)).save(consumer);
 		}
 	}
 

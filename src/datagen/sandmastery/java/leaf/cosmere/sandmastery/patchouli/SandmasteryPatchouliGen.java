@@ -1,21 +1,22 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.patchouli;
 
-import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import leaf.cosmere.sandmastery.common.Sandmastery;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class SandmasteryPatchouliGen extends PatchouliProvider
 {
-	public SandmasteryPatchouliGen(DataGenerator generatorIn)
+	public SandmasteryPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Sandmastery.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

@@ -30,20 +30,22 @@ buildscript {
 }
 
 plugins {
-	id 'net.darkhax.curseforgegradle' version '1.0.14'
+	id 'org.ajoberstar.grgit.service' version '5.2.0'
+	id 'net.darkhax.curseforgegradle' version '1.1.16'
 	id "com.modrinth.minotaur" version "2.+"
 	id 'java'
 	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
-	id 'net.minecraftforge.gradle' version '5.1.+'
+	id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+	//id 'net.neoforged.gradle' version '[6.0.18,6.2)'
 	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 	id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 tasks.named('wrapper', Wrapper).configure {
 	//Define wrapper values here so as to not have to always do so when updating gradlew.properties
-	gradleVersion = '8.1.1'
+	gradleVersion = '8.4'
 	distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -170,7 +172,7 @@ def setupExtraSourceSets(SourceSet base)
 	}
 	//And then setup and have all the extra sourceSets have their configurations extend the ones for the base module so that they can
 	// properly access the dependency
-	for (def extraType : extraTypes) {
+	for (String extraType : extraTypes) {
 		//Setup a source set in extraType/$name
 		def extraSourceSet = setupExtraSourceSet(base, extraType)
 		//And then setup the configurations for it
@@ -305,7 +307,10 @@ version = "${minecraft_version}-${forge_version}-" + full_mod_version
 
 
 java {
-	toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of("${java_version}"))
+		//vendor.set(JvmVendorSpec.JETBRAINS)
+	}
 	withSourcesJar()
 }
 
@@ -316,7 +321,8 @@ minecraft {
 	mappings channel: "${mappings_channel}", version: "${mappings_version}"
 
 	accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'),
-			file('src/allomancy/resources/META-INF/accesstransformer.cfg'))
+			file('src/allomancy/resources/META-INF/accesstransformer.cfg'),
+			file('src/surgebinding/resources/META-INF/accesstransformer.cfg'))
 
 	runs {
 		client {
@@ -332,6 +338,10 @@ minecraft {
 				//Your username/display name, this is the name that shows up in chat
 				// Note: This is not your email, even if you have a Mojang account
 				args '--username', project.getProperty('mc_username')
+			}
+			if (project.hasProperty('mc_accessToken')) {
+				//Your access token, you can find it in your '.minecraft/launcher_accounts.json' file
+				args '--accessToken', project.getProperty('mc_accessToken')
 			}
 		}
 		server { setupRunConfig(it, true) }
@@ -357,20 +367,18 @@ minecraft {
 def setupRunConfig(RunConfig runConfig, boolean supportsGameTests, String directory = "run")
 {
 	runConfig.workingDirectory(file(directory))
-	//We aren't a multi-project config so we can disable the forced exit to allow gradle run tasks to stop gracefully
-	runConfig.forceExit = false
 	//This fixes Mixin application problems from other mods because their refMaps are SRG-based, but we're in a MCP env
 	runConfig.property 'mixin.env.remapRefMap', 'true'
 	runConfig.property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 	if (supportsGameTests) {
 		//Specify all our mods as domains to look for game tests
-		runConfig.property 'forge.enabledGameTestNamespaces', 'cosmere,allomancy,feruchemy,hemalurgy,surgebinding,sandmastery'
+		runConfig.property 'forge.enabledGameTestNamespaces', 'cosmere,allomancy,feruchemy,hemalurgy,surgebinding,sandmastery,cosmeretools'
 	}
 
 	if (project.hasProperty('forge_force_ansi')) {
 		//Force ansi if declared as a gradle variable, as the auto detection doesn't detect IntelliJ properly
 		// or eclipse's plugin that adds support for ansi escape in console
-		runConfig.jvmArg('-Dterminal.ansi=' + project.getProperty('forge_force_ansi'))
+		runConfig.jvmArg("-Dterminal.ansi=${project.getProperty('forge_force_ansi')}")
 	}
 
 	runConfig.mods.register("cosmere").configure {
@@ -399,7 +407,7 @@ repositories {
 	}
 	maven {
 		//curio
-		url = "https://maven.theillusivec4.top/"
+		url "https://maven.theillusivec4.top/"
 	}
 	maven {
 		//curios
@@ -434,8 +442,11 @@ repositories {
 }
 
 dependencies {
+	//minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
 	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
 	apiAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	allomancyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	feruchemyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -455,13 +466,13 @@ dependencies {
 	compileOnly fg.deobf("curse.maven:jade-api-324717:${jade_api_id}")
 	runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
 
-	runtimeOnly fg.deobf("curse.maven:soulhome-574511:${soulhome_id}")
+	//runtimeOnly fg.deobf("curse.maven:soulhome-574511:${soulhome_id}")
 
-	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
-	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
+	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
-	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}-FORGE:api")
+	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}-FORGE")
 
 }
 
@@ -608,7 +619,7 @@ for (def name : secondaryModules) {
 def createReobf(SourceSet sourceSet)
 {
 	def reobfTask = createReobf(sourceSet.getJarTaskName())
-	reobfTask.configure { classpath.from(sourceSet.compileClasspath) }
+	reobfTask.configure { libraries.from(sourceSet.compileClasspath) }
 	tasks.named(sourceSet.getJarTaskName()).configure(task -> task.finalizedBy(reobfTask))
 	return reobfTask
 }
@@ -624,9 +635,6 @@ afterEvaluate {
 	tasks.named('jar', Jar).configure { finalizedBy(tasks.named('reobfJar', RenameJarInPlace)) }
 }
 
-tasks.withType(RenameJarInPlace).configureEach {
-	args.add('--stable')
-}
 
 tasks.withType(GenerateModuleMetadata) {
 	//Disable Gradle 7 module metadata generation as it does not play nicely with FG
@@ -737,7 +745,7 @@ void setGenericCurseArtifactData(UploadArtifact artifact, String changelog, Stri
 	artifact.changelog = changelog
 	artifact.changelogType = 'text'
 	artifact.releaseType = "${release_type}"
-	artifact.addModLoader("forge")
+	artifact.addModLoader("Forge")
 }
 
 void uploadSecondaryCurseProject(TaskPublishCurseForge task, long projectId, String changelog, TaskProvider<Jar> sourceSetJar, String release_type)
@@ -803,7 +811,7 @@ if (System.getenv("MODRINTH_API_TOKEN") != null || project.hasProperty('modrinth
 		projectId = "SEABTDiK"
 		versionNumber = "${full_mod_version}"
 		versionType = "${release_type}"
-		gameVersions = ["1.19.2"] // Must be an array, even with only one version
+		gameVersions = ["1.20.1"] // Must be an array, even with only one version
 		changelog = changeLogResolver.call()
 		uploadFile = jar
 		getAdditionalFiles().value([apiJar.get()])
@@ -835,7 +843,7 @@ def createSecondaryModrinthUpload(String output, String targetProjectId, TaskPro
 			modrinth {
 				projectId = targetProjectId
 				uploadFile = sourceSetJar.get()
-				gameVersions = ["1.19.2"] // Must be an array, even with only one version
+				gameVersions = ["1.20.1"] // Must be an array, even with only one version
 				//Clear additional upload files as this is a modification of what things are set to from before
 				getAdditionalFiles().empty()
 

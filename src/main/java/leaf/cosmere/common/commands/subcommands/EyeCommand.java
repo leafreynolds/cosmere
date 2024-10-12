@@ -48,7 +48,7 @@ public class EyeCommand extends ModCommand
 			});
 		}
 
-		context.getSource().sendSuccess(TextHelper.createTranslatedText(Constants.Strings.SET_EYE_HEIGHT_SUCCESS, value), true);
+		context.getSource().sendSuccess(() -> TextHelper.createTranslatedText(Constants.Strings.SET_EYE_HEIGHT_SUCCESS, value), true);
 
 		return SINGLE_SUCCESS;
 	}

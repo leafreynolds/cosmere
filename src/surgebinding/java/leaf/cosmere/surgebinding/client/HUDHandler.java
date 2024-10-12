@@ -1,18 +1,17 @@
 /*
- * File updated ~ 27 - 2 - 2023 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +24,7 @@ public class HUDHandler
 	private static final ResourceLocation stormlightBar = new ResourceLocation(Surgebinding.MODID, "textures/gui/stormlight_hud.png");
 
 
-	public static void onDrawScreenPost(PoseStack ms)
+	public static void onDrawScreenPost(GuiGraphics guiGraphics)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.options.hideGui)
@@ -55,7 +54,7 @@ public class HUDHandler
 						if (heldStormlight > 0)
 						{
 							final int maxPlayerStormlight = SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get();
-							renderStormlightBar(ms, heldStormlight, maxPlayerStormlight);
+							renderStormlightBar(guiGraphics, heldStormlight, maxPlayerStormlight);
 						}
 					}
 
@@ -68,7 +67,7 @@ public class HUDHandler
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 	}
 
-	private static void renderStormlightBar(PoseStack ms, int heldStormlight, int maxPlayerStormlight)
+	private static void renderStormlightBar(GuiGraphics gui, int heldStormlight, int maxPlayerStormlight)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		int barWidth = 182;
@@ -120,22 +119,11 @@ public class HUDHandler
 				1// - (red / 255F)//fading in and out?
 		);
 
-		RenderSystem.setShaderTexture(0, stormlightBar);
-
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		//draw textured rect
-		GuiComponent.blit(
-				ms,
-				barStartingX,
-				barStartingY,
-				0,
-				251,
-				barWidth,
-				5,
-				256,
-				256);
+		gui.blit(stormlightBar, barStartingX, barStartingY, 0, 251, barWidth, 5, 256, 256);
 
 		RenderSystem.disableBlend();
 		RenderSystem.setShaderColor(1, 1, 1, 1);

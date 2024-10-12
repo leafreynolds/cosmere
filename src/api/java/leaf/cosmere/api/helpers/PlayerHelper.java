@@ -70,7 +70,7 @@ public class PlayerHelper
 
 	public static void addItem(Player player, ItemStack stack)
 	{
-		if (!player.addItem(stack) && !player.level.isClientSide)
+		if (!player.addItem(stack) && !player.level().isClientSide)
 		{
 			ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(), player.position().y(), player.position().z(), stack);
 			player.getCommandSenderWorld().addFreshEntity(entity);

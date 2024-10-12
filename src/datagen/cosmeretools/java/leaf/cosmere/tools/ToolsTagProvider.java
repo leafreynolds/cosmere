@@ -1,5 +1,5 @@
 /*
- * File updated ~ 22 - 3 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools;
@@ -8,17 +8,19 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.tag.BaseTagProvider;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.registries.ToolsBlocks;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ToolsTagProvider extends BaseTagProvider
 {
-	public ToolsTagProvider(DataGenerator dataGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public ToolsTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(dataGenerator, CosmereTools.MODID, existingFileHelper);
+		super(packOutput, lookupProvider, CosmereTools.MODID, existingFileHelper);
 	}
 
 
@@ -30,7 +32,7 @@ public class ToolsTagProvider extends BaseTagProvider
 
 
 	@Override
-	protected void registerTags()
+	protected void registerTags(HolderLookup.Provider registries)
 	{
 		//getItemBuilder(CosmereTags.Items.CURIO_HEAD).add(Tools.Item.asItem());
 

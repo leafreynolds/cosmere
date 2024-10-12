@@ -1,14 +1,16 @@
+/*
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
+ */
+
 package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.api.providers.IItemProvider;
-import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +30,7 @@ public class ItemDeferredRegister extends WrappedDeferredRegister<Item>
 
 	public static Item.Properties getCosmereDefaultProperties()
 	{
-		return new Item.Properties().tab(CosmereItemGroups.ITEMS);
+		return new Item.Properties();
 	}
 
 	public ItemRegistryObject<Item> register(String name)

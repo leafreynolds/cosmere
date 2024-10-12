@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 8 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -8,20 +8,22 @@ import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.tag.BaseTagProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
 public class AllomancyTagProvider extends BaseTagProvider
 {
-	public AllomancyTagProvider(DataGenerator dataGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public AllomancyTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(dataGenerator, Allomancy.MODID, existingFileHelper);
+		super(packOutput, lookupProvider, Allomancy.MODID, existingFileHelper);
 	}
 
 	@Override
-	protected void registerTags()
+	protected void registerTags(HolderLookup.Provider registries)
 	{
 		getItemBuilder(CosmereTags.Items.CURIO_HEAD).add(AllomancyItems.MISTCLOAK.asItem());
 	}

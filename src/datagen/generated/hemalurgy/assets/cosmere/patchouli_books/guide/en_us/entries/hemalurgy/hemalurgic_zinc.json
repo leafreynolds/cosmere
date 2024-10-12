@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:hemalurgy",
+  "icon": "hemalurgy:zinc_spike",
+  "name": "Hemalurgic Zinc",
+  "pages": [
+    {
+      "type": "text",
+      "text": "[Not Yet Implemented] $(p)My research has yet to determine any Hemalurgic properties of zinc - further research necessary. (WIP)"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hemalurgy:zinc_spike"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 4
+}

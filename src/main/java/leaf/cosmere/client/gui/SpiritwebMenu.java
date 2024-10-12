@@ -19,6 +19,8 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
@@ -390,8 +392,9 @@ public class SpiritwebMenu extends Screen
 	}
 
 	@Override
-	public void render(final @NotNull PoseStack matrixStack, final int mouseX, final int mouseY, final float partialTicks)
+	public void render(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks)
 	{
+		PoseStack matrixStack = guiGraphics.pose();
 		if (spiritweb == null)
 		{
 			return;
@@ -402,9 +405,9 @@ public class SpiritwebMenu extends Screen
 		final int start = (int) (visibility * 98) << 24;
 		final int end = (int) (visibility * 128) << 24;
 
-		fillGradient(matrixStack, 0, 0, width, height, start, end);
+		guiGraphics.fillGradient(0, 0, width, height, start, end);
 
-		RenderSystem.disableTexture();
+		//RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		final Tesselator tessellator = Tesselator.getInstance();
@@ -431,25 +434,26 @@ public class SpiritwebMenu extends Screen
 		//draw out what we've asked for
 		tessellator.end();
 
-		drawIcons(matrixStack, buffer, middle_x, middle_y);
+		drawIcons(guiGraphics, buffer, middle_x, middle_y);
 
 
 		// draw radial button strings
-		renderRadialButtonStrings(matrixStack, (int) middle_x, (int) middle_y);
+		renderRadialButtonStrings(guiGraphics, (int) middle_x, (int) middle_y);
 		//draw sided button strings
-		renderSidedButtonStrings(matrixStack, middle_x, middle_y);
+		renderSidedButtonStrings(guiGraphics, middle_x, middle_y);
 		//draw quadrant strings
-		renderMetalQuadrantsStrings(matrixStack);
+		renderMetalQuadrantsStrings(guiGraphics);
 		//do extra text info stuff
-		renderAnyExtraInfoTexts(matrixStack, (int) middle_x, (int) middle_y);
+		renderAnyExtraInfoTexts(guiGraphics, (int) middle_x, (int) middle_y);
 
 		matrixStack.popPose();
 	}
 
-	private void drawIcons(@NotNull PoseStack matrixStack, BufferBuilder buffer, double middle_x, double middle_y)
+	private void drawIcons(@NotNull GuiGraphics guiGraphics, BufferBuilder buffer, double middle_x, double middle_y)
 	{
+		PoseStack matrixStack = guiGraphics.pose();
 		matrixStack.pushPose();
-		RenderSystem.enableTexture();
+		//RenderSystem.enableTexture();
 		RenderSystem.enableBlend();
 
 		//then we switch to icons
@@ -459,14 +463,14 @@ public class SpiritwebMenu extends Screen
 		//buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
 		//put the icons on the region buttons
-		renderRadialButtonIcons(matrixStack, middle_x, middle_y);
+		renderRadialButtonIcons(guiGraphics, middle_x, middle_y);
 		//put the icons on the sided buttons
-		renderSidedButtonIcons(matrixStack, middle_x, middle_y);
+		renderSidedButtonIcons(guiGraphics, middle_x, middle_y);
 
 		matrixStack.popPose();
 	}
 
-	private void renderAnyExtraInfoTexts(PoseStack matrixStack, int middle_x, int middle_y)
+	private void renderAnyExtraInfoTexts(GuiGraphics guiGraphics, int middle_x, int middle_y)
 	{
 		int leftSideX = 10;
 		final int[] y = {(int) middle_y / 2};
@@ -484,7 +488,7 @@ public class SpiritwebMenu extends Screen
 			{
 				if (s.toLowerCase().contains("hydration"))
 				{
-					font.drawShadow(matrixStack, s, leftSideX, y[0], 0xffffffff);
+					guiGraphics.drawString(font, s, leftSideX, y[0], 0xffffffff);
 					y[0] += 10;
 				}
 			}
@@ -498,14 +502,15 @@ public class SpiritwebMenu extends Screen
 		y[0] = (int) middle_y / 2;
 		int rightSideX = middle_x + 35;
 
-		font.drawShadow(matrixStack, I18n.get(selectedManifestation.getTranslationKey()), rightSideX, y[0], 0xffffffff);
+		guiGraphics.drawString(font, I18n.get(selectedManifestation.getTranslationKey()), rightSideX, y[0], 0xffffffff);
 		//todo mode translation
-		font.drawShadow(matrixStack, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
+		guiGraphics.drawString(font, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
 
 	}
 
-	private void renderMetalQuadrantsStrings(PoseStack matrixStack)
+	private void renderMetalQuadrantsStrings(GuiGraphics guiGraphics)
 	{
+		PoseStack matrixStack = guiGraphics.pose();
 		m_infoText.clear();
 
 		List<Manifestation> maniList = spiritweb.getAvailableManifestations();
@@ -535,10 +540,10 @@ public class SpiritwebMenu extends Screen
 					if (((inMetalSubmenu && selectedAllomancyType) || shouldShowAllomancy) && s.toLowerCase().contains("a. " + quad.metalType.getName()) && maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID())))
 					{
 						String displayString = s.split(":")[1].stripLeading();
-						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) quad.centerY + font.lineHeight, 0xffffffff);
 
 						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY - font.lineHeight*1.5F), 0xffffffff);
 
 						foundNumber = true;
 						break;
@@ -546,10 +551,10 @@ public class SpiritwebMenu extends Screen
 					else if (((inMetalSubmenu && selectedFeruchemyType) || shouldShowFeruchemy) && s.toLowerCase().contains("f. " + quad.metalType.getName()) && maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID())))
 					{
 						String displayString = s.split(":")[1].stripLeading();
-						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) quad.centerY + font.lineHeight, 0xffffffff);
 
 						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-						font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY - font.lineHeight*1.5F), 0xffffffff);
 
 						foundNumber = true;
 						break;
@@ -566,15 +571,15 @@ public class SpiritwebMenu extends Screen
 			{
 				String displayString;
 				displayString = "0";
-				font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY + font.lineHeight, 0xffffffff);
+				guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY + font.lineHeight), 0xffffffff);
 
 				displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-				font.drawShadow(matrixStack, displayString, (int) quad.centerX - font.width(displayString)/2F, (int) quad.centerY - font.lineHeight*1.5F, 0xffffffff);
+				guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY - font.lineHeight*1.5F), 0xffffffff);
 			}
 		}
 	}
 
-	private void renderSidedButtonStrings(PoseStack matrixStack, double middle_x, double middle_y)
+	private void renderSidedButtonStrings(GuiGraphics guiGraphics, double middle_x, double middle_y)
 	{
 		for (final SidedMenuButton sideButton : sidedMenuButtons)
 		{
@@ -586,16 +591,16 @@ public class SpiritwebMenu extends Screen
 				switch (sideButton.textSide)
 				{
 					case WEST:
-						font.drawShadow(matrixStack, text, (int) (middle_x + sideButton.x1 - 8) - font.width(text), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
+						guiGraphics.drawString(font, text, (int) (middle_x + sideButton.x1 - 8) - font.width(text), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
 						break;
 					case EAST:
-						font.drawShadow(matrixStack, text, (int) (middle_x + sideButton.x2 + 8), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
+						guiGraphics.drawString(font, text, (int) (middle_x + sideButton.x2 + 8), (int) (middle_y + sideButton.y1 + 6), 0xffffffff);
 						break;
 					case UP:
-						font.drawShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.width(text) * 0.5), (int) (middle_y + sideButton.y1 - 14), 0xffffffff);
+						guiGraphics.drawString(font, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.width(text) * 0.5), (int) (middle_y + sideButton.y1 - 14), 0xffffffff);
 						break;
 					case DOWN:
-						font.drawShadow(matrixStack, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.width(text) * 0.5), (int) (middle_y + sideButton.y1 + 24), 0xffffffff);
+						guiGraphics.drawString(font, text, (int) (middle_x + (sideButton.x1 + sideButton.x2) * 0.5 - font.width(text) * 0.5), (int) (middle_y + sideButton.y1 + 24), 0xffffffff);
 						break;
 				}
 
@@ -603,7 +608,7 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void renderRadialButtonStrings(PoseStack matrixStack, int middle_x, int middle_y)
+	private void renderRadialButtonStrings(GuiGraphics guiGraphics, int middle_x, int middle_y)
 	{
 		for (final RadialMenuButton button : radialMenuButtons)
 		{
@@ -623,7 +628,7 @@ public class SpiritwebMenu extends Screen
 				                 ? fixed_x - (font.width(text) + TEXT_DISTANCE)
 				                 : fixed_x + TEXT_DISTANCE);
 
-				font.drawShadow(matrixStack, text, middle_x + fixed_x, middle_y + fixed_y, 0xffffffff);
+				guiGraphics.drawString(font, text, middle_x + fixed_x, middle_y + fixed_y, 0xffffffff);
 
 				//no need to keep searching, we only keep one highlighted at a time.
 				break;
@@ -631,7 +636,7 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void renderSidedButtonIcons(PoseStack matrixStack, double middleX, double middleY)
+	private void renderSidedButtonIcons(GuiGraphics guiGraphics, double middleX, double middleY)
 	{
 		final StringBuilder stringBuilder = new StringBuilder();
 		for (final SidedMenuButton button : sidedMenuButtons)
@@ -645,13 +650,13 @@ public class SpiritwebMenu extends Screen
 					.append(button.name)
 					.append(".png");
 
-			RenderSystem.setShaderTexture(0, new ResourceLocation(button.name, stringBuilder.toString()));
-			blit(matrixStack, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
+			//RenderSystem.setShaderTexture(0, new ResourceLocation(button.name, stringBuilder.toString()));
+			guiGraphics.blit(new ResourceLocation(button.name, stringBuilder.toString()), (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
 
 		}
 	}
 
-	private void renderRadialButtonIcons(PoseStack matrixStack, double middleX, double middleY)
+	private void renderRadialButtonIcons(GuiGraphics guiGraphics, double middleX, double middleY)
 	{
 		final StringBuilder stringBuilder = new StringBuilder();
 		for (final RadialMenuButton menuRegion : radialMenuButtons)
@@ -694,7 +699,7 @@ public class SpiritwebMenu extends Screen
 			stringBuilder.append(".png");
 			final ResourceLocation textureLocation = new ResourceLocation(mani.getRegistryName().getNamespace(), stringBuilder.toString());
 			RenderSystem.setShaderTexture(0, textureLocation);
-			blit(matrixStack,
+			guiGraphics.blit(textureLocation,
 					(int) (middleX + x1),
 					(int) (middleY + y1),
 					16,

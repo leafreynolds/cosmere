@@ -14,7 +14,9 @@
           "name": "sandmastery:taldain_sand"
         }
       ],
+      "name": "main",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "sandmastery:blocks/taldain_sand"
 }

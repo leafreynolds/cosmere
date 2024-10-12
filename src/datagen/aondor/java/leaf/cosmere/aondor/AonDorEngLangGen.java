@@ -1,15 +1,15 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aondor;
 
 import leaf.cosmere.aondor.common.AonDor;
 import leaf.cosmere.aondor.common.registries.AonDorEntityTypes;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -17,9 +17,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class AonDorEngLangGen extends LanguageProvider
 {
-	public AonDorEngLangGen(DataGenerator gen)
+	public AonDorEngLangGen(PackOutput output)
 	{
-		super(gen, AonDor.MODID, "en_us");
+		super(output, AonDor.MODID, "en_us");
 	}
 
 	@Override
@@ -31,6 +31,7 @@ public class AonDorEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
 		addItemGroups();
 		addDamageSources();
@@ -49,7 +50,7 @@ public class AonDorEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(AonDor.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -86,6 +87,13 @@ public class AonDorEngLangGen extends LanguageProvider
 
 	}
 
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		add("tabs.aondor.items", "Aon Dor");
+
+	}
+
 	private void addTooltips()
 	{
 
@@ -94,7 +102,7 @@ public class AonDorEngLangGen extends LanguageProvider
 	private void addItemGroups()
 	{
 		//ItemGroups/Tabs
-		//add("itemGroup." + AonDorItemGroups.GROUP.getRecipeFolderName(), "AonDor Group");
+		//todo aondor item group
 	}
 
 	private void addDamageSources()

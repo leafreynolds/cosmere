@@ -1,22 +1,21 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.patchouli.data;
 
 import com.google.common.collect.Sets;
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.text.StringHelper;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 //
@@ -25,29 +24,33 @@ import java.util.function.Consumer;
 public abstract class PatchouliProvider implements DataProvider
 {
 	public static final String GUIDE_NAME = "guide";
-	private final DataGenerator generator;
+	private final PackOutput packOutput;
 	private final String modid;
 
 
 	protected final List<BookStuff.Category> categories = new ArrayList<>();
 	protected final List<BookStuff.Entry> entries = new ArrayList<>();
 
-	public PatchouliProvider(DataGenerator generatorIn, String modid)
+	public PatchouliProvider(PackOutput packOutput, String modid)
 	{
-		this.generator = generatorIn;
+		this.packOutput = packOutput;
 		this.modid = modid;
 	}
 
 	/**
 	 * Performs this provider's action.
+	 *
+	 * @return
 	 */
-	public void run(@NotNull CachedOutput cache) throws IOException
+	public CompletableFuture<?> run(@NotNull CachedOutput cache)
 	{
-		Path path = this.generator.getOutputFolder();
+		List<CompletableFuture<?>> futures = new ArrayList<>();
+
+		Path path = this.packOutput.getOutputFolder();
 		Set<String> entryIDs = Sets.newHashSet();
 
-		Consumer<BookStuff.Entry> entryConsumer = getEntryConsumer(cache, path, entryIDs);
-		Consumer<BookStuff.Category> categoryConsumer = getCategoryConsumer(cache, path, entryIDs);
+		Consumer<BookStuff.Entry> entryConsumer = getEntryConsumer(cache, path, entryIDs, futures);
+		Consumer<BookStuff.Category> categoryConsumer = getCategoryConsumer(cache, path, entryIDs, futures);
 
 		//adds to our categories and entries fields.
 		collectInfoForBook();
@@ -62,11 +65,12 @@ public abstract class PatchouliProvider implements DataProvider
 			entryConsumer.accept(entryToConsume);
 		}
 
+		return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
 	}
 
 	protected abstract void collectInfoForBook();
 
-	private Consumer<BookStuff.Category> getCategoryConsumer(@NotNull CachedOutput cache, Path path, Set<String> categoryIDs)
+	private Consumer<BookStuff.Category> getCategoryConsumer(@NotNull CachedOutput cache, Path path, Set<String> categoryIDs, List<CompletableFuture<?>> futures)
 	{
 		return category ->
 		{
@@ -77,21 +81,12 @@ public abstract class PatchouliProvider implements DataProvider
 			else
 			{
 				Path path1 = getCategoryPath(path, category);
-
-				try
-				{
-					DataProvider.saveStable(cache, category.serialize(), path1);
-				}
-				catch (IOException ioexception)
-				{
-					CosmereAPI.logger.error("Couldn't save page {}", path1, ioexception);
-				}
-
+				futures.add(DataProvider.saveStable(cache, category.serialize(), path1));
 			}
 		};
 	}
 
-	private Consumer<BookStuff.Entry> getEntryConsumer(@NotNull CachedOutput cache, Path path, Set<String> entryIDs)
+	private Consumer<BookStuff.Entry> getEntryConsumer(@NotNull CachedOutput cache, Path path, Set<String> entryIDs, List<CompletableFuture<?>> futures)
 	{
 		return entry ->
 		{
@@ -102,16 +97,7 @@ public abstract class PatchouliProvider implements DataProvider
 			else
 			{
 				Path path1 = getEntryPath(path, entry);
-
-				try
-				{
-					DataProvider.saveStable(cache, entry.serialize(modid), path1);
-				}
-				catch (IOException ioexception)
-				{
-					CosmereAPI.logger.error("Couldn't save page {}", path1, ioexception);
-				}
-
+				futures.add(DataProvider.saveStable(cache, entry.serialize(modid), path1));
 			}
 		};
 	}
@@ -120,7 +106,7 @@ public abstract class PatchouliProvider implements DataProvider
 	{
 		return pathIn.resolve(
 				String.format(
-						"data/%s/patchouli_books/%s/en_us/categories/%s.json",
+						"assets/%s/patchouli_books/%s/en_us/categories/%s.json",
 						modid,
 						GUIDE_NAME,
 						StringHelper.fixPath(category.name)));
@@ -130,7 +116,7 @@ public abstract class PatchouliProvider implements DataProvider
 	{
 		return pathIn.resolve(
 				String.format(
-						"data/%s/patchouli_books/%s/en_us/entries/%s/%s.json",
+						"assets/%s/patchouli_books/%s/en_us/entries/%s/%s.json",
 						modid,
 						GUIDE_NAME,
 						StringHelper.fixPath(entry.category.name),
@@ -138,6 +124,3 @@ public abstract class PatchouliProvider implements DataProvider
 	}
 
 }
-
-
-

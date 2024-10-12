@@ -1,21 +1,22 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aondor.patchouli;
 
 import leaf.cosmere.aondor.common.AonDor;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class AonDorPatchouliGen extends PatchouliProvider
 {
-	public AonDorPatchouliGen(DataGenerator generatorIn)
+	public AonDorPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, AonDor.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

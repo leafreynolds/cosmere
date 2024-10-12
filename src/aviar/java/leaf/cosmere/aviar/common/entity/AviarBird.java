@@ -78,7 +78,7 @@ public class AviarBird extends Parrot
 		tickBond(owner, this.getVariant(), this.getStringUUID());
 	}
 
-	public static void tickBond(LivingEntity livingEntity, int variant, String aviarUUID)
+	public static void tickBond(LivingEntity livingEntity, Variant variant, String aviarUUID)
 	{
 		//if owner exists and has spiritweb
 		SpiritwebCapability.get(livingEntity).ifPresent(data ->
@@ -86,21 +86,22 @@ public class AviarBird extends Parrot
 			final Attribute attribute = switch (variant)
 			{
 				//todo decide on finalized attributes changed
+				// note: I'm unsure if these are the same as the IDs in the previous version // Gerbagel
 				default -> AttributesRegistry.COGNITIVE_CONCEALMENT.get();
-				case 1 -> AttributesRegistry.COSMERE_FORTUNE.get();
-				case 2 -> AttributesRegistry.XP_RATE_ATTRIBUTE.get();
-				case 3 -> AttributesRegistry.DETERMINATION.get();
-				case 4 -> AviarAttributes.HOSTILE_LIFE_SENSE.get();
+				case BLUE -> AttributesRegistry.COSMERE_FORTUNE.get();
+				case GREEN -> AttributesRegistry.XP_RATE_ATTRIBUTE.get();
+				case YELLOW_BLUE -> AttributesRegistry.DETERMINATION.get();
+				case GRAY -> AviarAttributes.HOSTILE_LIFE_SENSE.get();
 			};
 
 			//todo config
 			double strength = switch (variant)
 			{
 				default -> 10;//cognitive concealment
-				case 1 -> 1;//cosmere fortune
-				case 2 -> 1;//xp gain
-				case 3 -> 5;//determination
-				case 4 -> 2;//hostile life sense
+				case BLUE -> 1;//cosmere fortune
+				case GREEN -> 1;//xp gain
+				case YELLOW_BLUE -> 5;//determination
+				case GRAY -> 2;//hostile life sense
 			};
 
 			final CosmereEffectInstance effectInstance = CosmereEffectInstance.getOrCreateEffect(AviarEffects.AVIAR_BOND_EFFECT.get(), data, aviarUUID, 1);

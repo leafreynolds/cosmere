@@ -1,34 +1,44 @@
 /*
- * File updated ~ 22 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery;
 
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.BaseRecipeProvider;
+import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
-public class SandmasteryRecipeGen extends RecipeProvider implements IConditionBuilder
+public class SandmasteryRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public SandmasteryRecipeGen(DataGenerator generatorIn)
+	public SandmasteryRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
 	{
-		super(generatorIn);
+		super(output, existingFileHelper);
 	}
 
 	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+	protected ResourceLocation makeRL(String path)
 	{
-		ShapedRecipeBuilder.shaped(SandmasteryItems.QIDO_ITEM.get())
+		return Sandmastery.rl(path);
+	}
+
+	@Override
+	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	{
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SandmasteryItems.QIDO_ITEM.get())
 				.define('H', Items.GOAT_HORN)
 				.define('S', Tags.Items.STRING)
 				.pattern("SSS")
@@ -37,7 +47,7 @@ public class SandmasteryRecipeGen extends RecipeProvider implements IConditionBu
 				.unlockedBy("has_material", has(Items.GOAT_HORN))
 				.save(consumer);
 
-		ShapedRecipeBuilder.shaped(SandmasteryItems.JAR_ITEM.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, SandmasteryItems.JAR_ITEM.get())
 				.define('G', Tags.Items.GLASS)
 				.pattern("G G")
 				.pattern("G G")
@@ -45,7 +55,7 @@ public class SandmasteryRecipeGen extends RecipeProvider implements IConditionBu
 				.unlockedBy("has_material", has(Tags.Items.GLASS))
 				.save(consumer);
 
-		ShapedRecipeBuilder.shaped(SandmasteryItems.SAND_POUCH_ITEM.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SandmasteryItems.SAND_POUCH_ITEM.get())
 				.define('L', Tags.Items.LEATHER)
 				.define('B', Items.LEAD)
 				.define('J', SandmasteryItems.SAND_JAR_ITEM)
@@ -55,21 +65,21 @@ public class SandmasteryRecipeGen extends RecipeProvider implements IConditionBu
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
 				.save(consumer);
 
-		ShapedRecipeBuilder.shaped(SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock())
+		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SandmasteryBlocks.SAND_SPREADING_TUB_BLOCK.getBlock())
 				.define('W', ItemTags.WOODEN_SLABS)
 				.pattern("W W")
 				.pattern("WWW")
 				.unlockedBy("has_material", has(ItemTags.WOODEN_SLABS))
 				.save(consumer);
 
-		ShapelessRecipeBuilder.shapeless(SandmasteryItems.SAND_JAR_ITEM.get())
-				.requires(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem())
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, SandmasteryItems.SAND_JAR_ITEM.get())
+				.requires(SandmasteryBlocks.SAND_JAR_BLOCK.asItem())
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
 				.save(consumer);
 
-		ShapelessRecipeBuilder.shapeless(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem())
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, SandmasteryBlocks.SAND_JAR_BLOCK.asItem())
 				.requires(SandmasteryItems.SAND_JAR_ITEM)
-				.unlockedBy("has_material", has(SandmasteryBlocksRegistry.SAND_JAR_BLOCK.asItem()))
+				.unlockedBy("has_material", has(SandmasteryBlocks.SAND_JAR_BLOCK.asItem()))
 				.save(consumer);
 	}
 }

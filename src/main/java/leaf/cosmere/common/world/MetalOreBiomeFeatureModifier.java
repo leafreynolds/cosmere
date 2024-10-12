@@ -54,7 +54,7 @@ public record MetalOreBiomeFeatureModifier(HolderSet<Biome> biomes, GenerationSt
 		}
 		catch (Exception e)
 		{
-			return DataResult.error("Not a decoration stage: " + name);
+			return DataResult.error(() -> "Not a decoration stage: " + name);
 		}
 	}
 }

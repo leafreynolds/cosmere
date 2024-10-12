@@ -19,13 +19,13 @@ public class TestCommand extends ModCommand
 
 	private static int testSub(CommandContext<CommandSourceStack> context, ServerPlayer player)
 	{
-		return testSub(context, player.getLevel());
+		return testSub(context, player.serverLevel());
 	}
 
 	private static int testSub(CommandContext<CommandSourceStack> context, ServerLevel world)
 	{
 		CommandSourceStack source = context.getSource();
-		source.sendSuccess(Component.translatable("command.cosmere.test.sub"), true);
+		source.sendSuccess(() -> Component.translatable("command.cosmere.test.sub"), true);
 
 		return SINGLE_SUCCESS;
 	}

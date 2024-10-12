@@ -65,7 +65,7 @@ public class AllomancyCopper extends AllomancyManifestation
 		if (isActiveTick)
 		{
 			//do not multiply strength by mode here, flaring doesn't increase cognitive concealment and bronze flare doesn't increase pierce strength
-			final int actionableStrength = Mth.fastFloor(getStrength(data, false));
+			final int actionableStrength = Mth.floor(getStrength(data, false));
 			switch (getMode(data))
 			{
 				case 1:

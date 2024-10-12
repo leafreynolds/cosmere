@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy;
@@ -7,17 +7,16 @@ package leaf.cosmere.feruchemy;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
-import leaf.cosmere.feruchemy.common.itemgroups.FeruchemyItemGroups;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -33,9 +32,9 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.feruchemy.%s.title";
 	final String advancementDescriptionFormat = "advancements.feruchemy.%s.description";
 
-	public FeruchemyEngLangGen(DataGenerator gen)
+	public FeruchemyEngLangGen(PackOutput output)
 	{
-		super(gen, Feruchemy.MODID, "en_us");
+		super(output, Feruchemy.MODID, "en_us");
 	}
 
 	@Override
@@ -47,8 +46,8 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
-		addItemGroups();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -65,7 +64,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Feruchemy.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -182,6 +181,13 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		}
 	}
 
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		add("tabs.feruchemy.items", "Feruchemy");
+
+	}
+
 	private void addTooltips()
 	{
 		//Tooltips
@@ -192,12 +198,6 @@ public class FeruchemyEngLangGen extends LanguageProvider
 		add("tooltip.cosmere.attribute.duralumin", "");//todo hemalurgic connection/identity
 		add("tooltip.cosmere.attribute.chromium", "%s%s Luck");
 		add("tooltip.cosmere.attribute.nicrosil", "");//todo hemalurgic investiture
-	}
-
-	private void addItemGroups()
-	{
-		//ItemGroups/Tabs
-		add("itemGroup." + FeruchemyItemGroups.METALMINDS.getRecipeFolderName(), "Feruchemical Metalminds");
 	}
 
 	private void addDamageSources()

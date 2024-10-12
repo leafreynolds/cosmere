@@ -22,6 +22,7 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -219,7 +220,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 		AllomancyIronSteel steelAllomancy = (AllomancyIronSteel) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.STEEL).get();
 		AllomancyTin tinAllomancy = (AllomancyTin) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
 
-		PoseStack viewModelStack = new PoseStack();
+		PoseStack viewModelStack = event.getPoseStack();
 
 		//if user has iron or steel manifestation
 		if (spiritweb.hasManifestation(ironAllomancy) || spiritweb.hasManifestation(steelAllomancy))
@@ -233,11 +234,9 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				//todo - does this mean it's wrong on the first check? probably doesn't matter
 				IronSteelLinesThread.getInstance().setScanRange(range);
 				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
-				Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
+				Vec3i closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 
 				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
-
-				viewModelStack.last().pose().load(event.getPoseStack().last().pose());
 
 				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
 				if (drawMetalLines && !scanResult.foundEntities.isEmpty())
@@ -268,7 +267,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 
 		if (spiritweb.hasManifestation(tinAllomancy))
 		{
-			viewModelStack.last().pose().load(event.getPoseStack().last().pose());
+			viewModelStack.last().pose().get(event.getPoseStack().last().pose());   // not sure that get() is right here
 
 			Minecraft.getInstance().getProfiler().push("cosmere-getDrawSoundIndicator");
 			DrawHelper.drawSquareAtPoint(viewModelStack, Color.WHITE, AllomancyTin.getTinSoundList(), spiritweb.getLiving().getEyePosition());

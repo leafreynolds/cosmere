@@ -1,21 +1,22 @@
 /*
- * File updated ~ 18 - 9 - 2023 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class SurgebindingPatchouliGen extends PatchouliProvider
 {
-	public SurgebindingPatchouliGen(DataGenerator generatorIn)
+	public SurgebindingPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Surgebinding.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

@@ -1,15 +1,15 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
@@ -24,9 +24,9 @@ import java.util.function.Supplier;
 public class HemalurgyItemModelsGen extends ItemModelProvider
 {
 
-	public HemalurgyItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public HemalurgyItemModelsGen(PackOutput packOutput, ExistingFileHelper existingFileHelper)
 	{
-		super(generator, Hemalurgy.MODID, existingFileHelper);
+		super(packOutput, Hemalurgy.MODID, existingFileHelper);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class HemalurgyItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

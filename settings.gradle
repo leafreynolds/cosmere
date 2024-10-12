@@ -1,27 +1,32 @@
 pluginManagement {
 	repositories {
 		gradlePluginPortal()
+		/*maven {
+			name "NeoForge"
+			url "https://maven.neoforged.net/releases/"
+		}*/
 		maven {
-			name "forge"
-			url "https://maven.minecraftforge.net/"
+			name = 'MinecraftForge'
+			url = 'https://maven.minecraftforge.net/'
 		}
 		maven {
 			name 'parchment'
 			url 'https://maven.parchmentmc.org'
 		}
 	}
+
 	resolutionStrategy {
 		eachPlugin {
-			switch (requested.id.toString()) {
-				case "net.minecraftforge.gradle": {
-					useModule("${requested.id}:ForgeGradle:${requested.version}")
-					break
-				}
-				case "org.spongepowered.mixin": {
-					useModule("org.spongepowered:mixingradle:${requested.version}")
-					break;
-				}
+			if (requested.id.toString() == "org.spongepowered.mixin") {
+				useModule("org.spongepowered:mixingradle:${requested.version}")
+			}
+			if (requested.id.toString() == "net.minecraftforge.gradle") {
+				useModule("${requested.id}:ForgeGradle:${requested.version}")
 			}
 		}
 	}
+}
+
+plugins {
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
 }

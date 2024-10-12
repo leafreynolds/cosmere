@@ -1,0 +1,25 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:electrum_nugget",
+  "name": "Allomantic Electrum",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)electrum$() is known as a \"$(thing)Oracle$()\". Most of the page is missing... (Not yet fully implemented) The primary use for electrum is to counter the godmetal Atium's ability to see your attacks and thus dodge out of the way. This metal evens the playing field. Electrum is the internal pushing metal and one of four temporal metals (alongside Bendalloy, Cadmium, and Gold)"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_cadmium",
+        "cosmere:allomancy/allomantic_bendalloy",
+        "cosmere:allomancy/allomantic_gold",
+        "cosmere:allomancy/allomantic_electrum"
+      ],
+      "title": "The temporal metals:"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 15
+}

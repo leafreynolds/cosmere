@@ -1,19 +1,17 @@
 /*
- * File updated ~ 10 - 2 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.config.SandmasteryServerConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +23,7 @@ public class HUDHandler
 {
 	private static final ResourceLocation hydrationBar = new ResourceLocation(Sandmastery.MODID, "textures/gui/hydration_hud.png");
 
-	public static void onDrawScreenPost(PoseStack ms)
+	public static void onDrawScreenPost(GuiGraphics guiGraphics)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.options.hideGui)
@@ -54,7 +52,7 @@ public class HUDHandler
 						final int hydrationLevel = sbModule.getHydrationLevel();
 						if (hydrationLevel > 0)
 						{
-							renderHydrationBar(ms, hydrationLevel, SandmasteryConfigs.SERVER.MAX_HYDRATION.get());
+							renderHydrationBar(guiGraphics, hydrationLevel, SandmasteryConfigs.SERVER.MAX_HYDRATION.get());
 						}
 					}
 
@@ -67,7 +65,7 @@ public class HUDHandler
 		RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 	}
 
-	private static void renderHydrationBar(PoseStack ms, int hydration, int maxHydration)
+	private static void renderHydrationBar(GuiGraphics gui, int hydration, int maxHydration)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		int fullBarWidth = 83;
@@ -113,7 +111,6 @@ public class HUDHandler
 		final int green = color.getGreen();
 		final int blue = color.getBlue();
 
-		RenderSystem.setShaderTexture(0, hydrationBar);
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShaderColor(
@@ -123,8 +120,8 @@ public class HUDHandler
 				0.25F
 		);
 		//draw textured rect
-		GuiComponent.blit(
-				ms,
+		gui.blit(
+				hydrationBar,
 				barStartingX,
 				barStartingY,
 				0,
@@ -133,14 +130,16 @@ public class HUDHandler
 				hydrationBarHeight,
 				fullBarWidth,
 				hydrationBarHeight);
+
 		RenderSystem.setShaderColor(
 				red / 255F,
 				green / 255F,
 				blue / 255F,
 				1
 		);
-		GuiComponent.blit(
-				ms,
+
+		gui.blit(
+				hydrationBar,
 				barStartingX,
 				barStartingY,
 				0,

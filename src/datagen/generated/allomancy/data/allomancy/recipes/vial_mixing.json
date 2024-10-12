@@ -1,3 +1,4 @@
 {
-  "type": "allomancy:vial_mix"
+  "type": "allomancy:crafting_vial_mix",
+  "category": "misc"
 }

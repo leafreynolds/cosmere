@@ -1,5 +1,5 @@
 /*
- * File updated ~ 15 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -51,7 +51,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 	public int modeMax(ISpiritweb data)
 	{
 		final double strength = getStrength(data, false);
-		return Mth.fastFloor(strength / 3);
+		return Mth.floor(strength / 3);
 	}
 
 	//tapping is negative, eg taking from store
@@ -59,7 +59,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 	public int modeMin(ISpiritweb data)
 	{
 		final double strength = getStrength(data, false);
-		return -(Mth.fastFloor(strength));
+		return -(Mth.floor(strength));
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		{
 			//wanting to tap
 			//get cost
-			return mode >= -modeMax(data) ? mode : -(Mth.absFloor(Math.pow(Mth.abs(mode), 1.5d)));
+			return mode >= -modeMax(data) ? mode : -(Mth.abs(Mth.floor(Math.pow(Mth.abs(mode), 1.5d))));
 		}
 		//if we are storing
 		//check if there is space to store

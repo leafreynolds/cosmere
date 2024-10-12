@@ -1,11 +1,11 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
 
 import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
@@ -15,7 +15,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -28,9 +28,9 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.surgebinding.%s.title";
 	final String advancementDescriptionFormat = "advancements.surgebinding.%s.description";
 
-	public SurgebindingEngLangGen(DataGenerator gen)
+	public SurgebindingEngLangGen(PackOutput output)
 	{
-		super(gen, Surgebinding.MODID, "en_us");
+		super(output, Surgebinding.MODID, "en_us");
 	}
 
 	@Override
@@ -42,8 +42,8 @@ public class SurgebindingEngLangGen extends LanguageProvider
 		addManifestations();
 		addAttributes();
 		addPatchouli();
+		addCreativeTabs();
 		addTooltips();
-		addItemGroups();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -60,7 +60,7 @@ public class SurgebindingEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Surgebinding.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -137,12 +137,15 @@ public class SurgebindingEngLangGen extends LanguageProvider
 		//todo surgebinding patchouli localisation
 	}
 
-	private void addTooltips()
+
+	private void addCreativeTabs()
 	{
+		//ItemGroups/Tabs
+		add("tabs.surgebinding.items", "Surgebinding");
 
 	}
 
-	private void addItemGroups()
+	private void addTooltips()
 	{
 
 	}

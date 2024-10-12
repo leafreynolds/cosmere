@@ -27,13 +27,13 @@ public class PatchouliAviarCategory
 
 		//aviar basics entry
 		{
-			BookStuff.Entry entry = new BookStuff.Entry("aviar_basics", aviar, "minecraft:book").setDisplayTitle("Aviar (For Dummies)");
+			BookStuff.Entry entry = new BookStuff.Entry("aviar_basics", aviar, "minecraft:book").setDisplayTitle("Aviar (Terminology)");
 			entry.priority = true;
 			entry.sortnum = 1;
 
 			BookStuff.Page terminologyPage = new BookStuff.TextPage();
 			terminologyPage.setTitle("Terminology");
-			terminologyPage.setText("First, some terminology:"
+			terminologyPage.setText("Some terminology:"
 					+ "$(li) Aviar: A bird who has bonded a symbiote native to the planet 'First of the Sun', in the Drominad system.."
 					+ "$(li) Fruit of Patji: A fruit from off world. Contains the symbiote that grants birds their abilities, turning them into Aviar."
 					+ "$(li) Aviar Bond: A bond between an Aviar and a human. This bond allows the human to gain access to the Aviar's abilities."
@@ -53,9 +53,9 @@ public class PatchouliAviarCategory
 
 			pages.add(
 					new BookStuff.SpotlightPage(
-							"A very rare fruit, native to the planet 'First of the Sun', in the Drominad system. " +
-									"$(br)It is said that the fruit contains a symbiote that can bond with a human, granting them their companions wondrous abilities." +
-									"$(br)As this is not that planet, they're very hard to come by, with only the occaisional world hopper bringing them to this world.",
+							"A very rare fruit, native to the planet 'First of the Sun', in the Drominad system. It is said that the fruit contains a symbiote that can bond with a human, granting them their companions wondrous abilities." +
+									"$(br)As this is not that planet, they're very hard to come by, with only the occaisional world hopper bringing them to this world." +
+									"$(br)It is worth noting that the Fruit of Patji will not effect already tame parrots, rather you have to feed it to a parrot then tame the creature.",
 							"aviar:fruit_of_patji"
 					)
 			);
@@ -87,11 +87,11 @@ public class PatchouliAviarCategory
 			);
 			pages.add(textPage);
 
-			pages.add(new BookStuff.EntityPage("Grants Cognitive Concealment, hiding you from magic detection", "", "aviar:aviar{Variant:0}"));
+			pages.add(new BookStuff.EntityPage("Grants Cognitive Concealment, hiding you from magic detection such as alllomantic bronze and white sand.", "", "aviar:aviar{Variant:0}"));
 			pages.add(new BookStuff.EntityPage("Grants increased fortune and looting (but not chest loot luck)", "", "aviar:aviar{Variant:1}"));
 			pages.add(new BookStuff.EntityPage("Grants doubled experience gain.", "", "aviar:aviar{Variant:2}"));
-			pages.add(new BookStuff.EntityPage("Decreases incoming damage", "", "aviar:aviar{Variant:3}"));
-			pages.add(new BookStuff.EntityPage("Allows you to detect when mobs are targeting you", "", "aviar:aviar{Variant:4}"));
+			pages.add(new BookStuff.EntityPage("Decreases incoming damage.", "", "aviar:aviar{Variant:3}"));
+			pages.add(new BookStuff.EntityPage("Allows you to detect when mobs are targeting you. [currently doesn't work]", "", "aviar:aviar{Variant:4}"));
 
 			entry.pages = pages.toArray(BookStuff.Page[]::new);
 			entries.add(entry);

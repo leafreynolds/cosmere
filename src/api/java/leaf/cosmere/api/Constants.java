@@ -1,5 +1,5 @@
 /*
- * File updated ~ 2 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.api;

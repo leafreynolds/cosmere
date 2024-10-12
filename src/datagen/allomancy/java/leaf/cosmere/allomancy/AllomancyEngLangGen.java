@@ -1,5 +1,5 @@
 /*
- * File updated ~ 16 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
@@ -12,14 +12,14 @@ import leaf.cosmere.allomancy.common.registries.AllomancyEntityTypes;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -35,9 +35,9 @@ public class AllomancyEngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.allomancy.%s.title";
 	final String advancementDescriptionFormat = "advancements.allomancy.%s.description";
 
-	public AllomancyEngLangGen(DataGenerator gen)
+	public AllomancyEngLangGen(PackOutput output)
 	{
-		super(gen, Allomancy.MODID, "en_us");
+		super(output, Allomancy.MODID, "en_us");
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 		addAttributes();
 		addPatchouli();
 		addTooltips();
-		addItemGroups();
+		addCreativeTabs();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -67,7 +67,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 		//Items and Blocks
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
-			final ResourceLocation registryName = ResourceLocationHelper.get(item);
+			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Allomancy.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -174,9 +174,10 @@ public class AllomancyEngLangGen extends LanguageProvider
 		add("tooltip.cosmere.metals.contained", "Contained Metals:");
 	}
 
-	private void addItemGroups()
+	private void addCreativeTabs()
 	{
 		//ItemGroups/Tabs
+		add("tabs.allomancy.items", "Allomancy");
 	}
 
 	private void addDamageSources()

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.fog;
@@ -63,10 +63,10 @@ public class FogManager
 		{
 			return;
 		}
-		boolean isFogDense = this.mc.level.effects().isFoggyAt(pos.getX(), pos.getZ()) || this.mc.gui.getBossOverlay().shouldCreateWorldFog();
+		ClientLevel pLevel = this.mc.level;
+		boolean isFogDense = pLevel.effects().isFoggyAt(pos.getX(), pos.getZ()) || this.mc.gui.getBossOverlay().shouldCreateWorldFog();
 		float density = isFogDense ? 0.9F : 1.0F;
 
-		ClientLevel pLevel = this.mc.level;
 		Camera camera = this.mc.gameRenderer.getMainCamera();
 		BiomeManager biomemanager = pLevel.getBiomeManager();
 		Vec3 playerPos = camera.getPosition().subtract(2.0D, 2.0D, 2.0D).scale(0.25D);

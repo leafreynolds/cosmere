@@ -1,5 +1,6 @@
 {
   "entity.aviar.aviar": "Aviar",
   "item.aviar.aviar_spawn_egg": "Aviar Spawn Egg",
-  "item.aviar.fruit_of_patji": "Fruit Of Patji"
+  "item.aviar.fruit_of_patji": "Fruit Of Patji",
+  "tabs.aviar.items": "Aviar"
 }

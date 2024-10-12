@@ -1,0 +1,25 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:chromium_nugget",
+  "name": "Allomantic Chromium",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)chromium$() is known as a \"$(thing)Leecher$()\". A leecher can deplete the metal reserves of another allomancer with physical contact, as if the target were burning aluminum themselves. Chromium is the external pulling metal and one of four enhancement metals (alongside Aluminum, Duralumin, and Nicrosil)"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_aluminum",
+        "cosmere:allomancy/allomantic_duralumin",
+        "cosmere:allomancy/allomantic_chromium",
+        "cosmere:allomancy/allomantic_nicrosil"
+      ],
+      "title": "The enhancement metals:"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 10
+}

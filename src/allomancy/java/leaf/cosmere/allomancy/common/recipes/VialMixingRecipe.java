@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.recipes;
@@ -9,16 +9,17 @@ import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyRecipes;
 import leaf.cosmere.api.Metals;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
@@ -31,9 +32,9 @@ public class VialMixingRecipe extends CustomRecipe
 {
 	private static final Ingredient INGREDIENT_BOTTLE = Ingredient.of(Items.GLASS_BOTTLE, AllomancyItems.METAL_VIAL.get());
 
-	public VialMixingRecipe(ResourceLocation loc)
+	public VialMixingRecipe(ResourceLocation loc, CraftingBookCategory pCategory)
 	{
-		super(loc);
+		super(loc, pCategory);
 	}
 
 	@Override
@@ -112,9 +113,9 @@ public class VialMixingRecipe extends CustomRecipe
 		return Optional.empty();
 	}
 
+
 	@Override
-	@Nonnull
-	public ItemStack assemble(CraftingContainer inv)
+	public ItemStack assemble(CraftingContainer inv, RegistryAccess pRegistryAccess)
 	{
 		MetalVialItem metalVial = AllomancyItems.METAL_VIAL.get();
 		ItemStack itemstack = new ItemStack(metalVial);
@@ -162,15 +163,8 @@ public class VialMixingRecipe extends CustomRecipe
 	@Override
 	public @Nonnull RecipeSerializer<?> getSerializer()
 	{
-		return AllomancyRecipes.VIAL_RECIPE_SERIALIZER.get();
+		return AllomancyRecipes.VIAL_MIX.get();
 	}
 
 
-	public static class Serializer extends SimpleRecipeSerializer<VialMixingRecipe>
-	{
-		public Serializer()
-		{
-			super(VialMixingRecipe::new);
-		}
-	}
 }

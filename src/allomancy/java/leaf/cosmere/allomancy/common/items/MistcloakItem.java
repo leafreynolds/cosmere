@@ -15,9 +15,9 @@ import javax.annotation.Nonnull;
 
 public class MistcloakItem extends ArmorItem
 {
-	public MistcloakItem(ArmorMaterial material, EquipmentSlot slot, Properties properties)
+	public MistcloakItem(ArmorMaterial material, Type type, Properties properties)
 	{
-		super(material, slot, properties);
+		super(material, type, properties);
 	}
 
 	//todo increase dodge chance while in the mists

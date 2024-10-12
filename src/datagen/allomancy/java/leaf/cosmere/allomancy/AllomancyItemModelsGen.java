@@ -1,14 +1,14 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.allomancy;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 public class AllomancyItemModelsGen extends ItemModelProvider
 {
 
-	public AllomancyItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public AllomancyItemModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Allomancy.MODID, existingFileHelper);
 	}
@@ -49,7 +49,7 @@ public class AllomancyItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

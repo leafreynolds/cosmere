@@ -1,3 +1,3 @@
-// 1.19.2	2023-11-22T13:35:41.0202487	Example PatchouliGeneration
-04c3501728b65392de200993fb294f3acdf421d5 data/example/patchouli_books/guide/en_us/categories/example.json
-46ec0430ba03835cf96895151a94cdc37bdd8b18 data/example/patchouli_books/guide/en_us/entries/example/example_basics.json
+// 1.20.1	2024-10-09T13:38:50.3211153	Example PatchouliGeneration
+04c3501728b65392de200993fb294f3acdf421d5 assets/cosmere/patchouli_books/guide/en_us/categories/example.json
+4d3c3d21460d107c3ac2aa5c500ad14f7decb1cf assets/cosmere/patchouli_books/guide/en_us/entries/example/example_basics.json

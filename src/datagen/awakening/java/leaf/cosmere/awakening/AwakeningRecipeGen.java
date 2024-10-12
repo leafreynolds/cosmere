@@ -1,41 +1,36 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.awakening.common.Awakening;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
-public class AwakeningRecipeGen extends RecipeProvider implements IConditionBuilder
+public class AwakeningRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public AwakeningRecipeGen(DataGenerator generatorIn)
+	public AwakeningRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
 	{
-		super(generatorIn);
+		super(output, existingFileHelper);
 	}
 
 	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+	protected ResourceLocation makeRL(String path)
 	{
+		return Awakening.rl(path);
 	}
 
-
-	protected static void addOreSmeltingRecipes(Consumer<FinishedRecipe> consumer, ItemLike ore, Item result, float experience, int time)
+	@Override
+	protected void addRecipes(Consumer<FinishedRecipe> consumer)
 	{
-		String name = ResourceLocationHelper.get(result).getPath();
-		String path = ResourceLocationHelper.get(ore.asItem()).getPath();
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, Awakening.rl(name + "_from_smelting_" + path));
-		SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, Awakening.rl(name + "_from_blasting_" + path));
+
 	}
 
 }

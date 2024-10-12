@@ -1,0 +1,25 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:nicrosil_nugget",
+  "name": "Allomantic Nicrosil",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)nicrosil$() is known as a \"$(thing)Nicroburst$()\".$(br)A nicroburst can empower the allomancy of another with physical contact, as if the target were burning duralumin themselves. This can be used to throw other allomancers off, such as giving a coinshot a particularly strong steelpush when they don't expect it. Nicrosil is the external pushing metal and one of four enhancement metals (alongside Aluminum, Chromium, and Duralumin)"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_aluminum",
+        "cosmere:allomancy/allomantic_duralumin",
+        "cosmere:allomancy/allomantic_chromium",
+        "cosmere:allomancy/allomantic_nicrosil"
+      ],
+      "title": "The enhancement metals:"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 11
+}

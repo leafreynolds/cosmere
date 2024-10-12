@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:hemalurgy",
+  "icon": "hemalurgy:pewter_spike",
+  "name": "Hemalurgic Pewter",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Pewter spikes steal the physical feruchemical powers: $(p)Feruchemically storing and tapping $(l:feruchemy:feruchemy/feruchemical_iron)Iron$(), $(l:feruchemy:feruchemy/feruchemical_steel)Steel$(), $(l:feruchemy:feruchemy/feruchemical_tin)Tin$() and $(l:feruchemy:feruchemy/feruchemical_pewter)Pewter$(), the feruchemical attributes keyed to each of these are:  $(p)Weight(Slow Fall/Slowness, Resistance), Speed(Slowness/Speed), Senses(Blindness/Night Vision), and Strength(Weakness/Strength)."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hemalurgy:pewter_spike"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 3
+}

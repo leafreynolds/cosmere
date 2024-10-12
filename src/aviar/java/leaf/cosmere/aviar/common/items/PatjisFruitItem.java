@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 6 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.aviar.common.items;
@@ -34,10 +34,10 @@ public class PatjisFruitItem extends Item
 		{
 			if (!(parrot instanceof AviarBird))
 			{
-				if (!player.level.isClientSide)
+				if (!player.level().isClientSide)
 				{
 					//convert parrot to aviar
-					AviarBird birb = AviarEntityTypes.AVIAR_ENTITY.get().create(target.level);
+					AviarBird birb = AviarEntityTypes.AVIAR_ENTITY.get().create(target.level());
 
 					if (birb == null)
 					{
@@ -51,7 +51,7 @@ public class PatjisFruitItem extends Item
 					birb.setDeltaMovement(parrot.getDeltaMovement());
 
 					parrot.remove(Entity.RemovalReason.DISCARDED);
-					birb.level.addFreshEntity(birb);
+					birb.level().addFreshEntity(birb);
 
 					//todo replace sound
 					birb.playSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON, 1.0F, 1.0F);
@@ -61,11 +61,11 @@ public class PatjisFruitItem extends Item
 						double d0 = birb.getRandom().nextGaussian() * 0.02D;
 						double d1 = birb.getRandom().nextGaussian() * 0.02D;
 						double d2 = birb.getRandom().nextGaussian() * 0.02D;
-						birb.level.addParticle(ParticleTypes.HEART, birb.getRandomX(1.0D), birb.getRandomY() + 0.5D, birb.getRandomZ(1.0D), d0, d1, d2);
+						birb.level().addParticle(ParticleTypes.HEART, birb.getRandomX(1.0D), birb.getRandomY() + 0.5D, birb.getRandomZ(1.0D), d0, d1, d2);
 					}
 					itemStack.shrink(1);
 				}
-				return InteractionResult.sidedSuccess(player.level.isClientSide);
+				return InteractionResult.sidedSuccess(player.level().isClientSide);
 			}
 
 		}

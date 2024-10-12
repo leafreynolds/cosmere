@@ -25,7 +25,7 @@ public class EntityMixin
 	{
 		Entity e = (Entity) (Object) this;
 
-		final boolean isServerSide = !(e.level.isClientSide);
+		final boolean isServerSide = !(e.level().isClientSide);
 		final boolean isInanimateEntity = !(e instanceof LivingEntity);
 		if (isServerSide || isInanimateEntity || cir.getReturnValue())
 		{

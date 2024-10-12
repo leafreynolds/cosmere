@@ -9,6 +9,7 @@
   "dont_generate_book": true,
   "custom_book_item": "cosmere:guide",
   "advancements_tab": "cosmere:main/root",
+  "use_resource_pack": true,
   "advancement_namespaces": [
     "cosmere"
   ],

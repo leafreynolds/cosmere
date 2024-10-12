@@ -1,39 +1,30 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.example.loottables;
 
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.example.common.registries.ExampleBlocks;
-import net.minecraft.data.loot.BlockLoot;
+import leaf.cosmere.loottables.BaseBlockLootTables;
 import net.minecraft.world.level.block.Block;
 
-public class ExampleBlockLootTableGen extends BlockLoot
+public class ExampleBlockLootTableGen extends BaseBlockLootTables
 {
 	@Override
-	protected void addTables()
+	protected void generate()
 	{
+		//first catch any blocks that don't drop self, like ores
 		for (IBlockProvider itemRegistryObject : ExampleBlocks.BLOCKS.getAllBlocks())
 		{
 			final Block block = itemRegistryObject.getBlock();
 			//if (block instanceof MetalOreBlock oreBlock)
 			//{
-			//	this.add(oreBlock, (ore) ->
-			//	{
-			//		return createOreDrop(ore, ExampleItems.ITEM.get());
-			//	});
+			//      this.add(oreBlock, (ore) -> createOreDrop(ore, ItemsRegistry.METAL_RAW_ORE.get(oreBlock.getMetalType())));
 			//}
-			//else
-			{
-				this.dropSelf(block);
-			}
 		}
-	}
 
-	@Override
-	protected Iterable<Block> getKnownBlocks()
-	{
-		return ExampleBlocks.BLOCKS.getAllBlocks().stream().map(IBlockProvider::getBlock)::iterator;
+		//then make the rest drop themselves.
+		dropSelf(ExampleBlocks.BLOCKS.getAllBlocks());
 	}
 }

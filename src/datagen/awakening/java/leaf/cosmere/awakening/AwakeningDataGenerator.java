@@ -1,14 +1,14 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening;
 
-import leaf.cosmere.awakening.advancements.AwakeningAdvancementGen;
 import leaf.cosmere.awakening.common.Awakening;
 import leaf.cosmere.awakening.loottables.AwakeningLootTableGen;
 import leaf.cosmere.awakening.patchouli.AwakeningPatchouliGen;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,15 +22,15 @@ public class AwakeningDataGenerator
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator generator = event.getGenerator();
+		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		generator.addProvider(true, new AwakeningEngLangGen(generator));
-		generator.addProvider(true, new AwakeningTagProvider(generator, existingFileHelper));
-		generator.addProvider(true, new AwakeningLootTableGen(generator));
-		generator.addProvider(true, new AwakeningItemModelsGen(generator, existingFileHelper));
-		generator.addProvider(true, new AwakeningRecipeGen(generator));
-		generator.addProvider(true, new AwakeningPatchouliGen(generator));
-		generator.addProvider(true, new AwakeningAdvancementGen(generator));
+		generator.addProvider(true, new AwakeningEngLangGen(packOutput));
+		generator.addProvider(true, new AwakeningTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
+		generator.addProvider(true, new AwakeningLootTableGen(packOutput));
+		generator.addProvider(true, new AwakeningItemModelsGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AwakeningRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AwakeningPatchouliGen(packOutput));
 	}
 
 }

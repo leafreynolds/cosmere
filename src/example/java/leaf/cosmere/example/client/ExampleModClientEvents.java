@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 7 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.example.client;
@@ -7,11 +7,8 @@ package leaf.cosmere.example.client;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.example.client.render.ExampleRenderers;
 import leaf.cosmere.example.common.Example;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -32,6 +29,7 @@ public class ExampleModClientEvents
 	}
 
 
+	/* todo - re setup power icon registration
 	//special thank you to the chisels and bits team who have an example of how to register other sprites
 	@SubscribeEvent
 	public static void registerIconTextures(TextureStitchEvent.Pre event)
@@ -43,5 +41,5 @@ public class ExampleModClientEvents
 		}
 
 		event.addSprite(Example.rl("icon/example"));
-	}
+	}*/
 }

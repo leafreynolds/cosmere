@@ -21,6 +21,7 @@ import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -167,7 +168,7 @@ public class SpiritwebCapability implements ISpiritweb
 				MANIFESTATIONS_MODE.remove(manifestation);
 			}
 
-			if (getLiving().level.isClientSide && oldManifestationMode != newManifestationMode)
+			if (getLiving().level().isClientSide && oldManifestationMode != newManifestationMode)
 			{
 				manifestation.onModeChange(this, oldManifestationMode);
 			}
@@ -226,7 +227,7 @@ public class SpiritwebCapability implements ISpiritweb
 				CosmereEffectInstance cosmereEffectInstance = this.activeEffects.get(uuidOfEffedInstance);
 				if (!cosmereEffectInstance.tick(this))
 				{
-					if (!this.getLiving().level.isClientSide)
+					if (!this.getLiving().level().isClientSide)
 					{
 						iterator.remove();
 						this.onEffectRemoved(cosmereEffectInstance);
@@ -272,7 +273,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void onEffectAdded(CosmereEffectInstance effectInstance, Entity sourceEntity)
 	{
-		if (!this.getLiving().level.isClientSide)
+		if (!this.getLiving().level().isClientSide)
 		{
 			effectInstance.applyAttributeModifiers(this.getLiving(), this.getLiving().getAttributes());
 		}
@@ -284,7 +285,7 @@ public class SpiritwebCapability implements ISpiritweb
 	public void onEffectUpdated(CosmereEffectInstance cosmereEffectInstance, boolean forced, Entity entity)
 	{
 		final LivingEntity livingEntity = this.getLiving();
-		if (forced && !livingEntity.level.isClientSide)
+		if (forced && !livingEntity.level().isClientSide)
 		{
 			cosmereEffectInstance.removeAttributeModifiers(livingEntity.getAttributes());
 			cosmereEffectInstance.applyAttributeModifiers(livingEntity, livingEntity.getAttributes());
@@ -294,7 +295,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void removeEffect(UUID uuid)
 	{
-		if (!this.getLiving().level.isClientSide)
+		if (!this.getLiving().level().isClientSide)
 		{
 			final CosmereEffectInstance effectInstance = this.activeEffects.remove(uuid);
 			onEffectRemoved(effectInstance);
@@ -304,7 +305,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void onEffectRemoved(CosmereEffectInstance cosmereEffectInstance)
 	{
-		if (!this.getLiving().level.isClientSide && cosmereEffectInstance != null)
+		if (!this.getLiving().level().isClientSide && cosmereEffectInstance != null)
 		{
 			cosmereEffectInstance.removeAttributeModifiers(this.getLiving().getAttributes());
 		}
@@ -341,7 +342,7 @@ public class SpiritwebCapability implements ISpiritweb
 	public void tick()
 	{
 		//if server
-		if (!livingEntity.level.isClientSide)
+		if (!livingEntity.level().isClientSide)
 		{
 			//Login sync
 			if (!didSetup)
@@ -490,7 +491,7 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 
-	public void renderSelectedHUD(PoseStack ms)
+	public void renderSelectedHUD(GuiGraphics gg)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		Window mainWindow = mc.getWindow();
@@ -498,7 +499,7 @@ public class SpiritwebCapability implements ISpiritweb
 		int y = mainWindow.getGuiScaledHeight() / 5;
 
 		String stringToDraw = I18n.get(selectedManifestation.getTextComponent().getString());
-		mc.font.drawShadow(ms, stringToDraw, x + 18, y, 0xFF4444);
+		gg.drawString(mc.font, stringToDraw, x + 18, y, 0xFF4444);
 
 		int mode = getMode(selectedManifestation);
 
@@ -541,7 +542,7 @@ public class SpiritwebCapability implements ISpiritweb
 		//todo translations
 		if (!stringToDraw2.isEmpty())
 		{
-			mc.font.drawShadow(ms, stringToDraw2, x + 18, y + 10, 0xFF4444);
+			gg.drawString(mc.font, stringToDraw2, x + 18, y + 10, 0xFF4444);
 		}
 	}
 
@@ -817,7 +818,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void syncToClients(@Nullable ServerPlayer serverPlayerEntity)
 	{
-		if (livingEntity != null && livingEntity.level.isClientSide)
+		if (livingEntity != null && livingEntity.level().isClientSide)
 		{
 			throw new IllegalStateException("Don't sync client -> server");
 		}
@@ -833,7 +834,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		if (serverPlayerEntity == null)
 		{
-			Cosmere.packetHandler().sendToAllInWorld(new SyncPlayerSpiritwebMessage(this.livingEntity.getId(), nbt), (ServerLevel) livingEntity.level);
+			Cosmere.packetHandler().sendToAllInWorld(new SyncPlayerSpiritwebMessage(this.livingEntity.getId(), nbt), (ServerLevel) livingEntity.level());
 		}
 		else
 		{

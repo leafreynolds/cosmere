@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 10 - 2023 ~ Leaf
+ * File updated ~ 1 - 5 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.api.helpers;
@@ -17,13 +17,13 @@ public class EntityHelper
 	public static List<LivingEntity> getLivingEntitiesInRange(LivingEntity livingEntity, int range, boolean includeSelf)
 	{
 		AABB areaOfEffect = new AABB(livingEntity.blockPosition()).inflate(range, range, range);
-		return livingEntity.level.getEntitiesOfClass(LivingEntity.class, areaOfEffect, e -> includeSelf || e != livingEntity);
+		return livingEntity.level().getEntitiesOfClass(LivingEntity.class, areaOfEffect, e -> includeSelf || e != livingEntity);
 	}
 
 	public static List<Entity> getEntitiesInRange(Entity entity, int range, boolean includeSelf)
 	{
 		AABB areaOfEffect = new AABB(entity.blockPosition()).inflate(range, range, range);
-		return entity.level.getEntitiesOfClass(Entity.class, areaOfEffect, e -> includeSelf || e != entity);
+		return entity.level().getEntitiesOfClass(Entity.class, areaOfEffect, e -> includeSelf || e != entity);
 	}
 
 	public static double getAttributeValue(LivingEntity entity, Attribute attribute)

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.items;
@@ -10,13 +10,10 @@ import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.itemgroups.SandmasteryItemGroups;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,14 +32,15 @@ public class QidoItem extends ChargeableItemBase
 {
 	public QidoItem()
 	{
-		super(PropTypes.Items.ONE.get().tab(SandmasteryItemGroups.ITEMS));
+		super(PropTypes.Items.ONE.get());
 	}
 
 	/**
 	 * @param fillPercent ranges from 0 to 1
 	 * @return ItemStack of a qido with specified fill percentage
 	 */
-	public ItemStack getChargedQido(float fillPercent) {
+	public ItemStack getChargedQido(float fillPercent)
+	{
 		ItemStack qido = new ItemStack(this);
 		setCharge(qido, Math.round(fillPercent * SandmasteryConfigs.SERVER.QIDO_MAX_FILL.get()));
 		return qido;
@@ -98,7 +96,7 @@ public class QidoItem extends ChargeableItemBase
 	}
 
 	@Override
-	public void onUsingTick(ItemStack pStack, LivingEntity pLivingEntity, int pRemainingUseDuration)
+	public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration)
 	{
 		if (!pLivingEntity.isCrouching())
 		{
@@ -130,7 +128,7 @@ public class QidoItem extends ChargeableItemBase
 				setCharge(pStack, availableWater - increasePerTick);
 			});
 		}
-		super.onUsingTick(pStack, pLivingEntity, pRemainingUseDuration);
+		super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 	}
 
 	@Nonnull

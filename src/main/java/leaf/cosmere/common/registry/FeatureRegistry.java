@@ -1,37 +1,29 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.common.registry;
 
-import com.google.common.collect.ImmutableList;
-import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registration.impl.ConfiguredFeatureDeferredRegister;
-import leaf.cosmere.common.registration.impl.ConfiguredFeatureRegistryObject;
 import leaf.cosmere.common.registration.impl.PlacedFeatureDeferredRegister;
-import leaf.cosmere.common.registration.impl.PlacedFeatureRegistryObject;
-import net.minecraft.core.Holder;
-import net.minecraft.data.worldgen.features.OreFeatures;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class FeatureRegistry
 {
 	public static final ConfiguredFeatureDeferredRegister CONFIGURED_FEATURES = new ConfiguredFeatureDeferredRegister(Cosmere.MODID);
 	public static final PlacedFeatureDeferredRegister PLACED_FEATURES = new PlacedFeatureDeferredRegister(Cosmere.MODID);
+	public static final RuleTest STONE_ORE_REPLACEABLES = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
+	public static final RuleTest DEEPSLATE_ORE_REPLACEABLES = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
 
-	public static final Map<Metals.MetalType, ConfiguredFeatureRegistryObject<ConfiguredFeature<?, ?>>> CONFIGURED_METAL_ORE_FEATURES =
+	// todo: might need to be redone? ore and placed features are already in the generated jsons, so might be fine
+	// hard to tell while it doesn't build
+	/*public static final Map<Metals.MetalType, ConfiguredFeatureRegistryObject<ConfiguredFeature<?, ?>>> CONFIGURED_METAL_ORE_FEATURES =
 			Arrays.stream(Metals.MetalType.values())
 					.filter(Metals.MetalType::hasOre)
 					.collect(Collectors.toMap(
@@ -68,33 +60,34 @@ public class FeatureRegistry
 
 	private static List<OreConfiguration.TargetBlockState> makeTarget(Metals.MetalType metalType)
 	{
+
 		return ImmutableList.of(
 				OreConfiguration.target(
-						OreFeatures.STONE_ORE_REPLACEABLES,
+						STONE_ORE_REPLACEABLES,
 						BlocksRegistry.METAL_ORE.get(metalType).getBlock().defaultBlockState()),
 				OreConfiguration.target(
-						OreFeatures.DEEPSLATE_ORE_REPLACEABLES,
+						DEEPSLATE_ORE_REPLACEABLES,
 						BlocksRegistry.METAL_ORE_DEEPSLATE.get(metalType).getBlock().defaultBlockState())
 		);
 	}
-
+*/
 
 	// The "New Tardis Mod" code says we should register configured versions of the features in FMLCommonSetup
 	// since it helps prevent mod incompatibility issues. No need to delete other mod's world gen. Thank you 50!
 
 
 	//copied from OrePlacements.java, since they're private methods that should really be public
-	private static List<PlacementModifier> commonOrePlacement(int pCount, PlacementModifier pHeightRange)
+	public static List<PlacementModifier> commonOrePlacement(int pCount, PlacementModifier pHeightRange)
 	{
 		return orePlacement(CountPlacement.of(pCount), pHeightRange);
 	}
 
-	private static List<PlacementModifier> rareOrePlacement(int pCount, PlacementModifier pHeightRange)
+	public static List<PlacementModifier> rareOrePlacement(int pCount, PlacementModifier pHeightRange)
 	{
 		return orePlacement(RarityFilter.onAverageOnceEvery(pCount), pHeightRange);
 	}
 
-	private static List<PlacementModifier> orePlacement(PlacementModifier countPlacement, PlacementModifier heightRange)
+	public static List<PlacementModifier> orePlacement(PlacementModifier countPlacement, PlacementModifier heightRange)
 	{
 		return List.of(countPlacement, InSquarePlacement.spread(), heightRange, BiomeFilter.biome());
 	}

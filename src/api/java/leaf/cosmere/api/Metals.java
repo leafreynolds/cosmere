@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 4 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -605,6 +604,7 @@ public class Metals
 			return null;
 		}
 
+		@SuppressWarnings("DuplicateBranchesInSwitch")
 		public int getAllomancyBurnTimeSeconds()
 		{
 			//todo convert to config item
@@ -755,12 +755,12 @@ public class Metals
 					}
 					else if (killedEntity instanceof Cat cat)
 					{
-						final CatVariant catType = cat.getCatVariant();
-						if (catType == CatVariant.BLACK)//all black
+						final CatVariant catType = cat.getVariant();
+						if (catType.texture().getPath().contains("black"))//all black
 						{
 							strengthToAdd = -5;
 						}
-						else if (catType == CatVariant.WHITE)//white
+						else if (catType.texture().getPath().contains("white"))//white
 						{
 							strengthToAdd = 1;
 						}
@@ -925,29 +925,29 @@ public class Metals
 		}
 
 		@Override
-		public int getDurabilityForSlot(EquipmentSlot pSlot)
+		public int getDurabilityForType(ArmorItem.Type pType)
 		{
-			float multiplier = switch (pSlot)
+			float multiplier = switch (pType)
 			{
 				default -> 0.0F;
-				case HEAD -> 0.3F;
-				case CHEST -> 0.5F;
-				case LEGS -> 0.4F;
-				case FEET -> 0.25F;
+				case HELMET -> 0.3F;
+				case CHESTPLATE -> 0.5F;
+				case LEGGINGS -> 0.4F;
+				case BOOTS -> 0.25F;
 			};
 
 			return Mth.floor(getUses() * multiplier);
 		}
 
 		@Override
-		public int getDefenseForSlot(EquipmentSlot pSlot)
+		public int getDefenseForType(ArmorItem.Type pType)
 		{
-			return getLevel() + switch (pSlot)
+			return getLevel() + switch (pType)
 			{
 				default -> 0;
-				case HEAD, FEET -> 0;
-				case LEGS -> 3;
-				case CHEST -> 4;
+				case HELMET, BOOTS -> 0;
+				case LEGGINGS -> 3;
+				case CHESTPLATE -> 4;
 			};
 		}
 

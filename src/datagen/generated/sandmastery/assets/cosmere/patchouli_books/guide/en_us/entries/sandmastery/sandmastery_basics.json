@@ -1,0 +1,21 @@
+{
+  "category": "cosmere:sandmastery",
+  "icon": "sandmastery:qido",
+  "name": "Sandmastery Basics",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Here is where I shall explain Sand Mastery, a system of Investiture native to Taldain. The sand from Taldain is rare to find on this planet- perhaps delving into abandoned pyramids will aid in your search. While normally black, Whenever in the presence of physical investiture- Allomancy and Surgebinding, to name a few- the sand will turn white and spread to nearby sand.This has been observed to be most consistent in a sand spreading tub.",
+      "title": "Sand Mastery (For Dummies)"
+    },
+    {
+      "type": "text",
+      "text": "To get started, you will need to be hydrated. You can accomplish this simply by drinking water bottles, but to hold even more water on you at a time consider looking into a Qido. You will also need to keep sand on you, for that you will need to get a sand pouch, the more sand you put inside, the more charge it will hold.And finally, you will need to charge the sand inside the jar. The sand will charge when in the presence of kinetic investiture, as long as it is not being hidden by something like copper allomancy.",
+      "title": "Sand Mastery (For Dummies)"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}

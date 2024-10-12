@@ -21,7 +21,7 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 {
 	Metals.MetalType metalType;
 
-	public TArmorItem(Metals.MetalType metalType, EquipmentSlot pSlot, Properties pProperties)
+	public TArmorItem(Metals.MetalType metalType, Type pSlot, Properties pProperties)
 	{
 		super(metalType, pSlot, pProperties);
 		this.metalType = metalType;

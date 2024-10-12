@@ -1,14 +1,14 @@
 /*
- * File updated ~ 24 - 3 - 2024 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.tools;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.registries.ToolsItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 public class ToolsItemModelsGen extends ItemModelProvider
 {
 
-	public ToolsItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public ToolsItemModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, CosmereTools.MODID, existingFileHelper);
 	}
@@ -95,7 +95,7 @@ public class ToolsItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

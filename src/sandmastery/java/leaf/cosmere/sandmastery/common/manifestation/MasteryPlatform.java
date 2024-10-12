@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -9,8 +9,7 @@ import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
-import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.BlockPos;
@@ -48,7 +47,7 @@ public class MasteryPlatform extends SandmasteryManifestation
 	private void setBlockIfAir(Level level, BlockPos pos, BlockState state)
 	{
 		Block block = level.getBlockState(pos).getBlock();
-		if (block != Blocks.AIR && block != SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock())
+		if (block != Blocks.AIR && block != SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock())
 		{
 			return;
 		}
@@ -60,9 +59,9 @@ public class MasteryPlatform extends SandmasteryManifestation
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 		LivingEntity living = data.getLiving();
-		Level level = living.level;
+		Level level = living.level();
 		BlockPos pos = living.blockPosition().below();
-		BlockState state = SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock().defaultBlockState();
+		BlockState state = SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock().defaultBlockState();
 		int size = getMode(data) / 2;
 		pos = pos.offset(-(size + 1), living.isCrouching() ? -1 : 0, -(size + 1));
 		for (int x = -size; x <= size; x++)
@@ -77,7 +76,7 @@ public class MasteryPlatform extends SandmasteryManifestation
 		}
 
 		BlockPos groundPos = MiscHelper.blockPosAtGround(data.getLiving());
-		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level, data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
+		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level(), data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
 
 		submodule.adjustHydration(-getHydrationCost(data), true, data);
 		return true;

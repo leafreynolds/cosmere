@@ -1,0 +1,7 @@
+{
+  "description": "Metalworkers recently discovered that other metals besides iron and gold can be worked to make tools and armor.",
+  "icon": "cosmeretools:pewter_pickaxe",
+  "name": "Tools",
+  "secret": true,
+  "sortnum": 99
+}

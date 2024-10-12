@@ -1,7 +1,0 @@
-{
-  "description": "Tools description that says some stuff.",
-  "icon": "minecraft:paper",
-  "name": "Tools",
-  "secret": true,
-  "sortnum": 99
-}

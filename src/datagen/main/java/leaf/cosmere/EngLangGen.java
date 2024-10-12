@@ -1,19 +1,18 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.itemgroups.CosmereItemGroups;
 import leaf.cosmere.common.registry.*;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -25,9 +24,9 @@ public class EngLangGen extends LanguageProvider
 	final String advancementTitleFormat = "advancements.cosmere.%s.title";
 	final String advancementDescriptionFormat = "advancements.cosmere.%s.description";
 
-	public EngLangGen(DataGenerator gen)
+	public EngLangGen(PackOutput output)
 	{
-		super(gen, Cosmere.MODID, "en_us");
+		super(output, Cosmere.MODID, "en_us");
 	}
 
 	@Override
@@ -40,7 +39,6 @@ public class EngLangGen extends LanguageProvider
 		addAttributes();
 		addPatchouli();
 		addTooltips();
-		addItemGroups();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -48,7 +46,7 @@ public class EngLangGen extends LanguageProvider
 		addCommands();
 		addKeybindings();
 		addStats();
-
+		addCreativeTabs();
 	}
 
 
@@ -58,7 +56,7 @@ public class EngLangGen extends LanguageProvider
 		for (IItemProvider item : ItemsRegistry.ITEMS.getAllItems())
 		{
 			final Item currentItem = item.asItem();
-			final ResourceLocation registryName = ResourceLocationHelper.get(currentItem);
+			final ResourceLocation registryName = RegistryHelper.get(currentItem);
 			if (registryName.getNamespace().contentEquals(Cosmere.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
@@ -77,7 +75,7 @@ public class EngLangGen extends LanguageProvider
 		for (IItemProvider item : BlocksRegistry.BLOCKS.getAllBlocks())
 		{
 			final Item currentItem = item.asItem();
-			final ResourceLocation registryName = ResourceLocationHelper.get(currentItem);
+			final ResourceLocation registryName = RegistryHelper.get(currentItem);
 			String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
 			add(currentItem.getDescriptionId(), localisedString);
 		}
@@ -144,6 +142,13 @@ public class EngLangGen extends LanguageProvider
 		add("cosmere.landing", "The Cosmere is filled with many fantastical things. I have left my findings written within this book.");
 	}
 
+	private void addCreativeTabs()
+	{
+		//ItemGroups/Tabs
+		//CreativeTabsRegistry.ITEMS.get().getDisplayName()
+		add("tabs.cosmere.items", "Cosmere");
+	}
+
 	private void addTooltips()
 	{
 		//Tooltips
@@ -153,13 +158,6 @@ public class EngLangGen extends LanguageProvider
 
 		//patchouli
 		add(PATCHOULI_NOT_INSTALLED, "Patchouli is not installed. Documentation is not available.");
-	}
-
-	private void addItemGroups()
-	{
-		//ItemGroups/Tabs
-		add("itemGroup." + CosmereItemGroups.ITEMS.getRecipeFolderName(), "Cosmere Items");
-		add("itemGroup." + CosmereItemGroups.BLOCKS.getRecipeFolderName(), "Cosmere Blocks");
 	}
 
 	private void addDamageSources()

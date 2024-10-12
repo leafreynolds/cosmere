@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.loottables;
@@ -8,32 +8,24 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.blocks.MetalOreBlock;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
-import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.level.block.Block;
 
-public class BlockLootTableGen extends BlockLoot
+public class BlockLootTableGen extends BaseBlockLootTables
 {
 	@Override
-	protected void addTables()
+	protected void generate()
 	{
+		//first catch any blocks that don't drop self, like ores
 		for (IBlockProvider itemRegistryObject : BlocksRegistry.BLOCKS.getAllBlocks())
 		{
 			final Block block = itemRegistryObject.getBlock();
 			if (block instanceof MetalOreBlock oreBlock)
 			{
-
-				this.add(oreBlock, (ore) -> createOreDrop(ore, ItemsRegistry.METAL_RAW_ORE.get(oreBlock.getMetalType()).asItem()));
-			}
-			else
-			{
-				this.dropSelf(block);
+				this.add(oreBlock, (ore) -> createOreDrop(ore, ItemsRegistry.METAL_RAW_ORE.get(oreBlock.getMetalType())));
 			}
 		}
-	}
 
-	@Override
-	protected Iterable<Block> getKnownBlocks()
-	{
-		return BlocksRegistry.BLOCKS.getAllBlocks().stream().map(IBlockProvider::getBlock)::iterator;
+		//then make the rest drop themselves.
+		dropSelf(BlocksRegistry.BLOCKS.getAllBlocks());
 	}
 }

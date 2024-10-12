@@ -11,6 +11,7 @@ import leaf.cosmere.aviar.common.entity.AviarBird;
 import leaf.cosmere.aviar.common.registries.AviarEntityTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.player.Player;
 
 public class AviarSpiritwebSubmodule implements ISpiritwebSubmodule
@@ -48,7 +49,7 @@ public class AviarSpiritwebSubmodule implements ISpiritwebSubmodule
 				.filter((entityType) -> entityType == AviarEntityTypes.AVIAR_ENTITY.get())
 				.ifPresent((entityType) ->
 				{
-					final int variant = compoundtag.getInt("Variant");
+					final Parrot.Variant variant = Parrot.Variant.byId(compoundtag.getInt("Variant"));
 					AviarBird.tickBond(player, variant, compoundtag.getUUID("UUID").toString());
 				});
 	}

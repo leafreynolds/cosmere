@@ -1,0 +1,29 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:bronze_nugget",
+  "name": "Allomantic Bronze",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)bronze$() is known as a \"$(thing)Seeker$()\". A seeker burning bronze is able to detect the nearby use of allomancy or feruchemy. A skilled seeker is capable of detecting what specific abilities are being used. Keep in mind that a smoker can neutralise the ability for a seeker to track allomancy or feruchemy. Bronze is the internal pushing metal and one of four mental metals (alongside Brass, Copper, and Zinc)"
+    },
+    {
+      "type": "text",
+      "text": "[If you use the Jade mod, it shows you the metal the creature is burning, though you can do this on sound alone]"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_zinc",
+        "cosmere:allomancy/allomantic_brass",
+        "cosmere:allomancy/allomantic_copper",
+        "cosmere:allomancy/allomantic_bronze"
+      ],
+      "title": "The mental metals:"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 7
+}

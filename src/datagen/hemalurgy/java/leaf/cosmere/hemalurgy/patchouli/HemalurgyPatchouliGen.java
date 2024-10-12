@@ -1,21 +1,22 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class HemalurgyPatchouliGen extends PatchouliProvider
 {
-	public HemalurgyPatchouliGen(DataGenerator generatorIn)
+	public HemalurgyPatchouliGen(PackOutput packOutput)
 	{
-		super(generatorIn, Hemalurgy.MODID);
+		super(packOutput, CosmereAPI.COSMERE_MODID);
 	}
 
 

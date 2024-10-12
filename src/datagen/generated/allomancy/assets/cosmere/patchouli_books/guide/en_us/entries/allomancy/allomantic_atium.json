@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:atium_nugget",
+  "name": "Allomantic Atium",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)atium$() is known as a \"$(thing)Seer$()\". $(br)Most of the page is missing... (Not yet fully implemented)$(br)The metal atium is extraordinarily rare. Seers who can burn it can see into the future a small amount, and thus can dodge every attack that might befall them (unless the attacker is burning electrum of course)."
+    },
+    {
+      "type": "text",
+      "text": "Interestingly atium doesnt fit the normal metal categories... $(br)I will have to further pursue the subject."
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 16
+}

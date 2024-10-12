@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.utils;
@@ -15,7 +15,7 @@ import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.sandmastery.common.Sandmastery;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
@@ -120,7 +120,6 @@ public class MiscHelper
 	}
 
 	/**
-	 *
 	 * @param e Living Entity
 	 * @return the distance between the entity and the first block below it. Returns -1 if above void
 	 */
@@ -129,10 +128,10 @@ public class MiscHelper
 		BlockPos pos = e.blockPosition();
 		double y = pos.getY();
 		int dist = 0;
-		for (double i = y; i >= e.level.getMinBuildHeight(); i--)
+		for (double i = y; i >= e.level().getMinBuildHeight(); i--)
 		{
-			BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
-			if (!block.isAir() && !block.is(SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock()))
+			BlockState block = e.level().getBlockState(pos.offset(0, -dist, 0));
+			if (!block.isAir() && !block.is(SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock()))
 			{
 				return dist;
 			}
@@ -143,7 +142,6 @@ public class MiscHelper
 	}
 
 	/**
-	 *
 	 * @param e Living Entity
 	 * @return If above ground, returns the block position of the first block directly below entity, otherwise returns eye position
 	 */
@@ -152,10 +150,10 @@ public class MiscHelper
 		BlockPos pos = e.blockPosition();
 		double y = pos.getY();
 		int dist = 0;
-		for (double i = y; i >= e.level.getMinBuildHeight(); i--)
+		for (double i = y; i >= e.level().getMinBuildHeight(); i--)
 		{
-			BlockState block = e.level.getBlockState(pos.offset(0, -dist, 0));
-			if (!block.isAir() && !block.is(SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock()))
+			BlockState block = e.level().getBlockState(pos.offset(0, -dist, 0));
+			if (!block.isAir() && !block.is(SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock()))
 			{
 				return pos.offset(0, -dist, 0);
 			}
@@ -163,7 +161,7 @@ public class MiscHelper
 		}
 
 		Vec3 eyePos = e.getEyePosition();
-		return new BlockPos(eyePos);
+		return BlockPos.containing(eyePos);
 	}
 
 	public static boolean isActivatedAndActive(ISpiritweb data, Manifestation manifestation)
@@ -178,11 +176,11 @@ public class MiscHelper
 			return 0;
 		}
 
-		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem())
+		if (stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem())
 		{
 			return stack.getCount() * 10;
 		}
-		if (stack.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem())
+		if (stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem())
 		{
 			return stack.getCount() * 80;
 		}
@@ -227,7 +225,7 @@ public class MiscHelper
 
 	public static boolean isClient(ISpiritweb data)
 	{
-		return data.getLiving().level.isClientSide;
+		return data.getLiving().level().isClientSide;
 	}
 
 	public static int getHotkeyFlags(ISpiritweb data)
@@ -259,9 +257,10 @@ public class MiscHelper
 
 	public static void spawnMasteredSandLine(ServerLevel level, Vec3 pos1, Vec3 pos2)
 	{
-		ParticleOptions particleOptions = new BlockParticleOption(ParticleTypes.FALLING_DUST, SandmasteryBlocksRegistry.TEMPORARY_SAND_BLOCK.getBlock().defaultBlockState());
+		ParticleOptions particleOptions = new BlockParticleOption(ParticleTypes.FALLING_DUST, SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock().defaultBlockState());
 		int dist = Mth.floor(pos1.distanceTo(pos2));
-		for( Vec3 vector : vectorsBetweenPositions(pos1, pos2, dist)) {
+		for (Vec3 vector : vectorsBetweenPositions(pos1, pos2, dist))
+		{
 			level.sendParticles(particleOptions, vector.x, vector.y, vector.z, 2, 0, 0, 0, 1);
 		}
 	}

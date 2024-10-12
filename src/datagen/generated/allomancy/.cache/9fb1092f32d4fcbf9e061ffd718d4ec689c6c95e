@@ -1,6 +1,6 @@
-// 1.19.2	2022-11-20T19:09:29.6607831	Recipes
-b713c28b6b44393543b389c3b4423e986328c34a data/allomancy/advancements/recipes/cosmere.items/coin_pouch.json
-67d10d1cf2469d477bd38bf3346da441dfd52a91 data/allomancy/advancements/recipes/cosmere.items/metal_vial.json
-46f98acd99a6be45dd6e62538025a924ed8cea5d data/allomancy/recipes/coin_pouch.json
-60f315841ea01a2eeb29508e9014b6a66b28b6a6 data/allomancy/recipes/metal_vial.json
-5377db94c7ddbd8768415ba695120fadfb68e51d data/allomancy/recipes/vial_mixing.json
+// 1.20.1	2024-10-09T13:22:13.338555	Recipes
+2ab76b8b72d83f1207051efc1cb9174ae9ae4a61 data/allomancy/advancements/recipes/tools/coin_pouch.json
+ff01905c7528be493d7b447b09e20762cd818089 data/allomancy/advancements/recipes/tools/metal_vial.json
+97699dc7b7a7cd857564421ad0cafff04b654089 data/allomancy/recipes/coin_pouch.json
+8ad78df11acb7d92cf1169192b00ab592dc78b93 data/allomancy/recipes/metal_vial.json
+08792c13f9fd6638a1e2f0b0a267e81ca8c42849 data/allomancy/recipes/vial_mixing.json

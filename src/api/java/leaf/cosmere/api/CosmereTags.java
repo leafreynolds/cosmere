@@ -1,10 +1,9 @@
 /*
- * File updated ~ 11 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.api;
 
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -13,6 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Arrays;
@@ -55,6 +55,12 @@ public class CosmereTags
 						.collect(Collectors.toMap(
 								Function.identity(),
 								type -> forgeItemTag("raw_materials/" + type.getName())));
+
+		public static final Map<Metals.MetalType, TagKey<Item>> METAL_ORE_TAGS =
+				Arrays.stream(Metals.MetalType.values())
+						.collect(Collectors.toMap(
+								Function.identity(),
+								type -> forgeItemTag("ores/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_DUST_TAGS =
 				Arrays.stream(Metals.MetalType.values())
@@ -169,9 +175,11 @@ public class CosmereTags
 		public static final TagKey<Biome> IS_ROSHAR = create(new ResourceLocation("surgebinding", "is_roshar"));
 		public static final TagKey<Biome> IS_SHADESMAR = create(new ResourceLocation(CosmereAPI.COSMERE_MODID, "is_shadesmar"));
 
+		public static final TagKey<Biome> SPAWN_ORES = create(new ResourceLocation(CosmereAPI.COSMERE_MODID, "spawn_ores"));
+
 		private static TagKey<Biome> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(Registry.BIOME_REGISTRY, resourceLocation);
+			return TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), resourceLocation);
 		}
 	}
 
@@ -186,7 +194,7 @@ public class CosmereTags
 
 		private static TagKey<EntityType<?>> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, resourceLocation);
+			return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), resourceLocation);
 		}
 	}
 }

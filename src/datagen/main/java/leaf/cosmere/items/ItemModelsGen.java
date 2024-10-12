@@ -1,17 +1,17 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 6 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.items;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.items.MetalIngotItem;
 import leaf.cosmere.common.items.MetalNuggetItem;
 import leaf.cosmere.common.items.MetalRawOreItem;
 import leaf.cosmere.common.registry.ItemsRegistry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -25,9 +25,9 @@ import java.util.function.Supplier;
 public class ItemModelsGen extends ItemModelProvider
 {
 
-	public ItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public ItemModelsGen(PackOutput packOutput, ExistingFileHelper existingFileHelper)
 	{
-		super(generator, Cosmere.MODID, existingFileHelper);
+		super(packOutput, Cosmere.MODID, existingFileHelper);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class ItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

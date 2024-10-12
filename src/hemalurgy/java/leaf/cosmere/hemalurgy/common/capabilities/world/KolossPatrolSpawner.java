@@ -1,5 +1,5 @@
 /*
- * File updated ~ 31 - 7 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.capabilities.world;
@@ -24,8 +24,11 @@ import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraft.world.level.levelgen.PatrolSpawner;
 
+/**
+ * Koloss spawn patrol version of  {@link PatrolSpawner}.
+ */
 public class KolossPatrolSpawner implements CustomSpawner
 {
 	private int nextTick;
@@ -36,87 +39,101 @@ public class KolossPatrolSpawner implements CustomSpawner
 		{
 			return 0;
 		}
-		if (!pLevel.getGameRules().getBoolean(GameRules.RULE_DO_PATROL_SPAWNING))
+		else if (!pLevel.getGameRules().getBoolean(GameRules.RULE_DO_PATROL_SPAWNING))
 		{
 			return 0;
 		}
-		RandomSource randomsource = pLevel.random;
-		--this.nextTick;
-		if (this.nextTick > 0)
+		else
 		{
-			return 0;
-		}
-		this.nextTick += 12000 + randomsource.nextInt(1200);
-		long i = pLevel.getDayTime() / 24000L;
-		if (i >= 5L && pLevel.isDay())
-		{
-			final int ranNumTest = randomsource.nextInt(5);
-			if (ranNumTest != 0)
+			RandomSource randomsource = pLevel.random;
+			--this.nextTick;
+			if (this.nextTick > 0)
 			{
 				return 0;
-			}
-			int j = pLevel.players().size();
-			if (j < 1)
-			{
-				return 0;
-			}
-			Player player = pLevel.players().get(randomsource.nextInt(j));
-			if (player.isSpectator())
-			{
-				return 0;
-			}
-			if (pLevel.isCloseToVillage(player.blockPosition(), 2))
-			{
-				return 0;
-			}
-			return trySpawnPatrol(pLevel, randomsource, player);
-		}
-		return 0;
-	}
-
-	private int trySpawnPatrol(ServerLevel pLevel, RandomSource randomsource, Player player)
-	{
-		int k = (24 + randomsource.nextInt(24)) * (randomsource.nextBoolean() ? -1 : 1);
-		int l = (24 + randomsource.nextInt(24)) * (randomsource.nextBoolean() ? -1 : 1);
-		BlockPos.MutableBlockPos blockpos$mutableblockpos = player.blockPosition().mutable().move(k, 0, l);
-
-		if (!pLevel.hasChunksAt(
-				blockpos$mutableblockpos.getX() - 10,
-				blockpos$mutableblockpos.getZ() - 10,
-				blockpos$mutableblockpos.getX() + 10,
-				blockpos$mutableblockpos.getZ() + 10))
-		{
-			return 0;
-		}
-		Holder<Biome> holder = pLevel.getBiome(blockpos$mutableblockpos);
-		if (holder.is(BiomeTags.WITHOUT_PATROL_SPAWNS))
-		{
-			return 0;
-		}
-		int j1 = 0;
-		int k1 = (int) Math.ceil((double) pLevel.getCurrentDifficultyAt(blockpos$mutableblockpos).getEffectiveDifficulty()) + 1;
-
-		for (int l1 = 0; l1 < k1; ++l1)
-		{
-			++j1;
-			blockpos$mutableblockpos.setY(pLevel.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos$mutableblockpos).getY());
-			if (l1 == 0)
-			{
-				if (!this.spawnPatrolMember(pLevel, blockpos$mutableblockpos, randomsource, true))
-				{
-					break;
-				}
 			}
 			else
 			{
-				this.spawnPatrolMember(pLevel, blockpos$mutableblockpos, randomsource, false);
+				this.nextTick += 12000 + randomsource.nextInt(1200);
+				long i = pLevel.getDayTime() / 24000L;
+				if (i >= 5L && pLevel.isDay())
+				{
+					if (randomsource.nextInt(5) != 0)
+					{
+						return 0;
+					}
+					else
+					{
+						int j = pLevel.players().size();
+						if (j < 1)
+						{
+							return 0;
+						}
+						else
+						{
+							Player player = pLevel.players().get(randomsource.nextInt(j));
+							if (player.isSpectator())
+							{
+								return 0;
+							}
+							else if (pLevel.isCloseToVillage(player.blockPosition(), 2))
+							{
+								return 0;
+							}
+							else
+							{
+								int k = (24 + randomsource.nextInt(24)) * (randomsource.nextBoolean() ? -1 : 1);
+								int l = (24 + randomsource.nextInt(24)) * (randomsource.nextBoolean() ? -1 : 1);
+								BlockPos.MutableBlockPos blockpos$mutableblockpos = player.blockPosition().mutable().move(k, 0, l);
+								int i1 = 10;
+								if (!pLevel.hasChunksAt(blockpos$mutableblockpos.getX() - 10, blockpos$mutableblockpos.getZ() - 10, blockpos$mutableblockpos.getX() + 10, blockpos$mutableblockpos.getZ() + 10))
+								{
+									return 0;
+								}
+								else
+								{
+									Holder<Biome> holder = pLevel.getBiome(blockpos$mutableblockpos);
+									if (holder.is(BiomeTags.WITHOUT_PATROL_SPAWNS))
+									{
+										return 0;
+									}
+									else
+									{
+										int j1 = 0;
+										int k1 = (int) Math.ceil((double) pLevel.getCurrentDifficultyAt(blockpos$mutableblockpos).getEffectiveDifficulty()) + 1;
+
+										for (int l1 = 0; l1 < k1; ++l1)
+										{
+											++j1;
+											blockpos$mutableblockpos.setY(pLevel.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, blockpos$mutableblockpos).getY());
+											if (l1 == 0)
+											{
+												if (!this.spawnPatrolMember(pLevel, blockpos$mutableblockpos, randomsource, true))
+												{
+													break;
+												}
+											}
+											else
+											{
+												this.spawnPatrolMember(pLevel, blockpos$mutableblockpos, randomsource, false);
+											}
+
+											blockpos$mutableblockpos.setX(blockpos$mutableblockpos.getX() + randomsource.nextInt(5) - randomsource.nextInt(5));
+											blockpos$mutableblockpos.setZ(blockpos$mutableblockpos.getZ() + randomsource.nextInt(5) - randomsource.nextInt(5));
+										}
+
+										return j1;
+									}
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					return 0;
+				}
 			}
-
-			blockpos$mutableblockpos.setX(blockpos$mutableblockpos.getX() + randomsource.nextInt(5) - randomsource.nextInt(5));
-			blockpos$mutableblockpos.setZ(blockpos$mutableblockpos.getZ() + randomsource.nextInt(5) - randomsource.nextInt(5));
 		}
-
-		return j1;
 	}
 
 	private boolean spawnPatrolMember(ServerLevel pLevel, BlockPos pPos, RandomSource pRandom, boolean pLeader)
@@ -125,62 +142,38 @@ public class KolossPatrolSpawner implements CustomSpawner
 		if (!NaturalSpawner.isValidEmptySpawnBlock(pLevel, pPos, blockstate, blockstate.getFluidState(), HemalurgyEntityTypes.KOLOSS_LARGE.getEntityType()))
 		{
 			return false;
-
 		}
-		//if you can spawn a pillager there, for now lets just assume koloss can go there
-		if (!PatrollingMonster.checkPatrollingMonsterSpawnRules(EntityType.PILLAGER, pLevel, MobSpawnType.PATROL, pPos, pRandom))
+		else if (!PatrollingMonster.checkPatrollingMonsterSpawnRules(EntityType.PILLAGER, pLevel, MobSpawnType.PATROL, pPos, pRandom))
 		{
 			return false;
-		}
-		PatrollingMonster patrollingmonster;
-		if (pLeader)
-		{
-			patrollingmonster = HemalurgyEntityTypes.KOLOSS_LARGE.getEntityType().create(pLevel);
 		}
 		else
 		{
 			final EntityTypeRegistryObject<Koloss> kolossType =
-					pLevel.random.nextBoolean()
-					? HemalurgyEntityTypes.KOLOSS_MEDIUM
-					: HemalurgyEntityTypes.KOLOSS_SMALL;
+					pLeader
+					? HemalurgyEntityTypes.KOLOSS_LARGE
+					: pLevel.random.nextBoolean()
+					  ? HemalurgyEntityTypes.KOLOSS_MEDIUM
+					  : HemalurgyEntityTypes.KOLOSS_SMALL;
 
-			patrollingmonster = kolossType.getEntityType().create(pLevel);
-		}
-
-		if (patrollingmonster != null)
-		{
-			if (pLeader)
+			PatrollingMonster patrollingmonster = kolossType.getEntityType().create(pLevel);
+			if (patrollingmonster != null)
 			{
-				patrollingmonster.setPatrolLeader(true);
-				patrollingmonster.findPatrolTarget();
+				if (pLeader)
+				{
+					patrollingmonster.setPatrolLeader(true);
+					patrollingmonster.findPatrolTarget();
+				}
+
+				patrollingmonster.setPos((double) pPos.getX(), (double) pPos.getY(), (double) pPos.getZ());
+				patrollingmonster.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(pPos), MobSpawnType.PATROL, (SpawnGroupData) null, (CompoundTag) null);
+				pLevel.addFreshEntityWithPassengers(patrollingmonster);
+				return true;
 			}
-
-			patrollingmonster.setPos((double) pPos.getX(), (double) pPos.getY(), (double) pPos.getZ());
-
-			final int canEntitySpawn = ForgeHooks.canEntitySpawn(
-					patrollingmonster,
-					pLevel,
-					pPos.getX(),
-					pPos.getY(),
-					pPos.getZ(),
-					null,
-					MobSpawnType.PATROL);
-
-			if (canEntitySpawn == -1)
+			else
 			{
 				return false;
 			}
-
-			patrollingmonster.finalizeSpawn(
-					pLevel,
-					pLevel.getCurrentDifficultyAt(pPos),
-					MobSpawnType.PATROL,
-					(SpawnGroupData) null,
-					(CompoundTag) null);
-
-			pLevel.addFreshEntityWithPassengers(patrollingmonster);
-			return true;
 		}
-		return false;
 	}
 }

@@ -42,7 +42,7 @@ public class AllomancyBendalloy extends AllomancyManifestation
 		// data processing
 		{
 			// this is the only way to check if the player is still online, thanks forge devs
-			if (data.getLiving().level.getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
+			if (data.getLiving().level().getServer().getPlayerList().getPlayer(data.getLiving().getUUID()) == null)
 			{
 				return;
 			}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.example;
@@ -8,17 +8,19 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.example.common.Example;
 import leaf.cosmere.example.common.registries.ExampleBlocks;
 import leaf.cosmere.tag.BaseTagProvider;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ExampleTagProvider extends BaseTagProvider
 {
-	public ExampleTagProvider(DataGenerator dataGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public ExampleTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(dataGenerator, Example.MODID, existingFileHelper);
+		super(packOutput, lookupProvider, Example.MODID, existingFileHelper);
 	}
 
 
@@ -30,7 +32,7 @@ public class ExampleTagProvider extends BaseTagProvider
 
 
 	@Override
-	protected void registerTags()
+	protected void registerTags(HolderLookup.Provider registries)
 	{
 		//getItemBuilder(CosmereTags.Items.CURIO_HEAD).add(Example.Item.asItem());
 

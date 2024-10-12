@@ -1,14 +1,14 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.awakening;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.awakening.common.Awakening;
 import leaf.cosmere.awakening.common.registries.AwakeningItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 public class AwakeningItemModelsGen extends ItemModelProvider
 {
 
-	public AwakeningItemModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public AwakeningItemModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Awakening.MODID, existingFileHelper);
 	}
@@ -61,7 +61,7 @@ public class AwakeningItemModelsGen extends ItemModelProvider
 
 	public String getPath(Supplier<? extends Item> itemSupplier)
 	{
-		ResourceLocation location = ResourceLocationHelper.get(itemSupplier.get());
+		ResourceLocation location = RegistryHelper.get(itemSupplier.get());
 		return location.getPath();
 	}
 

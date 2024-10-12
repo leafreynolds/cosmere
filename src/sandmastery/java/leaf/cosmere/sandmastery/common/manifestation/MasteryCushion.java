@@ -1,5 +1,5 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.manifestation;
@@ -7,7 +7,6 @@ package leaf.cosmere.sandmastery.common.manifestation;
 import leaf.cosmere.api.Taldain;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
-import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -32,7 +31,8 @@ public class MasteryCushion extends SandmasteryManifestation
 	}
 
 	@Override
-	protected int getBaseCost() {
+	protected int getBaseCost()
+	{
 		return 1;
 	}
 
@@ -58,7 +58,7 @@ public class MasteryCushion extends SandmasteryManifestation
 		}
 
 		BlockPos groundPos = MiscHelper.blockPosAtGround(data.getLiving());
-		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level, data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
+		MiscHelper.spawnMasteredSandLine((ServerLevel) data.getLiving().level(), data.getLiving().getEyePosition(), new Vec3(groundPos.getX(), groundPos.getY(), groundPos.getZ()));
 
 		living.setDeltaMovement(movement.multiply(1, 0.05, 1));
 		living.hurtMarked = true;

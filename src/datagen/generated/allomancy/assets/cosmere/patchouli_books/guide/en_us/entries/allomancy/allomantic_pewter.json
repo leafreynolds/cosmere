@@ -1,0 +1,25 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:pewter_nugget",
+  "name": "Allomantic Pewter",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns$(thing)pewter$() is known as a \"$(thing)Thug$()\". While burning pewter, a pewterarm becomes faster, considerably stronger, and more resistant to punishment. However, they need to be careful because if they run out of pewter to burn, they will immediately feel all the pain they were shrugging off. This can mean instant death in extreme cases. Pewter is the internal pushing metal and one of the four physical metals (alongside Tin, Iron, and Steel) [Do note that there isn't currently a way to tell how much damage you take when you stop burning pewter, be cautious.]"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_steel",
+        "cosmere:allomancy/allomantic_iron",
+        "cosmere:allomancy/allomantic_pewter",
+        "cosmere:allomancy/allomantic_tin"
+      ],
+      "title": "The physical metals:"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 3
+}

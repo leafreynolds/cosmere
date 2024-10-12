@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "redstone",
   "key": {
     "G": {
       "tag": "forge:glass"
@@ -12,5 +13,6 @@
   ],
   "result": {
     "item": "sandmastery:jar"
-  }
+  },
+  "show_notification": true
 }

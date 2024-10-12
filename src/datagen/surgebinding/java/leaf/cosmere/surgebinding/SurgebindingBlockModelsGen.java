@@ -1,16 +1,16 @@
 /*
- * File updated ~ 17 - 11 - 2023 ~ Leaf
+ * File updated ~ 8 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
 
-import leaf.cosmere.api.helpers.ResourceLocationHelper;
+import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.*;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 public class SurgebindingBlockModelsGen extends BlockStateProvider
 {
-	public SurgebindingBlockModelsGen(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public SurgebindingBlockModelsGen(PackOutput generator, ExistingFileHelper existingFileHelper)
 	{
 		super(generator, Surgebinding.MODID, existingFileHelper);
 	}
@@ -43,7 +43,7 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 			{
 				//Special thanks to @Random & @sciwhiz12  on discord who helped me get these running
 				//To get the overlay working, you need to tell the blocks they have transparency, which I've donne in the ClientSetup script.
-				final boolean deepslate = ResourceLocationHelper.get(block).getPath().contains("deepslate");
+				final boolean deepslate = RegistryHelper.get(block).getPath().contains("deepslate");
 
 				final String stoneType = deepslate ? "block/gem_ore_block_deepslate" : "block/gem_ore_block";
 				final String stoneFileName = deepslate ? "gem_ore_block_deepslate" : "gem_ore_block";
@@ -55,7 +55,8 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 				simpleBlock(block, blockModel);
 				continue;
 			}
-			else if (block instanceof LavisPolypBlock || block instanceof PrickletacBlock || block instanceof RockbudVariantBlock || block instanceof VinebudBlock) {
+			else if (block instanceof LavisPolypBlock || block instanceof PrickletacBlock || block instanceof RockbudVariantBlock || block instanceof VinebudBlock)
+			{
 				continue;
 			}
 

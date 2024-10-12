@@ -1,0 +1,19 @@
+{
+  "category": "cosmere:feruchemy",
+  "icon": "feruchemy:copper_bracelet_metalmind",
+  "name": "Compounding",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A curious loophole in the systems of investiture on this planet has been discovered. It involves a metalborn with the allomantic and feruchemical abilities of the same metal to burn one of their feruchemical metalminds, essentially creating a new allomantic metal that releases the stored feruchemical charge tenfold."
+    },
+    {
+      "type": "text",
+      "text": "This is activated by setting your allomantic power to a negative mode called Compounding and Flared Compounding, which spends allomantic charges to gain feruchemical stores quickly. This is only accessible to Twinborn who have the same Allomantic and Feruchemic metals."
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}

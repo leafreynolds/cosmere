@@ -1,21 +1,22 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 10 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.soulforgery.patchouli;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import leaf.cosmere.soulforgery.common.Soulforgery;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 //
 //  In-Game Documentation generator
 //
 public class SoulforgeryPatchouliGen extends PatchouliProvider
 {
-	public SoulforgeryPatchouliGen(DataGenerator generatorIn)
+	public SoulforgeryPatchouliGen(PackOutput generatorIn)
 	{
-		super(generatorIn, Soulforgery.MODID);
+		super(generatorIn, CosmereAPI.COSMERE_MODID);
 	}
 
 	@Override

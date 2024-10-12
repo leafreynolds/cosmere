@@ -1,8 +1,12 @@
+/*
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.blocks.entities;
 
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreader.SandSpreaderMenu;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -164,26 +168,50 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 		for (int i = 0; i < this.itemHandler.getSlots(); i++)
 		{
 			ItemStack item = this.itemHandler.getStackInSlot(i);
-			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND.asItem()) return true;
-			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.asItem()) return true;
-			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND_LAYER.asItem()) return true;
-			if (item.getItem() == SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.asItem()) return true;
+			if (item.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem())
+			{
+				return true;
+			}
+			if (item.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND.asItem())
+			{
+				return true;
+			}
+			if (item.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem())
+			{
+				return true;
+			}
+			if (item.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.asItem())
+			{
+				return true;
+			}
 		}
 		return false;
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SandSpreaderBE entity)
 	{
-		if (level.isClientSide()) return;
-		if (!entity.readyToUpdate()) return;
-		if (!entity.hasCatalyst()) return;
-		if (!MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos, false)) return;
+		if (level.isClientSide())
+		{
+			return;
+		}
+		if (!entity.readyToUpdate())
+		{
+			return;
+		}
+		if (!entity.hasCatalyst())
+		{
+			return;
+		}
+		if (!MiscHelper.checkIfNearbyInvestiture((ServerLevel) level, pos, false))
+		{
+			return;
+		}
 		ItemStackHandler inv = entity.itemHandler;
 		int slot = MiscHelper.randomSlot(inv);
 		ItemStack item = inv.getStackInSlot(slot);
 		if (item.getItem() == Blocks.SAND.asItem())
 		{
-			ItemStack newItem = new ItemStack(SandmasteryBlocksRegistry.TALDAIN_BLACK_SAND);
+			ItemStack newItem = new ItemStack(SandmasteryBlocks.TALDAIN_BLACK_SAND);
 			newItem.setCount(item.getCount());
 			inv.setStackInSlot(slot, newItem);
 		}

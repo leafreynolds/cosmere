@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.tap;
@@ -21,7 +21,7 @@ public class BendalloyTapEffect extends FeruchemyEffectBase
 	@Override
 	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		if (data.getLiving() instanceof Player player && !player.level.isClientSide)
+		if (data.getLiving() instanceof Player player && !player.level().isClientSide)
 		{
 			final FoodData foodData = player.getFoodData();
 			final int i = (int) (1 + strength);

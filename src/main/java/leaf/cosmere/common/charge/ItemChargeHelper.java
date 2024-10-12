@@ -15,9 +15,11 @@ import leaf.cosmere.common.items.CapWrapper;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.*;
 
@@ -45,9 +47,15 @@ public class ItemChargeHelper
 			return Collections.emptyList();
 		}
 
-		Container acc = new CapWrapper(CuriosApi.getCuriosHelper().getEquippedCurios(player).orElseGet(EmptyHandler::new));
 
-		List<ItemStack> toReturn = getChargeableItemStacks(acc);
+		LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(player);
+		Container acc = null;
+		if (curiosItemHandler.resolve().isPresent())
+		{
+			 acc = new CapWrapper(curiosItemHandler.resolve().get().getEquippedCurios());
+		}
+
+		List<ItemStack> toReturn = (acc != null) ? getChargeableItemStacks(acc) : new ArrayList<>();
 
 		return toReturn;
 	}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 11 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.registries;
@@ -13,7 +13,6 @@ import leaf.cosmere.feruchemy.common.items.BandsOfMourningItem;
 import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.NecklaceMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
-import net.minecraft.world.item.Item;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class FeruchemyItems
 	public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(Feruchemy.MODID);
 
 
-	public static final ItemRegistryObject<Item> BANDS_OF_MOURNING = ITEMS.register("bands_of_mourning", BandsOfMourningItem::new);
+	public static final ItemRegistryObject<BandsOfMourningItem> BANDS_OF_MOURNING = ITEMS.register("bands_of_mourning", BandsOfMourningItem::new);
 
 	public static final Map<Metals.MetalType, ItemRegistryObject<RingMetalmindItem>> METAL_RINGS =
 			Arrays.stream(Metals.MetalType.values())

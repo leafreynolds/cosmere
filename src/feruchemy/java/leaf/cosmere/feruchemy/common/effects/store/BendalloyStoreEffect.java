@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 9 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.effects.store;
@@ -22,7 +22,7 @@ public class BendalloyStoreEffect extends FeruchemyEffectBase
 	@Override
 	public void applyEffectTick(ISpiritweb data, double strength)
 	{
-		if (data.getLiving() instanceof Player player && !player.level.isClientSide)
+		if (data.getLiving() instanceof Player player && !player.level().isClientSide)
 		{
 			final FoodData foodData = player.getFoodData();
 			foodData.setFoodLevel((int) Math.max(0, foodData.getFoodLevel() - (1 + strength)));

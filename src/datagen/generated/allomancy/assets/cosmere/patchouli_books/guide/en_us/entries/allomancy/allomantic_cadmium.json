@@ -1,0 +1,25 @@
+{
+  "category": "cosmere:allomancy",
+  "icon": "cosmere:cadmium_nugget",
+  "name": "Allomantic Cadmium",
+  "pages": [
+    {
+      "type": "text",
+      "text": "A misting who burns $(thing)cadmium$() is known as a \"$(thing)Pulser$()\". A pulser creates a bubble around them in which time slows down. To anyone inside this time bubble, everything outside appears to move faster. Cadmium is the external pulling metal and one of four temporal metals (alongside Bendalloy, Electrum, and Gold) [Cadmium doesn't work properly yet and is still in development]"
+    },
+    {
+      "type": "relations",
+      "entries": [
+        "cosmere:allomancy/allomantic_cadmium",
+        "cosmere:allomancy/allomantic_bendalloy",
+        "cosmere:allomancy/allomantic_gold",
+        "cosmere:allomancy/allomantic_electrum"
+      ],
+      "title": "The temporal metals:"
+    }
+  ],
+  "priority": false,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 12
+}

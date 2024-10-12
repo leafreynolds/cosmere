@@ -14,7 +14,9 @@
           "name": "minecraft:air"
         }
       ],
+      "name": "main",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "sandmastery:blocks/temporary_sand_block"
 }

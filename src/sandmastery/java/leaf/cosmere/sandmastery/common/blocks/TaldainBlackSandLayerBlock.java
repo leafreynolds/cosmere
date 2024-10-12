@@ -1,8 +1,12 @@
+/*
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.blocks;
 
 import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -101,7 +105,9 @@ public class TaldainBlackSandLayerBlock extends BaseFallingBlock
 	public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos)
 	{
 		if (touchesLiquid(pLevel, pCurrentPos, pState))
+		{
 			return this.defaultBlockState().setValue(LAYERS, pState.getValue(LAYERS));
+		}
 		return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
 	}
 
@@ -154,18 +160,27 @@ public class TaldainBlackSandLayerBlock extends BaseFallingBlock
 	public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom)
 	{
 		if (!pLevel.isAreaLoaded(pPos, 3))
+		{
 			return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
-		BlockState defaultWhiteSandLayers = SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND_LAYER.getBlock().defaultBlockState();
+		}
+		BlockState defaultWhiteSandLayers = SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock().defaultBlockState();
 
 		boolean nearbyInvestiture = MiscHelper.checkIfNearbyInvestiture(pLevel, pPos, false);
 		boolean offTaldain = !MiscHelper.onTaldain(pLevel);
 		boolean canSeeSky = pLevel.canSeeSky(pPos.above());
-		if (offTaldain && !nearbyInvestiture) return;
+		if (offTaldain && !nearbyInvestiture)
+		{
+			return;
+		}
 		if (!canSeeSky && !nearbyInvestiture)
+		{
 			return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
+		}
 
 		if ((!MiscHelper.onTaldain(pLevel) && !pLevel.canSeeSky(pPos.above())) && !MiscHelper.checkIfNearbyInvestiture(pLevel, pPos, false))
+		{
 			return; // Can't see the taldanian sky nor can I find any investiture, can't charge from it
+		}
 		pLevel.setBlockAndUpdate(pPos, defaultWhiteSandLayers.setValue(LAYERS, pState.getValue(LAYERS)));
 
 		for (int i = 0; i < 4; ++i)
@@ -173,7 +188,7 @@ public class TaldainBlackSandLayerBlock extends BaseFallingBlock
 			BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
 			if (pLevel.getBlockState(blockpos).is(Blocks.SAND))
 			{
-				pLevel.setBlockAndUpdate(blockpos, SandmasteryBlocksRegistry.TALDAIN_WHITE_SAND.getBlock().defaultBlockState());
+				pLevel.setBlockAndUpdate(blockpos, SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock().defaultBlockState());
 			}
 		}
 	}

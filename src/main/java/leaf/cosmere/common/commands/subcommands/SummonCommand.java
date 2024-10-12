@@ -57,7 +57,7 @@ public class SummonCommand extends ModCommand
 			                            : FeruchemyManifestations.FERUCHEMY_POWERS.get(metalType).get();
 		}*/
 		ServerPlayer serverPlayer = context.getSource().getPlayerOrException();
-		Villager entity = new Villager(EntityType.VILLAGER, serverPlayer.level);
+		Villager entity = new Villager(EntityType.VILLAGER, serverPlayer.serverLevel());
 		entity.moveTo(serverPlayer.position());
 		context.getSource().getLevel().addFreshEntity(entity);
 

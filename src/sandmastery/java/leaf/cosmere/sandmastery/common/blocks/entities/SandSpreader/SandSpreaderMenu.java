@@ -1,10 +1,12 @@
+/*
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.blocks.entities.SandSpreader;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreaderBE;
-import leaf.cosmere.sandmastery.common.items.SandPouchItem;
-import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchSlot;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocksRegistry;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +27,7 @@ public class SandSpreaderMenu extends AbstractContainerMenu
 
 	public SandSpreaderMenu(int id, Inventory inv, FriendlyByteBuf extraData)
 	{
-		this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+		this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
 	}
 
 	public SandSpreaderMenu(int id, Inventory inv, BlockEntity entity, ContainerData data)
@@ -33,7 +35,7 @@ public class SandSpreaderMenu extends AbstractContainerMenu
 		super(SandmasteryMenuTypes.SAND_SPREADER.get(), id);
 		checkContainerSize(inv, 3);
 		this.blockEntity = (SandSpreaderBE) entity;
-		this.level = inv.player.level;
+		this.level = inv.player.level();
 		this.data = data;
 		IItemHandlerModifiable blockInv = (IItemHandlerModifiable) this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		int invStart = 0;
@@ -123,6 +125,6 @@ public class SandSpreaderMenu extends AbstractContainerMenu
 	@Override
 	public boolean stillValid(Player pPlayer)
 	{
-		return stillValid(ContainerLevelAccess.create(this.level, this.blockEntity.getBlockPos()), pPlayer, SandmasteryBlocksRegistry.SAND_SPREADING_TUB_BLOCK.getBlock());
+		return stillValid(ContainerLevelAccess.create(this.level, this.blockEntity.getBlockPos()), pPlayer, SandmasteryBlocks.SAND_SPREADING_TUB_BLOCK.getBlock());
 	}
 }
