@@ -4,8 +4,6 @@
 
 package leaf.cosmere.allomancy.client.metalScanning;
 
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.common.Cosmere;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
@@ -103,7 +101,7 @@ public final class ScanResult
 
 		if (root != null)
 		{
-			if (new Vec3(pos.getX(), pos.getY(), pos.getZ()).equals(currentClosestMetalObject))
+			if (pos.getCenter().equals(currentClosestMetalObject))
 			{
 				targetedCluster = root;
 				hasTargetedCluster = true;

@@ -8,7 +8,6 @@ import leaf.cosmere.allomancy.client.AllomancyKeybindings;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.network.packets.EntityAllomancyActivateMessage;
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;

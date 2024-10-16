@@ -62,7 +62,7 @@ public class DrawHelper
 
 			if (highlightVector != null)
 			{
-				if (new Vec3(endPos.x - 0.5, endPos.y - 0.5, endPos.z - 0.5).equals(highlightVector) || endPos.equals(highlightVector))
+				if (endPos.equals(highlightVector))
 				{
 					finalColor = Color.decode("#66b2ff");
 				}
@@ -197,7 +197,7 @@ public class DrawHelper
 				{
 					finalColor = Color.decode("#66b2ff");
 				}
-				else if (new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ()).equals(highlightVector))
+				else if (blockPos.getCenter().equals(highlightVector))
 				{
 					finalColor = Color.decode("#66b2ff");
 				}
