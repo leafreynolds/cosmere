@@ -492,6 +492,11 @@ public class SpiritwebCapability implements ISpiritweb
 
 	public void renderSelectedHUD(PoseStack ms)
 	{
+		if (CosmereConfigs.CLIENT_CONFIG.disableSelectedManifestationHud.get() || selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.NONE)
+		{
+			return;
+		}
+
 		Minecraft mc = Minecraft.getInstance();
 		Window mainWindow = mc.getWindow();
 		int x = 10;
