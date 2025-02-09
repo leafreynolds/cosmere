@@ -11,6 +11,7 @@ public class CosmereClientConfig implements ICosmereConfig
 {
 	private final ForgeConfigSpec configSpec;
 	public final ForgeConfigSpec.BooleanValue disableItemTinting;
+	public final ForgeConfigSpec.BooleanValue disableSelectedManifestationHud;
 
 
 	CosmereClientConfig()
@@ -19,6 +20,8 @@ public class CosmereClientConfig implements ICosmereConfig
 		builder.comment("Client Config. This config only exists on the client").push("cosmere");
 
 		disableItemTinting = builder.comment("Lets you disable item and block tinting for metal items and blocks").define("disableItemTinting", false);
+
+		disableSelectedManifestationHud = builder.comment("Disables the HUD for selected power").define("disableSelectedManifestationHud", false);
 
 		builder.pop();
 		configSpec = builder.build();
