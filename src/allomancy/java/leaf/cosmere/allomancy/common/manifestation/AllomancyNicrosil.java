@@ -33,7 +33,7 @@ public class AllomancyNicrosil extends AllomancyManifestation
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
-		return 0;
+		return -1;
 	}
 
 	@Override

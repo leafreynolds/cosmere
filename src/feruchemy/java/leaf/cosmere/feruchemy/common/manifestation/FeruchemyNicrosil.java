@@ -17,6 +17,7 @@ import leaf.cosmere.common.charge.MetalmindChargeHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyManifestations;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -159,8 +160,8 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			//edit: don't disable allomantic nicrosil, to allow compounding
 			final boolean invalidMetalToDisable =
 					manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.NICROSIL).get()
-							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get();
-							|| manifestation == AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.NICROSIL).get();
+							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get()
+							|| manifestation == CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", Metals.MetalType.NICROSIL.getName()));
 			if (attributeRegistryObject == null || invalidMetalToDisable)
 			{
 				continue;
