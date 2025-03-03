@@ -156,10 +156,11 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 
 			//don't disable nicrosil, because we want to keep storing
 			//don't disable aluminum, because we may be wanting to store without identity
+			//edit: don't disable allomantic nicrosil, to allow compounding
 			final boolean invalidMetalToDisable =
 					manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.NICROSIL).get()
 							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get();
-
+							|| manifestation == AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.NICROSIL).get();
 			if (attributeRegistryObject == null || invalidMetalToDisable)
 			{
 				continue;
@@ -177,7 +178,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
 		//for each power the user has access to
 		//todo add the stored investiture identity to spiritweb data if not there already?
-
+		
 		final CosmereEffectInstance effectInstance = CosmereEffectInstance.getOrCreateEffect(getTappingEffect(), data, data.getLiving(), 1);
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
