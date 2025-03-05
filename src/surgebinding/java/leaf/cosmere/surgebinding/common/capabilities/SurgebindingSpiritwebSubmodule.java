@@ -1,16 +1,15 @@
 /*
- * File updated ~ 14 - 1 - 2025 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.items.CapWrapper;
-import leaf.cosmere.surgebinding.common.capabilities.ideals.IdealsManager;
+import leaf.cosmere.surgebinding.common.capabilities.ideals.RadiantStateManager;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
@@ -40,7 +39,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	//stormlight stored
 	private int stormlightStored = 0;
 
-	private Roshar.RadiantOrder heraldOrder = null;
+	private boolean herald = false;
 
 	//Since I'm referencing it so often. For readability if nothing else
 	int maxPlayerStormlight = SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get();
@@ -50,7 +49,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 	//a little ew, I'd rather this in an enum utils, but it's the only place that needs it
 	public static final ShardplateArmorMaterial[] ARMOR_MATERIALS = ShardplateArmorMaterial.values();
-	IdealsManager idealsManager = new IdealsManager();
+	RadiantStateManager idealsManager = new RadiantStateManager();
 	private ISpiritweb spiritweb;
 
 	public static SurgebindingSpiritwebSubmodule getSubmodule(ISpiritweb data)
@@ -60,7 +59,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 	public boolean isHerald()
 	{
-		return heraldOrder != null;
+		return herald;
 	}
 
 	public boolean isOathed()
@@ -77,9 +76,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		stormlightStored = compoundTag.getInt("stored_stormlight");
 		idealsManager.deserialize(spiritweb);
 
-		this.heraldOrder = compoundTag.contains("herald")
-		                   ? Roshar.RadiantOrder.valueOf(compoundTag.getInt("herald")).orElse(null)
-		                   : null;
+		this.herald = compoundTag.contains("herald") && compoundTag.getBoolean("herald");
 	}
 
 	@Override
@@ -90,9 +87,10 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		compoundTag.putInt("stored_stormlight", stormlightStored);
 		idealsManager.serialize(spiritweb);
 
-		if (heraldOrder != null)
+		//don't store extra data if we don't need to
+		if (herald)
 		{
-			compoundTag.putInt("herald", heraldOrder.getID());
+			compoundTag.putBoolean("herald", true);
 		}
 		else if (compoundTag.contains("herald"))
 		{
@@ -160,9 +158,9 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 				int drainRate = SurgebindingConfigs.SERVER.STORMLIGHT_DRAIN_RATE.get();
 				//todo maybe reducing cost based on how many ideals they have sworn?
-				int idealsSworn = 1;
+				//int idealsSworn = idealsManager.getIdeal();
 
-				adjustStormlight(-(drainRate / idealsSworn), true);
+				adjustStormlight(-(drainRate), true);
 			}
 		}
 
@@ -201,6 +199,13 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				}
 			}
 		}
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+		//todo drain based on strength
+		stormlightStored = (int) (stormlightStored * 0.1f);
 	}
 
 
@@ -422,8 +427,8 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		idealsManager.onChatMessageReceived(event);
 	}
 
-	public void setHerald(Roshar.RadiantOrder order)
+	public void setHerald(boolean isHerald)
 	{
-		heraldOrder = order;
+		herald = isHerald;
 	}
 }

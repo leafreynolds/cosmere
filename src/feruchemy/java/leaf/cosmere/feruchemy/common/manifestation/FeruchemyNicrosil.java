@@ -1,5 +1,5 @@
 /*
- * File updated ~ 04 - 03 - 2025 ~ Nova
+ * File updated ~ 19 - 11 - 2023 ~ Leaf
  */
 
 
@@ -8,6 +8,7 @@ package leaf.cosmere.feruchemy.common.manifestation;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.EntityHelper;
@@ -18,6 +19,7 @@ import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyManifestations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -42,11 +44,12 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		return 1;
 	}
 
-
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
 		//don't check every tick.
+		LivingEntity livingEntity = data.getLiving();
+
 		if (!isActiveTick(data))
 		{
 			return false;
@@ -55,6 +58,8 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		int mode = getMode(data);
 
 		int adjustAmount;
+
+		CosmereEffect effect = getEffect(mode);
 
 		// if we are tapping
 		//check if there is charges to tap
@@ -139,24 +144,25 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			//this will add/remove powers based on what the user currently has.
 			final double totalStrength = manifestation.getStrength(data, false);
 			final String registryName = manifestation.getRegistryName().toString();
-
-			// Store the highest strength version of the power in the Nicrosilmind
 			if (totalStrength > 0)
 			{
-				double storedStrength = nbt.getDouble(registryName);
-				double newStrength = Math.max(storedStrength, totalStrength);
-				nbt.putDouble(registryName, newStrength);
+				nbt.putDouble(registryName, totalStrength);
+			}
+			//remove if not available
+			else if (nbt.contains(registryName))
+			{
+				nbt.remove(registryName);
 			}
 
 			final Attribute attributeRegistryObject = manifestation.getAttribute();
 
 			//don't disable nicrosil, because we want to keep storing
 			//don't disable aluminum, because we may be wanting to store without identity
-			//don't disable allomantic nicrosil, to allow compounding
+			//edit: don't disable allomantic nicrosil, to allow compounding
 			final boolean invalidMetalToDisable =
 					manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.NICROSIL).get()
-							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get()
-							|| manifestation == CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", Metals.MetalType.NICROSIL.getName()));
+							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get();
+							|| manifestation == AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.NICROSIL).get();
 			if (attributeRegistryObject == null || invalidMetalToDisable)
 			{
 				continue;
@@ -174,7 +180,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
 		//for each power the user has access to
 		//todo add the stored investiture identity to spiritweb data if not there already?
-
+		
 		final CosmereEffectInstance effectInstance = CosmereEffectInstance.getOrCreateEffect(getTappingEffect(), data, data.getLiving(), 1);
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
@@ -183,10 +189,11 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			Attribute attribute = manifestation.getAttribute();
 			if (CompoundNBTHelper.verifyExistance(nbt, manifestationName))
 			{
-				final double strength = CompoundNBTHelper.getDouble(
-						nbt,
-						manifestationName,
-						0);
+				final double strength =
+						CompoundNBTHelper.getDouble(
+								nbt,
+								manifestationName,
+								0);
 
 				effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADDITION);
 			}

@@ -48,7 +48,7 @@ public class HeraldCommand extends ModCommand
 			SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 			{
 				SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(spiritweb);
-				ssm.setHerald(order);
+				ssm.setHerald(true);
 
 				spiritweb.syncToClients(player);
 			});
@@ -66,7 +66,7 @@ public class HeraldCommand extends ModCommand
 			SpiritwebCapability.get(player).ifPresent((spiritweb) ->
 			{
 				SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(spiritweb);
-				ssm.setHerald(null);
+				ssm.setHerald(false);
 
 				spiritweb.syncToClients(player);
 			});

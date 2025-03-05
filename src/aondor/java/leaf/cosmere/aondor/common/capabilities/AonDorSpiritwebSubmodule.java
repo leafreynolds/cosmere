@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.aondor.common.capabilities;
@@ -58,6 +58,12 @@ public class AonDorSpiritwebSubmodule implements ISpiritwebSubmodule
 
 	@Override
 	public void GiveStartingItem(Player player, Manifestation manifestation)
+	{
+
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
 	{
 
 	}

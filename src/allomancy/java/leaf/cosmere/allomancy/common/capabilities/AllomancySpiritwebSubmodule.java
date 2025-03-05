@@ -1,5 +1,5 @@
 /*
- * File updated ~ 20 - 11 - 2024 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities;
@@ -213,6 +213,34 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	public void resetOnDeath(ISpiritweb spiritweb)
 	{
 		pewterDelayedDamage = 0f;
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+		//for the purpose of allomantic aluminum and chromium, we're going to drain all the metals from the user.
+		// I realise it doesn't quite fit for a-duralumin
+
+		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
+		{
+			int ingestedMetalAmount = getIngestedMetal(metalType);
+
+			//if metal exists
+			if (ingestedMetalAmount > 0)
+			{
+				//drain metals that are actively being burned
+				if (data.canTickManifestation(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID())))
+				{
+					final int amountToAdjust =
+							ingestedMetalAmount > 30 ? (ingestedMetalAmount / 2) : ingestedMetalAmount;
+					adjustIngestedMetal(
+							metalType,
+							-amountToAdjust, //take amount away
+							true);
+
+				}
+			}
+		}
 	}
 
 	@Override

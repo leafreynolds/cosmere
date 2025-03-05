@@ -1,5 +1,5 @@
 /*
- * File updated ~ 20 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.aviar.common.capabilities;
@@ -41,6 +41,12 @@ public class AviarSpiritwebSubmodule implements ISpiritwebSubmodule
 			}
 
 		}
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+		//todo should this disrupt the bond?
 	}
 
 	private void tickAviar(Player player, CompoundTag compoundtag)

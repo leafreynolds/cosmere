@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 10 - 2022 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -54,4 +54,6 @@ public interface ISpiritwebSubmodule
 	{
 
 	}
+
+	void drainInvestiture(ISpiritweb data, double strength);
 }

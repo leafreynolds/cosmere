@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.capabilities;
@@ -171,6 +171,13 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	public void resetOnDeath(ISpiritweb spiritweb)
 	{
 		hydrationLevel = SandmasteryConfigs.SERVER.STARTING_HYDRATION.get();
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+		//todo - how should we handle draining sandmastery?
+		// we could force it to turn off ribbons?
 	}
 
 	@Override

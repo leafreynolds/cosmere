@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.eventHandlers;
@@ -7,6 +7,7 @@ package leaf.cosmere.allomancy.common.eventHandlers;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.items.CoinPouchItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyAtium;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyChromium;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyNicrosil;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyPewter;
 import leaf.cosmere.allomancy.common.utils.MiscHelper;
@@ -64,6 +65,10 @@ public class AllomancyEntityEventHandler
 
 			}
 		}
+		else
+		{
+
+		}
 	}
 
 
@@ -97,5 +102,6 @@ public class AllomancyEntityEventHandler
 	{
 		AllomancyNicrosil.onLivingHurtEvent(event);
 		AllomancyPewter.onLivingHurtEvent(event);
+		AllomancyChromium.onLivingHurtEvent(event);
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.capabilities;
@@ -9,6 +9,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
@@ -26,6 +27,7 @@ import java.util.List;
 public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	private static final HashMap<Metals.MetalType, Double> metalmindChargesMap = new HashMap<>();
+
 	@Override
 	public void GiveStartingItem(Player player)
 	{
@@ -50,6 +52,13 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 			final float fillAmount = (float) (maxAmount * Math.random());
 			GiveStartingItem(player, feruchemyManifestation.getMetalType(), fillAmount);
 		}
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+		//todo - how should we handle draining feruchemy?
+		// remove the effects only? can we even detect that properly?
 	}
 
 	@Override
