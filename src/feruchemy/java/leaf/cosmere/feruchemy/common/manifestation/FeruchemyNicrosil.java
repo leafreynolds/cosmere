@@ -161,8 +161,8 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			//edit: don't disable allomantic nicrosil, to allow compounding
 			final boolean invalidMetalToDisable =
 					manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.NICROSIL).get()
-							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get();
-							|| manifestation == AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.NICROSIL).get();
+							|| manifestation == FeruchemyManifestations.FERUCHEMY_POWERS.get(Metals.MetalType.ALUMINUM).get()
+							|| manifestation == CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy"));
 			if (attributeRegistryObject == null || invalidMetalToDisable)
 			{
 				continue;
