@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.capabilities;
@@ -35,5 +35,11 @@ public class HemalurgySpiritwebSubmodule implements ISpiritwebSubmodule
 				}
 			}
 		}
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+
 	}
 }

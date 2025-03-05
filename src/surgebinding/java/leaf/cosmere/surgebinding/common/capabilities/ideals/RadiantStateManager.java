@@ -1,5 +1,5 @@
 /*
- * File updated ~ 14 - 1 - 2025 ~ Leaf
+ * File updated ~ 4 - 2 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities.ideals;
@@ -7,13 +7,15 @@ package leaf.cosmere.surgebinding.common.capabilities.ideals;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.util.TaskQueueManager;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.capabilities.ideals.order.WindrunnerIdealValidator;
+import leaf.cosmere.surgebinding.common.capabilities.ideals.order.WindrunnerIdealStateManager;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.config.SurgebindingServerConfig;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +25,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.ServerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class IdealsManager
+public class RadiantStateManager
 {
 	private static ResourceLocation SWEAR_IDEAL = new ResourceLocation(Surgebinding.MODID, "swear_ideal");
 
@@ -31,7 +33,6 @@ public class IdealsManager
 	private Roshar.RadiantOrder order = null;
 	private int ideal = 0;
 
-	//todo change string to enum
 	public Roshar.RadiantOrder getOrder()
 	{
 		return order;
@@ -62,7 +63,9 @@ public class IdealsManager
 	{
 		this.spiritweb = (SpiritwebCapability) spiritweb;
 		final CompoundTag spiritwebCompoundTag = spiritweb.getCompoundTag();
-		this.order = Roshar.RadiantOrder.valueOf(spiritwebCompoundTag.getInt("order")).orElse(null);
+		this.order = spiritwebCompoundTag.contains("order")
+		             ? Roshar.RadiantOrder.valueOf(spiritwebCompoundTag.getInt("order")).orElse(null)
+		             : null;
 		this.ideal = spiritwebCompoundTag.getInt("ideal");
 	}
 
@@ -222,7 +225,7 @@ public class IdealsManager
 		{
 			case WINDRUNNER ->
 			{
-				return WindrunnerIdealValidator.validateIdeal(spiritweb, idealToSwear);
+				return WindrunnerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case SKYBREAKER ->
 			{
@@ -271,6 +274,7 @@ public class IdealsManager
 				if (this.ideal != 1)
 				{
 					player.sendSystemMessage(Component.literal("THESE WORDS ARE ACCEPTED."));
+					updatePowerState();
 				}
 				//player.playSound(SoundEvents.LIGHTNING_BOLT_THUNDER, 1000, 0.8F + player.getRandom().nextFloat() * 0.2F);
 				player.level().playSound(
@@ -300,5 +304,14 @@ public class IdealsManager
 
 			TaskQueueManager.submitDelayedTask(SWEAR_IDEAL, 60, new TaskQueueManager.OneOffTask(work));
 		}
+	}
+
+	private void updatePowerState()
+	{
+		Manifestation firstSurge = SurgebindingManifestations.SURGEBINDING_POWERS.get(this.order.getFirstSurge()).get();
+		Manifestation secondSurge = SurgebindingManifestations.SURGEBINDING_POWERS.get(this.order.getSecondSurge()).get();
+
+		spiritweb.giveManifestation(firstSurge, getIdeal());
+		spiritweb.giveManifestation(secondSurge, getIdeal());
 	}
 }

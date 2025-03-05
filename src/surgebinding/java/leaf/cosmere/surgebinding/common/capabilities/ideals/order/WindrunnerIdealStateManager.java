@@ -1,5 +1,5 @@
 /*
- * File updated ~ 14 - 1 - 2025 ~ Leaf
+ * File updated ~ 4 - 2 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities.ideals.order;
@@ -12,7 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class WindrunnerIdealValidator
+public class WindrunnerIdealStateManager
 {
 	public static boolean validateIdeal(SpiritwebCapability spiritweb, int ideal)
 	{

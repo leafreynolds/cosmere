@@ -1,22 +1,19 @@
 /*
- * File updated ~ 20 - 11 - 2024 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
-import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.api.EnumUtils;
-import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
+import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.registry.CosmereEffectsRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class AllomancyChromium extends AllomancyManifestation
 {
@@ -25,89 +22,45 @@ public class AllomancyChromium extends AllomancyManifestation
 		super(metalType);
 	}
 
-	@Override
-	protected void applyEffectTick(ISpiritweb data)
+	public static void onLivingHurtEvent(LivingHurtEvent event)
 	{
-		//Wipes Allomantic Reserves of Target
+		if (event.isCanceled())
 		{
-			int range = getRange(data);
+			return;
+		}
 
-			LivingEntity living = data.getLiving();
-			Level world = living.level();
-			boolean isActiveTick = isActiveTick(data);
-			if (!world.isClientSide && isActiveTick)
+		Entity trueSource = event.getSource().getEntity();
+		LivingEntity targetEntity = event.getEntity();
+		if (trueSource instanceof Player trueSourcePlayer)
+		{
+			SpiritwebCapability.get(trueSourcePlayer).ifPresent(player ->
 			{
-				//thank you to CyclopsMC and their repo EverlastingAbilities for their section on detecting enemies you are looking at
-				//https://github.com/CyclopsMC/EverlastingAbilities/blob/master-1.16/src/main/java/org/cyclops/everlastingabilities/ability/AbilityTypePowerStare.java
-
-				double eyeHeight = living.getEyeHeight();
-				Vec3 lookVec = living.getLookAngle();
-				Vec3 origin = new Vec3(living.getX(), living.getY() + eyeHeight, living.getZ());
-				Vec3 direction = origin.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
-
-				List<Entity> entitiesInRange = world.getEntities(living,
-						living.getBoundingBox()
-								.inflate(
-										lookVec.x * range,
-										lookVec.y * range,
-										lookVec.z * range)
-								.inflate(range));
-
-				for (Entity targetEntity : entitiesInRange)
+				final AllomancyManifestation aChromium = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.CHROMIUM).get();
+				if (aChromium.isActive(player))
 				{
-					if (!(targetEntity instanceof LivingEntity))
+					SpiritwebCapability.get(targetEntity).ifPresent(targetISpiritweb ->
 					{
-						continue;
-					}
-					SpiritwebCapability.get((LivingEntity) targetEntity).ifPresent(targetISpiritweb ->
-					{
-						Entity entity = null;
 						final SpiritwebCapability targetSpiritweb = (SpiritwebCapability) targetISpiritweb;
-
-						float f10 = targetEntity.getPickRadius();
-						AABB axisalignedbb = targetEntity.getBoundingBox().expandTowards(f10, f10, f10);
-						Vec3 hitVec = axisalignedbb.clip(origin, direction).orElse(null);
-
-						if (axisalignedbb.contains(origin))
+						if (targetSpiritweb.getLiving() != null)
 						{
-							entity = targetEntity;
-						}
-						else if (hitVec != null)
-						{
-							double distance = origin.distanceTo(hitVec);
-							if (distance < range || range == 0.0D)
-							{
-								if (targetEntity == living.getVehicle() && !living.canRiderInteract())
-								{
-									if (range == 0.0D)
-									{
-										entity = targetEntity;
-									}
-								}
-								else
-								{
-									entity = targetEntity;
-								}
-							}
-						}
-
-						if (entity != null)
-						{
-							AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) targetSpiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
+							/*AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) targetSpiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 							for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 							{
 								float drainAmount = allo.getIngestedMetal(metalType) * 0.1f;
 								allo.adjustIngestedMetal(metalType, (int) -drainAmount, true);
-							}
+							}*/
+
+							CosmereEffectInstance newEffect = EffectsHelper.getNewEffect(
+									CosmereEffectsRegistry.DRAIN_INVESTITURE.get(),
+									targetEntity,
+									(aChromium.getStrength(player, false))
+							);
+
+							targetSpiritweb.addEffect(newEffect, trueSourcePlayer);
 						}
 					});
-
 				}
-			}
+			});
 		}
-
-
 	}
-
-
 }

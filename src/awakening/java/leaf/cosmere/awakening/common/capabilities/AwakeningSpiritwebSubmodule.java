@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.awakening.common.capabilities;
@@ -60,5 +60,11 @@ public class AwakeningSpiritwebSubmodule implements ISpiritwebSubmodule
 	public void GiveStartingItem(Player player, Manifestation manifestation)
 	{
 
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+		//todo can breaths be drained?
 	}
 }

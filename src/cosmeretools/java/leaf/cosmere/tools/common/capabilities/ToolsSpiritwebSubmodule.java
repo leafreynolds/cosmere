@@ -1,5 +1,5 @@
 /*
- * File updated ~ 22 - 3 - 2024 ~ Leaf
+ * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.tools.common.capabilities;
@@ -60,5 +60,11 @@ public class ToolsSpiritwebSubmodule implements ISpiritwebSubmodule
 	public void GiveStartingItem(Player player, Manifestation manifestation)
 	{
 
+	}
+
+	@Override
+	public void drainInvestiture(ISpiritweb data, double strength)
+	{
+		// what did you expect to see here?
 	}
 }

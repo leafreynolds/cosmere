@@ -83,7 +83,7 @@ public interface IHemalurgicInfo
 			manifestationsFound.addAll(entityKilledSpiritWeb.getAvailableManifestations(true));
 
 
-			if (manifestationsFound.size() > 0)
+			if (!manifestationsFound.isEmpty())
 			{
 				whiteList.clear();
 
