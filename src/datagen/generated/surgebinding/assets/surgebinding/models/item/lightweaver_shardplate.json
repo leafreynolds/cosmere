@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "surgebinding:item/shardplate_helmet",
+    "layer1": "surgebinding:item/shardplate_helmet_visor"
+  }
+}

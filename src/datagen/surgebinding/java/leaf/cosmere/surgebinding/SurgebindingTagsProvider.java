@@ -1,3 +1,4 @@
+
 /*
  * File updated ~ 20 - 11 - 2024 ~ Leaf
  */
@@ -57,6 +58,10 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		addBiomes();
 
 		addContainsMetal();
+
+		SurgebindingItems.SHARDPLATE_SUITS.values().forEach(
+				item -> getItemBuilder(CosmereTags.Items.CURIO_SHARDPLATE).add(item.asItem())
+		);
 	}
 
 	private void addItems()

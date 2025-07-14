@@ -1,5 +1,6 @@
-// 1.20.1	2024-10-09T13:22:13.2757907	Tags: surgebinding
+// 1.20.1	2025-07-12T22:57:06.910351	Tags: surgebinding
 1f4a893d33327a86f361b3e38f9dcf2af46287fc data/cosmere/tags/worldgen/biome/spawn_ores.json
+0e5e04d1b6d62efd24f782e0c382ad9256614636 data/curios/tags/items/shardplate.json
 dc8ed69b241d772a977e7c0c34320929d00ab4fa data/forge/tags/blocks/storage_blocks.json
 e65d9a5c24c24dc049cce37538918e39cdeac5f8 data/forge/tags/blocks/storage_blocks/amethyst.json
 c9686858daba30ebceb8af773a05f2f597efe509 data/forge/tags/blocks/storage_blocks/diamond.json

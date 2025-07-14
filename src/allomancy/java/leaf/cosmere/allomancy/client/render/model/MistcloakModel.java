@@ -1,5 +1,6 @@
 /*
  * File updated ~ 14 - 8 - 2023 ~ Leaf
+ * File updated ~ 12 - 7 - 2025 ~ Soar
  */
 
 package leaf.cosmere.allomancy.client.render.model;
@@ -56,29 +57,22 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition hat = partdefinition.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(24, 0).addBox(4.0F, -8.0F, -4.0F, 0.125F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 24).addBox(-4.125F, -8.0F, -4.0F, 0.125F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(16, 37).addBox(-4.125F, -8.0F, 4.0F, 8.25F, 8.0F, 0.0625F, new CubeDeformation(0.0F))
-				.texOffs(2, 8).addBox(-4.125F, -8.0F, -4.0625F, 1.0F, 8.0F, 0.0625F, new CubeDeformation(0.0F))
-				.texOffs(16, 0).addBox(-4.125F, -8.0625F, -4.0625F, 8.25F, 0.0625F, 8.125F, new CubeDeformation(0.0F))
-				.texOffs(0, 8).addBox(3.125F, -8.0F, -4.0625F, 1.0F, 8.0F, 0.0625F, new CubeDeformation(0.0F))
-				.texOffs(36, 48).addBox(-3.125F, -8.0F, -4.0625F, 6.25F, 1.0F, 0.0625F, new CubeDeformation(0.0F))
-				.texOffs(36, 47).addBox(-3.125F, -8.0F, -4.0625F, 6.25F, 1.0F, 0.0625F, new CubeDeformation(0.0F))
-				.texOffs(2, 0).addBox(-4.125F, -8.0F, -4.0625F, 1.0F, 8.0F, 0.0625F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-4.125F, -8.0625F, -4.0625F, 8.25F, 0.0625F, 8.125F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(3.125F, -8.0F, -4.0625F, 1.0F, 8.0F, 0.0625F, new CubeDeformation(0.0F))
-				.texOffs(16, 21).addBox(4.0F, -8.0F, -4.0F, 0.125F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 16).addBox(-4.125F, -8.0F, -4.0F, 0.125F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 16).addBox(-4.125F, 0.0F, -4.0625F, 8.25F, 0.0625F, 8.125F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 24).addBox(-4.125F, -8.0F, -4.0F, 0.125F, 8.0F, 8.0F, new CubeDeformation(0.1F))
+				.texOffs(16, 37).addBox(-4.125F, -8.0F, 4.0F, 8.25F, 8.0F, 0.0625F, new CubeDeformation(0.1F))
+				.texOffs(2, 8).addBox(-4.125F, -8.0F, -4.0625F, 1.0F, 8.0F, 0.0625F, new CubeDeformation(0.1F))
+				.texOffs(16, 0).addBox(-4.125F, -8.0625F, -4.0625F, 8.25F, 0.0625F, 8.125F, new CubeDeformation(0.1F))
+				.texOffs(36, 47).addBox(-3.125F, -8.0F, -4.0625F, 6.25F, 1.0F, 0.0625F, new CubeDeformation(0.1F))
+				.texOffs(0, 0).addBox(3.125F, -8.0F, -4.0625F, 1.0F, 8.0F, 0.0625F, new CubeDeformation(0.1F))
+				.texOffs(16, 21).addBox(4.0F, -8.0F, -4.0F, 0.125F, 8.0F, 8.0F, new CubeDeformation(0.1F))
+				.texOffs(0, 16).addBox(-4.125F, 0.0F, -4.0625F, 8.25F, 0.0625F, 8.125F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition left_leg = partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition left_leg = partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition right_leg = partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition right_leg = partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition hat = partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(20, 20).addBox(-4.0F, -8.4745F, -2.5423F, 8.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 8).addBox(-4.125F, -8.4745F, -4.6048F, 8.25F, 0.0625F, 8.125F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 32.4745F, 0.5423F));
+		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(20, 20).addBox(-4.0F, -0.4745F, -2.5423F, 8.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.4745F, 0.5423F));
 
 		PartDefinition body_r1 = body.addOrReplaceChild("body_r1", CubeListBuilder.create().texOffs(0, 0).addBox(6.0F, -1.1684F, 1.7913F, 1.0F, 0.25F, 6.0F, new CubeDeformation(0.0F))
 				.texOffs(11, 24).addBox(5.0F, -1.1684F, 2.7913F, 1.0F, 0.25F, 5.0F, new CubeDeformation(0.0F))
@@ -101,7 +95,7 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(39, 7).addBox(3.0F, -1.1684F, 2.7913F, 1.0F, 0.25F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 45).addBox(3.0F, -1.1059F, -6.2087F, 1.0F, 0.1875F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(36, 20).addBox(3.0F, -1.0434F, -10.2087F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 16).addBox(3.0F, -1.1059F, -1.2087F, 1.0F, 0.1875F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-6.0F, -0.611F, -2.0574F, 1.4835F, 0.0F, 0.0F));
+				.texOffs(0, 16).addBox(3.0F, -1.1059F, -1.2087F, 1.0F, 0.1875F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-6.0F, 7.389F, -2.0574F, 1.4835F, 0.0F, 0.0F));
 
 		PartDefinition body_r2 = body.addOrReplaceChild("body_r2", CubeListBuilder.create().texOffs(23, 29).addBox(0.0F, -0.1563F, -10.25F, 1.0F, 0.25F, 9.0F, new CubeDeformation(0.0F))
 				.texOffs(25, 38).addBox(0.0F, -0.0938F, -1.25F, 1.0F, 0.1875F, 7.0F, new CubeDeformation(0.0F))
@@ -126,13 +120,13 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(44, 6).addBox(-2.0F, -0.0938F, -4.25F, 1.0F, 0.1875F, 6.0F, new CubeDeformation(0.0F))
 				.texOffs(41, 20).addBox(-1.0F, -0.0313F, 3.75F, 1.0F, 0.125F, 7.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 40).addBox(-1.0F, -0.0938F, -3.25F, 1.0F, 0.1875F, 7.0F, new CubeDeformation(0.0F))
-				.texOffs(37, 0).addBox(-1.0F, -0.1563F, -10.25F, 1.0F, 0.25F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.6469F, 3.0837F, -1.3963F, 0.0F, 0.0F));
+				.texOffs(37, 0).addBox(-1.0F, -0.1563F, -10.25F, 1.0F, 0.25F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 9.6469F, 3.0837F, -1.3963F, 0.0F, 0.0F));
 
-		PartDefinition left_arm = partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(36, 33).addBox(-2.836F, -6.3344F, -2.2414F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(6.836F, 30.3344F, 0.2414F));
+		PartDefinition left_arm = partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(36, 33).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 2.0F, 0.0F));
 
 		PartDefinition left_arm_r1 = left_arm.addOrReplaceChild("left_arm_r1", CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, -1.1684F, 5.7913F, 1.0F, 0.25F, 2.0F, new CubeDeformation(0.0F))
 				.texOffs(37, 20).addBox(-2.0F, -1.1059F, -1.2087F, 1.0F, 0.1875F, 7.0F, new CubeDeformation(0.0F))
-				.texOffs(2, 40).addBox(-2.0F, -1.0434F, -8.2087F, 1.0F, 0.125F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.836F, 1.5291F, -1.7565F, 1.4835F, 0.0F, 0.0F));
+				.texOffs(2, 40).addBox(-2.0F, -1.0434F, -8.2087F, 1.0F, 0.125F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 5.8635F, -1.5151F, 1.4835F, 0.0F, 0.0F));
 
 		PartDefinition left_arm_r2 = left_arm.addOrReplaceChild("left_arm_r2", CubeListBuilder.create().texOffs(35, 7).addBox(0.5F, -0.1563F, 2.75F, 1.0F, 0.25F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(3, 47).addBox(0.5F, -0.0313F, -4.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
@@ -142,10 +136,10 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(49, 15).addBox(-0.5F, -0.0313F, -6.25F, 1.0F, 0.125F, 3.0F, new CubeDeformation(0.0F))
 				.texOffs(26, 29).addBox(-1.5F, -0.1563F, -0.25F, 1.0F, 0.25F, 8.0F, new CubeDeformation(0.0F))
 				.texOffs(49, 3).addBox(-1.5F, -0.0938F, -3.25F, 1.0F, 0.1875F, 3.0F, new CubeDeformation(0.0F))
-				.texOffs(5, 47).addBox(-1.5F, -0.0313F, -7.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.336F, 1.3997F, -2.7612F, 1.4835F, 0.0F, 0.0F));
+				.texOffs(5, 47).addBox(-1.5F, -0.0313F, -7.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.5F, 5.7341F, -2.5198F, 1.4835F, 0.0F, 0.0F));
 
 		PartDefinition left_arm_r3 = left_arm.addOrReplaceChild("left_arm_r3", CubeListBuilder.create().texOffs(51, 26).addBox(-3.0F, -2.0313F, 8.5F, 2.0F, 0.125F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(42, 49).addBox(-5.0F, -2.0938F, 8.5F, 2.0F, 0.1875F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.6034F, 2.9033F, -7.7414F, 0.0F, 0.0F, 1.3963F));
+				.texOffs(42, 49).addBox(-5.0F, -2.0938F, 8.5F, 2.0F, 0.1875F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.4393F, 7.2377F, -7.5F, 0.0F, 0.0F, 1.3963F));
 
 		PartDefinition left_arm_r4 = left_arm.addOrReplaceChild("left_arm_r4", CubeListBuilder.create().texOffs(49, 50).addBox(-8.5F, -2.1563F, 8.5F, 4.0F, 0.25F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(51, 27).addBox(-0.5F, -2.0313F, 7.5F, 2.0F, 0.125F, 1.0F, new CubeDeformation(0.0F))
@@ -156,7 +150,7 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(51, 23).addBox(-0.5F, -2.0313F, 6.5F, 3.0F, 0.125F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(51, 28).addBox(-1.5F, -2.0313F, 5.5F, 2.0F, 0.125F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(51, 21).addBox(-4.5F, -2.0938F, 5.5F, 3.0F, 0.1875F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 51).addBox(-8.5F, -2.1563F, 5.5F, 4.0F, 0.25F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5165F, 2.4109F, -7.7414F, 0.0F, 0.0F, 1.3963F));
+				.texOffs(0, 51).addBox(-8.5F, -2.1563F, 5.5F, 4.0F, 0.25F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.3525F, 6.7453F, -7.5F, 0.0F, 0.0F, 1.3963F));
 
 		PartDefinition left_arm_r5 = left_arm.addOrReplaceChild("left_arm_r5", CubeListBuilder.create().texOffs(36, 29).addBox(6.0F, -0.0313F, -3.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(38, 20).addBox(7.0F, -0.0313F, -4.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
@@ -170,9 +164,9 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(20, 16).addBox(4.0F, -0.0938F, -5.25F, 1.0F, 0.1875F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(12, 45).addBox(4.0F, -0.0938F, -1.25F, 1.0F, 0.1875F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(38, 29).addBox(5.0F, -0.0313F, -1.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(44, 33).addBox(4.0F, -0.0313F, 3.75F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-6.836F, 3.787F, 3.3846F, -1.3963F, 0.0F, 0.0F));
+				.texOffs(44, 33).addBox(4.0F, -0.0313F, 3.75F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.0F, 8.1214F, 3.626F, -1.3963F, 0.0F, 0.0F));
 
-		PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(36, 12).addBox(-1.164F, -6.2307F, -2.2232F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.836F, 30.2307F, 0.2232F));
+		PartDefinition right_arm = partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(36, 12).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 2.0F, 0.0F));
 
 		PartDefinition right_arm_r1 = right_arm.addOrReplaceChild("right_arm_r1", CubeListBuilder.create().texOffs(7, 47).addBox(0.5F, -0.0313F, -7.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(49, 6).addBox(0.5F, -0.0938F, -3.25F, 1.0F, 0.1875F, 3.0F, new CubeDeformation(0.0F))
@@ -182,11 +176,11 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(35, 0).addBox(-0.5F, -0.1563F, 0.75F, 1.0F, 0.25F, 7.0F, new CubeDeformation(0.0F))
 				.texOffs(49, 9).addBox(-1.5F, -0.0938F, -0.25F, 1.0F, 0.1875F, 3.0F, new CubeDeformation(0.0F))
 				.texOffs(9, 47).addBox(-1.5F, -0.0313F, -4.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(37, 7).addBox(-1.5F, -0.1563F, 2.75F, 1.0F, 0.25F, 5.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.336F, 1.5034F, -2.743F, 1.4835F, 0.0F, 0.0F));
+				.texOffs(37, 7).addBox(-1.5F, -0.1563F, 2.75F, 1.0F, 0.25F, 5.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, 5.7341F, -2.5198F, 1.4835F, 0.0F, 0.0F));
 
 		PartDefinition right_arm_r2 = right_arm.addOrReplaceChild("right_arm_r2", CubeListBuilder.create().texOffs(4, 40).addBox(1.0F, -1.0434F, -8.2087F, 1.0F, 0.125F, 7.0F, new CubeDeformation(0.0F))
 				.texOffs(27, 37).addBox(1.0F, -1.1059F, -1.2087F, 1.0F, 0.1875F, 7.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 18).addBox(1.0F, -1.1684F, 5.7913F, 1.0F, 0.25F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.836F, 1.6327F, -1.7383F, 1.4835F, 0.0F, 0.0F));
+				.texOffs(0, 18).addBox(1.0F, -1.1684F, 5.7913F, 1.0F, 0.25F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 5.8635F, -1.5151F, 1.4835F, 0.0F, 0.0F));
 
 		PartDefinition right_arm_r3 = right_arm.addOrReplaceChild("right_arm_r3", CubeListBuilder.create().texOffs(24, 50).addBox(4.5F, -2.1563F, -6.5F, 4.0F, 0.25F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(8, 51).addBox(1.5F, -2.0938F, -6.5F, 3.0F, 0.1875F, 1.0F, new CubeDeformation(0.0F))
@@ -199,7 +193,7 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(51, 25).addBox(-1.5F, -2.0313F, -8.5F, 2.0F, 0.125F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(32, 50).addBox(4.5F, -2.1563F, -9.5F, 4.0F, 0.25F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 49).addBox(2.5F, -2.0938F, -9.5F, 2.0F, 0.1875F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(26, 51).addBox(0.5F, -2.0313F, -9.5F, 2.0F, 0.125F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5165F, 2.5146F, 7.2768F, 0.0F, 0.0F, -1.3963F));
+				.texOffs(26, 51).addBox(0.5F, -2.0313F, -9.5F, 2.0F, 0.125F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.3525F, 6.7453F, 7.5F, 0.0F, 0.0F, -1.3963F));
 
 		PartDefinition right_arm_r4 = right_arm.addOrReplaceChild("right_arm_r4", CubeListBuilder.create().texOffs(49, 12).addBox(-8.0F, -0.0313F, -5.25F, 1.0F, 0.125F, 3.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 46).addBox(-8.0F, -0.0938F, -8.25F, 1.0F, 0.1875F, 3.0F, new CubeDeformation(0.0F))
@@ -213,10 +207,9 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				.texOffs(0, 8).addBox(-6.0F, -0.1563F, -10.25F, 1.0F, 0.25F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(46, 45).addBox(-7.0F, -0.0313F, -3.25F, 1.0F, 0.125F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(24, 16).addBox(-7.0F, -0.0938F, -7.25F, 1.0F, 0.1875F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 43).addBox(-7.0F, -0.1563F, -10.25F, 1.0F, 0.25F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.836F, 3.8907F, 3.4029F, -1.3963F, 0.0F, 0.0F));
+				.texOffs(0, 43).addBox(-7.0F, -0.1563F, -10.25F, 1.0F, 0.25F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.0F, 8.1214F, 3.626F, -1.3963F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
-
 	}
 
 	@Override

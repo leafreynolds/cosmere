@@ -165,7 +165,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		//special effects for wearing shardplate.
-
+/*
 		if (surgebindingActiveTick)
 		{
 			ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
@@ -198,8 +198,9 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 					}
 				}
 			}
-		}
+		}*/
 	}
+
 
 	@Override
 	public void drainInvestiture(ISpiritweb data, double strength)

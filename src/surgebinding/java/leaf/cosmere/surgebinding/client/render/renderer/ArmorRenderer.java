@@ -1,17 +1,22 @@
+
 /*
  * File updated ~ 26 - 2 - 2023 ~ Leaf
+ * File updated ~ 12 - 7- 2025 ~ Soar
  */
 
 package leaf.cosmere.surgebinding.client.render.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.surgebinding.client.render.SurgebindingLayerDefinitions;
-import leaf.cosmere.surgebinding.client.render.model.ShardplateModel;
+import leaf.cosmere.surgebinding.client.render.model.DynamicShardplateModel;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ArmorStandModel;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,12 +26,15 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class ArmorRenderer implements ICurioRenderer
 {
-	public ShardplateModel model;
+	public DynamicShardplateModel model;
+
 
 	public ArmorRenderer()
 	{
 		final ModelPart modelPart = Minecraft.getInstance().getEntityModels().bakeLayer(SurgebindingLayerDefinitions.SHARDPLATE);
-		model = new ShardplateModel(modelPart);
+		model = new DynamicShardplateModel(modelPart);
+
+
 	}
 
 	@Override
@@ -46,6 +54,7 @@ public class ArmorRenderer implements ICurioRenderer
 
 		LivingEntity entity = slotContext.entity();
 
+
 		MobEffectInstance effectInstance = entity.getEffect(MobEffects.INVISIBILITY);
 		if (effectInstance != null && effectInstance.getDuration() > 0)
 		{
@@ -57,7 +66,11 @@ public class ArmorRenderer implements ICurioRenderer
 
 		ICurioRenderer.followBodyRotations(entity, this.model);
 
+		this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
 		//this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
 
 	}
+
+
+
 }

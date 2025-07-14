@@ -42,7 +42,7 @@ public class SurgebindingModClientEvents
 	{
 		SurgebindingRenderers.register();
 
-		CosmereAPI.logger.info("Surgebinding client setup complete!");
+		CosmereAPI.logger.info("Surgebinding client render complete!");
 	}
 
 }

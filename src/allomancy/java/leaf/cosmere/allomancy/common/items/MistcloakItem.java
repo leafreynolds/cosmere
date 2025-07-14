@@ -1,5 +1,6 @@
 /*
  * File updated ~ 7 - 8 - 2023 ~ Leaf
+ * File updated ~ 12 - 7 - 2025 ~ Soar
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -9,15 +10,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import javax.annotation.Nonnull;
 
-public class MistcloakItem extends ArmorItem
+public class MistcloakItem extends Item implements ICurioItem
 {
-	public MistcloakItem(ArmorMaterial material, Type type, Properties properties)
+	public MistcloakItem(Properties properties)
 	{
-		super(material, type, properties);
+		super( properties);
 	}
 
 	//todo increase dodge chance while in the mists
