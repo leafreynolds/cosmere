@@ -14,6 +14,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -22,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.earlydisplay.ElementShader;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -31,7 +33,9 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ResourceLocation TEXTURE = Surgebinding.rl("textures/models/armor/shardplate_base.png");
-	public static final ResourceLocation VISOR = Surgebinding.rl("textures/models/armor/shardplate_visor.png");
+	public static final ResourceLocation VISOR = Surgebinding.rl("textures/models/armor/shardplate_visors.png");
+	public static final ResourceLocation CRACKS1 = Surgebinding.rl("textures/models/armor/shardplate_cracks_1.png");
+	public static final ResourceLocation TRIM = Surgebinding.rl("textures/models/armor/shardplate_trims.png");
 
 	public static final int TOTAL_HELMET_IDS = 1;
 	public static final int TOTAL_FACEPLATE_IDS = 4;
@@ -405,25 +409,69 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 				1f);
 
 		// Second overlay texture (e.g., glowing runes, color tint)
-		VertexConsumer overlayLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(VISOR));
-		renderToBuffer(matrixStack,
-				overlayLayer,
-				light,
-				OverlayTexture.NO_OVERLAY,
-				1f,
-				1f,
-				1f,
-				1f);
+
 
 		// Third layer
 		if(item instanceof LivingplateCurioItem lpItem)
 		{
 			String location = "textures/models/armor/glyphs/" + lpItem.getOrder().getName().toLowerCase() + "_glyph.png";
 			ResourceLocation glyphRL = Surgebinding.rl(location);
+			Color glyphColor = lpItem.getOrder().getColor();
+			glyphColor = glyphColor.brighter().brighter();
+/*
+			VertexConsumer lightLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(TRIM));
+			renderToBuffer(matrixStack,
+					lightLayer,
+					LightTexture.FULL_BRIGHT,
+					OverlayTexture.NO_OVERLAY,
+					glyphColor.getRed()/255F,
+					glyphColor.getGreen()/255F,
+					glyphColor.getBlue()/255F,
+					1F);
+*/
+
 			VertexConsumer glyphLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(glyphRL));
 			renderToBuffer(matrixStack,
 					glyphLayer,
-					light,
+					LightTexture.FULL_BRIGHT,
+					OverlayTexture.NO_OVERLAY,
+					glyphColor.getRed()/255f,
+					glyphColor.getGreen()/255f,
+					glyphColor.getBlue()/255f,
+					1f);
+
+			VertexConsumer overlayLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(VISOR));
+			renderToBuffer(matrixStack,
+					overlayLayer,
+					LightTexture.FULL_BRIGHT,
+					OverlayTexture.NO_OVERLAY,
+					glyphColor.getRed()/255f,
+					glyphColor.getGreen()/255f,
+					glyphColor.getBlue()/255f,
+					1f);
+
+
+		}
+		else
+		{
+			VertexConsumer overlayLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(VISOR));
+			renderToBuffer(matrixStack,
+					overlayLayer,
+					LightTexture.FULL_BRIGHT,
+					OverlayTexture.NO_OVERLAY,
+					1,
+					1,
+					1,
+					1f);
+		}
+
+		//Cracked Layer
+		if(item.getMaxCharge(pStack) - item.getCharge(pStack) > item.getMaxCharge(pStack)/4)
+		{
+			VertexConsumer cracksLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(CRACKS1));
+			renderToBuffer(matrixStack,
+					cracksLayer,
+					15728700,
 					OverlayTexture.NO_OVERLAY,
 					1f,
 					1f,

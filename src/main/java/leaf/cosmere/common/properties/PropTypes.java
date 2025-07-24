@@ -42,6 +42,11 @@ public class PropTypes
 				.fireResistant()
 				.rarity(Rarity.EPIC);
 
+		public static final Supplier<Item.Properties> SHARDPLATE = () -> new Item.Properties()
+				.stacksTo(1)
+				.rarity(Rarity.EPIC)
+				.fireResistant();
+
 		public static final Supplier<Item.Properties> ONE = () -> new Item.Properties().stacksTo(1);
 		public static final Supplier<Item.Properties> SIXTEEN = () -> new Item.Properties().stacksTo(16);
 		public static final Supplier<Item.Properties> SIXTY_FOUR = () -> new Item.Properties().stacksTo(64);

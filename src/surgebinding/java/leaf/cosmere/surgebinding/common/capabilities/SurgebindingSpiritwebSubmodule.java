@@ -4,34 +4,38 @@
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
+import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.api.helpers.CuriosHelper;
 import leaf.cosmere.common.items.CapWrapper;
+import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.capabilities.ideals.RadiantStateManager;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
-import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
+import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 {
@@ -48,7 +52,6 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	int drawSpeed = SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get();
 
 	//a little ew, I'd rather this in an enum utils, but it's the only place that needs it
-	public static final ShardplateArmorMaterial[] ARMOR_MATERIALS = ShardplateArmorMaterial.values();
 	RadiantStateManager idealsManager = new RadiantStateManager();
 	private ISpiritweb spiritweb;
 
@@ -114,6 +117,8 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 			if (stormlightStored > 0 && surgebindingActiveTick)
 			{
 				//being hurt takes priority
+
+
 				if (livingEntity.getHealth() < livingEntity.getMaxHealth())
 				{
 					//todo healing stormlight config
@@ -128,6 +133,8 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				//otherwise conditional effects
 				else
 				{
+					List<SlotResult> plate = CuriosHelper.getSlotsByIdentifier(livingEntity, "shardplate");
+
 					if (livingEntity.getCombatTracker().inCombat)
 					{
 						//todo combat effect cost
@@ -165,40 +172,8 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		//special effects for wearing shardplate.
-/*
-		if (surgebindingActiveTick)
-		{
-			ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
-			ItemStack breastplate = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
-			ItemStack leggings = livingEntity.getItemBySlot(EquipmentSlot.LEGS);
-			ItemStack boots = livingEntity.getItemBySlot(EquipmentSlot.FEET);
+		// now handled in ShardplateCurioItem.
 
-			//check wearing full suit of armor
-			if (Stream.of(helmet, breastplate, leggings, boots).allMatch(armorStack -> !armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem))
-			{
-				//check armor matches same material
-				for (ShardplateArmorMaterial material : ARMOR_MATERIALS)
-				{
-					if (Stream.of(helmet, breastplate, leggings, boots).allMatch((armorStack -> ((ArmorItem) armorStack.getItem()).getMaterial() == material)))
-					{
-						int amplifier = material == ShardplateArmorMaterial.DEADPLATE ? 0 : 1;
-
-						//todo make our own effect for wearing shardplate
-						//todo replace with non-vanilla effects
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, amplifier));
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DIG_SPEED, amplifier));
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_BOOST, amplifier));
-						livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, amplifier));
-
-						//todo oathed radiant shardplate stormlight cost
-						//todo deadplate stormlight cost
-						//Didn't deadplate draw reallyy quickly from Kaladin when he was using the 'gauntlet' in the duel?
-						stormlightStored--;
-						break;
-					}
-				}
-			}
-		}*/
 	}
 
 
@@ -242,14 +217,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 		if (isInHighstorm(entity))
 		{
-			if (maxPlayerStormlight - stormlightStored >= drawSpeed)
-			{
-				stormlightStored += drawSpeed;
-			}
-			else
-			{
-				stormlightStored += maxPlayerStormlight - stormlightStored;
-			}
+			stormlightStored += Math.min(maxPlayerStormlight - stormlightStored, drawSpeed);
 		}
 		else if (entity instanceof Player player)
 		{

@@ -15,6 +15,7 @@ import net.minecraft.client.model.ArmorStandModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -68,6 +69,8 @@ public class ArmorRenderer implements ICurioRenderer
 
 		this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
 		//this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
+
+
 
 	}
 

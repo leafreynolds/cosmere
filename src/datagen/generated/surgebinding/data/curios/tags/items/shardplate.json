@@ -1,14 +1,24 @@
 {
   "values": [
-    "surgebinding:truthwatcher_shardplate",
-    "surgebinding:stoneward_shardplate",
-    "surgebinding:dead_shardplate",
-    "surgebinding:skybreaker_shardplate",
     "surgebinding:windrunner_shardplate",
+    "surgebinding:skybreaker_shardplate",
     "surgebinding:dustbringer_shardplate",
     "surgebinding:edgedancer_shardplate",
+    "surgebinding:truthwatcher_shardplate",
     "surgebinding:lightweaver_shardplate",
     "surgebinding:elsecaller_shardplate",
-    "surgebinding:willshaper_shardplate"
+    "surgebinding:willshaper_shardplate",
+    "surgebinding:stoneward_shardplate",
+    "surgebinding:dead_shardplate",
+    "surgebinding:truthwatcher_shardplate",
+    "surgebinding:edgedancer_shardplate",
+    "surgebinding:skybreaker_shardplate",
+    "surgebinding:lightweaver_shardplate",
+    "surgebinding:willshaper_shardplate",
+    "surgebinding:dustbringer_shardplate",
+    "surgebinding:dead_shardplate",
+    "surgebinding:elsecaller_shardplate",
+    "surgebinding:windrunner_shardplate",
+    "surgebinding:stoneward_shardplate"
   ]
 }

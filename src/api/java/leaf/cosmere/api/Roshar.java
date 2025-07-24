@@ -5,6 +5,8 @@
 
 package leaf.cosmere.api;
 
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -413,12 +415,12 @@ public class Roshar
 	{
 		public static final Color WINDRUNNER = Color.decode("#17008a");
 		public static final Color SKYBREAKER = Color.decode("#c2c2c2");
-		public static final Color DUSTBRINGER = Color.decode("#d11613");
+		public static final Color DUSTBRINGER = Color.decode("#858585");
 		public static final Color EDGEDANCER = Color.decode("#e8e8e8");
 		public static final Color TRUTHWATCHER = Color.decode("#13a113");
 		public static final Color LIGHTWEAVER = Color.decode("#c91842");
 		public static final Color ELSECALLER = Color.decode("#1e6c82");
-		public static final Color WILLSHAPER = Color.decode("#5a0b85");
+		public static final Color WILLSHAPER = Color.decode("#d4d4d4");
 		public static final Color STONEWARD = Color.decode("#b57007");
 		public static final Color BONDSMITH = Color.decode("#f3dd25");
 		public static final Color DEADPLATE = Color.decode("#757575");

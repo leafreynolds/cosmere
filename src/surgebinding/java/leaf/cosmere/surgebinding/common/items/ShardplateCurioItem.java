@@ -1,83 +1,115 @@
-/*
- * File updated ~ 14 - 7 - 2025 ~ Leaf
- */
-
 package leaf.cosmere.surgebinding.common.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.IHasColour;
-import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.*;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
+import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.helpers.StackNBTHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.api.text.TextHelper;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.charge.IChargeable;
+import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
+import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.*;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.awt.*;
+import java.util.*;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class ShardplateCurioItem extends Item implements ICurioItem, IHasColour
+import static leaf.cosmere.surgebinding.common.registries.SurgebindingItems.SHARDPLATE_SUITS;
+
+public class ShardplateCurioItem extends ChargeableItemBase implements ICurioItem, IHasColour
 {
 	public static final Capability<DynamicShardplateData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
 	{
 	});
 
-	ShardplateArmorMaterial material;
-	private final int defense;
-	private final float toughness;
-	protected final float knockbackResistance;
-	private final Multimap<Attribute, AttributeModifier> defaultModifiers;
-
 
 	public ShardplateCurioItem(Properties properties)
 	{
-		this(ShardplateArmorMaterial.DEADPLATE, properties);
-	}
-
-
-	public ShardplateCurioItem(ShardplateArmorMaterial material, Properties properties)
-	{
 		super(properties);
-		this.material = material;
-		defense = material.getDefense();
-		toughness = material.getToughness();
-		knockbackResistance = material.getKnockbackResistance();
-
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(Attributes.ARMOR, new AttributeModifier("Armor modifier", (double) this.defense, AttributeModifier.Operation.ADDITION));
-		builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier("Armor toughness", (double) this.toughness, AttributeModifier.Operation.ADDITION));
-		if (this.knockbackResistance > 0.0F)
-		{
-			builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier("Armor knockback resistance", (double) this.knockbackResistance, AttributeModifier.Operation.ADDITION));
-		}
-
-		this.defaultModifiers = builder.build();
 	}
+
+	@Override
+	public int getMaxCharge(ItemStack itemStack)
+	{
+		return 84000;
+	}
+
+	public int chargeWithRadiant(ISpiritweb spiritweb, ItemStack itemStack, int amount)
+	{
+		ShardplateCurioItem item = (ShardplateCurioItem)itemStack.getItem();
+		int charge = Math.min(amount, item.getMaxCharge(itemStack) - item.getCharge(itemStack));
+		if(SurgebindingSpiritwebSubmodule.getSubmodule(spiritweb).getStormlight() >= charge)
+		{
+			item.adjustCharge(itemStack, charge);
+			return charge;
+		}
+		return 0;
+	}
+
+	public boolean isFullCharged(ItemStack itemStack)
+	{
+		return getMaxCharge(itemStack) == getCharge(itemStack);
+	}
+
+	public boolean isFoil(@NotNull ItemStack stack)
+	{
+		return false;
+	}
+
 
 	@Override
 	public void curioTick(SlotContext slotContext, ItemStack stack)
 	{
-		ICurioItem.super.curioTick(slotContext, stack);
+		LivingEntity entity = slotContext.entity();
+		SpiritwebCapability cap;
+		if(SpiritwebCapability.get(entity).isPresent())
+		{
+			cap = (SpiritwebCapability) SpiritwebCapability.get(entity).resolve().get();
+			SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(cap);
+			if(ssm.getStormlight() > 0 && !((ShardplateCurioItem)stack.getItem()).isFullCharged(stack))
+			{
+				int charge = chargeWithRadiant(cap, stack, Math.min(ssm.getStormlight(), 30));
+				ssm.adjustStormlight(-charge, true);
+			}
+		}
+		if(((ShardplateCurioItem)stack.getItem()).getCharge(stack) != 0)
+		{
+			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
+			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,0));
+		}
 
+		ICurioItem.super.curioTick(slotContext, stack);
 	}
 
 	@Override
@@ -105,41 +137,46 @@ public class ShardplateCurioItem extends Item implements ICurioItem, IHasColour
 		return Roshar.getDeadplate();
 	}
 
-
-	public int getEnchantmentValue()
+	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
 	{
-		return this.material.getEnchantmentValue();
-	}
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 
-	public ShardplateArmorMaterial getMaterial()
-	{
-		return this.material;
-	}
+		Multimap<Attribute, AttributeModifier> defaultModifiers;
 
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers()
-	{
-		return this.defaultModifiers;
+		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, uuid, stack));
+		if (getCharge(stack) > 0)
+		{
+			builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", 22, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", 0.4f, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", 0.4D, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Armor jump", 1.3, AttributeModifier.Operation.MULTIPLY_BASE));
+			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Armor run", 1.2, AttributeModifier.Operation.MULTIPLY_BASE));
+			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(uuid, "Armor damage", 1.2, AttributeModifier.Operation.MULTIPLY_TOTAL));
+			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Armor attack speed", 1.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+			builder.put(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor stepper", 0.8, AttributeModifier.Operation.ADDITION));
+		}
+		else
+		{
+			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Armor run", 0.7, AttributeModifier.Operation.MULTIPLY_BASE));
+			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Armor attack speed", 0.9, AttributeModifier.Operation.MULTIPLY_TOTAL));
+		}
+		defaultModifiers = builder.build();
+		return defaultModifiers;
 	}
-
-	public int getDefense()
-	{
-		return this.defense;
-	}
-
-	public float getToughness()
-	{
-		return this.toughness;
-	}
-
-	public SoundEvent getEquipSound()
-	{
-		return this.getMaterial().getEquipSound();
-	}
-
 
 	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<net.minecraft.network.chat.Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
+		String attunedPlayerName = getAttunedPlayerName(pStack);
+		UUID attunedPlayer = getAttunedPlayer(pStack);
+		if (attunedPlayer != null)
+		{
+			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
+		}
+		pTooltipComponents.add(TextHelper.createText(String.format("%s/%s", getCharge(pStack), getMaxCharge(pStack))).withStyle(ChatFormatting.GRAY));
+
+
 		if (!InventoryScreen.hasShiftDown())
 		{
 			pTooltipComponents.add(Constants.Translations.TOOLTIP_HOLD_SHIFT);
@@ -190,5 +227,7 @@ public class ShardplateCurioItem extends Item implements ICurioItem, IHasColour
 				data.deserializeNBT(nbt.getCompound("shard_data"));
 			}
 		}
+
 	}
 }
+

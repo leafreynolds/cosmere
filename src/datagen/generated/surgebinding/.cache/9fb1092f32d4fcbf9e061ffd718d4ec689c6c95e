@@ -1,4 +1,4 @@
-// 1.20.1	2025-01-04T22:50:03.9985254	Recipes
+// 1.20.1	2025-07-22T21:58:05.428635	Recipes
 f86b7818b6bb7ac5af53f3f3b414422f4e54a663 data/surgebinding/advancements/recipes/decorations/amethyst_block.json
 cc3d924329dbcd7a0ab1be4ee4a00ac8ceaa1444 data/surgebinding/advancements/recipes/decorations/diamond_block.json
 22b1bf29f26c81d9763059cdbf36c9f5709daf52 data/surgebinding/advancements/recipes/decorations/emerald_block.json
@@ -34,6 +34,7 @@ e47ace5f1e03ea1701519febfe100070fefe305b data/surgebinding/recipes/conversions/t
 1da9e250d0e68aa6a8f5724990c772f1c797aa42 data/surgebinding/recipes/emerald_block.json
 8ecebabe5a19c476284a9ee90e4d9b9ac252b152 data/surgebinding/recipes/garnet_block.json
 56cab856c8cb2b4fe0c6ca930548ffe1b73e50fd data/surgebinding/recipes/heliodor_block.json
+191264d7369d8dd7d03596b160b0a28b37a58544 data/surgebinding/recipes/plate_charging.json
 8ef2087c48fec60effd4a2d4c32f3c6477571a04 data/surgebinding/recipes/ruby_block.json
 baa1016fee7b4d27d60195b0458c8455ba566d4c data/surgebinding/recipes/sapphire_block.json
 2c914eb0060c71b825b8b0106b0d871e90db0faa data/surgebinding/recipes/smokestone_block.json

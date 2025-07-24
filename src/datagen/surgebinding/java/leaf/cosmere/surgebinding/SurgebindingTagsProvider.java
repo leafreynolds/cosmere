@@ -15,6 +15,7 @@ import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.GemBlock;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
+import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBiomes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
@@ -76,6 +77,14 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 
 			//and let our full sized gems be usable for other recipes
 			addToTag(CosmereTags.Items.GEM_TAGS.get(gemstone), broamItem);
+		}
+
+		for (Roshar.RadiantOrder order: EnumUtils.RADIANT_ORDERS)
+		{
+			final ItemRegistryObject<ShardplateCurioItem> shardplateItem = SurgebindingItems.SHARDPLATE_SUITS.get(order);
+
+			addToTag(Tags.Items.ARMORS, shardplateItem);
+			addToTag(CosmereTags.Items.CURIO_SHARDPLATE, shardplateItem);
 		}
 	}
 

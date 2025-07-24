@@ -22,7 +22,7 @@ public enum ShardplateArmorMaterial
 	{
 		return null;
 	}),
-	LIVINGPLATE("livingplate", 45, 22, 0, SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.4F, () ->
+	LIVINGPLATE("livingplate", 42, 22, 0, SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.4F, () ->
 	{
 		return null;
 	});

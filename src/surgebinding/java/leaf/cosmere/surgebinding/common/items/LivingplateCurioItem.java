@@ -16,7 +16,7 @@ public class LivingplateCurioItem extends ShardplateCurioItem
 	public Roshar.RadiantOrder order;
 	public LivingplateCurioItem(Properties properties, Roshar.RadiantOrder order)
 	{
-		super(ShardplateArmorMaterial.LIVINGPLATE, properties);
+		super(properties);
 		this.order = order;
 	}
 
@@ -40,9 +40,11 @@ public class LivingplateCurioItem extends ShardplateCurioItem
 	@Override
 	public boolean canUnequip(SlotContext slotContext, ItemStack stack)
 	{
+		//for testing
 		if(slotContext.entity() instanceof Player player)
 		{
-			return player.isCreative();
+			return true;
+			//return player.isCreative();
 		}
 		return false;
 	}

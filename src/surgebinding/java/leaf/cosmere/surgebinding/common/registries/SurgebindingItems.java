@@ -91,8 +91,8 @@ public class SurgebindingItems
 									//hijacking bondsmith plate, since we don't know if it exists.
 									(order.hasBlade() ? order.getName():"dead") + "_shardplate",
 									() -> (order.hasBlade() ?
-									       new LivingplateCurioItem(PropTypes.Items.SHARDBLADE.get(), order):
-									       new ShardplateCurioItem(PropTypes.Items.SHARDBLADE.get())
+									       new LivingplateCurioItem(PropTypes.Items.SHARDPLATE.get(), order):
+									       new ShardplateCurioItem(PropTypes.Items.SHARDPLATE.get())
 									)
 							)));
 }
