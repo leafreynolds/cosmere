@@ -13,7 +13,6 @@
   "item.sandmastery.qido": "Qido",
   "item.sandmastery.sand_jar": "Sand Jar",
   "item.sandmastery.sand_pouch": "Sand Pouch",
-  "itemGroup.sandmastery": "Sandmastery Items",
   "key.cosmere.sandmastery.elevate": "Use Elevate Mastery",
   "key.cosmere.sandmastery.launch": "Use Launch Mastery",
   "key.cosmere.sandmastery.platform": "Use Platform Mastery",
@@ -27,5 +26,6 @@
   "manifestation.sandmastery.platform": "Sand Mastery Platform",
   "manifestation.sandmastery.platform.description": "Masters can use platform",
   "manifestation.sandmastery.projectile": "Sand Mastery Projectile",
-  "manifestation.sandmastery.projectile.description": "Masters can use projectile"
+  "manifestation.sandmastery.projectile.description": "Masters can use projectile",
+  "tabs.sandmastery.items": "Sandmastery"
 }
