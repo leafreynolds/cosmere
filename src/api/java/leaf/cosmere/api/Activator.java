@@ -10,14 +10,13 @@ public class Activator
         public Manifestation manifest;
         public String name;
         public String category;
-        public String keyName;
 
 	public Activator(KeyMapping key, Manifestation manifestation)
 	{
             keyMapping = key;
             manifest = manifestation;
 
-        }
+	}
 
 	public void setCategory(String category)
 	{
@@ -33,4 +32,13 @@ public class Activator
     public Manifestation getManifestation() {return manifest;}
 
     public String getCategory() {return category;}
+
+	public String getKeyName()
+	{
+		return "key.cosmere." + getCategory() + "." + name;
+	}
+	public String translator()
+	{
+		return name + "_" + category;
+	}
 }

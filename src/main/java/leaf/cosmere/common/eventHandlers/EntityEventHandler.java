@@ -152,15 +152,26 @@ public class EntityEventHandler
 	{
 		boolean isPlayerEntity = entity instanceof Player;
 
+		if (isPlayerEntity)
+		{
+			if (!MathHelper.chance(CosmereConfigs.SERVER_CONFIG.PLAYER_METALBORN_CHANCE.get()))
+			{
+				// if player isn't metalborn, no need to continue
+				// a bit messy to do this but oh well, we want to change it anyway      // tech debt? what's that?
+				addOtherPowers(spiritwebCapability);
+				return;
+			}
+		}
+
 		final Integer chanceOfFullPowers = CosmereConfigs.SERVER_CONFIG.FULLBORN_POWERS_CHANCE.get();
-		final Integer chanceOfTwinborn = CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE.get();
+		final Integer chanceOfTwinborn = isPlayerEntity ? CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE_PLAYER.get() : CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE_MOB.get();
 		//low chance of having full powers of one type
 		//0-15 inclusive is normal powers.
 		boolean isFullPowersFromOneType = MathHelper.chance(chanceOfFullPowers);
 
 		//small chance of being twin born, but only if not having full powers above
 		//except for players who are guaranteed having at least two powers.
-		boolean isTwinborn = isPlayerEntity || MathHelper.chance(chanceOfTwinborn);
+		boolean isTwinborn = MathHelper.chance(chanceOfTwinborn);
 
 		//randomise the given powers from allomancy and feruchemy
 		int allomancyPowerID = MathHelper.randomInt(0, 15);
@@ -251,6 +262,7 @@ public class EntityEventHandler
 			else
 			{
 				Manifestation manifestation;
+				isAllomancy = isPlayerEntity ? MathHelper.randomInt(0, 99) < CosmereConfigs.SERVER_CONFIG.PLAYER_MISTING_TO_FERRING_DISTRIBUTION.get() : MathHelper.randomBool();
 				if (allomancyLoaded && feruchemyLoaded)
 				{
 					manifestation =
@@ -273,6 +285,10 @@ public class EntityEventHandler
 				}
 
 				spiritwebCapability.giveManifestation(manifestation, 9);
+				if (spiritwebCapability.getLiving() instanceof Player player)
+				{
+					spiritwebCapability.getSubmodule(isAllomancy ? Manifestations.ManifestationTypes.ALLOMANCY : Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, manifestation);
+				}
 				CosmereAPI.logger.info("Entity {} has been granted {}, with metal {}!",
 						spiritwebCapability.getLiving().getName().getString(),
 						isAllomancy

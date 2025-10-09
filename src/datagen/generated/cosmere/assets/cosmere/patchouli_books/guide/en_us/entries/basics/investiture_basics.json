@@ -1,0 +1,21 @@
+{
+  "category": "cosmere:basics",
+  "icon": "cosmere:lerasatium_ingot",
+  "name": "Investiture Basics",
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(thing)Investiture$() is a concept functioning like matter or energy. It makes up 16 godlike beings called $(thing)Shards$(), as well as many other mystical or magical things. Investiture permeates all matter and can function as a power source for several types of magics we call \"$(thing)Invested Arts$().\" You may already have access to one or more of these arts.",
+      "title": "Investiture (For Dummies)"
+    },
+    {
+      "type": "text",
+      "text": "Once, all investiture belonged to one powerful being called \"$(thing)Adonalsium$(),\" but eventually 17 people decided to work together to kill him. They gathered four powerful artifacts made from investiture known as the \"$(thing)Dawnshards$()\" and killed him with them through means still unknown to us. After Adonalsium was killed, his investiture was broken into 16 Shards and each of the 17 people picked a shard and took it up, except for one, a man named \"$(thing)Hoid$().\" You may even see Hoid on your travels.",
+      "title": "Origins of Investiture"
+    }
+  ],
+  "priority": true,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}

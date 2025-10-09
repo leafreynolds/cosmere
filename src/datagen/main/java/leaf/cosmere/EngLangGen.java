@@ -6,6 +6,7 @@ package leaf.cosmere;
 
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
@@ -203,6 +204,7 @@ public class EngLangGen extends LanguageProvider
 	{
 		//KeyBindings
 		add(KEYS_CATEGORY, "Cosmere");
+		add(KEYS_ACTIVATE_CATEGORY, "Power Activators");
 		add(KEY_MANIFESTATION_MENU, "Powers Menu");
 		add(KEY_DEACTIVATE_ALL_POWERS, "Deactivate All Powers");
 		add(KEY_MANIFESTATION_NEXT, "Next Power");
@@ -210,6 +212,24 @@ public class EngLangGen extends LanguageProvider
 		add(KEY_MANIFESTATION_USE_ACTIVE, "Use Active Ability");
 		add(KEY_MANIFESTATION_MODE_INCREASE, "Mode Increase");
 		add(KEY_MANIFESTATION_MODE_DECREASE, "Mode Decrease");
+		add(KEY_ACTIVATE, "Activate Power Save State");
+		add(KEY_SAVE_ACTIVATOR, "Save New Power State");
+		String allo = "Activate Allomantic ";
+		String feru = "Activate Feruchemic ";
+		String surge = "Activate Surgebinding ";
+		for(Metals.MetalType metalType: EnumUtils.METAL_TYPES)
+		{
+			if(!metalType.hasFeruchemicalEffect())
+			{
+				continue;
+			}
+			add(KEY_ALLOMANCY + metalType.getName(), allo + StringHelper.fixCapitalisation(metalType.getName()));
+			add(KEY_FERUCHEMY + metalType.getName(), feru + StringHelper.fixCapitalisation(metalType.getName()));
+		}
+		for(Roshar.Surges i : EnumUtils.SURGES)
+		{
+			add(KEY_STORMLIGHT + i.getName(), surge + StringHelper.fixCapitalisation(i.getName()));
+		}
 	}
 
 	private void addStats()

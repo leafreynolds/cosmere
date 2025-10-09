@@ -1,5 +1,5 @@
 /*
- * File updated ~ 5 - 3 - 2025 ~ Leaf
+ * File updated ~ 26 - 7 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.sandmastery.common.capabilities;
@@ -297,7 +297,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private static AttributeModifier getOvermasteryAttributeModifier(int gainedRibbons, UUID uuid)
 	{
 		final AttributeModifier overmasteryAttributeModifier = new AttributeModifier(
-				SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID,
+				uuid,
 				String.format("%s - gained %s ribbons: %s", "Overmastery", gainedRibbons, uuid),
 				gainedRibbons,
 				AttributeModifier.Operation.ADDITION

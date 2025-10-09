@@ -58,6 +58,6 @@ public class AllomancyCommonEvents
 	{
 		// tell threads it's time to stop
 		AllomancyEntityThread.serverShutdown = true;
-		IronSteelLinesThread.stopThread();
+		IronSteelLinesThread.stopThread(false);
 	}
 }

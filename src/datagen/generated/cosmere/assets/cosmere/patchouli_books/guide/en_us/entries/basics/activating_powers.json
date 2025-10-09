@@ -1,0 +1,44 @@
+{
+  "category": "cosmere:basics",
+  "icon": "cosmere:steel_ingot",
+  "name": "Activating Powers",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The first way I will teach you to activate powers is with the basic keybinds. This is not the most effective way of doing it, but it is straightforward.\nFirst, locate the icon for your current main power in the upper left corner. By pressing ($(k:key.cosmere.powers.next)$()) and ($(k:key.cosmere.powers.previous)$()) you can change which power is your current main. From there, press ($(k:key.cosmere.powers.mode.increase)$()) and ($(k:key.cosmere.powers.mode.decrease)$()) to change the mode for that power. Changing your current main power will not stop your other powers from running in the background.",
+      "title": "Activating Powers"
+    },
+    {
+      "type": "text",
+      "text": "The most accessible way to activate powers is from the menu. To access the menu, press and hold ($(k:key.cosmere.powers.menu)$()). From here, left clicking on a power will increase its mode by one, and right clicking will decrease it. Releasing ($(k:key.cosmere.powers.menu)$()) will close the menu.",
+      "title": "The Menu"
+    },
+    {
+      "type": "text",
+      "text": "The fastest way to activate one power quickly is with its dedicated keybind. These are not set by default, but you can change your favorites to activate this way. When this keybind is used, it will set the mode of your power to +1, unless the power is feruchemical in nature, in which case it will tap at level 5 instead. However, in all cases, if the power is already active, no matter the mode, pressing the keybind will turn the power off instead. Using a dedicated keybind will also set your active main power to the associated power as well",
+      "title": "Dedicated Keybinds"
+    },
+    {
+      "type": "empty",
+      "draw_filler": true
+    },
+    {
+      "type": "text",
+      "text": "(Note: this is a recent and complicated feature. It may have bugs. Please report all bugs to the bug tracker.)$(br)By far the most complicated way to activate your powers is with the Power Mode Save States. You have access to nine different ones. To save a new save state, activate all desired powers at the desired levels through any of the means previously described, and ensure all others are turned off. Then hold ($(k:key.cosmere.powers.save)$()) and press one of your hotbar slots.$(br2)All active powers are now saved to that key.",
+      "title": "Power Mode Save Keybind"
+    },
+    {
+      "type": "text",
+      "text": "To load a preexisting save state, hold ($(k:key.cosmere.powers.activate)$()) and press the hotbar key for the desired save slot. Your powers should now be activated. If they are not, press it again. (This is a known bug.) You can also toggle a save state off by pressing the keybind again. Powers that were not on when the save state was saved will not be affected by loading the save state."
+    },
+    {
+      "type": "text",
+      "text": "To quickly deactivate all powers you have active, press ($(k:key.cosmere.powers.toggle)$()).",
+      "title": "Deactivating Powers"
+    }
+  ],
+  "priority": true,
+  "read_by_default": false,
+  "secret": false,
+  "sortnum": 0
+}

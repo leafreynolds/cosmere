@@ -1,5 +1,6 @@
 /*
  * File updated ~ 29 - 10 - 2023 ~ Leaf
+ * File updated ~ 2 - 5 - 2025 ~ SoaringEaqle
  */
 
 package leaf.cosmere.api.spiritweb;
@@ -18,10 +19,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public interface ISpiritweb extends INBTSerializable<CompoundTag>
 {
@@ -60,6 +58,10 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	List<Manifestation> getAvailableManifestations();
 
 	List<Manifestation> getAvailableManifestations(boolean ignoreTemporaryPower);
+
+	HashMap<Manifestation, Integer> getManifestations();
+
+	HashMap<Manifestation, Integer> getManifestations(boolean ignoreTemporaryPower, boolean ignoreInactivePower);
 
 	String changeManifestation(int dir);
 

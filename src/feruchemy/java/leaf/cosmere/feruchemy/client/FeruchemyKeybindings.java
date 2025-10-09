@@ -19,8 +19,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
-import static leaf.cosmere.api.Constants.Strings.KEY_FERUCHEMY;
+import static leaf.cosmere.api.Constants.Strings.*;
 import static leaf.cosmere.feruchemy.common.registries.FeruchemyManifestations.FERUCHEMY_POWERS;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Feruchemy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -32,7 +31,7 @@ public class FeruchemyKeybindings
                     .collect(Collectors.toMap(
                             Function.identity(),
                             metalType ->
-                                    new KeyMapping(KEY_FERUCHEMY + metalType.getName(), GLFW.GLFW_KEY_UNKNOWN,KEYS_CATEGORY)
+                                    new KeyMapping(KEY_FERUCHEMY + metalType.getName(), GLFW.GLFW_KEY_UNKNOWN,KEYS_ACTIVATE_CATEGORY)
                     ));
 
     @SubscribeEvent

@@ -40,7 +40,7 @@ public class SurgebindingKeybindings
 					.collect(Collectors.toMap(
 							Function.identity(),
 							surge ->
-									new KeyMapping(KEY_STORMLIGHT + surge.getName(), GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY)
+									new KeyMapping(KEY_STORMLIGHT + surge.getName(), GLFW.GLFW_KEY_UNKNOWN, KEYS_ACTIVATE_CATEGORY)
 					));
 
 	@SubscribeEvent
@@ -55,7 +55,7 @@ public class SurgebindingKeybindings
 			SurgebindingManifestation manifest = (SurgebindingManifestation) SURGEBINDING_POWERS.get(surge).getManifestation();
 			event.register(key);
 			Activator entry = new Activator(key, manifest);
-			entry.setCategory("surgebinding");
+			entry.setCategory("stormlight");
 			Keybindings.activators.add(entry);
 		}
 

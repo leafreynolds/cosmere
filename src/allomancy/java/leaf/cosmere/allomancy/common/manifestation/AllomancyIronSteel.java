@@ -118,7 +118,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 				}
 				else if (getMode(cap) <= 0)
 				{
-					IronSteelLinesThread.stopThread();
+					IronSteelLinesThread.stopThread(false);
 				}
 				return;
 			}

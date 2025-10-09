@@ -41,7 +41,7 @@ public class AllomancyKeybindings
 					.collect(Collectors.toMap(
 						Function.identity(),
 						metalType ->
-							new KeyMapping(KEY_ALLOMANCY + metalType.getName(),GLFW.GLFW_KEY_UNKNOWN,KEYS_CATEGORY)
+							new KeyMapping(KEY_ALLOMANCY + metalType.getName(),GLFW.GLFW_KEY_UNKNOWN,KEYS_ACTIVATE_CATEGORY)
 					));
 
 	@SubscribeEvent
