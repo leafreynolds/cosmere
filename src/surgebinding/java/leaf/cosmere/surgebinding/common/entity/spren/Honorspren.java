@@ -35,7 +35,7 @@ public class Honorspren extends Allay
 	@Override
 	public boolean canBeSeenByAnyone()
 	{
-		//TODO: make this only visible to the player it is bonded to?
+		//TODO: make this only visible to the player it is bond to?
 		return super.canBeSeenByAnyone();
 	}
 
@@ -60,7 +60,7 @@ public class Honorspren extends Allay
 	@Override
 	public boolean canBeCollidedWith()
 	{
-		//todo: make this only collide with the player it is bonded to?
+		//todo: make this only collide with the player it is bond to?
 		return false;
 	}
 
@@ -68,7 +68,7 @@ public class Honorspren extends Allay
 	public boolean canTakeItem(ItemStack pItemstack)
 	{
 		//return super.canTakeItem(pItemstack);
-		//TODO: make this only take items from the player it is bonded to?
+		//TODO: make this only take items from the player it is bond to?
 		//todo make it only able to take things once bond has progressed?
 		return false;
 	}

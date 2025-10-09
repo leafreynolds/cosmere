@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.IShardbladeDynamicData;
+import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import leaf.cosmere.surgebinding.common.items.ShardbladeDynamicItem;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
@@ -112,12 +114,12 @@ public class ShardbladeModel extends Model
 		//now we need to get the actual data from the itemstack
 		//and set the correct pieces to be visible
 
-		if (!pStack.getCapability(ShardbladeDynamicItem.CAPABILITY).isPresent())
+		if (!pStack.getCapability(ShardData.SHARD_DATA).isPresent())
 		{
 			return;
 		}
 
-		final IShardbladeDynamicData data = pStack.getCapability(ShardbladeDynamicItem.CAPABILITY).resolve().get();
+		final IShardbladeDynamicData data = ((ShardbladeDynamicItem) pStack.getItem()).getShardData(pStack);
 
 		this.blade.getChild(data.getBladeID()).visible = true;
 		this.handle.getChild(data.getHandleID()).visible = true;

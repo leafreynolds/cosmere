@@ -22,6 +22,7 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.awt.*;
 import java.util.function.Supplier;
 
 public class SurgebindingItemModelsGen extends ItemModelProvider
@@ -77,8 +78,7 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 				}
 				continue;
 			}
-			else if(item instanceof ShardplateCurioItem
-					|| item instanceof LivingplateCurioItem)
+			else if(item instanceof ShardplateCurioItem)
 			{
 				complexItem(path, "shardplate_helmet", "shardplate_helmet_visor");
 				continue;
@@ -103,11 +103,11 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
 				.texture("layer0", modLoc("item/" + texturePath));
 	}
-	public ItemModelBuilder complexItem(String path, String texturePath1, String texturePath2)
+	public ItemModelBuilder complexItem(String path, String texturePath1, String texturePath2, Color color)
 	{
 		return this.getBuilder(path)
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
-				.texture("layer0", modLoc("item/" + texturePath1))
+				.texture("layer0", modLoc("item/" + texturePath1)).
 				.texture("layer1",modLoc("item/" + texturePath2));
 	}
 }

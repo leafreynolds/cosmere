@@ -145,7 +145,7 @@ public class SurgebindingForgeEventsHandler
 		if (CuriosHelper.getCuriosHandler(entity) != null)
 		{
 
-			for (SlotResult slotResult : CuriosHelper.getSlotsWithItem(entity, ItemRegistryObject.asItemList(SurgebindingItems.SHARDPLATE_SUITS.values())))
+			for (SlotResult slotResult : CuriosHelper.getSlotsWithItem(entity, SurgebindingItems.SHARDPLATE.asItem()))
 			{
 				ItemStack stack = slotResult.stack();
 				ShardplateCurioItem item = (ShardplateCurioItem) stack.getItem();

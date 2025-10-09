@@ -7,8 +7,12 @@ package leaf.cosmere.surgebinding.common.items;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.helpers.TimeHelper;
+import leaf.cosmere.surgebinding.common.capabilities.IShard;
+import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -63,10 +67,24 @@ public class HonorbladeItem extends ShardbladeItem
 
 	}
 
-
-	public boolean canSummonDismiss(Player player)
+	@Override
+	public ItemStack getDefaultInstance()
 	{
-		//honorblades can always be dismissed
+		ItemStack stack = super.getDefaultInstance();
+		IShard data = stack.getCapability(ShardData.SHARD_DATA).orElseGet(() -> {return new ShardData(stack);});
+		data.setOrder(radiantOrder);
+		return stack;
+	}
+
+	@Override
+	public int bondTime()
+	{
+		return 5;
+	}
+
+	@Override
+	public boolean canSummonDismiss(LivingEntity entity, ItemStack stack)
+	{
 		return true;
 	}
 }

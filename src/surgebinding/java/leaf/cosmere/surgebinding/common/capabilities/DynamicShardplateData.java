@@ -1,12 +1,15 @@
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
+import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.surgebinding.client.render.model.DynamicShardplateModel;
+import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -16,11 +19,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
-public class DynamicShardplateData implements ICapabilityProvider, INBTSerializable<CompoundTag>
+public class DynamicShardplateData extends ShardData implements ICapabilityProvider, INBTSerializable<CompoundTag>, IShardplateDynamicData
 {
-	private final LazyOptional<DynamicShardplateData> opt = LazyOptional.of(() -> this);
-
-	private CompoundTag nbt;
+	private final LazyOptional<IShard> opt = LazyOptional.of(() -> this);
 
 	private String headID;
 	private String faceplateID;
@@ -39,10 +40,13 @@ public class DynamicShardplateData implements ICapabilityProvider, INBTSerializa
 	private String leftBootOutsideID;
 	private String leftBootTipID;
 
+	private boolean colored;
 
-	public DynamicShardplateData()
+
+
+	public DynamicShardplateData(ItemStack stack)
 	{
-		this.nbt = new CompoundTag();
+		super(stack);
 
 		this.headID = "head" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_HELMET_IDS);
 		this.faceplateID = "faceplate" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_FACEPLATE_IDS);
@@ -61,31 +65,30 @@ public class DynamicShardplateData implements ICapabilityProvider, INBTSerializa
 		this.leftBootOutsideID = new String(rightBootOutsideID).replace("right","left");
 		this.leftBootTipID = new String(rightBootTipID).replace("right","left");
 
+		this.colored = true;
 	}
 	@Override
 	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction)
 	{
-		return ShardplateCurioItem.CAPABILITY.orEmpty(capability, opt);
+		return ShardData.SHARD_DATA.orEmpty(capability, opt);
 	}
 
 	@Override
 	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap)
 	{
-		return ICapabilityProvider.super.getCapability(cap);
+		return super.getCapability(cap);
 	}
 
 	@Override
 	public CompoundTag serializeNBT()
 	{
-		if (this.nbt == null)
-		{
-			this.nbt = new CompoundTag();
-		}
 
-		this.nbt.putString("headID", this.headID);
-		this.nbt.putString("faceplateID" , this.faceplateID);
-		this.nbt.putString("bodyID", this.bodyID);
-		this.nbt.putString("kamaID", this.kamaID);
+		super.serializeNBT();
+
+		super.nbt.putString("headID", this.headID);
+		super.nbt.putString("faceplateID" , this.faceplateID);
+		super.nbt.putString("bodyID", this.bodyID);
+		super.nbt.putString("kamaID", this.kamaID);
 
 		this.nbt.putString("rightArmID", this.rightArmID);
 		this.nbt.putString("rightPaldronID", this.rightPaldronsID);
@@ -99,6 +102,7 @@ public class DynamicShardplateData implements ICapabilityProvider, INBTSerializa
 		this.nbt.putString("leftBootOutsideID", this.leftBootOutsideID);
 		this.nbt.putString("leftBootTipID", this.leftBootTipID);
 
+		super.nbt.putBoolean("isColored", colored);
 
 		return this.nbt;
 	}
@@ -106,7 +110,7 @@ public class DynamicShardplateData implements ICapabilityProvider, INBTSerializa
 	@Override
 	public void deserializeNBT(CompoundTag compoundTag)
 	{
-		this.nbt = compoundTag;
+		super.deserializeNBT(compoundTag);
 
 
 		this.headID = nbt.getString("headID");
@@ -131,6 +135,9 @@ public class DynamicShardplateData implements ICapabilityProvider, INBTSerializa
 		this.leftLegID = nbt.getString("leftLegID");
 		this.leftBootOutsideID = nbt.getString("leftBootOutsideID");
 		this.leftBootTipID = nbt.getString("leftBootTipID");
+
+		this.colored = nbt.getBoolean("isColored");
+
 	}
 
 	public String getHeadID()
@@ -199,5 +206,10 @@ public class DynamicShardplateData implements ICapabilityProvider, INBTSerializa
 	public String getLeftBootTipID()
 	{
 		return leftBootTipID;
+	}
+
+	public boolean isColored()
+	{
+		return colored;
 	}
 }

@@ -3,24 +3,21 @@ package leaf.cosmere.surgebinding.common.items;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.*;
-import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.helpers.EffectsHelper;
-import leaf.cosmere.api.helpers.StackNBTHelper;
+import leaf.cosmere.api.helpers.TimeHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.charge.IChargeable;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
+import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -33,7 +30,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.*;
@@ -42,12 +38,9 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static leaf.cosmere.surgebinding.common.registries.SurgebindingItems.SHARDPLATE_SUITS;
 
-public class ShardplateCurioItem extends ChargeableItemBase implements ICurioItem, IHasColour
+public class ShardplateCurioItem extends ChargeableItemBase implements ICurioItem, IShardItem
 {
 	public static final Capability<DynamicShardplateData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
 	{
@@ -75,6 +68,12 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 			return charge;
 		}
 		return 0;
+	}
+
+	@Override
+	public DynamicShardplateData getShardData(ItemStack stack)
+	{
+		return (DynamicShardplateData) stack.getCapability(ShardData.SHARD_DATA).resolve().get();
 	}
 
 	public boolean isFullCharged(ItemStack itemStack)
@@ -109,33 +108,156 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,0));
 		}
 
+		DynamicShardplateData data = getShardData(stack);
+		if(entity instanceof Player player)
+		{
+			if(data.bondTicks() >= bondTime())
+			{
+				bond(stack, player);
+			}
+			else
+			{
+				data.tickBondUp();
+			}
+		}
+		else
+		{
+			data.resetBondTicks();
+		}
+
 		ICurioItem.super.curioTick(slotContext, stack);
+	}
+
+	@Override
+	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
+	{
+		DynamicShardplateData data = getShardData(pStack);
+		if(pEntity instanceof Player player)
+		{
+			if(data.isLiving())
+			{
+				bond(pStack, player);
+			}
+			else if(data.bondTicks() >= bondTime())
+			{
+				bond(pStack, player);
+			}
+			else
+			{
+				data.tickBondUp();
+			}
+		}
+		else
+		{
+			data.resetBondTicks();
+		}
+		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
+	}
+
+	@Override
+	public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
+	{
+		if (slotContext.entity().level().isClientSide) return;
+
+		// Copy the capability data if present
+		prevStack.getCapability(ShardData.SHARD_DATA).ifPresent(fromCap -> {
+			stack.getCapability(ShardData.SHARD_DATA).ifPresent(toCap -> {
+				CompoundTag nbt = fromCap.serializeNBT();
+				toCap.deserializeNBT(nbt);
+			});
+		});
+		ICurioItem.super.onEquip(slotContext, prevStack, stack);
+	}
+
+	@Override
+	public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack)
+	{
+		if (slotContext.entity().level().isClientSide) return;
+
+		// Copy the capability data if present
+		stack.getCapability(ShardData.SHARD_DATA).ifPresent(fromCap -> {
+			newStack.getCapability(ShardData.SHARD_DATA).ifPresent(toCap -> {
+				CompoundTag nbt = fromCap.serializeNBT();
+				toCap.deserializeNBT(nbt);
+			});
+		});
+
+		ICurioItem.super.onUnequip(slotContext, newStack, stack);
 	}
 
 	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
 	{
-		final DynamicShardplateData dynamicShardplateData = new DynamicShardplateData();
+		final DynamicShardplateData dynamicShardplateData = new DynamicShardplateData(stack);
 
-		if (nbt != null)
+		if (nbt != null && nbt.contains("shard_data"))
 		{
-			dynamicShardplateData.deserializeNBT(nbt); // todo check if this breaks things?
+			dynamicShardplateData.deserializeNBT(nbt.getCompound("shard_data")); // todo check if this breaks things?
+			if(dynamicShardplateData.getOrder() == null)
+			{
+				int i = (int)(Math.random()*10);
+				dynamicShardplateData.setOrder(Roshar.RadiantOrder.valueOf(i).get());
+			}
 		}
 
 		return dynamicShardplateData;
 	}
 
-	public boolean isLiving()
+	@Override
+	public boolean canSummonDismiss(LivingEntity player, ItemStack stack)
 	{
-		return false;
+		return isBondedTo(stack, player) && isLiving(stack);
 	}
-
 
 	@Override
-	public Color getColour()
+	public void bond(ItemStack stack, Player entity)
 	{
-		return Roshar.getDeadplate();
+		DynamicShardplateData data = getShardData(stack);
+		if(!data.isBonded())
+		{
+			data.setBondedEntity(entity);
+			setAttunedPlayer(stack, entity);
+			setAttunedPlayerName(stack, entity);
+		}
 	}
+
+	@Override
+	public void releaseBond(ItemStack stack)
+	{
+		getShardData(stack).setEmptyBond();
+	}
+
+	@Override
+	public int bondTime()
+	{
+		return (int)TimeHelper.MinutesToSeconds(30.0) * 20;
+	}
+
+	public boolean canSummonDismiss(Player player, ItemStack stack)
+	{
+		return getBond(stack).is(player) && isLiving(stack);
+	}
+
+
+	public Color getColour(ItemStack stack)
+	{
+		DynamicShardplateData data = getShardData(stack);
+		Roshar.RadiantOrder order = getOrder(stack);
+
+		if(!isLiving(stack))
+		{
+			return Roshar.getDeadplate();
+		}
+		else if(data.isColored())
+		{
+			return order.getPlateColor();
+		}
+		else
+		{
+			return Roshar.getDeadplate();
+		}
+	}
+
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
@@ -176,6 +298,18 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		}
 		pTooltipComponents.add(TextHelper.createText(String.format("%s/%s", getCharge(pStack), getMaxCharge(pStack))).withStyle(ChatFormatting.GRAY));
 
+		final DynamicShardplateData data = getShardData(pStack);
+
+		if(data.getOrder() != null)
+		{
+			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
+		}
+		if(!data.isLiving())
+		{
+			pTooltipComponents.add(TextHelper.createText("Deadplate"));
+		}
+
+
 
 		if (!InventoryScreen.hasShiftDown())
 		{
@@ -183,7 +317,6 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 			return;
 		}
 
-		final DynamicShardplateData data = pStack.getCapability(ShardplateCurioItem.CAPABILITY).resolve().get();
 		pTooltipComponents.add(TextHelper.createText(String.format("Faceplate: %s", data.getFaceplateID())));
 		pTooltipComponents.add(TextHelper.createText(String.format("Head: %s", data.getHeadID())));
 		pTooltipComponents.add(TextHelper.createText(String.format("Body: %s", data.getBodyID())));
@@ -202,10 +335,13 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		pTooltipComponents.add(TextHelper.createText(String.format("Right Boot Tip: %s", data.getRightBootTipID())));
 	}
 
+
+
+
 	@Override
 	public @Nullable CompoundTag getShareTag(@NotNull ItemStack stack)
 	{
-		final DynamicShardplateData data = stack.getCapability(ShardplateCurioItem.CAPABILITY).resolve().get();
+		final DynamicShardplateData data = getShardData(stack);
 		CompoundTag tag = stack.getOrCreateTag();
 
 		tag.put("shard_data", data.serializeNBT());
@@ -220,7 +356,7 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 
 		if (nbt != null)
 		{
-			final DynamicShardplateData data = stack.getCapability(ShardplateCurioItem.CAPABILITY).resolve().get();
+			final DynamicShardplateData data = getShardData(stack);
 
 			if (nbt.contains("shard_data"))
 			{
@@ -229,5 +365,29 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		}
 
 	}
+
+
+
+	@Override
+	public void addFilled(CreativeModeTab.Output output)
+	{
+		for(Roshar.RadiantOrder order: EnumUtils.RADIANT_ORDERS)
+		{
+			//dead
+			output.accept(buildData(new ItemStack(this), order, false, null));
+			ItemStack fullPower = new ItemStack(this);
+			setCharge(fullPower, getMaxCharge(fullPower));
+			buildData(fullPower, order, false, null);
+			output.accept(fullPower);
+
+			//living
+			output.accept(buildData(new ItemStack(this), order, true, null));
+			ItemStack fullPowerLiving = new ItemStack(this);
+			setCharge(fullPowerLiving, getMaxCharge(fullPower));
+			buildData(fullPowerLiving, order, true, null);
+			output.accept(fullPowerLiving);
+		}
+	}
+
 }
 

@@ -5,12 +5,16 @@ import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
+import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
+import leaf.cosmere.surgebinding.common.capabilities.IShard;
+import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -123,19 +127,22 @@ public class ShardplateChargingRecipe extends CustomRecipe
 	{
 		//Determine what kind of plate it is
 		ShardplateCurioItem shardplateItem = null;
+		CompoundTag tag = new CompoundTag();
+		CompoundTag dataTag = new CompoundTag();
 		for(ItemStack item: inv.getItems())
 		{
 			if (item.is(CosmereTags.Items.CURIO_SHARDPLATE))
 			{
 				shardplateItem = (ShardplateCurioItem) item.getItem();
+				tag = item.getTag();
+				IShard cap = item.getCapability(ShardData.SHARD_DATA).orElseGet(() -> new DynamicShardplateData(item));
+				dataTag = cap.serializeNBT();
 			}
-		}
-		if(shardplateItem == null)
-		{
-			shardplateItem = SurgebindingItems.SHARDPLATE_SUITS.get(Roshar.RadiantOrder.BONDSMITH).asItem();
 		}
 
 		ItemStack itemstack = new ItemStack(shardplateItem);
+		//itemstack.setTag(tag);
+		itemstack.getCapability(ShardData.SHARD_DATA).orElseGet(() -> new DynamicShardplateData(itemstack)).deserializeNBT(dataTag);
 
 		for (int i = 0; i < inv.getContainerSize(); ++i)
 		{

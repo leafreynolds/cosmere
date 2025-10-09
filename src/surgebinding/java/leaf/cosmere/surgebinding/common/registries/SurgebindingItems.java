@@ -39,6 +39,8 @@ public class SurgebindingItems
 	public static final ItemRegistryObject<ShardbladeItem> SHARDBLADE = ITEMS.register("shardblade", () -> new ShardbladeDynamicItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardbladeItem> MASTER_SWORD = ITEMS.register("master_sword", () -> new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 
+	public static final ItemRegistryObject<ShardplateCurioItem> SHARDPLATE = ITEMS.register("shardplate", () -> new ShardplateCurioItem(PropTypes.Items.SHARDPLATE.get()));
+
 
 	public static final Map<Roshar.RadiantOrder, ItemRegistryObject<HonorbladeItem>> HONORBLADES =
 			Arrays.stream(EnumUtils.RADIANT_ORDERS)
@@ -82,17 +84,4 @@ public class SurgebindingItems
 
 	public static final ItemRegistryObject<ForgeSpawnEggItem> CHULL_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CHULL, 0x6c482f, 0x8a1a08);
 	public static final ItemRegistryObject<ForgeSpawnEggItem> CRYPTIC_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CRYPTIC, 0x272727, 0x4d4d4d);
-
-	public static final Map<Roshar.RadiantOrder, ItemRegistryObject<ShardplateCurioItem>> SHARDPLATE_SUITS =
-			Arrays.stream(EnumUtils.RADIANT_ORDERS)
-					.collect(Collectors.toMap(
-							Function.identity(),
-							order -> ITEMS.register(
-									//hijacking bondsmith plate, since we don't know if it exists.
-									(order.hasBlade() ? order.getName():"dead") + "_shardplate",
-									() -> (order.hasBlade() ?
-									       new LivingplateCurioItem(PropTypes.Items.SHARDPLATE.get(), order):
-									       new ShardplateCurioItem(PropTypes.Items.SHARDPLATE.get())
-									)
-							)));
 }

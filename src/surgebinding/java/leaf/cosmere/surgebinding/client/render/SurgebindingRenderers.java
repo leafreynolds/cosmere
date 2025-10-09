@@ -16,6 +16,8 @@ import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 public class SurgebindingRenderers
@@ -29,10 +31,7 @@ public class SurgebindingRenderers
 		EntityRenderers.register(SurgebindingEntityTypes.CRYPTIC.get(), CrypticRenderer::new);
 		EntityRenderers.register(SurgebindingEntityTypes.HONORSPREN.get(), HonorsprenRenderer::new);
 
-		for (ItemRegistryObject<ShardplateCurioItem> item : SurgebindingItems.SHARDPLATE_SUITS.values())
-		{
-			CuriosRendererRegistry.register(item.asItem(), ArmorRenderer::new);
-		}
+		CuriosRendererRegistry.register(SurgebindingItems.SHARDPLATE.asItem(), ArmorRenderer::new);
 	}
 
 

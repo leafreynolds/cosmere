@@ -12,7 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class WindrunnerIdealStateManager
+public class SkybreakerIdealStateManager
 {
 	public static boolean validateIdeal(SpiritwebCapability spiritweb, int ideal)
 	{
@@ -22,16 +22,15 @@ public class WindrunnerIdealStateManager
 			case 1:
 				return true;
 			case 2:
-				return ProtectThoseWhoCannotProtectThemselves(spiritweb);
+				return SeekJustice(spiritweb);
 			case 3:
-				//return ProtectThoseIHate(spiritweb);
 			case 4:
 			case 5:
 				return false;
 		}
 	}
 
-	private static boolean ProtectThoseWhoCannotProtectThemselves(SpiritwebCapability spiritweb)
+	private static boolean SeekJustice(SpiritwebCapability spiritweb)
 	{
 		final LivingEntity living = spiritweb.getLiving();
 
@@ -44,18 +43,5 @@ public class WindrunnerIdealStateManager
 
 		MobEffectInstance isHero = living.getEffect(MobEffects.HERO_OF_THE_VILLAGE);
 		return isHero != null;
-	}
-
-	private static boolean ProtectThoseIHate(SpiritwebCapability spiritweb)
-	{
-		final LivingEntity living = spiritweb.getLiving();
-		return false;
-	}
-
-	private static boolean AcceptICannotProtect(SpiritwebCapability spiritweb)
-	{
-		final LivingEntity living = spiritweb.getLiving();
-
-		return false;
 	}
 }

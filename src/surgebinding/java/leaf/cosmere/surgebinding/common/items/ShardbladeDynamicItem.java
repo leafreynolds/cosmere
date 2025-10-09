@@ -4,18 +4,17 @@
 
 package leaf.cosmere.surgebinding.common.items;
 
+import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.client.render.renderer.ShardbladeItemRenderer;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardbladeData;
-import leaf.cosmere.surgebinding.common.capabilities.IShardbladeDynamicData;
+import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,9 +22,6 @@ import java.util.function.Consumer;
 
 public class ShardbladeDynamicItem extends ShardbladeItem
 {
-	public static final Capability<IShardbladeDynamicData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
 
 
 	public ShardbladeDynamicItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
@@ -34,9 +30,15 @@ public class ShardbladeDynamicItem extends ShardbladeItem
 	}
 
 	@Override
+	public DynamicShardbladeData getShardData(ItemStack stack)
+	{
+		return (DynamicShardbladeData) stack.getCapability(ShardData.SHARD_DATA).resolve().get();
+	}
+
+	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
 	{
-		final DynamicShardbladeData dynamicShardbladeData = new DynamicShardbladeData();
+		final DynamicShardbladeData dynamicShardbladeData = new DynamicShardbladeData(stack);
 
 		if (nbt != null)
 		{

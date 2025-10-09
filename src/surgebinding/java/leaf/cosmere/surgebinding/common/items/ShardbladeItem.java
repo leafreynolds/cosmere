@@ -4,14 +4,24 @@
 
 package leaf.cosmere.surgebinding.common.items;
 
+import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.helpers.TimeHelper;
+import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
 
-public class ShardbladeItem extends SwordItem
+import java.util.UUID;
+
+public class ShardbladeItem extends SwordItem implements IShardItem
 {
 	protected final float attackDamage;
 	protected final float attackSpeedIn;
@@ -32,19 +42,20 @@ public class ShardbladeItem extends SwordItem
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
-		return enchantment.category == EnchantmentCategory.WEAPON;
+		return false;
 	}
 
+	//Shards can't be enchanted
 	@Override
 	public int getEnchantmentValue(ItemStack itemStack)
 	{
-		return 20;
+		return 0;
 	}
 
 	@Override
 	public boolean isEnchantable(ItemStack itemStack)
 	{
-		return true;
+		return false;
 	}
 
 	@Override
@@ -54,9 +65,76 @@ public class ShardbladeItem extends SwordItem
 		return false;
 	}
 
-	public boolean canSummonDismiss(Player player)
+	@Override
+	public ShardData getShardData(ItemStack stack)
 	{
-		//todo check a value on sword for whether player has held the shardblade for long enough
-		return true;
+		return (ShardData)stack.getCapability(ShardData.SHARD_DATA).resolve().get();
 	}
+
+
+	@Override
+	public void bond(ItemStack stack, Player entity)
+	{
+		// if bonded, then don't bond again
+		if (getBond(stack) != null)
+		{
+			return;
+		}
+
+
+		getShardData(stack).setBondedEntity(entity);
+
+	}
+
+	@Override
+	public void releaseBond(ItemStack stack)
+	{
+		if(getBond(stack) != null)
+		{
+			getShardData(stack).setEmptyBond();
+		}
+	}
+
+	@Override
+	public int bondTime()
+	{
+		return (int) TimeHelper.MinutesToSeconds(30.0) * 20;
+	}
+
+	@Override
+	public boolean canSummonDismiss(LivingEntity player, ItemStack stack)
+	{
+		if (getBond(stack).is(player))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
+	{
+		ShardData data = getShardData(pStack);
+		if(pEntity instanceof Player player)
+		{
+			if(data.isLiving())
+			{
+				bond(pStack, player);
+			}
+			else if(data.bondTicks() >= bondTime())
+			{
+				bond(pStack, player);
+			}
+			else
+			{
+				data.tickBondUp();
+			}
+		}
+		else
+		{
+			data.resetBondTicks();
+		}
+		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
+	}
+
 }

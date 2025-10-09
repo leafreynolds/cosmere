@@ -59,10 +59,6 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		addBiomes();
 
 		addContainsMetal();
-
-		SurgebindingItems.SHARDPLATE_SUITS.values().forEach(
-				item -> getItemBuilder(CosmereTags.Items.CURIO_SHARDPLATE).add(item.asItem())
-		);
 	}
 
 	private void addItems()
@@ -79,13 +75,11 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 			addToTag(CosmereTags.Items.GEM_TAGS.get(gemstone), broamItem);
 		}
 
-		for (Roshar.RadiantOrder order: EnumUtils.RADIANT_ORDERS)
-		{
-			final ItemRegistryObject<ShardplateCurioItem> shardplateItem = SurgebindingItems.SHARDPLATE_SUITS.get(order);
+			final ItemRegistryObject<ShardplateCurioItem> shardplateItem = SurgebindingItems.SHARDPLATE;
 
 			addToTag(Tags.Items.ARMORS, shardplateItem);
 			addToTag(CosmereTags.Items.CURIO_SHARDPLATE, shardplateItem);
-		}
+
 	}
 
 	private void addBlocks()

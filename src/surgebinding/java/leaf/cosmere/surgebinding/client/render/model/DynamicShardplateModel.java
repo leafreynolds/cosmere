@@ -7,7 +7,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.items.LivingplateCurioItem;
+import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -17,13 +18,11 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.earlydisplay.ElementShader;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -333,14 +332,15 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		//now we need to get the actual data from the itemstack
 		//and set the correct pieces to be visible
 
-		if (!pStack.getCapability(ShardplateCurioItem.CAPABILITY).isPresent())
+		if (!pStack.getCapability(ShardData.SHARD_DATA).isPresent())
 		{
 			return;
 		}
 
-		final DynamicShardplateData data = pStack.getCapability(ShardplateCurioItem.CAPABILITY).resolve().get();
 
 		final ShardplateCurioItem item = (ShardplateCurioItem) pStack.getItem();
+
+		final DynamicShardplateData data = item.getShardData(pStack);
 
 
 		this.right_leg.visible = true;
@@ -396,7 +396,7 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		this.faceplate.getChild(data.getFaceplateID()).getAllParts().forEach(part -> part.visible = true);
 
 
-		Color color = item.getColour();
+		Color color = item.getColour(pStack);
 		// First texture layer
 		VertexConsumer baseLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(TEXTURE));
 		renderToBuffer(matrixStack,
@@ -412,11 +412,11 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 
 
 		// Third layer
-		if(item instanceof LivingplateCurioItem lpItem)
+		if(data.isLiving())
 		{
-			String location = "textures/models/armor/glyphs/" + lpItem.getOrder().getName().toLowerCase() + "_glyph.png";
+			String location = "textures/models/armor/glyphs/" + data.getOrder().getName().toLowerCase() + "_glyph.png";
 			ResourceLocation glyphRL = Surgebinding.rl(location);
-			Color glyphColor = lpItem.getOrder().getColor();
+			Color glyphColor = item.getOrder(pStack).getColor();
 			glyphColor = glyphColor.brighter().brighter();
 /*
 			VertexConsumer lightLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(TRIM));

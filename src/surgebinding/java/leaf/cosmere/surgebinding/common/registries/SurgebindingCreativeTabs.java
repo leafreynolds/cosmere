@@ -42,10 +42,9 @@ public class SurgebindingCreativeTabs
 			SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get().addFilled(output);
 			SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get().addFilled(output);
 		}
-		for(var order : EnumUtils.RADIANT_ORDERS)
-		{
-			SurgebindingItems.SHARDPLATE_SUITS.get(order).get().addFilled(output);
-		}
+
+
+		SurgebindingItems.SHARDPLATE.get().addFilled(output);
 	}
 
 	private static void addToExistingTabs(BuildCreativeModeTabContentsEvent event)
@@ -83,8 +82,8 @@ public class SurgebindingCreativeTabs
 			for (var gemstone : EnumUtils.RADIANT_ORDERS)
 			{
 				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.HONORBLADES.get(gemstone));
-				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.SHARDPLATE_SUITS.get(gemstone));
 			}
+			CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.SHARDPLATE.get(), SurgebindingItems.NIGHTBLOOD.get(), SurgebindingItems.SHARDBLADE.get());
 		}
 		else if (tabKey == CreativeModeTabs.FOOD_AND_DRINKS)
 		{

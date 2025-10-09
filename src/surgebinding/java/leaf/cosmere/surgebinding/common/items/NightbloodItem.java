@@ -11,6 +11,7 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,7 +32,7 @@ public class NightbloodItem extends ShardbladeItem
 	}
 
 
-	public boolean canSummonDismiss(Player player)
+	public boolean canSummonDismiss(LivingEntity player, ItemStack stack)
 	{
 		return false;
 	}
