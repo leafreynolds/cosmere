@@ -1,5 +1,5 @@
 /*
- * File updated ~ 6 - 8 - 2024 ~ Leaf
+ * File updated ~ 8 - 11 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.items;
@@ -7,9 +7,6 @@ package leaf.cosmere.items;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.items.MetalIngotItem;
-import leaf.cosmere.common.items.MetalNuggetItem;
-import leaf.cosmere.common.items.MetalRawOreItem;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -43,22 +40,22 @@ public class ItemModelsGen extends ItemModelProvider
 			{
 				continue;
 			}
-			//otherwise set specific textures based on these item types
-			else if (item instanceof MetalIngotItem)
-			{
-				simpleItem(path, "metal_ingot");
-				continue;
-			}
-			else if (item instanceof MetalNuggetItem)
-			{
-				simpleItem(path, "metal_nugget");
-				continue;
-			}
-			else if (item instanceof MetalRawOreItem rawItem)
-			{
-				simpleItem(path, rawItem.getMetalType().isAlloy() ? "metal_blend" : "metal_raw");
-				continue;
-			}
+			////otherwise set specific textures based on these item types
+			//else if (item instanceof MetalIngotItem)
+			//{
+			//	simpleItem(path, "metal_ingot");
+			//	continue;
+			//}
+			//else if (item instanceof MetalNuggetItem)
+			//{
+			//	simpleItem(path, "metal_nugget");
+			//	continue;
+			//}
+			//else if (item instanceof MetalRawOreItem rawItem)
+			//{
+			//	simpleItem(path, rawItem.getMetalType().isAlloy() ? "metal_blend" : "metal_raw");
+			//	continue;
+			//}
 
 			//else normal item texture rules apply
 			simpleItem(path, path);

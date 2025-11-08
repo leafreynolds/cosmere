@@ -110,6 +110,10 @@ public class SandmasteryEngLangGen extends LanguageProvider
 			final ResourceLocation regName = manifestation.getRegistryName();
 			add("manifestation." + regName.getNamespace() + "." + regName.getPath() + ".description", description);
 		}
+
+		// Temp translation fix - Remove when ribbons are added
+		add("manifestation.sandmastery.ribbons", StringHelper.fixCapitalisation("Sand Mastery Ribbons"));
+		add("manifestation.sandmastery.ribbons.description", "Masters can use ribbons");
 	}
 
 	private void addAttributes()

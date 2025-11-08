@@ -42,6 +42,7 @@ public class HemalurgyEngLangGen extends LanguageProvider
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
+		addCurioModifiers();
 		addConfigs();
 		addCommands();
 		addKeybindings();
@@ -144,6 +145,17 @@ public class HemalurgyEngLangGen extends LanguageProvider
 		add("curios.identifier.mental", "Mental Quadrant");
 		add("curios.identifier.spiritual", "Spiritual Quadrant");
 		add("curios.identifier.temporal", "Temporal Quadrant");
+		add("curios.identifier.eyes", "Eye Spikes");
+	}
+
+	private void addCurioModifiers()
+	{
+		add("curios.modifiers.linchpin", "Linchpin Spike");
+		add("curios.modifiers.physical", "Physical Quadrant");
+		add("curios.modifiers.mental", "Mental Quadrant");
+		add("curios.modifiers.spiritual", "Spiritual Quadrant");
+		add("curios.modifiers.temporal", "Temporal Quadrant");
+		add("curios.modifiers.eyes", "Eye Spikes");
 	}
 
 	private void addConfigs()

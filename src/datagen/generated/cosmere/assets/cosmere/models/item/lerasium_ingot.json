@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmere:item/metal_ingot"
+    "layer0": "cosmere:item/lerasium_ingot"
   }
 }

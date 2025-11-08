@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "surgebinding:item/gemstone_broam"
+    "layer0": "surgebinding:item/sapphire_broam"
   }
 }

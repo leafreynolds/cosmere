@@ -122,6 +122,9 @@ public class EngLangGen extends LanguageProvider
 	private void addManifestations()
 	{
 		add(ManifestationRegistry.NONE.getTranslationKey(), "None");
+		// Hemalurgic manifestations
+		add("manifestation.cosmere.night_vision", "Night Vision");
+		add("manifestation.cosmere.xp_gain_rate", "XP Gain Rate");
 	}
 
 	private void addAttributes()

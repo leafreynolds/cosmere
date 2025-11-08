@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmere:item/metal_raw"
+    "layer0": "cosmere:item/raw_silver_ore"
   }
 }

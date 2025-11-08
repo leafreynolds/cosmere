@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmere:item/metal_nugget"
+    "layer0": "cosmere:item/aluminum_nugget"
   }
 }

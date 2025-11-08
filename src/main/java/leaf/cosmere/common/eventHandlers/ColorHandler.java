@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 3 - 2025 ~ Leaf
+ * File updated ~ 8 - 11 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -71,9 +71,10 @@ public final class ColorHandler
 			else
 			{
 				//todo temp?
-				if (!itemNamespace.equals("surgebinding")
-						&& !itemNamespace.equals("cosmeretools")
-						&& !itemNamespace.equals("cosmere"))
+				if (//!itemNamespace.equals("surgebinding") &&
+						!itemNamespace.equals("cosmeretools")
+					//&& !itemNamespace.equals("cosmere")
+				)
 				{
 					continue;
 				}

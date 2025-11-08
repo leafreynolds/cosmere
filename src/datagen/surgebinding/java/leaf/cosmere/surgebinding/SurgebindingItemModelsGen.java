@@ -9,7 +9,7 @@ package leaf.cosmere.surgebinding;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.items.*;
+import leaf.cosmere.surgebinding.common.items.ShardbladeItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

@@ -1,16 +1,19 @@
 /*
- * File updated ~ 14 - 1 - 2025 ~ Leaf
+ * File updated ~ 8 - 11 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.registries;
 
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.common.registration.impl.CreativeTabDeferredRegister;
 import leaf.cosmere.common.registration.impl.CreativeTabRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
+import leaf.cosmere.surgebinding.common.blocks.GemBlock;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -29,7 +32,7 @@ public class SurgebindingCreativeTabs
 									.displayItems((displayParameters, output) ->
 									{
 										CreativeTabDeferredRegister.addToDisplay(SurgebindingItems.ITEMS, output);
-										//CreativeTabDeferredRegister.addToDisplay(AllomancyBlocks.BLOCKS, output);
+										CreativeTabDeferredRegister.addToDisplay(SurgebindingBlocks.BLOCKS, output);
 										addFilled(output);
 									})
 			);
@@ -64,6 +67,14 @@ public class SurgebindingCreativeTabs
 			{
 				CreativeTabDeferredRegister.addToDisplay(event, ore);
 			}*/
+		}
+		else if (tabKey == CreativeModeTabs.COLORED_BLOCKS)
+		{
+			for (var gemstone : EnumUtils.GEMSTONE_TYPES)
+			{
+				BlockRegistryObject<GemBlock, BlockItem> item = SurgebindingBlocks.GEM_BLOCKS.get(gemstone);
+				CreativeTabDeferredRegister.addToDisplay(event, item);
+			}
 		}
 		else if (tabKey == CreativeModeTabs.FUNCTIONAL_BLOCKS)
 		{
