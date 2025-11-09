@@ -1,5 +1,5 @@
 /*
- * File created ~ 2 - 5 - 2025 ~ SoaringEaqle
+ * File updated ~ 10 - 6 - 2025 ~ SoaringEaqle
  */
 
 package leaf.cosmere.client;
@@ -7,8 +7,8 @@ package leaf.cosmere.client;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.client.render.CosmereRenderers;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.nbt.CompoundTag;
@@ -16,10 +16,7 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class PowerSaveState
 {
@@ -102,6 +99,11 @@ public class PowerSaveState
 				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, modifier));
 
 			}
+			if(CosmereConfigs.CLIENT_CONFIG.disableActivatorChatMessage.get())
+			{
+				return;
+			}
+
 			if(toActivate)
 			{
 				spiritweb.getLiving().sendSystemMessage(Component.literal("Activating " + getName()));
@@ -111,16 +113,25 @@ public class PowerSaveState
 				spiritweb.getLiving().sendSystemMessage(Component.literal("Deactivating " + getName()));
 			}
 			manifestations.keySet().forEach((manifest) ->
-					spiritweb.getLiving()
+
+
+						spiritweb.getLiving()
 							.sendSystemMessage(Component.literal(
 									Component.translatable(
 											manifest.getTranslationKey()
-									).getString() + ": " + manifest.getMode(spiritweb))));
+									).getString() + ": " + (toActivate ? manifestations.get(manifest) : 0)
+							))
+					);
+
 		}
 
 		public void addManifestations(ISpiritweb spiritweb)
 		{
 			manifestations = spiritweb.getManifestations(false, true);
+			if(CosmereConfigs.CLIENT_CONFIG.disableActivatorChatMessage.get())
+			{
+				return;
+			}
 			spiritweb.getLiving().sendSystemMessage(Component.literal("Saved new " + getName()));
 			manifestations.forEach((manifestation, integer) ->
 					spiritweb.getLiving()
@@ -136,7 +147,6 @@ public class PowerSaveState
 		{
 			this.manifestations = manifestations;
 		}
-
 	}
 
 	private static Map.@Nullable Entry<Manifestation, Integer> getEntry(@NotNull Map<Manifestation, Integer> map, Manifestation manifestation)

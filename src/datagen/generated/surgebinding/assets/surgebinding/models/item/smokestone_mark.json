@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "surgebinding:item/gemstone_mark"
+    "layer0": "surgebinding:item/smokestone_mark"
   }
 }

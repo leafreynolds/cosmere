@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "surgebinding:item/gemstone_chip"
+    "layer0": "surgebinding:item/heliodor_chip"
   }
 }

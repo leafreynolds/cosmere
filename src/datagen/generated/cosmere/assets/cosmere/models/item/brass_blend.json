@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmere:item/metal_blend"
+    "layer0": "cosmere:item/brass_blend"
   }
 }
