@@ -14,6 +14,7 @@ public interface IShard extends INBTSerializable<CompoundTag>
 	boolean isLiving();
 
 	UUID getBondedEntity();
+	String getBondedName();
 	boolean isBonded();
 
 	void setOrder(Roshar.RadiantOrder order);

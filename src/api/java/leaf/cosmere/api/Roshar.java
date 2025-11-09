@@ -196,8 +196,8 @@ public class Roshar
 		public static final Color SMOKESTONE = Color.decode("#c0a6b3");
 		public static final Color RUBY = Color.decode("#b40502");
 		public static final Color DIAMOND = Color.decode("#f5faf3");
-		public static final Color EMERALD = Color.decode("#52b984");
-		public static final Color GARNET = Color.decode("#e03935");
+		public static final Color EMERALD = Color.decode("#31E840");
+		public static final Color GARNET = Color.decode("#f03c72");
 		public static final Color ZIRCON = Color.decode("#3ab7bb");
 		public static final Color AMETHYST = Color.decode("#c975e4");
 		public static final Color TOPAZ = Color.decode("#e3681a");
@@ -415,13 +415,13 @@ public class Roshar
 	{
 		public static final Color WINDRUNNER = Color.decode("#17008a");
 		public static final Color SKYBREAKER = Color.decode("#c2c2c2");
-		public static final Color DUSTBRINGER = Color.decode("#858585");
-		public static final Color EDGEDANCER = Color.decode("#e8e8e8");
-		public static final Color TRUTHWATCHER = Color.decode("#13a113");
-		public static final Color LIGHTWEAVER = Color.decode("#c91842");
+		public static final Color DUSTBRINGER = Color.decode("#574e4b");
+		public static final Color EDGEDANCER = Color.decode("#c6cfd8");
+		public static final Color TRUTHWATCHER = Color.decode("#6d8f5b");
+		public static final Color LIGHTWEAVER = Color.decode("#8a343e");
 		public static final Color ELSECALLER = Color.decode("#1e6c82");
 		public static final Color WILLSHAPER = Color.decode("#d4d4d4");
-		public static final Color STONEWARD = Color.decode("#b57007");
+		public static final Color STONEWARD = Color.decode("#b09335");
 		public static final Color BONDSMITH = Color.decode("#f3dd25");
 		public static final Color DEADPLATE = Color.decode("#757575");
 	}

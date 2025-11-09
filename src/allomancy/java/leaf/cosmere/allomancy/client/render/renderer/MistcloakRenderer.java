@@ -52,8 +52,11 @@ public class MistcloakRenderer implements ICurioRenderer
 			return;
 		}
 
+
+
 		this.model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
 		this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+
 
 		ICurioRenderer.followBodyRotations(entity, this.model);
 		this.model.render(matrixStack, renderTypeBuffer, light);

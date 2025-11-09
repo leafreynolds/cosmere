@@ -3,9 +3,11 @@ package leaf.cosmere.surgebinding.common.capabilities;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
+import leaf.cosmere.surgebinding.common.items.HonorbladeItem;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -28,6 +30,7 @@ public class ShardData implements ICapabilityProvider, IShard
 	protected Roshar.RadiantOrder order;
 	protected boolean living;
 	protected UUID bond;
+	protected String bondedName;
 
 	protected int bondTicks;
 
@@ -39,6 +42,17 @@ public class ShardData implements ICapabilityProvider, IShard
 	{
 		this.stack = stack;
 		this.nbt = new CompoundTag();
+	}
+
+	public ShardData(ItemStack stack, int i)
+	{
+		this.stack = stack;
+		this.nbt = new CompoundTag();
+
+		if(i == 1)
+		{
+			this.order = ((HonorbladeItem)stack.getItem()).getOrder(stack);
+		}
 	}
 
 	@Override
@@ -72,6 +86,12 @@ public class ShardData implements ICapabilityProvider, IShard
 	}
 
 	@Override
+	public String getBondedName()
+	{
+		return bondedName;
+	}
+
+	@Override
 	public boolean isBonded()
 	{
 		return bond != null;
@@ -93,6 +113,7 @@ public class ShardData implements ICapabilityProvider, IShard
 	public void setBondedEntity(LivingEntity entity)
 	{
 		this.bond = entity.getUUID();
+		this.bondedName = entity.getName().getString();
 	}
 
 	@Override
@@ -131,7 +152,9 @@ public class ShardData implements ICapabilityProvider, IShard
 		if (bond != null)
 		{
 			this.nbt.putUUID(Constants.NBT.ATTUNED_PLAYER, bond);
+			this.nbt.putString(Constants.NBT.ATTUNED_PLAYER_NAME, bondedName);
 		}
+
 
 		this.nbt.putInt("bondTicks", bondTicks);
 
@@ -150,6 +173,7 @@ public class ShardData implements ICapabilityProvider, IShard
 		if(nbt.contains(Constants.NBT.ATTUNED_PLAYER))
 		{
 			this.bond = nbt.getUUID(Constants.NBT.ATTUNED_PLAYER);
+			this.bondedName = nbt.getString(Constants.NBT.ATTUNED_PLAYER_NAME);
 		}
 
 		this.bondTicks = nbt.getInt("bondTicks");

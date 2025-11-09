@@ -9,6 +9,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.*;
 import leaf.cosmere.surgebinding.common.capabilities.world.IRoshar;
 import leaf.cosmere.surgebinding.common.capabilities.world.RosharCapability;
+import leaf.cosmere.surgebinding.common.items.HonorbladeItem;
 import leaf.cosmere.surgebinding.common.items.IShardItem;
 import leaf.cosmere.surgebinding.common.items.ShardbladeDynamicItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
@@ -89,7 +90,7 @@ public class SurgebindingCapabilitiesHandler
 			else
 			{
 				event.addCapability(new ResourceLocation(Surgebinding.MODID,"shard_cap"),
-						new ShardCapProvider(() -> new DynamicShardplateData(stack)));
+						new ShardCapProvider(() -> new ShardData(stack)));
 			}
 		}
 	}

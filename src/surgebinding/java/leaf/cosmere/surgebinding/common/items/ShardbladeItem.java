@@ -7,18 +7,27 @@ package leaf.cosmere.surgebinding.common.items;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.TimeHelper;
+import leaf.cosmere.api.text.StringHelper;
+import leaf.cosmere.api.text.TextHelper;
+import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
 import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ShardbladeItem extends SwordItem implements IShardItem
@@ -137,4 +146,28 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
 	}
 
+	@Override
+	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	{
+
+		final ShardData data = getShardData(pStack);
+		String attunedPlayerName = data.getBondedName();
+		UUID attunedPlayer = data.getBondedEntity();
+		if (attunedPlayer != null)
+		{
+			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
+		}
+
+		if(data.getOrder() != null)
+		{
+			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
+		}
+		if(!data.isLiving())
+		{
+			pTooltipComponents.add(TextHelper.createText("Deadblade"));
+		}
+
+
+
+	}
 }

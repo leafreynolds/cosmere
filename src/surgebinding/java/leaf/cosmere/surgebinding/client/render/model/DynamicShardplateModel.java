@@ -417,7 +417,7 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 			String location = "textures/models/armor/glyphs/" + data.getOrder().getName().toLowerCase() + "_glyph.png";
 			ResourceLocation glyphRL = Surgebinding.rl(location);
 			Color glyphColor = item.getOrder(pStack).getColor();
-			glyphColor = glyphColor.brighter().brighter();
+			glyphColor = glyphColor.brighter();
 /*
 			VertexConsumer lightLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(TRIM));
 			renderToBuffer(matrixStack,
@@ -459,8 +459,8 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 					overlayLayer,
 					LightTexture.FULL_BRIGHT,
 					OverlayTexture.NO_OVERLAY,
-					1,
-					1,
+					0.6F,
+					0.8F,
 					1,
 					1f);
 		}

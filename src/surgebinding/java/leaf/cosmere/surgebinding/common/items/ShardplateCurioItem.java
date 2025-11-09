@@ -104,8 +104,7 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		}
 		if(((ShardplateCurioItem)stack.getItem()).getCharge(stack) != 0)
 		{
-			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 0));
-			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,0));
+			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 1));
 		}
 
 		DynamicShardplateData data = getShardData(stack);
@@ -273,7 +272,7 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 			builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", 0.4f, AttributeModifier.Operation.ADDITION));
 			builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", 0.4D, AttributeModifier.Operation.ADDITION));
 			builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Armor jump", 1.3, AttributeModifier.Operation.MULTIPLY_BASE));
-			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Armor run", 1.2, AttributeModifier.Operation.MULTIPLY_BASE));
+			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Armor run", 1.05, AttributeModifier.Operation.MULTIPLY_BASE));
 			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(uuid, "Armor damage", 1.2, AttributeModifier.Operation.MULTIPLY_TOTAL));
 			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Armor attack speed", 1.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
 			builder.put(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor stepper", 0.8, AttributeModifier.Operation.ADDITION));
@@ -373,6 +372,10 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	{
 		for(Roshar.RadiantOrder order: EnumUtils.RADIANT_ORDERS)
 		{
+			if(order.equals(Roshar.RadiantOrder.BONDSMITH))
+			{
+				continue;
+			}
 			//dead
 			output.accept(buildData(new ItemStack(this), order, false, null));
 			ItemStack fullPower = new ItemStack(this);

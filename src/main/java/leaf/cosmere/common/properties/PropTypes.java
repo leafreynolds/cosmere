@@ -50,7 +50,10 @@ public class PropTypes
 		public static final Supplier<Item.Properties> ONE = () -> new Item.Properties().stacksTo(1);
 		public static final Supplier<Item.Properties> SIXTEEN = () -> new Item.Properties().stacksTo(16);
 		public static final Supplier<Item.Properties> SIXTY_FOUR = () -> new Item.Properties().stacksTo(64);
-		public static final Supplier<Item.Properties> MISTCLOAK = () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON);
+		public static final Supplier<Item.Properties> MISTCLOAK = () -> new Item.Properties()
+				.stacksTo(1)
+				.rarity(Rarity.UNCOMMON)
+				.defaultDurability(500);
 
 	}
 }

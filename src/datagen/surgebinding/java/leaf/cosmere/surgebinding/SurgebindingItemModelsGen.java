@@ -103,11 +103,11 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
 				.texture("layer0", modLoc("item/" + texturePath));
 	}
-	public ItemModelBuilder complexItem(String path, String texturePath1, String texturePath2, Color color)
+	public ItemModelBuilder complexItem(String path, String texturePath1, String texturePath2)
 	{
 		return this.getBuilder(path)
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
-				.texture("layer0", modLoc("item/" + texturePath1)).
+				.texture("layer0", modLoc("item/" + texturePath1))
 				.texture("layer1",modLoc("item/" + texturePath2));
 	}
 }
