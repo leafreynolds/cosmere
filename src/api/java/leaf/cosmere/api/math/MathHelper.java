@@ -29,11 +29,13 @@ public class MathHelper
 		return RANDOM.nextBoolean();
 	}
 
-	public static float InverseLerp(float a, float b, float value)
+	//percentage of value between two values.
+	//e.g. 100, 200, 150 should return 0.5f as 150 is halfway between 100 and 200
+	public static float InverseLerp(float startBoundary, float endBoundary, float value)
 	{
-		if (a != b)
+		if (startBoundary != endBoundary)
 		{
-			return clamp01((value - a) / (b - a));
+			return clamp01((value - startBoundary) / (endBoundary - startBoundary));
 		}
 		else
 		{
