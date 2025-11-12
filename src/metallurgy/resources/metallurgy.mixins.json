@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "leaf.cosmere.metallurgy.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "mixins.cosmere.metallurgy.refmap.json",
+    "mixins": [],
+    "client": [],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

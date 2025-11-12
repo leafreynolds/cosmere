@@ -75,6 +75,7 @@ ext {
 			'aondor',
 			'aviar',
 			'soulforgery',
+			'metallurgy',
 			'example',
 			'cosmeretools']
 
@@ -457,6 +458,7 @@ dependencies {
 	awakeningAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	aondorAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	soulforgeryAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	metallurgyAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	cosmeretoolsAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
@@ -489,6 +491,7 @@ mixin {
 	add sourceSets.awakening, 'mixins.cosmere.awakening.refmap.json'
 	add sourceSets.aondor, 'mixins.cosmere.aondor.refmap.json'
 	add sourceSets.soulforgery, 'mixins.cosmere.soulforgery.refmap.json'
+	add sourceSets.metallurgy, 'mixins.cosmere.metallurgy.refmap.json'
 	add sourceSets.cosmeretools, 'mixins.cosmere.cosmeretools.refmap.json'
 
 	config 'cosmere.mixins.json'
@@ -502,6 +505,7 @@ mixin {
 	config 'awakening.mixins.json'
 	config 'aondor.mixins.json'
 	config 'soulforgery.mixins.json'
+	config 'metallurgy.mixins.json'
 	config 'cosmeretools.mixins.json'
 }
 
@@ -539,6 +543,7 @@ tasks.named('sourcesJar', Jar).configure {
 			awakeningClasses,
 			aondorClasses,
 			soulforgeryClasses,
+			metallurgyClasses,
 			cosmeretoolsClasses,
 	)
 	duplicatesStrategy(DuplicatesStrategy.FAIL)
@@ -554,6 +559,7 @@ tasks.named('sourcesJar', Jar).configure {
 			sourceSets.awakening.allJava,
 			sourceSets.aondor.allJava,
 			sourceSets.soulforgery.allJava,
+			sourceSets.metallurgy.allJava,
 			sourceSets.cosmeretools.allJava,
 	)
 	manifest.attributes(getManifestAttributes("Cosmere"))
@@ -585,6 +591,7 @@ def awakeningJar = secondaryJar(sourceSets.awakening, 'Awakening')
 def aondorJar = secondaryJar(sourceSets.aondor, 'AonDor')
 def aviarJar = secondaryJar(sourceSets.aviar, 'Aviar')
 def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'SoulForgery')
+def metallurgyJar = secondaryJar(sourceSets.metallurgy, 'Metallurgy')
 def exampleJar = secondaryJar(sourceSets.example, 'Example')
 def cosmeretoolsJar = secondaryJar(sourceSets.cosmeretools, 'CosmereTools')
 
@@ -606,6 +613,7 @@ artifacts {
 	archives aondorJar
 	archives aviarJar
 	archives soulforgeryJar
+	archives metallurgyJar
 	archives exampleJar
 	archives cosmeretoolsJar
 }

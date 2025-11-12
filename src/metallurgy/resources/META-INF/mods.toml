@@ -1,0 +1,22 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "MIT"
+
+[[mods]]
+modId = "metallurgy"
+version = "${version}"
+displayName = "Cosmere: Metallurgy"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+authors = "MoonlitJolty"
+credits = '''
+'''
+logoFile = "logo.png"
+description = '''Metallurgy module for Cosmere.'''
+
+[[dependencies.metallurgy]]
+modId = "cosmere"
+mandatory = true
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
