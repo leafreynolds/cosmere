@@ -1,0 +1,9 @@
+{
+  "item.metallurgy.alloy_fragment": "Alloy Fragment",
+  "item.metallurgy.alloy_ingot": "Alloy Ingot",
+  "item.metallurgy.alloy_powder": "Alloy Powder",
+  "item.metallurgy.diamond_chisel": "Diamond Chisel",
+  "item.metallurgy.iron_chisel": "Iron Chisel",
+  "item.metallurgy.netherite_chisel": "Netherite Chisel",
+  "tabs.metallurgy.items": "Metallurgy"
+}

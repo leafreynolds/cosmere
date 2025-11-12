@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "S": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    " I",
+    "S "
+  ],
+  "result": {
+    "item": "metallurgy:iron_chisel"
+  },
+  "show_notification": true
+}
