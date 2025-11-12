@@ -1,8 +1,10 @@
 package leaf.cosmere.metallurgy;
 
+import leaf.cosmere.metallurgy.blocks.MetallurgyBlockModelsGen;
 import leaf.cosmere.metallurgy.common.Metallurgy;
 import leaf.cosmere.metallurgy.items.MetallurgyItemModelsGen;
 import leaf.cosmere.metallurgy.items.MetallurgyTagsProvider;
+import leaf.cosmere.metallurgy.loottables.MetallurgyLootTableGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -21,6 +23,8 @@ public class MetallurgyDataGenerator {
 
         generator.addProvider(true, new MetallurgyEngLangGen(packOutput));
         generator.addProvider(true, new MetallurgyItemModelsGen(packOutput, existingFileHelper));
+        generator.addProvider(true, new MetallurgyBlockModelsGen(packOutput, existingFileHelper));
+        generator.addProvider(true, new MetallurgyLootTableGen(packOutput));
         generator.addProvider(true,
                 new MetallurgyTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
         generator.addProvider(true, new MetallurgyRecipeGen(packOutput, existingFileHelper));
