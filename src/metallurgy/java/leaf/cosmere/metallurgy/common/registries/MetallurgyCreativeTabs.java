@@ -69,7 +69,7 @@ public class MetallurgyCreativeTabs {
         output.accept(copperPowder);
 
         // Example 5: Metal Fragment - 25% of an ingot
-        ItemStack fragment = new ItemStack(MetallurgyItems.METAL_FRAGMENT.get());
+        ItemStack fragment = new ItemStack(MetallurgyItems.ALLOY_FRAGMENT.get());
         Map<String, Double> fragmentComp = new HashMap<>();
         fragmentComp.put("minecraft:gold_ingot", 1.0);
         AlloyComposition.setComposition(fragment, fragmentComp);
@@ -89,7 +89,7 @@ public class MetallurgyCreativeTabs {
         } else if (tabKey == CreativeModeTabs.INGREDIENTS) {
             // Add metal processing items to vanilla ingredients tab
             CreativeTabDeferredRegister.addToDisplay(event, MetallurgyItems.ALLOY_POWDER);
-            CreativeTabDeferredRegister.addToDisplay(event, MetallurgyItems.METAL_FRAGMENT);
+            CreativeTabDeferredRegister.addToDisplay(event, MetallurgyItems.ALLOY_FRAGMENT);
             CreativeTabDeferredRegister.addToDisplay(event, MetallurgyItems.ALLOY_INGOT);
         }
     }
