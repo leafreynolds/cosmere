@@ -6,6 +6,7 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.metallurgy.common.registries.MetallurgyBlockEntities;
 import leaf.cosmere.metallurgy.common.registries.MetallurgyBlocks;
+import leaf.cosmere.metallurgy.common.registries.MetallurgyCreativeTabs;
 import leaf.cosmere.metallurgy.common.registries.MetallurgyItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,6 +31,7 @@ public class Metallurgy implements IModModule {
         MetallurgyItems.ITEMS.register(modBus);
         MetallurgyBlocks.BLOCKS.register(modBus);
         MetallurgyBlockEntities.BLOCK_ENTITIES.register(modBus);
+        MetallurgyCreativeTabs.CREATIVE_TABS.register(modBus);
 
         // Set our version number to match the mods.toml file, which matches the one in
         // our build.gradle
