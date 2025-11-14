@@ -1,0 +1,52 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "lavispolyp",
+		"particle": "lavispolyp"
+	},
+	"elements": [
+		{
+			"name": "bud",
+			"from": [5, 0, 5],
+			"to": [11, 6, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 0, 8]},
+			"faces": {
+				"north": {"uv": [8, 0, 11, 3], "texture": "#0"},
+				"east": {"uv": [8, 3, 11, 6], "texture": "#0"},
+				"south": {"uv": [8, 6, 11, 9], "texture": "#0"},
+				"west": {"uv": [8, 9, 11, 12], "texture": "#0"},
+				"up": {"uv": [14, 3, 11, 0], "texture": "#0"},
+				"down": {"uv": [14, 3, 11, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "root",
+			"from": [0, 0, 0],
+			"to": [16, 0, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 0, 3]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 0], "texture": "#0"},
+				"east": {"uv": [0, 0, 8, 0], "texture": "#0"},
+				"south": {"uv": [0, 0, 8, 0], "texture": "#0"},
+				"west": {"uv": [0, 0, 8, 0], "texture": "#0"},
+				"up": {"uv": [8, 8, 0, 0], "texture": "#0"},
+				"down": {"uv": [8, 16, 8, 16], "texture": "#0"}
+			}
+		},
+		{
+			"name": "flower",
+			"from": [6, 6.25, 6],
+			"to": [10, 6.25, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 4.25, 7]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 0], "texture": "#0"},
+				"east": {"uv": [0, 0, 2, 0], "texture": "#0"},
+				"south": {"uv": [0, 0, 2, 0], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 0], "texture": "#0"},
+				"up": {"uv": [0, 8, 2, 10], "texture": "#0"},
+				"down": {"uv": [0, 0, 2, 2], "texture": "#0"}
+			}
+		}
+	]
+}
