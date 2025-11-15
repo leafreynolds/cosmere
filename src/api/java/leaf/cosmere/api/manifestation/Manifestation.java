@@ -8,6 +8,7 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.providers.IManifestationProvider;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -130,6 +131,15 @@ public class Manifestation implements IManifestationProvider
 		return this;
 	}
 
+	public boolean hasMenu()
+	{
+		return false;
+	}
+
+	public void openMenu(Minecraft minecraft)
+	{
+
+	}
 
 	public Attribute getAttribute()
 	{

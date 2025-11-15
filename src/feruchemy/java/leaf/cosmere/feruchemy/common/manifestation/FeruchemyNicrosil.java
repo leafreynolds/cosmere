@@ -15,7 +15,10 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import leaf.cosmere.feruchemy.client.FeruchemyClientSetup;
+import leaf.cosmere.feruchemy.client.gui.NicrosilMenu;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyManifestations;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -28,6 +31,19 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 	public FeruchemyNicrosil(Metals.MetalType metalType)
 	{
 		super(metalType);
+	}
+
+	@Override
+	public boolean hasMenu()
+	{
+		return true;
+	}
+
+	@Override
+	public void openMenu(Minecraft minecraft)
+	{
+		NicrosilMenu.instance.CloseScreen();
+		minecraft.setScreen(NicrosilMenu.instance);
 	}
 
 	@Override

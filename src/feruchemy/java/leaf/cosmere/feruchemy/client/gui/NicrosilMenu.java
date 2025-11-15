@@ -2,7 +2,7 @@
  * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
 
-package leaf.cosmere.client.gui;
+package leaf.cosmere.feruchemy.client.gui;
 
 import com.google.common.base.Stopwatch;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -10,14 +10,18 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.api.*;
+import leaf.cosmere.api.MenuHelpers.MenuButton;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.math.Vector2;
 import leaf.cosmere.client.Keybindings;
-import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.client.gui.ButtonAction;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
-import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.common.charge.ItemChargeHelper;
+import leaf.cosmere.common.items.ChargeableMetalCurioItem;
+import leaf.cosmere.feruchemy.client.gui.guiitems.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,35 +30,46 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class SpiritwebMenu extends Screen
+public class NicrosilMenu extends Screen
 {
 	final double TEXT_DISTANCE = 30;
 
-	public static final SpiritwebMenu instance = new SpiritwebMenu();
+	public static final NicrosilMenu instance = new NicrosilMenu();
 	private SpiritwebCapability spiritweb = null;
 
+
+	private boolean closed = true;
 	private float visibility = 0.0f;
 	private Stopwatch lastChange = Stopwatch.createStarted();
 	public Manifestation selectedManifestation = null;
 	public SidedMenuButton doAction = null;
 	private Manifestations.ManifestationTypes selectedPowerType = Manifestations.ManifestationTypes.ALLOMANCY;
 
-	protected ArrayList<RadialMenuButton> radialMenuButtons = new ArrayList<>();
+	private TransferredPower heldButton = null;
+
+	protected SpiritwebMenuContainer spiritwebContainer = null;
+
+	ArrayList<ItemStack> metalminds = new ArrayList<ItemStack>();
+	protected ArrayList<MetalmindMenuContainer> metalmindContainers = new ArrayList<MetalmindMenuContainer>();
+
+	protected ArrayList<NicroSpiritwebPowerButton> spiritwebPowerButtons = new ArrayList<>();
+
+	protected ArrayList<HemalurgyPowerButton> hemalurgyPowerButtons = new ArrayList<>();
 	protected ArrayList<SidedMenuButton> sidedMenuButtons = new ArrayList<>();
 	protected ArrayList<MetalQuadrant> metalQuadrants = new ArrayList<>();
 
+
 	private final List<String> m_infoText = new ArrayList<>();
 
-	protected SpiritwebMenu()
+	protected NicrosilMenu()
 	{
 		super(Component.literal("Menu"));
 		this.minecraft = getMinecraft();
@@ -86,27 +101,29 @@ public class SpiritwebMenu extends Screen
 	}
 
 
-	public void postRender(SpiritwebCapability spiritweb)
+	public void postRender()
 	{
-		if (this.minecraft.screen != SpiritwebMenu.instance && this.minecraft.screen != null) {
-			return;
-		}
-		if (Keybindings.MANIFESTATION_MENU.consumeClick())
+		if (this.minecraft.screen == NicrosilMenu.instance)
 		{
-			final Window window = this.minecraft.getWindow();
-			init(this.minecraft, window.getGuiScaledWidth(), window.getGuiScaledHeight());
-			setScaledResolution(window.getGuiScaledWidth(), window.getGuiScaledHeight());
-			this.spiritweb = spiritweb;
-			this.minecraft.setScreen(SpiritwebMenu.instance);
-			visibility = 0;
-			lastChange = Stopwatch.createStarted();
+			if (this.closed)
+			{
+				final Window window = this.minecraft.getWindow();
+				init(this.minecraft, window.getGuiScaledWidth(), window.getGuiScaledHeight());
+				setScaledResolution(window.getGuiScaledWidth(), window.getGuiScaledHeight());
 
-			selectedManifestation = spiritweb.getSelectedManifestation();
+				this.spiritweb = SpiritwebMenu.instance.getSpiritweb();
 
-			SetupButtons();
-		}
-		if (this.minecraft.screen == SpiritwebMenu.instance)
-		{
+				//no need to set if it's already open
+				//this.minecraft.setScreen(NicrosilMenu.instance);
+				visibility = 0;
+				lastChange = Stopwatch.createStarted();
+
+				selectedManifestation = this.spiritweb.getSelectedManifestation();
+
+				SetupButtons();
+				this.closed = false;
+			}
+
 			raiseVisibility();
 		}
 	}
@@ -116,14 +133,6 @@ public class SpiritwebMenu extends Screen
 	{
 		if (Keybindings.MANIFESTATION_MENU.matches(pKeyCode, pScanCode))
 		{
-			for (RadialMenuButton radialMenuButton : radialMenuButtons)
-			{
-				if (radialMenuButton.highlighted)
-				{
-					Cosmere.packetHandler().sendToServer(new SetSelectedManifestationMessage(radialMenuButton.manifestation));
-					break;
-				}
-			}
 
 			CloseScreen();
 		}
@@ -133,54 +142,114 @@ public class SpiritwebMenu extends Screen
 	@Override
 	public boolean mouseClicked(final double mouseX, final double mouseY, final int button)
 	{
-		for (RadialMenuButton radialMenuButton : radialMenuButtons)
+		if (heldButton != null)
 		{
-			if (radialMenuButton.highlighted)
+			heldButton = null;
+		}
+
+		for (MenuButton spcontbutton : spiritwebContainer.menuButtons)
+		{
+			if (spcontbutton.highlight)
 			{
-				//final ResourceLocation selectedPower = radialMenuButton.manifestation.getRegistryName();
-				//if  (selectedPower.getNamespace().equals("feruchemy") && selectedPower.getPath().equals("nicrosil"))
-				if (radialMenuButton.manifestation.hasMenu())
+				//todo implement heldbutton
+			}
+		}
+
+		for (NicroSpiritwebPowerButton spiritwebPowerButton : spiritwebPowerButtons)
+		{
+			if (spiritwebPowerButton.highlighted)
+			{
+				/*
+				if (button == 0)
 				{
-					radialMenuButton.manifestation.openMenu(this.minecraft);
+					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, 1));
 				}
 				else
 				{
-					if (button == 0)
-					{
-						Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, 1));
-					}
-					else
-					{
-						Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, -1));
-					}
-					return true;
+					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, -1));
 				}
+				return true;
+				 */
+
+				heldButton = new TransferredPower(spiritwebPowerButton, spiritwebPowerButton.strength);
+
 			}
 		}
 		for (SidedMenuButton sidedMenuButton : sidedMenuButtons)
 		{
+
+
 			if (sidedMenuButton.highlighted)
 			{
-				if (sidedMenuButton.powerType != -1)
+				if (heldButton == null)
 				{
-					selectedPowerType = Manifestations.ManifestationTypes.valueOf(doAction.powerType).get();
-					SetupButtons();
+					if (sidedMenuButton.powerType != -1)
+					{
+						selectedPowerType = Manifestations.ManifestationTypes.valueOf(doAction.powerType).get();
+						SetupButtons();
+					}
+					else if (sidedMenuButton.action != null)
+					{
+						//do other action
+					}
 				}
-				else if (sidedMenuButton.action != null)
+				else
 				{
-					//do other action
+					heldButton = null;
 				}
 
 				return true;
 			}
+
+
 		}
 		return true;
 	}
 
-	private void CloseScreen()
+	@Override
+	public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta)
 	{
+
+		//1 = drop down
+
+
+		//-1 = pick up
+
+
+		System.out.println(pDelta);
+		return true;
+	}
+
+	public void CloseScreen()
+	{
+		this.closed = true;
 		this.minecraft.setScreen(null);
 	}
+
+
+	public static List<ItemStack> getHemalurgyItems(Player player)
+	{
+		if (player == null)
+		{
+			return Collections.emptyList();
+		}
+
+
+		List<ItemStack> curioChargeables = ItemChargeHelper.getChargeCurios(player);
+
+		List<ItemStack> toReturn = new ArrayList<>(curioChargeables.size());
+
+		for (ItemStack stack : curioChargeables)
+		{
+			if (!stack.isEmpty() && StackNBTHelper.verifyExistance(stack, "hemalurgy"))
+			{
+				toReturn.add(stack);
+			}
+		}
+
+		return toReturn;
+	}
+
 
 	private static class SidedMenuButton
 	{
@@ -232,17 +301,75 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	static class RadialMenuButton
+	static class PowerButton
 	{
-
-		public final Manifestation manifestation;
 		public double centerX;
 		public double centerY;
 		public boolean highlighted;
+		public double strength;
+		//Way to define spiritweb powers from hemalurgy powers
 
-		public RadialMenuButton(final Manifestation manifestation)
+	}
+
+	static class NicroSpiritwebPowerButton extends PowerButton
+	{
+
+		public final Manifestation manifestation;
+
+		public NicroSpiritwebPowerButton(final Manifestation manifestation)
 		{
 			this.manifestation = manifestation;
+			this.strength = manifestation.getStrength(instance.spiritweb, true);
+
+		}
+
+	}
+
+
+	//Class representing the held power
+	class TransferredPower
+	{
+		public PowerButton powerButton;
+		public double strength;
+
+		public TransferredPower(NicroSpiritwebPowerButton powerButton, double initialAmount)
+		{
+			this.powerButton = powerButton;
+			this.strength = initialAmount;
+		}
+
+		public void increaseAmount()
+		{
+			double strengthRemaining = powerButton.strength - strength;
+
+			if (strengthRemaining - 1 >= 0)
+			{
+				this.strength += 1;
+			}
+			else
+			{
+				this.strength += strengthRemaining;
+			}
+		}
+
+		//returns if it should let go of the button
+		public boolean decreaseAmount()
+		{
+			if (strength - 1 > 0)
+			{
+				this.strength -= 1;
+				return false;
+			}
+			else
+			{
+				strength = 0;
+				return true;
+			}
+		}
+
+		public boolean allTaken()
+		{
+			return powerButton.strength - strength <= 0;
 		}
 
 	}
@@ -266,101 +393,111 @@ public class SpiritwebMenu extends Screen
 
 	protected void SetupButtons()
 	{
-		radialMenuButtons.clear();
+		spiritwebPowerButtons.clear();
 		sidedMenuButtons.clear();
-		metalQuadrants.clear();
+		//metalQuadrants.clear();
 
-		if (selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY || selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY)
+		if (spiritwebContainer == null)
 		{
-			// adding manually one-by-one was better than a for loop, as there would have to be a switch case anyway
-
-			// add physical metals
-			double quadCenterX = width/2F - MetalQuadrant.width*3;		// these multiplications are kinda random, but if it works, it works
-			double quadCenterY = height/2F - MetalQuadrant.height*0.75;
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.IRON,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.STEEL,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.TIN,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.PEWTER,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			// add mental metals
-			quadCenterX = width/2 + MetalQuadrant.width*3;
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ZINC,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BRASS,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.COPPER,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BRONZE,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			// add enhancement metals
-			quadCenterX = width/2F - MetalQuadrant.width*3;
-			quadCenterY = height/2F + MetalQuadrant.height*1.75;
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ALUMINUM,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.DURALUMIN,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.CHROMIUM,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.NICROSIL,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			// add temporal metals
-			quadCenterX = width/2 + MetalQuadrant.width*3;
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.GOLD,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ELECTRUM,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.CADMIUM,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BENDALLOY,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
-
-			// add atium
-			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ATIUM,
-					width/2D,
-					quadCenterY + MetalQuadrant.height/2));
+			spiritwebContainer = new SpiritwebMenuContainer(width / 2f, 100, 1, 1);
 		}
+
+		spiritwebContainer.clearButtons();
+
+		metalmindContainers.clear();
+
+
+		//todo add buttons to container
+
+
+		List<ItemStack> hemalurgySpikes = null;
+
+		if (spiritweb.getLiving() instanceof Player player)
+		{
+			hemalurgySpikes = getHemalurgyItems(player);
+
+			for (ItemStack hema : hemalurgySpikes)
+			{
+
+				StringBuilder asd = new StringBuilder();
+
+				String itemname = hema.getItem().getName(hema).getString().toLowerCase().replace(" ", "_");
+
+				System.out.println(itemname);
+				System.out.println(StackNBTHelper.get(hema, "hemalurgy").toString());
+
+
+				//{
+				// "allomancy:aluminum":5.0d,
+				// "allomancy:atium":5.0d,
+				// "allomancy:bendalloy":5.0d,
+				// "allomancy:brass":5.0d,
+				// "allomancy:bronze":5.0d,
+				// "allomancy:cadmium":5.0d,
+				// "allomancy:chromium":5.0d,
+				// "allomancy:copper":5.0d,
+				// "allomancy:duralumin":5.0d,
+				// "allomancy:electrum":5.0d,
+				// "allomancy:gold":5.0d,
+				// "allomancy:iron":5.0d,
+				// "allomancy:nicrosil":5.0d,
+				// "allomancy:pewter":5.0d,
+				// "allomancy:steel":5.0d,
+				// "allomancy:tin":5.0d,
+				// "allomancy:zinc":5.0d,
+				// "aondor:aondor":5.0d,"aviar:aviar":5.0d,"awakening:awakening":5.0d,"cosmere:none":5.0d,"cosmeretools:tools":5.0d,"example:example":5.0d,"feruchemy:aluminum":5.0d,"feruchemy:atium":5.0d,"feruchemy:bendalloy":5.0d,"feruchemy:brass":5.0d,"feruchemy:bronze":5.0d,"feruchemy:cadmium":5.0d,"feruchemy:chromium":5.0d,"feruchemy:copper":5.0d,"feruchemy:duralumin":5.0d,"feruchemy:electrum":5.0d,"feruchemy:gold":5.0d,"feruchemy:iron":5.0d,"feruchemy:nicrosil":5.0d,"feruchemy:pewter":5.0d,"feruchemy:steel":5.0d,"feruchemy:tin":5.0d,"feruchemy:zinc":5.0d,"sandmastery:cushion":5.0d,"sandmastery:elevate":5.0d,"sandmastery:launch":5.0d,"sandmastery:platform":5.0d,"sandmastery:projectile":5.0d,"soulforgery:soulforgery":5.0d}
+
+				//For icon-making
+
+				//translation{key='item.hemalurgy.aluminum_spike', args=[]}_spike
+
+				//Pewter Spike_spike
+				//translation{key='item.hemalurgy.pewter_spike', args=[]}_spike
+				//class net.minecraft.network.chat.MutableComponent_spike
+			}
+
+			metalminds.clear();
+			metalminds.addAll(ItemChargeHelper.getChargeItems(player));
+			metalminds.addAll(ItemChargeHelper.getChargeCurios(player));
+
+			for (ItemStack stack : metalminds)
+			{
+				if (stack.getItem() instanceof ChargeableMetalCurioItem chargeable)
+				{
+					if (chargeable.getMetalType() == Metals.MetalType.NICROSIL)
+					{
+						metalmindContainers.add(new MetalmindMenuContainer(200, 200, 2, 4, stack));
+					}
+				}
+			}
+
+		}
+
 
 		final List<Manifestation> availableManifestations = spiritweb.getAvailableManifestations();
 
 		if (availableManifestations.size() <= 16)
 		{
+			if (hemalurgySpikes != null)
+			{
+				for (ItemStack stack : hemalurgySpikes)
+				{
+					if (stack.getItem() instanceof ChargeableMetalCurioItem metalCurioItem)
+					{
+
+					}
+				}
+
+			}
+
 			for (Manifestation manifestation : availableManifestations)
 			{
-				radialMenuButtons.add(new RadialMenuButton(manifestation));
+
+				if (manifestation.getStrength(spiritweb, true) > 0)
+				{
+					spiritwebPowerButtons.add(new NicroSpiritwebPowerButton(manifestation));
+					spiritwebContainer.addButton(new SpiritwebPowerButton(100, 100, manifestation, spiritweb));
+				}
 			}
 		}
 		else
@@ -369,11 +506,16 @@ public class SpiritwebMenu extends Screen
 
 			for (Manifestation manifestation : availableManifestations)
 			{
+
 				if (manifestation.getManifestationType() == selectedPowerType)
 				{
-					radialMenuButtons.add(new RadialMenuButton(manifestation));
-				}
+					if (manifestation.getStrength(spiritweb, true) > 0)
+					{
+						spiritwebPowerButtons.add(new NicroSpiritwebPowerButton(manifestation));
+						spiritwebContainer.addButton(new SpiritwebPowerButton(100, 100, manifestation, spiritweb));
+					}
 				foundPowerTypes.add(manifestation.getManifestationType());
+				}
 			}
 
 			for (Manifestations.ManifestationTypes foundPowerType : foundPowerTypes)
@@ -391,6 +533,8 @@ public class SpiritwebMenu extends Screen
 
 			}
 		}
+
+
 	}
 
 	@Override
@@ -427,11 +571,21 @@ public class SpiritwebMenu extends Screen
 		doAction = null;
 
 		//render the button backgrounds
-		renderRadialButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
+
+		//spiritwebContainer.setPosition(middle_x, 100);
+
+		spiritwebContainer.highlightButtons(mouseX, mouseY);
+		//spiritwebContainer.setPosition(middle_x, 100);
+		spiritwebContainer.renderContainer(buffer);
+
+		//newButton.renderButton(buffer);
+
+		renderSpiritwebButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
 		renderSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
 
+
 		//render the metal quadrant backgrounds
-		renderMetalQuadrants(buffer);
+		//renderMetalQuadrants(buffer);
 
 		//draw out what we've asked for
 		tessellator.end();
@@ -444,9 +598,9 @@ public class SpiritwebMenu extends Screen
 		//draw sided button strings
 		renderSidedButtonStrings(guiGraphics, middle_x, middle_y);
 		//draw quadrant strings
-		renderMetalQuadrantsStrings(guiGraphics);
+		//renderMetalQuadrantsStrings(guiGraphics);
 		//do extra text info stuff
-		renderAnyExtraInfoTexts(guiGraphics, (int) middle_x, (int) middle_y);
+		//renderAnyExtraInfoTexts(guiGraphics, (int) middle_x, (int) middle_y);
 
 		matrixStack.popPose();
 	}
@@ -471,6 +625,8 @@ public class SpiritwebMenu extends Screen
 
 		matrixStack.popPose();
 	}
+
+	//Extra Info
 
 	private void renderAnyExtraInfoTexts(GuiGraphics guiGraphics, int middle_x, int middle_y)
 	{
@@ -510,7 +666,8 @@ public class SpiritwebMenu extends Screen
 
 	}
 
-	private void renderMetalQuadrantsStrings(GuiGraphics guiGraphics)
+	//Quadrant Strings
+	/*private void renderMetalQuadrantsStrings(GuiGraphics guiGraphics)
 	{
 		PoseStack matrixStack = guiGraphics.pose();
 		m_infoText.clear();
@@ -579,7 +736,7 @@ public class SpiritwebMenu extends Screen
 				guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY - font.lineHeight*1.5F), 0xffffffff);
 			}
 		}
-	}
+	}*/
 
 	private void renderSidedButtonStrings(GuiGraphics guiGraphics, double middle_x, double middle_y)
 	{
@@ -612,7 +769,7 @@ public class SpiritwebMenu extends Screen
 
 	private void renderRadialButtonStrings(GuiGraphics guiGraphics, int middle_x, int middle_y)
 	{
-		for (final RadialMenuButton button : radialMenuButtons)
+		for (final NicroSpiritwebPowerButton button : spiritwebPowerButtons)
 		{
 			//but only if that button is highlighted
 			if (button.highlighted)
@@ -621,14 +778,14 @@ public class SpiritwebMenu extends Screen
 				final double y = button.centerY;
 
 				int fixed_x = (int) x;//(x + TEXT_DISTANCE);
-				final int fixed_y = (int) y;//(y + TEXT_DISTANCE);
+				final int fixed_y = (int) y + 20;//(y + TEXT_DISTANCE);
 
 				//todo localisation check
 				final String text = I18n.get(button.manifestation.getTranslationKey());
 
-				fixed_x = (int) (x < 0
-				                 ? fixed_x - (font.width(text) + TEXT_DISTANCE)
-				                 : fixed_x + TEXT_DISTANCE);
+				fixed_x = (int) (x > 0
+				                 ? fixed_x - (font.width(text) + 10)
+				                 : fixed_x + 10);
 
 				guiGraphics.drawString(font, text, middle_x + fixed_x, middle_y + fixed_y, 0xffffffff);
 
@@ -660,8 +817,10 @@ public class SpiritwebMenu extends Screen
 
 	private void renderRadialButtonIcons(GuiGraphics guiGraphics, double middleX, double middleY)
 	{
+
+
 		final StringBuilder stringBuilder = new StringBuilder();
-		for (final RadialMenuButton menuRegion : radialMenuButtons)
+		for (final NicroSpiritwebPowerButton menuRegion : spiritwebPowerButtons)
 		{
 			stringBuilder.setLength(0);
 			final double x = menuRegion.centerX;
@@ -722,7 +881,6 @@ public class SpiritwebMenu extends Screen
 		{
 			final float a = 0.5f;
 			float f;
-
 			if (button.x1 <= mouseVecX && button.x2 >= mouseVecX && button.y1 <= mouseVecY && button.y2 >= mouseVecY)
 			{
 				f = 1;
@@ -748,6 +906,8 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
+	//MetalQuadrants
+
 	private void renderMetalQuadrants(BufferBuilder buffer)
 	{
 		List<Manifestation> maniList = spiritweb.getAvailableManifestations();
@@ -757,7 +917,7 @@ public class SpiritwebMenu extends Screen
 		boolean hasSubmenu = allomancySubmenuOpen || feruchemySubmenuOpen;
 		boolean allomancySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
 		boolean feruchemySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
-		int r = 0, g = 0, b = 0, a = 127;		// 127 is halfway between 0 and 255, so 0.5 transparency
+		int r = 0, g = 0, b = 0, a = 127;        // 127 is halfway between 0 and 255, so 0.5 transparency
 
 		for (MetalQuadrant quadrant : metalQuadrants)
 		{
@@ -766,38 +926,40 @@ public class SpiritwebMenu extends Screen
 
 			// if player doesn't have the manifestation, skip it
 			if ((hasSubmenu && ((allomancySubmenuOpen && maniList.contains(alloMani)) || (feruchemySubmenuOpen && maniList.contains(feruMani))))
-				|| (!hasSubmenu && ((allomancySelected && maniList.contains(alloMani)) || (feruchemySelected && maniList.contains(feruMani)))))
+					|| (!hasSubmenu && ((allomancySelected && maniList.contains(alloMani)) || (feruchemySelected && maniList.contains(feruMani)))))
 			{
-				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX - MetalQuadrant.width / 2, quadrant.centerY - MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX - MetalQuadrant.width / 2, quadrant.centerY + MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX + MetalQuadrant.width / 2, quadrant.centerY + MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX + MetalQuadrant.width / 2, quadrant.centerY - MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
 			}
 		}
 	}
 
-	private void renderRadialButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
+	private void renderSpiritwebButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
 	{
-		if (!radialMenuButtons.isEmpty())
+		if (!spiritwebPowerButtons.isEmpty())
 		{
 			final float ring_inner_edge = -20;
 			final float ring_outer_edge = -60;
 
-			// todo test if I can get down to one button only
-			final int totalButtons = radialMenuButtons.size();
+			final int totalButtons = spiritwebPowerButtons.size();
+
 
 			Vector2 innerEdge;
 			Vector2 outerEdge;
 
-			int drawMode = radialMenuButtons.size();
+			int drawMode = spiritwebPowerButtons.size();
 
 			innerEdge = new Vector2(0, ring_inner_edge);
 			outerEdge = new Vector2(0, ring_outer_edge);
 
-			int i = radialMenuButtons.size() - 1;
+			//Goes through every Radial button
+			int buttonAmount = spiritwebPowerButtons.size() - 1;
+			int i = buttonAmount;
 			while (i >= 0)
 			{
-				RadialMenuButton region = radialMenuButtons.get(i);
+				NicroSpiritwebPowerButton region = spiritwebPowerButtons.get(i);
 				//left side inner point
 				double x1m1;
 				double y1m1;
@@ -809,69 +971,51 @@ public class SpiritwebMenu extends Screen
 				//right side inner point
 				double x1m2;
 				double y1m2;
+
 				//right side outer point
 				double x2m2;
 				double y2m2;
 
-				if (drawMode == 1)
+
+				if (heldButton != null && heldButton.powerButton == region)
 				{
-					//1
-					x1m1 = outerEdge.x;
-					y1m1 = outerEdge.y;
-					outerEdge.Rotate(90);
+					//Left side upper
+					x1m1 = mouseVecX - 10;
+					y1m1 = mouseVecY - 10;
 
-					//2
-					x2m1 = outerEdge.x;
-					y2m1 = outerEdge.y;
-					outerEdge.Rotate(90);
+					//Left side downer
+					x2m1 = mouseVecX - 10;
+					y2m1 = mouseVecY + 10;
 
-					//3
-					x1m2 = outerEdge.x;
-					y1m2 = outerEdge.y;
-					outerEdge.Rotate(90);
+					//Right side upper
+					x1m2 = mouseVecX + 10;
+					y1m2 = mouseVecY - 10;
 
-				}
-				else if (drawMode == 2)
-				{
-					//1
-					x1m1 = outerEdge.x;
-					y1m1 = outerEdge.y;
-					outerEdge.Rotate(60);
-
-					//2
-					x2m1 = outerEdge.x;
-					y2m1 = outerEdge.y;
-					outerEdge.Rotate(60);
-
-					//3
-					x1m2 = outerEdge.x;
-					y1m2 = outerEdge.y;
-					outerEdge.Rotate(60);
-
+					//Right side downer
+					x2m2 = mouseVecX + 10;
+					y2m2 = mouseVecY + 10;
 				}
 				else
 				{
+					final int positionAdjustX = 0;
+					final int positionAdjustY = -50;
+					//Left side upper
+					x1m1 = (25 * (i - (double) buttonAmount / 2)) - 10 + positionAdjustX;
+					y1m1 = -10 + positionAdjustY;
 
-					//left side inner point
-					x1m1 = innerEdge.x;
-					y1m1 = innerEdge.y;
+					//Left side downer
+					x2m1 = (25 * (i - (double) buttonAmount / 2)) - 10 + positionAdjustX;
+					y2m1 = 10 + positionAdjustY;
 
-					//left side outer point
-					x2m1 = outerEdge.x;
-					y2m1 = outerEdge.y;
+					//Right side Upper
+					x1m2 = (25 * (i - (double) buttonAmount / 2)) + 10 + positionAdjustX;
+					y1m2 = -10 + positionAdjustY;
 
-					//rotate vectors around the point
-					innerEdge.Rotate(-(360f / totalButtons));
-					outerEdge.Rotate(-(360f / totalButtons));
-
-					//right side inner point
-					x1m2 = innerEdge.x;
-					y1m2 = innerEdge.y;
-
+					//Right side Downer
+					x2m2 = (25 * (i - (double) buttonAmount / 2)) + 10 + positionAdjustX;
+					y2m2 = 10 + positionAdjustY;
 				}
-				//4 or right side outer point
-				x2m2 = outerEdge.x;
-				y2m2 = outerEdge.y;
+
 
 				//the center of a regular polygon can be found by adding up
 				// all corner positions and divide by the total count
@@ -879,25 +1023,11 @@ public class SpiritwebMenu extends Screen
 				region.centerY = (y1m1 + y2m1 + y1m2 + y2m2) / 4;
 
 
-				final float a = 0.5f;
-				float f = 0f;
+				float opacity = 0.5f;
+				float brightness = 0f;
 
 				final boolean showHighlight;
-				if (drawMode <= 2)
-				{
-					showHighlight =
-							MathHelper.inTriangle(
-									x1m1, y1m1,
-									x2m1, y2m1,
-									x1m2, y1m2,
-									mouseVecX, mouseVecY)
-									|| MathHelper.inTriangle(
-									x1m2, y1m2,
-									x2m2, y2m2,
-									x1m1, y1m1,
-									mouseVecX, mouseVecY);
-				}
-				else
+
 				{
 					showHighlight =
 							MathHelper.inTriangle(
@@ -916,7 +1046,7 @@ public class SpiritwebMenu extends Screen
 				//if (begin_rad <= mouseAngle && mouseAngle <= end_rad && showHighlight)
 				if (showHighlight)
 				{
-					f = 0.1f;
+					brightness = 0.1f;
 					region.highlighted = true;
 					selectedManifestation = region.manifestation;
 				}
@@ -926,8 +1056,6 @@ public class SpiritwebMenu extends Screen
 				}
 
 				float lerpPositive = 0;
-				float lerpNegative = 0;
-				float green = 0;
 
 				if (region.manifestation != null)
 				{
@@ -935,48 +1063,29 @@ public class SpiritwebMenu extends Screen
 					int modeMin = region.manifestation.modeMin(spiritweb);
 					int modeMax = region.manifestation.modeMax(spiritweb);
 
-					if (region.manifestation.hasMenu())
-					{
-						lerpPositive = 0;
-						green = 0.5f;
-						lerpNegative = 0;
-					}
-					else if (mode > 0)
-					{
-						lerpPositive = MathHelper.InverseLerp(0, modeMax, mode) - 0.1f;
-					}
-					else if (mode < 0)
-					{
-						lerpNegative = MathHelper.InverseLerp(0, Math.abs(modeMin), Math.abs(mode)) - 0.1f;
-					}
+					lerpPositive = MathHelper.InverseLerp(0, 16, (float) region.strength - 0.1f);
+
 				}
 
-				float r = lerpPositive + f;
-				float g = f + green;
-				float b = lerpNegative + f;
+				float r = brightness;
+				float g = brightness;
+				float b = (lerpPositive / 2 + 0.3f) + brightness;
 
-				if (drawMode <= 2)
-				{
-					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, a).endVertex();
-					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, a).endVertex();
-				}
-				else
+				opacity = lerpPositive / 4 + 0.3f;
+
+
 				{
 					//set the square pos
-					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, a).endVertex();
-					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, a).endVertex();
-				}
+					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, opacity).endVertex();
+					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, opacity).endVertex();
 
-				buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(r, g, b, a).endVertex();
+					buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(r, g, b, opacity).endVertex();
+					buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(r, g, b, opacity).endVertex();
+				}
 
 				i--;
 			}
 		}
-	}
-	public SpiritwebCapability getSpiritweb()
-	{
-		return spiritweb;
 	}
 
 

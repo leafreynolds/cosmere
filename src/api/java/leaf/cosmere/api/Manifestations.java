@@ -40,7 +40,7 @@ public class Manifestations
 		// AonDor
 		AON_DOR(AONDOR_ID),
 
-		// AonDor
+		// Awakening
 		AWAKENING(AWAKENING_ID),
 
 		// Taldain's Sand Mastery
