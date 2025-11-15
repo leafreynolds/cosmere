@@ -1,5 +1,5 @@
 {
-  "__comment": "This table is injected as its own pool into minecraft:chests/end_city_treasure",
+  "__comment": "This table is injected as its own pool into minecraft:chests/woodland_mansion",
   "pools": [
     {
       "name": "main",
@@ -7,7 +7,8 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "hemalurgy:atium_spike",
+          "__comment": "with randomise metal type function, only tin doesn't matter here.",
+          "name": "hemalurgy:tin_spike",
           "functions": [
             {
               "function": "cosmere:randomise_metaltype"
@@ -47,7 +48,7 @@
         },
         {
           "type": "minecraft:empty",
-          "weight": 16
+          "weight": 18
         }
       ]
     }

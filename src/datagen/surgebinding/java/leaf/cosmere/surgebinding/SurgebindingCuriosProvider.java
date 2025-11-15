@@ -35,7 +35,7 @@ public class SurgebindingCuriosProvider extends CuriosDataProvider
 
 		this.createEntities("shardbearers")
 				.addPlayer()
-				.addEntities(EntityType.ARMOR_STAND)
+				.addEntities(EntityType.ARMOR_STAND, EntityType.VINDICATOR, EntityType.PILLAGER, EntityType.VILLAGER)
 				.addSlots("shardplate");
 	}
 }

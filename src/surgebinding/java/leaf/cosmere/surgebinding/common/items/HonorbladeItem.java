@@ -120,4 +120,13 @@ public class HonorbladeItem extends ShardbladeItem
 		}
 
 	}
+
+	@Override
+	public ItemStack randomizedLootData(ItemStack stack)
+	{
+		ShardData data = getShardData(stack);
+		data.setLiving(false);
+		data.setOrder(radiantOrder);
+		return stack;
+	}
 }

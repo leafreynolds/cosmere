@@ -36,6 +36,18 @@
           ]
         },
         {
+
+          "type": "minecraft:item",
+          "_comment": "Shardblade is randomized.",
+          "weight": 30,
+          "name": "surgebinding:shardblade",
+          "functions": [
+            {
+              "function": "surgebinding:setup_shard"
+            }
+          ]
+        },
+        {
           "type": "minecraft:empty",
           "weight": 33
         }
