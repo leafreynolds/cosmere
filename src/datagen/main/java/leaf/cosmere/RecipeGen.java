@@ -113,13 +113,13 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 				.save(consumer, new ResourceLocation(Cosmere.MODID,
 						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_RECIPE.getInternalRegistryName()).toString());
 
-		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_COMPRESS.get())
+		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_NUGGETS_COMPRESS.get())
 				.save(consumer, new ResourceLocation(Cosmere.MODID,
-						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_COMPRESS.getInternalRegistryName()).toString());
+						CosmereRecipesRegistry.GOD_METAL_NUGGETS_COMPRESS.getInternalRegistryName()).toString());
 
-		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_DECOMPRESS.get())
+		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_NUGGETS_DECOMPRESS.get())
 				.save(consumer, new ResourceLocation(Cosmere.MODID,
-						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_DECOMPRESS.getInternalRegistryName()).toString());
+						CosmereRecipesRegistry.GOD_METAL_NUGGETS_DECOMPRESS.getInternalRegistryName()).toString());
 
 	}
 
