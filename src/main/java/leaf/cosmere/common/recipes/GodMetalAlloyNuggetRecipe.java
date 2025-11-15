@@ -131,7 +131,7 @@ public class GodMetalAlloyNuggetRecipe extends CustomRecipe
 	@Override
 	public @Nonnull ResourceLocation getId()
 	{
-		return new ResourceLocation(Cosmere.MODID, "god_metal_alloy_nugget_recipe");
+		return new ResourceLocation(Cosmere.MODID, "crafting_god_metal_alloy_nugget_recipe");
 	}
 
 	@Override
