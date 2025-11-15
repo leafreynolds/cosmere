@@ -9,9 +9,7 @@ package leaf.cosmere.surgebinding;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardbladeItem;
-import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -62,6 +60,22 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 							.parent(new ModelFile.UncheckedModelFile("cosmere:item/test_blade"));
 				}*/
 
+				continue;
+			}
+			else if (item instanceof GemstoneItem gemstoneItem)
+			{
+				switch (gemstoneItem.getSize())
+				{
+					case BROAM:
+						simpleItem(path, "gemstone_broam");
+						break;
+					case MARK:
+						simpleItem(path, "gemstone_mark");
+						break;
+					case CHIP:
+						simpleItem(path, "gemstone_chip");
+						break;
+				}
 				continue;
 			}
 			else if(item instanceof ShardplateCurioItem)

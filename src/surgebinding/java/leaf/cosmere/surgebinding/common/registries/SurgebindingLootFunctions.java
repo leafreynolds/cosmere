@@ -10,6 +10,6 @@ public class SurgebindingLootFunctions
 {
 	public static final LootFunctionDeferredRegister LOOT_FUNCTIONS = new LootFunctionDeferredRegister(Surgebinding.MODID);
 
-	public static final LootItemFunctionTypeRegistryObject<LootItemFunctionType> SETUP_DATA = LOOT_FUNCTIONS.registerType("setup_shard", SetupShardDataLootFunction.Serializer::new);
+	public static final LootItemFunctionTypeRegistryObject<LootItemFunctionType> SETUP_DATA = LOOT_FUNCTIONS.registerType("setup_data", SetupShardDataLootFunction.Serializer::new);
 
 }

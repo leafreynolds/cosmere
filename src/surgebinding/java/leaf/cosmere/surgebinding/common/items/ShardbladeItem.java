@@ -158,15 +158,14 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
 		}
 
+		if(data.getOrder() != null)
+		{
+			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
+		}
 		if(!data.isLiving())
 		{
 			pTooltipComponents.add(TextHelper.createText("Deadblade"));
 		}
-		else if(data.getOrder() != null)
-		{
-			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
-		}
-
 
 
 

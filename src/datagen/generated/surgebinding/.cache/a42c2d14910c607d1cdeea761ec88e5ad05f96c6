@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-11T12:43:03.884382	Item Models: surgebinding
+// 1.20.1	2025-11-08T14:01:31.3831899	Item Models: surgebinding
 e797f0f6000c58a24305d96eede7cc5c7bf50529 assets/surgebinding/models/item/amethyst_broam.json
 f12008b9216dc96bae966f9bdc9c458623021477 assets/surgebinding/models/item/amethyst_chip.json
 f11fb5b2de87bddd0918dffcc40c267bcc6b4da7 assets/surgebinding/models/item/amethyst_mark.json
@@ -22,7 +22,10 @@ a91ca4972b8d3422763281c9cb8be570a54a5339 assets/surgebinding/models/item/ruby_ma
 a1a8e3e7d726a4e405b48cfce1af70ba1a51bb65 assets/surgebinding/models/item/sapphire_broam.json
 6765516aa733ab2612ca7218ac3d1d7a36f7dbeb assets/surgebinding/models/item/sapphire_chip.json
 e1a1241601f1e134a276a6beac7c6491344a004d assets/surgebinding/models/item/sapphire_mark.json
-8b5900e5e58805cdeb319817cdd965b796e36c2d assets/surgebinding/models/item/shardplate.json
+7817652b27f6e14fee558b9f7ed79a803bcc9651 assets/surgebinding/models/item/shardplate_boots.json
+fbee7654e8cdfae717bccf39f76848666cc51bb5 assets/surgebinding/models/item/shardplate_chest.json
+095355a2bd3bcf962839dd947514af66d6dd9639 assets/surgebinding/models/item/shardplate_helmet.json
+0fc29fc960fce820dfb1b37d580efb2bdbd7d052 assets/surgebinding/models/item/shardplate_leggings.json
 aeef1a413783b0d7474003797b1593f3b85471b5 assets/surgebinding/models/item/smokestone_broam.json
 fd59ca79570b088f9255de834dd00faa2cf49a58 assets/surgebinding/models/item/smokestone_chip.json
 273b3611916007e08e308048afb1d444167a0acd assets/surgebinding/models/item/smokestone_mark.json

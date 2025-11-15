@@ -5,15 +5,12 @@ import com.google.gson.JsonObject;
 import leaf.cosmere.surgebinding.common.items.HonorbladeItem;
 import leaf.cosmere.surgebinding.common.items.IShardItem;
 import leaf.cosmere.surgebinding.common.items.NightbloodItem;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingLootFunctions;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-
-import java.util.Random;
 
 public class SetupShardDataLootFunction extends LootItemConditionalFunction
 {
@@ -25,37 +22,19 @@ public class SetupShardDataLootFunction extends LootItemConditionalFunction
 	@Override
 	protected ItemStack run(ItemStack pStack, LootContext pContext)
 	{
-		if(pStack.getItem() instanceof IShardItem shard)
+		if(pStack.getItem() instanceof HonorbladeItem shard)
 		{
-			Random rand = new Random();
-			int chance = rand.nextInt(0, 40);
-
-			if(chance <= 3)
-			{
-				pStack = new ItemStack(SurgebindingItems.SHARDBLADE);
-				shard = (IShardItem) pStack.getItem();
-				shard.randomizedLootData(pStack);
-				return pStack;
-			}
-			else if(chance <= 5)
-			{
-				pStack = new ItemStack(SurgebindingItems.SHARDPLATE);
-				shard = (IShardItem) pStack.getItem();
-				shard.randomizedLootData(pStack);
-				return pStack;
-			}
-			else if(chance == 39)
-			{
-				pStack = new ItemStack(SurgebindingItems.NIGHTBLOOD);
-				return pStack;
-			}
-			else
-			{
-				pStack = ItemStack.EMPTY;
-				return pStack;
-			}
-
-
+			shard.buildData(pStack, shard.getOrder(pStack), false, null);
+			return pStack;
+		}
+		else if(pStack.getItem() instanceof NightbloodItem nightblood)
+		{
+			return pStack;
+		}
+		else if(pStack.getItem() instanceof IShardItem shard)
+		{
+			shard.randomizedLootData(pStack);
+			return pStack;
 		}
 		else
 		{

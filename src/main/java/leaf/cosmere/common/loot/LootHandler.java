@@ -30,7 +30,6 @@ public final class LootHandler
 			switch (file)
 			{
 				case "abandoned_mineshaft":
-				case "ancient_city":
 				case "bastion_treasure":
 				case "bastion_other":
 				case "bastion_bridge":
