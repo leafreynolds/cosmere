@@ -102,18 +102,18 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
                 int spiritwebIntegrity = -1;
                 if (slotContext.identifier().equals("linchpin"))
                 {
-                    // linchpin always gives at least +3
-                    spiritwebIntegrity += 3;
+                    // linchpin always gives a bonus (+3 default)
+                    spiritwebIntegrity += HemalurgyConfigs.SERVER.LINCHPIN_SPIKE_SPIRITWEB_BONUS.get();
                     Manifestation aPewter = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", Metals.MetalType.PEWTER.getName()));
                     if (aPewter != null && attributeModifiers.containsKey(aPewter.getAttribute()))
                     {
-                        // pewter gives an additional +3
+                        // pewter gives an additional bonus (+3 default)
                         spiritwebIntegrity += HemalurgyConfigs.SERVER.ALLOMANTIC_PEWTER_SPIRITWEB_BONUS.get();
                     }
                     Manifestation fGold = CosmereAPI.manifestationRegistry().getValue((new ResourceLocation("feruchemy", Metals.MetalType.GOLD.getName())));
                     if (fGold != null && attributeModifiers.containsKey(fGold.getAttribute()))
                     {
-                        // f-gold gives an extra +6
+                        // f-gold gives an extra bonus (+6 default)
                         spiritwebIntegrity += HemalurgyConfigs.SERVER.FERUCHEMICAL_GOLD_SPIRITWEB_BONUS.get();
                     }
                 }
