@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:nuggets/lerasium"
+            "items": [
+              "cosmere:lerasium_nugget"
+            ]
           }
         ]
       },

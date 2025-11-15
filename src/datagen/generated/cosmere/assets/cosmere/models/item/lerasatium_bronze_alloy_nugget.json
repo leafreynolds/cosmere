@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cosmere:item/lerasatium_bronze_nugget"
+  }
+}

@@ -13,6 +13,7 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.registry.*;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import static leaf.cosmere.api.Constants.Strings.*;
+import static leaf.cosmere.common.registry.ItemsRegistry.METAL_NUGGETS;
 
 public class EngLangGen extends LanguageProvider
 {
@@ -35,6 +37,7 @@ public class EngLangGen extends LanguageProvider
 	protected void addTranslations()
 	{
 		addItemsAndBlocks();
+		addMetals();
 		addEntities();
 		addAdvancements();
 		addManifestations();
@@ -101,6 +104,15 @@ public class EngLangGen extends LanguageProvider
 				add("item.cosmere." + i, StringHelper.fixCapitalisation(i));
 				add("item.cosmere." + b, StringHelper.fixCapitalisation(b));
 			}
+		}
+	}
+
+	private void addMetals()
+	{
+		// Work through each metal
+		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
+		{
+			add("metal.cosmere." + metalType.getName(), StringHelper.fixCapitalisation(metalType.getName()));
 		}
 	}
 

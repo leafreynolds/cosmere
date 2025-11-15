@@ -142,6 +142,20 @@ public class Metals
 			}
 		}
 
+		public boolean isGodMetal()
+		{
+			switch (this)
+			{
+				case ATIUM:
+				case LERASIUM:
+				case LERASATIUM:
+				case HARMONIUM:
+					return true;
+				default:
+					return false;
+			}
+		}
+
 		public boolean hasAssociatedManifestation()
 		{
 			switch (this)
@@ -332,6 +346,11 @@ public class Metals
 		public TagKey<Item> getMetalNuggetTag()
 		{
 			return CosmereTags.Items.METAL_NUGGET_TAGS.get(this);
+		}
+
+		public TagKey<Item> getGodMetalAlloyNuggetTag(MetalType alloyedMetalType)
+		{
+			return CosmereTags.Items.GOD_METAL_ALLOY_NUGGET_TAGS.get(this).get(alloyedMetalType);
 		}
 
 
@@ -968,6 +987,11 @@ public class Metals
 			var resourceLoc = new ResourceLocation(CosmereAPI.COSMERE_MODID, getName() + Constants.RegNameStubs.NUGGET);
 			return ForgeRegistries.ITEMS.getValue(resourceLoc);
 		}
+
+		public String getTranslationKey()
+		{
+			return "metal.cosmere." + this.getName();
+		}
 	}
 
 	private static class MetalColor
@@ -975,43 +999,43 @@ public class Metals
 
 		//Iron(0.560f,0.579f,0.580f)
 		public static final Color IRON = Color.decode("#f2f2f2");
-		public static final Color STEEL = Color.decode("#727273");
-		public static final Color TIN = Color.decode("#79b7bc");
-		public static final Color PEWTER = Color.decode("#a39b90");
+		public static final Color STEEL = Color.decode("#737173");
+		public static final Color TIN = Color.decode("#b0c9c3");
+		public static final Color PEWTER = Color.decode("#a9a1a1");
 		//Aluminium(0.913f,0.921f,0.925f)
-		public static final Color ALUMINUM = Color.decode("#d9d9d9");
-		public static final Color DURALUMIN = Color.decode("#a6a486");
+		public static final Color ALUMINUM = Color.decode("#819393");
+		public static final Color DURALUMIN = Color.decode("#7a8f90");
 		//Chromium(0.550f,0.556f,0.554f)
 		public static final Color CHROMIUM = Color.decode("#595959");
-		public static final Color NICROSIL = Color.decode("#59503e");
-		public static final Color ZINC = Color.decode("#d7d9c7");
-		public static final Color BRASS = Color.decode("#bc6330");
+		public static final Color NICROSIL = Color.decode("#9296b6");
+		public static final Color ZINC = Color.decode("#d9debc");
+		public static final Color BRASS = Color.decode("#fed679");
 		//Copper(0.955f,0.637f,0.538f)
-		public static final Color COPPER = Color.decode("#fba634");
+		public static final Color COPPER = Color.decode("#c15a36");
 		public static final Color BRONZE = Color.decode("#8c5b30");
 		//Gold(1.000f,0.766f,0.336f)
 		public static final Color GOLD = Color.decode("#faf25e");
-		public static final Color ELECTRUM = Color.decode("#d9b166");
-		public static final Color CADMIUM = Color.decode("#F5926C");
-		public static final Color BENDALLOY = Color.decode("#46473e");
+		public static final Color ELECTRUM = Color.decode("#b29988");
+		public static final Color CADMIUM = Color.decode("#a94934");
+		public static final Color BENDALLOY = Color.decode("#6d4c22");
 
 		//new Color(0.860f, 0.870f, 0.880f);
-		public static final Color LERASIUM = Color.decode("#f2dea0");
-		public static final Color ATIUM = Color.decode("#262626");
+		public static final Color LERASIUM = Color.decode("#e0e3d6");
+		public static final Color ATIUM = Color.decode("#363434");
 
 		//godmetal/metal alloys
-		public static final Color MALATIUM = Color.decode("#bfbfbf");
+		public static final Color MALATIUM = Color.decode("#e0e3d6");
 
 
 		//god metal only alloys
-		public static final Color HARMONIUM = Color.decode("#88b9d9");
+		public static final Color HARMONIUM = Color.decode("#9895aa");
 
 		// made up
-		public static final Color LERASATIUM = Color.decode("#8e9194");
+		public static final Color LERASATIUM = Color.decode("#73788a");
 
 		//non-special
-		public static final Color NICKEL = Color.decode("#eeedcb");
-		public static final Color LEAD = Color.decode("#8392c2");
+		public static final Color NICKEL = Color.decode("#c4c091");
+		public static final Color LEAD = Color.decode("#312f50");
 		public static final Color SILVER = Color.decode("#d3e5eb");
 	}
 

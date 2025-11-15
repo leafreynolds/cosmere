@@ -5,68 +5,58 @@
 package leaf.cosmere.allomancy.common.utils;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import net.minecraft.server.level.ServerPlayer;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
 
 public class MiscHelper
 {
 
-	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, int amount)
+	public static void consumeNugget(LivingEntity livingEntity, ItemStack itemStack)
 	{
-		if (metalType == null || livingEntity.level().isClientSide)
-		{
-			return;
-		}
+		if (livingEntity.level().isClientSide) return;
 
-		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
+		if(itemStack.getItem() instanceof IGrantsManifestations manifestingItem && itemStack.getItem() instanceof IHasSize sizeItem)
 		{
-			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
-
-			if (metalType == Metals.MetalType.LERASIUM)
+			Integer size = sizeItem.readMetalAlloySizeNbtData(itemStack);
+			if(size != null)
 			{
-				//https://www.theoryland.com/intvmain.php?i=977#43
+				ArrayList<Manifestation> manifestations = manifestingItem.determineManifestations(itemStack);
+				manifestingItem.grantManifestations(livingEntity, manifestations, size);
+			}
+
+			//https://www.theoryland.com/intvmain.php?i=977#43
+			if (itemStack.getItem() instanceof GodMetalNuggetItem godItem && godItem.getMetalType() == Metals.MetalType.LERASIUM)
+			{
 				if (livingEntity instanceof Llama && !livingEntity.hasCustomName())
 				{
 					//todo translations
 					livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
 				}
-
-				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+			}
+		}
+		else if(itemStack.getItem() instanceof IHasMetalType metalItem)
+		{
+			SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
+			{
+				Metals.MetalType metalType = metalItem.getMetalType();
+				SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
+				if (metalType.hasAssociatedManifestation()) //ignore metals without manifestations, that's handled in feruchemy
 				{
-					//give allomancy
-					final boolean isAllomancy = manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
-					final boolean notAtium = manifestation.getPowerID() != Metals.MetalType.ATIUM.getID();
-					if (isAllomancy && notAtium)
-					{
-						//todo allomancy godmetal strength
-						final double strength = manifestation.getStrength(iSpiritweb, true);
-						final int minimum = AllomancyConfigs.SERVER.GOD_METAL_EAT_STRENGTH_MINIMUM.get();
-
-						spiritweb.giveManifestation(manifestation, strength < minimum ? minimum : (int) (strength + 1));
-					}
+					//add to metal stored
+					final int addAmount = metalType.getAllomancyBurnTimeSeconds();
+					AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
+					allo.adjustIngestedMetal(metalType, addAmount, true);
 				}
-			}
-			else if (metalType != Metals.MetalType.LERASATIUM)//ignore lerasatium, that's handled in feruchemy
-			{
-				//add to metal stored
-				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;
-				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
-				allo.adjustIngestedMetal(metalType, addAmount, true);
-			}
-
-			if (livingEntity instanceof ServerPlayer serverPlayer)
-			{
-				spiritweb.syncToClients(serverPlayer);
-			}
-		});
+			});
+		}
 	}
 
 

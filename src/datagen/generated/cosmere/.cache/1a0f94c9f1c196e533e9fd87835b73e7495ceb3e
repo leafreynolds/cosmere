@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-30T10:54:20.1947047	Tags: cosmere
+// 1.20.1	2025-11-12T21:49:11.1720275	Tags: cosmere
 7e6f8b5d96792bb9046c5c1d332e4ba04dcade48 data/cosmere/tags/blocks/contains_metal.json
 af8261c6c6c4f45348129424d153185fe0b65a81 data/cosmere/tags/entity_types/contains_metal.json
 d0c886fa06555d83e6eb011a2ee98463827788e1 data/cosmere/tags/items/contains_metal.json
@@ -63,7 +63,7 @@ fb172135d66ef8791c5a8ada75b7e51bbfde19c8 data/forge/tags/items/ingots/silver.jso
 a7a420d5b7cc9d4aee8a081558985bbe907d7cb5 data/forge/tags/items/ingots/steel.json
 fb0b9a9b5ce5a346dbc8123188af5bf8eb41c6b1 data/forge/tags/items/ingots/tin.json
 f140725c970d068d8a82ce708d90066286adf93d data/forge/tags/items/ingots/zinc.json
-17ea46c722857735ed9d9f49ea9378791da43f3d data/forge/tags/items/nuggets.json
+17b8af4e83faf95132c51b8becaee76aa6854868 data/forge/tags/items/nuggets.json
 a6a8b995609572866ddf9cabcb9711813bb5b7df data/forge/tags/items/nuggets/aluminum.json
 55f6cc1ec48e9476aeb337bcae090d1b2d62210b data/forge/tags/items/nuggets/atium.json
 ea782221059a2106ec8c7ba74d71e70e3d605073 data/forge/tags/items/nuggets/bendalloy.json
@@ -77,7 +77,39 @@ dd30bdf008a620efe87c6c5119f1c2c4f70e4e49 data/forge/tags/items/nuggets/electrum.
 ec040e528b1db1332ff6840f0281812e1f7f6b74 data/forge/tags/items/nuggets/harmonium.json
 6aa066a9b7a3cbe43e5477bb8f3428e58434c15c data/forge/tags/items/nuggets/lead.json
 28030458471611b1614a624b264cdc17fb5c6ab4 data/forge/tags/items/nuggets/lerasatium.json
+0c591c1885a97a8a0fc749e3710c3099fd62f70a data/forge/tags/items/nuggets/lerasatium_aluminum_alloy.json
+3b85553cdcf90e3801d2deb3426a20aa2dc1e87e data/forge/tags/items/nuggets/lerasatium_bendalloy_alloy.json
+2d035bb181efae04c7e150a7379de56357786a4b data/forge/tags/items/nuggets/lerasatium_brass_alloy.json
+04ca19d905145e90142144693d7d0cd0dfe47107 data/forge/tags/items/nuggets/lerasatium_bronze_alloy.json
+3e2374ea393ca4d8378b909defe493063a36e711 data/forge/tags/items/nuggets/lerasatium_cadmium_alloy.json
+f0ad1c70b81b36e36318c48dfa341b15a053dfa3 data/forge/tags/items/nuggets/lerasatium_chromium_alloy.json
+8fe8dbe97eeb441cb3d7eb6e1f97be3e60b846c0 data/forge/tags/items/nuggets/lerasatium_copper_alloy.json
+e5e74090442129d6869d00ee3b8385550fe0ba77 data/forge/tags/items/nuggets/lerasatium_duralumin_alloy.json
+5891ad56adf9f39847bdd24037a13708c7bee869 data/forge/tags/items/nuggets/lerasatium_electrum_alloy.json
+329782cf4387b0e51c09da22d1c4ffdc82f74fd0 data/forge/tags/items/nuggets/lerasatium_gold_alloy.json
+513defe3597d314241300a9036fbda39809018cb data/forge/tags/items/nuggets/lerasatium_iron_alloy.json
+eb0d02802cde497272a11d25057e02aad104fbf3 data/forge/tags/items/nuggets/lerasatium_nicrosil_alloy.json
+13d2bfd8ec393251af811bb08e6f112af100d366 data/forge/tags/items/nuggets/lerasatium_pewter_alloy.json
+b8f1072749ad179f202c4b7843afaa81299d2fe2 data/forge/tags/items/nuggets/lerasatium_steel_alloy.json
+1ed392bf903455c1112f5382907367f1a3a8a082 data/forge/tags/items/nuggets/lerasatium_tin_alloy.json
+6fd9c09ab999ba9eb1d493d733bd79653a1f99c0 data/forge/tags/items/nuggets/lerasatium_zinc_alloy.json
 8208cc064a68c06d411c6a9bea026d2d78c38368 data/forge/tags/items/nuggets/lerasium.json
+f995f36d5f06cfd6f89345ea5c521a3bc7f30e54 data/forge/tags/items/nuggets/lerasium_aluminum_alloy.json
+2b52560da23d272aeb0ef92a6744ec4fe9d7d688 data/forge/tags/items/nuggets/lerasium_bendalloy_alloy.json
+fe0a0deb404227e3ffc43ed21d840554b8417f42 data/forge/tags/items/nuggets/lerasium_brass_alloy.json
+22ff4135e0b94e28f7d38a930887edc09893d021 data/forge/tags/items/nuggets/lerasium_bronze_alloy.json
+68e17513762ad58ef897dd2a83a86c06c171e094 data/forge/tags/items/nuggets/lerasium_cadmium_alloy.json
+8b87aabbe77e9ce18f98330a8135070d87889e3b data/forge/tags/items/nuggets/lerasium_chromium_alloy.json
+67d284e7bd227e045e514290f00be3b06bdbd283 data/forge/tags/items/nuggets/lerasium_copper_alloy.json
+cc790295eb3e95ed47d6f76109c73f23d84d9e40 data/forge/tags/items/nuggets/lerasium_duralumin_alloy.json
+208f863d87e795f095f74db7ba92bd85a0496c47 data/forge/tags/items/nuggets/lerasium_electrum_alloy.json
+b327a4b767bddbb0197393e2948aa3c804e90602 data/forge/tags/items/nuggets/lerasium_gold_alloy.json
+f279ab5a2e77b9e339817e6c8f0d4f086f135a9b data/forge/tags/items/nuggets/lerasium_iron_alloy.json
+d5a9fee1ee9de8e6396ce5d2b6edf40ab0866e9c data/forge/tags/items/nuggets/lerasium_nicrosil_alloy.json
+a96426ba454efe8bdfd9f4c63449dcfb5fafde05 data/forge/tags/items/nuggets/lerasium_pewter_alloy.json
+394d601755fe0e861374bed2135fad7b1a265ac7 data/forge/tags/items/nuggets/lerasium_steel_alloy.json
+559f3267451410477472d507195bc6b7d8510bd0 data/forge/tags/items/nuggets/lerasium_tin_alloy.json
+31d3eca1e41e21067082c414ee2bed9847fc73dc data/forge/tags/items/nuggets/lerasium_zinc_alloy.json
 53af8c89a4a8e6fb7e90668c967801dee236d614 data/forge/tags/items/nuggets/malatium.json
 ce8ca3009391a6012a898a5622718c1c49c33d87 data/forge/tags/items/nuggets/nickel.json
 ee2235eeec793fc18a173cfab9939ba12b2beee3 data/forge/tags/items/nuggets/nicrosil.json

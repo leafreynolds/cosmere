@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2025 ~ Leaf
+ * File updated ~ 6 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.items;
@@ -7,6 +7,8 @@ package leaf.cosmere.items;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +40,16 @@ public class ItemModelsGen extends ItemModelProvider
 			//blocks have their own model rules
 			if (item instanceof BlockItem)
 			{
+				continue;
+			}
+			else if (item instanceof GodMetalAlloyNuggetItem godMetalAlloyNuggetItem)
+			{
+				simpleItem(path, godMetalAlloyNuggetItem.getMetalType().getName() + "_" + godMetalAlloyNuggetItem.getAlloyedMetalType().getName() + "_nugget");
+				continue;
+			}
+			else if (item instanceof GodMetalNuggetItem godMetalNuggetItem)
+			{
+				simpleItem(path, godMetalNuggetItem.getMetalType().getName() + "_nugget");
 				continue;
 			}
 			////otherwise set specific textures based on these item types

@@ -56,8 +56,16 @@ public class PatchouliBasics
 			firstPage.setText("The first way I will teach you to activate powers is with the basic keybinds. This is not the most effective way of doing it, but it is straightforward.\n" +
 					"First, locate the icon for your current main power in the upper left corner. By pressing (" + PatchouliTextFormat.Keybind(Constants.Strings.KEY_MANIFESTATION_NEXT) + ") and (" + PatchouliTextFormat.Keybind(Constants.Strings.KEY_MANIFESTATION_PREVIOUS) +
 					") you can change which power is your current main. From there, press (" + PatchouliTextFormat.Keybind(Constants.Strings.KEY_MANIFESTATION_MODE_INCREASE) + ") and (" + PatchouliTextFormat.Keybind(Constants.Strings.KEY_MANIFESTATION_MODE_DECREASE) +
-					") to change the mode for that power. Changing your current main power will not stop your other powers from running in the background.");
+					") to change the mode for that power by plus or minus one respectively. If you are holding (" + PatchouliTextFormat.Keybind("Shift") + ") while you are changing the mode this way, it will change by plus or minus five levels, " +
+					"If instead you are holding (" + PatchouliTextFormat.Keybind("control") + "()) while you are changing the mode this way, it will change by plus or minus ten levels or to the maximum, whichever is lower. " +
+					"Changing your current main power will not stop your other powers from running in the background.");
 			pages.add(firstPage);
+
+			BookStuff.Page firstAndHalfPage = new BookStuff.TextPage();
+			firstAndHalfPage.setText("If you are holding (" + PatchouliTextFormat.Keybind("Shift") + ") while you are changing the mode this way, it will change by plus or minus five levels, " +
+					"If instead you are holding (" + PatchouliTextFormat.Keybind("Control") + "("+ PatchouliTextFormat.Keybind("Command") + " on Apple)) while you are changing the mode this way, it will change by plus or minus ten levels or " +
+					"to the maximum, whichever is lower. In addition if you crouch with an empty hand, you can change your power mode by scrolling." +
+					"Changing your current main power will not stop your other powers from running in the background.");
 
 			BookStuff.Page secondPage = new BookStuff.TextPage();
 			secondPage.setTitle("The Menu");
@@ -72,8 +80,6 @@ public class PatchouliBasics
 					"However, in all cases, if the power is already active, no matter the mode, pressing the keybind will turn the power off instead. Using a dedicated keybind will also set your active main power to the associated power as well");
 			pages.add(thirdPage);
 
-			BookStuff.Page emptyPage = new BookStuff.EmptyPage();
-			pages.add(emptyPage);
 
 			BookStuff.Page fourthPage = new BookStuff.TextPage();
 			fourthPage.setTitle("Power Mode Save Keybind");

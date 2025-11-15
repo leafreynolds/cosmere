@@ -9,20 +9,19 @@ import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registry.BlocksRegistry;
+import leaf.cosmere.common.registry.CosmereRecipesRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import leaf.cosmere.common.resource.ore.OreType;
 import leaf.cosmere.common.util.CosmereEnumUtils;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -79,9 +78,16 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 			compressRecipe(BlocksRegistry.METAL_BLOCKS.get(metalType).getBlock(), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType), ItemsRegistry.METAL_INGOTS.get(metalType)).save(consumer);
 			decompressRecipe(consumer, ItemsRegistry.METAL_INGOTS.get(metalType).get(), BlocksRegistry.METAL_BLOCKS.get(metalType), metalType.getName() + "_block_deconstruct");
 
-			compressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), CosmereTags.Items.METAL_NUGGET_TAGS.get(metalType), ItemsRegistry.METAL_NUGGETS.get(metalType)).save(consumer);
-			decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType), metalType.getName() + "_item_deconstruct");
-
+			if(metalType.isGodMetal())
+			{
+				godMetalCompressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), ItemsRegistry.GOD_METAL_NUGGETS.get(metalType).get()).save(consumer);
+				decompressRecipe(consumer, ItemsRegistry.GOD_METAL_NUGGETS.get(metalType).get(), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType), metalType.getName() + "_item_deconstruct");
+			}
+			else
+			{
+				compressRecipe(ItemsRegistry.METAL_INGOTS.get(metalType).get(), CosmereTags.Items.METAL_NUGGET_TAGS.get(metalType), ItemsRegistry.METAL_NUGGETS.get(metalType)).save(consumer);
+				decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType), metalType.getName() + "_item_deconstruct");
+			}
 
 			if (metalType.isAlloy())
 			{
@@ -102,6 +108,18 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 			addOreSmeltingRecipes(consumer, BlocksRegistry.METAL_ORE.get(oreType).deepslate().getBlock(), ItemsRegistry.METAL_INGOTS.get(metalType).asItem(), 1.0f, 200);
 			addOreSmeltingRecipes(consumer, ItemsRegistry.METAL_RAW_ORE.get(metalType).get(), ItemsRegistry.METAL_INGOTS.get(metalType).asItem(), 1.0f, 200);
 		}
+
+		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_RECIPE.get())
+				.save(consumer, new ResourceLocation(Cosmere.MODID,
+						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_RECIPE.getInternalRegistryName()).toString());
+
+		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_COMPRESS.get())
+				.save(consumer, new ResourceLocation(Cosmere.MODID,
+						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_COMPRESS.getInternalRegistryName()).toString());
+
+		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_DECOMPRESS.get())
+				.save(consumer, new ResourceLocation(Cosmere.MODID,
+						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_DECOMPRESS.getInternalRegistryName()).toString());
 
 	}
 

@@ -18,6 +18,8 @@ public class HemalurgyServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue LERASATIUM_MAX_SPIKE_STRENGTH;
 	public final ForgeConfigSpec.IntValue CHROMIUM_MAX_SPIKE_STRENGTH;
 	public final ForgeConfigSpec.IntValue DEFAULT_POWER_MAX_SPIKE_STRENGTH;
+    public final ForgeConfigSpec.IntValue ALLOMANTIC_PEWTER_SPIRITWEB_BONUS;
+    public final ForgeConfigSpec.IntValue FERUCHEMICAL_GOLD_SPIRITWEB_BONUS;
 
 
 	HemalurgyServerConfig()
@@ -25,11 +27,13 @@ public class HemalurgyServerConfig implements ICosmereConfig
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.comment("Hemalurgy Config. This config is synced between server and client.").push("hemalurgy");
 
-		SPIRITWEB_INTEGRITY_TICK_CHECK = builder.comment("What tick count should be used to check spiritweb integrity? There are 20 ticks in a second.").defineInRange("integrityCheckTick", 999, 20, 1234567890);
+		SPIRITWEB_INTEGRITY_TICK_CHECK = builder.comment("What tick count should be used to check spiritweb integrity? There are 20 ticks in a second.").defineInRange("integrityCheckTick", 20, 1, 1234567890);
 
 		LERASATIUM_MAX_SPIKE_STRENGTH = builder.comment("What is the maximum strength a lerasatium spike can hold.").defineInRange("lerasatiumMaxSpikeStrength", 5, 1, 20);
 		CHROMIUM_MAX_SPIKE_STRENGTH = builder.comment("What is the maximum strength a chromium spike can hold.").defineInRange("chromiumMaxSpikeStrength", 3, 1, 5);
 		DEFAULT_POWER_MAX_SPIKE_STRENGTH = builder.comment("What is the maximum strength all other power spikes can hold.").defineInRange("powerMaxSpikeStrength", 7, 1, 20);
+        ALLOMANTIC_PEWTER_SPIRITWEB_BONUS = builder.comment("What bonus does Allomantic pewter grant spiritweb integrity.").defineInRange("allomanticPewterSpiritwebBonus", 3, 0, 100);
+        FERUCHEMICAL_GOLD_SPIRITWEB_BONUS = builder.comment("What bonus does Feruchemical gold grant spiritweb integrity.").defineInRange("feruchemicalGoldSpiritwebBonus", 6, 0, 100);
 
 		builder.pop();
 		configSpec = builder.build();

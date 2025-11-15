@@ -4,10 +4,14 @@
 
 package leaf.cosmere;
 
+import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.helpers.RegistryHelper;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
+import leaf.cosmere.common.registry.ItemsRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
@@ -17,6 +21,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
+import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -244,7 +249,6 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 				.save(consumer, new ResourceLocation(modid, "conversions/" + name));
 	}
 
-
 	protected void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, TagKey<Item> input, String name)
 	{
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, 9)
@@ -270,6 +274,20 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 				.define('J', center)
 				.pattern("III")
 				.pattern("IJI")
+				.pattern("III")
+				.unlockedBy("has_item", has(input));
+	}
+
+	protected ShapedRecipeBuilder godMetalCompressRecipe(ItemLike output, ItemLike input)
+	{
+		CompoundTag tag = new CompoundTag();
+		tag.putInt("nuggetSize", 16);
+		PartialNBTIngredient ingredient = PartialNBTIngredient.of(input, tag);
+
+		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, output)
+				.define('I', ingredient)
+				.pattern("III")
+				.pattern("III")
 				.pattern("III")
 				.unlockedBy("has_item", has(input));
 	}

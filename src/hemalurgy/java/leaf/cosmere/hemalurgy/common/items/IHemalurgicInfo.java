@@ -360,7 +360,6 @@ public interface IHemalurgicInfo
 			}
 		}
 
-
 		return attributeModifiers;
 	}
 

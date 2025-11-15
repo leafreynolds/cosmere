@@ -12,6 +12,7 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
+import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -93,6 +94,9 @@ public class HemalurgyEngLangGen extends LanguageProvider
 
 	private void addAttributes()
 	{
+        final String descriptionId = HemalurgyAttributes.SPIRITWEB_INTEGRITY.getAttribute().getDescriptionId();
+        String translation = descriptionId.split("\\.")[1];
+        add(descriptionId, "Spiritweb Integrity");
 	}
 
 	private void addPatchouli()

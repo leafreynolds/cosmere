@@ -7,6 +7,8 @@ package leaf.cosmere.common.registry;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.registration.impl.CreativeTabDeferredRegister;
 import leaf.cosmere.common.registration.impl.CreativeTabRegistryObject;
 import net.minecraft.network.chat.Component;
@@ -15,6 +17,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+
+import java.util.List;
 
 public class CreativeTabsRegistry
 {
@@ -29,7 +33,14 @@ public class CreativeTabsRegistry
 							builder.withSearchBar()//Allow our tabs to be searchable for convenience purposes
 									.displayItems((displayParameters, output) ->
 									{
-										CreativeTabDeferredRegister.addToDisplay(ItemsRegistry.ITEMS, output);
+										List<IItemProvider> items = ItemsRegistry.ITEMS.getAllItems();
+										for(IItemProvider item : items)
+										{
+											if(!(item.asItem() instanceof GodMetalAlloyNuggetItem))
+											{
+												output.accept(item);
+											}
+										}
 										CreativeTabDeferredRegister.addToDisplay(BlocksRegistry.BLOCKS, output);
 									})
 			);
