@@ -13,6 +13,7 @@ import leaf.cosmere.common.items.GodMetalNuggetItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 
@@ -44,19 +45,31 @@ public class MiscHelper
 		}
 		else if(itemStack.getItem() instanceof IHasMetalType metalItem)
 		{
-			SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
-			{
-				Metals.MetalType metalType = metalItem.getMetalType();
-				SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
-				if (metalType.hasAssociatedManifestation()) //ignore metals without manifestations, that's handled in feruchemy
-				{
-					//add to metal stored
-					final int addAmount = metalType.getAllomancyBurnTimeSeconds();
-					AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
-					allo.adjustIngestedMetal(metalType, addAmount, true);
-				}
-			});
+			eatMetal(metalItem.getMetalType(), livingEntity);
 		}
+		else if(itemStack.getItem() == Items.IRON_NUGGET)
+		{
+			eatMetal(Metals.MetalType.IRON, livingEntity);
+		}
+		else if(itemStack.getItem() == Items.GOLD_NUGGET)
+		{
+			eatMetal(Metals.MetalType.GOLD, livingEntity);
+		}
+	}
+
+	private static void eatMetal(Metals.MetalType metalType, LivingEntity livingEntity)
+	{
+		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
+		{
+			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
+			if (metalType.hasAssociatedManifestation()) //ignore metals without manifestations, that's handled in feruchemy
+			{
+				//add to metal stored
+				final int addAmount = metalType.getAllomancyBurnTimeSeconds();
+				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
+				allo.adjustIngestedMetal(metalType, addAmount, true);
+			}
+		});
 	}
 
 

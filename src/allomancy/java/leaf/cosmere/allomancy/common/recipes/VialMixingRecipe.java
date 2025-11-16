@@ -9,6 +9,7 @@ import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyRecipes;
 import leaf.cosmere.api.EnumUtils;
+import leaf.cosmere.api.IHasSize;
 import leaf.cosmere.api.Metals;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -116,6 +117,11 @@ public class VialMixingRecipe extends CustomRecipe
 			TagKey<Item> metalNuggetTag = value.getMetalNuggetTag();
 			if (stack.is(metalNuggetTag))
 			{
+				if(stack.getItem() instanceof IHasSize sizeItem)
+				{
+					int size = sizeItem.readMetalAlloySizeNbtData(stack);
+					if(size < sizeItem.getMaxSize()) return Optional.empty();
+				}
 				return Optional.of(metalNuggetTag);
 			}
 		}
