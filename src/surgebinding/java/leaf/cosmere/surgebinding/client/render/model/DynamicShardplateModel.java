@@ -10,7 +10,8 @@ import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
 import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
-import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -18,11 +19,21 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -93,9 +104,9 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 	public final ModelPart left_paldron2;
 	public final ModelPart hat;
 
-	public Color color;
 
-	public DynamicShardplateModel(ModelPart root) {
+	public DynamicShardplateModel(ModelPart root)
+	{
 
 		super(root.getChild("root"));
 
@@ -154,12 +165,11 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 
 		this.hat = this.root.getChild("hat");
 
-		this.color = color;
 	}
 
 
-
-	public static LayerDefinition createBodyLayer() {
+	public static LayerDefinition createBodyLayer()
+	{
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -249,6 +259,8 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		PartDefinition right_kama = kama1.addOrReplaceChild("right_kama", CubeListBuilder.create().texOffs(107, 25).addBox(-1.0F, -2.0F, -5.25F, 1.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(-4.0F, 0.0F, 4.0F));
 
 		PartDefinition right_front_kama = right_kama.addOrReplaceChild("right_front_kama", CubeListBuilder.create().texOffs(117, 25).mirror().addBox(0.0F, -2.0F, -0.75F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 0.0F, -4.5F));
+
+		PartDefinition arms = root.addOrReplaceChild("arms", CubeListBuilder.create(), PartPose.offset(-5.0F, 2.25F, 0.0F));
 
 		PartDefinition right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-5.0F, 2.25F, 0.0F));
 
@@ -342,14 +354,24 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 
 		final DynamicShardplateData data = item.getShardData(pStack);
 
+		final LivingEntity entity = slot.entity();
+
+
+		this.body.visible = true;
+		this.body.getChild(data.getBodyID()).getAllParts().forEach(part -> part.visible = true);
+
 
 		this.right_leg.visible = true;
-		this.left_leg.visible = true;
 		this.right_boot.visible = true;
 		this.right_boot_outside.visible = true;
 		this.right_boot_tip.visible = true;
 		this.right_boot_outside.getChild(data.getRightBootOutsideID()).visible = true;
 		this.right_boot_tip.getChild(data.getRightBootTipID()).visible = true;
+
+		this.right_leg_top.visible = true;
+		this.right_leg_top.getChild(data.getRightLegID()).visible = true;
+
+		this.left_leg.visible = true;
 		this.left_boot.visible = true;
 		this.left_boot_tip.visible = true;
 		this.left_boot_outside.visible = true;
@@ -357,34 +379,28 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		this.left_boot_tip.getChild(data.getLeftBootTipID()).visible = true;
 
 		this.left_leg_top.visible = true;
-		this.right_leg_top.visible = true;
+		this.left_leg_top.getChild(data.getLeftLegID()).visible = true;
 
-		if(!data.getKamaID().equals("kama0"))
+		if (!data.getKamaID().equals("kama0"))
 		{
 			this.kama.visible = true;
 			this.kama.getChild(data.getKamaID()).getAllParts().forEach(part -> part.visible = true);
 		}
-		this.right_leg_top.getChild(data.getRightLegID()).visible = true;
-		this.left_leg_top.getChild(data.getLeftLegID()).visible = true;
 
 
-		this.body.visible = true;
 		this.right_arm.visible = true;
-		this.left_arm.visible = true;
 		this.right_arm_main.visible = true;
-		this.right_paldron.visible = true;
-		this.left_arm_main.visible = true;
-		this.left_paldron.visible = true;
-
-		this.body.getChild(data.getBodyID()).getAllParts().forEach(part -> part.visible = true);
-
 		this.right_arm_main.getChild(data.getRightArmID()).visible = true;
+		this.right_paldron.visible = true;
 		if (!data.getRightPaldronsID().equals("right_paldron0"))
 		{
 			this.right_paldron.getChild(data.getRightPaldronsID()).getAllParts().forEach(part -> part.visible = true);
 		}
 
+		this.left_arm.visible = true;
+		this.left_arm_main.visible = true;
 		this.left_arm_main.getChild(data.getLeftArmID()).visible = true;
+		this.left_paldron.visible = true;
 		if (!data.getLeftPaldronsID().equals("left_paldron0"))
 		{
 			this.left_paldron.getChild(data.getLeftPaldronsID()).getAllParts().forEach(part -> part.visible = true);
@@ -403,16 +419,16 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 				baseLayer,
 				light,
 				OverlayTexture.NO_OVERLAY,
-				color.getRed()/255f,
-				color.getGreen()/255f,
-				color.getBlue()/255f,
+				color.getRed() / 255f,
+				color.getGreen() / 255f,
+				color.getBlue() / 255f,
 				1f);
 
 		// Second overlay texture (e.g., glowing runes, color tint)
 
 
 		// Third layer
-		if(data.isLiving())
+		if (data.isLiving())
 		{
 			String location = "textures/models/armor/glyphs/" + data.getOrder().getName().toLowerCase() + "_glyph.png";
 			ResourceLocation glyphRL = Surgebinding.rl(location);
@@ -435,9 +451,9 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 					glyphLayer,
 					LightTexture.FULL_BRIGHT,
 					OverlayTexture.NO_OVERLAY,
-					glyphColor.getRed()/255f,
-					glyphColor.getGreen()/255f,
-					glyphColor.getBlue()/255f,
+					glyphColor.getRed() / 255f,
+					glyphColor.getGreen() / 255f,
+					glyphColor.getBlue() / 255f,
 					1f);
 
 			VertexConsumer overlayLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(VISOR));
@@ -445,9 +461,9 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 					overlayLayer,
 					LightTexture.FULL_BRIGHT,
 					OverlayTexture.NO_OVERLAY,
-					glyphColor.getRed()/255f,
-					glyphColor.getGreen()/255f,
-					glyphColor.getBlue()/255f,
+					glyphColor.getRed() / 255f,
+					glyphColor.getGreen() / 255f,
+					glyphColor.getBlue() / 255f,
 					1f);
 
 
@@ -466,7 +482,7 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		}
 
 		//Cracked Layer
-		if(item.getMaxCharge(pStack) - item.getCharge(pStack) > item.getMaxCharge(pStack)/4)
+		if (item.getMaxCharge(pStack) - item.getCharge(pStack) > item.getMaxCharge(pStack) / 4)
 		{
 			VertexConsumer cracksLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(CRACKS1));
 			renderToBuffer(matrixStack,
@@ -478,7 +494,6 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 					1f,
 					1f);
 		}
-
 
 
 	}

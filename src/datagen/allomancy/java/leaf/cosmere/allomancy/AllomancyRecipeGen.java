@@ -12,7 +12,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -36,13 +35,6 @@ public class AllomancyRecipeGen extends BaseRecipeProvider implements ICondition
 				.requires(Tags.Items.LEATHER)
 				.requires(Tags.Items.STRING)
 				.save(consumer);
-
-		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, AllomancyItems.MISTCLOAK.get())
-				.unlockedBy("has_item", has(Items.BLACK_WOOL))
-				.define('X', Items.BLACK_WOOL)
-				.pattern("X X")
-				.pattern("XXX")
-				.pattern("XXX").save(consumer);
 
 		SpecialRecipeBuilder
 				.special(AllomancyRecipes.VIAL_MIX.get())

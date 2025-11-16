@@ -1,8 +1,6 @@
-// 1.20.1	2025-11-11T12:50:43.865543	Recipes
-445aa9f7a583225384441480a5bbeb7fe0b2e4da data/allomancy/advancements/recipes/combat/mistcloak.json
+// 1.20.1	2025-11-16T14:11:17.154822	Recipes
 2ab76b8b72d83f1207051efc1cb9174ae9ae4a61 data/allomancy/advancements/recipes/tools/coin_pouch.json
 ff01905c7528be493d7b447b09e20762cd818089 data/allomancy/advancements/recipes/tools/metal_vial.json
 97699dc7b7a7cd857564421ad0cafff04b654089 data/allomancy/recipes/coin_pouch.json
 8ad78df11acb7d92cf1169192b00ab592dc78b93 data/allomancy/recipes/metal_vial.json
-08f1f6f97e7fca3553d79b739ffb4ec0038a3230 data/allomancy/recipes/mistcloak.json
 08792c13f9fd6638a1e2f0b0a267e81ca8c42849 data/allomancy/recipes/vial_mixing.json

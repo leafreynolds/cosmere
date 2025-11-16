@@ -21,6 +21,6 @@ public class AllomancyItems
 	public static final ItemRegistryObject<CoinPouchItem> COIN_POUCH = ITEMS.register("coin_pouch", () -> new CoinPouchItem(PropTypes.Items.ONE.get()));
 
 	public static final ItemRegistryObject<MetalVialItem> METAL_VIAL = ITEMS.register("metal_vial", MetalVialItem::new);
-	public static final ItemRegistryObject<MistcloakItem> MISTCLOAK = ITEMS.register("mistcloak", () -> new MistcloakItem(PropTypes.Items.MISTCLOAK.get()));
+	public static final ItemRegistryObject<MistcloakItem> MISTCLOAK = ITEMS.register("mistcloak", () -> new MistcloakItem(ArmorMaterials.LEATHER, ArmorItem.Type.HELMET, PropTypes.Items.ONE.get()));
 
 }
