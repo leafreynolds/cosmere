@@ -116,31 +116,35 @@ public class MenuButton
 	}
 
 	//Sets highlight and returns that, might split into two later.
-	public void highlightAction(double mouseX, double mouseY)
+	public void highlightAction(double mouseX, double mouseY, double middle_x, double middle_y)
 	{
-		highlight = (
-				MathHelper.inTriangle(
-				x1, y1,
-				x2, y2,
-				x4, y4,
+		highlight = (MathHelper.inTriangle(
+				x1 - middle_x, y1 - middle_y,
+				x2 - middle_x, y2 - middle_y,
+				x3 - middle_x, y3 - middle_y,
 				mouseX, mouseY)
-
 				|| MathHelper.inTriangle(
-				x1, y1,
-				x3, y3,
-				x4, y4,
-				mouseX, mouseY)
-		);
+				x1 -middle_x, y1 - middle_y,
+				x4 - middle_x, y4 - middle_y,
+				x3 - middle_x, y3 - middle_y,
+				mouseX, mouseY));
 
 	};
 
 	public void renderButton(BufferBuilder buffer)
 	{
-		buffer.vertex(x1, y1, 0).color(red, green, blue, opacity).endVertex();
-		buffer.vertex(x2, y2, 0).color(red, green, blue, opacity).endVertex();
+		int lerpositive = 0;
 
-		buffer.vertex(x3, y3, 0).color(red, green, blue, opacity).endVertex();
-		buffer.vertex(x4, y4, 0).color(red, green, blue, opacity).endVertex();
+		if (highlight)
+		{
+			lerpositive = 20;
+		}
+
+		buffer.vertex(x1, y1, 0).color(red + lerpositive, green, blue, opacity).endVertex();
+		buffer.vertex(x2, y2, 0).color(red + lerpositive, green, blue, opacity).endVertex();
+
+		buffer.vertex(x3, y3, 0).color(red + lerpositive, green, blue, opacity).endVertex();
+		buffer.vertex(x4, y4, 0).color(red + lerpositive, green, blue, opacity).endVertex();
 	}
 
 }

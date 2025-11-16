@@ -134,7 +134,7 @@ public class NicrosilMenu extends Screen
 		if (Keybindings.MANIFESTATION_MENU.matches(pKeyCode, pScanCode))
 		{
 
-			CloseScreen();
+			//CloseScreen();
 		}
 		return super.keyReleased(pKeyCode, pScanCode, pModifiers);
 	}
@@ -203,6 +203,14 @@ public class NicrosilMenu extends Screen
 
 
 		}
+		for(MenuButton menuButton : spiritwebContainer.menuButtons)
+		{
+			if(menuButton.highlight)
+			{
+
+			}
+		}
+
 		return true;
 	}
 
@@ -514,8 +522,8 @@ public class NicrosilMenu extends Screen
 						spiritwebPowerButtons.add(new NicroSpiritwebPowerButton(manifestation));
 						spiritwebContainer.addButton(new SpiritwebPowerButton(100, 100, manifestation, spiritweb));
 					}
-				foundPowerTypes.add(manifestation.getManifestationType());
 				}
+				foundPowerTypes.add(manifestation.getManifestationType());
 			}
 
 			for (Manifestations.ManifestationTypes foundPowerType : foundPowerTypes)
@@ -574,9 +582,9 @@ public class NicrosilMenu extends Screen
 
 		//spiritwebContainer.setPosition(middle_x, 100);
 
-		spiritwebContainer.highlightButtons(mouseX, mouseY);
+		//spiritwebContainer.highlightButtons(mouseX, mouseY);
 		//spiritwebContainer.setPosition(middle_x, 100);
-		spiritwebContainer.renderContainer(buffer);
+		spiritwebContainer.renderContainer(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
 
 		//newButton.renderButton(buffer);
 
@@ -594,9 +602,9 @@ public class NicrosilMenu extends Screen
 
 
 		// draw radial button strings
-		renderRadialButtonStrings(guiGraphics, (int) middle_x, (int) middle_y);
+		//renderRadialButtonStrings(guiGraphics, (int) middle_x, (int) middle_y);
 		//draw sided button strings
-		renderSidedButtonStrings(guiGraphics, middle_x, middle_y);
+		//renderSidedButtonStrings(guiGraphics, middle_x, middle_y);
 		//draw quadrant strings
 		//renderMetalQuadrantsStrings(guiGraphics);
 		//do extra text info stuff

@@ -28,7 +28,7 @@ public class SquareMenuButton extends MenuButton
 		this.posX = posX;
 		this.posY = posY;
 
-		this.red = 255;
+		this.red = 235;
 		this.blue = 20;
 		this.green = 20;
 		this.opacity = 200;

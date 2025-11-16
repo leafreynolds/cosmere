@@ -140,30 +140,30 @@ public class MenuContainer
 		menuButtons.remove(button);
 	}
 
-	public void highlightAction(double mouseX, double mouseY)
+	public void highlightAction(double mouseX, double mouseY, double middle_x, double middle_y)
 	{
 		highlight = (MathHelper.inTriangle(
-				x1, y1,
-				x2, y2,
-				x3, y3,
+				x1 - middle_x, y1 - middle_y,
+				x2 - middle_x, y2 - middle_y,
+				x3 - middle_x, y3 - middle_y,
 				mouseX, mouseY)
 				|| MathHelper.inTriangle(
-				x1, y1,
-				x4, y4,
-				x3, y3,
+				x1 -middle_x, y1 - middle_y,
+				x4 - middle_x, y4 - middle_y,
+				x3 - middle_x, y3 - middle_y,
 				mouseX, mouseY));
 
 	};
 
-	public void highlightButtons(double mouseX, double mouseY)
+	public void highlightButtons(double mouseX, double mouseY, double middle_x, double middle_y)
 	{
 		for (MenuButton button : menuButtons)
 		{
-			button.highlightAction(mouseX, mouseY);
+			button.highlightAction(mouseX, mouseY, middle_x, middle_y);
 		}
 	}
 
-	public void renderContainer(BufferBuilder buffer)
+	public void renderContainer(BufferBuilder buffer, double mouseX, double mouseY, double middle_x, double middle_y)
 	{
 
 		for (MenuButton button : menuButtons)
@@ -172,6 +172,12 @@ public class MenuContainer
 		}
 
 		int lerpositive;
+
+		this.centerX = middle_x;
+		this.centerY = middle_y;
+		updateDimensions(this.containWidth, this.containHeight);
+
+		highlightButtons(mouseX, mouseY, middle_x, middle_y);
 
 		if (highlight)
 		{
