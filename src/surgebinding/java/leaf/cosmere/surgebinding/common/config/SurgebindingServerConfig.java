@@ -24,7 +24,6 @@ public class SurgebindingServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.IntValue PROGRESSION_HEAL_COST;
 	public final ForgeConfigSpec.IntValue PROGRESSION_AGE_UP_COST;
 	public final ForgeConfigSpec.BooleanValue NIGHTBLOOD_SPOILERS;
-	public final ForgeConfigSpec.IntValue SHARDPLATE_PROTECTION_INVESTITURE_COST;
 
 
 	//public final ForgeConfigSpec.ConfigValue<List<? extends String>> FIRST_IDEALS;
@@ -50,7 +49,6 @@ public class SurgebindingServerConfig implements ICosmereConfig
 
 		NIGHTBLOOD_SPOILERS = builder.comment("Enable this to allow Nightblood to have certain feature, which is spoilers for WindAndTruth").define("nightbloodSpoilers", true);
 
-		SHARDPLATE_PROTECTION_INVESTITURE_COST = builder.comment("How many points of stormlight does it take for shardplate to absorb damage").defineInRange("shardplateProtectionCost", 100, 1, 84000);
 		final Predicate<Object> elementValidator = o -> o instanceof String;
 
 		SECOND_IDEALS = builder.defineList(

@@ -1,3 +1,4 @@
+
 /*
  * File updated ~ 4 - 2 - 2025 ~ Leaf
  */
@@ -8,25 +9,16 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
-import leaf.cosmere.api.text.StringHelper;
-import leaf.cosmere.api.text.TextHelper;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.UUID;
 
 public class NightbloodItem extends ShardbladeItem
@@ -40,7 +32,7 @@ public class NightbloodItem extends ShardbladeItem
 	}
 
 
-	public boolean canSummonDismiss(LivingEntity player, ItemStack stack)
+	public boolean canSummonDismiss(Player player)
 	{
 		return false;
 	}
@@ -73,18 +65,5 @@ public class NightbloodItem extends ShardbladeItem
 			case MAINHAND, OFFHAND -> this.attributeModifiers;
 			default -> super.getAttributeModifiers(equipmentSlot, stack);
 		};
-	}
-
-	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
-	{
-		final ShardData data = getShardData(pStack);
-		String attunedPlayerName = data.getBondedName();
-		UUID attunedPlayer = data.getBondedEntity();
-		if (attunedPlayer != null)
-		{
-			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
-		}
-
 	}
 }

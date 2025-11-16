@@ -1,7 +1,5 @@
-
 /*
  * File updated ~ 10 - 8 - 2024 ~ Leaf
- * File updated ~ 12 - 7 - 2025 ~ Soar
  */
 
 package leaf.cosmere.surgebinding.common.items.tiers;
@@ -11,37 +9,38 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.function.Supplier;
 
-public enum ShardplateArmorMaterial
+public enum ShardplateArmorMaterial implements ArmorMaterial
 {
-	//enchantmentValue changed to 0 because investiture resists other investiture.
-	DEADPLATE("deadplate", 40, 22, 0, SoundEvents.ARMOR_EQUIP_DIAMOND, 4.0F, 0.4F, () ->
+	DEADPLATE("deadplate", 33, new int[]{3, 6, 8, 3}, 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.0F, 0.0F, () ->
 	{
-		return null;
+		return Ingredient.of(Items.DIAMOND);
 	}),
-	LIVINGPLATE("livingplate", 42, 22, 0, SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.4F, () ->
+	LIVINGPLATE("livingplate", 35, new int[]{3, 6, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, 3.0F, 0.1F, () ->
 	{
-		return null;
+		return Ingredient.of(Items.NETHERITE_INGOT);
 	});
 
-	private static final int HEALTH_PER_SLOT = 55;
+	private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
 	private final String name;
 	private final int durabilityMultiplier;
-	private final int slotProtection;
+	private final int[] slotProtections;
 	private final int enchantmentValue;
 	private final SoundEvent sound;
 	private final float toughness;
 	private final float knockbackResistance;
 	private final LazyLoadedValue<Ingredient> repairIngredient;
 
-	ShardplateArmorMaterial(String pName, int pDurabilityMultiplier, int pSlotProtection , int pEnchantmentValue, SoundEvent pSound, float pToughness, float pKnockbackResistance, Supplier<Ingredient> pRepairIngredient)
+	ShardplateArmorMaterial(String pName, int pDurabilityMultiplier, int[] pSlotProtections, int pEnchantmentValue, SoundEvent pSound, float pToughness, float pKnockbackResistance, Supplier<Ingredient> pRepairIngredient)
 	{
 		this.name = pName;
 		this.durabilityMultiplier = pDurabilityMultiplier;
-		this.slotProtection = pSlotProtection;
+		this.slotProtections = pSlotProtections;
 		this.enchantmentValue = pEnchantmentValue;
 		this.sound = pSound;
 		this.toughness = pToughness;
@@ -49,14 +48,14 @@ public enum ShardplateArmorMaterial
 		this.repairIngredient = new LazyLoadedValue<>(pRepairIngredient);
 	}
 
-	public int getDurability()
+	public int getDurabilityForType(ArmorItem.Type pType)
 	{
-		return HEALTH_PER_SLOT * this.durabilityMultiplier;
+		return HEALTH_PER_SLOT[pType.getSlot().getIndex()] * this.durabilityMultiplier;
 	}
 
-	public int getDefense()
+	public int getDefenseForType(ArmorItem.Type pType)
 	{
-		return this.slotProtection;
+		return this.slotProtections[pType.getSlot().getIndex()];
 	}
 
 	public int getEnchantmentValue()

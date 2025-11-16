@@ -1,4 +1,3 @@
-
 /*
  * File updated ~ 4 - 2 - 2025 ~ Leaf
  */
@@ -25,7 +24,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import top.theillusivec4.curios.api.CuriosApi;
 
 @Mod(Surgebinding.MODID)
 public class Surgebinding implements IModModule
@@ -55,7 +53,6 @@ public class Surgebinding implements IModModule
 		SurgebindingEntityTypes.ENTITY_TYPES.register(modBus);
 		SurgebindingAttributes.ATTRIBUTES.register(modBus);
 		SurgebindingManifestations.MANIFESTATIONS.register(modBus);
-		SurgebindingRecipes.RECIPE_SERIALIZERS.register(modBus);
 
 		SurgebindingBiomes.BIOMES.register(modBus);
 		SurgebindingBiomeModifiers.BIOME_MODIFIER_SERIALIZERS.register(modBus);
@@ -70,8 +67,6 @@ public class Surgebinding implements IModModule
 
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
 		packetHandler = new SurgebindingPacketHandler();
-
-
 	}
 
 	public static ResourceLocation rl(String path)

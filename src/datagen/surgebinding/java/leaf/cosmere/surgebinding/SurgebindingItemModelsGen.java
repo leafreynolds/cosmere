@@ -1,7 +1,6 @@
 
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
- * File updated ~ 12 - 7- 2025 ~ Soar
+ * File updated ~ 8 - 11 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -9,13 +8,10 @@ package leaf.cosmere.surgebinding;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardbladeItem;
-import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -24,7 +20,6 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import java.awt.*;
 import java.util.function.Supplier;
 
 public class SurgebindingItemModelsGen extends ItemModelProvider
@@ -64,12 +59,6 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 
 				continue;
 			}
-			else if(item instanceof ShardplateCurioItem)
-			{
-				complexItem(path, "shardplate_helmet", "shardplate_helmet_visor");
-				continue;
-			}
-
 
 			//else normal item texture rules apply
 			simpleItem(path, path);
@@ -88,12 +77,5 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 		return this.getBuilder(path)
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
 				.texture("layer0", modLoc("item/" + texturePath));
-	}
-	public ItemModelBuilder complexItem(String path, String texturePath1, String texturePath2)
-	{
-		return this.getBuilder(path)
-				.parent(new ModelFile.UncheckedModelFile("item/generated"))
-				.texture("layer0", modLoc("item/" + texturePath1))
-				.texture("layer1",modLoc("item/" + texturePath2));
 	}
 }

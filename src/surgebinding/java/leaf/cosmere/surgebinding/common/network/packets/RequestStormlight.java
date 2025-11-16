@@ -8,7 +8,6 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,11 +42,6 @@ public class RequestStormlight implements ICosmerePacket
 					ssm.setStormlight(SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get());
 				}
 				else if (ssm.isOathed())
-				{
-					ssm.requestStormlight();
-				}
-				else if(SurgebindingManifestations.SURGEBINDING_POWERS.values().stream()
-						.anyMatch((manifestation -> cap.hasManifestation(manifestation.getManifestation()))))
 				{
 					ssm.requestStormlight();
 				}

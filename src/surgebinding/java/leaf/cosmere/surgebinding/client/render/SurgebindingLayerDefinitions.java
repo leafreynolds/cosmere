@@ -1,3 +1,4 @@
+
 /*
  * File updated ~ 6 - 2 - 2025 ~ Leaf
  */
@@ -11,7 +12,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 
 public class SurgebindingLayerDefinitions
 {
-	public static final ModelLayerLocation SHARDPLATE = new ModelLayerLocation(Surgebinding.rl("shardplate_base"), "shardplate");
+	public static final ModelLayerLocation SHARDPLATE = new ModelLayerLocation(Surgebinding.rl("shardplate"), "shardplate");
 	public static final ModelLayerLocation CHULL = new ModelLayerLocation(Surgebinding.rl("chull"), "chull");
 
 	// TODO This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -22,7 +23,7 @@ public class SurgebindingLayerDefinitions
 	public static void register(EntityRenderersEvent.RegisterLayerDefinitions evt)
 	{
 		//shardplate
-		evt.registerLayerDefinition(SurgebindingLayerDefinitions.SHARDPLATE, DynamicShardplateModel::createBodyLayer);
+		evt.registerLayerDefinition(SurgebindingLayerDefinitions.SHARDPLATE, ShardplateModel::createBodyLayer);
 		evt.registerLayerDefinition(SurgebindingLayerDefinitions.CHULL, ChullModel::createBodyLayer);
 		evt.registerLayerDefinition(SurgebindingLayerDefinitions.CRYPTIC, CrypticModel::createBodyLayer);
 		evt.registerLayerDefinition(SurgebindingLayerDefinitions.HONORSPREN, HonorsprenModel::createBodyLayer);

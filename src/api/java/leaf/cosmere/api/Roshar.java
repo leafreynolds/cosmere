@@ -1,12 +1,9 @@
 /*
  * File updated ~ 14 - 1 - 2025 ~ Leaf
- * File updated ~ 12 - 7 - 2025 ~ Soar
  */
 
 package leaf.cosmere.api;
 
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -196,8 +193,8 @@ public class Roshar
 		public static final Color SMOKESTONE = Color.decode("#c0a6b3");
 		public static final Color RUBY = Color.decode("#b40502");
 		public static final Color DIAMOND = Color.decode("#f5faf3");
-		public static final Color EMERALD = Color.decode("#31E840");
-		public static final Color GARNET = Color.decode("#f03c72");
+		public static final Color EMERALD = Color.decode("#52b984");
+		public static final Color GARNET = Color.decode("#e03935");
 		public static final Color ZIRCON = Color.decode("#3ab7bb");
 		public static final Color AMETHYST = Color.decode("#c975e4");
 		public static final Color TOPAZ = Color.decode("#e3681a");
@@ -308,126 +305,5 @@ public class Roshar
 		{
 			return gemstone.getColor();
 		}
-
-		public Gemstone getGemstone()
-		{
-			return gemstone;
-		}
-
-		public boolean hasBlade()
-		{
-			switch (this)
-			{
-				case BONDSMITH:
-					return false;
-				default:
-					return true;
-			}
-		}
-
-		public Color getPlateColor()
-		{
-			return switch (this)
-			{
-				case WINDRUNNER -> PlateColors.WINDRUNNER;
-				case SKYBREAKER -> PlateColors.SKYBREAKER;
-				case DUSTBRINGER -> PlateColors.DUSTBRINGER;
-				case EDGEDANCER -> PlateColors.EDGEDANCER;
-				case TRUTHWATCHER -> PlateColors.TRUTHWATCHER;
-				case LIGHTWEAVER -> PlateColors.LIGHTWEAVER;
-				case ELSECALLER -> PlateColors.ELSECALLER;
-				case WILLSHAPER -> PlateColors.WILLSHAPER;
-				case STONEWARD -> PlateColors.STONEWARD;
-				case BONDSMITH -> PlateColors.BONDSMITH;
-			};
-		}
-
-		public String getNahelSpren()
-		{
-			return switch (this)
-			{
-				case WINDRUNNER -> "honorspren";
-				case SKYBREAKER -> "highspren";
-				case DUSTBRINGER -> "ashspren";
-				case EDGEDANCER -> "cultivationspren";
-				case TRUTHWATCHER -> "mistspren";
-				case LIGHTWEAVER -> "cryptic";
-				case ELSECALLER -> "inkspren";
-				case WILLSHAPER -> "lightspren";
-				case STONEWARD -> "peakspren";
-				case BONDSMITH -> null;
-
-			};
-		}
-		public String getSprenOrBondsmith(int spren)
-		{
-			return this.getSprenOrBondsmith(spren, true);
-		}
-
-		public String getSprenOrBondsmith(int spren, boolean newSpren)
-		{
-			if(this.equals(RadiantOrder.BONDSMITH)  || (spren >= 1 && spren <= 3))
-			{
-				if (newSpren)
-				{
-					return switch (spren)
-					{
-						case 1 -> "stormfather";
-						case 2 -> "sibling";
-						case 3 -> "nightwatcher";
-						default -> getNahelSpren();
-					};
-				}
-				else
-				{
-					return switch (spren)
-					{
-						case 1 -> "wind";
-						case 2 -> "stone";
-						case 3 -> "night";
-						default -> getNahelSpren();
-					};
-				}
-
-			}
-			return getNahelSpren();
-		}
-
-		public String getLesserSpren()
-		{
-			return switch (this)
-			{
-				case WINDRUNNER -> "windspren";
-				case SKYBREAKER -> "gravitationspren";
-				case DUSTBRINGER -> "flamespren";
-				case EDGEDANCER -> "lifespren";
-				case TRUTHWATCHER -> "concentrationspren";
-				case LIGHTWEAVER -> "creationspren";
-				case ELSECALLER -> "logicspren";
-				case WILLSHAPER -> "joyspren";
-				case STONEWARD -> "stonespren";
-				case BONDSMITH -> "gloryspren";
-			};
-		}
-	}
-
-	private static class PlateColors
-	{
-		public static final Color WINDRUNNER = Color.decode("#17008a");
-		public static final Color SKYBREAKER = Color.decode("#c2c2c2");
-		public static final Color DUSTBRINGER = Color.decode("#574e4b");
-		public static final Color EDGEDANCER = Color.decode("#c6cfd8");
-		public static final Color TRUTHWATCHER = Color.decode("#6d8f5b");
-		public static final Color LIGHTWEAVER = Color.decode("#8a343e");
-		public static final Color ELSECALLER = Color.decode("#1e6c82");
-		public static final Color WILLSHAPER = Color.decode("#d4d4d4");
-		public static final Color STONEWARD = Color.decode("#b09335");
-		public static final Color BONDSMITH = Color.decode("#f3dd25");
-		public static final Color DEADPLATE = Color.decode("#757575");
-	}
-
-	public static Color getDeadplate()
-	{
-		return PlateColors.DEADPLATE;
 	}
 }

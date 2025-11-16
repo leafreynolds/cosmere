@@ -24,7 +24,6 @@ public class WindrunnerIdealStateManager
 			case 2:
 				return ProtectThoseWhoCannotProtectThemselves(spiritweb);
 			case 3:
-				//return ProtectThoseIHate(spiritweb);
 			case 4:
 			case 5:
 				return false;
@@ -44,18 +43,5 @@ public class WindrunnerIdealStateManager
 
 		MobEffectInstance isHero = living.getEffect(MobEffects.HERO_OF_THE_VILLAGE);
 		return isHero != null;
-	}
-
-	private static boolean ProtectThoseIHate(SpiritwebCapability spiritweb)
-	{
-		final LivingEntity living = spiritweb.getLiving();
-		return false;
-	}
-
-	private static boolean AcceptICannotProtect(SpiritwebCapability spiritweb)
-	{
-		final LivingEntity living = spiritweb.getLiving();
-
-		return false;
 	}
 }

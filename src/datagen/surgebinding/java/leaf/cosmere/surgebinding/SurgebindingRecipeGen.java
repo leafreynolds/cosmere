@@ -1,3 +1,4 @@
+
 /*
  * File updated ~ 4 - 1 - 2025 ~ Leaf
  */
@@ -11,10 +12,8 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingRecipes;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -46,9 +45,5 @@ public class SurgebindingRecipeGen extends BaseRecipeProvider implements ICondit
 			//addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
 			//addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), 1.0f, 1000);
 		}
-
-		SpecialRecipeBuilder
-				.special(SurgebindingRecipes.PLATE_CHARGE.get())
-				.save(consumer, Surgebinding.rl("plate_charging").toString());
 	}
 }

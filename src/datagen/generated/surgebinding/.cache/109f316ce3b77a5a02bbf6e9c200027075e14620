@@ -1,6 +1,5 @@
-// 1.20.1	2025-10-08T20:02:59.058869	Tags: surgebinding
+// 1.20.1	2025-11-16T15:05:53.857381	Tags: surgebinding
 1f4a893d33327a86f361b3e38f9dcf2af46287fc data/cosmere/tags/worldgen/biome/spawn_ores.json
-bb5e183a805f753908b6c65efaff0f102df47d81 data/curios/tags/items/shardplate.json
 dc8ed69b241d772a977e7c0c34320929d00ab4fa data/forge/tags/blocks/storage_blocks.json
 e65d9a5c24c24dc049cce37538918e39cdeac5f8 data/forge/tags/blocks/storage_blocks/amethyst.json
 c9686858daba30ebceb8af773a05f2f597efe509 data/forge/tags/blocks/storage_blocks/diamond.json
@@ -12,7 +11,6 @@ aeaede227bae14370d9c20b5fa1fde9a29521ebb data/forge/tags/blocks/storage_blocks/h
 5cd7c38bcb41dd20d7f68f84f3a282e6f3fcbf38 data/forge/tags/blocks/storage_blocks/smokestone.json
 538b3e977ed89fbf5346bda5d9c2a31519709789 data/forge/tags/blocks/storage_blocks/topaz.json
 5ce6a2023aa95ada658bb30be3a2bf1a1ab729a3 data/forge/tags/blocks/storage_blocks/zircon.json
-bb5e183a805f753908b6c65efaff0f102df47d81 data/forge/tags/items/armors.json
 0f13c3563b211b2c3182edb98369e780f7605b13 data/forge/tags/items/gems.json
 0d4577d583c0237e53fe8a14823bbd91670d7f0d data/forge/tags/items/gems/amethyst.json
 82c86c79901f94132496df461e7419cff4713658 data/forge/tags/items/gems/diamond.json
