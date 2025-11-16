@@ -34,12 +34,19 @@ public class MiscHelper
 			}
 
 			//https://www.theoryland.com/intvmain.php?i=977#43
-			if (itemStack.getItem() instanceof GodMetalNuggetItem godItem && godItem.getMetalType() == Metals.MetalType.LERASIUM)
+			if (itemStack.getItem() instanceof GodMetalNuggetItem godItem)
 			{
-				if (livingEntity instanceof Llama && !livingEntity.hasCustomName())
+				if (godItem.getMetalType() == Metals.MetalType.LERASIUM)
 				{
-					//todo translations
-					livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
+					if (livingEntity instanceof Llama && !livingEntity.hasCustomName())
+					{
+						//todo translations
+						livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
+					}
+				}
+				else if(godItem.getMetalType() == Metals.MetalType.ATIUM)
+				{
+					eatMetal(godItem.getMetalType(), livingEntity);
 				}
 			}
 		}
