@@ -75,16 +75,14 @@ public class ClientModEvents
 		final Minecraft mc = Minecraft.getInstance();
 		SpiritwebCapability.get(mc.player).ifPresent(cap ->
 		{
-			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
-
 			//normal hud stuff
-			if (mc.screen != SpiritwebMenu.instance)
+			if (!(mc.screen instanceof SpiritwebMenu))
 			{
-				spiritweb.renderSelectedHUD(guiGraphics);
+				//cap.renderSelectedHUD(guiGraphics);
 			}
 
 			//actual menu stuff
-			SpiritwebMenu.instance.postRender(spiritweb);
+			//SpiritwebMenu.instance.postRender(spiritweb);
 		});
 
 	}
