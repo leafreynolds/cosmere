@@ -12,16 +12,15 @@ import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.items.BaseItem;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
+import leaf.cosmere.common.registry.ItemsRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -112,10 +111,36 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 		//for each metal in the vial
 		Map<Integer, Integer> metalsInVial = getStoredMetalsMap(getContainedMetalsTag(stack));
 
-		metalsInVial.entrySet().forEach(metalInfo ->
+		metalsInVial.forEach((metalId, amount) ->
 		{
-			// MetalName x Value
-			MiscHelper.consumeNugget(entityLiving, stack);
+			ItemStack newStack;
+			if(Metals.MetalType.valueOf(metalId).isPresent())
+			{
+				Metals.MetalType metalType = Metals.MetalType.valueOf(metalId).get();
+				if(metalType.isGodMetal())
+				{
+					newStack = new ItemStack(ItemsRegistry.GOD_METAL_NUGGETS.get(metalType).asItem(), amount);
+					GodMetalNuggetItem item = (GodMetalNuggetItem) newStack.getItem();
+					item.writeMetalAlloySizeNbtData(newStack, item.getMaxSize());
+				}
+				else
+				{
+					switch(metalType)
+					{
+						case IRON:
+							newStack = new ItemStack(Items.IRON_NUGGET, amount);
+							break;
+						case GOLD:
+							newStack = new ItemStack(Items.GOLD_NUGGET, amount);
+							break;
+						default:
+							newStack = new ItemStack(ItemsRegistry.METAL_NUGGETS.get(metalType).asItem(), amount);
+							break;
+					}
+
+				}
+				MiscHelper.consumeNugget(entityLiving, newStack);
+			}
 		});
 
 
