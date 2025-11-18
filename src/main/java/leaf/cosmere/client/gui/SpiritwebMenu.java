@@ -879,7 +879,7 @@ public class SpiritwebMenu extends Screen
 				region.centerY = (y1m1 + y2m1 + y1m2 + y2m2) / 4;
 
 
-				final float a = 0.5f;
+				float a = 0.5f;
 				float f = 0f;
 
 				final boolean showHighlight;
@@ -937,9 +937,10 @@ public class SpiritwebMenu extends Screen
 
 					if (region.manifestation.hasMenu())
 					{
-						lerpPositive = 0;
-						green = 0.5f;
-						lerpNegative = 0;
+						lerpPositive = 0.25f;
+						green = 0.25f;
+						lerpNegative = 0.25f;
+						a = 0.75f;
 					}
 					else if (mode > 0)
 					{

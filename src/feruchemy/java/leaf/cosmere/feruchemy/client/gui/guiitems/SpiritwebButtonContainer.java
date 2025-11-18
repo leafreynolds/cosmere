@@ -3,14 +3,17 @@ package leaf.cosmere.feruchemy.client.gui.guiitems;
 import leaf.cosmere.api.MenuHelpers.MenuButton;
 import leaf.cosmere.api.MenuHelpers.MenuContainer;
 
-public class SpiritwebMenuContainer extends MenuContainer
+public class SpiritwebButtonContainer extends MenuContainer
 {
-	public SpiritwebMenuContainer(double x, double y, int containWidth, int containHeight)
+	public Integer curioItemSlot;
+
+	public SpiritwebButtonContainer(double x, double y, int containWidth, int containHeight, int curioItemSlot)
 	{
 		super(x, y, containWidth, containHeight);
-		this.red = 125;
-		this.green = 200;
-		this.blue = 220; //255
+		this.red = 0;
+		this.green = 0;
+		this.blue = 0; //255
+		this.curioItemSlot = curioItemSlot;
 	}
 
 
@@ -25,7 +28,7 @@ public class SpiritwebMenuContainer extends MenuContainer
 		else
 		{
 			menuButtons.add(button);
-			updateDimensions(containWidth + 1, containHeight);
+			updateDimensions(containWidth + 1, containHeight, centerX, centerY);
 		}
 
 	}
@@ -38,7 +41,7 @@ public class SpiritwebMenuContainer extends MenuContainer
 			if (size != 1) //Shrink the container according to amount of powers, but don't shrink if it's already at one
 			{
 				menuButtons.remove(button);
-				updateDimensions(containWidth - 1, containHeight);
+				updateDimensions(containWidth - 1, containHeight, centerX, centerY);
 			}
 			else
 			{
@@ -50,7 +53,7 @@ public class SpiritwebMenuContainer extends MenuContainer
 	@Override
 	public void clearButtons()
 	{
-		updateDimensions(1, 1);
+		updateDimensions(1, 1, centerX, centerY);
 		menuButtons.clear();
 	}
 }

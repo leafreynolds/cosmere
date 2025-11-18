@@ -56,7 +56,7 @@ public class MenuContainer
 		blue = 125;
 		opacity = 125;
 
-		updateDimensions(containWidth, containHeight);
+		updateDimensions(containWidth, containHeight, centerX, centerY);
 	}
 
 	public void setPosition(double x, double y)
@@ -64,8 +64,28 @@ public class MenuContainer
 		this.centerX = x;
 		this.centerY = y;
 
-		updateDimensions(containWidth, containHeight);
+		updateDimensions(containWidth, containHeight, centerX, centerY);
 
+	}
+
+	public double getWidth()
+	{
+		return width;
+	}
+
+	public double getHeight()
+	{
+		return height;
+	}
+
+	public int getContainWidth()
+	{
+		return containWidth;
+	}
+
+	public int getContainHeight()
+	{
+		return containHeight;
 	}
 
 	public void arrangeButtons() {
@@ -86,10 +106,13 @@ public class MenuContainer
 		}
 	}
 
-	public void updateDimensions(int containWidth, int containHeight)
+	public void updateDimensions(int containWidth, int containHeight, double centerX, double centerY)
 	{
 		this.containWidth = containWidth;
 		this.containHeight = containHeight;
+
+		this.centerX = centerX;
+		this.centerY = centerY;
 
 
 		//width needed is spacing + contents,
@@ -163,7 +186,7 @@ public class MenuContainer
 		}
 	}
 
-	public void renderContainer(BufferBuilder buffer, double mouseX, double mouseY, double middle_x, double middle_y)
+	public void renderContainer(BufferBuilder buffer, double mouseX, double mouseY, double centerX, double centerY)
 	{
 
 		for (MenuButton button : menuButtons)
@@ -173,11 +196,9 @@ public class MenuContainer
 
 		int lerpositive;
 
-		this.centerX = middle_x;
-		this.centerY = middle_y;
-		updateDimensions(this.containWidth, this.containHeight);
+		updateDimensions(containWidth, containHeight, centerX, centerY);
 
-		highlightButtons(mouseX, mouseY, middle_x, middle_y);
+		highlightButtons(mouseX, mouseY, centerX, centerY);
 
 		if (highlight)
 		{
@@ -193,9 +214,6 @@ public class MenuContainer
 
 		buffer.vertex(x3, y3, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
 		buffer.vertex(x4, y4, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
-
-
-
 
 	}
 

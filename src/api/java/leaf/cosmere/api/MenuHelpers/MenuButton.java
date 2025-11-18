@@ -1,7 +1,10 @@
 package leaf.cosmere.api.MenuHelpers;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import joptsimple.internal.Strings;
 import leaf.cosmere.api.math.MathHelper;
+import net.minecraft.resources.ResourceLocation;
 
 public class MenuButton
 {
@@ -119,14 +122,14 @@ public class MenuButton
 	public void highlightAction(double mouseX, double mouseY, double middle_x, double middle_y)
 	{
 		highlight = (MathHelper.inTriangle(
-				x1 - middle_x, y1 - middle_y,
-				x2 - middle_x, y2 - middle_y,
-				x3 - middle_x, y3 - middle_y,
+				x1, y1,
+				x2, y2,
+				x3, y3,
 				mouseX, mouseY)
 				|| MathHelper.inTriangle(
-				x1 -middle_x, y1 - middle_y,
-				x4 - middle_x, y4 - middle_y,
-				x3 - middle_x, y3 - middle_y,
+				x1, y1,
+				x4, y4,
+				x3, y3,
 				mouseX, mouseY));
 
 	};
@@ -137,14 +140,15 @@ public class MenuButton
 
 		if (highlight)
 		{
-			lerpositive = 20;
+			lerpositive = 50;
 		}
 
-		buffer.vertex(x1, y1, 0).color(red + lerpositive, green, blue, opacity).endVertex();
-		buffer.vertex(x2, y2, 0).color(red + lerpositive, green, blue, opacity).endVertex();
+		buffer.vertex(x1, y1, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+		buffer.vertex(x2, y2, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
 
-		buffer.vertex(x3, y3, 0).color(red + lerpositive, green, blue, opacity).endVertex();
-		buffer.vertex(x4, y4, 0).color(red + lerpositive, green, blue, opacity).endVertex();
+		buffer.vertex(x3, y3, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+		buffer.vertex(x4, y4, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+
 	}
 
 }

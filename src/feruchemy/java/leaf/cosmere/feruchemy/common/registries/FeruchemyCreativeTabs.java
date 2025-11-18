@@ -43,7 +43,7 @@ public class FeruchemyCreativeTabs
 		// but this is how we have them ordered nicely in the creative menu
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
-			if (metalType.hasFeruchemicalEffect())
+			if (metalType.hasFeruchemicalEffect() && metalType != Metals.MetalType.NICROSIL)
 			{
 				final RingMetalmindItem item = FeruchemyItems.METAL_RINGS.get(metalType).get();
 				item.addFilled(output);
@@ -51,7 +51,7 @@ public class FeruchemyCreativeTabs
 		}
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
-			if (metalType.hasFeruchemicalEffect())
+			if (metalType.hasFeruchemicalEffect() && metalType != Metals.MetalType.NICROSIL)
 			{
 				final BraceletMetalmindItem item = FeruchemyItems.METAL_BRACELETS.get(metalType).get();
 				item.addFilled(output);
@@ -59,7 +59,7 @@ public class FeruchemyCreativeTabs
 		}
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
-			if (metalType.hasFeruchemicalEffect())
+			if (metalType.hasFeruchemicalEffect() && metalType != Metals.MetalType.NICROSIL)
 			{
 				final NecklaceMetalmindItem item = FeruchemyItems.METAL_NECKLACES.get(metalType).get();
 				item.addFilled(output);
