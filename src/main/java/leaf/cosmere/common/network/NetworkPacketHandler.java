@@ -33,6 +33,7 @@ public class NetworkPacketHandler extends BasePacketHandler
 		registerClientToServer(ChangeManifestationModeMessage.class, ChangeManifestationModeMessage::decode);
 		registerClientToServer(ChangeSelectedManifestationMessage.class, ChangeSelectedManifestationMessage::decode);
 		registerClientToServer(SetSelectedManifestationMessage.class, SetSelectedManifestationMessage::decode);
+		registerClientToServer(StoreTapManifestationMessage.class, StoreTapManifestationMessage::decode);
 
 	}
 

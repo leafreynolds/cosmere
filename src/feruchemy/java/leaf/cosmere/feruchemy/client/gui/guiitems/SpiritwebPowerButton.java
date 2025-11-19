@@ -16,7 +16,7 @@ public class SpiritwebPowerButton extends SquareMenuButton
 
 	ISpiritweb spiritweb;
 	Manifestation manifestation;
-	double strength;
+	Integer strength;
 
 	SpiritwebButtonContainer container;
 
@@ -78,7 +78,6 @@ public class SpiritwebPowerButton extends SquareMenuButton
 		else
 		{
 			this.manifestation = manifestation;
-			this.strength = manifestation.getStrength(spiritweb, true);
 
 			//Create icon path
 			stringBuilder.setLength(0);
@@ -112,9 +111,14 @@ public class SpiritwebPowerButton extends SquareMenuButton
 
 	}
 
-	public double getStrength()
+	public Integer getStrength()
 	{
 		return strength;
+	}
+
+	public void setStrength(Integer strength)
+	{
+		this.strength = strength;
 	}
 
 

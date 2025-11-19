@@ -4,7 +4,9 @@
 
 package leaf.cosmere.feruchemy.common.items;
 
+import leaf.cosmere.api.Manifestations.ManifestationTypes;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.items.ManifestationMetalCurioItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +35,13 @@ public class NicrosilRingMetalmindItem extends ManifestationMetalCurioItem
 	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+
+		Manifestation[] manifestations = getManifestations(stack);
+
+		for(Manifestation manifestation : manifestations)
+		{
+			if(manifestation != null) tooltip.add(Component.literal(manifestation.getName()));
+		}
 	}
 
 }

@@ -18,7 +18,10 @@ import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.client.gui.ButtonAction;
 import leaf.cosmere.client.gui.SpiritwebMenu;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.common.network.packets.StoreTapManifestationMessage;
 import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebButtonContainer;
 import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebPowerButton;
 import net.minecraft.client.Minecraft;
@@ -29,6 +32,8 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
@@ -147,8 +152,8 @@ public class NicrosilMenu extends Screen
 			{
 				if(spiritwebPowerButton.highlight)
 				{
-					spiritwebPowerButton.setManifestation(heldButton.powerButton.manifestation);
-					playerSpiritwebPowerButtons.remove(heldButton.powerButton);
+					//spiritwebPowerButton.setManifestation(heldButton.powerButton.manifestation);
+					//playerSpiritwebPowerButtons.remove(heldButton.powerButton);
 
 					if (spiritweb.getLiving() instanceof Player player)
 					{
@@ -156,9 +161,18 @@ public class NicrosilMenu extends Screen
 						if (curiosItemHandler.resolve().isPresent())
 						{
 							ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
-							if (itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot).getItem() instanceof IHasManifestations item)
+							if (itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot).getItem() instanceof IHasManifestations)
 							{
-								// Store power in curio
+								final Attribute attribute = heldButton.powerButton.manifestation.getAttribute();
+								AttributeInstance manifestationAttribute = player.getAttribute(attribute);
+								Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
+										heldButton.powerButton.manifestation,
+										manifestationAttribute.getBaseValue(),
+										spiritwebPowerButton.getContainer().curioItemSlot,
+										true));
+								spiritwebPowerButton.setManifestation(heldButton.powerButton.manifestation);
+								spiritwebPowerButton.setStrength((int) manifestationAttribute.getBaseValue());
+								playerSpiritwebPowerButtons.remove(heldButton.powerButton);
 							}
 						}
 					}
@@ -172,8 +186,28 @@ public class NicrosilMenu extends Screen
 			{
 				if(spiritwebPowerButton.highlight && spiritwebPowerButton.getManifestation() != null)
 				{
-					playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(spiritwebPowerButton.getManifestation()));
-					spiritwebPowerButton.setManifestation(null);
+					//playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(spiritwebPowerButton.getManifestation()));
+					//spiritwebPowerButton.setManifestation(null);
+					if (spiritweb.getLiving() instanceof Player player)
+					{
+						LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(player);
+						if (curiosItemHandler.resolve().isPresent())
+						{
+							ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
+							if (itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot).getItem() instanceof IHasManifestations)
+							{
+								Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
+										spiritwebPowerButton.getManifestation(),
+										spiritwebPowerButton.getStrength(),
+										spiritwebPowerButton.getContainer().curioItemSlot,
+										false));
+								spiritwebPowerButtons.remove(spiritwebPowerButton);
+								playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(spiritwebPowerButton.getManifestation()));
+							}
+						}
+					}
+
+
 				}
 			}
 
@@ -181,20 +215,7 @@ public class NicrosilMenu extends Screen
 			{
 				if (playerSpiritwebPowerButton.highlighted)
 				{
-				/*
-				if (button == 0)
-				{
-					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, 1));
-				}
-				else
-				{
-					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(radialMenuButton.manifestation, -1));
-				}
-				return true;
-				 */
-
 					heldButton = new TransferredPower(playerSpiritwebPowerButton, playerSpiritwebPowerButton.strength);
-
 				}
 			}
 
@@ -263,9 +284,13 @@ public class NicrosilMenu extends Screen
 					if (itemHandler.getEquippedCurios().getStackInSlot(i).getItem() instanceof IHasManifestations item)
 					{
 						SpiritwebButtonContainer spiritwebContainer = new SpiritwebButtonContainer(0, 0, 1, 1, i);
+						Manifestation[] manifestations = item.getManifestations(itemHandler.getEquippedCurios().getStackInSlot(i));
+						Integer[] manifestationStrengths = item.getManifestationStrengths(itemHandler.getEquippedCurios().getStackInSlot(i));
 						for (int j = 0; j < item.getMaxCapacity(); j++)
 						{
 							SpiritwebPowerButton spiritwebPowerButton = new SpiritwebPowerButton(0, 0, spiritweb, spiritwebContainer);
+							spiritwebPowerButton.setManifestation(manifestations[j]);
+							spiritwebPowerButton.setStrength(manifestationStrengths[j]);
 							spiritwebPowerButtons.add(spiritwebPowerButton);
 							spiritwebContainer.addButton(spiritwebPowerButton);
 						}
