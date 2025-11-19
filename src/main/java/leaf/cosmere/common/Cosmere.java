@@ -70,6 +70,7 @@ public class Cosmere
 		LootFunctionRegistry.LOOT_FUNCTIONS.register(modBus);
 		GameEventRegistry.GAME_EVENTS.register(modBus);
 		ArgumentTypeRegistry.ARGUMENT_TYPE_INFOS.register(modBus);
+		CosmereRecipesRegistry.RECIPE_SERIALIZERS.register(modBus);
 
 		CreativeTabsRegistry.CREATIVE_TABS.register(modBus);
 		BiomeRegistry.BIOMES.register(modBus);

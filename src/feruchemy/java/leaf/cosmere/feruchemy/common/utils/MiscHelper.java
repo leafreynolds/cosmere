@@ -4,52 +4,44 @@
 
 package leaf.cosmere.feruchemy.common.utils;
 
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.IGrantsManifestations;
+import leaf.cosmere.api.IHasSize;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
-import net.minecraft.server.level.ServerPlayer;
+import leaf.cosmere.api.text.TextHelper;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
 
 public class MiscHelper
 {
 
-	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType)
+	public static void consumeNugget(LivingEntity livingEntity, ItemStack itemStack)
 	{
-		if (metalType == null || livingEntity.level().isClientSide)
-		{
-			return;
-		}
+		if (livingEntity.level().isClientSide) return;
 
-		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
-		{
-			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
 
-			if (metalType == Metals.MetalType.LERASATIUM)
+		if(itemStack.getItem() instanceof IGrantsManifestations manifestingItem && itemStack.getItem() instanceof IHasSize sizeItem)
+		{
+			Integer size = sizeItem.readMetalAlloySizeNbtData(itemStack);
+			if(size != null)
 			{
-				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
-				{
-					//give feruchemy
-					final boolean isFeruchemy = manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
-					final boolean notAtium = manifestation.getPowerID() != Metals.MetalType.ATIUM.getID();
-					if (isFeruchemy && notAtium)//don't double up on improving electrum
-					{
-						final double strength = manifestation.getStrength(iSpiritweb, true);
-						final int minimum = FeruchemyConfigs.SERVER.GOD_METAL_EAT_STRENGTH_MINIMUM.get();
+				ArrayList<Manifestation> manifestations = manifestingItem.determineManifestations(itemStack);
+				manifestingItem.grantManifestations(livingEntity, manifestations, size);
+			}
 
-						spiritweb.giveManifestation(manifestation, strength < minimum ? minimum : (int) (strength + 1));
-					}
+			if (itemStack.getItem() instanceof GodMetalNuggetItem godItem && godItem.getMetalType() == Metals.MetalType.LERASATIUM)
+			{
+				if (livingEntity instanceof Llama && !livingEntity.hasCustomName())
+				{
+					//todo translations
+					livingEntity.setCustomName(TextHelper.createTranslatedText("Full Feruchemist Llama"));
 				}
 			}
-
-			if (livingEntity instanceof ServerPlayer serverPlayer)
-			{
-				spiritweb.syncToClients(serverPlayer);
-			}
-
-		});
+		}
 	}
 
 

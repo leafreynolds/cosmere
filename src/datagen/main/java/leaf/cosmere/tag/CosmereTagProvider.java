@@ -11,6 +11,7 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.blocks.MetalBlock;
 import leaf.cosmere.common.blocks.MetalOreBlock;
+import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
 import leaf.cosmere.common.items.MetalIngotItem;
 import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
@@ -97,7 +98,9 @@ public class CosmereTagProvider extends BaseTagProvider
 				final TagKey<Item> metalNuggetTag = metalType.getMetalNuggetTag();
 				getItemBuilder(Tags.Items.NUGGETS).add(metalNuggetTag);
 
-				final ItemRegistryObject<Item> nugRegObj = ItemsRegistry.METAL_NUGGETS.get(metalType);
+				ItemRegistryObject<Item> nugRegObj = ItemsRegistry.METAL_NUGGETS.get(metalType);
+				if (nugRegObj == null) nugRegObj = ItemsRegistry.GOD_METAL_NUGGETS.get(metalType);
+
 				if (nugRegObj != null)
 				{// tell the Nugget that our Nuggets are related
 					Item nuggetItem = nugRegObj.asItem();
@@ -107,6 +110,23 @@ public class CosmereTagProvider extends BaseTagProvider
 
 					// tell our nuggets what their tags are.
 					addToTag(metalNuggetTag, nuggetItem);
+				}
+
+				// Add the metal alloy nugget to the nugget tags
+				if(!metalType.isGodMetal() && metalType.hasAssociatedManifestation())
+				{
+					for(Metals.MetalType godMetalType : new Metals.MetalType[] { Metals.MetalType.LERASIUM, Metals.MetalType.LERASATIUM})
+					{
+						final TagKey<Item> godMetalAlloyNuggetTag = godMetalType.getGodMetalAlloyNuggetTag(metalType);
+						getItemBuilder(Tags.Items.NUGGETS).add(godMetalAlloyNuggetTag);
+
+						ItemRegistryObject<GodMetalAlloyNuggetItem> alloyNugRegObj = ItemsRegistry.GOD_METAL_ALLOY_NUGGETS.get(godMetalType).get(metalType);
+						if (alloyNugRegObj != null)
+						{
+							Item nuggetItem = alloyNugRegObj.asItem();
+							addToTag(godMetalAlloyNuggetTag, nuggetItem);
+						}
+					}
 				}
 			}
 

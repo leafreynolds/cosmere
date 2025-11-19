@@ -5,66 +5,76 @@
 package leaf.cosmere.allomancy.common.utils;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
-import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import net.minecraft.server.level.ServerPlayer;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+import java.util.ArrayList;
 
 public class MiscHelper
 {
 
-	public static void consumeNugget(LivingEntity livingEntity, Metals.MetalType metalType, int amount)
+	public static void consumeNugget(LivingEntity livingEntity, ItemStack itemStack)
 	{
-		if (metalType == null || livingEntity.level().isClientSide)
-		{
-			return;
-		}
+		if (livingEntity.level().isClientSide) return;
 
+		if(itemStack.getItem() instanceof IGrantsManifestations manifestingItem && itemStack.getItem() instanceof IHasSize sizeItem)
+		{
+			Integer size = sizeItem.readMetalAlloySizeNbtData(itemStack);
+			if(size != null)
+			{
+				ArrayList<Manifestation> manifestations = manifestingItem.determineManifestations(itemStack);
+				manifestingItem.grantManifestations(livingEntity, manifestations, size);
+			}
+
+			//https://www.theoryland.com/intvmain.php?i=977#43
+			if (itemStack.getItem() instanceof GodMetalNuggetItem godItem)
+			{
+				if (godItem.getMetalType() == Metals.MetalType.LERASIUM)
+				{
+					if (livingEntity instanceof Llama && !livingEntity.hasCustomName())
+					{
+						//todo translations
+						livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
+					}
+				}
+				else if(godItem.getMetalType() == Metals.MetalType.ATIUM)
+				{
+					eatMetal(godItem.getMetalType(), livingEntity);
+				}
+			}
+		}
+		else if(itemStack.getItem() instanceof IHasMetalType metalItem)
+		{
+			eatMetal(metalItem.getMetalType(), livingEntity);
+		}
+		else if(itemStack.getItem() == Items.IRON_NUGGET)
+		{
+			eatMetal(Metals.MetalType.IRON, livingEntity);
+		}
+		else if(itemStack.getItem() == Items.GOLD_NUGGET)
+		{
+			eatMetal(Metals.MetalType.GOLD, livingEntity);
+		}
+	}
+
+	private static void eatMetal(Metals.MetalType metalType, LivingEntity livingEntity)
+	{
 		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
-
-			if (metalType == Metals.MetalType.LERASIUM)
-			{
-				//https://www.theoryland.com/intvmain.php?i=977#43
-				if (livingEntity instanceof Llama && !livingEntity.hasCustomName())
-				{
-					//todo translations
-					livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
-				}
-
-				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
-				{
-					//give allomancy
-					final boolean isAllomancy = manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
-					final boolean notAtium = manifestation.getPowerID() != Metals.MetalType.ATIUM.getID();
-					if (isAllomancy && notAtium)
-					{
-						//todo allomancy godmetal strength
-						final double strength = manifestation.getStrength(iSpiritweb, true);
-						final int minimum = AllomancyConfigs.SERVER.GOD_METAL_EAT_STRENGTH_MINIMUM.get();
-
-						spiritweb.giveManifestation(manifestation, strength < minimum ? minimum : (int) (strength + 1));
-					}
-				}
-			}
-			else if (metalType != Metals.MetalType.LERASATIUM)//ignore lerasatium, that's handled in feruchemy
+			if (metalType.hasAssociatedManifestation()) //ignore metals without manifestations, that's handled in feruchemy
 			{
 				//add to metal stored
-				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;
+				final int addAmount = metalType.getAllomancyBurnTimeSeconds();
 				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 				allo.adjustIngestedMetal(metalType, addAmount, true);
-			}
-
-			if (livingEntity instanceof ServerPlayer serverPlayer)
-			{
-				spiritweb.syncToClients(serverPlayer);
 			}
 		});
 	}

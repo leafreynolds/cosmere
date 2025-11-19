@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:nuggets/harmonium"
+            "items": [
+              "cosmere:harmonium_nugget"
+            ]
           }
         ]
       },

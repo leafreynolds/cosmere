@@ -23,3 +23,5 @@ docs/changelog*.txt
 /logs
 /src/datagen/*/resources
 libs/
+
+**/.DS_Store

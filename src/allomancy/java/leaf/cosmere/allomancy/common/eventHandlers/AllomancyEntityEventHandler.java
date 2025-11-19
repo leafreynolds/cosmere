@@ -12,6 +12,8 @@ import leaf.cosmere.allomancy.common.manifestation.AllomancyNicrosil;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyPewter;
 import leaf.cosmere.allomancy.common.utils.MiscHelper;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
+import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.items.MetalNuggetItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -49,20 +51,21 @@ public class AllomancyEntityEventHandler
 		ItemStack stack = event.getEntity().getMainHandItem();
 		if (!stack.isEmpty())
 		{
-			if (stack.getItem() instanceof MetalNuggetItem beadItem)
+			if (stack.getItem() instanceof MetalNuggetItem metalNuggetItem)
 			{
-				Metals.MetalType metalType = beadItem.getMetalType();
-
-				switch (metalType)
+				// Don't alloy for consuming normal metal nuggets
+				if (!(stack.getItem() instanceof GodMetalAlloyNuggetItem) && !(stack.getItem() instanceof GodMetalNuggetItem))
 				{
-					//only care about god metal when trying to give others powers
-					case LERASIUM:
-						MiscHelper.consumeNugget(target, metalType, 1);
-						//need to shrink, because metal nugget only shrinks on item use finish from eating, which is not part of entity interact with item
-						stack.shrink(1);
-						break;
+					return;
+				}
+				// Only consume the nugget if it contains Lerasium
+				if (metalNuggetItem.getMetalType().isGodMetal() && metalNuggetItem.getMetalType() != Metals.MetalType.LERASIUM)
+				{
+					return;
 				}
 
+				MiscHelper.consumeNugget(target, stack);
+				stack.shrink(1);
 			}
 		}
 		else
@@ -79,12 +82,16 @@ public class AllomancyEntityEventHandler
 		{
 			return;
 		}
-
 		final LivingEntity livingEntity = event.getEntity();
-		if (event.getItem().getItem() instanceof MetalNuggetItem item)
+
+		if (event.getItem().getItem() instanceof MetalNuggetItem metalNuggetItem)
 		{
-			//no need to shrink item count as it's already done as part of nugget use item finish
-			MiscHelper.consumeNugget(livingEntity, item.getMetalType(), 1);
+			// Only consume the nugget if it contains Lerasium
+			if (metalNuggetItem.getMetalType().isGodMetal() && metalNuggetItem.getMetalType() != Metals.MetalType.LERASIUM)
+			{
+				return;
+			}
+			MiscHelper.consumeNugget(livingEntity, event.getItem());
 		}
 	}
 

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "The first way I will teach you to activate powers is with the basic keybinds. This is not the most effective way of doing it, but it is straightforward.\nFirst, locate the icon for your current main power in the upper left corner. By pressing ($(k:key.cosmere.powers.next)$()) and ($(k:key.cosmere.powers.previous)$()) you can change which power is your current main. From there, press ($(k:key.cosmere.powers.mode.increase)$()) and ($(k:key.cosmere.powers.mode.decrease)$()) to change the mode for that power. Changing your current main power will not stop your other powers from running in the background.",
+      "text": "The first way I will teach you to activate powers is with the basic keybinds. This is not the most effective way of doing it, but it is straightforward.\nFirst, locate the icon for your current main power in the upper left corner. By pressing ($(k:key.cosmere.powers.next)$()) and ($(k:key.cosmere.powers.previous)$()) you can change which power is your current main. From there, press ($(k:key.cosmere.powers.mode.increase)$()) and ($(k:key.cosmere.powers.mode.decrease)$()) to change the mode for that power by plus or minus one respectively. If you are holding ($(k:Shift)$()) while you are changing the mode this way, it will change by plus or minus five levels, If instead you are holding ($(k:control)$()()) while you are changing the mode this way, it will change by plus or minus ten levels or to the maximum, whichever is lower. Changing your current main power will not stop your other powers from running in the background.",
       "title": "Activating Powers"
     },
     {
@@ -17,10 +17,6 @@
       "type": "text",
       "text": "The fastest way to activate one power quickly is with its dedicated keybind. These are not set by default, but you can change your favorites to activate this way. When this keybind is used, it will set the mode of your power to +1, unless the power is feruchemical in nature, in which case it will tap at level 5 instead. However, in all cases, if the power is already active, no matter the mode, pressing the keybind will turn the power off instead. Using a dedicated keybind will also set your active main power to the associated power as well",
       "title": "Dedicated Keybinds"
-    },
-    {
-      "type": "empty",
-      "draw_filler": true
     },
     {
       "type": "text",

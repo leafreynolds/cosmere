@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:nuggets/atium"
+            "items": [
+              "cosmere:atium_nugget"
+            ]
           }
         ]
       },

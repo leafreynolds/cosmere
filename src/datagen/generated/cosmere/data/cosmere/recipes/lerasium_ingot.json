@@ -3,15 +3,14 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:nuggets/lerasium"
-    },
-    "J": {
-      "item": "cosmere:lerasium_nugget"
+      "type": "forge:partial_nbt",
+      "item": "cosmere:lerasium_nugget",
+      "nbt": "{nuggetSize:16}"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {
