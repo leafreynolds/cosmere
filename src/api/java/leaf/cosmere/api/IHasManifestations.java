@@ -6,15 +6,13 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
-
 public interface IHasManifestations
 {
 	int getMaxCapacity();
 
-	default boolean addManifestation(ItemStack itemStack, Manifestation manifestation, int strength)
+	default void addManifestation(ItemStack itemStack, Manifestation manifestation, int strength)
 	{
-		if(manifestation == null) return false;
+		if(manifestation == null) return;
 		Manifestation[] manifestations = getManifestations(itemStack);
 		Integer[] manifestationStrengths = getManifestationStrengths(itemStack);
 
@@ -32,15 +30,14 @@ public interface IHasManifestations
 				manifestationStrengths[i] = strength;
 				setManifestations(itemStack, manifestations);
 				setManifestationStrengths(itemStack, manifestationStrengths);
-				return true;
+				return;
 			}
 		}
-		return false;
 	}
 
-	default boolean removeManifestation(ItemStack itemStack, Manifestation manifestation)
+	default void removeManifestation(ItemStack itemStack, Manifestation manifestation)
 	{
-		if(manifestation == null) return false;
+		if(manifestation == null) return;
 		Manifestation[] manifestations = getManifestations(itemStack);
 		Integer[] manifestationStrengths = getManifestationStrengths(itemStack);
 
@@ -52,10 +49,9 @@ public interface IHasManifestations
 				manifestationStrengths[i] = null;
 				setManifestations(itemStack, manifestations);
 				setManifestationStrengths(itemStack, manifestationStrengths);
-				return true;
+				return;
 			}
 		}
-		return false;
 	}
 
 	default Manifestation[] getManifestations(ItemStack itemStack)
@@ -116,7 +112,16 @@ public interface IHasManifestations
 		if(!nbt.contains("manifestationStrengths")) return new Integer[getMaxCapacity()];
 		int[] strengths = nbt.getIntArray("manifestationStrengths");
 		Integer[] newStrengths = new Integer[strengths.length];
-		for(int i = 0; i < strengths.length; i++) newStrengths[i] = strengths[i];
+		for(int i = 0; i < strengths.length; i++){
+			if (strengths[i] == 0)
+			{
+				newStrengths[i] = null;
+			}
+			else
+			{
+				newStrengths[i] = strengths[i];
+			}
+		}
 
 		if(newStrengths.length == 0) return new Integer[getMaxCapacity()];
 		return newStrengths;
@@ -127,8 +132,18 @@ public interface IHasManifestations
 		if(strengths.length == 0) return false;
 
 		CompoundTag nbt = itemStack.getOrCreateTag();
-		int[] newStrengths = new int[strengths.length];
-		for(int i = 0; i < strengths.length; i++) newStrengths[i] = strengths[i];
+		int[] newStrengths = new int[getMaxCapacity()];
+		for(int i = 0; i < strengths.length; i++)
+		{
+			if (strengths[i] == null)
+			{
+				newStrengths[i] = 0;
+			}
+			else
+			{
+				newStrengths[i] = strengths[i];
+			}
+		}
 
 		nbt.putIntArray("manifestationStrengths", newStrengths);
 		return true;

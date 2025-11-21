@@ -55,10 +55,9 @@ public class FeruchemyClientSetup
 		final Minecraft mc = Minecraft.getInstance();
 		SpiritwebCapability.get(mc.player).ifPresent(cap ->
 		{
-			//SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
-
+			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
 			//actual menu stuff
-			NicrosilMenu.instance.postRender();
+			NicrosilMenu.instance.postRender(spiritweb);
 		});
 
 	}

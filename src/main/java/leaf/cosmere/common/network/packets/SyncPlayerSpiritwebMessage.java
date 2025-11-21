@@ -4,6 +4,8 @@
 
 package leaf.cosmere.common.network.packets;
 
+import leaf.cosmere.client.gui.ISyncSpiritweb;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import net.minecraft.client.Minecraft;
@@ -39,16 +41,43 @@ public class SyncPlayerSpiritwebMessage implements ICosmerePacket
 	@Override
 	public void handle(NetworkEvent.Context cont)
 	{
-		Entity result = Minecraft.getInstance().level.getEntity(entityID);
-		if (result != null)
-		{
-			SpiritwebCapability.get((LivingEntity) result).ifPresent((c) ->
+		cont.enqueueWork(() -> {
+			Minecraft mc = Minecraft.getInstance();
+			if (mc.level == null)
 			{
+				return;
+			}
+
+			Entity result = mc.level.getEntity(entityID);
+			if (!(result instanceof LivingEntity living))
+			{
+				return;
+			}
+
+			if (living != mc.player) {
+				SpiritwebCapability.get(living).ifPresent(c -> {
+					c.deserializeNBT(entityNBT);
+					c.getLiving().refreshDimensions();
+				});
+				return;
+			}
+
+			SpiritwebCapability.get(living).ifPresent(c -> {
 				c.deserializeNBT(entityNBT);
 				c.getLiving().refreshDimensions();
-			});
 
-		}
+				if (mc.screen instanceof ISyncSpiritweb spiritMenu)
+				{
+					// optional: check it’s the same capability instance
+					if (spiritMenu.getSpiritweb() == c)
+					{
+						spiritMenu.onSpiritwebUpdated((SpiritwebCapability) c);
+					}
+				}
+			});
+		});
+
+		cont.setPacketHandled(true);
 	}
 
 }

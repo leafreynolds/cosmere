@@ -32,39 +32,42 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 	public void handle(NetworkEvent.Context context)
 	{
 		ServerPlayer sender = context.getSender();
-		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+		context.enqueueWork(() ->
 		{
-			// Storing
-			if(isStore)
+			if (sender == null) return;
+			SpiritwebCapability.get(sender).ifPresent((cap) ->
 			{
-				LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(sender);
-				if (curiosItemHandler.resolve().isPresent())
+				// Storing
+				if (isStore)
 				{
-					ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
-					if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
+					LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(sender);
+					if (curiosItemHandler.resolve().isPresent())
 					{
-						cap.removeManifestation(manifestation);
-						item.addManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation, (int) manifestationStrength);
+						ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
+						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
+						{
+							cap.removeManifestation(manifestation);
+							item.addManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation, (int) manifestationStrength);
+						}
 					}
 				}
-			}
-			// Tapping
-			else
-			{
-				LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(sender);
-				if (curiosItemHandler.resolve().isPresent())
+				// Tapping
+				else
 				{
-					ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
-					if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
+					LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(sender);
+					if (curiosItemHandler.resolve().isPresent())
 					{
-						cap.giveManifestation(manifestation, (int) manifestationStrength);
-						item.removeManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation);
+						ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
+						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
+						{
+							cap.giveManifestation(manifestation, (int) manifestationStrength);
+							item.removeManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation);
+						}
 					}
 				}
-			}
-			cap.syncToClients(null);
-		}));
+				cap.syncToClients(sender);
+			});
+		});
 		context.setPacketHandled(true);
 	}
 

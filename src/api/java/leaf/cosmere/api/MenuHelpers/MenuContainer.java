@@ -188,12 +188,6 @@ public class MenuContainer
 
 	public void renderContainer(BufferBuilder buffer, double mouseX, double mouseY, double centerX, double centerY)
 	{
-
-		for (MenuButton button : menuButtons)
-		{
-			button.renderButton(buffer);
-		}
-
 		int lerpositive;
 
 		updateDimensions(containWidth, containHeight, centerX, centerY);
@@ -215,10 +209,21 @@ public class MenuContainer
 		buffer.vertex(x3, y3, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
 		buffer.vertex(x4, y4, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
 
+		for (MenuButton button : menuButtons)
+		{
+			button.renderButton(buffer);
+		}
+
 	}
 
 
+	public double getCenterX()
+	{
+		return centerX;
+	}
 
-
-
+	public double getCenterY()
+	{
+		return centerY;
+	}
 }

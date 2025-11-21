@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class SpiritwebMenu extends Screen
+public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 {
 	final double TEXT_DISTANCE = 30;
 
@@ -142,6 +142,7 @@ public class SpiritwebMenu extends Screen
 				if (radialMenuButton.manifestation.hasMenu())
 				{
 					radialMenuButton.manifestation.openMenu(this.minecraft);
+
 				}
 				else
 				{
@@ -163,7 +164,7 @@ public class SpiritwebMenu extends Screen
 			{
 				if (sidedMenuButton.powerType != -1)
 				{
-					selectedPowerType = Manifestations.ManifestationTypes.valueOf(doAction.powerType).get();
+					selectedPowerType = Manifestations.ManifestationTypes.valueOf(sidedMenuButton.powerType).get();
 					SetupButtons();
 				}
 				else if (sidedMenuButton.action != null)
@@ -184,7 +185,6 @@ public class SpiritwebMenu extends Screen
 
 	private static class SidedMenuButton
 	{
-
 		public double x1, x2;
 		public double y1, y2;
 		public boolean highlighted;
@@ -195,42 +195,45 @@ public class SpiritwebMenu extends Screen
 		public String name;
 		public Direction textSide;
 
+		// NEW: logical layout info
+		public final int index;
+		public final int size;
+
+		// For "action" buttons (if you ever use them)
 		public SidedMenuButton(
 				final String name,
 				final ButtonAction action,
-				final double x,
-				final double y,
+				final int index,
+				final int size,
 				final Direction textSide)
 		{
 			this.name = name;
 			this.action = action;
 			this.powerType = -1;
-			x1 = x;
-			x2 = x + 18;
-			y1 = y;
-			y2 = y + 18;
-			color = 0xffffff;
+			this.color = 0xffffff;
 			this.textSide = textSide;
+			this.index = index;
+			this.size = size;
 		}
 
+		// For "power type" buttons (current use)
 		public SidedMenuButton(
 				final String name,
 				final int powerType,
-				final double x,
-				final double y,
+				final int index,
+				final int size,
 				final Direction textSide)
 		{
 			this.name = name;
 			this.action = null;
 			this.powerType = powerType;
-			x1 = x;
-			x2 = x + 18;
-			y1 = y;
-			y2 = y + 18;
-			color = 0xffffff;
+			this.color = 0xffffff;
 			this.textSide = textSide;
+			this.index = index;
+			this.size = size;
 		}
 	}
+
 
 	static class RadialMenuButton
 	{
@@ -262,6 +265,13 @@ public class SpiritwebMenu extends Screen
 			this.centerY = centerY;
 		}
 
+	}
+
+	public void onSpiritwebUpdated(SpiritwebCapability cap)
+	{
+		this.spiritweb = cap;
+		// if you want the radial menu to reflect changes immediately:
+		SetupButtons();
 	}
 
 	protected void SetupButtons()
@@ -376,19 +386,19 @@ public class SpiritwebMenu extends Screen
 				foundPowerTypes.add(manifestation.getManifestationType());
 			}
 
+			int index = 0;
+			int size = foundPowerTypes.size();
+
 			for (Manifestations.ManifestationTypes foundPowerType : foundPowerTypes)
 			{
-				final int index = foundPowerType.getID() - 1;
-				final double v = TEXT_DISTANCE * index;
 				sidedMenuButtons.add(
 						new SidedMenuButton(
 								foundPowerType.getName(),
 								foundPowerType.getID(),
-								v - ((TEXT_DISTANCE * foundPowerTypes.size()) / 2) + 5,
-								-90,
+								index++,
+								size,
 								Direction.UP)
 				);
-
 			}
 		}
 	}
@@ -718,12 +728,44 @@ public class SpiritwebMenu extends Screen
 
 	private void renderSidedButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
 	{
-		for (final SidedMenuButton button : sidedMenuButtons)
+		if (sidedMenuButtons.isEmpty())
 		{
+			return;
+		}
+
+		// How many buttons in this row
+		final int size = sidedMenuButtons.size();
+
+		// Match Nicrosil-style spacing: distance between button centers
+		final double spacing = 25.0;
+		final double half = (size - 1) / 2.0;
+
+		// Vertical offset relative to center (was hardcoded -90 in SetupButtons before)
+		final double rowYOffset = -90.0;
+
+		for (int i = 0; i < size; i++)
+		{
+			final SidedMenuButton button = sidedMenuButtons.get(i);
+
+			// Center offsets relative to screen center
+			double centerX = spacing * (i - half);
+			double centerY = rowYOffset;
+
+			// Button is 18x18 → half-size = 9
+			double halfSize = 9.0;
+			button.x1 = centerX - halfSize;
+			button.x2 = centerX + halfSize;
+			button.y1 = centerY - halfSize;
+			button.y2 = centerY + halfSize;
+
 			final float a = 0.5f;
 			float f;
 
-			if (button.x1 <= mouseVecX && button.x2 >= mouseVecX && button.y1 <= mouseVecY && button.y2 >= mouseVecY)
+			// Mouse is also relative to center here (mouseVecX/mouseVecY)
+			boolean inside = (button.x1 <= mouseVecX && button.x2 >= mouseVecX
+					&& button.y1 <= mouseVecY && button.y2 >= mouseVecY);
+
+			if (inside)
 			{
 				f = 1;
 				button.highlighted = true;
@@ -733,20 +775,20 @@ public class SpiritwebMenu extends Screen
 			{
 				button.highlighted = false;
 
-				//highlight button, but don't draw string unless mouse over
+				// Highlight selected power type, even if not hovered
 				f = selectedPowerType.getID() == button.powerType
 				    ? 1
 				    : 0;
 			}
 
-			//set first triangle
+			// Draw the quad at center-relative position
 			buffer.vertex(middle_x + button.x1, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
 			buffer.vertex(middle_x + button.x1, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
-			//set second triangle
 			buffer.vertex(middle_x + button.x2, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
 			buffer.vertex(middle_x + button.x2, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
 		}
 	}
+
 
 	private void renderMetalQuadrants(BufferBuilder buffer)
 	{
@@ -979,6 +1021,5 @@ public class SpiritwebMenu extends Screen
 	{
 		return spiritweb;
 	}
-
 
 }

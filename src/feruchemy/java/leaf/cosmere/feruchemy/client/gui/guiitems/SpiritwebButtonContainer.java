@@ -2,18 +2,21 @@ package leaf.cosmere.feruchemy.client.gui.guiitems;
 
 import leaf.cosmere.api.MenuHelpers.MenuButton;
 import leaf.cosmere.api.MenuHelpers.MenuContainer;
+import net.minecraft.world.item.Item;
 
 public class SpiritwebButtonContainer extends MenuContainer
 {
 	public Integer curioItemSlot;
+	public Item item;
 
-	public SpiritwebButtonContainer(double x, double y, int containWidth, int containHeight, int curioItemSlot)
+	public SpiritwebButtonContainer(double x, double y, int containWidth, int containHeight, int curioItemSlot, Item item)
 	{
 		super(x, y, containWidth, containHeight);
 		this.red = 0;
 		this.green = 0;
 		this.blue = 0; //255
 		this.curioItemSlot = curioItemSlot;
+		this.item = item;
 	}
 
 

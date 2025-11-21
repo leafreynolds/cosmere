@@ -15,11 +15,11 @@ public class Manifestations
 {
 	public final static int ALLOMANCY_ID = 1;
 	public final static int FERUCHEMY_ID = 2;
-	public final static int HEMALURGY_ID = 7;//yes I know. Didn't add this till way later and now I'm too afraid to change it... todo: change it
-	public final static int SURGEBINDING_ID = 3;
-	public final static int AONDOR_ID = 4;
-	public final static int AWAKENING_ID = 5;
-	public final static int SANDMASTERY_ID = 6;
+	public final static int HEMALURGY_ID = 3;//yes I know. Didn't add this till way later and now I'm too afraid to change it... todo: change it
+	public final static int SURGEBINDING_ID = 4;
+	public final static int AONDOR_ID = 5;
+	public final static int AWAKENING_ID = 6;
+	public final static int SANDMASTERY_ID = 7;
 	public final static int AVIAR_ID = 8;
 
 	public enum ManifestationTypes

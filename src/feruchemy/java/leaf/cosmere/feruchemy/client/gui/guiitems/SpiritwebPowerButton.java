@@ -20,7 +20,7 @@ public class SpiritwebPowerButton extends SquareMenuButton
 
 	SpiritwebButtonContainer container;
 
-	public SpiritwebPowerButton(double posY, double posX, ISpiritweb spiritweb, SpiritwebButtonContainer container)
+	public SpiritwebPowerButton(double posX, double posY, ISpiritweb spiritweb, SpiritwebButtonContainer container)
 	{
 		super(posX, posY);
 		this.spiritweb = spiritweb;
