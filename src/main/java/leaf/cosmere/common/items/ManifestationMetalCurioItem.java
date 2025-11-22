@@ -20,6 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalType, ICurioItem, IHasManifestations
@@ -89,12 +90,19 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 		Manifestation[] manifestations = getManifestations(stack);
 		Integer[] manifestationStrengths = getManifestationStrengths(stack);
 
-		tooltip.add(Component.empty());
-		tooltip.add(Component.literal("When tapped:").withStyle(ChatFormatting.GOLD));
+		boolean isFirst = true;
 		for (int i = 0; i < manifestations.length; i++)
 		{
+
 			if(manifestations[i] != null && manifestationStrengths[i] != null)
 			{
+				if(isFirst)
+				{
+					tooltip.add(Component.empty());
+					tooltip.add(Component.literal("When tapped:").withStyle(ChatFormatting.GOLD));
+					isFirst = false;
+				}
+
 				tooltip.add(Component.literal("+" + manifestationStrengths[i] + " ").append(
 						Component.translatable(manifestations[i].getTranslationKey()))
 						.withStyle(ChatFormatting.BLUE));

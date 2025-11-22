@@ -10,7 +10,7 @@ public interface IHasManifestations
 {
 	int getMaxCapacity();
 
-	default void addManifestation(ItemStack itemStack, Manifestation manifestation, int strength)
+	default void addManifestation(ItemStack itemStack, Manifestation manifestation, int strength, byte manifestationSlot)
 	{
 		if(manifestation == null) return;
 		Manifestation[] manifestations = getManifestations(itemStack);
@@ -22,17 +22,10 @@ public interface IHasManifestations
 			manifestationStrengths = new Integer[getMaxCapacity()];
 		}
 
-		for(int i = 0; i < manifestations.length; i++)
-		{
-			if(manifestations[i] == null)
-			{
-				manifestations[i] = manifestation;
-				manifestationStrengths[i] = strength;
-				setManifestations(itemStack, manifestations);
-				setManifestationStrengths(itemStack, manifestationStrengths);
-				return;
-			}
-		}
+		manifestations[manifestationSlot] = manifestation;
+		manifestationStrengths[manifestationSlot] = strength;
+		setManifestations(itemStack, manifestations);
+		setManifestationStrengths(itemStack, manifestationStrengths);
 	}
 
 	default void removeManifestation(ItemStack itemStack, Manifestation manifestation)

@@ -17,15 +17,17 @@ public class SpiritwebPowerButton extends SquareMenuButton
 	ISpiritweb spiritweb;
 	Manifestation manifestation;
 	Integer strength;
+	byte slotIndex;
 
 	SpiritwebButtonContainer container;
 
-	public SpiritwebPowerButton(double posX, double posY, ISpiritweb spiritweb, SpiritwebButtonContainer container)
+	public SpiritwebPowerButton(double posX, double posY, ISpiritweb spiritweb, SpiritwebButtonContainer container, byte slotIndex)
 	{
 		super(posX, posY);
 		this.spiritweb = spiritweb;
 		this.displayName = "";
 		this.container = container;
+		this.slotIndex = slotIndex;
 	}
 
 	public void renderIcon(GuiGraphics guiGraphics){
@@ -121,5 +123,8 @@ public class SpiritwebPowerButton extends SquareMenuButton
 		this.strength = strength;
 	}
 
-
+	public byte getSlotIndex()
+	{
+		return slotIndex;
+	}
 }

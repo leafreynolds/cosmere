@@ -19,13 +19,15 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 	double manifestationStrength;
 	int curioSlot;
 	boolean isStore;
+	byte manifestationSlot;
 
-	public StoreTapManifestationMessage(Manifestation manifestation, double manifestationStrength, int curioSlot, boolean isStore)
+	public StoreTapManifestationMessage(Manifestation manifestation, double manifestationStrength, int curioSlot, boolean isStore, byte manifestationSlot)
 	{
 		this.manifestation = manifestation;
 		this.manifestationStrength = manifestationStrength;
 		this.curioSlot = curioSlot;
 		this.isStore = isStore;
+		this.manifestationSlot = manifestationSlot;
 	}
 
 	@Override
@@ -47,7 +49,7 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
 						{
 							cap.removeManifestation(manifestation);
-							item.addManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation, (int) manifestationStrength);
+							item.addManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation, (int) manifestationStrength, manifestationSlot);
 						}
 					}
 				}
@@ -79,6 +81,7 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 		buf.writeDouble(this.manifestationStrength);
 		buf.writeInt(this.curioSlot);
 		buf.writeBoolean(this.isStore);
+		buf.writeByte(this.manifestationSlot);
 	}
 
 	public static StoreTapManifestationMessage decode(FriendlyByteBuf buf)
@@ -87,6 +90,7 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 		double manifestationStrength = buf.readDouble();
 		int curioSlot = buf.readInt();
 		boolean isStore = buf.readBoolean();
-		return new StoreTapManifestationMessage(ManifestationRegistry.fromID(manifestation), manifestationStrength, curioSlot, isStore);
+		byte manifestationSlot = buf.readByte();
+		return new StoreTapManifestationMessage(ManifestationRegistry.fromID(manifestation), manifestationStrength, curioSlot, isStore, manifestationSlot);
 	}
 }
