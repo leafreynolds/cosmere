@@ -139,7 +139,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 					}
 
 				}
-				MiscHelper.consumeNugget(entityLiving, newStack);
+				MiscHelper.consumeNugget(entityLiving, newStack, amount);
 			}
 		});
 
