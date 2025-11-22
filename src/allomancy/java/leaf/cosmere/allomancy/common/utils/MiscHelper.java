@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class MiscHelper
 {
 
-	public static void consumeNugget(LivingEntity livingEntity, ItemStack itemStack)
+	public static void consumeNugget(LivingEntity livingEntity, ItemStack itemStack, int amount)
 	{
 		if (livingEntity.level().isClientSide) return;
 
@@ -46,25 +46,25 @@ public class MiscHelper
 				}
 				else if(godItem.getMetalType() == Metals.MetalType.ATIUM)
 				{
-					eatMetal(godItem.getMetalType(), livingEntity);
+					eatMetal(godItem.getMetalType(), livingEntity, amount);
 				}
 			}
 		}
 		else if(itemStack.getItem() instanceof IHasMetalType metalItem)
 		{
-			eatMetal(metalItem.getMetalType(), livingEntity);
+			eatMetal(metalItem.getMetalType(), livingEntity, amount);
 		}
 		else if(itemStack.getItem() == Items.IRON_NUGGET)
 		{
-			eatMetal(Metals.MetalType.IRON, livingEntity);
+			eatMetal(Metals.MetalType.IRON, livingEntity, amount);
 		}
 		else if(itemStack.getItem() == Items.GOLD_NUGGET)
 		{
-			eatMetal(Metals.MetalType.GOLD, livingEntity);
+			eatMetal(Metals.MetalType.GOLD, livingEntity, amount);
 		}
 	}
 
-	private static void eatMetal(Metals.MetalType metalType, LivingEntity livingEntity)
+	private static void eatMetal(Metals.MetalType metalType, LivingEntity livingEntity, int amount)
 	{
 		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
 		{
@@ -72,7 +72,7 @@ public class MiscHelper
 			if (metalType.hasAssociatedManifestation()) //ignore metals without manifestations, that's handled in feruchemy
 			{
 				//add to metal stored
-				final int addAmount = metalType.getAllomancyBurnTimeSeconds();
+				final int addAmount = metalType.getAllomancyBurnTimeSeconds() * amount;
 				AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 				allo.adjustIngestedMetal(metalType, addAmount, true);
 			}
