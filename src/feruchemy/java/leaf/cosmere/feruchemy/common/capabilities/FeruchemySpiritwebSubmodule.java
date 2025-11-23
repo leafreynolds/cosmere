@@ -5,11 +5,14 @@
 package leaf.cosmere.feruchemy.common.capabilities;
 
 import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
+import leaf.cosmere.feruchemy.client.gui.FeruchemySpiritwebMenu;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
@@ -95,6 +98,12 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 		}
 
 		ISpiritwebSubmodule.super.collectMenuInfo(m_infoText);
+	}
+
+	@Override
+	public void registerMenu()
+	{
+		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.FERUCHEMY, FeruchemySpiritwebMenu::new);
 	}
 
 	private static void GiveStartingItem(Player player, Metals.MetalType metalType, float fillAmount)

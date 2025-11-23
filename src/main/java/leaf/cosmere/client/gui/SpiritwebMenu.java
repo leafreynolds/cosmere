@@ -5,50 +5,32 @@
 package leaf.cosmere.client.gui;
 
 import com.google.common.base.Stopwatch;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import leaf.cosmere.api.*;
-import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.math.MathHelper;
-import leaf.cosmere.api.math.Vector2;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
-import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
-import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.recipebook.RecipeBookPage;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.stats.RecipeBook;
-import net.minecraft.world.inventory.RecipeBookMenu;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpiritwebMenu extends Screen
 {
 	private float visibility = 0.0f;
 	private Stopwatch lastChange = Stopwatch.createStarted();
-	private ISpiritweb spiritweb;
+	private final ISpiritweb spiritweb;
+	private final SpiritwebRegistry registry;
+	private Manifestations.ManifestationTypes selectedManifestationType = Manifestations.ManifestationTypes.NONE;
+	private Screen selectedManifestationScreen = null;
 
 	public SpiritwebMenu(Component pTitle, ISpiritweb spiritweb)
 	{
 		super(pTitle);
 		this.spiritweb = spiritweb;
+		this.registry = SpiritwebRegistry.getInstance();
 	}
 
 	public void raiseVisibility()
@@ -63,6 +45,43 @@ public class SpiritwebMenu extends Screen
 		this.minecraft.setScreen(null);
 	}
 
+	public void prepareClose()
+	{
+		// todo
+		// will need later
+	}
+
+	@Override
+	protected void init()
+	{
+		AtomicInteger added = new AtomicInteger(0);
+		int count = registry.getManifestationScreenMap().size();
+		for (int i = 0; i < Manifestations.ManifestationTypes.AVIAR.getID(); i++)
+		{
+			Manifestations.ManifestationTypes.valueOf(i).ifPresent( (maniType) ->
+			{
+				if (registry.getManifestationScreenMap().get(maniType) != null)
+				{
+					int x = (width / 2) - ((count * 32) / 2) + (added.get() * 32);
+					addRenderableWidget(new TabButton(x, (pButton ->
+					{
+						if (maniType != selectedManifestationType)
+						{
+							selectedManifestationType = maniType;
+							selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
+						}
+					}), maniType));
+					added.set(added.get()+1);
+					if (added.get() == 1)
+					{
+						selectedManifestationType = maniType;
+						selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
+					}
+				}
+			});
+		}
+	}
+
 	@Override
 	public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
@@ -72,6 +91,11 @@ public class SpiritwebMenu extends Screen
 		final int end = (int) (visibility * 128) << 24;
 
 		pGuiGraphics.fillGradient(0, 0, width, height, start, end);
+
+		if (selectedManifestationScreen != null)
+		{
+			selectedManifestationScreen.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		}
 	}
 
 	@Override

@@ -70,6 +70,12 @@ public class ClientForgeEvents
 		{
 			if (Keybindings.MANIFESTATION_MENU.consumeClick())
 			{
+				SpiritwebCapability.get(player).ifPresent( (iSpiritweb ->
+				{
+					iSpiritweb.getSubmodules().forEach( ((manifestationTypes, iSpiritwebSubmodule) -> {
+						iSpiritwebSubmodule.registerMenu();
+					}));
+				}));
 				Minecraft.getInstance().setScreen(new SpiritwebMenu(Component.literal("Spiritweb Menu"), spiritweb));
 			}
 

@@ -7,7 +7,10 @@ package leaf.cosmere.common.cap.entity;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.ISpiritwebSubmodule;
@@ -54,7 +57,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.List;
 
 /*
     "The actual outlet of the power is not chosen by the practitioner, but instead is hardwritten into their Spiritweb"
