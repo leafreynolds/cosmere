@@ -139,7 +139,7 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 				if(!(manifestation.getAttribute() instanceof RangedAttribute attribute)) return;
 				AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
 				if(attributeInstance != null) {
-					currentStrength = (int) attributeInstance.getValue();
+					currentStrength = (int) attributeInstance.getBaseValue();
 				}
 
 				// Let's ensure not to exceed the base value if it's out of range,

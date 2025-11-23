@@ -11,7 +11,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.api.IHasManifestations;
 import leaf.cosmere.api.IHasMetalType;
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Manifestations.ManifestationTypes;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -19,11 +18,9 @@ import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.client.gui.ButtonAction;
 import leaf.cosmere.client.gui.ISyncSpiritweb;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.StoreTapManifestationMessage;
-import leaf.cosmere.common.registry.ManifestationRegistry;
 import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebButtonContainer;
 import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebPowerButton;
 import net.minecraft.client.Minecraft;
@@ -36,6 +33,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.LazyOptional;
@@ -44,10 +42,7 @@ import org.lwjgl.opengl.GL11;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class NicrosilMenu extends Screen implements ISyncSpiritweb
@@ -151,7 +146,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			{
 				if (spiritwebPowerButton.highlight)
 				{
-					if(spiritwebPowerButton.getManifestation() == null)
+					if(spiritwebPowerButton.getManifestation() == null || spiritwebPowerButton.getManifestation() == heldButton.manifestation)
 					{
 						if (spiritweb.getLiving() instanceof Player player)
 						{
@@ -231,7 +226,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 							selectedPowerType = ManifestationTypes.valueOf(sidedMenuButton.powerType).get();
 							playerSpiritwebPowerButtons.clear();
 							sidedMenuButtons.clear();
-							setupManifestationButtons(getAvailableManifestations(), 0);
+							setupManifestationButtons(getAvailableManifestations(), null, 0);
 							break;
 						}
 					}
@@ -269,15 +264,40 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			targetSlot.setManifestation(held.manifestation);
 			targetSlot.setStrength((int) held.strength);
 		}
+		else if(targetSlot.getManifestation() == held.manifestation)
+		{
+			int totalStrength = (int) held.strength + targetSlot.getStrength();
+
+			if((held.manifestation.getAttribute() instanceof RangedAttribute attribute))
+			{
+				if(totalStrength < attribute.getMinValue())
+				{
+					totalStrength = (int) attribute.getMinValue();
+				}
+				else if (totalStrength > attribute.getMaxValue())
+				{
+					totalStrength = (int) attribute.getMaxValue();
+				}
+			}
+			targetSlot.setStrength(totalStrength);
+		}
 
 		if(playerSpiritwebPowerButtons.isEmpty())
 		{
 			final List<Manifestation> availableManifestations = getAvailableManifestations();
-			availableManifestations.remove(held.manifestation);
+			if(held.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
+			{
+				availableManifestations.removeIf(manifestation -> manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY);
+			}
+			else
+			{
+				availableManifestations.remove(held.manifestation);
+			}
 			playerSpiritwebPowerButtons.clear();
 			sidedMenuButtons.clear();
-			selectedPowerType = availableManifestations.get(0).getManifestationType();
-			setupManifestationButtons(availableManifestations, held.strength);
+			if(!availableManifestations.isEmpty()) selectedPowerType = availableManifestations.get(0).getManifestationType();
+			availableManifestations.sort(Comparator.comparingInt(Manifestation::getPowerID));
+			setupManifestationButtons(availableManifestations, held.manifestation, held.strength);
 		}
 	}
 
@@ -285,25 +305,36 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	{
 		Manifestation mani = fromSlot.getManifestation();
 		double strength = fromSlot.getStrength();
+		final List<Manifestation> availableManifestations = getAvailableManifestations();
+
+		double totalStrength = strength;
+		if(availableManifestations.contains(mani))
+		{
+			totalStrength += mani.getStrength(spiritweb, true);
+		}
+
+		if((mani.getAttribute() instanceof RangedAttribute attribute))
+		{
+			if(totalStrength < attribute.getMinValue())
+			{
+				totalStrength = (int) attribute.getMinValue();
+			}
+			else if (totalStrength > attribute.getMaxValue())
+			{
+				totalStrength = (int) attribute.getMaxValue();
+			}
+		}
 
 		fromSlot.setManifestation(null);
 		fromSlot.setStrength(0);
 
-		for (PlayerSpiritwebPowerButton btn : playerSpiritwebPowerButtons)
-		{
-			if (btn.manifestation == mani)
-			{
-				btn.strength = strength;
-				return;
-			}
-		}
-
-		final List<Manifestation> availableManifestations = getAvailableManifestations();
 		playerSpiritwebPowerButtons.clear();
 		sidedMenuButtons.clear();
+		availableManifestations.removeIf(manifestation -> manifestation == mani);
 		availableManifestations.add(mani);
 		selectedPowerType = mani.getManifestationType();
-		setupManifestationButtons(availableManifestations, strength);
+		availableManifestations.sort(Comparator.comparingInt(Manifestation::getPowerID));
+		setupManifestationButtons(availableManifestations, mani, totalStrength);
 	}
 
 	protected void setupButtons()
@@ -316,7 +347,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		sidedMenuButtons.clear();
 
 		final List<Manifestation> availableManifestations = getAvailableManifestations();
-		setupManifestationButtons(availableManifestations, 0);
+		setupManifestationButtons(availableManifestations, null, 0);
 
 		setupSpiritwebButtons();
 	}
@@ -368,28 +399,52 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	private void setupManifestationButtons(List<Manifestation> manifestations, double strength)
+	private void setupManifestationButtons(List<Manifestation> manifestations, Manifestation mani, double strength)
 	{
-		Set<ManifestationTypes> foundPowerTypes = new HashSet<>();
+		Set<ManifestationTypes> foundPowerTypes = EnumSet.noneOf(ManifestationTypes.class);
+
+		boolean addedSandmastery = false;
 
 		for (Manifestation manifestation : manifestations)
 		{
-			if (manifestation.getManifestationType() == selectedPowerType)
+			if(manifestation.getStrength(spiritweb, true) == 0 && strength == 0) continue;
+			ManifestationTypes type = manifestation.getManifestationType();
+			foundPowerTypes.add(type);
+
+			if (type != selectedPowerType)
+			{
+				continue;
+			}
+
+			if (type == ManifestationTypes.SANDMASTERY)
+			{
+				if (addedSandmastery)
+				{
+					continue;
+				}
+				addedSandmastery = true;
+			}
+
+			if(mani != null && manifestation == mani)
 			{
 				playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(manifestation, strength));
 			}
-			foundPowerTypes.add(manifestation.getManifestationType());
+			else
+			{
+				playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(manifestation, manifestation.getStrength(spiritweb, true)));
+			}
 		}
 
 		int index = 0;
-		for (ManifestationTypes foundPowerType : foundPowerTypes)
+		int totalTypes = foundPowerTypes.size();
+		for (ManifestationTypes type : foundPowerTypes)
 		{
 			sidedMenuButtons.add(
 					new SidedMenuButton(
-							foundPowerType.getName(),
-							foundPowerType.getID(),
+							type.getName(),
+							type.getID(),
 							index++,
-							foundPowerTypes.size(),
+							totalTypes,
 							width,
 							Direction.UP)
 			);
@@ -481,7 +536,15 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			}
 
 			final Manifestation mani = button.getManifestation();
-			final String text = I18n.get(mani.getTranslationKey());
+			String text = "+" + button.getStrength() + " ";
+			if(mani.getManifestationType() == ManifestationTypes.SANDMASTERY)
+			{
+				text += I18n.get("manifestation.sandmastery.ribbons");
+			}
+			else
+			{
+				text += I18n.get(mani.getTranslationKey());
+			}
 
 			int textCenterX = (int) button.posX;
 			int textY       = (int) (button.posY + 20); // 20px above the button
@@ -514,7 +577,15 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 				continue;
 			}
 
-			final String text = I18n.get(btn.manifestation.getTranslationKey());
+			String text = "+" + (int) btn.strength + " ";
+			if(btn.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
+			{
+				text += I18n.get("manifestation.sandmastery.ribbons");
+			}
+			else
+			{
+				text += I18n.get(btn.manifestation.getTranslationKey());
+			}
 
 			int textCenterX = (int) (middleX + btn.centerX);
 			int textY       = (int) (middleY + btn.centerY - 24); // a bit above the button
@@ -876,7 +947,8 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 		availableManifestations.removeIf((manifestation ->
 				manifestation.getManifestationType() == ManifestationTypes.FERUCHEMY &&
-						manifestation.getPowerID() == Metals.MetalType.NICROSIL.getID())
+						(manifestation.getPowerID() == Metals.MetalType.NICROSIL.getID() ||
+						manifestation.getPowerID() == Metals.MetalType.ATIUM.getID()))
 		);
 
 		return availableManifestations;
@@ -928,9 +1000,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		public PlayerSpiritwebPowerButton(final Manifestation manifestation, double strength)
 		{
 			this.manifestation = manifestation;
-			this.strength = manifestation.getStrength(instance.spiritweb, true);
-			if(this.strength == 0) this.strength = strength;
-
+			this.strength = strength;
 		}
 	}
 

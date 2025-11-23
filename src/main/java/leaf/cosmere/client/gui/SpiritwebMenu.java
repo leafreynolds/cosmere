@@ -514,7 +514,8 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 		y[0] = (int) middle_y / 2;
 		int rightSideX = middle_x + 35;
 
-		guiGraphics.drawString(font, I18n.get(selectedManifestation.getTranslationKey()), rightSideX, y[0], 0xffffffff);
+		String displayString = "+" + (int) selectedManifestation.getStrength(spiritweb, false) + " " + I18n.get(selectedManifestation.getTranslationKey());
+		guiGraphics.drawString(font, displayString, rightSideX, y[0], 0xffffffff);
 		//todo mode translation
 		guiGraphics.drawString(font, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
 

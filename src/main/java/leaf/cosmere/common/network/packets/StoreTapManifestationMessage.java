@@ -6,8 +6,9 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -62,7 +63,26 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 						ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
 						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
 						{
-							cap.giveManifestation(manifestation, (int) manifestationStrength);
+							int currentStrength = 0;
+							if(!(manifestation.getAttribute() instanceof RangedAttribute attribute)) return;
+							AttributeInstance attributeInstance = sender.getAttribute(attribute);
+							if(attributeInstance != null) {
+								currentStrength = (int) attributeInstance.getBaseValue();
+							}
+
+							// Let's ensure not to exceed the base value if it's out of range,
+							// even if it will get sanitized
+							int newStrength = (int) manifestationStrength + currentStrength;
+							if(newStrength < attribute.getMinValue())
+							{
+								newStrength = (int) attribute.getMinValue();
+							}
+							else if (newStrength > attribute.getMaxValue())
+							{
+								newStrength = (int) attribute.getMaxValue();
+							}
+
+							cap.giveManifestation(manifestation, (int) newStrength);
 							item.removeManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation);
 						}
 					}

@@ -22,8 +22,14 @@ public interface IHasManifestations
 			manifestationStrengths = new Integer[getMaxCapacity()];
 		}
 
+		int newStrength = strength;
+		if(manifestations[manifestationSlot] != null && manifestationStrengths[manifestationSlot] != null)
+		{
+			newStrength += manifestationStrengths[manifestationSlot];
+		}
+
 		manifestations[manifestationSlot] = manifestation;
-		manifestationStrengths[manifestationSlot] = strength;
+		manifestationStrengths[manifestationSlot] = newStrength;
 		setManifestations(itemStack, manifestations);
 		setManifestationStrengths(itemStack, manifestationStrengths);
 	}

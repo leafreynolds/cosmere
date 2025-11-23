@@ -6,6 +6,7 @@ package leaf.cosmere.common.items;
 
 import leaf.cosmere.api.IHasManifestations;
 import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.properties.PropTypes;
@@ -103,8 +104,19 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 					isFirst = false;
 				}
 
+				String translationKey;
+
+				if(manifestations[i].getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
+				{
+					translationKey = "manifestation.sandmastery.ribbons";
+				}
+				else
+				{
+					translationKey = manifestations[i].getTranslationKey();
+				}
+
 				tooltip.add(Component.literal("+" + manifestationStrengths[i] + " ").append(
-						Component.translatable(manifestations[i].getTranslationKey()))
+						Component.translatable(translationKey))
 						.withStyle(ChatFormatting.BLUE));
 			}
 		}

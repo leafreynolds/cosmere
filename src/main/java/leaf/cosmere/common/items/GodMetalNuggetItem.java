@@ -123,7 +123,8 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 			for (Metals.MetalType metal : EnumUtils.METAL_TYPES)
 			{
 				Manifestation manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metal.getID());
-				if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE)
+				// Don't include Atium because it's bound to Electrum
+				if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE && metal != Metals.MetalType.ATIUM)
 				{
 					manifestations.add(manifestation);
 				}
@@ -134,7 +135,8 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 			for (Metals.MetalType metal : EnumUtils.METAL_TYPES)
 			{
 				Manifestation manifestation = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(metal.getID());
-				if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE)
+				// Don't include Atium because it's bound to Electrum
+				if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE && metal != Metals.MetalType.ATIUM)
 				{
 					manifestations.add(manifestation);
 				}
@@ -156,7 +158,7 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 				if(!(manifestation.getAttribute() instanceof RangedAttribute attribute)) return;
 				AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
 				if(attributeInstance != null) {
-					currentStrength = (int) attributeInstance.getValue();
+					currentStrength = (int) attributeInstance.getBaseValue();
 				}
 
 				// Let's ensure not to exceed the base value if it's out of range,
