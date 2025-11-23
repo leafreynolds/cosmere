@@ -52,7 +52,10 @@ public interface ISpiritwebSubmodule
 
 	default void resetOnDeath(ISpiritweb spiritweb)
 	{
+	}
 
+	default void registerMenu()
+	{
 	}
 
 	void drainInvestiture(ISpiritweb data, double strength);

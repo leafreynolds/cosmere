@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common.capabilities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import leaf.cosmere.allomancy.client.gui.AllomancySpiritwebMenu;
 import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
@@ -22,6 +23,7 @@ import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -342,6 +344,12 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			MetalVialItem.addMetals(itemStack, allomancyManifestation.getMetalType().getID(), 16);
 			PlayerHelper.addItem(player, itemStack);
 		}
+	}
+
+	@Override
+	public void registerMenu()
+	{
+		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.ALLOMANCY, AllomancySpiritwebMenu::new);
 	}
 
 	public int getIngestedMetal(Metals.MetalType metalType)
