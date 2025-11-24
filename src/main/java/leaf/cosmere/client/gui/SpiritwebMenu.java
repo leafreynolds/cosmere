@@ -23,8 +23,8 @@ public class SpiritwebMenu extends Screen
 	private Stopwatch lastChange = Stopwatch.createStarted();
 	private final ISpiritweb spiritweb;
 	private final SpiritwebRegistry registry;
-	private Manifestations.ManifestationTypes selectedManifestationType = Manifestations.ManifestationTypes.NONE;
 	private Screen selectedManifestationScreen = null;
+	public static Manifestations.ManifestationTypes selectedManifestationType = Manifestations.ManifestationTypes.NONE;
 
 	public SpiritwebMenu(Component pTitle, ISpiritweb spiritweb)
 	{
@@ -62,7 +62,7 @@ public class SpiritwebMenu extends Screen
 			{
 				if (registry.getManifestationScreenMap().get(maniType) != null)
 				{
-					int x = (width / 2) - ((count * 32) / 2) + (added.get() * 32);
+					int x = (width / 2) - ((count * 32) / 2) + (added.get() * 37);
 					addRenderableWidget(new TabButton(x, (pButton ->
 					{
 						if (maniType != selectedManifestationType)
