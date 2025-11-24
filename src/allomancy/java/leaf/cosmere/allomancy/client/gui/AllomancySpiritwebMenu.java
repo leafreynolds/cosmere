@@ -1,6 +1,5 @@
 package leaf.cosmere.allomancy.client.gui;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,9 +20,7 @@ public class AllomancySpiritwebMenu extends Screen
 	@Override
 	protected void init()
 	{
-		CosmereAPI.logger.info("wow");
 		SpiritwebCapability.get(player).ifPresent( (iSpiritweb -> {
-			CosmereAPI.logger.info("wahoo");
 			addRenderableWidget(new OuterRadialButton(width/2, height/2, 0, iSpiritweb.getAvailableManifestations().get(0)));
 		}));
 //		for (int i = 0; i < spiritweb.getAvailableManifestations().size(); i++)
@@ -38,7 +35,7 @@ public class AllomancySpiritwebMenu extends Screen
 	@Override
 	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
-		pGuiGraphics.drawCenteredString(Minecraft.getInstance().font, "wow", pMouseX, pMouseY, 0xFFFFFFFF);
+		pGuiGraphics.drawCenteredString(Minecraft.getInstance().font, "allomancy", pMouseX, pMouseY, 0xFFFFFFFF);
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 	}
 }
