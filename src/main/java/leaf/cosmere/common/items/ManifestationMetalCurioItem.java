@@ -21,7 +21,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalType, ICurioItem, IHasManifestations
@@ -75,9 +74,12 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 	public boolean isFoil(ItemStack itemStack)
 	{
 		Manifestation[] manifestations = getManifestations(itemStack);
-		for(Manifestation manifestation : manifestations)
+		for (Manifestation manifestation : manifestations)
 		{
-			if(manifestation != null) return true;
+			if (manifestation != null)
+			{
+				return true;
+			}
 		}
 		return false;
 	}
@@ -95,9 +97,9 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 		for (int i = 0; i < manifestations.length; i++)
 		{
 
-			if(manifestations[i] != null && manifestationStrengths[i] != null)
+			if (manifestations[i] != null && manifestationStrengths[i] != null)
 			{
-				if(isFirst)
+				if (isFirst)
 				{
 					tooltip.add(Component.empty());
 					tooltip.add(Component.literal("When tapped:").withStyle(ChatFormatting.GOLD));
@@ -106,7 +108,7 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 
 				String translationKey;
 
-				if(manifestations[i].getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
+				if (manifestations[i].getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
 				{
 					translationKey = "manifestation.sandmastery.ribbons";
 				}
@@ -116,7 +118,7 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 				}
 
 				tooltip.add(Component.literal("+" + manifestationStrengths[i] + " ").append(
-						Component.translatable(translationKey))
+								Component.translatable(translationKey))
 						.withStyle(ChatFormatting.BLUE));
 			}
 		}

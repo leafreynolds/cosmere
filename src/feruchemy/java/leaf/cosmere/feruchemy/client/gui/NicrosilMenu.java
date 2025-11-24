@@ -146,7 +146,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			{
 				if (spiritwebPowerButton.highlight)
 				{
-					if(spiritwebPowerButton.getManifestation() == null || spiritwebPowerButton.getManifestation() == heldButton.manifestation)
+					if (spiritwebPowerButton.getManifestation() == null || spiritwebPowerButton.getManifestation() == heldButton.manifestation)
 					{
 						if (spiritweb.getLiving() instanceof Player player)
 						{
@@ -264,13 +264,13 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			targetSlot.setManifestation(held.manifestation);
 			targetSlot.setStrength((int) held.strength);
 		}
-		else if(targetSlot.getManifestation() == held.manifestation)
+		else if (targetSlot.getManifestation() == held.manifestation)
 		{
 			int totalStrength = (int) held.strength + targetSlot.getStrength();
 
-			if((held.manifestation.getAttribute() instanceof RangedAttribute attribute))
+			if ((held.manifestation.getAttribute() instanceof RangedAttribute attribute))
 			{
-				if(totalStrength < attribute.getMinValue())
+				if (totalStrength < attribute.getMinValue())
 				{
 					totalStrength = (int) attribute.getMinValue();
 				}
@@ -282,10 +282,10 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			targetSlot.setStrength(totalStrength);
 		}
 
-		if(playerSpiritwebPowerButtons.isEmpty())
+		if (playerSpiritwebPowerButtons.isEmpty())
 		{
 			final List<Manifestation> availableManifestations = getAvailableManifestations();
-			if(held.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
+			if (held.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
 			{
 				availableManifestations.removeIf(manifestation -> manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY);
 			}
@@ -295,7 +295,10 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			}
 			playerSpiritwebPowerButtons.clear();
 			sidedMenuButtons.clear();
-			if(!availableManifestations.isEmpty()) selectedPowerType = availableManifestations.get(0).getManifestationType();
+			if (!availableManifestations.isEmpty())
+			{
+				selectedPowerType = availableManifestations.get(0).getManifestationType();
+			}
 			availableManifestations.sort(Comparator.comparingInt(Manifestation::getPowerID));
 			setupManifestationButtons(availableManifestations, held.manifestation, held.strength);
 		}
@@ -308,14 +311,14 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		final List<Manifestation> availableManifestations = getAvailableManifestations();
 
 		double totalStrength = strength;
-		if(availableManifestations.contains(mani))
+		if (availableManifestations.contains(mani))
 		{
 			totalStrength += mani.getStrength(spiritweb, true);
 		}
 
-		if((mani.getAttribute() instanceof RangedAttribute attribute))
+		if ((mani.getAttribute() instanceof RangedAttribute attribute))
 		{
-			if(totalStrength < attribute.getMinValue())
+			if (totalStrength < attribute.getMinValue())
 			{
 				totalStrength = (int) attribute.getMinValue();
 			}
@@ -407,7 +410,10 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 		for (Manifestation manifestation : manifestations)
 		{
-			if(manifestation.getStrength(spiritweb, true) == 0 && strength == 0) continue;
+			if (manifestation.getStrength(spiritweb, true) == 0 && strength == 0)
+			{
+				continue;
+			}
 			ManifestationTypes type = manifestation.getManifestationType();
 			foundPowerTypes.add(type);
 
@@ -425,7 +431,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 				addedSandmastery = true;
 			}
 
-			if(mani != null && manifestation == mani)
+			if (mani != null && manifestation == mani)
 			{
 				playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(manifestation, strength));
 			}
@@ -537,7 +543,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 			final Manifestation mani = button.getManifestation();
 			String text = "+" + button.getStrength() + " ";
-			if(mani.getManifestationType() == ManifestationTypes.SANDMASTERY)
+			if (mani.getManifestationType() == ManifestationTypes.SANDMASTERY)
 			{
 				text += I18n.get("manifestation.sandmastery.ribbons");
 			}
@@ -547,13 +553,13 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			}
 
 			int textCenterX = (int) button.posX;
-			int textY       = (int) (button.posY + 20); // 20px above the button
+			int textY = (int) (button.posY + 20); // 20px above the button
 
 			int textX = textCenterX - font.width(text) / 2;
 
-			int bgLeft   = textX - 2;
-			int bgTop    = textY - 2;
-			int bgRight  = textX + font.width(text) + 2;
+			int bgLeft = textX - 2;
+			int bgTop = textY - 2;
+			int bgRight = textX + font.width(text) + 2;
 			int bgBottom = textY + font.lineHeight + 2;
 
 			guiGraphics.fill(bgLeft, bgTop, bgRight, bgBottom, 0x80000000);
@@ -578,7 +584,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			}
 
 			String text = "+" + (int) btn.strength + " ";
-			if(btn.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
+			if (btn.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
 			{
 				text += I18n.get("manifestation.sandmastery.ribbons");
 			}
@@ -588,13 +594,13 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			}
 
 			int textCenterX = (int) (middleX + btn.centerX);
-			int textY       = (int) (middleY + btn.centerY - 24); // a bit above the button
+			int textY = (int) (middleY + btn.centerY - 24); // a bit above the button
 
 			int textX = textCenterX - font.width(text) / 2;
 
-			int bgLeft   = textX - 2;
-			int bgTop    = textY - 2;
-			int bgRight  = textX + font.width(text) + 2;
+			int bgLeft = textX - 2;
+			int bgTop = textY - 2;
+			int bgRight = textX + font.width(text) + 2;
 			int bgBottom = textY + font.lineHeight + 2;
 
 			guiGraphics.fill(bgLeft, bgTop, bgRight, bgBottom, 0x80000000);
@@ -621,14 +627,14 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			final String text = I18n.get(ManifestationTypes.valueOf(button.powerType).get().getName());
 
 			double centerX = (button.x1 + button.x2) / 2.0;
-			double topY    = button.y1;
+			double topY = button.y1;
 
 			int textY = (int) (topY - font.lineHeight - 4);
 			int textX = (int) (centerX - font.width(text) / 2);
 
-			int bgLeft   = textX - 2;
-			int bgTop    = textY - 2;
-			int bgRight  = textX + font.width(text) + 2;
+			int bgLeft = textX - 2;
+			int bgTop = textY - 2;
+			int bgRight = textX + font.width(text) + 2;
 			int bgBottom = textY + font.lineHeight + 2;
 
 			guiGraphics.fill(bgLeft, bgTop, bgRight, bgBottom, 0x80000000);
@@ -668,11 +674,14 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 					.append(".png");
 
 			ResourceLocation tex = new ResourceLocation(button.name, stringBuilder.toString());
-			try {
+			try
+			{
 				mc.getResourceManager().getResourceOrThrow(tex);
 				guiGraphics.blit(tex, (int) (x - 8), (int) (y - 8),
 						16, 16, 0, 0, 18, 18, 18, 18);
-			} catch (Exception ignored) {
+			}
+			catch (Exception ignored)
+			{
 				// No icon? Just don't draw it.
 			}
 
@@ -686,7 +695,8 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		for (final PlayerSpiritwebPowerButton menuRegion : playerSpiritwebPowerButtons)
 		{
 			// Skip uninitialized entries just in case
-			if (menuRegion.centerX == 0 && menuRegion.centerY == 0) {
+			if (menuRegion.centerX == 0 && menuRegion.centerY == 0)
+			{
 				continue;
 			}
 
@@ -727,7 +737,8 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 			stringBuilder.append(".png");
 			final ResourceLocation textureLocation = new ResourceLocation(mani.getRegistryName().getNamespace(), stringBuilder.toString());
-			try {
+			try
+			{
 				mc.getResourceManager().getResourceOrThrow(textureLocation);
 				RenderSystem.setShaderTexture(0, textureLocation);
 				guiGraphics.blit(textureLocation,
@@ -741,7 +752,9 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 						18,
 						18,
 						18);
-			} catch (Exception ignored) {
+			}
+			catch (Exception ignored)
+			{
 				// Missing icon – skip drawing instead of showing a white/missing-texture square
 			}
 
@@ -804,7 +817,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			buffer.vertex(button.x2, button.y1, 0).color(f, f, f, a).endVertex();
 		}
 	}
-
 
 
 	private void renderPlayerSpiritwebButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
@@ -948,7 +960,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		availableManifestations.removeIf((manifestation ->
 				manifestation.getManifestationType() == ManifestationTypes.FERUCHEMY &&
 						(manifestation.getPowerID() == Metals.MetalType.NICROSIL.getID() ||
-						manifestation.getPowerID() == Metals.MetalType.ATIUM.getID()))
+								manifestation.getPowerID() == Metals.MetalType.ATIUM.getID()))
 		);
 
 		return availableManifestations;
@@ -1004,11 +1016,13 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	static class TransferredPower {
+	static class TransferredPower
+	{
 		public Manifestation manifestation;
 		public double strength;
 
-		public TransferredPower(Manifestation manifestation, double strength) {
+		public TransferredPower(Manifestation manifestation, double strength)
+		{
 			this.manifestation = manifestation;
 			this.strength = strength;
 		}

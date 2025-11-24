@@ -90,10 +90,19 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 	public Rarity getRarity(ItemStack itemStack)
 	{
 		Integer size = readMetalAlloySizeNbtData(itemStack);
-		if (size == null) return Rarity.COMMON;
+		if (size == null)
+		{
+			return Rarity.COMMON;
+		}
 
-		if (size <= 8) return Rarity.UNCOMMON;
-		else if (size == MAX_SIZE) return Rarity.EPIC;
+		if (size <= 8)
+		{
+			return Rarity.UNCOMMON;
+		}
+		else if (size == MAX_SIZE)
+		{
+			return Rarity.EPIC;
+		}
 		return Rarity.RARE;
 	}
 
@@ -133,19 +142,23 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
 
-			for(Manifestation manifestation: manifestations)
+			for (Manifestation manifestation : manifestations)
 			{
 				int currentStrength = 0;
-				if(!(manifestation.getAttribute() instanceof RangedAttribute attribute)) return;
+				if (!(manifestation.getAttribute() instanceof RangedAttribute attribute))
+				{
+					return;
+				}
 				AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
-				if(attributeInstance != null) {
+				if (attributeInstance != null)
+				{
 					currentStrength = (int) attributeInstance.getBaseValue();
 				}
 
 				// Let's ensure not to exceed the base value if it's out of range,
 				// even if it will get sanitized
 				int newStrength = strength + currentStrength;
-				if(newStrength < attribute.getMinValue())
+				if (newStrength < attribute.getMinValue())
 				{
 					newStrength = (int) attribute.getMinValue();
 				}

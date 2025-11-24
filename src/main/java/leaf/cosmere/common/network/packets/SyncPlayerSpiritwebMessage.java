@@ -5,7 +5,6 @@
 package leaf.cosmere.common.network.packets;
 
 import leaf.cosmere.client.gui.ISyncSpiritweb;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import net.minecraft.client.Minecraft;
@@ -41,7 +40,8 @@ public class SyncPlayerSpiritwebMessage implements ICosmerePacket
 	@Override
 	public void handle(NetworkEvent.Context cont)
 	{
-		cont.enqueueWork(() -> {
+		cont.enqueueWork(() ->
+		{
 			Minecraft mc = Minecraft.getInstance();
 			if (mc.level == null)
 			{
@@ -54,15 +54,18 @@ public class SyncPlayerSpiritwebMessage implements ICosmerePacket
 				return;
 			}
 
-			if (living != mc.player) {
-				SpiritwebCapability.get(living).ifPresent(c -> {
+			if (living != mc.player)
+			{
+				SpiritwebCapability.get(living).ifPresent(c ->
+				{
 					c.deserializeNBT(entityNBT);
 					c.getLiving().refreshDimensions();
 				});
 				return;
 			}
 
-			SpiritwebCapability.get(living).ifPresent(c -> {
+			SpiritwebCapability.get(living).ifPresent(c ->
+			{
 				c.deserializeNBT(entityNBT);
 				c.getLiving().refreshDimensions();
 

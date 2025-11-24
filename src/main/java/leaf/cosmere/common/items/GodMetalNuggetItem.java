@@ -46,9 +46,13 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 	}
 
 	@Override
-	public void onCraftedBy(ItemStack itemStack, Level level, Player player) {
+	public void onCraftedBy(ItemStack itemStack, Level level, Player player)
+	{
 		CompoundTag nbt = itemStack.getOrCreateTag();
-		if(!nbt.contains("nuggetSize")) writeMetalAlloySizeNbtData(itemStack, getMaxSize());
+		if (!nbt.contains("nuggetSize"))
+		{
+			writeMetalAlloySizeNbtData(itemStack, getMaxSize());
+		}
 	}
 
 	// God Metals shouldn't hurt
@@ -69,12 +73,14 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 	}
 
 	@Override
-	public boolean hasCraftingRemainingItem(ItemStack stack) {
+	public boolean hasCraftingRemainingItem(ItemStack stack)
+	{
 		return true;
 	}
 
 	@Override
-	public ItemStack getCraftingRemainingItem(ItemStack stack) {
+	public ItemStack getCraftingRemainingItem(ItemStack stack)
+	{
 		return ItemStack.EMPTY;
 	}
 
@@ -109,7 +115,8 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 		}
 	}
 
-	public boolean overrideOtherStackedOnMe(ItemStack pStack, ItemStack pOther, Slot pSlot, ClickAction pAction, Player pPlayer, SlotAccess pAccess) {
+	public boolean overrideOtherStackedOnMe(ItemStack pStack, ItemStack pOther, Slot pSlot, ClickAction pAction, Player pPlayer, SlotAccess pAccess)
+	{
 		return false;
 	}
 
@@ -152,19 +159,23 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
 
-			for(Manifestation manifestation: manifestations)
+			for (Manifestation manifestation : manifestations)
 			{
 				int currentStrength = 0;
-				if(!(manifestation.getAttribute() instanceof RangedAttribute attribute)) return;
+				if (!(manifestation.getAttribute() instanceof RangedAttribute attribute))
+				{
+					return;
+				}
 				AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
-				if(attributeInstance != null) {
+				if (attributeInstance != null)
+				{
 					currentStrength = (int) attributeInstance.getBaseValue();
 				}
 
 				// Let's ensure not to exceed the base value if it's out of range,
 				// even if it will get sanitized
 				int newStrength = strength + currentStrength;
-				if(newStrength < attribute.getMinValue())
+				if (newStrength < attribute.getMinValue())
 				{
 					newStrength = (int) attribute.getMinValue();
 				}

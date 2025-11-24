@@ -15,7 +15,6 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
-import leaf.cosmere.feruchemy.client.FeruchemyClientSetup;
 import leaf.cosmere.feruchemy.client.gui.NicrosilMenu;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyManifestations;
 import net.minecraft.client.Minecraft;

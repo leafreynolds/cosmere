@@ -9,7 +9,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import leaf.cosmere.api.*;
+import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.math.Vector2;
@@ -88,7 +91,8 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 
 	public void postRender(SpiritwebCapability spiritweb)
 	{
-		if (this.minecraft.screen != SpiritwebMenu.instance && this.minecraft.screen != null) {
+		if (this.minecraft.screen != SpiritwebMenu.instance && this.minecraft.screen != null)
+		{
 			return;
 		}
 		if (Keybindings.MANIFESTATION_MENU.consumeClick())
@@ -285,83 +289,83 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 			// adding manually one-by-one was better than a for loop, as there would have to be a switch case anyway
 
 			// add physical metals
-			double quadCenterX = width/2F - MetalQuadrant.width*3;		// these multiplications are kinda random, but if it works, it works
-			double quadCenterY = height/2F - MetalQuadrant.height*0.75;
+			double quadCenterX = width / 2F - MetalQuadrant.width * 3;        // these multiplications are kinda random, but if it works, it works
+			double quadCenterY = height / 2F - MetalQuadrant.height * 0.75;
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.IRON,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.STEEL,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.TIN,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.PEWTER,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			// add mental metals
-			quadCenterX = width/2 + MetalQuadrant.width*3;
+			quadCenterX = width / 2 + MetalQuadrant.width * 3;
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ZINC,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BRASS,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.COPPER,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BRONZE,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			// add enhancement metals
-			quadCenterX = width/2F - MetalQuadrant.width*3;
-			quadCenterY = height/2F + MetalQuadrant.height*1.75;
+			quadCenterX = width / 2F - MetalQuadrant.width * 3;
+			quadCenterY = height / 2F + MetalQuadrant.height * 1.75;
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ALUMINUM,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.DURALUMIN,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.CHROMIUM,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.NICROSIL,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			// add temporal metals
-			quadCenterX = width/2 + MetalQuadrant.width*3;
+			quadCenterX = width / 2 + MetalQuadrant.width * 3;
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.GOLD,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ELECTRUM,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY - MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY - MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.CADMIUM,
-					quadCenterX - MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX - MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.BENDALLOY,
-					quadCenterX + 2 + MetalQuadrant.width/2,
-					quadCenterY + 2 + MetalQuadrant.height/2));
+					quadCenterX + 2 + MetalQuadrant.width / 2,
+					quadCenterY + 2 + MetalQuadrant.height / 2));
 
 			// add atium
 			metalQuadrants.add(new MetalQuadrant(Metals.MetalType.ATIUM,
-					width/2D,
-					quadCenterY + MetalQuadrant.height/2));
+					width / 2D,
+					quadCenterY + MetalQuadrant.height / 2));
 		}
 
 		final List<Manifestation> availableManifestations = spiritweb.getAvailableManifestations();
@@ -553,10 +557,10 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 					if (((inMetalSubmenu && selectedAllomancyType) || shouldShowAllomancy) && s.toLowerCase().contains("a. " + quad.metalType.getName()) && maniList.contains(Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quad.metalType.getID())))
 					{
 						String displayString = s.split(":")[1].stripLeading();
-						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) quad.centerY + font.lineHeight, 0xffffffff);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString) / 2F), (int) quad.centerY + font.lineHeight, 0xffffffff);
 
-						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY - font.lineHeight*1.5F), 0xffffffff);
+						displayString = quad.metalType.getName().substring(0, 1).toUpperCase() + quad.metalType.getName().substring(1);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString) / 2F), (int) (quad.centerY - font.lineHeight * 1.5F), 0xffffffff);
 
 						foundNumber = true;
 						break;
@@ -564,10 +568,10 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 					else if (((inMetalSubmenu && selectedFeruchemyType) || shouldShowFeruchemy) && s.toLowerCase().contains("f. " + quad.metalType.getName()) && maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID())))
 					{
 						String displayString = s.split(":")[1].stripLeading();
-						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) quad.centerY + font.lineHeight, 0xffffffff);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString) / 2F), (int) quad.centerY + font.lineHeight, 0xffffffff);
 
-						displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY - font.lineHeight*1.5F), 0xffffffff);
+						displayString = quad.metalType.getName().substring(0, 1).toUpperCase() + quad.metalType.getName().substring(1);
+						guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString) / 2F), (int) (quad.centerY - font.lineHeight * 1.5F), 0xffffffff);
 
 						foundNumber = true;
 						break;
@@ -579,15 +583,15 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 			boolean feruManiListContains = maniList.contains(Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quad.metalType.getID()));
 
 			boolean shouldDrawMetalNames = !foundNumber && ((inMetalSubmenu && ((selectedAllomancyType && alloManiListContains) || (selectedFeruchemyType && feruManiListContains)))
-														|| (!inMetalSubmenu && ((shouldShowAllomancy && alloManiListContains) || (shouldShowFeruchemy && feruManiListContains))));
+					|| (!inMetalSubmenu && ((shouldShowAllomancy && alloManiListContains) || (shouldShowFeruchemy && feruManiListContains))));
 			if (shouldDrawMetalNames)
 			{
 				String displayString;
 				displayString = "0";
-				guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY + font.lineHeight), 0xffffffff);
+				guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString) / 2F), (int) (quad.centerY + font.lineHeight), 0xffffffff);
 
-				displayString = quad.metalType.getName().substring(0,1).toUpperCase() + quad.metalType.getName().substring(1);
-				guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString)/2F), (int) (quad.centerY - font.lineHeight*1.5F), 0xffffffff);
+				displayString = quad.metalType.getName().substring(0, 1).toUpperCase() + quad.metalType.getName().substring(1);
+				guiGraphics.drawString(font, displayString, (int) (quad.centerX - font.width(displayString) / 2F), (int) (quad.centerY - font.lineHeight * 1.5F), 0xffffffff);
 			}
 		}
 	}
@@ -800,7 +804,7 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 		boolean hasSubmenu = allomancySubmenuOpen || feruchemySubmenuOpen;
 		boolean allomancySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
 		boolean feruchemySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
-		int r = 0, g = 0, b = 0, a = 127;		// 127 is halfway between 0 and 255, so 0.5 transparency
+		int r = 0, g = 0, b = 0, a = 127;        // 127 is halfway between 0 and 255, so 0.5 transparency
 
 		for (MetalQuadrant quadrant : metalQuadrants)
 		{
@@ -809,12 +813,12 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 
 			// if player doesn't have the manifestation, skip it
 			if ((hasSubmenu && ((allomancySubmenuOpen && maniList.contains(alloMani)) || (feruchemySubmenuOpen && maniList.contains(feruMani))))
-				|| (!hasSubmenu && ((allomancySelected && maniList.contains(alloMani)) || (feruchemySelected && maniList.contains(feruMani)))))
+					|| (!hasSubmenu && ((allomancySelected && maniList.contains(alloMani)) || (feruchemySelected && maniList.contains(feruMani)))))
 			{
-				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX - MetalQuadrant.width / 2, quadrant.centerY - MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX - MetalQuadrant.width / 2, quadrant.centerY + MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX + MetalQuadrant.width / 2, quadrant.centerY + MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
+				buffer.vertex(quadrant.centerX + MetalQuadrant.width / 2, quadrant.centerY - MetalQuadrant.height / 2, 0).color(r, g, b, a).endVertex();
 			}
 		}
 	}
@@ -1018,6 +1022,7 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 			}
 		}
 	}
+
 	public SpiritwebCapability getSpiritweb()
 	{
 		return spiritweb;

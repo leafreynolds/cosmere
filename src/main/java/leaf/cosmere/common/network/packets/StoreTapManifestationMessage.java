@@ -37,7 +37,10 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 		ServerPlayer sender = context.getSender();
 		context.enqueueWork(() ->
 		{
-			if (sender == null) return;
+			if (sender == null)
+			{
+				return;
+			}
 			SpiritwebCapability.get(sender).ifPresent((cap) ->
 			{
 				// Storing
@@ -64,16 +67,20 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
 						{
 							int currentStrength = 0;
-							if(!(manifestation.getAttribute() instanceof RangedAttribute attribute)) return;
+							if (!(manifestation.getAttribute() instanceof RangedAttribute attribute))
+							{
+								return;
+							}
 							AttributeInstance attributeInstance = sender.getAttribute(attribute);
-							if(attributeInstance != null) {
+							if (attributeInstance != null)
+							{
 								currentStrength = (int) attributeInstance.getBaseValue();
 							}
 
 							// Let's ensure not to exceed the base value if it's out of range,
 							// even if it will get sanitized
 							int newStrength = (int) manifestationStrength + currentStrength;
-							if(newStrength < attribute.getMinValue())
+							if (newStrength < attribute.getMinValue())
 							{
 								newStrength = (int) attribute.getMinValue();
 							}
