@@ -5,6 +5,7 @@
 package leaf.cosmere.feruchemy;
 
 import leaf.cosmere.BaseRecipeProvider;
+import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.feruchemy.common.Feruchemy;
@@ -49,9 +50,19 @@ public class FeruchemyRecipeGen extends BaseRecipeProvider implements ICondition
 
 		if (metalType.hasFeruchemicalEffect())
 		{
-			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_NECKLACES.get(metalType)).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern(" X ").group("necklace").unlockedBy("has_material", has(inputMaterial)).save(consumer);
-			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_RINGS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern(" X ").group("ring").unlockedBy("has_material", has(inputMaterial)).save(consumer);
-			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_BRACELETS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern("X X").group("bracelet").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			// Using switch for future metal types that may need special handling
+			switch(metalType)
+			{
+				case NICROSIL:
+					ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.NICROSIL_METAL_NECKLACE).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern(" X ").group("necklace").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+					ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.NICROSIL_METAL_RING).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern(" X ").group("ring").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+					ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.NICROSIL_METAL_BRACELET).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern("X X").group("bracelet").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+					break;
+				default:
+					ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_NECKLACES.get(metalType)).define('X', inputMaterial).pattern("XXX").pattern("X X").pattern(" X ").group("necklace").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+					ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_RINGS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern(" X ").group("ring").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+					ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FeruchemyItems.METAL_BRACELETS.get(metalType)).define('X', inputMaterial).pattern(" X ").pattern("X X").pattern("X X").group("bracelet").unlockedBy("has_material", has(inputMaterial)).save(consumer);
+			}
 		}
 	}
 

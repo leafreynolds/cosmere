@@ -35,10 +35,19 @@ public class FeruchemyTagProvider extends BaseTagProvider
 		{
 			if (metalType.hasFeruchemicalEffect())
 			{
-				//curio stuff
-				getItemBuilder(CosmereTags.Items.CURIO_NECKLACE).add(FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
-				getItemBuilder(CosmereTags.Items.CURIO_RING).add(FeruchemyItems.METAL_RINGS.get(metalType).asItem());
-				getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
+				// Using switch for future metal types that may need special handling
+				switch(metalType)
+				{
+					case NICROSIL:
+						getItemBuilder(CosmereTags.Items.CURIO_NECKLACE).add(FeruchemyItems.NICROSIL_METAL_NECKLACE.asItem());
+						getItemBuilder(CosmereTags.Items.CURIO_RING).add(FeruchemyItems.NICROSIL_METAL_RING.asItem());
+						getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.NICROSIL_METAL_BRACELET.asItem());
+						break;
+					default:
+						getItemBuilder(CosmereTags.Items.CURIO_NECKLACE).add(FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
+						getItemBuilder(CosmereTags.Items.CURIO_RING).add(FeruchemyItems.METAL_RINGS.get(metalType).asItem());
+						getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
+				}
 			}
 		}
 	}

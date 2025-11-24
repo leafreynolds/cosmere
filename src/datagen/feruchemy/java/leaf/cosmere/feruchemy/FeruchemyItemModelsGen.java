@@ -6,6 +6,7 @@ package leaf.cosmere.feruchemy;
 
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
+import leaf.cosmere.common.items.ManifestationMetalCurioItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
 import net.minecraft.data.PackOutput;
@@ -37,7 +38,7 @@ public class FeruchemyItemModelsGen extends ItemModelProvider
 			{
 				continue;
 			}
-			else if (item instanceof ChargeableMetalCurioItem)
+			else if (item instanceof ChargeableMetalCurioItem || item instanceof ManifestationMetalCurioItem)
 			{
 				//because I'm lazy and don't wanna rename all the textures
 				//doesn't really need to be that explicit in naming anyway

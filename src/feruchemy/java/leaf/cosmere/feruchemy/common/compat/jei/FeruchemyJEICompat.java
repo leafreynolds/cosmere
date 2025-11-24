@@ -37,7 +37,7 @@ public class FeruchemyJEICompat implements IModPlugin
 					case NICROSIL:
 						addItemInfoPage(reg, FeruchemyItems.NICROSIL_METAL_NECKLACE.asItem());
 						addItemInfoPage(reg, FeruchemyItems.NICROSIL_METAL_RING.asItem());
-						addItemInfoPage(reg, FeruchemyItems.NICROSIL_METAL_NECKLACE.asItem());
+						addItemInfoPage(reg, FeruchemyItems.NICROSIL_METAL_BRACELET.asItem());
 						break;
 					default:
 						addItemInfoPage(reg, FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());

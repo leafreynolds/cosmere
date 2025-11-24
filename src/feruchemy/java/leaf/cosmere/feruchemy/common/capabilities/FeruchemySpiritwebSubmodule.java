@@ -12,6 +12,7 @@ import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
+import leaf.cosmere.feruchemy.common.items.NicrosilRingMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
@@ -86,11 +87,18 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 
 	private static void GiveStartingItem(Player player, Metals.MetalType metalType, float fillAmount)
 	{
-		final RingMetalmindItem metalmindItem = FeruchemyItems.METAL_RINGS.get(metalType).get();
-		ItemStack itemStack = new ItemStack(metalmindItem);
-
-
-		metalmindItem.setCharge(itemStack, (int) (metalmindItem.getMaxCharge(itemStack) * fillAmount));
+		ItemStack itemStack;
+		if (metalType == Metals.MetalType.NICROSIL)
+		{
+			final NicrosilRingMetalmindItem metalmindItem = FeruchemyItems.NICROSIL_METAL_RING.get();
+			itemStack = new ItemStack(metalmindItem);
+		}
+		else
+		{
+			final RingMetalmindItem metalmindItem = FeruchemyItems.METAL_RINGS.get(metalType).get();
+			itemStack = new ItemStack(metalmindItem);
+			metalmindItem.setCharge(itemStack, (int) (metalmindItem.getMaxCharge(itemStack) * fillAmount));
+		}
 		PlayerHelper.addItem(player, itemStack);
 	}
 

@@ -22,6 +22,7 @@ public class FeruchemyRenderers
 		{
 			CuriosRendererRegistry.register(itemRegistryObject.get(), bracelet);
 		}
+		CuriosRendererRegistry.register(FeruchemyItems.NICROSIL_METAL_BRACELET.get(), bracelet);
 		CuriosRendererRegistry.register(FeruchemyItems.BANDS_OF_MOURNING.get(), bracelet);
 
 	}
