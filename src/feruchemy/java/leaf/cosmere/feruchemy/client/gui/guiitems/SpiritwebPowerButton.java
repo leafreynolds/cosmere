@@ -1,17 +1,50 @@
 package leaf.cosmere.feruchemy.client.gui.guiitems;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import joptsimple.internal.Strings;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.api.MenuHelpers.SquareMenuButton;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
-public class SpiritwebPowerButton extends SquareMenuButton
+public class SpiritwebPowerButton
 {
+	public double x1 = 0;
+	public double y1 = 0;
+
+	//left side downer
+	public double x2 = 0;
+	public double y2 = 0;
+
+	//right side downer
+	public double x3 = 0;
+	public double y3 = 0;
+
+	//right side upper
+	public double x4 = 0;
+	public double y4 = 0;
+
+	public double posX = 0;
+	public double posY = 0;
+
+	public boolean highlight;
+
+	public String displayName;
+	public String iconPath;
+
+	public int red;
+	public int green;
+	public int blue;
+
+	public int opacity;
+
+	double width;
+	double height;
+
 	static final StringBuilder stringBuilder = new StringBuilder();
 
 	ISpiritweb spiritweb;
@@ -23,15 +56,41 @@ public class SpiritwebPowerButton extends SquareMenuButton
 
 	public SpiritwebPowerButton(double posX, double posY, ISpiritweb spiritweb, SpiritwebButtonContainer container, byte slotIndex)
 	{
-		super(posX, posY);
 		this.spiritweb = spiritweb;
 		this.displayName = "";
 		this.container = container;
 		this.slotIndex = slotIndex;
+
+		this.width = 20;
+		this.height = 20;
+
+		this.x1 = posX - (width / 2);
+		this.y1 = posY - (height / 2);
+
+		//left side downer
+		this.x2 = posX - (width / 2);
+		this.y2 = posY + (height / 2);
+
+		//right side downer
+		this.x3 = posX + (width / 2);
+		this.y3 = posY + (height / 2);
+
+		//right side upper
+		this.x4 = posX + (width / 2);
+		this.y4 = posY - (height / 2);
+
+		this.posX = posX;
+		this.posY = posY;
+
+		this.red = 205;
+		this.blue = 205;
+		this.green = 205;
+		this.opacity = 100;
 	}
 
-	public void renderIcon(GuiGraphics guiGraphics){
-		if(!Strings.isNullOrEmpty(iconPath))
+	public void renderIcon(GuiGraphics guiGraphics)
+	{
+		if (!Strings.isNullOrEmpty(iconPath))
 		{
 			final ResourceLocation textureLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), iconPath);
 			RenderSystem.setShaderTexture(0, textureLocation);
@@ -71,7 +130,7 @@ public class SpiritwebPowerButton extends SquareMenuButton
 
 	public void setManifestation(Manifestation manifestation)
 	{
-		if(manifestation == null)
+		if (manifestation == null)
 		{
 			// Remove manifestation from button
 			this.manifestation = null;
@@ -126,5 +185,103 @@ public class SpiritwebPowerButton extends SquareMenuButton
 	public byte getSlotIndex()
 	{
 		return slotIndex;
+	}
+
+	public void setPosition(double sPosX, double sPosY)
+	{
+
+		//Left side upper
+		double x1offset = x1 - posX;
+		double y1offset = y1 - posY;
+
+		//left side downer
+		double x2offset = x2 - posX;
+		double y2offset = y2 - posY;
+
+		//right side downer
+		double x3offset = x3 - posX;
+		double y3offset = y3 - posY;
+
+		//right side upper
+		double x4offset = x4 - posX;
+		double y4offset = y4 - posY;
+
+		posX = sPosX;
+		posY = sPosY;
+
+		//Left side upper
+		x1 = posX + x1offset;
+		y1 = posY + y1offset;
+
+		//left side downer
+		x2 = posX + x2offset;
+		y2 = posY + y2offset;
+
+		//right side downer
+		x3 = posX + x3offset;
+		y3 = posY + y3offset;
+
+		//right side upper
+		x4 = posX + x4offset;
+		y4 = posY + y4offset;
+
+	}
+
+	public void setColour(int red, int green, int blue)
+	{
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+	}
+
+	public void setOpacity(int opacity)
+	{
+		this.opacity = opacity;
+	}
+
+	//Float versions for previous^^
+	public void setColour(float red, float green, float blue)
+	{
+		setColour((int) red * 255, (int) green * 255, (int) blue * 255);
+	}
+
+	public void setOpacity(float opacity)
+	{
+		setOpacity((int) opacity * 255);
+	}
+
+	//Sets highlight and returns that, might split into two later.
+	public void highlightAction(double mouseX, double mouseY, double middle_x, double middle_y)
+	{
+		highlight = (MathHelper.inTriangle(
+				x1, y1,
+				x2, y2,
+				x3, y3,
+				mouseX, mouseY)
+				|| MathHelper.inTriangle(
+				x1, y1,
+				x4, y4,
+				x3, y3,
+				mouseX, mouseY));
+
+	}
+
+	;
+
+	public void renderButton(BufferBuilder buffer)
+	{
+		int lerpositive = 0;
+
+		if (highlight)
+		{
+			lerpositive = 50;
+		}
+
+		buffer.vertex(x1, y1, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+		buffer.vertex(x2, y2, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+
+		buffer.vertex(x3, y3, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+		buffer.vertex(x4, y4, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+
 	}
 }

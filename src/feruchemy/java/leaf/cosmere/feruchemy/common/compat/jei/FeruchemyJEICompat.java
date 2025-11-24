@@ -32,9 +32,18 @@ public class FeruchemyJEICompat implements IModPlugin
 		{
 			if (metalType.hasFeruchemicalEffect())
 			{
-				addItemInfoPage(reg, FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
-				addItemInfoPage(reg, FeruchemyItems.METAL_RINGS.get(metalType).asItem());
-				addItemInfoPage(reg, FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
+				switch(metalType)
+				{
+					case NICROSIL:
+						addItemInfoPage(reg, FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
+						addItemInfoPage(reg, FeruchemyItems.METAL_RINGS.get(metalType).asItem());
+						addItemInfoPage(reg, FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
+						break;
+					default:
+						addItemInfoPage(reg, FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
+						addItemInfoPage(reg, FeruchemyItems.METAL_RINGS.get(metalType).asItem());
+						addItemInfoPage(reg, FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
+				}
 			}
 		}
 	}

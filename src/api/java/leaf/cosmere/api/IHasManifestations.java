@@ -12,18 +12,21 @@ public interface IHasManifestations
 
 	default void addManifestation(ItemStack itemStack, Manifestation manifestation, int strength, byte manifestationSlot)
 	{
-		if(manifestation == null) return;
+		if (manifestation == null)
+		{
+			return;
+		}
 		Manifestation[] manifestations = getManifestations(itemStack);
 		Integer[] manifestationStrengths = getManifestationStrengths(itemStack);
 
-		if(manifestations == null || manifestations.length == 0)
+		if (manifestations == null || manifestations.length == 0)
 		{
 			manifestations = new Manifestation[getMaxCapacity()];
 			manifestationStrengths = new Integer[getMaxCapacity()];
 		}
 
 		int newStrength = strength;
-		if(manifestations[manifestationSlot] != null && manifestationStrengths[manifestationSlot] != null)
+		if (manifestations[manifestationSlot] != null && manifestationStrengths[manifestationSlot] != null)
 		{
 			newStrength += manifestationStrengths[manifestationSlot];
 		}
@@ -36,13 +39,16 @@ public interface IHasManifestations
 
 	default void removeManifestation(ItemStack itemStack, Manifestation manifestation)
 	{
-		if(manifestation == null) return;
+		if (manifestation == null)
+		{
+			return;
+		}
 		Manifestation[] manifestations = getManifestations(itemStack);
 		Integer[] manifestationStrengths = getManifestationStrengths(itemStack);
 
-		for(int i = 0; i < manifestations.length; i++)
+		for (int i = 0; i < manifestations.length; i++)
 		{
-			if(manifestations[i] == manifestation)
+			if (manifestations[i] == manifestation)
 			{
 				manifestations[i] = null;
 				manifestationStrengths[i] = null;
@@ -57,16 +63,19 @@ public interface IHasManifestations
 	{
 		CompoundTag nbt = itemStack.getOrCreateTag();
 		Manifestation[] manifestations;
-		if(!nbt.contains("manifestationIds")) return new Manifestation[getMaxCapacity()];
+		if (!nbt.contains("manifestationIds"))
+		{
+			return new Manifestation[getMaxCapacity()];
+		}
 
 
 		ListTag manifestationListTag = (ListTag) nbt.get("manifestationIds");
 
 		manifestations = new Manifestation[manifestationListTag.size()];
-		for(int i = 0; i < manifestationListTag.size(); i++)
+		for (int i = 0; i < manifestationListTag.size(); i++)
 		{
-			CompoundTag tag  = (CompoundTag) manifestationListTag.get(i);
-			if(tag.getString("manifestation").equals("null"))
+			CompoundTag tag = (CompoundTag) manifestationListTag.get(i);
+			if (tag.getString("manifestation").equals("null"))
 			{
 				manifestations[i] = null;
 			}
@@ -81,15 +90,18 @@ public interface IHasManifestations
 
 	default boolean setManifestations(ItemStack itemStack, Manifestation[] manifestations)
 	{
-		if(manifestations.length == 0) return false;
+		if (manifestations.length == 0)
+		{
+			return false;
+		}
 
 		CompoundTag nbt = itemStack.getOrCreateTag();
 		ListTag manifestationListTag = new ListTag();
-		for(Manifestation manifestation : manifestations)
+		for (Manifestation manifestation : manifestations)
 		{
 
 			CompoundTag tag = new CompoundTag();
-			if(manifestation == null)
+			if (manifestation == null)
 			{
 				tag.putString("manifestation", "null");
 			}
@@ -108,10 +120,14 @@ public interface IHasManifestations
 	{
 		CompoundTag nbt = itemStack.getOrCreateTag();
 
-		if(!nbt.contains("manifestationStrengths")) return new Integer[getMaxCapacity()];
+		if (!nbt.contains("manifestationStrengths"))
+		{
+			return new Integer[getMaxCapacity()];
+		}
 		int[] strengths = nbt.getIntArray("manifestationStrengths");
 		Integer[] newStrengths = new Integer[strengths.length];
-		for(int i = 0; i < strengths.length; i++){
+		for (int i = 0; i < strengths.length; i++)
+		{
 			if (strengths[i] == 0)
 			{
 				newStrengths[i] = null;
@@ -122,17 +138,23 @@ public interface IHasManifestations
 			}
 		}
 
-		if(newStrengths.length == 0) return new Integer[getMaxCapacity()];
+		if (newStrengths.length == 0)
+		{
+			return new Integer[getMaxCapacity()];
+		}
 		return newStrengths;
 	}
 
 	default boolean setManifestationStrengths(ItemStack itemStack, Integer[] strengths)
 	{
-		if(strengths.length == 0) return false;
+		if (strengths.length == 0)
+		{
+			return false;
+		}
 
 		CompoundTag nbt = itemStack.getOrCreateTag();
 		int[] newStrengths = new int[getMaxCapacity()];
-		for(int i = 0; i < strengths.length; i++)
+		for (int i = 0; i < strengths.length; i++)
 		{
 			if (strengths[i] == null)
 			{
