@@ -133,7 +133,7 @@ public interface IChargeable
 
 		UUID itemAttunedPlayerUUID = getAttunedPlayer(itemStack);
 		//null means not attuned at all, so can assume player is attuned with it
-		return noIdentityPlayer || itemAttunedPlayerUUID == null || itemAttunedPlayerUUID == entity.getUUID();
+		return noIdentityPlayer || itemAttunedPlayerUUID == null || itemAttunedPlayerUUID.equals(entity.getUUID());
 	}
 
 
