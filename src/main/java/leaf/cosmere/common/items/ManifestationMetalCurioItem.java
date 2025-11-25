@@ -4,15 +4,20 @@
 
 package leaf.cosmere.common.items;
 
-import leaf.cosmere.api.IHasManifestations;
+import leaf.cosmere.api.text.TextHelper;
+import leaf.cosmere.common.charge.IHasManifestations;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -22,6 +27,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalType, ICurioItem, IHasManifestations
 {
@@ -93,6 +99,22 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 		Manifestation[] manifestations = getManifestations(stack);
 		Integer[] manifestationStrengths = getManifestationStrengths(stack);
 
+		String attunedPlayerName = getAttunedPlayerName(stack);
+		UUID attunedPlayer = getAttunedPlayer(stack);
+
+		if (attunedPlayer != null)
+		{
+			MutableComponent identityName = TextHelper.createText(attunedPlayerName).withStyle();
+
+			Minecraft mc = Minecraft.getInstance();
+			Player player = mc.player;
+			if(player != null && !player.getUUID().equals(attunedPlayer))
+			{
+				identityName = Component.literal(EnchantmentNames.getInstance().getRandomName(mc.font, 16).getString());
+			}
+			tooltip.add(Component.literal("Identity: ").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC).append(identityName.withStyle(ChatFormatting.LIGHT_PURPLE)));
+		}
+
 		boolean isFirst = true;
 		for (int i = 0; i < manifestations.length; i++)
 		{
@@ -101,7 +123,6 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 			{
 				if (isFirst)
 				{
-					tooltip.add(Component.empty());
 					tooltip.add(Component.literal("When tapped:").withStyle(ChatFormatting.GOLD));
 					isFirst = false;
 				}

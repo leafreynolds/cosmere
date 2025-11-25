@@ -1,6 +1,6 @@
 package leaf.cosmere.common.network.packets;
 
-import leaf.cosmere.api.IHasManifestations;
+import leaf.cosmere.common.charge.IHasManifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
@@ -9,6 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -50,10 +51,14 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 					if (curiosItemHandler.resolve().isPresent())
 					{
 						ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
+						ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(curioSlot);
 						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
 						{
-							cap.removeManifestation(manifestation);
-							item.addManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation, (int) manifestationStrength, manifestationSlot);
+							if(item.trySetAttunedPlayer(itemStack, sender))
+							{
+								cap.removeManifestation(manifestation);
+								item.addManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation, (int) manifestationStrength, manifestationSlot);
+							}
 						}
 					}
 				}
@@ -64,6 +69,7 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 					if (curiosItemHandler.resolve().isPresent())
 					{
 						ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
+						ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(curioSlot);
 						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHasManifestations item)
 						{
 							int currentStrength = 0;
@@ -89,8 +95,11 @@ public class StoreTapManifestationMessage implements ICosmerePacket
 								newStrength = (int) attribute.getMaxValue();
 							}
 
-							cap.giveManifestation(manifestation, (int) newStrength);
-							item.removeManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation);
+							if(item.getPlayerIsAttuned(itemStack, sender))
+							{
+								cap.giveManifestation(manifestation, (int) newStrength);
+								item.removeManifestation(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), manifestation);
+							}
 						}
 					}
 				}

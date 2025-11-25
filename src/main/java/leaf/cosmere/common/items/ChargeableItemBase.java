@@ -7,7 +7,11 @@ package leaf.cosmere.common.items;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.charge.IChargeable;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -46,11 +50,20 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 	{
 		String attunedPlayerName = getAttunedPlayerName(stack);
 		UUID attunedPlayer = getAttunedPlayer(stack);
+
 		if (attunedPlayer != null)
 		{
-			tooltip.add(TextHelper.createText(attunedPlayerName));
+			MutableComponent identityName = TextHelper.createText(attunedPlayerName).withStyle();
+
+			Minecraft mc = Minecraft.getInstance();
+			Player player = mc.player;
+			if(player != null && !player.getUUID().equals(attunedPlayer))
+			{
+				identityName = Component.literal(EnchantmentNames.getInstance().getRandomName(mc.font, 16).getString());
+			}
+			tooltip.add(Component.literal("Identity: ").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC).append(identityName.withStyle(ChatFormatting.LIGHT_PURPLE)));
+			tooltip.add(TextHelper.createText(String.format("%s/%s", getCharge(stack), getMaxCharge(stack))).withStyle(ChatFormatting.GRAY));
 		}
-		tooltip.add(TextHelper.createText(String.format("%s/%s", getCharge(stack), getMaxCharge(stack))).withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override

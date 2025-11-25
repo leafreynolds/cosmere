@@ -9,7 +9,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import leaf.cosmere.api.IHasManifestations;
+import leaf.cosmere.common.charge.IHasManifestations;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations.ManifestationTypes;
 import leaf.cosmere.api.Metals;
@@ -36,6 +36,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -154,21 +155,23 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 							if (curiosItemHandler.resolve().isPresent())
 							{
 								ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
-								if (itemHandler.getEquippedCurios()
-										.getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot)
-										.getItem() instanceof IHasManifestations)
+								ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot);
+								if (itemStack.getItem() instanceof IHasManifestations item)
 								{
 									final Attribute attribute = heldButton.manifestation.getAttribute();
 									AttributeInstance manifestationAttribute = player.getAttribute(attribute);
 
-									Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
-											heldButton.manifestation,
-											manifestationAttribute.getBaseValue(),
-											spiritwebPowerButton.getContainer().curioItemSlot,
-											true,
-											spiritwebPowerButton.getSlotIndex()));
+									if(item.trySetAttunedPlayer(itemStack, player))
+									{
+										Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
+												heldButton.manifestation,
+												manifestationAttribute.getBaseValue(),
+												spiritwebPowerButton.getContainer().curioItemSlot,
+												true,
+												spiritwebPowerButton.getSlotIndex()));
 
-									applyLocalStore(heldButton, spiritwebPowerButton);
+										applyLocalStore(heldButton, spiritwebPowerButton);
+									}
 									heldButton = null;
 									return true;
 								}
@@ -191,15 +194,19 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 						if (curiosItemHandler.resolve().isPresent())
 						{
 							ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
-							if (itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot).getItem() instanceof IHasManifestations)
+							ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot);
+							if (itemStack.getItem() instanceof IHasManifestations item)
 							{
-								Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
-										spiritwebPowerButton.getManifestation(),
-										spiritwebPowerButton.getStrength(),
-										spiritwebPowerButton.getContainer().curioItemSlot,
-										false,
-										spiritwebPowerButton.getSlotIndex()));
-								applyLocalTap(spiritwebPowerButton);
+								if(item.getPlayerIsAttuned(itemStack, player))
+								{
+									Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
+											spiritwebPowerButton.getManifestation(),
+											spiritwebPowerButton.getStrength(),
+											spiritwebPowerButton.getContainer().curioItemSlot,
+											false,
+											spiritwebPowerButton.getSlotIndex()));
+									applyLocalTap(spiritwebPowerButton);
+								}
 								return true;
 							}
 						}

@@ -33,37 +33,4 @@ public class NecklaceMetalmindItem extends ChargeableMetalCurioItem
 	{
 		return (6f / 9f);
 	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
-	{
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
-
-		if (this.getMetalType() == Metals.MetalType.NICROSIL)
-		{
-			CompoundTag nbt = stack.getOrCreateTagElement("StoredInvestiture");
-
-			tooltip.add(Component.empty());
-			tooltip.add(Component.literal("When tapping:").withStyle(ChatFormatting.GOLD));
-
-			for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
-			{
-				Attribute attribute = manifestation.getAttribute();
-				final String attributeRegistryName = manifestation.getRegistryName().toString();
-				if (!CompoundNBTHelper.verifyExistance(nbt, attributeRegistryName) || attribute == null)
-				{
-					continue;
-				}
-
-				int strength = CompoundNBTHelper.getInt(
-						nbt,
-						attributeRegistryName,
-						0);
-
-				tooltip.add(Component.literal("+" + strength + " ").append(Component.translatable(manifestation.getTranslationKey())).withStyle(ChatFormatting.BLUE));
-
-			}
-		}
-	}
 }
