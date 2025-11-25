@@ -517,7 +517,7 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 		}
 
 		int sidedMenuX = !sidedMenuButtons.isEmpty() ? (int) sidedMenuButtons.get(sidedMenuButtons.size() - 1).x2 + 35 : 0;
-		int sidedMenuY = !sidedMenuButtons.isEmpty() ? (int) sidedMenuButtons.get(sidedMenuButtons.size() - 1).y1 : 0;
+		int sidedMenuY = !sidedMenuButtons.isEmpty() ? (int) sidedMenuButtons.get(sidedMenuButtons.size() - 1).y1 : -85;
 
 		sidedMenuX += middle_x;
 		sidedMenuY += middle_y;
