@@ -454,7 +454,8 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 
 
 		// draw radial button strings
-		renderRadialButtonStrings(guiGraphics, (int) middle_x, (int) middle_y);
+		// Removing radial button strings since its so cluttered with the metal submenu
+		//renderRadialButtonStrings(guiGraphics, (int) middle_x, (int) middle_y);
 		//draw sided button strings
 		renderSidedButtonStrings(guiGraphics, middle_x, middle_y);
 		//draw quadrant strings
@@ -515,13 +516,16 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 			return;
 		}
 
-		y[0] = (int) middle_y / 2;
-		int rightSideX = middle_x + 35;
+		int sidedMenuX = !sidedMenuButtons.isEmpty() ? (int) sidedMenuButtons.get(sidedMenuButtons.size() - 1).x2 + 35 : 0;
+		int sidedMenuY = !sidedMenuButtons.isEmpty() ? (int) sidedMenuButtons.get(sidedMenuButtons.size() - 1).y1 : 0;
+
+		sidedMenuX += middle_x;
+		sidedMenuY += middle_y;
 
 		String displayString = "+" + (int) selectedManifestation.getStrength(spiritweb, false) + " " + I18n.get(selectedManifestation.getTranslationKey());
-		guiGraphics.drawString(font, displayString, rightSideX, y[0], 0xffffffff);
+		guiGraphics.drawString(font, displayString, sidedMenuX, sidedMenuY, 0xffffffff);
 		//todo mode translation
-		guiGraphics.drawString(font, "Mode: " + spiritweb.getMode(selectedManifestation), rightSideX, y[0] + 10, 0xffffffff);
+		guiGraphics.drawString(font, "Mode: " + spiritweb.getMode(selectedManifestation), sidedMenuX, sidedMenuY + 10, 0xffffffff);
 
 	}
 

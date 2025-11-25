@@ -49,9 +49,6 @@ import java.util.concurrent.TimeUnit;
 public class NicrosilMenu extends Screen implements ISyncSpiritweb
 {
 	public static final NicrosilMenu instance = new NicrosilMenu();
-	static final double TEXT_DISTANCE = 30;
-	public SidedMenuButton doAction = null;
-	boolean syncLock = false;
 
 	protected ArrayList<SpiritwebButtonContainer> ringMenus = new ArrayList<>();
 	protected ArrayList<SpiritwebButtonContainer> braceletMenus = new ArrayList<>();
@@ -71,7 +68,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	protected NicrosilMenu()
 	{
 		super(Component.literal("Menu"));
-		this.minecraft = getMinecraft();
 	}
 
 	@Override
@@ -101,22 +97,16 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 	public void postRender(SpiritwebCapability spiritweb)
 	{
-		if (this.minecraft == null)
-		{
-			return;
-		}
-		if (this.minecraft.screen == NicrosilMenu.instance)
+		if (getMinecraft().screen == NicrosilMenu.instance)
 		{
 			if (this.closed)
 			{
-				final Window window = this.minecraft.getWindow();
-				init(this.minecraft, window.getGuiScaledWidth(), window.getGuiScaledHeight());
+				final Window window = getMinecraft().getWindow();
+				init(getMinecraft(), window.getGuiScaledWidth(), window.getGuiScaledHeight());
 				setScaledResolution(window.getGuiScaledWidth(), window.getGuiScaledHeight());
 
 				this.spiritweb = spiritweb;
 
-				//no need to set if it's already open
-				//this.minecraft.setScreen(NicrosilMenu.instance);
 				visibility = 0;
 				lastChange = Stopwatch.createStarted();
 
@@ -258,7 +248,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	public void closeScreen()
 	{
 		this.closed = true;
-		this.minecraft.setScreen(null);
+		getMinecraft().setScreen(null);
 	}
 
 	private void applyLocalStore(TransferredPower held, SpiritwebPowerButton targetSlot)
@@ -373,7 +363,8 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 				for (int i = 0; i < itemHandler.getSlots(); i++)
 				{
-					if (itemHandler.getEquippedCurios().getStackInSlot(i).getItem() instanceof IHasManifestations item)
+					ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(i);
+					if (itemStack.getItem() instanceof IHasManifestations item)
 					{
 						final double middleX = width / 2f;
 						final double middleY = height / 2f;
@@ -382,7 +373,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 						Integer[] manifestationStrengths = item.getManifestationStrengths(itemHandler.getEquippedCurios().getStackInSlot(i));
 						for (int j = 0; j < item.getMaxCapacity(); j++)
 						{
-							SpiritwebPowerButton spiritwebPowerButton = new SpiritwebPowerButton(middleX, middleY, spiritweb, spiritwebContainer, (byte) j);
+							SpiritwebPowerButton spiritwebPowerButton = new SpiritwebPowerButton(middleX, middleY, spiritweb, spiritwebContainer, (byte) j, item.getPlayerIsAttuned(itemStack, player));
 							spiritwebPowerButton.setManifestation(manifestations[j]);
 							spiritwebPowerButton.setStrength(manifestationStrengths[j]);
 							spiritwebPowerButtons.add(spiritwebPowerButton);
@@ -492,8 +483,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 		final double middleX = width / 2f;
 		final double middleY = height / 2f;
-
-		doAction = null;
 
 		renderSpiritwebMenuContainer(buffer, ringMenus, mouseX, mouseY, middleX, middleY);
 		renderSpiritwebMenuContainer(buffer, braceletMenus, mouseX, mouseY, middleX, middleY);
@@ -667,7 +656,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 	private void renderSidedButtonIcons(GuiGraphics guiGraphics, double middleX, double middleY)
 	{
-		Minecraft mc = Minecraft.getInstance();
+		Minecraft mc = getMinecraft();
 		final StringBuilder stringBuilder = new StringBuilder();
 		for (final SidedMenuButton button : sidedMenuButtons)
 		{
@@ -697,7 +686,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 	private void renderPlayerSpiritwebButtonIcons(GuiGraphics guiGraphics, double middleX, double middleY)
 	{
-		Minecraft mc = Minecraft.getInstance();
+		Minecraft mc = getMinecraft();
 		final StringBuilder stringBuilder = new StringBuilder();
 		for (final PlayerSpiritwebPowerButton menuRegion : playerSpiritwebPowerButtons)
 		{
@@ -811,7 +800,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			if (button.highlighted)
 			{
 				f = 1;
-				doAction = button;
 			}
 			else
 			{

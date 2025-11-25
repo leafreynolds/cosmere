@@ -32,6 +32,7 @@ public class SpiritwebPowerButton
 	public double posY = 0;
 
 	public boolean highlight;
+	public boolean matchesIdentity;
 
 	public String displayName;
 	public String iconPath;
@@ -54,12 +55,13 @@ public class SpiritwebPowerButton
 
 	SpiritwebButtonContainer container;
 
-	public SpiritwebPowerButton(double posX, double posY, ISpiritweb spiritweb, SpiritwebButtonContainer container, byte slotIndex)
+	public SpiritwebPowerButton(double posX, double posY, ISpiritweb spiritweb, SpiritwebButtonContainer container, byte slotIndex, boolean matchesIdentity)
 	{
 		this.spiritweb = spiritweb;
 		this.displayName = "";
 		this.container = container;
 		this.slotIndex = slotIndex;
+		this.matchesIdentity = matchesIdentity;
 
 		this.width = 20;
 		this.height = 20;
@@ -227,28 +229,7 @@ public class SpiritwebPowerButton
 
 	}
 
-	public void setColour(int red, int green, int blue)
-	{
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
-	}
 
-	public void setOpacity(int opacity)
-	{
-		this.opacity = opacity;
-	}
-
-	//Float versions for previous^^
-	public void setColour(float red, float green, float blue)
-	{
-		setColour((int) red * 255, (int) green * 255, (int) blue * 255);
-	}
-
-	public void setOpacity(float opacity)
-	{
-		setOpacity((int) opacity * 255);
-	}
 
 	//Sets highlight and returns that, might split into two later.
 	public void highlightAction(double mouseX, double mouseY, double middle_x, double middle_y)
@@ -270,18 +251,27 @@ public class SpiritwebPowerButton
 
 	public void renderButton(BufferBuilder buffer)
 	{
-		int lerpositive = 0;
+		int r = red;;
+		int g = green;;
+		int b = blue;
 
 		if (highlight)
 		{
-			lerpositive = 50;
+			r += 30;
+			g += 30;
+			b += 30;
+		}
+		if(!matchesIdentity)
+		{
+			g -= 100;
+			b -= 100;
 		}
 
-		buffer.vertex(x1, y1, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
-		buffer.vertex(x2, y2, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+		buffer.vertex(x1, y1, 0).color(r, g, b, opacity).endVertex();
+		buffer.vertex(x2, y2, 0).color(r, g, b, opacity).endVertex();
 
-		buffer.vertex(x3, y3, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
-		buffer.vertex(x4, y4, 0).color(red + lerpositive, green + lerpositive, blue + lerpositive, opacity).endVertex();
+		buffer.vertex(x3, y3, 0).color(r, g, b, opacity).endVertex();
+		buffer.vertex(x4, y4, 0).color(r, g, b, opacity).endVertex();
 
 	}
 }

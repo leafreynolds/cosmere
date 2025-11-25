@@ -1,7 +1,6 @@
 package leaf.cosmere.feruchemy.client.gui.guiitems;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import leaf.cosmere.api.math.MathHelper;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
@@ -83,37 +82,6 @@ public class SpiritwebButtonContainer
 
 	}
 
-	public void removeButton(SpiritwebPowerButton button)
-	{
-		if (menuButtons.contains(button))
-		{
-			if (size != 1) //Shrink the container according to amount of powers, but don't shrink if it's already at one
-			{
-				menuButtons.remove(button);
-				updateDimensions(containWidth - 1, containHeight, centerX, centerY);
-			}
-			else
-			{
-				menuButtons.remove(button);
-			}
-		}
-	}
-
-	public void clearButtons()
-	{
-		updateDimensions(1, 1, centerX, centerY);
-		menuButtons.clear();
-	}
-
-	public void setPosition(double x, double y)
-	{
-		this.centerX = x;
-		this.centerY = y;
-
-		updateDimensions(containWidth, containHeight, centerX, centerY);
-
-	}
-
 	public double getWidth()
 	{
 		return width;
@@ -162,16 +130,10 @@ public class SpiritwebButtonContainer
 		this.centerX = centerX;
 		this.centerY = centerY;
 
-
-		//width needed is spacing + contents,
-		//contents = nPossibleButtons * buttonSize
-		//spacing = (nPossibleButtons + 1) * spacingSize
-		//same for height
 		this.width = (containWidth + 1) * 5 + containWidth * 20;
 		this.height = (containHeight + 1) * 5 + containHeight * 20;
 
 		size = containHeight * containWidth;
-
 
 		//left side upper
 		x1 = centerX - (width / 2);
@@ -191,23 +153,6 @@ public class SpiritwebButtonContainer
 
 		arrangeButtons();
 	}
-
-	public void highlightAction(double mouseX, double mouseY, double middle_x, double middle_y)
-	{
-		highlight = (MathHelper.inTriangle(
-				x1 - middle_x, y1 - middle_y,
-				x2 - middle_x, y2 - middle_y,
-				x3 - middle_x, y3 - middle_y,
-				mouseX, mouseY)
-				|| MathHelper.inTriangle(
-				x1 - middle_x, y1 - middle_y,
-				x4 - middle_x, y4 - middle_y,
-				x3 - middle_x, y3 - middle_y,
-				mouseX, mouseY));
-
-	}
-
-	;
 
 	public void highlightButtons(double mouseX, double mouseY, double middle_x, double middle_y)
 	{
@@ -245,16 +190,5 @@ public class SpiritwebButtonContainer
 			button.renderButton(buffer);
 		}
 
-	}
-
-
-	public double getCenterX()
-	{
-		return centerX;
-	}
-
-	public double getCenterY()
-	{
-		return centerY;
 	}
 }
