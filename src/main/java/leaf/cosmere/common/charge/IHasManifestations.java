@@ -3,22 +3,19 @@ package leaf.cosmere.common.charge;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.registry.CosmereEffectsRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface IHasManifestations
@@ -73,7 +70,11 @@ public interface IHasManifestations
 			}
 		}
 
-		for(Manifestation mani : manifestations) if(mani != null) return;
+		for (Manifestation mani : manifestations)
+			if (mani != null)
+			{
+				return;
+			}
 		//if no manifestations left, clear attuned player
 		StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER);
 		StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME);
@@ -200,25 +201,18 @@ public interface IHasManifestations
 
 			if (noAttunedPlayer)
 			{
-				boolean isStoringIdentity = false;
-				{
-					Optional<ISpiritweb> data = SpiritwebCapability.get(entity).filter(obj -> true);
-					if (data.isPresent()) {
-						isStoringIdentity = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(Metals.MetalType.ALUMINUM.getID()).getMode(data.get()) > 0;
-					}
-				}
-
-				if (isStoringIdentity)
+				ISpiritweb spiritweb = SpiritwebCapability.get(entity).resolve().get();
+				CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+				if (spiritweb.hasEffect(aluminumEffect))
 				{
 					// Then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
 					StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNKEYED_UUID);
 					StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unkeyed"); // todo translation
 					return true;
-
 				}
 			}
 
-			if (noAttunedPlayer || attunedPlayerID.compareTo(playerID) == 0 || attunedPlayerID.compareTo(Constants.NBT.UNKEYED_UUID) == 0)
+			if (noAttunedPlayer || attunedPlayerID.equals(playerID) || attunedPlayerID.equals(Constants.NBT.UNKEYED_UUID))
 			{
 				if (noAttunedPlayer && getManifestations(itemStack).length > 0)
 				{
@@ -255,15 +249,18 @@ public interface IHasManifestations
 
 	default boolean getPlayerIsAttuned(ItemStack itemStack, Player entity)
 	{
-		//todo clean up
-		final MobEffect aluminumStoreEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
-		assert aluminumStoreEffect != null;
-		MobEffectInstance storingIdentityEffect = entity.getEffect(aluminumStoreEffect);
-		boolean noIdentityPlayer = storingIdentityEffect != null && storingIdentityEffect.getDuration() > 0;
+		if (SpiritwebCapability.get(entity).resolve().isPresent())
+		{
+			ISpiritweb spiritweb = SpiritwebCapability.get(entity).resolve().get();
+			CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+			boolean noIdentityPlayer = spiritweb.hasEffect(aluminumEffect);
 
-		UUID itemAttunedPlayerUUID = getAttunedPlayer(itemStack);
-		//null means not attuned at all, so can assume player is attuned with it
-		UUID playerUUID = entity.getUUID();
-		return noIdentityPlayer || itemAttunedPlayerUUID == null || itemAttunedPlayerUUID.equals(playerUUID);
+			UUID itemAttunedPlayerUUID = getAttunedPlayer(itemStack);
+			UUID playerUUID = entity.getUUID();
+			boolean noIdentityItem = itemAttunedPlayerUUID == null || itemAttunedPlayerUUID.equals(Constants.NBT.UNKEYED_UUID);
+
+			return noIdentityPlayer || noIdentityItem || itemAttunedPlayerUUID.equals(playerUUID);
+		}
+		return false;
 	}
 }

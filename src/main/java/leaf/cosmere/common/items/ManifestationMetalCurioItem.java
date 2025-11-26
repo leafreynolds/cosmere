@@ -4,6 +4,7 @@
 
 package leaf.cosmere.common.items;
 
+import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.charge.IHasManifestations;
 import leaf.cosmere.api.IHasMetalType;
@@ -108,7 +109,12 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 
 			Minecraft mc = Minecraft.getInstance();
 			Player player = mc.player;
-			if(player != null && !player.getUUID().equals(attunedPlayer))
+
+			if(attunedPlayer.equals(Constants.NBT.UNKEYED_UUID))
+			{
+				identityName = Component.literal("Unkeyed");
+			}
+			else if(player != null && !player.getUUID().equals(attunedPlayer))
 			{
 				identityName = Component.literal(EnchantmentNames.getInstance().getRandomName(mc.font, 16).getString());
 			}

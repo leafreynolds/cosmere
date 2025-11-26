@@ -4,6 +4,7 @@
 
 package leaf.cosmere.common.items;
 
+import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.charge.IChargeable;
 import net.minecraft.ChatFormatting;
@@ -57,7 +58,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 
 			Minecraft mc = Minecraft.getInstance();
 			Player player = mc.player;
-			if(player != null && !player.getUUID().equals(attunedPlayer))
+			if(player != null && !player.getUUID().equals(attunedPlayer) && !attunedPlayer.equals(Constants.NBT.UNKEYED_UUID))
 			{
 				identityName = Component.literal(EnchantmentNames.getInstance().getRandomName(mc.font, 16).getString());
 			}
