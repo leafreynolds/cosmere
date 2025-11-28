@@ -6,11 +6,11 @@ package leaf.cosmere.allomancy.common.utils;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
 import leaf.cosmere.api.*;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.GodMetalNuggetItem;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,15 +22,18 @@ public class MiscHelper
 
 	public static void consumeNugget(LivingEntity livingEntity, ItemStack itemStack, int amount)
 	{
-		if (livingEntity.level().isClientSide) return;
+		if (livingEntity.level().isClientSide)
+		{
+			return;
+		}
 
-		if(itemStack.getItem() instanceof IGrantsManifestations manifestingItem && itemStack.getItem() instanceof IHasSize sizeItem)
+		if (itemStack.getItem() instanceof IGrantsBaseAttributes attributeItem && itemStack.getItem() instanceof IHasSize sizeItem)
 		{
 			Integer size = sizeItem.readMetalAlloySizeNbtData(itemStack);
-			if(size != null)
+			if (size != null)
 			{
-				ArrayList<Manifestation> manifestations = manifestingItem.determineManifestations(itemStack);
-				manifestingItem.grantManifestations(livingEntity, manifestations, size);
+				ArrayList<Attribute> attributes = attributeItem.determineBaseAttributes(itemStack);
+				attributeItem.grantBaseAttributes(livingEntity, attributes, size);
 			}
 
 			//https://www.theoryland.com/intvmain.php?i=977#43
@@ -44,21 +47,21 @@ public class MiscHelper
 						livingEntity.setCustomName(TextHelper.createTranslatedText("Mistborn Llama"));
 					}
 				}
-				else if(godItem.getMetalType() == Metals.MetalType.ATIUM)
+				else if (godItem.getMetalType() == Metals.MetalType.ATIUM)
 				{
 					eatMetal(godItem.getMetalType(), livingEntity, amount);
 				}
 			}
 		}
-		else if(itemStack.getItem() instanceof IHasMetalType metalItem)
+		else if (itemStack.getItem() instanceof IHasMetalType metalItem)
 		{
 			eatMetal(metalItem.getMetalType(), livingEntity, amount);
 		}
-		else if(itemStack.getItem() == Items.IRON_NUGGET)
+		else if (itemStack.getItem() == Items.IRON_NUGGET)
 		{
 			eatMetal(Metals.MetalType.IRON, livingEntity, amount);
 		}
-		else if(itemStack.getItem() == Items.GOLD_NUGGET)
+		else if (itemStack.getItem() == Items.GOLD_NUGGET)
 		{
 			eatMetal(Metals.MetalType.GOLD, livingEntity, amount);
 		}
