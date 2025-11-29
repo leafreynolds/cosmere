@@ -29,6 +29,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static leaf.cosmere.allomancy.common.registries.AllomancyAttributes.ALLOMANCY_ATTRIBUTES;
 import static leaf.cosmere.api.Constants.Strings.*;
 
 public class AllomancyEngLangGen extends LanguageProvider
@@ -143,17 +144,14 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addAttributes()
 	{
 		//Attributes
-		for (IAttributeProvider registryObject : AllomancyAttributes.ATTRIBUTES.getAllAttributes())
+		ALLOMANCY_ATTRIBUTES.forEach((metalType, registryObject) ->
 		{
 			final String descriptionId = registryObject.getAttribute().getDescriptionId();
-			//no duplicates pls
-			//manifestation section handles adding attributes lang gen for themselves
-			if (!descriptionId.startsWith("manifestation"))
-			{
-				String translation = descriptionId.split("\\.")[1];
-				add(descriptionId, StringHelper.fixCapitalisation(translation));
-			}
-		}
+
+			String name = "Allomantic " + metalType.getName();
+			// Attributes are the powers themselves, they need their own names.
+			add(descriptionId, StringHelper.fixCapitalisation(name));
+		});
 	}
 
 	private void addPatchouli()

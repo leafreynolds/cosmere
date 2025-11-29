@@ -149,7 +149,8 @@ public class EngLangGen extends LanguageProvider
 			//manifestation section handles adding attributes lang gen for themselves
 			if (!descriptionId.startsWith("manifestation"))
 			{
-				String translation = descriptionId.split("\\.")[1];
+				String[] sections = descriptionId.replace('_', ' ').split("\\.");
+				String translation = sections[2];
 				add(descriptionId, StringHelper.fixCapitalisation(translation));
 			}
 		}
