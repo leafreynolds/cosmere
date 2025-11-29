@@ -1,15 +1,15 @@
 package leaf.cosmere.common.items;
 
 import leaf.cosmere.api.*;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.util.CosmereAttributeUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -23,7 +23,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGrantsManifestations
+import static leaf.cosmere.common.util.CosmereAttributeUtils.grantBaseAttribute;
+
+public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGrantsBaseAttributes
 {
 	public static int MIN_SIZE = 1;
 	public static int MAX_SIZE = 16;
@@ -100,16 +102,16 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 		tooltip.add(Component.literal("Size: ").withStyle(ChatFormatting.WHITE).append(
 				Component.literal(size + "/" + MAX_SIZE).withStyle(ChatFormatting.GRAY)));
 
-		ArrayList<Manifestation> manifestations = determineManifestations(stack);
+		ArrayList<Attribute> attributes = determineBaseAttributes(stack);
 
-		if (!manifestations.isEmpty())
+		if (!attributes.isEmpty())
 		{
 			tooltip.add(Component.empty());
 			tooltip.add(Component.literal("When consumed:").withStyle(ChatFormatting.GOLD));
-			for (Manifestation manifestation : manifestations)
+			for (Attribute attribute : attributes)
 			{
 				tooltip.add(Component.literal("+" + size + " ").append(
-								Component.translatable(manifestation.getTranslationKey()))
+								Component.translatable(attribute.getDescriptionId()))
 						.withStyle(ChatFormatting.BLUE));
 			}
 		}
@@ -121,19 +123,18 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 	}
 
 	@Override
-	public ArrayList<Manifestation> determineManifestations(ItemStack itemStack)
+	public ArrayList<Attribute> determineBaseAttributes(ItemStack itemStack)
 	{
-		ArrayList<Manifestation> manifestations = new ArrayList<>();
+		ArrayList<Attribute> attributes = new ArrayList<>();
 
 		if (this.getMetalType() == Metals.MetalType.LERASIUM)
 		{
 			for (Metals.MetalType metal : EnumUtils.METAL_TYPES)
 			{
-				Manifestation manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metal.getID());
-				// Don't include Atium because it's bound to Electrum
-				if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE && metal != Metals.MetalType.ATIUM)
+				Attribute attribute = CosmereAttributeUtils.getAttribute(Manifestations.ManifestationTypes.ALLOMANCY, metal.getID());
+				if (attribute != null)
 				{
-					manifestations.add(manifestation);
+					attributes.add(attribute);
 				}
 			}
 		}
@@ -141,51 +142,30 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 		{
 			for (Metals.MetalType metal : EnumUtils.METAL_TYPES)
 			{
-				Manifestation manifestation = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(metal.getID());
-				// Don't include Atium because it's bound to Electrum
-				if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE && metal != Metals.MetalType.ATIUM)
+				Attribute attribute = CosmereAttributeUtils.getAttribute(Manifestations.ManifestationTypes.FERUCHEMY, metal.getID());
+				if (attribute != null)
 				{
-					manifestations.add(manifestation);
+					attributes.add(attribute);
 				}
 			}
 		}
-		return manifestations;
+		return attributes;
 	}
 
 	@Override
-	public void grantManifestations(LivingEntity livingEntity, ArrayList<Manifestation> manifestations, int strength)
+	public void grantBaseAttributes(LivingEntity livingEntity, ArrayList<Attribute> attributes, int strength)
 	{
 		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
 
-			for (Manifestation manifestation : manifestations)
+			for (Attribute attribute : attributes)
 			{
-				int currentStrength = 0;
-				if (!(manifestation.getAttribute() instanceof RangedAttribute attribute))
+				if (!(attribute instanceof RangedAttribute rangedAttribute))
 				{
 					return;
 				}
-				AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
-				if (attributeInstance != null)
-				{
-					currentStrength = (int) attributeInstance.getBaseValue();
-				}
-
-				// Let's ensure not to exceed the base value if it's out of range,
-				// even if it will get sanitized
-				int newStrength = strength + currentStrength;
-				if (newStrength < attribute.getMinValue())
-				{
-					newStrength = (int) attribute.getMinValue();
-				}
-				else if (newStrength > attribute.getMaxValue())
-				{
-					newStrength = (int) attribute.getMaxValue();
-				}
-
-				spiritweb.giveManifestation(manifestation, newStrength);
-
+				grantBaseAttribute(livingEntity, rangedAttribute, strength);
 			}
 
 			if (livingEntity instanceof ServerPlayer serverPlayer)
