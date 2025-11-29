@@ -5,9 +5,9 @@
 package leaf.cosmere.feruchemy.common.items;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.common.items.ManifestationMetalCurioItem;
+import leaf.cosmere.common.items.PowerMetalCurioItem;
 
-public class NicrosilRingMetalmindItem extends ManifestationMetalCurioItem
+public class NicrosilRingMetalmindItem extends PowerMetalCurioItem
 {
 	public NicrosilRingMetalmindItem(Metals.MetalType metalType)
 	{

@@ -1,151 +1,153 @@
 package leaf.cosmere.common.charge;
 
 import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.helpers.StackNBTHelper;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.CosmereEffectsRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
 
-public interface IHasManifestations
+public interface IHoldsPowers
 {
 	int getMaxCapacity();
 
-	default void addManifestation(ItemStack itemStack, Manifestation manifestation, int strength, byte manifestationSlot)
+	default void addPower(ItemStack itemStack, Attribute attribute, int strength, byte attributeSlot)
 	{
-		if (manifestation == null)
+		if (attribute == null)
 		{
 			return;
 		}
-		Manifestation[] manifestations = getManifestations(itemStack);
-		Integer[] manifestationStrengths = getManifestationStrengths(itemStack);
+		Attribute[] attributes = getAttributes(itemStack);
+		Integer[] attributeStrengths = getAttributeStrengths(itemStack);
 
-		if (manifestations == null || manifestations.length == 0)
+		if (attributes == null || attributes.length == 0)
 		{
-			manifestations = new Manifestation[getMaxCapacity()];
-			manifestationStrengths = new Integer[getMaxCapacity()];
+			attributes = new Attribute[getMaxCapacity()];
+			attributeStrengths = new Integer[getMaxCapacity()];
 		}
 
 		int newStrength = strength;
-		if (manifestations[manifestationSlot] != null && manifestationStrengths[manifestationSlot] != null)
+		if (attributes[attributeSlot] != null && attributeStrengths[attributeSlot] != null)
 		{
-			newStrength += manifestationStrengths[manifestationSlot];
+			newStrength += attributeStrengths[attributeSlot];
 		}
 
-		manifestations[manifestationSlot] = manifestation;
-		manifestationStrengths[manifestationSlot] = newStrength;
-		setManifestations(itemStack, manifestations);
-		setManifestationStrengths(itemStack, manifestationStrengths);
+		attributes[attributeSlot] = attribute;
+		attributeStrengths[attributeSlot] = newStrength;
+		setAttributes(itemStack, attributes);
+		setAttributeStrengths(itemStack, attributeStrengths);
 	}
 
-	default void removeManifestation(ItemStack itemStack, Manifestation manifestation)
+	default void removePower(ItemStack itemStack, Attribute attribute)
 	{
-		if (manifestation == null)
+		if (attribute == null)
 		{
 			return;
 		}
-		Manifestation[] manifestations = getManifestations(itemStack);
-		Integer[] manifestationStrengths = getManifestationStrengths(itemStack);
+		Attribute[] attributes = getAttributes(itemStack);
+		Integer[] attributeStrengths = getAttributeStrengths(itemStack);
 
-		for (int i = 0; i < manifestations.length; i++)
+		for (int i = 0; i < attributes.length; i++)
 		{
-			if (manifestations[i] == manifestation)
+			if (attributes[i] == attribute)
 			{
-				manifestations[i] = null;
-				manifestationStrengths[i] = null;
-				setManifestations(itemStack, manifestations);
-				setManifestationStrengths(itemStack, manifestationStrengths);
+				attributes[i] = null;
+				attributeStrengths[i] = null;
+				setAttributes(itemStack, attributes);
+				setAttributeStrengths(itemStack, attributeStrengths);
 				break;
 			}
 		}
 
-		for (Manifestation mani : manifestations)
-			if (mani != null)
+		for (Attribute att : attributes)
+		{
+			if (att != null)
 			{
 				return;
 			}
-		//if no manifestations left, clear attuned player
+		}
+		//if no powers left, clear attuned player
 		StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER);
 		StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME);
 	}
 
-	default Manifestation[] getManifestations(ItemStack itemStack)
+	default Attribute[] getAttributes(ItemStack itemStack)
 	{
 		CompoundTag nbt = itemStack.getOrCreateTag();
-		Manifestation[] manifestations;
-		if (!nbt.contains("manifestationIds"))
+		Attribute[] attributes;
+		if (!nbt.contains("attributeIds"))
 		{
-			return new Manifestation[getMaxCapacity()];
+			return new Attribute[getMaxCapacity()];
 		}
 
 
-		ListTag manifestationListTag = (ListTag) nbt.get("manifestationIds");
+		ListTag attributeListTag = (ListTag) nbt.get("attributeIds");
 
-		manifestations = new Manifestation[manifestationListTag.size()];
-		for (int i = 0; i < manifestationListTag.size(); i++)
+		attributes = new Attribute[attributeListTag.size()];
+		for (int i = 0; i < attributeListTag.size(); i++)
 		{
-			CompoundTag tag = (CompoundTag) manifestationListTag.get(i);
-			if (tag.getString("manifestation").equals("null"))
+			CompoundTag tag = (CompoundTag) attributeListTag.get(i);
+			if (tag.getString("attribute").equals("null"))
 			{
-				manifestations[i] = null;
+				attributes[i] = null;
 			}
 			else
 			{
-				manifestations[i] = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation(tag.getString("manifestation")));
+				attributes[i] = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(tag.getString("attribute")));
 			}
 		}
 
-		return manifestations;
+		return attributes;
 	}
 
-	default boolean setManifestations(ItemStack itemStack, Manifestation[] manifestations)
+	default boolean setAttributes(ItemStack itemStack, Attribute[] attributes)
 	{
-		if (manifestations.length == 0)
+		if (attributes.length == 0)
 		{
 			return false;
 		}
 
 		CompoundTag nbt = itemStack.getOrCreateTag();
-		ListTag manifestationListTag = new ListTag();
-		for (Manifestation manifestation : manifestations)
+		ListTag attributesListTag = new ListTag();
+		for (Attribute attribute : attributes)
 		{
 
 			CompoundTag tag = new CompoundTag();
-			if (manifestation == null)
+			if (attribute == null)
 			{
-				tag.putString("manifestation", "null");
+				tag.putString("attribute", "null");
 			}
 			else
 			{
-				tag.putString("manifestation", manifestation.getRegistryName().toString());
+				tag.putString("attribute", attribute.getDescriptionId());
 			}
-			manifestationListTag.add(tag);
+			attributesListTag.add(tag);
 		}
 
-		nbt.put("manifestationIds", manifestationListTag);
+		nbt.put("attributeIds", attributesListTag);
 		return true;
 	}
 
-	default Integer[] getManifestationStrengths(ItemStack itemStack)
+	default Integer[] getAttributeStrengths(ItemStack itemStack)
 	{
 		CompoundTag nbt = itemStack.getOrCreateTag();
 
-		if (!nbt.contains("manifestationStrengths"))
+		if (!nbt.contains("attributeStrengths"))
 		{
 			return new Integer[getMaxCapacity()];
 		}
-		int[] strengths = nbt.getIntArray("manifestationStrengths");
+		int[] strengths = nbt.getIntArray("attributeStrengths");
 		Integer[] newStrengths = new Integer[strengths.length];
 		for (int i = 0; i < strengths.length; i++)
 		{
@@ -166,7 +168,7 @@ public interface IHasManifestations
 		return newStrengths;
 	}
 
-	default boolean setManifestationStrengths(ItemStack itemStack, Integer[] strengths)
+	default boolean setAttributeStrengths(ItemStack itemStack, Integer[] strengths)
 	{
 		if (strengths.length == 0)
 		{
@@ -187,7 +189,7 @@ public interface IHasManifestations
 			}
 		}
 
-		nbt.putIntArray("manifestationStrengths", newStrengths);
+		nbt.putIntArray("attributeStrengths", newStrengths);
 		return true;
 	}
 
@@ -214,7 +216,7 @@ public interface IHasManifestations
 
 			if (noAttunedPlayer || attunedPlayerID.equals(playerID) || attunedPlayerID.equals(Constants.NBT.UNKEYED_UUID))
 			{
-				if (noAttunedPlayer && getManifestations(itemStack).length > 0)
+				if (noAttunedPlayer && getAttributes(itemStack).length > 0)
 				{
 					setAttunedPlayer(itemStack, entity);
 					setAttunedPlayerName(itemStack, entity);

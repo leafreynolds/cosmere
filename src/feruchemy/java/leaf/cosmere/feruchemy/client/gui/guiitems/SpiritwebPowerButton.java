@@ -8,8 +8,10 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.util.CosmereAttributeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 
 public class SpiritwebPowerButton
 {
@@ -48,18 +50,18 @@ public class SpiritwebPowerButton
 
 	static final StringBuilder stringBuilder = new StringBuilder();
 
-	ISpiritweb spiritweb;
-	Manifestation manifestation;
+	Manifestations.ManifestationTypes manifestationType;
+	Attribute attribute;
 	Integer strength;
 	byte slotIndex;
 
 	SpiritwebButtonContainer container;
 
-	public SpiritwebPowerButton(double posX, double posY, ISpiritweb spiritweb, SpiritwebButtonContainer container, byte slotIndex, boolean matchesIdentity)
+	public SpiritwebPowerButton(double posX, double posY, Manifestations.ManifestationTypes manifestationType, SpiritwebButtonContainer container, byte slotIndex, boolean matchesIdentity)
 	{
-		this.spiritweb = spiritweb;
 		this.displayName = "";
 		this.container = container;
+		this.manifestationType = manifestationType;
 		this.slotIndex = slotIndex;
 		this.matchesIdentity = matchesIdentity;
 
@@ -94,7 +96,7 @@ public class SpiritwebPowerButton
 	{
 		if (!Strings.isNullOrEmpty(iconPath))
 		{
-			final ResourceLocation textureLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), iconPath);
+			final ResourceLocation textureLocation = new ResourceLocation(manifestationType.getName(), iconPath);
 			RenderSystem.setShaderTexture(0, textureLocation);
 			guiGraphics.blit(textureLocation,
 					(int) (posX - 7.5),
@@ -115,55 +117,42 @@ public class SpiritwebPowerButton
 		return container;
 	}
 
-	public ISpiritweb getSpiritweb()
+	public Attribute getAttribute()
 	{
-		return spiritweb;
+		return attribute;
 	}
 
-	public void setSpiritweb(ISpiritweb spiritweb)
+	public void setAttribute(Attribute attribute)
 	{
-		this.spiritweb = spiritweb;
-	}
-
-	public Manifestation getManifestation()
-	{
-		return manifestation;
-	}
-
-	public void setManifestation(Manifestation manifestation)
-	{
-		if (manifestation == null)
+		if (attribute == null)
 		{
 			// Remove manifestation from button
-			this.manifestation = null;
+			this.attribute = null;
 			this.iconPath = null;
 		}
 		else
 		{
-			this.manifestation = manifestation;
+			this.attribute = attribute;
 
 			//Create icon path
 			stringBuilder.setLength(0);
-			final Manifestations.ManifestationTypes manifestationType = manifestation.getManifestationType();
-			String manifestationTypeName = manifestationType.getName();
+			String[] idParts = attribute.getDescriptionId().split("\\.");
 			stringBuilder
 					.append("textures/icon/")
-					.append(manifestationTypeName)
+					.append(idParts[1])
 					.append("/");
 
 			switch (manifestationType)
 			{
 				case ALLOMANCY:
 				case FERUCHEMY:
-					if (manifestation instanceof IHasMetalType metalType)
-					{
-						stringBuilder.append(metalType.getMetalType().getName());
-					}
-					break;
 				case SURGEBINDING:
-					stringBuilder.append(manifestation.getName());
+					stringBuilder.append(idParts[2]);
 					break;
 				case AON_DOR:
+				case SANDMASTERY:
+				case HEMALURGY:
+				case AVIAR:
 				case AWAKENING:
 					break;
 			}

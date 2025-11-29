@@ -5,7 +5,7 @@
 package leaf.cosmere.feruchemy.common.items;
 
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.common.items.ManifestationMetalCurioItem;
+import leaf.cosmere.common.items.PowerMetalCurioItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-public class NicrosilNecklaceMetalmindItem extends ManifestationMetalCurioItem
+public class NicrosilNecklaceMetalmindItem extends PowerMetalCurioItem
 {
 	public NicrosilNecklaceMetalmindItem(Metals.MetalType metalType)
 	{

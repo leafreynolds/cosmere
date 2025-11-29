@@ -66,4 +66,14 @@ public class CosmereAttributeUtils
 
 		entityAttributeInstance.setBaseValue(newStrength);
 	}
+
+	public static void removeBaseAttribute(LivingEntity livingEntity, Attribute attribute)
+	{
+		AttributeInstance entityAttributeInstance = livingEntity.getAttribute(attribute);
+		if (entityAttributeInstance == null)
+		{
+			return;
+		}
+		entityAttributeInstance.setBaseValue(0);
+	}
 }

@@ -6,11 +6,9 @@ package leaf.cosmere.common.items;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.text.TextHelper;
-import leaf.cosmere.common.charge.IHasManifestations;
 import leaf.cosmere.api.IHasMetalType;
-import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.common.charge.IHoldsPowers;
 import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -18,6 +16,7 @@ import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -30,11 +29,11 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.util.List;
 import java.util.UUID;
 
-public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalType, ICurioItem, IHasManifestations
+public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICurioItem, IHoldsPowers
 {
 	private final Metals.MetalType metalType;
 
-	public ManifestationMetalCurioItem(Metals.MetalType metalType)
+	public PowerMetalCurioItem(Metals.MetalType metalType)
 	{
 		super(PropTypes.Items.ONE.get().rarity(metalType.getRarity()));
 		this.metalType = metalType;
@@ -80,10 +79,10 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 	@Override
 	public boolean isFoil(ItemStack itemStack)
 	{
-		Manifestation[] manifestations = getManifestations(itemStack);
-		for (Manifestation manifestation : manifestations)
+		Attribute[] attributes = getAttributes(itemStack);
+		for (Attribute attribute : attributes)
 		{
-			if (manifestation != null)
+			if (attribute != null)
 			{
 				return true;
 			}
@@ -97,8 +96,8 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 	{
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
-		Manifestation[] manifestations = getManifestations(stack);
-		Integer[] manifestationStrengths = getManifestationStrengths(stack);
+		Attribute[] attributes = getAttributes(stack);
+		Integer[] attributeStrengths = getAttributeStrengths(stack);
 
 		String attunedPlayerName = getAttunedPlayerName(stack);
 		UUID attunedPlayer = getAttunedPlayer(stack);
@@ -122,10 +121,10 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 		}
 
 		boolean isFirst = true;
-		for (int i = 0; i < manifestations.length; i++)
+		for (int i = 0; i < attributes.length; i++)
 		{
 
-			if (manifestations[i] != null && manifestationStrengths[i] != null)
+			if (attributes[i] != null && attributeStrengths[i] != null)
 			{
 				if (isFirst)
 				{
@@ -133,19 +132,8 @@ public class ManifestationMetalCurioItem extends BaseItem implements IHasMetalTy
 					isFirst = false;
 				}
 
-				String translationKey;
-
-				if (manifestations[i].getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
-				{
-					translationKey = "manifestation.sandmastery.ribbons";
-				}
-				else
-				{
-					translationKey = manifestations[i].getTranslationKey();
-				}
-
-				tooltip.add(Component.literal("+" + manifestationStrengths[i] + " ").append(
-								Component.translatable(translationKey))
+				tooltip.add(Component.literal("+" + attributes[i] + " ").append(
+								Component.translatable(attributes[i].getDescriptionId()))
 						.withStyle(ChatFormatting.BLUE));
 			}
 		}

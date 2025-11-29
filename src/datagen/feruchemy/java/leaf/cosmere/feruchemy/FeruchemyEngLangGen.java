@@ -7,13 +7,11 @@ package leaf.cosmere.feruchemy;
 import leaf.cosmere.api.*;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
-import leaf.cosmere.common.items.ManifestationMetalCurioItem;
+import leaf.cosmere.common.items.PowerMetalCurioItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
-import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -70,7 +68,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
 
-				if (item instanceof ChargeableMetalCurioItem || item instanceof ManifestationMetalCurioItem)
+				if (item instanceof ChargeableMetalCurioItem || item instanceof PowerMetalCurioItem)
 				{
 					String use = ((IHasMetalType) item).getMetalType().getFeruchemyMetalmindUse();
 					add("item.feruchemy." + registryName.getPath() + ".tooltip", use);

@@ -9,7 +9,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import leaf.cosmere.common.charge.IHasManifestations;
+import leaf.cosmere.common.charge.IHoldsPowers;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations.ManifestationTypes;
 import leaf.cosmere.api.Metals;
@@ -20,7 +20,7 @@ import leaf.cosmere.client.gui.ButtonAction;
 import leaf.cosmere.client.gui.ISyncSpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.network.packets.StoreTapManifestationMessage;
+import leaf.cosmere.common.network.packets.StoreTapPowerMessage;
 import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebButtonContainer;
 import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebPowerButton;
 import net.minecraft.client.Minecraft;
@@ -137,7 +137,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			{
 				if (spiritwebPowerButton.highlight)
 				{
-					if (spiritwebPowerButton.getManifestation() == null || spiritwebPowerButton.getManifestation() == heldButton.manifestation)
+					if (spiritwebPowerButton.getAttribute() == null || spiritwebPowerButton.getAttribute() == heldButton.attribute)
 					{
 						if (spiritweb.getLiving() instanceof Player player)
 						{
@@ -146,16 +146,16 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 							{
 								ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
 								ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot);
-								if (itemStack.getItem() instanceof IHasManifestations item)
+								if (itemStack.getItem() instanceof IHoldsPowers item)
 								{
-									final Attribute attribute = heldButton.manifestation.getAttribute();
-									AttributeInstance manifestationAttribute = player.getAttribute(attribute);
+									final Attribute attribute = heldButton.attribute;
+									AttributeInstance attributeInstance = player.getAttribute(attribute);
 
 									if(item.trySetAttunedPlayer(itemStack, player))
 									{
-										Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
-												heldButton.manifestation,
-												manifestationAttribute.getBaseValue(),
+										Cosmere.packetHandler().sendToServer(new StoreTapPowerMessage(
+												heldButton.attribute,
+												attributeInstance.getBaseValue(),
 												spiritwebPowerButton.getContainer().curioItemSlot,
 												true,
 												spiritwebPowerButton.getSlotIndex()));
@@ -176,7 +176,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		{
 			for (SpiritwebPowerButton spiritwebPowerButton : spiritwebPowerButtons)
 			{
-				if (spiritwebPowerButton.highlight && spiritwebPowerButton.getManifestation() != null)
+				if (spiritwebPowerButton.highlight && spiritwebPowerButton.getAttribute() != null)
 				{
 					if (spiritweb.getLiving() instanceof Player player)
 					{
@@ -185,12 +185,12 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 						{
 							ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
 							ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(spiritwebPowerButton.getContainer().curioItemSlot);
-							if (itemStack.getItem() instanceof IHasManifestations item)
+							if (itemStack.getItem() instanceof IHoldsPowers item)
 							{
 								if(item.getPlayerIsAttuned(itemStack, player))
 								{
-									Cosmere.packetHandler().sendToServer(new StoreTapManifestationMessage(
-											spiritwebPowerButton.getManifestation(),
+									Cosmere.packetHandler().sendToServer(new StoreTapPowerMessage(
+											spiritwebPowerButton.getAttribute(),
 											spiritwebPowerButton.getStrength(),
 											spiritwebPowerButton.getContainer().curioItemSlot,
 											false,
@@ -208,7 +208,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			{
 				if (playerSpiritwebPowerButton.highlighted)
 				{
-					heldButton = new TransferredPower(playerSpiritwebPowerButton.manifestation, playerSpiritwebPowerButton.strength);
+					heldButton = new TransferredPower(playerSpiritwebPowerButton.attribute, playerSpiritwebPowerButton.strength);
 				}
 			}
 
@@ -253,27 +253,27 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 	private void applyLocalStore(TransferredPower held, SpiritwebPowerButton targetSlot)
 	{
-		playerSpiritwebPowerButtons.removeIf(btn -> btn.manifestation == held.manifestation);
+		playerSpiritwebPowerButtons.removeIf(btn -> btn.attribute == held.attribute);
 
 
-		if (targetSlot.getManifestation() == null)
+		if (targetSlot.getAttribute() == null)
 		{
-			targetSlot.setManifestation(held.manifestation);
+			targetSlot.setAttribute(held.attribute);
 			targetSlot.setStrength((int) held.strength);
 		}
-		else if (targetSlot.getManifestation() == held.manifestation)
+		else if (targetSlot.getAttribute() == held.attribute)
 		{
 			int totalStrength = (int) held.strength + targetSlot.getStrength();
 
-			if ((held.manifestation.getAttribute() instanceof RangedAttribute attribute))
+			if ((held.attribute instanceof RangedAttribute rangedAttribute))
 			{
-				if (totalStrength < attribute.getMinValue())
+				if (totalStrength < rangedAttribute.getMinValue())
 				{
-					totalStrength = (int) attribute.getMinValue();
+					totalStrength = (int) rangedAttribute.getMinValue();
 				}
-				else if (totalStrength > attribute.getMaxValue())
+				else if (totalStrength > rangedAttribute.getMaxValue())
 				{
-					totalStrength = (int) attribute.getMaxValue();
+					totalStrength = (int) rangedAttribute.getMaxValue();
 				}
 			}
 			targetSlot.setStrength(totalStrength);
@@ -998,27 +998,27 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 	static class PlayerSpiritwebPowerButton
 	{
-		public final Manifestation manifestation;
+		public final Attribute attribute;
 		public double centerX;
 		public double centerY;
 		public boolean highlighted;
 		public double strength;
 
-		public PlayerSpiritwebPowerButton(final Manifestation manifestation, double strength)
+		public PlayerSpiritwebPowerButton(final Attribute attribute, double strength)
 		{
-			this.manifestation = manifestation;
+			this.attribute = attribute;
 			this.strength = strength;
 		}
 	}
 
 	static class TransferredPower
 	{
-		public Manifestation manifestation;
+		public Attribute attribute;
 		public double strength;
 
-		public TransferredPower(Manifestation manifestation, double strength)
+		public TransferredPower(Attribute attribute, double strength)
 		{
-			this.manifestation = manifestation;
+			this.attribute = attribute;
 			this.strength = strength;
 		}
 	}
