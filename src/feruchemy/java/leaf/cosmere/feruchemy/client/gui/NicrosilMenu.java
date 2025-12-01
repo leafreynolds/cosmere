@@ -1,3 +1,4 @@
+// java
 /*
  * File updated ~ 10 - 2 - 2023 ~ Leaf
  */
@@ -10,10 +11,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.common.charge.IHoldsPowers;
-import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations.ManifestationTypes;
-import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.client.gui.ButtonAction;
@@ -21,8 +19,7 @@ import leaf.cosmere.client.gui.ISyncSpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.StoreTapPowerMessage;
-import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebButtonContainer;
-import leaf.cosmere.feruchemy.client.gui.guiitems.SpiritwebPowerButton;
+import leaf.cosmere.common.util.CosmereAttributeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -53,9 +50,10 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	protected ArrayList<SpiritwebButtonContainer> ringMenus = new ArrayList<>();
 	protected ArrayList<SpiritwebButtonContainer> braceletMenus = new ArrayList<>();
 	protected ArrayList<SpiritwebButtonContainer> necklaceMenus = new ArrayList<>();
-	protected ArrayList<SpiritwebPowerButton> spiritwebPowerButtons = new ArrayList<>();
+	// now using combined PowerButton for both container buttons and player buttons
+	protected ArrayList<PowerButton> spiritwebPowerButtons = new ArrayList<>();
 
-	protected ArrayList<PlayerSpiritwebPowerButton> playerSpiritwebPowerButtons = new ArrayList<>();
+	protected ArrayList<PowerButton> playerSpiritwebPowerButtons = new ArrayList<>();
 	protected ArrayList<SidedMenuButton> sidedMenuButtons = new ArrayList<>();
 
 	private SpiritwebCapability spiritweb = null;
@@ -123,7 +121,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	{
 		if (Keybindings.MANIFESTATION_MENU.matches(pKeyCode, pScanCode))
 		{
-			closeScreen();
+			//closeScreen();
 		}
 		return super.keyReleased(pKeyCode, pScanCode, pModifiers);
 	}
@@ -133,9 +131,9 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	{
 		if (heldButton != null)
 		{
-			for (SpiritwebPowerButton spiritwebPowerButton : spiritwebPowerButtons)
+			for (PowerButton spiritwebPowerButton : spiritwebPowerButtons)
 			{
-				if (spiritwebPowerButton.highlight)
+				if (spiritwebPowerButton.highlighted)
 				{
 					if (spiritwebPowerButton.getAttribute() == null || spiritwebPowerButton.getAttribute() == heldButton.attribute)
 					{
@@ -174,9 +172,9 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 		else
 		{
-			for (SpiritwebPowerButton spiritwebPowerButton : spiritwebPowerButtons)
+			for (PowerButton spiritwebPowerButton : spiritwebPowerButtons)
 			{
-				if (spiritwebPowerButton.highlight && spiritwebPowerButton.getAttribute() != null)
+				if (spiritwebPowerButton.highlighted && spiritwebPowerButton.getAttribute() != null)
 				{
 					if (spiritweb.getLiving() instanceof Player player)
 					{
@@ -204,11 +202,11 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 				}
 			}
 
-			for (PlayerSpiritwebPowerButton playerSpiritwebPowerButton : playerSpiritwebPowerButtons)
+			for (PowerButton playerSpiritwebPowerButton : playerSpiritwebPowerButtons)
 			{
 				if (playerSpiritwebPowerButton.highlighted)
 				{
-					heldButton = new TransferredPower(playerSpiritwebPowerButton.attribute, playerSpiritwebPowerButton.strength);
+					heldButton = new TransferredPower(playerSpiritwebPowerButton.getAttribute(), (int) playerSpiritwebPowerButton.getStrength());
 				}
 			}
 
@@ -223,7 +221,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 							selectedPowerType = ManifestationTypes.valueOf(sidedMenuButton.powerType).get();
 							playerSpiritwebPowerButtons.clear();
 							sidedMenuButtons.clear();
-							setupManifestationButtons(getAvailableManifestations(), null, 0);
+							setupAttributeButtons(getAvailableAttributes(), null, 0);
 							break;
 						}
 					}
@@ -251,9 +249,9 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		getMinecraft().setScreen(null);
 	}
 
-	private void applyLocalStore(TransferredPower held, SpiritwebPowerButton targetSlot)
+	private void applyLocalStore(TransferredPower held, PowerButton targetSlot)
 	{
-		playerSpiritwebPowerButtons.removeIf(btn -> btn.attribute == held.attribute);
+		playerSpiritwebPowerButtons.removeIf(btn -> btn.getAttribute() == held.attribute);
 
 
 		if (targetSlot.getAttribute() == null)
@@ -263,7 +261,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 		else if (targetSlot.getAttribute() == held.attribute)
 		{
-			int totalStrength = (int) held.strength + targetSlot.getStrength();
+			int totalStrength = (int) held.strength + (int) targetSlot.getStrength();
 
 			if ((held.attribute instanceof RangedAttribute rangedAttribute))
 			{
@@ -281,60 +279,54 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 		if (playerSpiritwebPowerButtons.isEmpty())
 		{
-			final List<Manifestation> availableManifestations = getAvailableManifestations();
-			if (held.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
-			{
-				availableManifestations.removeIf(manifestation -> manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY);
-			}
-			else
-			{
-				availableManifestations.remove(held.manifestation);
-			}
+			final List<AttributeInstance> availableAttributes = getAvailableAttributes();
+			availableAttributes.removeIf(attributeInstance -> attributeInstance.getAttribute() == held.attribute);
 			playerSpiritwebPowerButtons.clear();
 			sidedMenuButtons.clear();
-			if (!availableManifestations.isEmpty())
+			if (!availableAttributes.isEmpty())
 			{
-				selectedPowerType = availableManifestations.get(0).getManifestationType();
+				selectedPowerType = CosmereAttributeUtils.getManifestationType(availableAttributes.get(0).getAttribute());
 			}
-			availableManifestations.sort(Comparator.comparingInt(Manifestation::getPowerID));
-			setupManifestationButtons(availableManifestations, held.manifestation, held.strength);
+			availableAttributes.sort(Comparator.comparingInt((availableAttribute -> CosmereAttributeUtils.getManifestationType(availableAttribute.getAttribute()).getID())));
+			setupAttributeButtons(availableAttributes, held.attribute, held.strength);
 		}
 	}
 
-	private void applyLocalTap(SpiritwebPowerButton fromSlot)
+	private void applyLocalTap(PowerButton fromSlot)
 	{
-		Manifestation mani = fromSlot.getManifestation();
-		double strength = fromSlot.getStrength();
-		final List<Manifestation> availableManifestations = getAvailableManifestations();
+		Attribute attribute = fromSlot.getAttribute();
+		Integer strength = fromSlot.getStrength();
+		final List<AttributeInstance> availableAttributes = getAvailableAttributes();
 
-		double totalStrength = strength;
-		if (availableManifestations.contains(mani))
+		Integer totalStrength = strength;
+		if (availableAttributes.stream().anyMatch(attributeInstance -> attributeInstance.getAttribute() == attribute))
 		{
-			totalStrength += mani.getStrength(spiritweb, true);
+			totalStrength += (int) spiritweb.getLiving().getAttribute(attribute).getBaseValue();
 		}
 
-		if ((mani.getAttribute() instanceof RangedAttribute attribute))
+		if ((attribute instanceof RangedAttribute rangedAttribute))
 		{
-			if (totalStrength < attribute.getMinValue())
+			if (totalStrength < rangedAttribute.getMinValue())
 			{
-				totalStrength = (int) attribute.getMinValue();
+				totalStrength = (int) rangedAttribute.getMinValue();
 			}
-			else if (totalStrength > attribute.getMaxValue())
+			else if (totalStrength > rangedAttribute.getMaxValue())
 			{
-				totalStrength = (int) attribute.getMaxValue();
+				totalStrength = (int) rangedAttribute.getMaxValue();
 			}
 		}
 
-		fromSlot.setManifestation(null);
+		fromSlot.setAttribute(null);
 		fromSlot.setStrength(0);
 
 		playerSpiritwebPowerButtons.clear();
 		sidedMenuButtons.clear();
-		availableManifestations.removeIf(manifestation -> manifestation == mani);
-		availableManifestations.add(mani);
-		selectedPowerType = mani.getManifestationType();
-		availableManifestations.sort(Comparator.comparingInt(Manifestation::getPowerID));
-		setupManifestationButtons(availableManifestations, mani, totalStrength);
+		availableAttributes.removeIf(att -> att.getAttribute() == attribute);
+		availableAttributes.add(spiritweb.getLiving().getAttribute(attribute));
+		spiritweb.getLiving().getAttribute(attribute).setBaseValue(strength);
+		selectedPowerType = CosmereAttributeUtils.getManifestationType(attribute);
+		availableAttributes.sort(Comparator.comparingInt((availableAttribute -> CosmereAttributeUtils.getManifestationType(availableAttribute.getAttribute()).getID())));
+		setupAttributeButtons(availableAttributes, attribute, totalStrength);
 	}
 
 	protected void setupButtons()
@@ -346,8 +338,8 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		playerSpiritwebPowerButtons.clear();
 		sidedMenuButtons.clear();
 
-		final List<Manifestation> availableManifestations = getAvailableManifestations();
-		setupManifestationButtons(availableManifestations, null, 0);
+		final List<AttributeInstance> availableAttributes = getAvailableAttributes();
+		setupAttributeButtons(availableAttributes, null, 0);
 
 		setupSpiritwebButtons();
 	}
@@ -364,17 +356,17 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 				for (int i = 0; i < itemHandler.getSlots(); i++)
 				{
 					ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(i);
-					if (itemStack.getItem() instanceof IHasManifestations item)
+					if (itemStack.getItem() instanceof IHoldsPowers item)
 					{
 						final double middleX = width / 2f;
 						final double middleY = height / 2f;
 						SpiritwebButtonContainer spiritwebContainer = new SpiritwebButtonContainer(middleX, middleY, 1, 1, i, (Item) item);
-						Manifestation[] manifestations = item.getManifestations(itemHandler.getEquippedCurios().getStackInSlot(i));
-						Integer[] manifestationStrengths = item.getManifestationStrengths(itemHandler.getEquippedCurios().getStackInSlot(i));
+						Attribute[] attributes = item.getAttributes(itemHandler.getEquippedCurios().getStackInSlot(i));
+						Integer[] manifestationStrengths = item.getAttributeStrengths(itemHandler.getEquippedCurios().getStackInSlot(i));
 						for (int j = 0; j < item.getMaxCapacity(); j++)
 						{
-							SpiritwebPowerButton spiritwebPowerButton = new SpiritwebPowerButton(middleX, middleY, spiritweb, spiritwebContainer, (byte) j, item.getPlayerIsAttuned(itemStack, player));
-							spiritwebPowerButton.setManifestation(manifestations[j]);
+							PowerButton spiritwebPowerButton = new PowerButton(middleX, middleY, CosmereAttributeUtils.getManifestationType(attributes[j]), spiritwebContainer, (byte) j, item.getPlayerIsAttuned(itemStack, player));
+							spiritwebPowerButton.setAttribute(attributes[j]);
 							spiritwebPowerButton.setStrength(manifestationStrengths[j]);
 							spiritwebPowerButtons.add(spiritwebPowerButton);
 							spiritwebContainer.addButton(spiritwebPowerButton);
@@ -400,42 +392,30 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	private void setupManifestationButtons(List<Manifestation> manifestations, Manifestation mani, double strength)
+	private void setupAttributeButtons(List<AttributeInstance> spiritwebPowers, Attribute newPower, Integer strength)
 	{
 		Set<ManifestationTypes> foundPowerTypes = EnumSet.noneOf(ManifestationTypes.class);
 
-		boolean addedSandmastery = false;
 
-		for (Manifestation manifestation : manifestations)
+		for (AttributeInstance spiritwebPower : spiritwebPowers)
 		{
-			if (manifestation.getStrength(spiritweb, true) == 0 && strength == 0)
-			{
-				continue;
-			}
-			ManifestationTypes type = manifestation.getManifestationType();
-			foundPowerTypes.add(type);
+			if (spiritwebPower.getBaseValue() == 0 && strength == 0) continue;
 
-			if (type != selectedPowerType)
-			{
-				continue;
-			}
+			ManifestationTypes powerType = CosmereAttributeUtils.getManifestationType(spiritwebPower.getAttribute());
+			foundPowerTypes.add(powerType);
 
-			if (type == ManifestationTypes.SANDMASTERY)
-			{
-				if (addedSandmastery)
-				{
-					continue;
-				}
-				addedSandmastery = true;
-			}
+			if (powerType != selectedPowerType) continue;
 
-			if (mani != null && manifestation == mani)
+			if (spiritwebPower.getAttribute() == newPower)
 			{
-				playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(manifestation, strength));
+				// create player-sourced PowerButton
+				PowerButton p = PowerButton.createPlayerButton(newPower, strength);
+				playerSpiritwebPowerButtons.add(p);
 			}
 			else
 			{
-				playerSpiritwebPowerButtons.add(new PlayerSpiritwebPowerButton(manifestation, manifestation.getStrength(spiritweb, true)));
+				PowerButton p = PowerButton.createPlayerButton(spiritwebPower.getAttribute(), (int) spiritwebPower.getBaseValue());
+				playerSpiritwebPowerButtons.add(p);
 			}
 		}
 
@@ -488,13 +468,13 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		renderSpiritwebMenuContainer(buffer, braceletMenus, mouseX, mouseY, middleX, middleY);
 		renderSpiritwebMenuContainer(buffer, necklaceMenus, mouseX, mouseY, middleX, middleY);
 
-		renderPlayerSpiritwebButtons(buffer, mouseVecX, mouseVecY, middleX, middleY);
+		renderPlayerSpiritwebButtons(buffer, mouseX, mouseY, middleX, middleY);
 		renderSidedButtons(buffer, mouseX, mouseY, middleX, middleY);
 
 		tessellator.end();
 
 		matrixStack.pushPose();
-		for (SpiritwebPowerButton spiritwebPowerButton : spiritwebPowerButtons)
+		for (PowerButton spiritwebPowerButton : spiritwebPowerButtons)
 		{
 			spiritwebPowerButton.renderIcon(guiGraphics);
 		}
@@ -507,7 +487,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		renderSpiritwebButtonContainerStrings(guiGraphics, necklaceMenus, middleX, middleY);
 
 		renderSpiritwebPowerButtonStrings(guiGraphics);
-		renderPlayerSpiritwebButtonStrings(guiGraphics, middleX, middleY);
+		renderPlayerSpiritwebButtonStrings(guiGraphics);
 		renderSidedButtonStrings(guiGraphics);
 
 		matrixStack.popPose();
@@ -522,7 +502,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
-		renderPlayerSpiritwebButtonIcons(guiGraphics, middle_x, middle_y);
+		renderPlayerSpiritwebButtonIcons(guiGraphics);
 		renderSidedButtonIcons(guiGraphics, middle_x, middle_y);
 
 		matrixStack.popPose();
@@ -530,23 +510,16 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 	private void renderSpiritwebPowerButtonStrings(GuiGraphics guiGraphics)
 	{
-		for (final SpiritwebPowerButton button : spiritwebPowerButtons)
+		for (final PowerButton button : spiritwebPowerButtons)
 		{
-			if (!button.highlight || button.getManifestation() == null)
+			if (!button.highlighted || button.getAttribute() == null)
 			{
 				continue;
 			}
 
-			final Manifestation mani = button.getManifestation();
+			final Attribute attr = button.getAttribute();
 			String text = "+" + button.getStrength() + " ";
-			if (mani.getManifestationType() == ManifestationTypes.SANDMASTERY)
-			{
-				text += I18n.get("manifestation.sandmastery.ribbons");
-			}
-			else
-			{
-				text += I18n.get(mani.getTranslationKey());
-			}
+			text += I18n.get(attr.getDescriptionId());
 
 			int textCenterX = (int) button.posX;
 			int textY = (int) (button.posY + 20); // 20px above the button
@@ -556,7 +529,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			int bgLeft = textX - 2;
 			int bgTop = textY - 2;
 			int bgRight = textX + font.width(text) + 2;
-			int bgBottom = textY + font.lineHeight + 2;
+			int bgBottom = textX + font.lineHeight + 2;
 
 			guiGraphics.fill(bgLeft, bgTop, bgRight, bgBottom, 0x80000000);
 			guiGraphics.drawString(font, text, textX, textY, 0xFFFFFFFF);
@@ -565,44 +538,30 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	private void renderPlayerSpiritwebButtonStrings(GuiGraphics guiGraphics, double middleX, double middleY)
+	private void renderPlayerSpiritwebButtonStrings(GuiGraphics guiGraphics)
 	{
-		if (playerSpiritwebPowerButtons.isEmpty())
+		if (playerSpiritwebPowerButtons.isEmpty()) return;
+
+		for (PowerButton btn : playerSpiritwebPowerButtons)
 		{
-			return;
-		}
+			if (!btn.highlighted || btn.getAttribute() == null) continue;
 
-		for (final PlayerSpiritwebPowerButton btn : playerSpiritwebPowerButtons)
-		{
-			if (!btn.highlighted || btn.manifestation == null)
-			{
-				continue;
-			}
+			String text = "+" + btn.getStrength() + " " + I18n.get(btn.getAttribute().getDescriptionId());
 
-			String text = "+" + (int) btn.strength + " ";
-			if (btn.manifestation.getManifestationType() == ManifestationTypes.SANDMASTERY)
-			{
-				text += I18n.get("manifestation.sandmastery.ribbons");
-			}
-			else
-			{
-				text += I18n.get(btn.manifestation.getTranslationKey());
-			}
-
-			int textCenterX = (int) (middleX + btn.centerX);
-			int textY = (int) (middleY + btn.centerY - 24); // a bit above the button
+			int textCenterX = (int) btn.centerX;
+			int textY = (int) (btn.centerY - PLAYER_BTN_HALF_SIZE - PLAYER_BTN_LABEL_GAP - font.lineHeight);
 
 			int textX = textCenterX - font.width(text) / 2;
 
-			int bgLeft = textX - 2;
-			int bgTop = textY - 2;
-			int bgRight = textX + font.width(text) + 2;
-			int bgBottom = textY + font.lineHeight + 2;
+			int bgLeft = textX - 3;
+			int bgTop = textY - 3;
+			int bgRight = textX + font.width(text) + 3;
+			int bgBottom = textY + font.lineHeight + 3;
 
 			guiGraphics.fill(bgLeft, bgTop, bgRight, bgBottom, 0x80000000);
 			guiGraphics.drawString(font, text, textX, textY, 0xFFFFFFFF);
 
-			break;
+			break; // only show one highlighted tooltip
 		}
 	}
 
@@ -684,76 +643,69 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	private void renderPlayerSpiritwebButtonIcons(GuiGraphics guiGraphics, double middleX, double middleY)
+	private void renderPlayerSpiritwebButtonIcons(GuiGraphics guiGraphics)
 	{
+		if (playerSpiritwebPowerButtons.isEmpty())
+			return;
+
 		Minecraft mc = getMinecraft();
-		final StringBuilder stringBuilder = new StringBuilder();
-		for (final PlayerSpiritwebPowerButton menuRegion : playerSpiritwebPowerButtons)
+		final StringBuilder sb = new StringBuilder();
+
+		for (final PowerButton btn : playerSpiritwebPowerButtons)
 		{
-			// Skip uninitialized entries just in case
-			if (menuRegion.centerX == 0 && menuRegion.centerY == 0)
-			{
+			if (btn.attribute == null)
 				continue;
-			}
 
-			stringBuilder.setLength(0);
-			final double x = menuRegion.centerX;
-			final double y = menuRegion.centerY;
+			// Absolute screen coordinates already stored
+			final double x = btn.centerX;
+			final double y = btn.centerY;
 
-			final double scalex = 15 * 0.5;
-			final double scaley = 15 * 0.5;
-			final double x1 = x - scalex;
-			final double y1 = y - scaley;
+			// Icon quad (15px logical, texture 18x18)
+			final double half = 15 * 0.5;
+			final int drawX = (int) (x - half);
+			final int drawY = (int) (y - half);
 
-			Manifestation mani = menuRegion.manifestation;
-			final ManifestationTypes manifestationType = mani.getManifestationType();
-			String manifestationTypeName = manifestationType.getName();
-			stringBuilder
-					.append("textures/icon/")
-					.append(manifestationTypeName)
-					.append("/");
+			// Build texture path based on attribute id
+			sb.setLength(0);
+			final String[] idParts = btn.attribute.getDescriptionId().split("\\.");
+			// Expect format: attribute.modid.name
+			if (idParts.length < 3)
+				continue;
 
-			switch (manifestationType)
+			ManifestationTypes type = CosmereAttributeUtils.getManifestationType(btn.attribute);
+			sb.append("textures/icon/").append(idParts[1]).append("/");
+
+			switch (type)
 			{
 				case ALLOMANCY:
 				case FERUCHEMY:
-					if (mani instanceof IHasMetalType metalType)
-					{
-						stringBuilder.append(metalType.getMetalType().getName());
-					}
-					break;
 				case SURGEBINDING:
-					stringBuilder.append(mani.getName());
+					sb.append(idParts[2]);
 					break;
-				case AON_DOR:
-					break;
-				case AWAKENING:
-					break;
+				default:
+					// Unsupported type: skip icon
+					continue;
 			}
+			sb.append(".png");
 
-			stringBuilder.append(".png");
-			final ResourceLocation textureLocation = new ResourceLocation(mani.getRegistryName().getNamespace(), stringBuilder.toString());
+			ResourceLocation tex = new ResourceLocation(idParts[1], sb.toString());
 			try
 			{
-				mc.getResourceManager().getResourceOrThrow(textureLocation);
-				RenderSystem.setShaderTexture(0, textureLocation);
-				guiGraphics.blit(textureLocation,
-						(int) (middleX + x1),
-						(int) (middleY + y1),
-						16,
-						16,
-						0,
-						0,
-						18,
-						18,
-						18,
-						18);
+				mc.getResourceManager().getResourceOrThrow(tex);
+				RenderSystem.setShaderTexture(0, tex);
+				guiGraphics.blit(
+						tex,
+						drawX,
+						drawY,
+						16, 16,      // scaled size
+						0, 0,
+						18, 18,      // texture size
+						18, 18);
 			}
 			catch (Exception ignored)
 			{
-				// Missing icon – skip drawing instead of showing a white/missing-texture square
+				// Missing texture: skip silently
 			}
-
 		}
 	}
 
@@ -813,124 +765,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-
-	private void renderPlayerSpiritwebButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
-	{
-		if (!playerSpiritwebPowerButtons.isEmpty())
-		{
-			int buttonAmount = playerSpiritwebPowerButtons.size() - 1;
-			int i = buttonAmount;
-			while (i >= 0)
-			{
-				PlayerSpiritwebPowerButton region = playerSpiritwebPowerButtons.get(i);
-				//left side inner point
-				double x1m1;
-				double y1m1;
-
-				//left side outer point
-				double x2m1;
-				double y2m1;
-
-				//right side inner point
-				double x1m2;
-				double y1m2;
-
-				//right side outer point
-				double x2m2;
-				double y2m2;
-
-
-				if (heldButton != null && heldButton.manifestation == region.manifestation)
-				{
-					//Left side upper
-					x1m1 = mouseVecX - 10;
-					y1m1 = mouseVecY - 10;
-
-					//Left side downer
-					x2m1 = mouseVecX - 10;
-					y2m1 = mouseVecY + 10;
-
-					//Right side upper
-					x1m2 = mouseVecX + 10;
-					y1m2 = mouseVecY - 10;
-
-					//Right side downer
-					x2m2 = mouseVecX + 10;
-					y2m2 = mouseVecY + 10;
-				}
-				else
-				{
-					final int positionAdjustX = 0;
-					final int positionAdjustY = -50;
-					//Left side upper
-					x1m1 = (25 * (i - (double) buttonAmount / 2)) - 10 + positionAdjustX;
-					y1m1 = -10 + positionAdjustY;
-
-					//Left side downer
-					x2m1 = (25 * (i - (double) buttonAmount / 2)) - 10 + positionAdjustX;
-					y2m1 = 10 + positionAdjustY;
-
-					//Right side Upper
-					x1m2 = (25 * (i - (double) buttonAmount / 2)) + 10 + positionAdjustX;
-					y1m2 = -10 + positionAdjustY;
-
-					//Right side Downer
-					x2m2 = (25 * (i - (double) buttonAmount / 2)) + 10 + positionAdjustX;
-					y2m2 = 10 + positionAdjustY;
-				}
-
-
-				//the center of a regular polygon can be found by adding up
-				// all corner positions and divide by the total count
-				region.centerX = (x1m1 + x2m1 + x1m2 + x2m2) / 4;
-				region.centerY = (y1m1 + y2m1 + y1m2 + y2m2) / 4;
-
-				float opacity;
-				float brightness = 0f;
-
-				final boolean showHighlight;
-
-				showHighlight = MathHelper.inTriangle(
-						x1m1, y1m1,
-						x2m2, y2m2,
-						x2m1, y2m1,
-						mouseVecX, mouseVecY)
-						|| MathHelper.inTriangle(
-						x1m1, y1m1,
-						x1m2, y1m2,
-						x2m2, y2m2,
-						mouseVecX, mouseVecY);
-
-				if (showHighlight)
-				{
-					brightness = 0.2f;
-					region.highlighted = true;
-				}
-				else
-				{
-					region.highlighted = false;
-				}
-
-				float r = brightness;
-				float g = brightness;
-				float b = brightness;
-
-				opacity = 0.5f;
-
-				{
-					//set the square pos
-					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, opacity).endVertex();
-					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, opacity).endVertex();
-
-					buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(r, g, b, opacity).endVertex();
-					buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(r, g, b, opacity).endVertex();
-				}
-
-				i--;
-			}
-		}
-	}
-
 	private void renderSpiritwebMenuContainer(BufferBuilder buffer, ArrayList<SpiritwebButtonContainer> spiritwebContainers, double mouseVecX, double mouseVecY, double middleX, double middleY)
 	{
 		for (int i = 0; i < spiritwebContainers.size(); i++)
@@ -944,21 +778,15 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	private List<Manifestation> getAvailableManifestations()
+	private List<AttributeInstance> getAvailableAttributes()
 	{
-		final List<Manifestation> availableManifestations = spiritweb.getAvailableManifestations();
-		availableManifestations.removeIf((manifestation ->
-				manifestation.getManifestationType() == ManifestationTypes.ALLOMANCY &&
-						manifestation.getPowerID() == Metals.MetalType.ATIUM.getID())
-		);
+		final List<AttributeInstance> spiritwebPowers = new ArrayList<>();
+		spiritweb.getSubmodules().forEach((manifestationType, submodule) ->
+		{
+			spiritwebPowers.addAll(submodule.getEntityPowers(spiritweb.getLiving()));
+		});
 
-		availableManifestations.removeIf((manifestation ->
-				manifestation.getManifestationType() == ManifestationTypes.FERUCHEMY &&
-						(manifestation.getPowerID() == Metals.MetalType.NICROSIL.getID() ||
-								manifestation.getPowerID() == Metals.MetalType.ATIUM.getID()))
-		);
-
-		return availableManifestations;
+		return spiritwebPowers;
 	}
 
 	private static class SidedMenuButton
@@ -996,32 +824,431 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	static class PlayerSpiritwebPowerButton
-	{
-		public final Attribute attribute;
-		public double centerX;
-		public double centerY;
-		public boolean highlighted;
-		public double strength;
-
-		public PlayerSpiritwebPowerButton(final Attribute attribute, double strength)
-		{
-			this.attribute = attribute;
-			this.strength = strength;
-		}
-	}
-
 	static class TransferredPower
 	{
 		public Attribute attribute;
-		public double strength;
+		public Integer strength;
 
-		public TransferredPower(Attribute attribute, double strength)
+		public TransferredPower(Attribute attribute, Integer strength)
 		{
 			this.attribute = attribute;
 			this.strength = strength;
 		}
 	}
+
+	static class PowerButton
+	{
+		// common
+		public Attribute attribute;
+		public Integer strength;
+		public boolean highlighted;
+		public boolean isPlayer;
+
+		// container-mounted visuals
+		public double x1 = 0, y1 = 0;
+		public double x2 = 0, y2 = 0;
+		public double x3 = 0, y3 = 0;
+		public double x4 = 0, y4 = 0;
+		public double posX = 0, posY = 0;
+		public boolean matchesIdentity;
+		public String iconPath;
+		public int red = 205, green = 205, blue = 205, opacity = 100;
+		double width = 20, height = 20;
+
+		ManifestationTypes manifestationType;
+		byte slotIndex;
+		SpiritwebButtonContainer container;
+
+		// player-sourced visuals
+		public double centerX;
+		public double centerY;
+
+		private PowerButton() { }
+
+		// container-based constructor (now computes corners directly)
+		public PowerButton(double posX, double posY, ManifestationTypes manifestationType, SpiritwebButtonContainer container, byte slotIndex, boolean matchesIdentity)
+		{
+			this.posX = posX;
+			this.posY = posY;
+			this.manifestationType = manifestationType;
+			this.container = container;
+			this.slotIndex = slotIndex;
+			this.matchesIdentity = matchesIdentity;
+			this.isPlayer = false;
+
+			this.width = 20;
+			this.height = 20;
+
+			recomputeCorners();
+			this.red = 205; this.blue = 205; this.green = 205; this.opacity = 100;
+		}
+
+		// factory for player-sourced button
+		public static PowerButton createPlayerButton(Attribute attribute, Integer strength)
+		{
+			PowerButton p = new PowerButton();
+			p.isPlayer = true;
+			p.attribute = attribute;
+			p.strength = strength;
+			p.highlighted = false;
+			return p;
+		}
+
+		// simple setter that recomputes corners from center & size
+		public void setPosition(double sPosX, double sPosY)
+		{
+			this.posX = sPosX;
+			this.posY = sPosY;
+			recomputeCorners();
+		}
+
+		private void recomputeCorners()
+		{
+			double halfW = width / 2.0;
+			double halfH = height / 2.0;
+			// Left-top
+			x1 = posX - halfW;
+			y1 = posY - halfH;
+			// Left-bottom
+			x2 = posX - halfW;
+			y2 = posY + halfH;
+			// Right-bottom
+			x3 = posX + halfW;
+			y3 = posY + halfH;
+			// Right-top
+			x4 = posX + halfW;
+			y4 = posY - halfH;
+		}
+
+		// highlight test for container-mounted buttons (unchanged logic but clearer)
+		public void highlightAction(double mouseX, double mouseY, double middle_x, double middle_y)
+		{
+			if (isPlayer) return;
+			highlighted = (MathHelper.inTriangle(x1, y1, x2, y2, x3, y3, mouseX, mouseY)
+					|| MathHelper.inTriangle(x1, y1, x4, y4, x3, y3, mouseX, mouseY));
+		}
+
+		public void renderIcon(GuiGraphics guiGraphics)
+		{
+			if (!isPlayer && iconPath != null)
+			{
+				final ResourceLocation textureLocation = new ResourceLocation(manifestationType.getName(), iconPath);
+				RenderSystem.setShaderTexture(0, textureLocation);
+				guiGraphics.blit(textureLocation,
+						(int) (posX - 7.5),
+						(int) (posY - 7.5),
+						0,
+						0,
+						16,
+						16,
+						18,
+						18);
+			}
+		}
+
+		public void renderButton(BufferBuilder buffer)
+		{
+			if (isPlayer) return; // player buttons are rendered by the parent menu
+			int r = red;
+			int g = green;
+			int b = blue;
+
+			if (highlighted)
+			{
+				r += 30;
+				g += 30;
+				b += 30;
+			}
+			if (!matchesIdentity)
+			{
+				g -= 100;
+				b -= 100;
+			}
+
+			buffer.vertex(x1, y1, 0).color(r, g, b, opacity).endVertex();
+			buffer.vertex(x2, y2, 0).color(r, g, b, opacity).endVertex();
+			buffer.vertex(x3, y3, 0).color(r, g, b, opacity).endVertex();
+			buffer.vertex(x4, y4, 0).color(r, g, b, opacity).endVertex();
+		}
+
+		public Attribute getAttribute()
+		{
+			return attribute;
+		}
+
+		public void setAttribute(Attribute attribute)
+		{
+			this.attribute = attribute;
+		}
+
+		public Integer getStrength()
+		{
+			return strength;
+		}
+
+		public void setStrength(Integer strength)
+		{
+			this.strength = strength;
+		}
+
+		public SpiritwebButtonContainer getContainer()
+		{
+			return container;
+		}
+
+		public byte getSlotIndex()
+		{
+			return slotIndex;
+		}
+	}
+
+	public static class SpiritwebButtonContainer
+	{
+		public Integer curioItemSlot;
+		public Item item;
+
+		protected double centerX;
+		protected double centerY;
+
+		// Refers to how many items can fit in a row and column
+		protected int containWidth;
+		protected int containHeight;
+
+		protected double width;
+		protected double height;
+
+		public int red;
+		public int green;
+		public int blue;
+		public int opacity;
+
+		// Left top
+		protected double x1;
+		protected double y1;
+
+		// left bottom
+		protected double x2;
+		protected double y2;
+
+		// right bottom
+		protected double x3;
+		protected double y3;
+
+		// right top
+		protected double x4;
+		protected double y4;
+
+		// width * height
+		protected int size;
+
+		public boolean highlight;
+
+		public ArrayList<PowerButton> menuButtons = new ArrayList<>();
+
+		public SpiritwebButtonContainer(double x, double y, int containWidth, int containHeight, int curioItemSlot, Item item)
+		{
+			this.centerX = x;
+			this.centerY = y;
+
+			red = 125;
+			green = 125;
+			blue = 125;
+			opacity = 125;
+
+			// ensure sane values and compute dimensions
+			updateDimensions(containWidth, containHeight, centerX, centerY);
+
+			this.red = 0;
+			this.green = 0;
+			this.blue = 0;
+			this.curioItemSlot = curioItemSlot;
+			this.item = item;
+		}
+
+		public void addButton(PowerButton button)
+		{
+			if (menuButtons.size() < size)
+			{
+				menuButtons.add(button);
+				button.container = this;
+				// assign slot index if applicable
+				button.slotIndex = (byte) (menuButtons.size() - 1);
+				arrangeButtons();
+			}
+			else
+			{
+				// container is full - ignore extra buttons
+			}
+		}
+
+		public double getWidth()
+		{
+			return width;
+		}
+
+		public double getHeight()
+		{
+			return height;
+		}
+
+		public int getContainWidth()
+		{
+			return containWidth;
+		}
+
+		public int getContainHeight()
+		{
+			return containHeight;
+		}
+
+		public void arrangeButtons()
+		{
+			if (menuButtons.isEmpty()) return;
+
+			final double spacing = 25.0;
+			// center the grid at container center
+			double totalWidth = (containWidth - 1) * spacing;
+			double totalHeight = (containHeight - 1) * spacing;
+			double startX = centerX - totalWidth / 2.0;
+			double startY = centerY - totalHeight / 2.0;
+
+			for (int i = 0; i < menuButtons.size(); i++)
+			{
+				int column = i % containWidth;
+				int row = i / containWidth;
+				double x = startX + column * spacing;
+				double y = startY + row * spacing;
+				menuButtons.get(i).setPosition(x, y);
+			}
+		}
+
+		public void updateDimensions(int containWidth, int containHeight, double centerX, double centerY)
+		{
+			// sanitize inputs
+			this.containWidth = Math.max(1, containWidth);
+			this.containHeight = Math.max(1, containHeight);
+
+			this.centerX = centerX;
+			this.centerY = centerY;
+
+			final double spacing = 25.0;
+			// compute width/height to enclose the grid of buttons (button size ~20)
+			this.width = (this.containWidth - 1) * spacing + 20.0;
+			this.height = (this.containHeight - 1) * spacing + 20.0;
+
+			size = this.containHeight * this.containWidth;
+
+			// compute bounding corners for container rectangle
+			x1 = centerX - (width / 2.0);
+			y1 = centerY - (height / 2.0);
+			x2 = centerX - (width / 2.0);
+			y2 = centerY + (height / 2.0);
+			x3 = centerX + (width / 2.0);
+			y3 = centerY + (height / 2.0);
+			x4 = centerX + (width / 2.0);
+			y4 = centerY - (height / 2.0);
+
+			// reflow any existing buttons to the new layout
+			arrangeButtons();
+		}
+
+		public void highlightButtons(double mouseX, double mouseY, double middle_x, double middle_y)
+		{
+			// update each child button's highlight state
+			for (PowerButton button : menuButtons)
+			{
+				button.highlightAction(mouseX, mouseY, middle_x, middle_y);
+			}
+			// container highlight if any child is highlighted
+			highlight = menuButtons.stream().anyMatch(b -> b.highlighted);
+		}
+
+		public void renderContainer(BufferBuilder buffer, double mouseX, double mouseY, double centerX, double centerY)
+		{
+			// update geometry for current center
+			updateDimensions(containWidth, containHeight, centerX, centerY);
+
+			// update highlights
+			highlightButtons(mouseX, mouseY, centerX, centerY);
+
+			// clamp color channels to valid range
+			int rr = Math.max(0, red);
+			int gg = Math.max(0, green);
+			int bb = Math.max(0, blue);
+			int aa = Math.max(0, opacity);
+
+			// draw container quad
+			buffer.vertex(x1+5, y1, 0).color(rr, gg, bb, aa).endVertex();
+			buffer.vertex(x2, y2, 0).color(rr, gg, bb, aa).endVertex();
+			buffer.vertex(x3, y3, 0).color(rr, gg, bb, aa).endVertex();
+			buffer.vertex(x4, y4, 0).color(rr, gg, bb, aa).endVertex();
+
+			// render each button quad
+			for (PowerButton button : menuButtons)
+			{
+				button.renderButton(buffer);
+			}
+		}
+	}
+
+	private static final double PLAYER_BTN_HALF_SIZE = 10.0; // 20px square
+	private static final double PLAYER_BTN_SPACING = 30.0;
+	private static final double PLAYER_BTN_LABEL_GAP = 6.0; // gap above button
+
+	private void renderPlayerSpiritwebButtons(BufferBuilder buffer, double mouseX, double mouseY, double middle_x, double middle_y)
+	{
+		if (playerSpiritwebPowerButtons.isEmpty()) return;
+
+		// Row Y placed below sided menu buttons
+		double sidedBottomY = sidedMenuButtons.stream()
+				.mapToDouble(b -> b.y2)
+				.max()
+				.orElse(middle_y - 90 + 9); // fallback (previous sided center + halfSize)
+
+		final double verticalGap = 20.0;
+		final double rowCenterY = sidedBottomY + verticalGap;
+
+		final int n = playerSpiritwebPowerButtons.size();
+		final double halfSpan = (n - 1) * PLAYER_BTN_SPACING / 2.0;
+
+		for (int i = 0; i < n; i++)
+		{
+			PowerButton btn = playerSpiritwebPowerButtons.get(i);
+
+			double screenX = middle_x + (i * PLAYER_BTN_SPACING - halfSpan);
+			double screenY = rowCenterY;
+
+			btn.centerX = screenX;
+			btn.centerY = screenY;
+
+			double x1 = screenX - PLAYER_BTN_HALF_SIZE;
+			double y1 = screenY - PLAYER_BTN_HALF_SIZE;
+			double x2 = screenX - PLAYER_BTN_HALF_SIZE;
+			double y2 = screenY + PLAYER_BTN_HALF_SIZE;
+			double x3 = screenX + PLAYER_BTN_HALF_SIZE;
+			double y3 = screenY + PLAYER_BTN_HALF_SIZE;
+			double x4 = screenX + PLAYER_BTN_HALF_SIZE;
+			double y4 = screenY - PLAYER_BTN_HALF_SIZE;
+
+			boolean showHighlight =
+					MathHelper.inTriangle(x1, y1, x2, y2, x3, y3, mouseX, mouseY) ||
+							MathHelper.inTriangle(x1, y1, x4, y4, x3, y3, mouseX, mouseY);
+
+			btn.highlighted = showHighlight;
+
+			float brightness = showHighlight ? 0.25f : 0f;
+			float r = brightness;
+			float g = brightness;
+			float b = brightness;
+			float a = 0.5f;
+
+			buffer.vertex(x1, y1, 0).color(r, g, b, a).endVertex();
+			buffer.vertex(x2, y2, 0).color(r, g, b, a).endVertex();
+			buffer.vertex(x3, y3, 0).color(r, g, b, a).endVertex();
+			buffer.vertex(x4, y4, 0).color(r, g, b, a).endVertex();
+		}
+	}
+
 
 	public SpiritwebCapability getSpiritweb()
 	{

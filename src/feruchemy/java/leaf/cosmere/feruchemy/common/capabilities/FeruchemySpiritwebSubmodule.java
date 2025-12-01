@@ -10,20 +10,25 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.NicrosilRingMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
+import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 {
@@ -53,6 +58,13 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 			final float fillAmount = (float) (maxAmount * Math.random());
 			GiveStartingItem(player, feruchemyManifestation.getMetalType(), fillAmount);
 		}
+	}
+
+	@Override
+	public List<Attribute> getPowers()
+	{
+		return FeruchemyAttributes.FERUCHEMY_ATTRIBUTES.values().stream()
+				.map((AttributeRegistryObject::getAttribute)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -90,12 +102,12 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 		ItemStack itemStack;
 		if (metalType == Metals.MetalType.NICROSIL)
 		{
-			final NicrosilRingMetalmindItem metalmindItem = FeruchemyItems.NICROSIL_METAL_RING.get();
+			final Item metalmindItem = FeruchemyItems.METAL_RINGS.get(metalType).get();
 			itemStack = new ItemStack(metalmindItem);
 		}
 		else
 		{
-			final RingMetalmindItem metalmindItem = FeruchemyItems.METAL_RINGS.get(metalType).get();
+			final RingMetalmindItem metalmindItem = (RingMetalmindItem) FeruchemyItems.METAL_RINGS.get(metalType).get();
 			itemStack = new ItemStack(metalmindItem);
 			metalmindItem.setCharge(itemStack, (int) (metalmindItem.getMaxCharge(itemStack) * fillAmount));
 		}

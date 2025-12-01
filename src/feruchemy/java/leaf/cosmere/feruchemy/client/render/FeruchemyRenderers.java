@@ -8,6 +8,7 @@ import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.feruchemy.client.render.renderer.BraceletRenderer;
 import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
+import net.minecraft.world.item.Item;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
@@ -18,11 +19,10 @@ public class FeruchemyRenderers
 	public static void register()
 	{
 		final Supplier<ICurioRenderer> bracelet = BraceletRenderer::new;
-		for (ItemRegistryObject<BraceletMetalmindItem> itemRegistryObject : FeruchemyItems.METAL_BRACELETS.values())
+		for (ItemRegistryObject<Item> itemRegistryObject : FeruchemyItems.METAL_BRACELETS.values())
 		{
 			CuriosRendererRegistry.register(itemRegistryObject.get(), bracelet);
 		}
-		CuriosRendererRegistry.register(FeruchemyItems.NICROSIL_METAL_BRACELET.get(), bracelet);
 		CuriosRendererRegistry.register(FeruchemyItems.BANDS_OF_MOURNING.get(), bracelet);
 
 	}

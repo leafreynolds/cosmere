@@ -6,11 +6,15 @@ package leaf.cosmere.api;
 
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ISpiritwebSubmodule
@@ -56,4 +60,23 @@ public interface ISpiritwebSubmodule
 	}
 
 	void drainInvestiture(ISpiritweb data, double strength);
+
+	default List<Attribute> getPowers()
+	{
+		return new ArrayList<>();
+	}
+
+	default List<AttributeInstance> getEntityPowers(LivingEntity entity)
+	{
+		List<AttributeInstance> powers = new ArrayList<>();
+		for(Attribute attribute : getPowers())
+		{
+			AttributeInstance instance = entity.getAttribute(attribute);
+			if(instance != null)
+			{
+				powers.add(instance);
+			}
+		}
+		return powers;
+	}
 }

@@ -11,6 +11,7 @@ import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.manifestation.*;
+import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.EnumUtils;
@@ -22,8 +23,10 @@ import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -342,6 +345,13 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			MetalVialItem.addMetals(itemStack, allomancyManifestation.getMetalType().getID(), 16);
 			PlayerHelper.addItem(player, itemStack);
 		}
+	}
+
+	@Override
+	public List<Attribute> getPowers()
+	{
+		return AllomancyAttributes.ALLOMANCY_ATTRIBUTES.values().stream()
+				.map((AttributeRegistryObject::getAttribute)).collect(Collectors.toList());
 	}
 
 	public int getIngestedMetal(Metals.MetalType metalType)

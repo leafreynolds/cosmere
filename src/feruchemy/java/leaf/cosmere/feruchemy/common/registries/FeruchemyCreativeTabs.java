@@ -45,7 +45,7 @@ public class FeruchemyCreativeTabs
 		{
 			if (metalType.hasFeruchemicalEffect() && metalType != Metals.MetalType.NICROSIL)
 			{
-				final RingMetalmindItem item = FeruchemyItems.METAL_RINGS.get(metalType).get();
+				final RingMetalmindItem item = (RingMetalmindItem) FeruchemyItems.METAL_RINGS.get(metalType).get();
 				item.addFilled(output);
 			}
 		}
@@ -53,7 +53,7 @@ public class FeruchemyCreativeTabs
 		{
 			if (metalType.hasFeruchemicalEffect() && metalType != Metals.MetalType.NICROSIL)
 			{
-				final BraceletMetalmindItem item = FeruchemyItems.METAL_BRACELETS.get(metalType).get();
+				final BraceletMetalmindItem item = (BraceletMetalmindItem) FeruchemyItems.METAL_BRACELETS.get(metalType).get();
 				item.addFilled(output);
 			}
 		}
@@ -61,7 +61,7 @@ public class FeruchemyCreativeTabs
 		{
 			if (metalType.hasFeruchemicalEffect() && metalType != Metals.MetalType.NICROSIL)
 			{
-				final NecklaceMetalmindItem item = FeruchemyItems.METAL_NECKLACES.get(metalType).get();
+				final NecklaceMetalmindItem item = (NecklaceMetalmindItem) FeruchemyItems.METAL_NECKLACES.get(metalType).get();
 				item.addFilled(output);
 			}
 		}

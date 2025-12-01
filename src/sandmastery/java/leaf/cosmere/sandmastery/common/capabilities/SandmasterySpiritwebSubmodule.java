@@ -13,6 +13,7 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
@@ -25,6 +26,7 @@ import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -33,9 +35,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
@@ -203,6 +207,12 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void GiveStartingItem(Player player, Manifestation manifestation)
 	{
+	}
+
+	@Override
+	public List<Attribute> getPowers()
+	{
+		return List.of(SandmasteryAttributes.RIBBONS.get());
 	}
 
 	public int getHydrationLevel()

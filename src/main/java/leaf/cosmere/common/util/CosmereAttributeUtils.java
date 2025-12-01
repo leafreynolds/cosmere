@@ -41,6 +41,21 @@ public class CosmereAttributeUtils
 		}
 	}
 
+	public static ManifestationTypes getManifestationType(Attribute attribute)
+	{
+		if(attribute == null) return ManifestationTypes.NONE;
+		String modId = attribute.getDescriptionId().split("\\.")[1];
+
+		for (ManifestationTypes manifestationType : ManifestationTypes.values())
+		{
+			if (manifestationType.getName().equals(modId))
+			{
+				return manifestationType;
+			}
+		}
+		return ManifestationTypes.NONE;
+	}
+
 	public static void grantBaseAttribute(LivingEntity livingEntity, RangedAttribute attribute, int strength)
 	{
 		int currentStrength = 0;
