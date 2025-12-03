@@ -360,7 +360,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 					{
 						final double middleX = width / 2f;
 						final double middleY = height / 2f;
-						SpiritwebButtonContainer spiritwebContainer = new SpiritwebButtonContainer(middleX, middleY, 1, 1, i, (Item) item);
+						SpiritwebButtonContainer spiritwebContainer = new SpiritwebButtonContainer(middleX, middleY, item.getMaxCapacity(), 1, i, (Item) item);
 						Attribute[] attributes = item.getAttributes(itemHandler.getEquippedCurios().getStackInSlot(i));
 						Integer[] manifestationStrengths = item.getAttributeStrengths(itemHandler.getEquippedCurios().getStackInSlot(i));
 						for (int j = 0; j < item.getMaxCapacity(); j++)
@@ -1138,15 +1138,20 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 			size = this.containHeight * this.containWidth;
 
+			int padding = 5; // padding around buttons
+
 			// compute bounding corners for container rectangle
-			x1 = centerX - (width / 2.0);
-			y1 = centerY - (height / 2.0);
-			x2 = centerX - (width / 2.0);
-			y2 = centerY + (height / 2.0);
-			x3 = centerX + (width / 2.0);
-			y3 = centerY + (height / 2.0);
-			x4 = centerX + (width / 2.0);
-			y4 = centerY - (height / 2.0);
+			x1 = centerX - (width / 2.0) - padding;
+			y1 = centerY - (height / 2.0) - padding;
+			x2 = centerX - (width / 2.0) - padding;
+			y2 = centerY + (height / 2.0) + padding;
+			x3 = centerX + (width / 2.0) + padding;
+			y3 = centerY + (height / 2.0) + padding;
+			x4 = centerX + (width / 2.0) + padding;
+			y4 = centerY - (height / 2.0) - padding;
+
+			this.width = Math.abs(x1 - x4);
+			this.height = Math.abs(y1 - y2);
 
 			// reflow any existing buttons to the new layout
 			arrangeButtons();
@@ -1178,7 +1183,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			int aa = Math.max(0, opacity);
 
 			// draw container quad
-			buffer.vertex(x1+5, y1, 0).color(rr, gg, bb, aa).endVertex();
+			buffer.vertex(x1, y1, 0).color(rr, gg, bb, aa).endVertex();
 			buffer.vertex(x2, y2, 0).color(rr, gg, bb, aa).endVertex();
 			buffer.vertex(x3, y3, 0).color(rr, gg, bb, aa).endVertex();
 			buffer.vertex(x4, y4, 0).color(rr, gg, bb, aa).endVertex();
