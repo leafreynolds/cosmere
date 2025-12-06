@@ -163,7 +163,7 @@ public class ItemChargeHelper
 				continue;
 			}
 
-			boolean playerUnableToAccess = !chargeItemSlot. trySetAttunedPlayer(stackInSlot, player);
+			boolean playerUnableToAccess = !chargeItemSlot.trySetAttunedPlayer(stackInSlot, player);
 			final UUID attunedPlayer = chargeItemSlot.getAttunedPlayer(stackInSlot);
 			if (checkPlayer && playerUnableToAccess //if we need to make sure the player has access and they do not
 					|| //or if the player is trying to store in an unsealed metalmind but have identity
