@@ -19,27 +19,27 @@ import java.util.concurrent.CompletableFuture;
 
 public class FeruchemyTagProvider extends BaseTagProvider
 {
-    public FeruchemyTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
-    {
-        super(packOutput, lookupProvider, Feruchemy.MODID, existingFileHelper);
-    }
+	public FeruchemyTagProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
+	{
+		super(packOutput, lookupProvider, Feruchemy.MODID, existingFileHelper);
+	}
 
-    @Override
-    protected void registerTags(HolderLookup.Provider registries)
-    {
-        //getItemBuilder(CosmereTags.Items.CURIO_HEAD).add(Example.Item.asItem());
+	@Override
+	protected void registerTags(HolderLookup.Provider registries)
+	{
+		//getItemBuilder(CosmereTags.Items.CURIO_HEAD).add(Example.Item.asItem());
 
-        getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.BANDS_OF_MOURNING.get());
+		getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.BANDS_OF_MOURNING.get());
 
-        for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
-        {
-            if (metalType.hasFeruchemicalEffect())
-            {
-                //curio stuff
-                getItemBuilder(CosmereTags.Items.CURIO_NECKLACE).add(FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
-                getItemBuilder(CosmereTags.Items.CURIO_RING).add(FeruchemyItems.METAL_RINGS.get(metalType).asItem());
-                getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
-            }
-        }
-    }
+		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
+		{
+			if (metalType.hasFeruchemicalEffect())
+			{
+              //curio stuff
+				getItemBuilder(CosmereTags.Items.CURIO_NECKLACE).add(FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
+				getItemBuilder(CosmereTags.Items.CURIO_RING).add(FeruchemyItems.METAL_RINGS.get(metalType).asItem());
+				getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
+			}
+		}
+	}
 }
