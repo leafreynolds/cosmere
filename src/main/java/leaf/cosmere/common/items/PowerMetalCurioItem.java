@@ -132,7 +132,7 @@ public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICur
 					isFirst = false;
 				}
 
-				tooltip.add(Component.literal("+" + attributes[i] + " ").append(
+				tooltip.add(Component.literal("+" + attributeStrengths[i] + " ").append(
 								Component.translatable(attributes[i].getDescriptionId()))
 						.withStyle(ChatFormatting.BLUE));
 			}

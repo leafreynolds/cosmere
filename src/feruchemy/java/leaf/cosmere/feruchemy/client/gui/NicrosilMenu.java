@@ -47,9 +47,9 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 {
 	public static final NicrosilMenu instance = new NicrosilMenu();
 
-	protected ArrayList<SpiritwebButtonContainer> ringMenus = new ArrayList<>();
-	protected ArrayList<SpiritwebButtonContainer> braceletMenus = new ArrayList<>();
-	protected ArrayList<SpiritwebButtonContainer> necklaceMenus = new ArrayList<>();
+	protected ArrayList<PowerButtonContainer> ringMenus = new ArrayList<>();
+	protected ArrayList<PowerButtonContainer> braceletMenus = new ArrayList<>();
+	protected ArrayList<PowerButtonContainer> necklaceMenus = new ArrayList<>();
 	// now using combined PowerButton for both container buttons and player buttons
 	protected ArrayList<PowerButton> spiritwebPowerButtons = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	private float visibility = 0.0f;
 	private Stopwatch lastChange = Stopwatch.createStarted();
 	private ManifestationTypes selectedPowerType = ManifestationTypes.ALLOMANCY;
-	private TransferredPower heldButton = null;
+	private PowerButton heldButton = null;
 
 	protected NicrosilMenu()
 	{
@@ -152,7 +152,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 									if(item.trySetAttunedPlayer(itemStack, player))
 									{
 										Cosmere.packetHandler().sendToServer(new StoreTapPowerMessage(
-												heldButton.attribute,
+												attribute,
 												attributeInstance.getBaseValue(),
 												spiritwebPowerButton.getContainer().curioItemSlot,
 												true,
@@ -206,7 +206,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			{
 				if (playerSpiritwebPowerButton.highlighted)
 				{
-					heldButton = new TransferredPower(playerSpiritwebPowerButton.getAttribute(), (int) playerSpiritwebPowerButton.getStrength());
+					heldButton = playerSpiritwebPowerButton;
 				}
 			}
 
@@ -249,7 +249,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		getMinecraft().setScreen(null);
 	}
 
-	private void applyLocalStore(TransferredPower held, PowerButton targetSlot)
+	private void applyLocalStore(PowerButton held, PowerButton targetSlot)
 	{
 		playerSpiritwebPowerButtons.removeIf(btn -> btn.getAttribute() == held.attribute);
 
@@ -257,7 +257,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		if (targetSlot.getAttribute() == null)
 		{
 			targetSlot.setAttribute(held.attribute);
-			targetSlot.setStrength((int) held.strength);
+			targetSlot.setStrength(held.strength);
 		}
 		else if (targetSlot.getAttribute() == held.attribute)
 		{
@@ -283,11 +283,11 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			availableAttributes.removeIf(attributeInstance -> attributeInstance.getAttribute() == held.attribute);
 			playerSpiritwebPowerButtons.clear();
 			sidedMenuButtons.clear();
+			availableAttributes.sort(Comparator.comparingInt((availableAttribute -> CosmereAttributeUtils.getManifestationType(availableAttribute.getAttribute()).getID())));
 			if (!availableAttributes.isEmpty())
 			{
 				selectedPowerType = CosmereAttributeUtils.getManifestationType(availableAttributes.get(0).getAttribute());
 			}
-			availableAttributes.sort(Comparator.comparingInt((availableAttribute -> CosmereAttributeUtils.getManifestationType(availableAttribute.getAttribute()).getID())));
 			setupAttributeButtons(availableAttributes, held.attribute, held.strength);
 		}
 	}
@@ -360,7 +360,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 					{
 						final double middleX = width / 2f;
 						final double middleY = height / 2f;
-						SpiritwebButtonContainer spiritwebContainer = new SpiritwebButtonContainer(middleX, middleY, item.getMaxCapacity(), 1, i, (Item) item);
+						PowerButtonContainer spiritwebContainer = new PowerButtonContainer(middleX, middleY, item.getMaxCapacity(), 1, i, (Item) item);
 						Attribute[] attributes = item.getAttributes(itemHandler.getEquippedCurios().getStackInSlot(i));
 						Integer[] manifestationStrengths = item.getAttributeStrengths(itemHandler.getEquippedCurios().getStackInSlot(i));
 						for (int j = 0; j < item.getMaxCapacity(); j++)
@@ -458,9 +458,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		final double mouseVecX = mouseX - width / 2f;
-		final double mouseVecY = (mouseY - height / 2f);
-
 		final double middleX = width / 2f;
 		final double middleY = height / 2f;
 
@@ -470,16 +467,11 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 		renderPlayerSpiritwebButtons(buffer, mouseX, mouseY, middleX, middleY);
 		renderSidedButtons(buffer, mouseX, mouseY, middleX, middleY);
+		renderHeldButton(buffer, mouseX, mouseY);
 
 		tessellator.end();
 
 		matrixStack.pushPose();
-		for (PowerButton spiritwebPowerButton : spiritwebPowerButtons)
-		{
-			spiritwebPowerButton.renderIcon(guiGraphics);
-		}
-		matrixStack.popPose();
-
 		drawIcons(guiGraphics, buffer, middleX, middleY);
 
 		renderSpiritwebButtonContainerStrings(guiGraphics, ringMenus, middleX, middleY);
@@ -498,10 +490,11 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		PoseStack matrixStack = guiGraphics.pose();
 		matrixStack.pushPose();
 		RenderSystem.enableBlend();
-
 		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
+		// New: both kinds of buttons rendered here
+		renderSpiritwebPowerButtonIcons(guiGraphics);
 		renderPlayerSpiritwebButtonIcons(guiGraphics);
 		renderSidedButtonIcons(guiGraphics, middle_x, middle_y);
 
@@ -529,7 +522,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			int bgLeft = textX - 2;
 			int bgTop = textY - 2;
 			int bgRight = textX + font.width(text) + 2;
-			int bgBottom = textX + font.lineHeight + 2;
+			int bgBottom = textY + font.lineHeight + 1;
 
 			guiGraphics.fill(bgLeft, bgTop, bgRight, bgBottom, 0x80000000);
 			guiGraphics.drawString(font, text, textX, textY, 0xFFFFFFFF);
@@ -599,15 +592,15 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	private void renderSpiritwebButtonContainerStrings(GuiGraphics guiGraphics, List<SpiritwebButtonContainer> spiritwebButtonContainers, double middle_x, double middle_y)
+	private void renderSpiritwebButtonContainerStrings(GuiGraphics guiGraphics, List<PowerButtonContainer> spiritwebButtonContainers, double middle_x, double middle_y)
 	{
 		if (spiritwebButtonContainers != null && !spiritwebButtonContainers.isEmpty())
 		{
-			SpiritwebButtonContainer spiritwebButtonContainer = spiritwebButtonContainers.get(0);
+			PowerButtonContainer spiritwebButtonContainer = spiritwebButtonContainers.get(0);
 			int y_offset = spiritwebButtonContainer.getContainWidth() - 1;
 			final String text = I18n.get(spiritwebButtonContainer.item.getDescriptionId());
 			int xCoord = (int) (middle_x - font.width(text) * 0.5);
-			int yCoord = (int) ((middle_y - font.lineHeight - spiritwebButtonContainer.getHeight() / 2) + (60 * y_offset));
+			int yCoord = (int) ((middle_y - font.lineHeight - spiritwebButtonContainer.getHeight() / 2) + (60 * y_offset) - 1);
 
 			guiGraphics.drawString(font, text, xCoord, yCoord, 0xffffffff);
 		}
@@ -643,52 +636,94 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
+	private void renderSpiritwebPowerButtonIcons(GuiGraphics guiGraphics)
+	{
+		if (spiritwebPowerButtons.isEmpty())
+		{
+			return;
+		}
+
+		Minecraft mc = getMinecraft();
+
+		for (final PowerButton btn : spiritwebPowerButtons)
+		{
+			if (btn.attribute == null)
+			{
+				continue;
+			}
+
+			ResourceLocation tex = getAttributeIconLocation(btn.attribute);
+			if (tex == null)
+			{
+				continue;
+			}
+
+			// Centered around the button's posX / posY
+			final double x = btn.posX;
+			final double y = btn.posY;
+
+			final double half = 15 * 0.5; // logical 15px icon
+			final int drawX = (int) (x - half);
+			final int drawY = (int) (y - half);
+
+			try
+			{
+				// Ensure it exists (avoid missing-texture spam)
+				mc.getResourceManager().getResourceOrThrow(tex);
+
+				RenderSystem.setShaderTexture(0, tex);
+				guiGraphics.blit(
+						tex,
+						drawX,
+						drawY,
+						16, 16,   // icon size on screen
+						0, 0,
+						18, 18,   // texture size
+						18, 18
+				);
+			}
+			catch (Exception ignored)
+			{
+				// Missing texture: silently skip
+			}
+		}
+	}
+
 	private void renderPlayerSpiritwebButtonIcons(GuiGraphics guiGraphics)
 	{
 		if (playerSpiritwebPowerButtons.isEmpty())
+		{
 			return;
+		}
 
 		Minecraft mc = getMinecraft();
-		final StringBuilder sb = new StringBuilder();
 
 		for (final PowerButton btn : playerSpiritwebPowerButtons)
 		{
 			if (btn.attribute == null)
+			{
 				continue;
+			}
 
-			// Absolute screen coordinates already stored
+			// Skip buttons that haven't been laid out yet
+			if (btn.centerX == 0 && btn.centerY == 0)
+			{
+				continue;
+			}
+
+			ResourceLocation tex = getAttributeIconLocation(btn.attribute);
+			if (tex == null)
+			{
+				continue;
+			}
+
 			final double x = btn.centerX;
 			final double y = btn.centerY;
 
-			// Icon quad (15px logical, texture 18x18)
 			final double half = 15 * 0.5;
 			final int drawX = (int) (x - half);
 			final int drawY = (int) (y - half);
 
-			// Build texture path based on attribute id
-			sb.setLength(0);
-			final String[] idParts = btn.attribute.getDescriptionId().split("\\.");
-			// Expect format: attribute.modid.name
-			if (idParts.length < 3)
-				continue;
-
-			ManifestationTypes type = CosmereAttributeUtils.getManifestationType(btn.attribute);
-			sb.append("textures/icon/").append(idParts[1]).append("/");
-
-			switch (type)
-			{
-				case ALLOMANCY:
-				case FERUCHEMY:
-				case SURGEBINDING:
-					sb.append(idParts[2]);
-					break;
-				default:
-					// Unsupported type: skip icon
-					continue;
-			}
-			sb.append(".png");
-
-			ResourceLocation tex = new ResourceLocation(idParts[1], sb.toString());
 			try
 			{
 				mc.getResourceManager().getResourceOrThrow(tex);
@@ -697,14 +732,15 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 						tex,
 						drawX,
 						drawY,
-						16, 16,      // scaled size
+						16, 16,
 						0, 0,
-						18, 18,      // texture size
-						18, 18);
+						18, 18,
+						18, 18
+				);
 			}
 			catch (Exception ignored)
 			{
-				// Missing texture: skip silently
+				// Missing texture: skip
 			}
 		}
 	}
@@ -765,7 +801,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	private void renderSpiritwebMenuContainer(BufferBuilder buffer, ArrayList<SpiritwebButtonContainer> spiritwebContainers, double mouseVecX, double mouseVecY, double middleX, double middleY)
+	private void renderSpiritwebMenuContainer(BufferBuilder buffer, ArrayList<PowerButtonContainer> spiritwebContainers, double mouseVecX, double mouseVecY, double middleX, double middleY)
 	{
 		for (int i = 0; i < spiritwebContainers.size(); i++)
 		{
@@ -792,7 +828,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 	private static class SidedMenuButton
 	{
 
-		public final ButtonAction action;
 		public final int powerType;
 		public double x1, x2;
 		public double y1, y2;
@@ -813,7 +848,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 				final Direction textSide)
 		{
 			this.name = name;
-			this.action = null;
 			this.powerType = powerType;
 
 			this.index = index;
@@ -821,18 +855,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 			this.color = 0xffffff;
 			this.textSide = textSide;
-		}
-	}
-
-	static class TransferredPower
-	{
-		public Attribute attribute;
-		public Integer strength;
-
-		public TransferredPower(Attribute attribute, Integer strength)
-		{
-			this.attribute = attribute;
-			this.strength = strength;
 		}
 	}
 
@@ -851,13 +873,12 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		public double x4 = 0, y4 = 0;
 		public double posX = 0, posY = 0;
 		public boolean matchesIdentity;
-		public String iconPath;
 		public int red = 205, green = 205, blue = 205, opacity = 100;
 		double width = 20, height = 20;
 
 		ManifestationTypes manifestationType;
 		byte slotIndex;
-		SpiritwebButtonContainer container;
+		PowerButtonContainer container;
 
 		// player-sourced visuals
 		public double centerX;
@@ -866,7 +887,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		private PowerButton() { }
 
 		// container-based constructor (now computes corners directly)
-		public PowerButton(double posX, double posY, ManifestationTypes manifestationType, SpiritwebButtonContainer container, byte slotIndex, boolean matchesIdentity)
+		public PowerButton(double posX, double posY, ManifestationTypes manifestationType, PowerButtonContainer container, byte slotIndex, boolean matchesIdentity)
 		{
 			this.posX = posX;
 			this.posY = posY;
@@ -928,25 +949,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 					|| MathHelper.inTriangle(x1, y1, x4, y4, x3, y3, mouseX, mouseY));
 		}
 
-		public void renderIcon(GuiGraphics guiGraphics)
-		{
-			if (!isPlayer && iconPath != null)
-			{
-				final ResourceLocation textureLocation = new ResourceLocation(manifestationType.getName(), iconPath);
-				RenderSystem.setShaderTexture(0, textureLocation);
-				guiGraphics.blit(textureLocation,
-						(int) (posX - 7.5),
-						(int) (posY - 7.5),
-						0,
-						0,
-						16,
-						16,
-						18,
-						18);
-			}
-		}
-
-		public void renderButton(BufferBuilder buffer)
+		public void renderButton(BufferBuilder buffer, double mouseX, double mouseY)
 		{
 			if (isPlayer) return; // player buttons are rendered by the parent menu
 			int r = red;
@@ -991,7 +994,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			this.strength = strength;
 		}
 
-		public SpiritwebButtonContainer getContainer()
+		public PowerButtonContainer getContainer()
 		{
 			return container;
 		}
@@ -1002,7 +1005,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
-	public static class SpiritwebButtonContainer
+	public static class PowerButtonContainer
 	{
 		public Integer curioItemSlot;
 		public Item item;
@@ -1045,7 +1048,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 
 		public ArrayList<PowerButton> menuButtons = new ArrayList<>();
 
-		public SpiritwebButtonContainer(double x, double y, int containWidth, int containHeight, int curioItemSlot, Item item)
+		public PowerButtonContainer(double x, double y, int containWidth, int containHeight, int curioItemSlot, Item item)
 		{
 			this.centerX = x;
 			this.centerY = y;
@@ -1191,7 +1194,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 			// render each button quad
 			for (PowerButton button : menuButtons)
 			{
-				button.renderButton(buffer);
+				button.renderButton(buffer, mouseX, mouseY);
 			}
 		}
 	}
@@ -1209,8 +1212,9 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 				.mapToDouble(b -> b.y2)
 				.max()
 				.orElse(middle_y - 90 + 9); // fallback (previous sided center + halfSize)
+		if(sidedBottomY == 0) return;
 
-		final double verticalGap = 20.0;
+		final double verticalGap = 30.0;
 		final double rowCenterY = sidedBottomY + verticalGap;
 
 		final int n = playerSpiritwebPowerButtons.size();
@@ -1219,6 +1223,10 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		for (int i = 0; i < n; i++)
 		{
 			PowerButton btn = playerSpiritwebPowerButtons.get(i);
+			if(heldButton != null && heldButton == btn)
+			{
+				continue; // held button rendered separately
+			}
 
 			double screenX = middle_x + (i * PLAYER_BTN_SPACING - halfSpan);
 			double screenY = rowCenterY;
@@ -1254,10 +1262,85 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb
 		}
 	}
 
+	private void renderHeldButton(BufferBuilder buffer, double mouseX, double mouseY)
+	{
+		if (heldButton == null) return;
+
+		PowerButton btn = heldButton;
+
+		btn.centerX = mouseX;
+		btn.centerY = mouseY;
+
+		double x1 = btn.centerX - PLAYER_BTN_HALF_SIZE;
+		double y1 = btn.centerY - PLAYER_BTN_HALF_SIZE;
+		double x2 = btn.centerX - PLAYER_BTN_HALF_SIZE;
+		double y2 = btn.centerY + PLAYER_BTN_HALF_SIZE;
+		double x3 = btn.centerX + PLAYER_BTN_HALF_SIZE;
+		double y3 = btn.centerY + PLAYER_BTN_HALF_SIZE;
+		double x4 = btn.centerX + PLAYER_BTN_HALF_SIZE;
+		double y4 = btn.centerY - PLAYER_BTN_HALF_SIZE;
+
+		btn.highlighted = MathHelper.inTriangle(x1, y1, x2, y2, x3, y3, mouseX, mouseY) ||
+				MathHelper.inTriangle(x1, y1, x4, y4, x3, y3, mouseX, mouseY);
+
+		float r = 0.25f;
+		float g = 0.25f;
+		float b = 0.25f;
+		float a = 0.5f;
+
+		buffer.vertex(x1, y1, 0).color(r, g, b, a).endVertex();
+		buffer.vertex(x2, y2, 0).color(r, g, b, a).endVertex();
+		buffer.vertex(x3, y3, 0).color(r, g, b, a).endVertex();
+		buffer.vertex(x4, y4, 0).color(r, g, b, a).endVertex();
+	}
+
+
 
 	public SpiritwebCapability getSpiritweb()
 	{
 		return spiritweb;
+	}
+
+	private ResourceLocation getAttributeIconLocation(Attribute attribute)
+	{
+		if (attribute == null)
+		{
+			return null;
+		}
+
+		String[] idParts = attribute.getDescriptionId().split("\\.");
+		// Expect: attribute.<modid>.<name>
+		if (idParts.length < 3)
+		{
+			return null;
+		}
+
+		String modid = idParts[1];
+		String name  = idParts[2];
+
+		ManifestationTypes type = CosmereAttributeUtils.getManifestationType(attribute);
+		switch (type)
+		{
+			case ALLOMANCY:
+			case FERUCHEMY:
+			case SURGEBINDING:
+			case SANDMASTERY:
+				// supported
+				break;
+			default:
+				// No icon for other types
+				return null;
+		}
+
+		if(type == ManifestationTypes.SANDMASTERY) {
+			int temp = 5;
+		}
+
+		// This matches your existing player-icon layout:
+		// assets/<modid>/textures/icon/<modid>/<name>.png
+		String path = "textures/icon/" + modid + "/" + name + ".png";
+
+		return new ResourceLocation(modid, path);
 	}
 
 

@@ -72,7 +72,7 @@ public interface ISpiritwebSubmodule
 		for(Attribute attribute : getPowers())
 		{
 			AttributeInstance instance = entity.getAttribute(attribute);
-			if(instance != null)
+			if(instance != null && instance.getBaseValue() > 0)
 			{
 				powers.add(instance);
 			}

@@ -109,7 +109,6 @@ public class StoreTapPowerMessage implements ICosmerePacket
 		boolean isStore = buf.readBoolean();
 		byte attributeSlot = buf.readByte();
 
-		ResourceLocation attributeResourceLocation = new ResourceLocation(attributeId);
-		return new StoreTapPowerMessage(ForgeRegistries.ATTRIBUTES.getValue(attributeResourceLocation), attributeStrength, curioSlot, isStore, attributeSlot);
+		return new StoreTapPowerMessage(CosmereAttributeUtils.getAttributeById(attributeId), attributeStrength, curioSlot, isStore, attributeSlot);
 	}
 }

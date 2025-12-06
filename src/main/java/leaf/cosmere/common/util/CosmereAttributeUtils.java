@@ -41,6 +41,15 @@ public class CosmereAttributeUtils
 		}
 	}
 
+	public static Attribute getAttributeById(String id)
+	{
+		String[] attributeSections = id.split("\\.");
+		return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(
+				attributeSections[1],
+				attributeSections[2]
+		));
+	}
+
 	public static ManifestationTypes getManifestationType(Attribute attribute)
 	{
 		if(attribute == null) return ManifestationTypes.NONE;

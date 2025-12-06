@@ -8,6 +8,7 @@ import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.CosmereEffectsRegistry;
+import leaf.cosmere.common.util.CosmereAttributeUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -104,7 +105,7 @@ public interface IHoldsPowers
 			}
 			else
 			{
-				attributes[i] = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(tag.getString("attribute")));
+				attributes[i] = CosmereAttributeUtils.getAttributeById(tag.getString("attribute"));
 			}
 		}
 
