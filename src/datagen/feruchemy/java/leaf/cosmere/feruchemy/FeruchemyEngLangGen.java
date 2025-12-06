@@ -28,6 +28,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.Locale;
 import java.util.Map;
 
+import static leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes.FERUCHEMY_ATTRIBUTES;
+
 public class FeruchemyEngLangGen extends LanguageProvider
 {
 	final String advancementTitleFormat = "advancements.feruchemy.%s.title";
@@ -153,17 +155,14 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	private void addAttributes()
 	{
 		//Attributes
-		for (IAttributeProvider registryObject : FeruchemyAttributes.ATTRIBUTES.getAllAttributes())
+		FERUCHEMY_ATTRIBUTES.forEach((metalType, registryObject) ->
 		{
 			final String descriptionId = registryObject.getAttribute().getDescriptionId();
-			//no duplicates pls
-			//manifestation section handles adding attributes lang gen for themselves
-			if (!descriptionId.startsWith("manifestation"))
-			{
-				String translation = descriptionId.split("\\.")[1];
-				add(descriptionId, StringHelper.fixCapitalisation(translation));
-			}
-		}
+
+			String name = "Feruchemical " + metalType.getName();
+			// Attributes are the powers themselves, they need their own names.
+			add(descriptionId, StringHelper.fixCapitalisation(name));
+		});
 	}
 
 	private void addPatchouli()

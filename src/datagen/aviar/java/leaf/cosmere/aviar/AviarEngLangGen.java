@@ -15,6 +15,8 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static leaf.cosmere.aviar.common.registries.AviarAttributes.HOSTILE_LIFE_SENSE;
+
 public class AviarEngLangGen extends LanguageProvider
 {
 	public AviarEngLangGen(PackOutput output)
@@ -79,6 +81,11 @@ public class AviarEngLangGen extends LanguageProvider
 
 	private void addAttributes()
 	{
+		//Attribute
+		final String descriptionId = HOSTILE_LIFE_SENSE.getAttribute().getDescriptionId();
+		final String name = HOSTILE_LIFE_SENSE.getName().replace('_',' ');
+		// Attributes are the powers themselves, they need their own names.
+		add(descriptionId, StringHelper.fixCapitalisation(name));
 	}
 
 	private void addPatchouli()

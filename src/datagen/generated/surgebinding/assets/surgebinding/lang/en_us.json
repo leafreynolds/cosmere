@@ -21,6 +21,16 @@
   "advancements.surgebinding.surgebinding.transformation.title": "Transformation",
   "advancements.surgebinding.surgebinding.transportation.description": "Test description: Transportation",
   "advancements.surgebinding.surgebinding.transportation.title": "Transportation",
+  "attribute.surgebinding.abrasion": "Surge of Abrasion",
+  "attribute.surgebinding.adhesion": "Surge of Adhesion",
+  "attribute.surgebinding.cohesion": "Surge of Cohesion",
+  "attribute.surgebinding.division": "Surge of Division",
+  "attribute.surgebinding.gravitation": "Surge of Gravitation",
+  "attribute.surgebinding.illumination": "Surge of Illumination",
+  "attribute.surgebinding.progression": "Surge of Progression",
+  "attribute.surgebinding.tension": "Surge of Tension",
+  "attribute.surgebinding.transformation": "Surge of Transformation",
+  "attribute.surgebinding.transportation": "Surge of Transportation",
   "block.surgebinding.amethyst_block": "Amethyst Block",
   "block.surgebinding.diamond_block": "Diamond Block",
   "block.surgebinding.emerald_block": "Emerald Block",
@@ -109,6 +119,5 @@
   "manifestation.surgebinding.transformation.description": "Needs description",
   "manifestation.surgebinding.transportation": "Transportation",
   "manifestation.surgebinding.transportation.description": "Needs description",
-  "tabs.surgebinding.items": "Surgebinding",
-  "keys.surgebinding.main": "Surgebinding"
+  "tabs.surgebinding.items": "Surgebinding"
 }
