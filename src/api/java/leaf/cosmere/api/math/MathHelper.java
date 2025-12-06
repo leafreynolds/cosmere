@@ -29,8 +29,6 @@ public class MathHelper
 		return RANDOM.nextBoolean();
 	}
 
-	//percentage of value between two values.
-	//e.g. 100, 200, 150 should return 0.5f as 150 is halfway between 100 and 200
     public static float InverseLerp(float a, float b, float value)
     {
         if (a != b)
