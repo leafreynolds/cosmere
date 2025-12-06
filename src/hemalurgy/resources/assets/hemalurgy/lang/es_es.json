@@ -1,4 +1,5 @@
 {
+  "attribute.hemalurgy.spiritweb_integrity": "Spiritweb Integrity",
   "command.cosmere.eyeheight.set.success": "Establecer la altura de los ojos en %s",
   "curios.identifier.eyes": "Eye Spikes",
   "curios.identifier.linchpin": "Clavo pezonero",
@@ -83,7 +84,6 @@
   "item.hemalurgy.tin_spike.tooltip": "Roba los sentidos.",
   "item.hemalurgy.zinc_spike": "Clavo de Zinc",
   "item.hemalurgy.zinc_spike.tooltip": "Roba la fortaleza emocional.",
-  "manifestation.hemalurgy.spiritweb_integrity": "Spiritweb Integrity",
   "tabs.hemalurgy.items": "Hemalurgy",
   "tooltip.cosmere.attribute.chromium": "%s%s Suerte",
   "tooltip.cosmere.attribute.copper": "%s%s%% Experiencia",
