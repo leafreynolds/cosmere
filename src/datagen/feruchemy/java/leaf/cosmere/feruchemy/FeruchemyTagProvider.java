@@ -35,7 +35,7 @@ public class FeruchemyTagProvider extends BaseTagProvider
         {
             if (metalType.hasFeruchemicalEffect())
             {
-            //curio stuff
+                //curio stuff
                 getItemBuilder(CosmereTags.Items.CURIO_NECKLACE).add(FeruchemyItems.METAL_NECKLACES.get(metalType).asItem());
                 getItemBuilder(CosmereTags.Items.CURIO_RING).add(FeruchemyItems.METAL_RINGS.get(metalType).asItem());
                 getItemBuilder(CosmereTags.Items.CURIO_BRACELET).add(FeruchemyItems.METAL_BRACELETS.get(metalType).asItem());
