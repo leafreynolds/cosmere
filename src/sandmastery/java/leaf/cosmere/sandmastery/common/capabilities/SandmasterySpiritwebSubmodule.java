@@ -13,7 +13,6 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
-import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
@@ -35,11 +34,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {

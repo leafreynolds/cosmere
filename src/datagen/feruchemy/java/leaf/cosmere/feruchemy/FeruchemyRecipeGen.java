@@ -5,7 +5,6 @@
 package leaf.cosmere.feruchemy;
 
 import leaf.cosmere.BaseRecipeProvider;
-import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.feruchemy.common.Feruchemy;
