@@ -43,4 +43,3 @@ public class FeruchemyTagProvider extends BaseTagProvider
 		}
 	}
 }
-
