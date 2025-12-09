@@ -41,7 +41,23 @@ public class CosmereAttributeUtils
 		}
 	}
 
-	public static Attribute getAttributeById(String id)
+    public static int getAttributePowerId(Attribute attribute)
+    {
+        switch (getManifestationType(attribute))
+        {
+            case ALLOMANCY:
+            case FERUCHEMY:
+                String metalName = attribute.getDescriptionId().split("\\.")[2];
+                return Metals.MetalType.valueOf(metalName.toUpperCase()).getID();
+            case SURGEBINDING:
+                String surgeName = attribute.getDescriptionId().split("\\.")[2];
+                return Roshar.Surges.valueOf(surgeName.toUpperCase()).getID();
+            default:
+                return 0;
+        }
+    }
+
+	public static Attribute getAttributeByDescriptionId(String id)
 	{
 		String[] attributeSections = id.split("\\.");
 		return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(

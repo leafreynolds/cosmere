@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
 
@@ -105,7 +104,7 @@ public interface IHoldsPowers
 			}
 			else
 			{
-				attributes[i] = CosmereAttributeUtils.getAttributeById(tag.getString("attribute"));
+				attributes[i] = CosmereAttributeUtils.getAttributeByDescriptionId(tag.getString("attribute"));
 			}
 		}
 

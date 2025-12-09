@@ -218,6 +218,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb {
 
     public void closeScreen() {
         this.closed = true;
+        this.heldButton = null;
         getMinecraft().setScreen(null);
     }
 
@@ -285,8 +286,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb {
         spiritweb.getLiving().getAttribute(attribute).setBaseValue(strength);
         selectedPowerType = CosmereAttributeUtils.getManifestationType(attribute);
         availableAttributes.sort(Comparator.comparingInt(
-                (availableAttribute -> CosmereAttributeUtils.getManifestationType(availableAttribute.getAttribute())
-                        .getID())));
+                (availableAttribute -> CosmereAttributeUtils.getAttributePowerId(availableAttribute.getAttribute()))));
         setupAttributeButtons(availableAttributes, attribute, totalStrength);
     }
 
@@ -735,7 +735,7 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb {
             powers.removeIf(attributeInstance -> attributeInstance.getAttribute() ==
                     CosmereAttributeUtils.getAttribute(ManifestationTypes.FERUCHEMY,
                             Metals.MetalType.NICROSIL.getID()));
-            spiritwebPowers.addAll(submodule.getEntityPowers(spiritweb.getLiving()));
+            spiritwebPowers.addAll(powers);
         });
 
         return spiritwebPowers;
