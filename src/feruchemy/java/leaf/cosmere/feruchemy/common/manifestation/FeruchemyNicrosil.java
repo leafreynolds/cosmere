@@ -23,6 +23,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 //storing all the available powers on the user individually
 public class FeruchemyNicrosil extends FeruchemyManifestation
@@ -39,6 +41,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 	}
 
 	@Override
+    @OnlyIn(Dist.CLIENT)
 	public void openMenu(Minecraft minecraft)
 	{
 		NicrosilMenu.instance.closeScreen();
