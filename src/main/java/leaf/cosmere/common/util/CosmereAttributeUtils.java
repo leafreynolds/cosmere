@@ -8,7 +8,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 public class CosmereAttributeUtils
 {
@@ -116,4 +122,26 @@ public class CosmereAttributeUtils
 		}
 		entityAttributeInstance.setBaseValue(0);
 	}
+
+    public static ItemStack getPowerItem(Player player, int itemSlot, boolean isCurio)
+    {
+        if(isCurio)
+        {
+            LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(player);
+            if (curiosItemHandler.resolve().isPresent())
+            {
+                ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
+                return itemHandler.getEquippedCurios().getStackInSlot(itemSlot);
+            }
+            else
+            {
+                return ItemStack.EMPTY;
+            }
+        }
+        else
+        {
+            Inventory playerInventory = player.getInventory();
+            return playerInventory.getItem(itemSlot);
+        }
+    }
 }

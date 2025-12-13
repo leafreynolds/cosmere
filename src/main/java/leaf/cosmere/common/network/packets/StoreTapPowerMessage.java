@@ -17,18 +17,20 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 public class StoreTapPowerMessage implements ICosmerePacket
 {
 	Attribute attribute;
-	double attributeStrength;
-	int curioSlot;
+	int attributeStrength;
+	int itemSlot;
+    int attributeSlot;
 	boolean isStore;
-	byte attributeSlot;
+    boolean isCurio;
 
-	public StoreTapPowerMessage(Attribute attribute, double attributeStrength, int curioSlot, boolean isStore, byte attributeSlot)
+	public StoreTapPowerMessage(Attribute attribute, int attributeStrength, int itemSlot, int attributeSlot, boolean isStore, boolean isCurio)
 	{
 		this.attribute = attribute;
 		this.attributeStrength = attributeStrength;
-		this.curioSlot = curioSlot;
+        this.itemSlot = itemSlot;
+        this.attributeSlot = attributeSlot;
 		this.isStore = isStore;
-		this.attributeSlot = attributeSlot;
+		this.isCurio = isCurio;
 	}
 
 	@Override
@@ -46,38 +48,28 @@ public class StoreTapPowerMessage implements ICosmerePacket
 				// Storing
 				if (isStore)
 				{
-					LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(sender);
-					if (curiosItemHandler.resolve().isPresent())
-					{
-						ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
-						ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(curioSlot);
-						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHoldsPowers item)
-						{
-							if(item.trySetAttunedPlayer(itemStack, sender))
-							{
-								CosmereAttributeUtils.removeBaseAttribute(sender, attribute);
-								item.addPower(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), attribute, (int) attributeStrength, attributeSlot);
-							}
-						}
-					}
+                    ItemStack itemStack = CosmereAttributeUtils.getPowerItem(sender, itemSlot, isCurio);
+                    if (itemStack.getItem() instanceof IHoldsPowers item)
+                    {
+                        if(item.trySetAttunedPlayer(itemStack, sender))
+                        {
+                            CosmereAttributeUtils.removeBaseAttribute(sender, attribute);
+                            item.addPower(itemStack, attribute, attributeStrength, attributeSlot);
+                        }
+                    }
 				}
 				// Tapping
 				else
 				{
-					LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(sender);
-					if (curiosItemHandler.resolve().isPresent())
-					{
-						ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
-						ItemStack itemStack = itemHandler.getEquippedCurios().getStackInSlot(curioSlot);
-						if (itemHandler.getEquippedCurios().getStackInSlot(curioSlot).getItem() instanceof IHoldsPowers item)
-						{
-							if(item.getPlayerIsAttuned(itemStack, sender))
-							{
-								CosmereAttributeUtils.grantBaseAttribute(sender, (RangedAttribute) attribute, (int) attributeStrength);
-								item.removePower(itemHandler.getEquippedCurios().getStackInSlot(curioSlot), attribute);
-							}
-						}
-					}
+                    ItemStack itemStack = CosmereAttributeUtils.getPowerItem(sender, itemSlot, isCurio);
+                    if (itemStack.getItem() instanceof IHoldsPowers item)
+                    {
+                        if(item.getPlayerIsAttuned(itemStack, sender))
+                        {
+                            CosmereAttributeUtils.grantBaseAttribute(sender, (RangedAttribute) attribute, attributeStrength);
+                            item.removePower(itemStack, attribute);
+                        }
+                    }
 				}
 				cap.syncToClients(sender);
 			});
@@ -90,20 +82,22 @@ public class StoreTapPowerMessage implements ICosmerePacket
 	public void encode(FriendlyByteBuf buf)
 	{
 		buf.writeUtf(this.attribute.getDescriptionId());
-		buf.writeDouble(this.attributeStrength);
-		buf.writeInt(this.curioSlot);
+		buf.writeInt(this.attributeStrength);
+		buf.writeInt(this.itemSlot);
+        buf.writeInt(this.attributeSlot);
 		buf.writeBoolean(this.isStore);
-		buf.writeByte(this.attributeSlot);
+        buf.writeBoolean(this.isCurio);
 	}
 
 	public static StoreTapPowerMessage decode(FriendlyByteBuf buf)
 	{
 		String attributeId = buf.readUtf();
-		double attributeStrength = buf.readDouble();
-		int curioSlot = buf.readInt();
+		int attributeStrength = buf.readInt();
+		int itemSlot = buf.readInt();
+        int attributeSlot = buf.readInt();
 		boolean isStore = buf.readBoolean();
-		byte attributeSlot = buf.readByte();
+        boolean isCurio = buf.readBoolean();
 
-		return new StoreTapPowerMessage(CosmereAttributeUtils.getAttributeByDescriptionId(attributeId), attributeStrength, curioSlot, isStore, attributeSlot);
+		return new StoreTapPowerMessage(CosmereAttributeUtils.getAttributeByDescriptionId(attributeId), attributeStrength, itemSlot, attributeSlot, isStore, isCurio);
 	}
 }

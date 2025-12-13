@@ -22,7 +22,7 @@ public interface IHoldsPowers
 {
 	int getMaxCapacity();
 
-	default void addPower(ItemStack itemStack, Attribute attribute, int strength, byte attributeSlot)
+	default void addPower(ItemStack itemStack, Attribute attribute, int strength, int attributeSlot)
 	{
 		if (attribute == null)
 		{
