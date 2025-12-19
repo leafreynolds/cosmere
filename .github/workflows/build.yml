@@ -29,5 +29,5 @@ jobs:
         with:
           name: cosmere-1.20.1-mod-jars
           path: |
-            build/libs/*.jar
+            build/libs/*[0-9].jar
           if-no-files-found: error
