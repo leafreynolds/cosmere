@@ -1,5 +1,5 @@
 /*
- * File updated ~ 12 - 11 - 2023 ~ Leaf
+ * File updated ~ 11 - 12 - 2025 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.compat.hwyla;
@@ -31,10 +31,10 @@ public class BronzeSeekerTooltip implements IEntityComponentProvider
 	@Override
 	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig iPluginConfig)
 	{
-		final boolean playerCreativeMode = accessor.getPlayer().isCreative();
 		//check the entity we are trying to
 		SpiritwebCapability.get(accessor.getPlayer()).ifPresent(clientPlayer ->
 		{
+			final boolean playerCreativeMode = accessor.getPlayer().isCreative();
 			AllomancyBronze allomancyBronze = (AllomancyBronze) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
 			if (allomancyBronze.isMetalBurning(clientPlayer) || playerCreativeMode)
 			{
