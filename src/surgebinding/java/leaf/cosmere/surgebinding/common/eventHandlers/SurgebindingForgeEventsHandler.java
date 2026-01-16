@@ -10,6 +10,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
+import leaf.cosmere.surgebinding.common.manifestation.SurgeDivision;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,6 +52,7 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeProgression.onBlockInteract(event);
+		SurgeDivision.onBlockInteract(event);
 	}
 
 	@SubscribeEvent
