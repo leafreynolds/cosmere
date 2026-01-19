@@ -1,5 +1,5 @@
 /*
- * File updated ~ 4 - 2 - 2025 ~ Leaf
+ * File updated ~ 19 - 1 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities.ideals;
@@ -88,17 +88,12 @@ public class RadiantStateManager
 		}
 
 		String playerMessage = SurgebindingServerConfig.cleanIdeal(event.getRawText());
-		int idealToSwear = 0;
+		int idealToSwear = -1;
 		Roshar.RadiantOrder idealOrder = null;
 
 		//every order's first ideal is the same
 
 		boolean foundAssociatedIdeal = false;
-
-		if (idealToSwear <= this.ideal)
-		{
-			return;
-		}
 
 		//for each order
 		for (Roshar.RadiantOrder radiantOrder : EnumUtils.RADIANT_ORDERS)
@@ -139,7 +134,7 @@ public class RadiantStateManager
 			}
 		}
 
-		if (idealToSwear == 0)
+		if (idealToSwear <= 0)
 		{
 			//not relevant, exit
 			return;
