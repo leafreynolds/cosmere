@@ -13,6 +13,7 @@ import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeDivision;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
+import leaf.cosmere.surgebinding.common.manifestation.SurgeTransportation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
@@ -83,6 +84,17 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeGravitation.onLivingAttackEvent(event);
+	}
+
+	@SubscribeEvent
+	public static void onEmptyInteract(PlayerInteractEvent.RightClickEmpty event)
+	{
+		if (event.isCanceled())
+		{
+			return;
+		}
+
+		SurgeTransportation.onEmptyClick(event);
 	}
 
 

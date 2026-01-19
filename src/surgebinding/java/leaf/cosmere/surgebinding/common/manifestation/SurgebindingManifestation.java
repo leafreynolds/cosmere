@@ -43,6 +43,6 @@ public class SurgebindingManifestation extends Manifestation
 
 		final SpiritwebCapability spiritwebCapability = (SpiritwebCapability) data;
 		SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		return data.hasManifestation(this) && sb.getStormlight() > 0 && data.getMode(this)>0;
+		return data.hasManifestation(this) && sb.getStormlight() > 0 && data.getMode(this)!=0;
 	}
 }
