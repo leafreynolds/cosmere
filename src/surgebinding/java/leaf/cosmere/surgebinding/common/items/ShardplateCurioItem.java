@@ -13,9 +13,11 @@ import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
 import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.utils.ParticleHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -105,6 +107,10 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		if(((ShardplateCurioItem)stack.getItem()).getCharge(stack) != 0)
 		{
 			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 1));
+		}
+		if(((ShardplateCurioItem)stack.getItem()).getCharge(stack) <= ((ShardplateCurioItem)stack.getItem()).getMaxCharge(stack)/4)
+		{
+			ParticleHelper.spawnLeakEffect((ServerLevel) entity.level(), 2, entity);
 		}
 
 		DynamicShardplateData data = getShardData(stack);

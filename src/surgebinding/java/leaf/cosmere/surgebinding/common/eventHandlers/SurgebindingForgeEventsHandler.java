@@ -17,8 +17,10 @@ import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
+import leaf.cosmere.surgebinding.common.utils.ParticleHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -160,6 +162,11 @@ public class SurgebindingForgeEventsHandler
 
 				// Reduce damage taken by entity
 				event.setAmount(remaining);
+
+				if (source.is(DamageTypes.FALL))
+				{
+					ParticleHelper.spawnBurstEffect((ServerLevel) entity.level(), entity);
+				}
 
 				item.adjustCharge(stack,
 						-Math.min((int) (absorbed * SurgebindingConfigs.SERVER.SHARDPLATE_PROTECTION_INVESTITURE_COST.get()),
