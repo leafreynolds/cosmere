@@ -16,18 +16,15 @@ public class WindrunnerIdealStateManager
 {
 	public static boolean validateIdeal(SpiritwebCapability spiritweb, int ideal)
 	{
-		switch (ideal)
+		return switch (ideal)
 		{
-			default:
-			case 1:
-				return true;
-			case 2:
-				return ProtectThoseWhoCannotProtectThemselves(spiritweb);
-			case 3:
-			case 4:
-			case 5:
-				return false;
-		}
+			case 1 -> true;
+			case 2 -> ProtectThoseWhoCannotProtectThemselves(spiritweb);
+			case 3 -> ProtectNoCaveats(spiritweb);
+			case 4 -> AcceptThereAreThoseICannotProtect(spiritweb);
+			case 5 -> ProtectSelfSoContinueToProtectOthers(spiritweb);
+			default -> false;
+		};
 	}
 
 	private static boolean ProtectThoseWhoCannotProtectThemselves(SpiritwebCapability spiritweb)
@@ -43,5 +40,20 @@ public class WindrunnerIdealStateManager
 
 		MobEffectInstance isHero = living.getEffect(MobEffects.HERO_OF_THE_VILLAGE);
 		return isHero != null;
+	}
+
+	private static boolean ProtectNoCaveats(SpiritwebCapability spiritweb)
+	{
+		return false;
+	}
+
+	private static boolean AcceptThereAreThoseICannotProtect(SpiritwebCapability spiritweb)
+	{
+		return false;
+	}
+
+	private static boolean ProtectSelfSoContinueToProtectOthers(SpiritwebCapability spiritweb)
+	{
+		return false;
 	}
 }

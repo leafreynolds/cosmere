@@ -12,6 +12,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.util.TaskQueueManager;
 import leaf.cosmere.surgebinding.common.Surgebinding;
+import leaf.cosmere.surgebinding.common.capabilities.ideals.order.SkybreakerIdealStateManager;
 import leaf.cosmere.surgebinding.common.capabilities.ideals.order.WindrunnerIdealStateManager;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.config.SurgebindingServerConfig;
@@ -229,6 +230,7 @@ public class RadiantStateManager
 			}
 			case SKYBREAKER ->
 			{
+				return SkybreakerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case DUSTBRINGER ->
 			{

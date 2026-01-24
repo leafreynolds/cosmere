@@ -37,10 +37,10 @@ public class SurgeAbrasion extends SurgebindingManifestation
 		SurgebindingSpiritwebSubmodule surg = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 		if(data.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation().isActive(data))
 		{
-			if(surg.adjustStormlight(-5,true))
+			if(surg.adjustStormlight(-3,true))
 			{
-				if (mode>0) {livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, mode,1));}
-				if (mode<0) {livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode,1));}
+				if (mode>0) {livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, mode,2));}
+				if (mode<0) {livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode,2));}
 			}
 		}
 		return super.tick(data);
