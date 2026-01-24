@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-15T14:32:48.0282889	Recipes
+// 1.20.1	2025-12-26T15:06:21.3344377	Recipes
 d4f7b0297526734faaf6ce62cac5d49069fd2e40 data/cosmere/advancements/recipes/decorations/aluminum_block.json
 681730a85e0fbb20839f9be5421df41f7bda0251 data/cosmere/advancements/recipes/decorations/aluminum_ingot.json
 b750cee2b3d294b561b263647aefcc90eed3d535 data/cosmere/advancements/recipes/decorations/atium_block.json
@@ -13,6 +13,7 @@ dc040358290d35dfd6adfab76930f17d096aaa10 data/cosmere/advancements/recipes/decor
 9912b201e66a6106bd6f29ad78ab4423d66c7988 data/cosmere/advancements/recipes/decorations/cadmium_ingot.json
 38b683af77d34e6a427b7c2c04cc083b8b6c5d98 data/cosmere/advancements/recipes/decorations/chromium_block.json
 f65fbb945ce9617744bd8294cd8443de09d378fc data/cosmere/advancements/recipes/decorations/chromium_ingot.json
+b10aaa33eb08332e15298e9a8e4ef37e130f561d data/cosmere/advancements/recipes/decorations/copper_ingot.json
 490ae23bc04bc0a9207c34098c990677aff227fc data/cosmere/advancements/recipes/decorations/duralumin_block.json
 c03fa74d826b1ae8a254ed5f90a975b63fb2141c data/cosmere/advancements/recipes/decorations/duralumin_ingot.json
 371d161d7f6fdbb7415a5fd76b246341fb7a8289 data/cosmere/advancements/recipes/decorations/electrum_block.json
@@ -278,6 +279,7 @@ f5cfb9a18ba62978b92bff60dc506b147476367b data/cosmere/recipes/conversions/steel_
 1bb3b1c7751740d881003c713ab35b81a6f4c5a6 data/cosmere/recipes/conversions/tin_item_deconstruct.json
 c88dc59d28af370757edcceb5e2b7d7725bda629 data/cosmere/recipes/conversions/zinc_block_deconstruct.json
 cc80cff2c8c790e49086d36e267878fa952275c6 data/cosmere/recipes/conversions/zinc_item_deconstruct.json
+955a690412068c5a0e43351529c4cae3f0c4502a data/cosmere/recipes/copper_ingot.json
 6ee94921dd2ca1e05f292bfa89a59dbfaf40cc92 data/cosmere/recipes/crafting_god_metal_alloy_nugget_recipe.json
 3bc69b37cc66cbd3d4f86e4c5867b36eec15c7c5 data/cosmere/recipes/crafting_god_metal_nuggets_compress.json
 227ef6bf76de263e59813751ed168afbedb87bea data/cosmere/recipes/crafting_god_metal_nuggets_decompress.json
@@ -350,5 +352,3 @@ c02ae4590e276c41986af6d3b3ba05ea62aa1016 data/cosmere/recipes/zinc_ingot_from_bl
 65b6bb07fc78de141c264b93fe176dc8d50a8504 data/cosmere/recipes/zinc_ingot_from_smelting_deepslate_zinc_ore.json
 62e4be71d4d5d4ba3cb893040ed76f411d15b1c8 data/cosmere/recipes/zinc_ingot_from_smelting_raw_zinc_ore.json
 ed93bd06609013926ddd3429d4c59bd1c266dc07 data/cosmere/recipes/zinc_ingot_from_smelting_zinc_ore.json
-34477b0d5dfe800d16590e061fbf848f14e9f21e data/minecraft/advancements/recipes/decorations/copper_ingot.json
-955a690412068c5a0e43351529c4cae3f0c4502a data/minecraft/recipes/copper_ingot.json
