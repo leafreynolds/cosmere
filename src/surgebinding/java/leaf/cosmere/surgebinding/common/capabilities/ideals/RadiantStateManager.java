@@ -12,8 +12,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.util.TaskQueueManager;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.capabilities.ideals.order.SkybreakerIdealStateManager;
-import leaf.cosmere.surgebinding.common.capabilities.ideals.order.WindrunnerIdealStateManager;
+import leaf.cosmere.surgebinding.common.capabilities.ideals.order.*;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.config.SurgebindingServerConfig;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
@@ -229,12 +228,15 @@ public class RadiantStateManager
 			}
 			case DUSTBRINGER ->
 			{
+				return DustbringerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case EDGEDANCER ->
 			{
+				return EdgedancerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case TRUTHWATCHER ->
 			{
+				return TruthwatcherIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case LIGHTWEAVER ->
 			{
@@ -244,12 +246,15 @@ public class RadiantStateManager
 			}
 			case WILLSHAPER ->
 			{
+				return WillshaperIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case STONEWARD ->
 			{
+				return StonewardIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case BONDSMITH ->
 			{
+
 			}
 		}
 
