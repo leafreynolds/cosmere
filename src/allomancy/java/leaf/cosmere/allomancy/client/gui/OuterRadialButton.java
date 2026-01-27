@@ -9,6 +9,7 @@ import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
@@ -45,7 +46,6 @@ public class OuterRadialButton extends Button
 	@Override
 	protected void renderWidget(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
-		//CosmereAPI.logger.info("Rendering at " + centerX + " | " + centerY);
 		renderSegment(pGuiGraphics, isMouseOver(pMouseX, pMouseY));
 		//renderIcon(pGuiGraphics);
 	}
@@ -83,10 +83,15 @@ public class OuterRadialButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
-		if (pButton == 0)
-			Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
-		else
-			Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+		if (isMouseOver(pMouseX, pMouseY))
+		{
+			if (pButton == 0)
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
+			else
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+
+			playDownSound(Minecraft.getInstance().getSoundManager());
+		}
 		return super.mouseClicked(pMouseX, pMouseY, pButton);
 	}
 

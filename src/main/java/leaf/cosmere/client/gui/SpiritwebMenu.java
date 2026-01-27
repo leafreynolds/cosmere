@@ -99,6 +99,16 @@ public class SpiritwebMenu extends Screen
 	}
 
 	@Override
+	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
+	{
+		if (selectedManifestationScreen != null)
+		{
+			selectedManifestationScreen.mouseClicked(pMouseX, pMouseY, pButton);
+		}
+		return super.mouseClicked(pMouseX, pMouseY, pButton);
+	}
+
+	@Override
 	public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers)
 	{
 		if (Keybindings.MANIFESTATION_MENU.matches(pKeyCode, pScanCode))

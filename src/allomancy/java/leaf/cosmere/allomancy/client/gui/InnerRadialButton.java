@@ -6,6 +6,9 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
@@ -73,6 +76,21 @@ public class InnerRadialButton extends Button
 		}
 	}
 
+	@Override
+	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
+	{
+		if (isMouseOver(pMouseX, pMouseY))
+		{
+			if (pButton == 0)
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
+			else
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+
+			playDownSound(Minecraft.getInstance().getSoundManager());
+		}
+		return super.mouseClicked(pMouseX, pMouseY, pButton);
+	}
+
 	private double normalizeAngle(double angle)
 	{
 		if (angle != 0)
@@ -86,6 +104,7 @@ public class InnerRadialButton extends Button
 		return angle;
 	}
 
+	// inspired by SteelCodeTeam's Metallic Arts https://github.com/SteelCodeTeam/Metallics-Arts
 	private void renderSegment(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
 		float r, g, b, a;
