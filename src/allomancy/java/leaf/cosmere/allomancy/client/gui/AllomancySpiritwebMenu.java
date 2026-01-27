@@ -26,39 +26,42 @@ public class AllomancySpiritwebMenu extends Screen
 		this.height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
 		SpiritwebCapability.get(player).ifPresent( (iSpiritweb -> {
+			int circleCenterX = width/2;
+			int circleCenterY = height/2 + height/16;   // heh, 16, nice
+
 			// Steel
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 4, Metals.MetalType.STEEL, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 4, Metals.MetalType.STEEL, iSpiritweb));
 			// Iron
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 5, Metals.MetalType.IRON, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 5, Metals.MetalType.IRON, iSpiritweb));
 			// Zinc
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 6, Metals.MetalType.ZINC, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 6, Metals.MetalType.ZINC, iSpiritweb));
 			// Brass
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 7, Metals.MetalType.BRASS, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 7, Metals.MetalType.BRASS, iSpiritweb));
 			// Bendalloy
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 0, Metals.MetalType.BENDALLOY, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 0, Metals.MetalType.BENDALLOY, iSpiritweb));
 			// Cadmium
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 1, Metals.MetalType.CADMIUM, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 1, Metals.MetalType.CADMIUM, iSpiritweb));
 			// Chromium
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 2, Metals.MetalType.CHROMIUM, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 2, Metals.MetalType.CHROMIUM, iSpiritweb));
 			// Nicrosil
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 3, Metals.MetalType.NICROSIL, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 3, Metals.MetalType.NICROSIL, iSpiritweb));
 
 			// Pewter
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 4, Metals.MetalType.PEWTER, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 4, Metals.MetalType.PEWTER, iSpiritweb));
 			// Tin
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 5, Metals.MetalType.TIN, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 5, Metals.MetalType.TIN, iSpiritweb));
 			// Copper
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 6, Metals.MetalType.COPPER, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 6, Metals.MetalType.COPPER, iSpiritweb));
 			// Bronze
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 7, Metals.MetalType.BRONZE, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 7, Metals.MetalType.BRONZE, iSpiritweb));
 			// Electrum
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 0, Metals.MetalType.ELECTRUM, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 0, Metals.MetalType.ELECTRUM, iSpiritweb));
 			// Gold
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 1, Metals.MetalType.GOLD, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 1, Metals.MetalType.GOLD, iSpiritweb));
 			// Aluminum
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 2, Metals.MetalType.ALUMINUM, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 2, Metals.MetalType.ALUMINUM, iSpiritweb));
 			// Duralumin
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 3, Metals.MetalType.DURALUMIN, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 3, Metals.MetalType.DURALUMIN, iSpiritweb));
 		}));
 	}
 

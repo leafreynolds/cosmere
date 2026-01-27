@@ -26,8 +26,8 @@ import org.lwjgl.opengl.GL11;
 
 public class InnerRadialButton extends Button
 {
-	private static final int OUTER_RADIUS = 60;
-	private static final int INNER_RADIUS = 0;
+	private final float outerRadius;
+	private final float innerRadius;
 	private final double startAngle;
 	private final double endAngle;
 	private final int segmentNr;
@@ -49,6 +49,9 @@ public class InnerRadialButton extends Button
 		endAngle = startAngle + eighthCircle;
 		this.centerX = centerX;
 		this.centerY = centerY;
+
+		outerRadius = (float) Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3f * 0.7f;
+		innerRadius = 0;
 	}
 
 	@Override
@@ -65,8 +68,8 @@ public class InnerRadialButton extends Button
 		double distanceY = mouseY - centerY;
 		double dSqr = distanceX * distanceX + distanceY * distanceY;
 
-		if (dSqr < INNER_RADIUS * INNER_RADIUS ||
-				dSqr > OUTER_RADIUS * OUTER_RADIUS)
+		if (dSqr < innerRadius * innerRadius ||
+				dSqr > outerRadius * outerRadius)
 		{
 			return false;
 		}
@@ -148,7 +151,7 @@ public class InnerRadialButton extends Button
 
 		float radsPerSegment = (float) Math.PI * 2 / 8;
 		float step = (float) Math.PI / 180;
-		float radius = OUTER_RADIUS;
+		float radius = outerRadius;
 
 		RenderSystem.disableCull();
 		RenderSystem.enableBlend();
@@ -203,7 +206,7 @@ public class InnerRadialButton extends Button
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
 		double midAngle = (startAngle + endAngle) / 2;
-		double midRadius = (INNER_RADIUS + OUTER_RADIUS) / 1.5;
+		double midRadius = (innerRadius + outerRadius) / 1.5;
 		int iconSize = width-2;
 		int posX = centerX + (int)(Math.cos(midAngle) * midRadius) - iconSize/2;
 		int posY = centerY + (int)(Math.sin(midAngle) * midRadius) - iconSize/2;
