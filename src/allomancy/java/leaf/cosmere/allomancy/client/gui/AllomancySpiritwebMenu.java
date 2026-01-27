@@ -46,6 +46,12 @@ public class AllomancySpiritwebMenu extends Screen
 	}
 
 	@Override
+	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
+	{
+		return super.mouseClicked(pMouseX, pMouseY, pButton);
+	}
+
+	@Override
 	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
