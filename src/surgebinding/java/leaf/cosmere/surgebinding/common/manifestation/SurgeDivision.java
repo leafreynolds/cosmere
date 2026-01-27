@@ -6,9 +6,12 @@ package leaf.cosmere.surgebinding.common.manifestation;
 
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingEffects;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -62,8 +65,14 @@ public class SurgeDivision extends SurgebindingManifestation
 		{
 			SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
 			{
-				target.addEffect(EffectsHelper.getNewEffect(MobEffects.WITHER,1,60));
-				target.level().addParticle(ParticleTypes.ANGRY_VILLAGER,target.getX(),target.getY(),target.getZ(),0,0.1 ,0);
+				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation().isActive(iSpiritweb))
+				{
+					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+					if (submodule.adjustStormlight(-40, true))
+					{
+						target.addEffect(EffectsHelper.getNewEffect(MobEffects.WITHER, 1, 80));
+					}
+				}
 			});
 		}
 	}
