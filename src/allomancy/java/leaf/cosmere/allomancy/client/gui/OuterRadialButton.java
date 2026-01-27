@@ -1,7 +1,10 @@
 package leaf.cosmere.allomancy.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.Cosmere;
@@ -12,38 +15,46 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 public class OuterRadialButton extends Button
 {
-	private static final int OUTER_RADIUS = 100;
+	private static final int OUTER_RADIUS = 80;
 	private static final int INNER_RADIUS = 60;
 	private final double startAngle;
 	private final double endAngle;
-	private Manifestation manifestation;
+	private final int segmentNr;
+	private final int centerX;
+	private final int centerY;
+	private final Manifestation manifestation;
 
 	protected OuterRadialButton(int centerX, int centerY, int segmentNr, Manifestation manifestation)
 	{
 		super(centerX, centerY, 16, 16, CommonComponents.EMPTY, (button) -> {}, DEFAULT_NARRATION);
 		this.manifestation = manifestation;
 		double eighthCircle = Math.toRadians(45.d); // a circle is 360 degrees, / by 8 for 45 degrees, converted to radians
+		this.segmentNr = segmentNr;
 		startAngle = segmentNr * eighthCircle;   // todo: decided by power ID
 		endAngle = startAngle + eighthCircle;
+		this.centerX = centerX;
+		this.centerY = centerY;
 	}
 
 	@Override
 	protected void renderWidget(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
-		//renderRingSegment(pGuiGraphics, getX(), getY(), 0xFFFFFFFF);
-		//renderSegment(pGuiGraphics, isMouseOver(pMouseX, pMouseY));
+		//CosmereAPI.logger.info("Rendering at " + centerX + " | " + centerY);
+		renderSegment(pGuiGraphics, isMouseOver(pMouseX, pMouseY));
 		//renderIcon(pGuiGraphics);
 	}
 
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY)
 	{
-		double distanceX = mouseX - this.getX();
-		double distanceY = mouseY - this.getY();
+		double distanceX = mouseX - centerX;
+		double distanceY = mouseY - centerY;
 		double dSqr = distanceX * distanceX + distanceY * distanceY;
 
 		if (dSqr < INNER_RADIUS * INNER_RADIUS ||
@@ -98,79 +109,49 @@ public class OuterRadialButton extends Button
 		return angle;
 	}
 
+	// inspired by SteelCodeTeam's Metallic Arts https://github.com/SteelCodeTeam/Metallics-Arts
 	private void renderSegment(@NotNull GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		final int color = isHovered ? 0xFFFFFFFF : 0xAAAAAAFF;
-		int segments = 32;
-		double angleRange = endAngle - startAngle;
+		float r, g, b, a;
 
-		for (int i = 0; i < segments; i++) {
-			double angle1 = startAngle + angleRange * i / segments;
-			double angle2 = startAngle + angleRange * (i + 1) / segments;
-
-			int x1Outer = getX() + (int)(Math.cos(angle1) * OUTER_RADIUS);
-			int y1Outer = getY() + (int)(Math.sin(angle1) * OUTER_RADIUS);
-			int x2Outer = getX() + (int)(Math.cos(angle2) * OUTER_RADIUS);
-			int y2Outer = getY() + (int)(Math.sin(angle2) * OUTER_RADIUS);
-
-			int x1Inner = getX() + (int)(Math.cos(angle1) * INNER_RADIUS);
-			int y1Inner = getY() + (int)(Math.sin(angle1) * INNER_RADIUS);
-			int x2Inner = getX() + (int)(Math.cos(angle2) * INNER_RADIUS);
-			int y2Inner = getY() + (int)(Math.sin(angle2) * INNER_RADIUS);
-
-			// Draw a quad (two triangles) to form the ring segment piece
-			// Triangle 1: outer1 -> outer2 -> inner1
-			drawTriangle(pGuiGraphics, x1Outer, y1Outer, x2Outer, y2Outer, x1Inner, y1Inner, color);
-			// Triangle 2: outer2 -> inner2 -> inner1
-			drawTriangle(pGuiGraphics, x2Outer, y2Outer, x2Inner, y2Inner, x1Inner, y1Inner, color);
-
-//			pGuiGraphics.fill(x1Inner, y1Inner, x1Outer, y1Outer, color);
-//			pGuiGraphics.fill(x1Outer, y1Outer, x2Outer, y2Outer, color);
+		if (isHovered) {
+			r = g = b = a = 1.0f;
+		} else {
+			r = g = b = 0.67f;
+			a = 1.0f;
 		}
-	}
 
-	private void renderRingSegment(GuiGraphics guiGraphics, int centerX, int centerY, int color) {
-		int segments = 32;
-		double angleRange = endAngle - startAngle;
+		float radsPerSegment = (float) Math.PI * 2 / 8;
+		float step = (float) Math.PI / 180;
+		float radius = OUTER_RADIUS;
 
-		PoseStack poseStack = guiGraphics.pose();
-		poseStack.pushPose();
-
+		RenderSystem.disableCull();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-		BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
-		bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		Matrix4f pose = pGuiGraphics.pose().last().pose();
+		Tesselator tess = Tesselator.getInstance();
+		BufferBuilder buf = tess.getBuilder();
 
-		float r = ((color >> 16) & 0xFF) / 255f;
-		float g = ((color >> 8) & 0xFF) / 255f;
-		float b = (color & 0xFF) / 255f;
-		float a = ((color >> 24) & 0xFF) / 255f;
+		buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
+		buf.vertex(pose, centerX, centerY, 0).color(r, g, b, a).endVertex();
 
-		for (int i = 0; i < segments; i++) {
-			double angle1 = startAngle + angleRange * i / segments;
-			double angle2 = startAngle + angleRange * (i + 1) / segments;
+		for (float f = 0f; f < radsPerSegment + step/2; f += step)
+		{
+			float rad = f + segmentNr * radsPerSegment;
+			float x = centerX + Mth.cos(rad) * radius;
+			float y = centerY + Mth.sin(rad) * radius;
 
-			float x1Outer = centerX + (float)(Math.cos(angle1) * OUTER_RADIUS);
-			float y1Outer = centerY + (float)(Math.sin(angle1) * OUTER_RADIUS);
-			float x2Outer = centerX + (float)(Math.cos(angle2) * OUTER_RADIUS);
-			float y2Outer = centerY + (float)(Math.sin(angle2) * OUTER_RADIUS);
-
-			float x1Inner = centerX + (float)(Math.cos(angle1) * INNER_RADIUS);
-			float y1Inner = centerY + (float)(Math.sin(angle1) * INNER_RADIUS);
-			float x2Inner = centerX + (float)(Math.cos(angle2) * INNER_RADIUS);
-			float y2Inner = centerY + (float)(Math.sin(angle2) * INNER_RADIUS);
-
-			bufferBuilder.vertex(poseStack.last().pose(), x1Inner, y1Inner, 0).color(r, g, b, a).endVertex();
-			bufferBuilder.vertex(poseStack.last().pose(), x1Outer, y1Outer, 0).color(r, g, b, a).endVertex();
-			bufferBuilder.vertex(poseStack.last().pose(), x2Outer, y2Outer, 0).color(r, g, b, a).endVertex();
-			bufferBuilder.vertex(poseStack.last().pose(), x2Inner, y2Inner, 0).color(r, g, b, a).endVertex();
+			if (f == 0)
+			{
+				buf.vertex(pose, x, y, 0).color(r,g,b,a).endVertex();
+			}
+			buf.vertex(pose, x, y, 0).color(r,g,b,a).endVertex();
 		}
 
-		BufferUploader.drawWithShader(bufferBuilder.end());
+		tess.end();
 
-		poseStack.popPose();
 		RenderSystem.disableBlend();
 	}
 

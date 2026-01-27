@@ -25,12 +25,12 @@ public class TabButton extends Button
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		renderBackground(pGuiGraphics, pMouseX, pMouseY);
-		renderIcon(pGuiGraphics);
+		renderIcon(pGuiGraphics, pMouseX, pMouseY);
 	}
 
 	private void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY)
 	{
-		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.5f;
+		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
 		alpha = (SpiritwebMenu.selectedManifestationType == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = new ResourceLocation(manifestation.getName(), "textures/gui/hud_background.png");
 		RenderSystem.setShaderTexture(0, resourceLocation);
@@ -54,10 +54,13 @@ public class TabButton extends Button
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	private void renderIcon(GuiGraphics pGuiGraphics)
+	private void renderIcon(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY)
 	{
+		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
+		alpha = (SpiritwebMenu.selectedManifestationType == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = new ResourceLocation(manifestation.getName(), "textures/icon/" + manifestation.getName() + ".png");
 		RenderSystem.setShaderTexture(0, resourceLocation);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
 
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -72,5 +75,7 @@ public class TabButton extends Button
 				width-2,
 				height-2
 		);
+
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
