@@ -6,15 +6,11 @@ package leaf.cosmere.surgebinding.common.manifestation;
 
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
-import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingEffects;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffects;

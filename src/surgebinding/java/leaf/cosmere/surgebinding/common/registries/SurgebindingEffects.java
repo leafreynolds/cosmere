@@ -1,12 +1,10 @@
 package leaf.cosmere.surgebinding.common.registries;
 
 import leaf.cosmere.common.registration.impl.CosmereEffectDeferredRegister;
-import leaf.cosmere.common.registration.impl.CosmereEffectRegistryObject;
 import leaf.cosmere.common.registration.impl.MobEffectDeferredRegister;
 import leaf.cosmere.common.registration.impl.MobEffectRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.effects.DividedEffect;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 
 public class SurgebindingEffects
