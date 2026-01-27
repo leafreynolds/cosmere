@@ -1,5 +1,6 @@
 package leaf.cosmere.allomancy.client.gui;
 
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,23 +26,39 @@ public class AllomancySpiritwebMenu extends Screen
 		this.height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
 		SpiritwebCapability.get(player).ifPresent( (iSpiritweb -> {
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 0, iSpiritweb.getAvailableManifestations().get(0)));
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 1, iSpiritweb.getAvailableManifestations().get(1)));
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 2, iSpiritweb.getAvailableManifestations().get(2)));
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 3, iSpiritweb.getAvailableManifestations().get(3)));
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 4, iSpiritweb.getAvailableManifestations().get(4)));
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 5, iSpiritweb.getAvailableManifestations().get(5)));
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 6, iSpiritweb.getAvailableManifestations().get(6)));
-			addRenderableWidget(new OuterRadialButton(width/2, height/2, 7, iSpiritweb.getAvailableManifestations().get(7)));
+			// Steel
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 7, Metals.MetalType.STEEL, iSpiritweb));
+			// Iron
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 6, Metals.MetalType.IRON, iSpiritweb));
+			// Zinc
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 0, Metals.MetalType.ZINC, iSpiritweb));
+			// Brass
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 1, Metals.MetalType.BRASS, iSpiritweb));
+			// Bendalloy
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 2, Metals.MetalType.BENDALLOY, iSpiritweb));
+			// Cadmium
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 3, Metals.MetalType.CADMIUM, iSpiritweb));
+			// Chromium
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 4, Metals.MetalType.CHROMIUM, iSpiritweb));
+			// Nicrosil
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 5, Metals.MetalType.NICROSIL, iSpiritweb));
 
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 0, iSpiritweb.getAvailableManifestations().get(0)));
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 1, iSpiritweb.getAvailableManifestations().get(1)));
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 2, iSpiritweb.getAvailableManifestations().get(2)));
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 3, iSpiritweb.getAvailableManifestations().get(3)));
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 4, iSpiritweb.getAvailableManifestations().get(4)));
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 5, iSpiritweb.getAvailableManifestations().get(5)));
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 6, iSpiritweb.getAvailableManifestations().get(6)));
-			addRenderableWidget(new InnerRadialButton(width/2, height/2, 7, iSpiritweb.getAvailableManifestations().get(7)));
+			// Pewter
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 7, Metals.MetalType.PEWTER, iSpiritweb));
+			// Tin
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 6, Metals.MetalType.TIN, iSpiritweb));
+			// Copper
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 0, Metals.MetalType.COPPER, iSpiritweb));
+			// Bronze
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 1, Metals.MetalType.BRONZE, iSpiritweb));
+			// Electrum
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 2, Metals.MetalType.ELECTRUM, iSpiritweb));
+			// Gold
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 3, Metals.MetalType.GOLD, iSpiritweb));
+			// Aluminum
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 4, Metals.MetalType.ALUMINUM, iSpiritweb));
+			// Duralumin
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 5, Metals.MetalType.DURALUMIN, iSpiritweb));
 		}));
 	}
 

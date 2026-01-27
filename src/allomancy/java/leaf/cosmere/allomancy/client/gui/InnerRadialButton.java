@@ -5,7 +5,12 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
+import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
@@ -13,9 +18,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
 
 public class InnerRadialButton extends Button
 {
@@ -26,12 +33,16 @@ public class InnerRadialButton extends Button
 	private final int segmentNr;
 	private final int centerX;
 	private final int centerY;
+	private final boolean hasManifestation;
 	private final Manifestation manifestation;
+	private final ISpiritweb spiritweb;
 
-	protected InnerRadialButton(int centerX, int centerY, int segmentNr, Manifestation manifestation)
+	protected InnerRadialButton(int centerX, int centerY, int segmentNr, Metals.MetalType metal, ISpiritweb spiritweb)
 	{
 		super(centerX, centerY, 16, 16, CommonComponents.EMPTY, (button) -> {}, DEFAULT_NARRATION);
-		this.manifestation = manifestation;
+		this.spiritweb = spiritweb;
+		manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metal.getID());
+		hasManifestation = spiritweb.hasManifestation(manifestation);
 		double eighthCircle = Math.toRadians(45.d); // a circle is 360 degrees, / by 8 for 45 degrees, converted to radians
 		this.segmentNr = segmentNr;
 		startAngle = segmentNr * eighthCircle;   // todo: decided by power ID
@@ -44,6 +55,7 @@ public class InnerRadialButton extends Button
 	protected void renderWidget(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		renderSegment(pGuiGraphics, isMouseOver(pMouseX, pMouseY));
+		renderIcon(pGuiGraphics);
 	}
 
 	@Override
@@ -79,7 +91,7 @@ public class InnerRadialButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
-		if (isMouseOver(pMouseX, pMouseY))
+		if (isMouseOver(pMouseX, pMouseY) && hasManifestation)
 		{
 			if (pButton == 0)
 				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
@@ -104,17 +116,34 @@ public class InnerRadialButton extends Button
 		return angle;
 	}
 
-	// inspired by SteelCodeTeam's Metallic Arts https://github.com/SteelCodeTeam/Metallics-Arts
+	// inspired by SteelCodeTeam's Metallic Arts https://github.com/SteelCodeTeam/Metallics-Arts/blob/main/src/main/java/net/rudahee/metallics_arts/modules/logic/client/custom_guis/selectors/AllomanticSelector.java
 	private void renderSegment(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r, g, b, a;
+		float r, g, b;
+		float a = 1f;
 
-		if (isHovered) {
-			r = g = b = a = 1.0f;
-		} else {
-			r = g = 0.f;
-			b = 0.67f;
-			a = 1.0f;
+		if (!hasManifestation)
+		{
+			r = g = b = 0.1f;
+		}
+		else
+		{
+			r = g = b = 0.5f;
+		}
+
+		if (isHovered && hasManifestation)
+		{
+			r = g = b = 0.6f;
+		}
+
+		if (manifestation instanceof AllomancyManifestation allomancyManifestation)
+		{
+			int mode = allomancyManifestation.getMode(spiritweb);
+
+			if (mode > 0)
+				r = r + 0.2f * mode;
+			else if (mode < 0)
+				b = b + 0.2f * mode;
 		}
 
 		float radsPerSegment = (float) Math.PI * 2 / 8;
@@ -149,5 +178,48 @@ public class InnerRadialButton extends Button
 		tess.end();
 
 		RenderSystem.disableBlend();
+	}
+
+	private void renderIcon(@NotNull GuiGraphics pGuiGraphics)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.setLength(0);
+		stringBuilder.append("textures/icon/")
+				.append(manifestation.getManifestationType().getName())
+				.append("/");
+
+		// no need for a switch case, always allomancy
+		if (manifestation instanceof IHasMetalType metalType)
+		{
+			stringBuilder.append(metalType.getMetalType().getName());
+		}
+
+		stringBuilder.append(".png");
+		final ResourceLocation location = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		float alpha = hasManifestation ? 1.0f : 0.25f;
+		RenderSystem.setShaderTexture(0, location);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
+		RenderSystem.enableBlend();
+		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+
+		double midAngle = (startAngle + endAngle) / 2;
+		double midRadius = (INNER_RADIUS + OUTER_RADIUS) / 1.5;
+		int iconSize = width-2;
+		int posX = centerX + (int)(Math.cos(midAngle) * midRadius) - iconSize/2;
+		int posY = centerY + (int)(Math.sin(midAngle) * midRadius) - iconSize/2;
+
+		pGuiGraphics.blit(location,
+				posX,
+				posY,
+				iconSize,
+				iconSize,
+				0,
+				0,
+				width,
+				height,
+				width,
+				height);
+
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
