@@ -20,22 +20,34 @@ public class AllomancySpiritwebMenu extends Screen
 	@Override
 	protected void init()
 	{
+		super.init();
+		this.width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		this.height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+
 		SpiritwebCapability.get(player).ifPresent( (iSpiritweb -> {
 			addRenderableWidget(new OuterRadialButton(width/2, height/2, 0, iSpiritweb.getAvailableManifestations().get(0)));
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 1, iSpiritweb.getAvailableManifestations().get(1)));
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 2, iSpiritweb.getAvailableManifestations().get(2)));
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 3, iSpiritweb.getAvailableManifestations().get(3)));
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 4, iSpiritweb.getAvailableManifestations().get(4)));
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 5, iSpiritweb.getAvailableManifestations().get(5)));
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 6, iSpiritweb.getAvailableManifestations().get(6)));
+			addRenderableWidget(new OuterRadialButton(width/2, height/2, 7, iSpiritweb.getAvailableManifestations().get(7)));
+
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 0, iSpiritweb.getAvailableManifestations().get(0)));
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 1, iSpiritweb.getAvailableManifestations().get(1)));
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 2, iSpiritweb.getAvailableManifestations().get(2)));
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 3, iSpiritweb.getAvailableManifestations().get(3)));
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 4, iSpiritweb.getAvailableManifestations().get(4)));
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 5, iSpiritweb.getAvailableManifestations().get(5)));
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 6, iSpiritweb.getAvailableManifestations().get(6)));
+			addRenderableWidget(new InnerRadialButton(width/2, height/2, 7, iSpiritweb.getAvailableManifestations().get(7)));
 		}));
-//		for (int i = 0; i < spiritweb.getAvailableManifestations().size(); i++)
-//		{
-//			if (i < 8)
-//			{
-//				addRenderableWidget(new OuterRadialButton(width / 2, height / 2, i, spiritweb.getAvailableManifestations().get(i)));
-//			}
-//		}
 	}
 
 	@Override
 	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
-		pGuiGraphics.drawCenteredString(Minecraft.getInstance().font, "allomancy", pMouseX, pMouseY, 0xFFFFFFFF);
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 	}
 }
