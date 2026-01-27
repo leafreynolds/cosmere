@@ -14,9 +14,11 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -58,8 +60,13 @@ public class OuterRadialButton extends Button
 	@Override
 	protected void renderWidget(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
-		renderSegment(pGuiGraphics, isMouseOver(pMouseX, pMouseY));
+		boolean isHover =isMouseOver(pMouseX, pMouseY);
+		renderSegment(pGuiGraphics, isHover);
 		renderIcon(pGuiGraphics);
+		if (isHover && hasManifestation)
+		{
+			renderText(pGuiGraphics);
+		}
 	}
 
 	@Override
@@ -231,5 +238,26 @@ public class OuterRadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderText(GuiGraphics pGuiGraphics)
+	{
+		Font font = Minecraft.getInstance().font;
+		int color = 0xffffffff;
+
+		float radsPerSegment = (float) Math.PI * 2 / 8;
+		float f = (float) ((radsPerSegment + (Math.PI / 180f / 2f)) / 2f);
+		float rad = f + segmentNr * radsPerSegment;
+		float x = centerX + Mth.cos(rad) * outerRadius;
+		float y = centerY + Mth.sin(rad) * outerRadius;
+
+		final String text = I18n.get(manifestation.getTranslationKey());
+
+		if (x < centerX)
+		{
+			x = x - (font.width(text));
+		}
+
+		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
 	}
 }
