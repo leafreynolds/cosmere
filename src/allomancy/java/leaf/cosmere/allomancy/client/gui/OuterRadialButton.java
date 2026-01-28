@@ -68,8 +68,7 @@ public class OuterRadialButton extends Button
 		renderIcon(pGuiGraphics);
 		if (isHover && hasManifestation)
 		{
-			renderNameText(pGuiGraphics);
-			renderStoresText(pGuiGraphics);
+			renderInfoBlock(pGuiGraphics);
 		}
 	}
 
@@ -296,5 +295,64 @@ public class OuterRadialButton extends Button
 		y += font.lineHeight*1.5f;
 
 		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
+	}
+
+	private void renderInfoBlock(GuiGraphics pGuiGraphics)
+	{
+		Font font = Minecraft.getInstance().font;
+		int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+		int x = 0;
+		int y = 0;
+		int width = screenWidth / 4;
+		int height = screenHeight / 5;
+		int color = 0x99333333;
+
+		if (segmentNr <= 1)
+		{
+			// bottom right display
+			x = screenWidth - width - 10;
+			y = screenHeight - height - 10;
+		}
+		else if (segmentNr <= 3)
+		{
+			// bottom left display
+			x = 10;
+			y = screenHeight - height - 10;
+		}
+		else if (segmentNr <= 5)
+		{
+			// top left display
+			x = 10;
+			y = 10;
+		}
+		else if (segmentNr <= 7)
+		{
+			// top right display
+			x = screenWidth - width - 10;
+			y = 10;
+		}
+
+		RenderSystem.disableCull();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+
+		pGuiGraphics.fill(x, y, x + width,  y + height, color);
+
+		String text = I18n.get(manifestation.getTranslationKey());
+		pGuiGraphics.drawString(font, text, x+5, y+10, 0xFFFFFFFF);
+
+		text = "";
+
+		for (String s : SpiritwebMenu.infoText)
+		{
+			if (s.toLowerCase().contains("a. " + metalType.getName()))
+			{
+				text = s.split(":")[1].stripLeading();
+				break;
+			}
+		}
+
+		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
 	}
 }
