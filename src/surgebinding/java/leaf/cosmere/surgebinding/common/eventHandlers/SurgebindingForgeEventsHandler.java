@@ -68,6 +68,7 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeProgression.onEntityInteract(event);
+		SurgeAdhesion.onEntiityInteract(event);
 	}
 
 
@@ -82,7 +83,6 @@ public class SurgebindingForgeEventsHandler
 
 		SurgeGravitation.onLivingAttackEvent(event);
 		SurgeDivision.onLivingAttackEvent(event);
-		SurgeAdhesion.onLivingAttackEvent(event);
 	}
 
 	@SubscribeEvent
