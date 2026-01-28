@@ -289,6 +289,19 @@ public class InnerRadialButton extends Button
 			if (s.toLowerCase().contains("a. " + metalType.getName()))
 			{
 				text = s.split(":")[1].stripLeading();
+
+				int seconds = Integer.parseInt(text);
+				int hours = seconds / 3600;
+				int minutes = (seconds % 3600) / 60;
+				seconds = seconds % 60;
+
+				if (hours > 0)
+					text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+				else if (minutes > 0)
+					text = String.format("%d:%02d", minutes, seconds);
+				else
+					text = String.format("%d", seconds);
+
 				break;
 			}
 		}
