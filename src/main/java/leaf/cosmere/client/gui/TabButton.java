@@ -2,6 +2,7 @@ package leaf.cosmere.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.api.Manifestations;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
@@ -33,23 +34,31 @@ public class TabButton extends Button
 		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
 		alpha = (SpiritwebMenu.selectedManifestationType == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = new ResourceLocation(manifestation.getName(), "textures/gui/hud_background.png");
-		RenderSystem.setShaderTexture(0, resourceLocation);
-		float[] shaderColor = RenderSystem.getShaderColor();
-		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
 
-		RenderSystem.enableBlend();
-		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-		pGuiGraphics.blit(
-				resourceLocation,
-				getX(),
-				getY(),
-				0,
-				0,
-				width,
-				height,
-				width,
-				height
-		);
+		if (Minecraft.getInstance().getResourceManager().getResource(resourceLocation).isPresent())
+		{
+			RenderSystem.setShaderTexture(0, resourceLocation);
+			float[] shaderColor = RenderSystem.getShaderColor();
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
+
+			RenderSystem.enableBlend();
+			RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+			pGuiGraphics.blit(
+					resourceLocation,
+					getX(),
+					getY(),
+					0,
+					0,
+					width,
+					height,
+					width,
+					height
+			);
+		}
+		else
+		{
+			pGuiGraphics.fill(getX(), getY(), getX()+width, getY()+height, 0x99333333);
+		}
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
