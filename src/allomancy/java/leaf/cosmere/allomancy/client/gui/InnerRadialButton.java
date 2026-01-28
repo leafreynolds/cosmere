@@ -68,8 +68,7 @@ public class InnerRadialButton extends Button
 		renderIcon(pGuiGraphics);
 		if (isHover && hasManifestation)
 		{
-			renderNameText(pGuiGraphics);
-			renderStoresText(pGuiGraphics);
+			renderInfoBlock(pGuiGraphics);
 		}
 	}
 
@@ -158,7 +157,7 @@ public class InnerRadialButton extends Button
 			if (mode > 0)
 				r = r + 0.2f * mode;
 			else if (mode < 0)
-				b = b + 0.2f * mode;
+				b = b + 0.2f * -mode;
 		}
 
 		float radsPerSegment = (float) Math.PI * 2 / 8;
@@ -238,41 +237,53 @@ public class InnerRadialButton extends Button
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	private void renderNameText(GuiGraphics pGuiGraphics)
+	private void renderInfoBlock(GuiGraphics pGuiGraphics)
 	{
 		Font font = Minecraft.getInstance().font;
-		int color = 0xffffffff;
+		int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+		int x = 0;
+		int y = 0;
+		int width = screenWidth / 4;
+		int height = screenHeight / 5;
+		int color = 0x99333333;
 
-		float radsPerSegment = (float) Math.PI * 2 / 8;
-		float f = (float) ((radsPerSegment + (Math.PI / 180f / 2f)) / 2f);
-		float rad = f + segmentNr * radsPerSegment;
-		float radius = (float) Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3 + 10;
-		float x = centerX + Mth.cos(rad) * radius;
-		float y = centerY + Mth.sin(rad) * radius;
-
-		final String text = I18n.get(manifestation.getTranslationKey());
-
-		if (x < centerX)
+		if (segmentNr <= 1)
 		{
-			x = x - (font.width(text));
+			// bottom right display
+			x = screenWidth - width - 10;
+			y = screenHeight - height - 10;
+		}
+		else if (segmentNr <= 3)
+		{
+			// bottom left display
+			x = 10;
+			y = screenHeight - height - 10;
+		}
+		else if (segmentNr <= 5)
+		{
+			// top left display
+			x = 10;
+			y = 10;
+		}
+		else if (segmentNr <= 7)
+		{
+			// top right display
+			x = screenWidth - width - 10;
+			y = 10;
 		}
 
-		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
-	}
+		RenderSystem.disableCull();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
 
-	private void renderStoresText(GuiGraphics pGuiGraphics)
-	{
-		Font font = Minecraft.getInstance().font;
-		int color = 0xffffffff;
+		pGuiGraphics.fill(x, y, x + width,  y + height, color);
 
-		float radsPerSegment = (float) Math.PI * 2 / 8;
-		float f = (float) ((radsPerSegment + (Math.PI / 180f / 2f)) / 2f);
-		float rad = f + segmentNr * radsPerSegment;
-		float radius = (float) Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3 + 10;
-		float x = centerX + Mth.cos(rad) * radius;
-		float y = centerY + Mth.sin(rad) * radius;
+		String text = I18n.get(manifestation.getTranslationKey());
+		pGuiGraphics.drawString(font, text, x+5, y+10, 0xFFFFFFFF);
 
-		String text = "";
+		text = "";
+
 		for (String s : SpiritwebMenu.infoText)
 		{
 			if (s.toLowerCase().contains("a. " + metalType.getName()))
@@ -282,12 +293,6 @@ public class InnerRadialButton extends Button
 			}
 		}
 
-		if (x < centerX)
-		{
-			x = x - (font.width(text));
-		}
-		y += font.lineHeight*1.5f;
-
-		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
+		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
 	}
 }
