@@ -89,8 +89,10 @@ public class SpiritwebMenu extends Screen
 	@Override
 	public void tick()
 	{
-		if (((int)Minecraft.getInstance().getPartialTick()) % 10 == 0)
+		assert Minecraft.getInstance().player != null;
+		if (Minecraft.getInstance().player.tickCount % 20 == 0)
 		{
+			infoText.clear();
 			for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.getSubmodules().values())
 			{
 				spiritwebSubmodule.collectMenuInfo(infoText);
