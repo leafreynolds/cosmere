@@ -11,6 +11,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
@@ -39,12 +40,14 @@ public class OuterRadialButton extends Button
 	private final boolean hasManifestation;
 	private final Manifestation manifestation;
 	private final ISpiritweb spiritweb;
+	private final Metals.MetalType metalType;
 
 	protected OuterRadialButton(int centerX, int centerY, int segmentNr, Metals.MetalType metal, ISpiritweb spiritweb)
 	{
 		super(centerX, centerY, 16, 16, CommonComponents.EMPTY, (button) -> {}, DEFAULT_NARRATION);
 		this.spiritweb = spiritweb;
-		manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metal.getID());
+		metalType = metal;
+		manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID());
 		hasManifestation = this.spiritweb.hasManifestation(manifestation);
 		double eighthCircle = Math.toRadians(45.d); // a circle is 360 degrees, / by 8 for 45 degrees, converted to radians
 		this.segmentNr = segmentNr;     // MetalType doesn't align with the chart in a pattern that can be programmatically written out; we do this manually
@@ -65,7 +68,8 @@ public class OuterRadialButton extends Button
 		renderIcon(pGuiGraphics);
 		if (isHover && hasManifestation)
 		{
-			renderText(pGuiGraphics);
+			renderNameText(pGuiGraphics);
+			renderStoresText(pGuiGraphics);
 		}
 	}
 
@@ -240,7 +244,7 @@ public class OuterRadialButton extends Button
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	private void renderText(GuiGraphics pGuiGraphics)
+	private void renderNameText(GuiGraphics pGuiGraphics)
 	{
 		Font font = Minecraft.getInstance().font;
 		int color = 0xffffffff;
@@ -248,8 +252,9 @@ public class OuterRadialButton extends Button
 		float radsPerSegment = (float) Math.PI * 2 / 8;
 		float f = (float) ((radsPerSegment + (Math.PI / 180f / 2f)) / 2f);
 		float rad = f + segmentNr * radsPerSegment;
-		float x = centerX + Mth.cos(rad) * outerRadius;
-		float y = centerY + Mth.sin(rad) * outerRadius;
+		float textRadius = outerRadius + 10;
+		float x = centerX + Mth.cos(rad) * textRadius;
+		float y = centerY + Mth.sin(rad) * textRadius;
 
 		final String text = I18n.get(manifestation.getTranslationKey());
 
@@ -257,6 +262,38 @@ public class OuterRadialButton extends Button
 		{
 			x = x - (font.width(text));
 		}
+
+		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
+	}
+
+	private void renderStoresText(GuiGraphics pGuiGraphics)
+	{
+		Font font = Minecraft.getInstance().font;
+		int color = 0xffffffff;
+
+		float radsPerSegment = (float) Math.PI * 2 / 8;
+		float f = (float) ((radsPerSegment + (Math.PI / 180f / 2f)) / 2f);
+		float rad = f + segmentNr * radsPerSegment;
+		float textRadius = outerRadius + 10;
+		float x = centerX + Mth.cos(rad) * textRadius;
+		float y = centerY + Mth.sin(rad) * textRadius;
+
+		String text = "";
+		for (String s : SpiritwebMenu.infoText)
+		{
+			if (s.toLowerCase().contains("a. " + metalType.getName()))
+			{
+				text = s.split(":")[1].stripLeading();
+
+				break;
+			}
+		}
+
+		if (x < centerX)
+		{
+			x = x - (font.width(text));
+		}
+		y += font.lineHeight*1.5f;
 
 		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
 	}

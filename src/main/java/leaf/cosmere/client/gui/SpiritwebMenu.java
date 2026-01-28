@@ -5,15 +5,18 @@
 package leaf.cosmere.client.gui;
 
 import com.google.common.base.Stopwatch;
+import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,6 +28,7 @@ public class SpiritwebMenu extends Screen
 	private final SpiritwebRegistry registry;
 	private Screen selectedManifestationScreen = null;
 	public static Manifestations.ManifestationTypes selectedManifestationType = Manifestations.ManifestationTypes.NONE;
+	public static ArrayList<String> infoText = new ArrayList<>();
 
 	public SpiritwebMenu(Component pTitle, ISpiritweb spiritweb)
 	{
@@ -80,6 +84,19 @@ public class SpiritwebMenu extends Screen
 				}
 			});
 		}
+	}
+
+	@Override
+	public void tick()
+	{
+		if (((int)Minecraft.getInstance().getPartialTick()) % 10 == 0)
+		{
+			for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.getSubmodules().values())
+			{
+				spiritwebSubmodule.collectMenuInfo(infoText);
+			}
+		}
+		super.tick();
 	}
 
 	@Override
