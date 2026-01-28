@@ -12,6 +12,7 @@ import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmod
 import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
 import leaf.cosmere.surgebinding.common.manifestation.*;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -68,7 +69,13 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeProgression.onEntityInteract(event);
-		SurgeAdhesion.onEntiityInteract(event);
+	}
+
+	public static void onEntityInteractTrue(PlayerInteractEvent.EntityInteract event){
+		if(event.isCanceled()){
+			return;
+		}
+		SurgeAdhesion.onEntityInteractTrue(event);
 	}
 
 
@@ -86,14 +93,8 @@ public class SurgebindingForgeEventsHandler
 	}
 
 	@SubscribeEvent
-	public static void onEmptyInteract(PlayerInteractEvent.RightClickEmpty event)
-	{
-		if (event.isCanceled())
-		{
-			return;
-		}
-
-		SurgeTransportation.onEmptyInteract(event);
+	public static void onShift(MovementInputUpdateEvent event){
+		SurgeTransportation.onShift(event);
 	}
 
 

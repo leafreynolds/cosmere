@@ -68,6 +68,11 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		return idealsManager.getOrder() != null;
 	}
 
+	public int getIdeal()
+	{
+		return idealsManager.getIdeal();
+	}
+
 	@Override
 	public void deserialize(ISpiritweb spiritweb)
 	{
