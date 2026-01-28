@@ -1,18 +1,18 @@
 package leaf.cosmere.common.items;
 
-import leaf.cosmere.api.IGrantsManifestations;
+import leaf.cosmere.api.IGrantsBaseAttributes;
 import leaf.cosmere.api.IHasSize;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.util.CosmereAttributeUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -25,10 +25,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize, IGrantsManifestations
+import static leaf.cosmere.common.util.CosmereAttributeUtils.grantBaseAttribute;
+
+public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize, IGrantsBaseAttributes
 {
 	public static int MIN_SIZE = 1;
 	public static int MAX_SIZE = 16;
+
+	public GodMetalAlloyNuggetItem(Metals.MetalType metalType, Metals.MetalType alloyedMetalType)
+	{
+
+		super(metalType, alloyedMetalType);
+	}
 
 	public int getMinSize()
 	{
@@ -38,12 +46,6 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 	public int getMaxSize()
 	{
 		return MAX_SIZE;
-	}
-
-	public GodMetalAlloyNuggetItem(Metals.MetalType metalType, Metals.MetalType alloyedMetalType)
-	{
-
-		super(metalType, alloyedMetalType);
 	}
 
 	public void addFilled(CreativeModeTab.Output output, int size)
@@ -71,16 +73,16 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 		tooltip.add(Component.literal("Size: ").withStyle(ChatFormatting.WHITE).append(
 				Component.literal(size + "/" + MAX_SIZE).withStyle(ChatFormatting.GRAY)));
 
-		ArrayList<Manifestation> manifestations = determineManifestations(stack);
+		ArrayList<Attribute> attributes = determineBaseAttributes(stack);
 
-		if (!manifestations.isEmpty() & size != null)
+		if (!attributes.isEmpty() & size != null)
 		{
 			tooltip.add(Component.empty());
 			tooltip.add(Component.literal("When consumed:").withStyle(ChatFormatting.GOLD));
-			for (Manifestation manifestation : manifestations)
+			for (Attribute attribute : attributes)
 			{
 				tooltip.add(Component.literal("+" + size + " ").append(
-								Component.translatable(manifestation.getTranslationKey()))
+								Component.translatable(attribute.getDescriptionId()))
 						.withStyle(ChatFormatting.BLUE));
 			}
 		}
@@ -90,71 +92,59 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 	public Rarity getRarity(ItemStack itemStack)
 	{
 		Integer size = readMetalAlloySizeNbtData(itemStack);
-		if (size == null) return Rarity.COMMON;
+		if (size == null)
+		{
+			return Rarity.COMMON;
+		}
 
-		if (size <= 8) return Rarity.UNCOMMON;
-		else if (size == MAX_SIZE) return Rarity.EPIC;
+		if (size <= 8)
+		{
+			return Rarity.UNCOMMON;
+		}
+		else if (size == MAX_SIZE)
+		{
+			return Rarity.EPIC;
+		}
 		return Rarity.RARE;
 	}
 
-	// This needs to be replaced once a connection system is in place
-	// https://wob.coppermind.net/events/361-skyward-pre-release-ama/#e11225
-	// Mixing Lerasium with other god metals or magic systems metals could create connections
-	// for new Investiture sources and new Manifestations
-	public ArrayList<Manifestation> determineManifestations(ItemStack itemStack)
+	public ArrayList<Attribute> determineBaseAttributes(ItemStack itemStack)
 	{
-		ArrayList<Manifestation> manifestations = new ArrayList<>();
+		ArrayList<Attribute> attributes = new ArrayList<>();
 
-		Manifestation manifestation;
 		if (this.getMetalType() == Metals.MetalType.LERASIUM)
 		{
-			manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(alloyedMetalType.getID());
-			if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE)
+			Attribute attribute = CosmereAttributeUtils.getAttribute(Manifestations.ManifestationTypes.ALLOMANCY, alloyedMetalType.getID());
+			if (attribute != null)
 			{
-				manifestations.add(manifestation);
+				attributes.add(attribute);
 			}
-
 		}
 		else if (this.getMetalType() == Metals.MetalType.LERASATIUM)
 		{
-			manifestation = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(alloyedMetalType.getID());
-			if (manifestation.getManifestationType() != Manifestations.ManifestationTypes.NONE)
+			Attribute attribute = CosmereAttributeUtils.getAttribute(Manifestations.ManifestationTypes.FERUCHEMY, alloyedMetalType.getID());
+			if (attribute != null)
 			{
-				manifestations.add(manifestation);
+				attributes.add(attribute);
 			}
 		}
-		return manifestations;
+		return attributes;
 	}
 
 	@Override
-	public void grantManifestations(LivingEntity livingEntity, ArrayList<Manifestation> manifestations, int strength)
+	public void grantBaseAttributes(LivingEntity livingEntity, ArrayList<Attribute> attributes, int strength)
 	{
 		SpiritwebCapability.get(livingEntity).ifPresent(iSpiritweb ->
 		{
 			SpiritwebCapability spiritweb = (SpiritwebCapability) iSpiritweb;
 
-			for(Manifestation manifestation: manifestations)
+			for (Attribute attribute : attributes)
 			{
-				int currentStrength = 0;
-				if(!(manifestation.getAttribute() instanceof RangedAttribute attribute)) return;
-				AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
-				if(attributeInstance != null) {
-					currentStrength = (int) attributeInstance.getValue();
-				}
-
-				// Let's ensure not to exceed the base value if it's out of range,
-				// even if it will get sanitized
-				int newStrength = strength + currentStrength;
-				if(newStrength < attribute.getMinValue())
+				if (!(attribute instanceof RangedAttribute rangedAttribute))
 				{
-					newStrength = (int) attribute.getMinValue();
+					return;
 				}
-				else if (newStrength > attribute.getMaxValue())
-				{
-					newStrength = (int) attribute.getMaxValue();
-				}
-
-				spiritweb.giveManifestation(manifestation, newStrength);
+				grantBaseAttribute(livingEntity, rangedAttribute, strength);
 			}
 
 			if (livingEntity instanceof ServerPlayer serverPlayer)

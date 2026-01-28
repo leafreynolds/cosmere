@@ -22,6 +22,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static leaf.cosmere.api.Constants.Strings.KEY_SHARDBLADE;
+import static leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes.SURGEBINDING_ATTRIBUTES;
 
 public class SurgebindingEngLangGen extends LanguageProvider
 {
@@ -119,17 +120,14 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addAttributes()
 	{
 		//Attributes
-		for (IAttributeProvider registryObject : SurgebindingAttributes.ATTRIBUTES.getAllAttributes())
+		SURGEBINDING_ATTRIBUTES.forEach((surgeType, registryObject) ->
 		{
 			final String descriptionId = registryObject.getAttribute().getDescriptionId();
-			//no duplicates pls
-			//manifestation section handles adding attributes lang gen for themselves
-			if (!descriptionId.startsWith("manifestation"))
-			{
-				String translation = descriptionId.split("\\.")[1];
-				add(descriptionId, StringHelper.fixCapitalisation(translation));
-			}
-		}
+
+			String name = "Surge of " + StringHelper.fixCapitalisation(surgeType.getName());
+			// Attributes are the powers themselves, they need their own names.
+			add(descriptionId, name);
+		});
 	}
 
 	private void addPatchouli()

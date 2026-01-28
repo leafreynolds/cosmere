@@ -112,13 +112,13 @@ public class GodMetalNuggetsDecompress extends CustomRecipe {
 	@Override
 	public @Nonnull ResourceLocation getId()
 	{
-		return new ResourceLocation(Cosmere.MODID, "god_metal_alloy_nugget_compress");
+		return new ResourceLocation(Cosmere.MODID, "crafting_god_metal_nuggets_decompress");
 	}
 
 	@Override
 	public @Nonnull RecipeSerializer<?> getSerializer()
 	{
-		return CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_DECOMPRESS.get();
+		return CosmereRecipesRegistry.GOD_METAL_NUGGETS_DECOMPRESS.get();
 	}
 
 	public @NotNull NonNullList<ItemStack> getRemainingItems(CraftingContainer pContainer) {

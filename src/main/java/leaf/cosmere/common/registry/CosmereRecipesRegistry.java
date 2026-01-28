@@ -16,11 +16,11 @@ public class CosmereRecipesRegistry
 			RECIPE_SERIALIZERS.register("crafting_god_metal_alloy_nugget_recipe",
 					() -> new SimpleCraftingRecipeSerializer<>(GodMetalAlloyNuggetRecipe::new));
 
-	public static final RecipeSerializerRegistryObject<GodMetalNuggetsCompress> GOD_METAL_ALLOY_NUGGET_COMPRESS =
-			RECIPE_SERIALIZERS.register("crafting_god_metal_alloy_nugget_compress",
+	public static final RecipeSerializerRegistryObject<GodMetalNuggetsCompress> GOD_METAL_NUGGETS_COMPRESS =
+			RECIPE_SERIALIZERS.register("crafting_god_metal_nuggets_compress",
 					() -> new SimpleCraftingRecipeSerializer<>(GodMetalNuggetsCompress::new));
 
-	public static final RecipeSerializerRegistryObject<GodMetalNuggetsDecompress> GOD_METAL_ALLOY_NUGGET_DECOMPRESS =
-			RECIPE_SERIALIZERS.register("crafting_god_metal_alloy_nugget_decompress",
+	public static final RecipeSerializerRegistryObject<GodMetalNuggetsDecompress> GOD_METAL_NUGGETS_DECOMPRESS =
+			RECIPE_SERIALIZERS.register("crafting_god_metal_nuggets_decompress",
 					() -> new SimpleCraftingRecipeSerializer<>(GodMetalNuggetsDecompress::new));
 }
