@@ -13,7 +13,9 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
+import leaf.cosmere.sandmastery.client.gui.SandmasterySpiritwebMenu;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
@@ -204,6 +206,12 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void GiveStartingItem(Player player, Manifestation manifestation)
 	{
+	}
+
+	@Override
+	public void registerMenu()
+	{
+		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SANDMASTERY, SandmasterySpiritwebMenu::new);
 	}
 
 	@Override
