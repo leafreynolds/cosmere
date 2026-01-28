@@ -10,22 +10,14 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeDivision;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeTransportation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
+import leaf.cosmere.surgebinding.common.manifestation.*;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.Nullable;
 
 @Mod.EventBusSubscriber(modid = Surgebinding.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SurgebindingForgeEventsHandler
@@ -90,6 +82,7 @@ public class SurgebindingForgeEventsHandler
 
 		SurgeGravitation.onLivingAttackEvent(event);
 		SurgeDivision.onLivingAttackEvent(event);
+		SurgeAdhesion.onLivingAttackEvent(event);
 	}
 
 	@SubscribeEvent

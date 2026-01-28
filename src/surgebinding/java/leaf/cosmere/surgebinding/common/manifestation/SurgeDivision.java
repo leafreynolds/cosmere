@@ -40,8 +40,7 @@ public class SurgeDivision extends SurgebindingManifestation
 		{
 			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation().isActive(iSpiritweb))
 			{
-				SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
-				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
 				if (submodule.adjustStormlight(-15, true))
 				{
