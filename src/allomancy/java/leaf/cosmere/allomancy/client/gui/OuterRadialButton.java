@@ -360,7 +360,7 @@ public class OuterRadialButton extends Button
 				else if (minutes > 0)
 					text = String.format("%d:%02d", minutes, seconds);
 				else
-					text = String.format("%d", seconds);
+					text = String.format("%02d", seconds);
 
 				break;
 			}
