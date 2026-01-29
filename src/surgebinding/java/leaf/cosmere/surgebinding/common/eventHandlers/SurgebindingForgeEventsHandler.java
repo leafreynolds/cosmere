@@ -75,7 +75,7 @@ public class SurgebindingForgeEventsHandler
 		if(event.isCanceled()){
 			return;
 		}
-		SurgeAdhesion.onEntityInteractTrue(event);
+		SurgeAdhesion.onEntityInteract(event);
 	}
 
 

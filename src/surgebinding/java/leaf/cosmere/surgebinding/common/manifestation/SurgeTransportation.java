@@ -4,10 +4,18 @@
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -24,25 +32,75 @@ public class SurgeTransportation extends SurgebindingManifestation
 	}
 
 	//travel between realms or locations
+
+	@Override
+	public int modeMax(ISpiritweb data)
+	{
+		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+		return submodule.getIdeal();
+	}
+
+	@Override
+	public boolean tick(ISpiritweb data)
+	{
+		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->
+		{
+			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).get()) &&
+				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation().isActive(iSpiritweb))
+			{
+				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+				LivingEntity living = data.getLiving();
+				AABB areaEffect = new AABB(new Vec3(living.getX()-3, living.getY()-3, living.getZ()-3), new Vec3(living.getX()+3, living.getY()+3, living.getZ()+3));
+				List<Entity> entitiesNear = living.level().getEntities(living,areaEffect);
+				List<LivingEntity> entityList= new LinkedList<>();
+				for(Entity entity : entitiesNear){
+					if(entity instanceof LivingEntity){
+						entityList.add((LivingEntity)entity);
+					}
+				}
+				for(LivingEntity entity : entityList){
+					entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,4));
+				}
+			}
+
+		});
+
+		return super.tick(data);
+	}
+
 	static List<Entity> targets = new LinkedList<>();
 	static int shiftDuration=0;
 
-	public static void onShift(MovementInputUpdateEvent event){
-		if(event.getInput().shiftKeyDown){
-			chargeUp(event);
-		}
-		else{
-			if(shiftDuration>0){
-				shiftDuration=0;
-				System.out.println(targets);
-				for(Entity target : targets){
-					target.setPos(new Vec3(50,50,50));
+	public static void onShift(MovementInputUpdateEvent event)
+	{
+		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
+		{
+			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).get()) &&
+				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation().isActive(iSpiritweb) &&
+				iSpiritweb.getMode(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation())>=3)
+			{
+				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+				if(event.getInput().shiftKeyDown){
+					chargeUp(event);
+				}
+				else{
+					if(shiftDuration>0){
+						shiftDuration=0;
+						System.out.println(targets);
+						for(Entity target : targets){
+							if(submodule.adjustStormlight(60,true))
+							{
+								//Teleport Effect
+							}
+						}
+					}
 				}
 			}
-		}
+		});
 	}
 
-	public static void chargeUp(MovementInputUpdateEvent event){
+	public static void chargeUp(MovementInputUpdateEvent event)
+	{
 		shiftDuration++;
 		Level level = event.getEntity().level();
 		AABB box = AABB.ofSize(event.getEntity().getEyePosition().add(0,-0.5,0),shiftDuration*0.05,shiftDuration*0.05,shiftDuration*0.05);

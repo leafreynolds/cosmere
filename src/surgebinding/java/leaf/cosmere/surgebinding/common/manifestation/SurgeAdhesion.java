@@ -25,7 +25,7 @@ public class SurgeAdhesion extends SurgebindingManifestation
 
 	//bind things together
 
-	public static void onEntityInteractTrue(PlayerInteractEvent.EntityInteract event) {
+	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
 		LivingEntity target = (LivingEntity) event.getTarget();
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
