@@ -59,7 +59,7 @@ public class SurgeTransportation extends SurgebindingManifestation
 					}
 				}
 				for(LivingEntity entity : entityList){
-					entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,10,4));
+					entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,4));
 				}
 			}
 
