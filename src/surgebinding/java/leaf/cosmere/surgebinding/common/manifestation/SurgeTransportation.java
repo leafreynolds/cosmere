@@ -7,6 +7,7 @@ package leaf.cosmere.surgebinding.common.manifestation;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
@@ -45,12 +46,20 @@ public class SurgeTransportation extends SurgebindingManifestation
 	{
 		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->
 		{
-			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).get()) &&
-				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation().isActive(iSpiritweb))
+			Manifestation Transportation = SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation();
+			if (iSpiritweb.hasManifestation(Transportation) &&
+				Transportation.getManifestation().isActive(iSpiritweb))
 			{
-				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				LivingEntity living = data.getLiving();
-				AABB areaEffect = new AABB(new Vec3(living.getX()-3, living.getY()-3, living.getZ()-3), new Vec3(living.getX()+3, living.getY()+3, living.getZ()+3));
+				int sightRange = 0;
+				if(Transportation.getMode(iSpiritweb)==1){
+					sightRange = 32;
+				}
+				else if(Transportation.getMode(iSpiritweb)>=2){
+					sightRange = 64;
+				}
+				AABB areaEffect = new AABB(new Vec3(living.getX()-sightRange, living.getY()-sightRange, living.getZ()-sightRange),
+											new Vec3(living.getX()+sightRange, living.getY()+sightRange, living.getZ()+sightRange));
 				List<Entity> entitiesNear = living.level().getEntities(living,areaEffect);
 				List<LivingEntity> entityList= new LinkedList<>();
 				for(Entity entity : entitiesNear){
@@ -75,22 +84,29 @@ public class SurgeTransportation extends SurgebindingManifestation
 	{
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
-			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).get()) &&
-				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation().isActive(iSpiritweb) &&
-				iSpiritweb.getMode(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation())>=3)
+			Manifestation Transportation = SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation();
+			if (iSpiritweb.hasManifestation(Transportation) &&
+				Transportation.getManifestation().isActive(iSpiritweb) &&
+				iSpiritweb.getMode(Transportation.getManifestation())>=3)
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				if(event.getInput().shiftKeyDown){
 					chargeUp(event);
+
 				}
 				else{
 					if(shiftDuration>0){
 						shiftDuration=0;
 						System.out.println(targets);
+						targets.add(0,event.getEntity());
 						for(Entity target : targets){
 							if(submodule.adjustStormlight(60,true))
 							{
-								//Teleport Effect
+								//Teleport Player
+								if(iSpiritweb.getMode(Transportation)>3)
+								{
+									//Teleport Others
+								}
 							}
 						}
 					}
@@ -104,6 +120,7 @@ public class SurgeTransportation extends SurgebindingManifestation
 		shiftDuration++;
 		Level level = event.getEntity().level();
 		AABB box = AABB.ofSize(event.getEntity().getEyePosition().add(0,-0.5,0),shiftDuration*0.05,shiftDuration*0.05,shiftDuration*0.05);
+
 		targets = level.getEntities(event.getEntity(), box);
 		SimpleParticleType s = ParticleTypes.PORTAL;
 		for(double i = box.minX; i<box.maxX;i+=0.1){
