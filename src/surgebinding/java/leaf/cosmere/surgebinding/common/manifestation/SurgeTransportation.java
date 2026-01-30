@@ -59,7 +59,7 @@ public class SurgeTransportation extends SurgebindingManifestation
 					}
 				}
 				for(LivingEntity entity : entityList){
-					entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,4));
+					entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,10,4));
 				}
 			}
 
@@ -81,12 +81,18 @@ public class SurgeTransportation extends SurgebindingManifestation
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				if(event.getInput().shiftKeyDown){
+					if(!(submodule.getIdeal()>3)){
+						if(shiftDuration==10){
+							shiftDuration=10;
+						}
+					}
 					chargeUp(event);
 				}
 				else{
 					if(shiftDuration>0){
 						shiftDuration=0;
 						System.out.println(targets);
+						targets.add(0, iSpiritweb.getLiving());
 						for(Entity target : targets){
 							if(submodule.adjustStormlight(60,true))
 							{

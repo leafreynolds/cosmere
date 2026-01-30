@@ -13,6 +13,7 @@ import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 // Honors truest surge
@@ -25,9 +26,9 @@ public class SurgeAdhesion extends SurgebindingManifestation
 
 	//bind things together
 
-	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		LivingEntity target = (LivingEntity) event.getTarget();
-		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
+	public static void onLivingAttackEvent(LivingAttackEvent event) {
+		LivingEntity target = event.getEntity();
+		SpiritwebCapability.get((LivingEntity) event.getSource().getEntity()).ifPresent(iSpiritweb ->
 		{
 			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ADHESION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ADHESION).getManifestation().isActive(iSpiritweb))
 			{
