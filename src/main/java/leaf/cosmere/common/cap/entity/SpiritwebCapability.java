@@ -16,9 +16,9 @@ import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.client.PowerSaveState;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereConfigs;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
@@ -30,6 +30,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,38 +62,54 @@ import java.util.List;
     https://coppermind.net/wiki/Ars_Arcanum#The_Alloy_of_Law
  */
 
+/**
+ * Capability-backed implementation of {@link ISpiritweb} for a living entity.
+ * Tracks manifestation ownership/modes, active Cosmere effects, and submodule state,
+ * and handles sync/serialization plus client rendering helpers.
+ */
 public class SpiritwebCapability implements ISpiritweb
 {
-	//Injection
+	// Injection
 	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
 	{
 	});
 
-	//detect if capability has been set up yet
+	// Lifecycle flags
 	private boolean didSetup = false;
 	private boolean hasBeenInitialized = false;
 
 	private final LivingEntity livingEntity;
 
+	// Manifestation state
 	public final Map<Manifestation, Integer> MANIFESTATIONS_MODE = new HashMap<>();
-
 	private Manifestation selectedManifestation = ManifestationRegistry.NONE.get();
 
-
+	// Push/pull state for client interaction
 	public List<BlockPos> pushBlocks = new ArrayList<>(4);
 	public List<Integer> pushEntities = new ArrayList<>(4);
-
 	public List<BlockPos> pullBlocks = new ArrayList<>(4);
 	public List<Integer> pullEntities = new ArrayList<>(4);
 	public int pushPullWeight = 1;
+
 	private CompoundTag nbt;
 
+	// Active effects keyed by instance UUID
 	private final Map<UUID, CosmereEffectInstance> activeEffects = Maps.newHashMap();
 
 	private final Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
 
-	private Map<Integer, Map<Manifestation, Integer>> powerSaveStorage;
-
+	// Doesn't like arrays with generic types. Need to use this instead.
+	private final PowerSaveState[] powerSaveStorage = new PowerSaveState[]{
+			new PowerSaveState(0),
+			new PowerSaveState(1),
+			new PowerSaveState(2),
+			new PowerSaveState(3),
+			new PowerSaveState(4),
+			new PowerSaveState(5),
+			new PowerSaveState(6),
+			new PowerSaveState(7),
+			new PowerSaveState(8)
+	};
 
 	public SpiritwebCapability(LivingEntity ent)
 	{
@@ -100,7 +117,9 @@ public class SpiritwebCapability implements ISpiritweb
 		spiritwebSubmodules = Cosmere.makeSpiritwebSubmodules();
 	}
 
-
+	/**
+	 * Retrieve the spiritweb capability for a living entity, if present.
+	 */
 	@Nonnull
 	public static LazyOptional<ISpiritweb> get(LivingEntity entity)
 	{
@@ -108,6 +127,9 @@ public class SpiritwebCapability implements ISpiritweb
 		                      : LazyOptional.empty();
 	}
 
+	/**
+	 * Serialize this spiritweb into the capability NBT payload.
+	 */
 	@Override
 	public CompoundTag serializeNBT()
 	{
@@ -149,11 +171,26 @@ public class SpiritwebCapability implements ISpiritweb
 			spiritwebSubmodule.serialize(this);
 		}
 
-		nbt.put("PowerSaveStates", PowerSaveState.serialize());
+		CompoundTag powerSaveList = new CompoundTag();
+		for(PowerSaveState saveState: powerSaveStorage)
+		{
+			CompoundTag data = new CompoundTag();
+			for(Manifestation manifest: saveState.manifestations.keySet())
+			{
+				data.putInt(manifest.getRegistryName().toString(),saveState.manifestations.get(manifest));
+			}
+			powerSaveList.put(Integer.toString(saveState.num), data);
+		}
+
+
+		nbt.put("PowerSaveStates", powerSaveList);
 
 		return nbt;
 	}
 
+	/**
+	 * Load spiritweb state from the capability NBT payload.
+	 */
 	@Override
 	public void deserializeNBT(CompoundTag compoundTag)
 	{
@@ -205,9 +242,31 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			spiritwebSubmodule.deserialize(this);
 		}
-		if(nbt.contains("PowerSaveStates"))
+		if (nbt.contains("PowerSaveStates"))
 		{
-			PowerSaveState.deserialize((CompoundTag) nbt.get("PowerSaveStates"));
+			for(PowerSaveState state : powerSaveStorage)
+			{
+				CompoundTag data = (CompoundTag) nbt.get(Integer.toString(state.num));
+
+				if(data == null)
+				{
+					continue;
+				}
+
+				HashMap<Manifestation,Integer> manifestations = new HashMap<>();
+
+				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+				{
+					final String manifestationLoc = manifestation.getRegistryName().toString();
+
+					if (data.contains(manifestationLoc))
+					{
+						manifestations.put(manifestation, data.getInt(manifestationLoc));
+					}
+				}
+
+				state.setManifestations(manifestations);
+			}
 		}
 	}
 
@@ -229,6 +288,13 @@ public class SpiritwebCapability implements ISpiritweb
 		return spiritwebSubmodules;
 	}
 
+	@Override
+	public LivingEntity getLiving()
+	{
+		return livingEntity;
+	}
+
+	// Effects
 	@Override
 	public void tickEffects()
 	{
@@ -353,6 +419,9 @@ public class SpiritwebCapability implements ISpiritweb
 		return this.activeEffects.values().stream().filter(effectInstance -> effectInstance.getEffect() == cosmereEffect).mapToInt(o -> (int) o.getStrength()).sum();
 	}
 
+	/**
+	 * Per-tick update for server/client spiritweb behavior.
+	 */
 	@Override
 	public void tick()
 	{
@@ -426,13 +495,6 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 	}
 
-	@Override
-	public LivingEntity getLiving()
-	{
-		return livingEntity;
-	}
-
-
 	//Copy things from an old spiritweb into the new one.
 	//Eg a player has died and we need to make sure they get their stormlight and breaths back.
 	@Override
@@ -505,7 +567,9 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 	}
 
-
+	/**
+	 * Render the client HUD widget for the current selected manifestation.
+	 */
 	public void renderSelectedHUD(GuiGraphics gg)
 	{
 		if (CosmereConfigs.CLIENT_CONFIG.disableSelectedManifestationHud.get() || selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.NONE)
@@ -608,8 +672,8 @@ public class SpiritwebCapability implements ISpiritweb
 			gg.blit(textureLocation,
 					posX,
 					posY,
-					size-4,
-					size-4,
+					size - 4,
+					size - 4,
 					0,
 					0,
 					18,
@@ -786,7 +850,6 @@ public class SpiritwebCapability implements ISpiritweb
 		return false;
 	}
 
-
 	@Override
 	public void giveManifestation(Manifestation manifestation, int baseValue)
 	{
@@ -898,7 +961,7 @@ public class SpiritwebCapability implements ISpiritweb
 	public HashMap<Manifestation, Integer> getManifestations(boolean ignoreTemporaryPower, boolean ignoreInactivePower)
 	{
 		HashMap<Manifestation, Integer> list = new HashMap<>();
-		for(Manifestation manifestation: CosmereAPI.manifestationRegistry())
+		for (Manifestation manifestation: CosmereAPI.manifestationRegistry())
 		{
 			if (manifestation == ManifestationRegistry.NONE.getManifestation())
 			{
@@ -906,13 +969,13 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 			if (hasManifestation(manifestation, ignoreTemporaryPower))
 			{
-				if(!ignoreInactivePower)
+				if (!ignoreInactivePower)
 				{
-					list.put(manifestation,MANIFESTATIONS_MODE.get(manifestation));
+					list.put(manifestation, MANIFESTATIONS_MODE.get(manifestation));
 				}
-				else if((MANIFESTATIONS_MODE.get(manifestation)) != null && MANIFESTATIONS_MODE.get(manifestation) != 0)
+				else if ((MANIFESTATIONS_MODE.get(manifestation)) != null && MANIFESTATIONS_MODE.get(manifestation) != 0)
 				{
-					list.put(manifestation,MANIFESTATIONS_MODE.get(manifestation));
+					list.put(manifestation, MANIFESTATIONS_MODE.get(manifestation));
 				}
 
 			}
@@ -920,6 +983,9 @@ public class SpiritwebCapability implements ISpiritweb
 		return list;
 	}
 
+	/**
+	 * Cycle the selected manifestation and return its translation key.
+	 */
 	@Override
 	public String changeManifestation(int dir)
 	{
@@ -1006,6 +1072,9 @@ public class SpiritwebCapability implements ISpiritweb
 		return mode;
 	}
 
+	/**
+	 * Sync this spiritweb to one player or the entire world.
+	 */
 	@Override
 	public void syncToClients(@Nullable ServerPlayer serverPlayerEntity)
 	{
@@ -1031,5 +1100,117 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			Cosmere.packetHandler().sendTo(new SyncPlayerSpiritwebMessage(this.livingEntity.getId(), nbt), serverPlayerEntity);
 		}
+	}
+
+	public void saveNewState(int num)
+	{
+		powerSaveStorage[num].addManifestations(this);
+	}
+
+	public void activatePowerState(int num)
+	{
+		powerSaveStorage[num].activate(this);
+	}
+
+	public class PowerSaveState
+	{
+		Map<Manifestation, Integer> manifestations = new HashMap<>();
+		int num;
+
+		public PowerSaveState(int num)
+		{
+			this.num = num;
+		}
+
+		public String getName()
+		{
+			return "Power Save State " + (num + 1);
+		}
+
+		public boolean isActive(SpiritwebCapability spiritweb)
+		{
+			for (var manifest : manifestations.keySet())
+			{
+				if(!spiritweb.MANIFESTATIONS_MODE.containsKey(manifest))
+				{
+					return false;
+				}
+				else if (!Objects.equals(spiritweb.MANIFESTATIONS_MODE.get(manifest), manifestations.get(manifest)))
+				{
+					return false;
+				}
+
+			}
+			return true;
+		}
+
+		public boolean hasManifestation(Manifestation manifestation)
+		{
+			return manifestations.containsKey(manifestation);
+		}
+
+		public void activate(SpiritwebCapability spiritweb)
+		{
+			boolean toActivate = !isActive(spiritweb);
+
+			for (Manifestation manifestation : manifestations.keySet())
+			{
+				int modifier = -(manifestation.getMode(spiritweb));
+				if (toActivate)
+				{
+					modifier += manifestations.get(manifestation);
+				}
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, modifier));
+
+			}
+			if (CosmereConfigs.CLIENT_CONFIG.disableActivatorChatMessage.get())
+			{
+				return;
+			}
+
+			if (toActivate)
+			{
+				spiritweb.getLiving().sendSystemMessage(Component.literal("Activating " + getName()));
+			}
+			else
+			{
+				spiritweb.getLiving().sendSystemMessage(Component.literal("Deactivating " + getName()));
+			}
+			manifestations.keySet().forEach((manifest) ->
+
+
+					spiritweb.getLiving()
+							.sendSystemMessage(Component.literal(
+									Component.translatable(
+											manifest.getTranslationKey()
+									).getString() + ": " + (toActivate ? manifestations.get(manifest) : 0)
+							))
+			);
+
+		}
+
+		public void addManifestations(ISpiritweb spiritweb)
+		{
+			manifestations = spiritweb.getManifestations(false, true);
+			if (CosmereConfigs.CLIENT_CONFIG.disableActivatorChatMessage.get())
+			{
+				return;
+			}
+			spiritweb.getLiving().sendSystemMessage(Component.literal("Saved new " + getName()));
+			manifestations.forEach((manifestation, integer) ->
+					spiritweb.getLiving()
+							.sendSystemMessage(Component.literal(
+									Component.translatable(
+											manifestation.getTranslationKey()
+									).getString() + ": " + integer)));
+
+
+		}
+
+		private void setManifestations(HashMap<Manifestation, Integer> manifestations)
+		{
+			this.manifestations = manifestations;
+		}
+
 	}
 }
