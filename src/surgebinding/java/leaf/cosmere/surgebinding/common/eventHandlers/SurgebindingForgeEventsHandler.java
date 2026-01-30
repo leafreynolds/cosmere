@@ -71,14 +71,6 @@ public class SurgebindingForgeEventsHandler
 		SurgeProgression.onEntityInteract(event);
 	}
 
-	public static void onEntityInteractTrue(PlayerInteractEvent.EntityInteract event){
-		if(event.isCanceled()){
-			return;
-		}
-		SurgeAdhesion.onEntityInteract(event);
-	}
-
-
 	//Attack event happens first
 	@SubscribeEvent
 	public static void onLivingAttackEvent(LivingAttackEvent event)
@@ -90,10 +82,14 @@ public class SurgebindingForgeEventsHandler
 
 		SurgeGravitation.onLivingAttackEvent(event);
 		SurgeDivision.onLivingAttackEvent(event);
+		SurgeAdhesion.onLivingAttackEvent(event);
 	}
 
 	@SubscribeEvent
 	public static void onShift(MovementInputUpdateEvent event){
+		if(event.isCanceled()){
+			return;
+		}
 		SurgeTransportation.onShift(event);
 	}
 
