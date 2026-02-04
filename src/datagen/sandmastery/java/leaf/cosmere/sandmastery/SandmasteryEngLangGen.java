@@ -22,6 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
+import static leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes.RIBBONS;
 import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.*;
 
 
@@ -110,26 +111,15 @@ public class SandmasteryEngLangGen extends LanguageProvider
 			final ResourceLocation regName = manifestation.getRegistryName();
 			add("manifestation." + regName.getNamespace() + "." + regName.getPath() + ".description", description);
 		}
-
-		// Temp translation fix - Remove when ribbons are added
-		add("manifestation.sandmastery.ribbons", StringHelper.fixCapitalisation("Sand Mastery Ribbons"));
-		add("manifestation.sandmastery.ribbons.description", "Masters can use ribbons");
 	}
 
 	private void addAttributes()
 	{
-		//Attributes
-		for (IAttributeProvider registryObject : SandmasteryAttributes.ATTRIBUTES.getAllAttributes())
-		{
-			final String descriptionId = registryObject.getAttribute().getDescriptionId();
-			//no duplicates pls
-			//manifestation section handles adding attributes lang gen for themselves
-			if (!descriptionId.startsWith("manifestation"))
-			{
-				String translation = descriptionId.split("\\.")[1];
-				add(descriptionId, StringHelper.fixCapitalisation(translation));
-			}
-		}
+		//Attribute
+		final String descriptionId = RIBBONS.getAttribute().getDescriptionId();
+		final String name = "Sand Mastery " + RIBBONS.getName();
+		// Attributes are the powers themselves, they need their own names.
+		add(descriptionId, StringHelper.fixCapitalisation(name));
 	}
 
 	private void addPatchouli()

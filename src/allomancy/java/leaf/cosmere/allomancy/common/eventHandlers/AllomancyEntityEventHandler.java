@@ -57,7 +57,8 @@ public class AllomancyEntityEventHandler
 				{
 					return;
 				}
-				MiscHelper.consumeNugget(target, stack);
+
+				MiscHelper.consumeNugget(target, stack, 1);
 				stack.shrink(1);
 			}
 		}
@@ -80,7 +81,7 @@ public class AllomancyEntityEventHandler
 			{
 				return;
 			}
-			MiscHelper.consumeNugget(livingEntity, event.getItem());
+			MiscHelper.consumeNugget(livingEntity, event.getItem(), 1);
 		}
 	}
 	//Attack event happens first

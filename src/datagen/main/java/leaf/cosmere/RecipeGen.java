@@ -70,7 +70,7 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 			// specifically copper has no nuggets, so create nugget and move on
 			if (metalType == Metals.MetalType.COPPER)
 			{
-				compressRecipe(Items.COPPER_INGOT, CosmereTags.Items.METAL_NUGGET_TAGS.get(metalType), ItemsRegistry.METAL_NUGGETS.get(metalType)).save(consumer);
+				compressRecipe(Items.COPPER_INGOT, CosmereTags.Items.METAL_NUGGET_TAGS.get(metalType), ItemsRegistry.METAL_NUGGETS.get(metalType)).save(consumer, new ResourceLocation(Cosmere.MODID, "copper_ingot"));
 				decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), Tags.Items.INGOTS_COPPER, metalType.getName() + "_item_deconstruct");
 				continue;
 			}
@@ -113,13 +113,13 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 				.save(consumer, new ResourceLocation(Cosmere.MODID,
 						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_RECIPE.getInternalRegistryName()).toString());
 
-		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_COMPRESS.get())
+		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_NUGGETS_COMPRESS.get())
 				.save(consumer, new ResourceLocation(Cosmere.MODID,
-						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_COMPRESS.getInternalRegistryName()).toString());
+						CosmereRecipesRegistry.GOD_METAL_NUGGETS_COMPRESS.getInternalRegistryName()).toString());
 
-		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_DECOMPRESS.get())
+		SpecialRecipeBuilder.special(CosmereRecipesRegistry.GOD_METAL_NUGGETS_DECOMPRESS.get())
 				.save(consumer, new ResourceLocation(Cosmere.MODID,
-						CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_DECOMPRESS.getInternalRegistryName()).toString());
+						CosmereRecipesRegistry.GOD_METAL_NUGGETS_DECOMPRESS.getInternalRegistryName()).toString());
 
 	}
 
