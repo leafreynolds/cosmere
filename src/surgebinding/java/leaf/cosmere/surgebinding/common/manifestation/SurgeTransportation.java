@@ -34,13 +34,6 @@ public class SurgeTransportation extends SurgebindingManifestation
 	//travel between realms or locations
 
 	@Override
-	public int modeMax(ISpiritweb data)
-	{
-		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		return submodule.getIdeal();
-	}
-
-	@Override
 	public boolean tick(ISpiritweb data)
 	{
 		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->

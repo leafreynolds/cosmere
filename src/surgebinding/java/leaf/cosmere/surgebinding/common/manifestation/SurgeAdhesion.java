@@ -14,7 +14,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 // Honors truest surge
 public class SurgeAdhesion extends SurgebindingManifestation
@@ -36,7 +35,7 @@ public class SurgeAdhesion extends SurgebindingManifestation
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				if(slowedEffect!=null && slowedEffect.getAmplifier()==50)
 				{
-					if(submodule.adjustStormlight(slowedEffect.getDuration()*10,true)){
+					if(submodule.adjustStormlight(slowedEffect.getDuration()/20,true)){
 						target.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 					}
 				}

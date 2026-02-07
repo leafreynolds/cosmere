@@ -28,13 +28,6 @@ public class SurgeAbrasion extends SurgebindingManifestation
 	}
 
 	@Override
-	public int modeMax(ISpiritweb data)
-	{
-		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		return submodule.getIdeal();
-	}
-
-	@Override
 	public boolean tick(ISpiritweb data)
 	{
 		if(!isActive(data))

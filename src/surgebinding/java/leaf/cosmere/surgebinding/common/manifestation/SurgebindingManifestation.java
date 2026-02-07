@@ -28,7 +28,11 @@ public class SurgebindingManifestation extends Manifestation
 	public int modeMin(ISpiritweb data) {return 0;}
 
 	@Override
-	public int modeMax(ISpiritweb data) {return 1;}
+	public int modeMax(ISpiritweb data)
+	{
+		SurgebindingSpiritwebSubmodule spiritweb = (SurgebindingSpiritwebSubmodule)data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+		return spiritweb.getIdeal();
+	}
 
 	@Override
 	public int getPowerID()
