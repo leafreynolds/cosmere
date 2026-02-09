@@ -34,7 +34,8 @@ public class SurgeGravitation extends SurgebindingManifestation
 			SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
 			{
 				//windrunners like Szeth could launch enemies into the air to die cruelly by fall damage
-				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get().isActive(iSpiritweb))
+				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get()) &&
+					SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get().isActive(iSpiritweb))
 				{
 
 					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);

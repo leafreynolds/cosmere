@@ -52,6 +52,7 @@ public class SurgebindingForgeEventsHandler
 
 		SurgeProgression.onBlockInteract(event);
 		SurgeDivision.onBlockInteract(event);
+		SurgeCohesion.onBlockInteract(event);
 	}
 
 	@SubscribeEvent
