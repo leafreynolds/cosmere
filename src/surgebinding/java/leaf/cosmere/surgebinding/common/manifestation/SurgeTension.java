@@ -4,11 +4,15 @@
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEffects;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 public class SurgeTension extends SurgebindingManifestation
@@ -26,9 +30,22 @@ public class SurgeTension extends SurgebindingManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		LivingEntity living = data.getLiving();
-		if(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TENSION).getManifestation().isActive(data))
-			data.getLiving().addEffect(EffectsHelper.getNewEffect(SurgebindingEffects.RIGID_DEFENSE.getMobEffect(), 9));
+		if(!isActive(data))
+		{
+			return false;
+		}
+		int mode = getMode(data);
+		LivingEntity livingEntity = data.getLiving();
+		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+		if(data.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TENSION).getManifestation()) &&
+			SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TENSION).getManifestation().isActive(data) &&
+			livingEntity.isShiftKeyDown())
+		{
+			if (submodule.adjustStormlight(-2*mode,true))
+			{
+				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_RESISTANCE, mode-1,2));
+			}
+		}
 		return super.tick(data);
 	}
 }

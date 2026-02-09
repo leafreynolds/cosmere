@@ -37,7 +37,8 @@ public class SurgeAbrasion extends SurgebindingManifestation
 		int mode = getMode(data);
 		LivingEntity livingEntity = data.getLiving();
 		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		if(data.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation().isActive(data))
+		if(data.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation()) &&
+			SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation().isActive(data))
 		{
 			if (mode>0 && submodule.adjustStormlight(-mode,true))
 			{
