@@ -220,23 +220,19 @@ public class RadiantStateManager
 		{
 			case WINDRUNNER ->
 			{
-				return WindrunnerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
+
 			}
 			case SKYBREAKER ->
 			{
-				return SkybreakerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case DUSTBRINGER ->
 			{
-				return DustbringerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case EDGEDANCER ->
 			{
-				return EdgedancerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case TRUTHWATCHER ->
 			{
-				return TruthwatcherIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case LIGHTWEAVER ->
 			{
@@ -246,11 +242,9 @@ public class RadiantStateManager
 			}
 			case WILLSHAPER ->
 			{
-				return WillshaperIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case STONEWARD ->
 			{
-				return StonewardIdealStateManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case BONDSMITH ->
 			{
