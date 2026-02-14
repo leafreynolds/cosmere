@@ -11,6 +11,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffects;
@@ -47,7 +48,9 @@ public class SurgeDivision extends SurgebindingManifestation
 				{
 					if (event.getLevel() instanceof ServerLevel serverLevel)
 					{
-						serverLevel.destroyBlock(blockPos, true);
+						serverLevel.destroyBlock(blockPos, false);
+						serverLevel.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,blockPos.getX(), blockPos.getY(), blockPos.getZ(), 0.0D, 0.1D, 0.0D);
+
 					}
 				}
 			}

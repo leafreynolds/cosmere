@@ -85,6 +85,9 @@ public class SurgeTransportation extends SurgebindingManifestation
 					if(shiftDuration>0){
 						shiftDuration=0;
 						System.out.println(targets);
+						if(!(submodule.getIdeal()>3)){
+							targets.clear();
+						}
 						targets.add(0, iSpiritweb.getLiving());
 						for(Entity target : targets){
 							if(submodule.adjustStormlight(60,true))
