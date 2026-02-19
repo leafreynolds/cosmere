@@ -4,6 +4,7 @@
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
+import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
@@ -11,12 +12,15 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
@@ -39,18 +43,33 @@ public class SurgeDivision extends SurgebindingManifestation
 
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
+			SurgebindingManifestation surge = (SurgebindingManifestation) SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation();
 			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).get()) &&
-				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation().isActive(iSpiritweb))
+					surge.isActive(iSpiritweb))
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-
-				if (submodule.adjustStormlight(-15, true))
+				if(iSpiritweb.getLiving().isShiftKeyDown())
 				{
-					if (event.getLevel() instanceof ServerLevel serverLevel)
+					if (submodule.adjustStormlight(-15, true))
 					{
-						serverLevel.destroyBlock(blockPos, false);
-						serverLevel.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,blockPos.getX(), blockPos.getY(), blockPos.getZ(), 0.0D, 0.1D, 0.0D);
+						if (event.getLevel() instanceof ServerLevel serverLevel)
+						{
+							Direction direc = event.getHitVec().getDirection();
+							BlockPos targetBlock = new BlockPos(blockPos.getX()+direc.getStepX(),blockPos.getY()+direc.getStepY(),blockPos.getZ()+direc.getStepZ());
+							serverLevel.setBlock(targetBlock,Blocks.FIRE.defaultBlockState(),1);
+						}
+					}
+				}
+				else
+				{
+					if (submodule.adjustStormlight(-15, true))
+					{
+						if (event.getLevel() instanceof ServerLevel serverLevel)
+						{
+							serverLevel.destroyBlock(blockPos, false);
+							serverLevel.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, blockPos.getX(), blockPos.getY(), blockPos.getZ(), 0.0D, 0.1D, 0.0D);
 
+						}
 					}
 				}
 			}

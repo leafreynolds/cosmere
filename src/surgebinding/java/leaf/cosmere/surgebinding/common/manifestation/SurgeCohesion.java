@@ -41,12 +41,20 @@ public class SurgeCohesion extends SurgebindingManifestation
 			Blocks.END_STONE,Blocks.END_STONE_BRICKS,Blocks.PURPUR_BLOCK,Blocks.QUARTZ_BLOCK,Blocks.SMOOTH_QUARTZ));
 
 	public static boolean isValidStoneBlock(Block blok){
+		if(blok==Blocks.COBBLESTONE){
+			return true;
+		}
+		else{
+			return false;
+		}
+		/*
 		for(Block b : cohesive){
 			if(b == blok){
 				return true;
 			}
 		}
 		return false;
+		 */
 	}
 
 	public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event){
@@ -55,9 +63,10 @@ public class SurgeCohesion extends SurgebindingManifestation
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
 			SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+			SurgebindingManifestation surge = (SurgebindingManifestation) SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.COHESION).getManifestation();
 			if(iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.COHESION).get()) &&
-				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.COHESION).getManifestation().isActive(iSpiritweb) &&
-				(isValidStoneBlock(block) || submodule.getIdeal()>3));
+				surge.isActive(iSpiritweb) &&
+				(isValidStoneBlock(block)));
 			{
 				if (!iSpiritweb.getLiving().isShiftKeyDown())
 				{
