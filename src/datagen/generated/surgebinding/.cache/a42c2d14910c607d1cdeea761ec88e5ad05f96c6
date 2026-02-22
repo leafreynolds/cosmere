@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-08T14:01:31.3831899	Item Models: surgebinding
+// 1.20.1	2026-02-22T13:29:28.9316397	Item Models: surgebinding
 e797f0f6000c58a24305d96eede7cc5c7bf50529 assets/surgebinding/models/item/amethyst_broam.json
 f12008b9216dc96bae966f9bdc9c458623021477 assets/surgebinding/models/item/amethyst_chip.json
 f11fb5b2de87bddd0918dffcc40c267bcc6b4da7 assets/surgebinding/models/item/amethyst_mark.json
@@ -29,6 +29,7 @@ fbee7654e8cdfae717bccf39f76848666cc51bb5 assets/surgebinding/models/item/shardpl
 aeef1a413783b0d7474003797b1593f3b85471b5 assets/surgebinding/models/item/smokestone_broam.json
 fd59ca79570b088f9255de834dd00faa2cf49a58 assets/surgebinding/models/item/smokestone_chip.json
 273b3611916007e08e308048afb1d444167a0acd assets/surgebinding/models/item/smokestone_mark.json
+b50c314162637445327770e943368dd644413878 assets/surgebinding/models/item/surge_banner_pattern.json
 e934281fad2ba0c4d87f0fbd780838c3060b2b4b assets/surgebinding/models/item/topaz_broam.json
 caa692f78e11810525d07377a8be4f74cd609a50 assets/surgebinding/models/item/topaz_chip.json
 41bee87d98c052d46e0b281745eba3ff392f42ab assets/surgebinding/models/item/topaz_mark.json

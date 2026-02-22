@@ -15,6 +15,8 @@ import leaf.cosmere.surgebinding.common.items.*;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardbladeItemTier;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BannerPatternItem;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import java.util.Arrays;
@@ -43,6 +45,7 @@ public class SurgebindingItems
 	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_LEGGINGS = ITEMS.register("shardplate_leggings", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.LEGGINGS, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_BOOTS = ITEMS.register("shardplate_boots", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.BOOTS, PropTypes.Items.SHARDBLADE.get()));
 
+	public static final ItemRegistryObject<BannerPatternItem> SURGE_BANNER_PATTERN = ITEMS.register("surge_banner_pattern",()-> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_SURGE, new Item.Properties().stacksTo(1)));
 
 	public static final Map<Roshar.RadiantOrder, ItemRegistryObject<HonorbladeItem>> HONORBLADES =
 			Arrays.stream(EnumUtils.RADIANT_ORDERS)
