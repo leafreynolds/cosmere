@@ -42,9 +42,9 @@ public class SurgebindingCreativeTabs
 	{
 		for (var gemstone : EnumUtils.GEMSTONE_TYPES)
 		{
-			SurgebindingItems.GEMSTONE_CHIPS.get(gemstone).get().addFilled(output);
-			SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get().addFilled(output);
-			SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get().addFilled(output);
+			SurgebindingItems.GEMSTONE_SMALL.get(gemstone).get().addFilled(output);
+			SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone).get().addFilled(output);
+			SurgebindingItems.GEMSTONE_LARGE.get(gemstone).get().addFilled(output);
 		}
 	}
 
@@ -107,9 +107,10 @@ public class SurgebindingCreativeTabs
 		{
 			for (var gemstone : EnumUtils.GEMSTONE_TYPES)
 			{
-				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_CHIPS.get(gemstone));
+				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_SMALL.get(gemstone));
+				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone));
+				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_LARGE.get(gemstone));
 				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_MARKS.get(gemstone));
-				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone));
 			}
 		}
 	}

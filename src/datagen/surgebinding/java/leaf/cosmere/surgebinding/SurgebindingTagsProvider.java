@@ -69,16 +69,16 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 
 		for (Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES)
 		{
-			final ItemRegistryObject<GemstoneItem> broamItem = SurgebindingItems.GEMSTONE_BROAMS.get(gemstone);
-
-			addToTag(Tags.Items.GEMS, broamItem);
 			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE_MARKS.get(gemstone));
-			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE_CHIPS.get(gemstone));
-
-			//and let our full sized gems be usable for other recipes
-			addToTag(CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE.get(gemstone));
+			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE_SMALL.get(gemstone));
+			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone));
+			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE_LARGE.get(gemstone));
 		}
 		addToTag(Tags.Items.GEMS, Items.AMETHYST_SHARD);
+		addToTag(Tags.Items.GEMS, Items.EMERALD);
+		for(Roshar.Gemstone gemstone : gemstoneList){
+			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE.get(gemstone));
+		}
 	}
 
 	private void addBlocks()

@@ -56,28 +56,28 @@ public class SurgebindingItems
 									() -> new HonorbladeItem(type, SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get())
 							)));
 
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_SMALL =
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_SMALL =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register("cut_"+type.getName()+"_small",
-									()-> new Item(new Item.Properties()))
+									()-> new GemstoneItem(type, Roshar.GemSize.SMALL))
 							));
 
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_MEDIUM =
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_MEDIUM =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register("cut_"+type.getName()+"_medium",
-									()-> new Item(new Item.Properties()))
+									()-> new GemstoneItem(type, Roshar.GemSize.MEDIUM))
 							));
 
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_LARGE =
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_LARGE =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register("cut_"+type.getName()+"_large",
-									()-> new Item(new Item.Properties()))
+									()-> new GemstoneItem(type, Roshar.GemSize.LARGE))
 							));
 
 	static Roshar.Gemstone[] gemstone = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
@@ -89,33 +89,13 @@ public class SurgebindingItems
 									()-> new Item(new Item.Properties()))
 					));
 
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_CHIPS =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
-					.collect(Collectors.toMap(
-							Function.identity(),
-							type -> ITEMS.register(
-									type.getName() + Constants.RegNameStubs.CHIP,
-									() -> new GemstoneItem(type, Roshar.GemSize.CHIP)
-							)));
-
-
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_MARKS =
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_MARKS =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + Constants.RegNameStubs.MARK,
-									() -> new GemstoneItem(type, Roshar.GemSize.MARK)
-							)));
-
-
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_BROAMS =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
-					.collect(Collectors.toMap(
-							Function.identity(),
-							type -> ITEMS.register(
-									type.getName() + Constants.RegNameStubs.BROAM,
-									() -> new GemstoneItem(type, Roshar.GemSize.BROAM)
+									() -> new Item(new Item.Properties())
 							)));
 
 	public static final ItemRegistryObject<ForgeSpawnEggItem> CHULL_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CHULL, 0x6c482f, 0x8a1a08);

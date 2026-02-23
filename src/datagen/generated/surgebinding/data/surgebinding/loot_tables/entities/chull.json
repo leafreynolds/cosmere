@@ -27,7 +27,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:sapphire_broam"
+          "name": "surgebinding:cut_sapphire_large"
         },
         {
           "type": "minecraft:item",
@@ -50,7 +50,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:sapphire_mark"
+          "name": "surgebinding:cut_sapphire_medium"
         },
         {
           "type": "minecraft:item",
@@ -73,7 +73,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:sapphire_chip"
+          "name": "surgebinding:cut_sapphire_small"
         },
         {
           "type": "minecraft:item",
@@ -88,7 +88,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:smokestone_broam"
+          "name": "surgebinding:cut_smokestone_large"
         },
         {
           "type": "minecraft:item",
@@ -111,7 +111,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:smokestone_mark"
+          "name": "surgebinding:cut_smokestone_medium"
         },
         {
           "type": "minecraft:item",
@@ -134,7 +134,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:smokestone_chip"
+          "name": "surgebinding:cut_smokestone_small"
         },
         {
           "type": "minecraft:item",
@@ -149,7 +149,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:ruby_broam"
+          "name": "surgebinding:cut_ruby_large"
         },
         {
           "type": "minecraft:item",
@@ -172,7 +172,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:ruby_mark"
+          "name": "surgebinding:cut_ruby_medium"
         },
         {
           "type": "minecraft:item",
@@ -195,7 +195,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:ruby_chip"
+          "name": "surgebinding:cut_ruby_small"
         },
         {
           "type": "minecraft:item",
@@ -210,7 +210,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:diamond_broam"
+          "name": "surgebinding:cut_diamond_large"
         },
         {
           "type": "minecraft:item",
@@ -233,7 +233,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:diamond_mark"
+          "name": "surgebinding:cut_diamond_medium"
         },
         {
           "type": "minecraft:item",
@@ -256,7 +256,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:diamond_chip"
+          "name": "surgebinding:cut_diamond_small"
         },
         {
           "type": "minecraft:item",
@@ -271,7 +271,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:emerald_broam"
+          "name": "surgebinding:cut_emerald_large"
         },
         {
           "type": "minecraft:item",
@@ -294,7 +294,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:emerald_mark"
+          "name": "surgebinding:cut_emerald_medium"
         },
         {
           "type": "minecraft:item",
@@ -317,7 +317,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:emerald_chip"
+          "name": "surgebinding:cut_emerald_small"
         },
         {
           "type": "minecraft:item",
@@ -332,7 +332,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:garnet_broam"
+          "name": "surgebinding:cut_garnet_large"
         },
         {
           "type": "minecraft:item",
@@ -355,7 +355,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:garnet_mark"
+          "name": "surgebinding:cut_garnet_medium"
         },
         {
           "type": "minecraft:item",
@@ -378,7 +378,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:garnet_chip"
+          "name": "surgebinding:cut_garnet_small"
         },
         {
           "type": "minecraft:item",
@@ -393,7 +393,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:zircon_broam"
+          "name": "surgebinding:cut_zircon_large"
         },
         {
           "type": "minecraft:item",
@@ -416,7 +416,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:zircon_mark"
+          "name": "surgebinding:cut_zircon_medium"
         },
         {
           "type": "minecraft:item",
@@ -439,7 +439,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:zircon_chip"
+          "name": "surgebinding:cut_zircon_small"
         },
         {
           "type": "minecraft:item",
@@ -454,7 +454,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:amethyst_broam"
+          "name": "surgebinding:cut_amethyst_large"
         },
         {
           "type": "minecraft:item",
@@ -477,7 +477,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:amethyst_mark"
+          "name": "surgebinding:cut_amethyst_medium"
         },
         {
           "type": "minecraft:item",
@@ -500,7 +500,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:amethyst_chip"
+          "name": "surgebinding:cut_amethyst_small"
         },
         {
           "type": "minecraft:item",
@@ -515,7 +515,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:topaz_broam"
+          "name": "surgebinding:cut_topaz_large"
         },
         {
           "type": "minecraft:item",
@@ -538,7 +538,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:topaz_mark"
+          "name": "surgebinding:cut_topaz_medium"
         },
         {
           "type": "minecraft:item",
@@ -561,7 +561,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:topaz_chip"
+          "name": "surgebinding:cut_topaz_small"
         },
         {
           "type": "minecraft:item",
@@ -576,7 +576,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "surgebinding:heliodor_broam"
+          "name": "surgebinding:cut_heliodor_large"
         },
         {
           "type": "minecraft:item",
@@ -599,7 +599,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:heliodor_mark"
+          "name": "surgebinding:cut_heliodor_medium"
         },
         {
           "type": "minecraft:item",
@@ -622,7 +622,7 @@
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "surgebinding:heliodor_chip"
+          "name": "surgebinding:cut_heliodor_small"
         }
       ],
       "name": "gems",

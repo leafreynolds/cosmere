@@ -23,7 +23,7 @@ public class SurgebindingBlockLootTableGen extends BaseBlockLootTables
 			final Block block = itemRegistryObject.getBlock();
 			if (block instanceof GemOreBlock oreBlock)
 			{
-				this.add(oreBlock, (ore) -> createOreDrop(ore, SurgebindingItems.GEMSTONE_CHIPS.get(oreBlock.getGemType())));
+				this.add(oreBlock, (ore) -> createOreDrop(ore, SurgebindingItems.GEMSTONE.get(oreBlock.getGemType())));
 			}
 		}
 
