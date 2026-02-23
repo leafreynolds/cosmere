@@ -21,6 +21,7 @@ public class SurgebindingTags
 
 	public static class BannerPatterns{
 		public static final TagKey<BannerPattern> PATTERN_ITEM_SURGE = tag("pattern_item/surge");
+		public static final TagKey<BannerPattern> PATTERN_ITEM_RADIANT_ORDER = tag("pattern_item/radiant_order");
 
 		private static TagKey<BannerPattern> tag(String name){
 			return TagKey.create(Registries.BANNER_PATTERN, new ResourceLocation(Surgebinding.MODID,name));

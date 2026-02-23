@@ -56,6 +56,46 @@ public class SurgebindingItems
 									() -> new HonorbladeItem(type, SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get())
 							)));
 
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_SMALL =
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> ITEMS.register("cut_"+type.getName()+"_small",
+									()-> new Item(new Item.Properties()))
+							));
+
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_MEDIUM =
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> ITEMS.register("cut_"+type.getName()+"_medium",
+									()-> new Item(new Item.Properties()))
+							));
+
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_LARGE =
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> ITEMS.register("cut_"+type.getName()+"_large",
+									()-> new Item(new Item.Properties()))
+							));
+
+	public static final ItemRegistryObject<Item> ROSHARAN_DIAMOND = ITEMS.register("rosharan_diamond",
+			() -> new Item(new Item.Properties()));
+	public static final ItemRegistryObject<Item> GARNET = ITEMS.register("garnet",
+			() -> new Item(new Item.Properties()));
+	public static final ItemRegistryObject<Item> HELIODOR = ITEMS.register("heliodor",
+			() -> new Item(new Item.Properties()));
+	public static final ItemRegistryObject<Item> RUBY = ITEMS.register("ruby",
+			() -> new Item(new Item.Properties()));
+	public static final ItemRegistryObject<Item> SAPPHIRE = ITEMS.register("sapphire",
+			() -> new Item(new Item.Properties()));
+	public static final ItemRegistryObject<Item> SMOKESTONE = ITEMS.register("smokestone",
+			() -> new Item(new Item.Properties()));
+	public static final ItemRegistryObject<Item> TOPAZ = ITEMS.register("topaz",
+			() -> new Item(new Item.Properties()));
+	public static final ItemRegistryObject<Item> zircon = ITEMS.register("zircon",
+			() -> new Item(new Item.Properties()));
 
 	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_CHIPS =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)

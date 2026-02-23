@@ -33,7 +33,7 @@ public class SurgebindingBlocks
 									() -> new GemBlock(gemstone),
 									Rarity.UNCOMMON)));
 
-/*	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
+	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
@@ -49,7 +49,7 @@ public class SurgebindingBlocks
 							gemstone -> BLOCKS.registerWithRarity(
 									Constants.RegNameStubs.DEEPSLATE + gemstone.getName() + Constants.RegNameStubs.ORE,
 									() -> new GemOreBlock(gemstone),
-									Rarity.UNCOMMON)));*/
+									Rarity.UNCOMMON)));
 
 	public static final BlockRegistryObject<LavisPolypBlock, BlockItem> LAVIS_POLYP_BLOCK = BLOCKS.register("lavis_polyp", LavisPolypBlock::new);
 	public static final BlockRegistryObject<PrickletacBlock, BlockItem> PRICKLETAC_BLOCK = BLOCKS.register("prickletac", PrickletacBlock::new);

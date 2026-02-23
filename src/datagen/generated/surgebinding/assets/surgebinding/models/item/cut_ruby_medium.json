@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "surgebinding:item/cut_ruby_medium"
+  }
+}
