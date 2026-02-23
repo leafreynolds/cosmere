@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 
 public class SurgebindingCreativeTabs
@@ -67,11 +68,13 @@ public class SurgebindingCreativeTabs
 		}
 		else if (tabKey == CreativeModeTabs.COLORED_BLOCKS)
 		{
-			for (var gemstone : EnumUtils.GEMSTONE_TYPES)
+			Roshar.Gemstone[] gemstonesTypes = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR, Roshar.Gemstone.AMETHYST};
+			for (var gemstone : gemstonesTypes)
 			{
 				BlockRegistryObject<GemBlock, BlockItem> item = SurgebindingBlocks.GEM_BLOCKS.get(gemstone);
 				CreativeTabDeferredRegister.addToDisplay(event, item);
 			}
+			CreativeTabDeferredRegister.addToDisplay(event, Items.EMERALD_BLOCK);
 		}
 		else if (tabKey == CreativeModeTabs.FUNCTIONAL_BLOCKS)
 		{

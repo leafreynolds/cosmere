@@ -24,30 +24,32 @@ public class SurgebindingBlocks
 {
 	public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(Surgebinding.MODID);
 
+	static Roshar.Gemstone[] gemstone = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.AMETHYST, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemBlock, BlockItem>> GEM_BLOCKS =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+			Arrays.stream(gemstone)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
-									gemstone.getName() + Constants.RegNameStubs.BLOCK,
+									gemstone==Roshar.Gemstone.DIAMOND?"rosharan_diamond_block":gemstone.getName() + Constants.RegNameStubs.BLOCK,
 									() -> new GemBlock(gemstone),
 									Rarity.UNCOMMON)));
 
+	static Roshar.Gemstone[] gemstoneOreList = {Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+			Arrays.stream(gemstoneOreList)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
-									gemstone.getName() + Constants.RegNameStubs.ORE,
+									gemstone==Roshar.Gemstone.DIAMOND?"rosharan_diamond_ore":gemstone.getName() + Constants.RegNameStubs.ORE,
 									() -> new GemOreBlock(gemstone),
 									Rarity.UNCOMMON)));
 
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE_DEEPSLATE =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+			Arrays.stream(gemstoneOreList)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
-									Constants.RegNameStubs.DEEPSLATE + gemstone.getName() + Constants.RegNameStubs.ORE,
+									gemstone==Roshar.Gemstone.DIAMOND?"deepslate_rosharan_diamond_ore":Constants.RegNameStubs.DEEPSLATE + gemstone.getName() + Constants.RegNameStubs.ORE,
 									() -> new GemOreBlock(gemstone),
 									Rarity.UNCOMMON)));
 

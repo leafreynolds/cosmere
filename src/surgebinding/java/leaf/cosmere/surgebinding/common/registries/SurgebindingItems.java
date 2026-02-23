@@ -80,22 +80,14 @@ public class SurgebindingItems
 									()-> new Item(new Item.Properties()))
 							));
 
-	public static final ItemRegistryObject<Item> ROSHARAN_DIAMOND = ITEMS.register("rosharan_diamond",
-			() -> new Item(new Item.Properties()));
-	public static final ItemRegistryObject<Item> GARNET = ITEMS.register("garnet",
-			() -> new Item(new Item.Properties()));
-	public static final ItemRegistryObject<Item> HELIODOR = ITEMS.register("heliodor",
-			() -> new Item(new Item.Properties()));
-	public static final ItemRegistryObject<Item> RUBY = ITEMS.register("ruby",
-			() -> new Item(new Item.Properties()));
-	public static final ItemRegistryObject<Item> SAPPHIRE = ITEMS.register("sapphire",
-			() -> new Item(new Item.Properties()));
-	public static final ItemRegistryObject<Item> SMOKESTONE = ITEMS.register("smokestone",
-			() -> new Item(new Item.Properties()));
-	public static final ItemRegistryObject<Item> TOPAZ = ITEMS.register("topaz",
-			() -> new Item(new Item.Properties()));
-	public static final ItemRegistryObject<Item> zircon = ITEMS.register("zircon",
-			() -> new Item(new Item.Properties()));
+	static Roshar.Gemstone[] gemstone = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE =
+			Arrays.stream(gemstone)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> ITEMS.register(type==Roshar.Gemstone.DIAMOND?"rosharan_diamond":type.getName(),
+									()-> new Item(new Item.Properties()))
+					));
 
 	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_CHIPS =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
