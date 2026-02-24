@@ -1,6 +1,6 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 4,
+  "count": 16,
   "ingredient": {
     "item": "surgebinding:smokestone"
   },

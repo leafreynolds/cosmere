@@ -1,0 +1,4 @@
+// 1.20.1	2026-02-24T19:48:37.2450137	Registries
+8fc25112e0091a17df0bb6f1eb37695ee03795bc data/surgebinding/forge/biome_modifier/add_smokestone_ore.json
+19eb112e971e9a2b012f88000c735c700b1eb430 data/surgebinding/worldgen/configured_feature/smokestone_ore.json
+de21012c5c0f61b11ab8c23ee2f16cde00985ca6 data/surgebinding/worldgen/placed_feature/smokestone_ore_placed.json

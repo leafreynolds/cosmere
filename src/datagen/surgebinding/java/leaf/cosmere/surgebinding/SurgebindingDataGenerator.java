@@ -40,6 +40,7 @@ public class SurgebindingDataGenerator
 		generator.addProvider(true, new SurgebindingBlockModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SurgebindingLootTableGen(packOutput));
 		generator.addProvider(true, new SurgebindingRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(event.includeServer(), new SurgebindingWorldGenProvider(packOutput, event.getLookupProvider()));
 
 		generator.addProvider(true, new SurgebindingPatchouliGen(packOutput));
 	}
