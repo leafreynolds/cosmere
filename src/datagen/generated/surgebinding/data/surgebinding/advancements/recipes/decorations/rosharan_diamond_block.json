@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:gems/diamond"
+            "items": [
+              "surgebinding:rosharan_diamond"
+            ]
           }
         ]
       },

@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:gems/smokestone"
+            "items": [
+              "surgebinding:smokestone"
+            ]
           }
         ]
       },

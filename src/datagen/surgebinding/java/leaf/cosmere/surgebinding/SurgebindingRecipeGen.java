@@ -55,15 +55,15 @@ public class SurgebindingRecipeGen extends BaseRecipeProvider implements ICondit
 		//Cutting Gemstones into Cut Gemstones
 		for(Roshar.Gemstone gemstone : gemstonesList)
 		{
-			RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_SMALL.get(gemstone),SurgebindingItems.GEMSTONE.get(gemstone),4);
-			RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone),SurgebindingItems.GEMSTONE.get(gemstone),2);
+			RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_SMALL.get(gemstone),SurgebindingItems.GEMSTONE.get(gemstone),16);
+			RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone),SurgebindingItems.GEMSTONE.get(gemstone),4);
 			RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_LARGE.get(gemstone),SurgebindingItems.GEMSTONE.get(gemstone),1);
 		}
-		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_SMALL.get(Roshar.Gemstone.EMERALD),Items.EMERALD,4);
-		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(Roshar.Gemstone.EMERALD),Items.EMERALD,2);
+		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_SMALL.get(Roshar.Gemstone.EMERALD),Items.EMERALD,16);
+		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(Roshar.Gemstone.EMERALD),Items.EMERALD,4);
 		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_LARGE.get(Roshar.Gemstone.EMERALD),Items.EMERALD,1);
-		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_SMALL.get(Roshar.Gemstone.AMETHYST),Items.AMETHYST_SHARD,4);
-		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(Roshar.Gemstone.AMETHYST),Items.AMETHYST_SHARD,2);
+		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_SMALL.get(Roshar.Gemstone.AMETHYST),Items.AMETHYST_SHARD,16);
+		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(Roshar.Gemstone.AMETHYST),Items.AMETHYST_SHARD,4);
 		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_LARGE.get(Roshar.Gemstone.AMETHYST),Items.AMETHYST_SHARD,1);
 
 

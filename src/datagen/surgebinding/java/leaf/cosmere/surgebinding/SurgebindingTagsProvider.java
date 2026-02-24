@@ -78,6 +78,7 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		addToTag(Tags.Items.GEMS, Items.EMERALD);
 		for(Roshar.Gemstone gemstone : gemstoneList){
 			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE.get(gemstone));
+			addToTag(CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE.get(gemstone));
 		}
 	}
 

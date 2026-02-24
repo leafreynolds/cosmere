@@ -1,4 +1,4 @@
-// 1.20.1	2026-02-23T23:04:10.7684502	Tags: surgebinding
+// 1.20.1	2026-02-23T23:45:04.5947586	Tags: surgebinding
 1f4a893d33327a86f361b3e38f9dcf2af46287fc data/cosmere/tags/worldgen/biome/spawn_ores.json
 b4bf1a40695628bad3692a7d5d6044ffdbf07e9b data/forge/tags/blocks/ores/diamond.json
 535ffd326e438b4244fa9119ac3fc325a55e6769 data/forge/tags/blocks/ores/garnet.json
@@ -18,6 +18,14 @@ aeaede227bae14370d9c20b5fa1fde9a29521ebb data/forge/tags/blocks/storage_blocks/h
 538b3e977ed89fbf5346bda5d9c2a31519709789 data/forge/tags/blocks/storage_blocks/topaz.json
 5ce6a2023aa95ada658bb30be3a2bf1a1ab729a3 data/forge/tags/blocks/storage_blocks/zircon.json
 9535dc5cb151b00d02ad4970b0b9b6ad387de67e data/forge/tags/items/gems.json
+1740e87a5918faaa0662e6a6f82cdaceccc0f7ab data/forge/tags/items/gems/diamond.json
+13fe09136216305b7e8326229706b6a29aeea74f data/forge/tags/items/gems/garnet.json
+227cf1c810ca19e1d0ee5c53cfe5730c61a6a0ed data/forge/tags/items/gems/heliodor.json
+a8dbdba2d330fce6f2f9d26c75566e6a2dae5f91 data/forge/tags/items/gems/ruby.json
+3212f49c370d4f81351f1bd9b86f12451d4bf44c data/forge/tags/items/gems/sapphire.json
+02aa08ddaefe6f547bac3f3f3aef7b290620d8aa data/forge/tags/items/gems/smokestone.json
+c76301221ab0903be9ccd17250dd0378ca8f45c7 data/forge/tags/items/gems/topaz.json
+7c94a13fdf826e0bcfd3bcfd48a3ce7e995ee202 data/forge/tags/items/gems/zircon.json
 d648c1fd0d4c14294758bf352928b98b4ad5fc70 data/forge/tags/items/storage_blocks.json
 e65d9a5c24c24dc049cce37538918e39cdeac5f8 data/forge/tags/items/storage_blocks/amethyst.json
 2a0fc78ca455134d73fea3bb15af5e21034f5e45 data/forge/tags/items/storage_blocks/diamond.json
