@@ -1,5 +1,6 @@
 package leaf.cosmere.surgebinding.common.worldgen;
 
+import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
@@ -16,26 +17,36 @@ import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguratio
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SurgebindingConfiguredFeatures
 {
-	public static final ResourceKey<ConfiguredFeature<?,?>> SMOKESTONE_ORE_KEY = registerKey("smokestone_ore");
+	public static Map<Roshar.Gemstone, ResourceKey<ConfiguredFeature<?,?>>> GEMSTONE_ORE_KEY =
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> registerKey(type== Roshar.Gemstone.DIAMOND?"ore_roshar_diamond":"ore_"+type.getName())
+					));
 
 	public static void boostrap(BootstapContext<ConfiguredFeature<?,?>> context){
 		RuleTest stoneReplaceable = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
 		RuleTest deepslateReplaceable = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
+		Map<Roshar.Gemstone, List<OreConfiguration.TargetBlockState>> overworldGemstoneOres = new HashMap<>(Map.of());
 
-		List<OreConfiguration.TargetBlockState> overworldSmokestoneOres = List.of(
-				OreConfiguration.target(stoneReplaceable,
-						Blocks.ACACIA_LEAVES.defaultBlockState()),
-				OreConfiguration.target(deepslateReplaceable,
-								SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(Roshar.Gemstone.SMOKESTONE).getBlock().defaultBlockState())
-		);
-
-		register(context, SMOKESTONE_ORE_KEY, Feature.ORE, new OreConfiguration(overworldSmokestoneOres, 3));
-
-
+		for(Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES_ORE){
+			overworldGemstoneOres.put(gemstone, List.of(
+					OreConfiguration.target(stoneReplaceable,
+							SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock().defaultBlockState()),
+					OreConfiguration.target(deepslateReplaceable,
+							SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone).getBlock().defaultBlockState())
+			));
+			register(context, GEMSTONE_ORE_KEY.get(gemstone), Feature.ORE, new OreConfiguration(overworldGemstoneOres.get(gemstone), 5));
+		}
 	}
 
 	public static ResourceKey<ConfiguredFeature<?,?>> registerKey(String name) {

@@ -2,16 +2,11 @@
   "type": "minecraft:ore",
   "config": {
     "discard_chance_on_air_exposure": 0.0,
-    "size": 3,
+    "size": 5,
     "targets": [
       {
         "state": {
-          "Name": "minecraft:acacia_leaves",
-          "Properties": {
-            "distance": "7",
-            "persistent": "false",
-            "waterlogged": "false"
-          }
+          "Name": "surgebinding:topaz_ore"
         },
         "target": {
           "predicate_type": "minecraft:tag_match",
@@ -20,7 +15,7 @@
       },
       {
         "state": {
-          "Name": "surgebinding:deepslate_smokestone_ore"
+          "Name": "surgebinding:deepslate_topaz_ore"
         },
         "target": {
           "predicate_type": "minecraft:tag_match",

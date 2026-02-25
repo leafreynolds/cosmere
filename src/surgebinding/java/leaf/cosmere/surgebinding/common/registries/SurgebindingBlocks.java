@@ -34,9 +34,8 @@ public class SurgebindingBlocks
 									() -> new GemBlock(gemstone),
 									Rarity.UNCOMMON)));
 
-	static Roshar.Gemstone[] gemstoneOreList = {Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
-			Arrays.stream(gemstoneOreList)
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
@@ -45,7 +44,7 @@ public class SurgebindingBlocks
 									Rarity.UNCOMMON)));
 
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE_DEEPSLATE =
-			Arrays.stream(gemstoneOreList)
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
