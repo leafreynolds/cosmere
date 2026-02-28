@@ -46,6 +46,7 @@ public class SurgebindingItems
 	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_BOOTS = ITEMS.register("shardplate_boots", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.BOOTS, PropTypes.Items.SHARDBLADE.get()));
 
 	public static final ItemRegistryObject<BannerPatternItem> SURGE_BANNER_PATTERN = ITEMS.register("surge_banner_pattern",()-> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_SURGE, new Item.Properties().stacksTo(1)));
+	public static final ItemRegistryObject<BannerPatternItem> RADIANT_ORDER_BANNER_PATTER = ITEMS.register("radiant_order_banner_pattern", ()-> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_RADIANT_ORDER, new Item.Properties().stacksTo(1)));
 
 	public static final Map<Roshar.RadiantOrder, ItemRegistryObject<HonorbladeItem>> HONORBLADES =
 			Arrays.stream(EnumUtils.RADIANT_ORDERS)

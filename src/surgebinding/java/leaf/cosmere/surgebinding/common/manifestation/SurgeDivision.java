@@ -8,6 +8,7 @@ import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
@@ -34,18 +35,14 @@ public class SurgeDivision extends SurgebindingManifestation
 	//power over destruction and decay
 	public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event)
 	{
-		if (!event.getEntity().getMainHandItem().isEmpty())
-		{
-			return;
-		}
-
 		final BlockPos blockPos = event.getHitVec().getBlockPos();
 
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
 			SurgebindingManifestation surge = (SurgebindingManifestation) SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation();
 			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).get()) &&
-					surge.isActive(iSpiritweb))
+					surge.isActive(iSpiritweb)&&
+					event.getEntity().getMainHandItem().isEmpty())
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				if(iSpiritweb.getLiving().isShiftKeyDown())

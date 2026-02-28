@@ -1,4 +1,4 @@
-// 1.20.1	2026-02-23T23:04:10.7741225	Item Models: surgebinding
+// 1.20.1	2026-02-26T19:08:45.3340351	Item Models: surgebinding
 f11fb5b2de87bddd0918dffcc40c267bcc6b4da7 assets/surgebinding/models/item/amethyst_mark.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/surgebinding/models/item/chull_spawn_egg.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/surgebinding/models/item/cryptic_spawn_egg.json
@@ -38,6 +38,7 @@ a866eaa8662c6e90868c456e3ff5619321ffa604 assets/surgebinding/models/item/cut_top
 ed0f4410947f36fb2c30adc5d2df3d429f5719bf assets/surgebinding/models/item/garnet_mark.json
 a2fab60aae34e89444507b186249f22ba45612a0 assets/surgebinding/models/item/heliodor.json
 266acccc694a0c4810b2bf49a73e095aadf178e5 assets/surgebinding/models/item/heliodor_mark.json
+9d990a29d20d768efedf7861c0cb0bec74d72263 assets/surgebinding/models/item/radiant_order_banner_pattern.json
 472e5801c87b5d0e423c66f4f3845f12be768585 assets/surgebinding/models/item/rosharan_diamond.json
 4411b11f1c8a178d5b59dc1a9a78091cad9459b3 assets/surgebinding/models/item/ruby.json
 a91ca4972b8d3422763281c9cb8be570a54a5339 assets/surgebinding/models/item/ruby_mark.json

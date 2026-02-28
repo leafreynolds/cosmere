@@ -7,19 +7,20 @@ package leaf.cosmere.surgebinding;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
 
 import static leaf.cosmere.api.Constants.Strings.KEY_SHARDBLADE;
 import static leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes.SURGEBINDING_ATTRIBUTES;
@@ -59,16 +60,21 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
+		List<Item> customNames = List.of(SurgebindingItems.RADIANT_ORDER_BANNER_PATTER.get(),SurgebindingItems.SURGE_BANNER_PATTERN.get());
 		for (Item item : ForgeRegistries.ITEMS.getValues())
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Surgebinding.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
-				add(item.getDescriptionId(), localisedString);
+				if(!customNames.contains(item))
+					add(item.getDescriptionId(), localisedString);
 			}
 		}
-
+		add("item.surgebinding.surge_banner_pattern","Banner Pattern");
+		add("item.surgebinding.radiant_order_banner_pattern","Banner Pattern");
+		add("item.surgebinding.surge_banner_pattern.desc","Surge");
+		add("item.surgebinding.radiant_order_banner_pattern.desc","Radiant Order");
 	}
 
 	private void addEntities()

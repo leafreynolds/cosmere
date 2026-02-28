@@ -11,6 +11,8 @@ import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmod
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,12 +43,7 @@ public class SurgeCohesion extends SurgebindingManifestation
 			Blocks.END_STONE,Blocks.END_STONE_BRICKS,Blocks.PURPUR_BLOCK,Blocks.QUARTZ_BLOCK,Blocks.SMOOTH_QUARTZ));
 
 	public static boolean isValidStoneBlock(Block blok){
-		if(blok==Blocks.COBBLESTONE){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return blok == Blocks.COBBLESTONE;
 		/*
 		for(Block b : cohesive){
 			if(b == blok){
@@ -64,17 +61,18 @@ public class SurgeCohesion extends SurgebindingManifestation
 		{
 			SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 			SurgebindingManifestation surge = (SurgebindingManifestation) SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.COHESION).getManifestation();
-			if(iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.COHESION).get()) &&
-				surge.isActive(iSpiritweb) &&
-				(isValidStoneBlock(block)));
+			if(iSpiritweb.hasManifestation(surge) && isValidStoneBlock(block))
 			{
-				if (!iSpiritweb.getLiving().isShiftKeyDown())
+				if (surge.isActive(iSpiritweb) && event.getEntity().getMainHandItem().isEmpty())
 				{
-					if (submodule.adjustStormlight(-15, true))
+					if (!iSpiritweb.getLiving().isShiftKeyDown())
 					{
-						if (event.getLevel() instanceof ServerLevel serverLevel)
+						if (submodule.adjustStormlight(-15, true))
 						{
-							serverLevel.destroyBlock(blockPos, true);
+							if (event.getLevel() instanceof ServerLevel serverLevel)
+							{
+									serverLevel.destroyBlock(blockPos, true);
+							}
 						}
 					}
 				}
