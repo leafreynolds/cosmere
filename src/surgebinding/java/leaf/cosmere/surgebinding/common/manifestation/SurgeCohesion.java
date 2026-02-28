@@ -43,15 +43,12 @@ public class SurgeCohesion extends SurgebindingManifestation
 			Blocks.END_STONE,Blocks.END_STONE_BRICKS,Blocks.PURPUR_BLOCK,Blocks.QUARTZ_BLOCK,Blocks.SMOOTH_QUARTZ));
 
 	public static boolean isValidStoneBlock(Block blok){
-		return blok == Blocks.COBBLESTONE;
-		/*
 		for(Block b : cohesive){
 			if(b == blok){
 				return true;
 			}
 		}
 		return false;
-		 */
 	}
 
 	public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event){
