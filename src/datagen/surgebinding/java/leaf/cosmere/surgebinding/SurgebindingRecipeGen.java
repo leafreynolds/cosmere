@@ -66,6 +66,9 @@ public class SurgebindingRecipeGen extends BaseRecipeProvider implements ICondit
 		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(Roshar.Gemstone.AMETHYST),Items.AMETHYST_SHARD,4);
 		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_LARGE.get(Roshar.Gemstone.AMETHYST),Items.AMETHYST_SHARD,1);
 
+		//Foods and stuff
+		RecipeProvider.smeltingResultFromBase(consumer, SurgebindingItems.COOKED_CHULL_LEG, SurgebindingItems.RAW_CHULL_LEG);
+		RecipeProvider.smeltingResultFromBase(consumer, SurgebindingItems.COOKED_CHULL_MEAT, SurgebindingItems.RAW_CHULL_MEAT);
 
 	}
 }

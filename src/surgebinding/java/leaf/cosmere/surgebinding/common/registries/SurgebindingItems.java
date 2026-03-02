@@ -14,6 +14,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.items.*;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardbladeItemTier;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.Item;
@@ -98,6 +99,30 @@ public class SurgebindingItems
 									type.getName() + Constants.RegNameStubs.MARK,
 									() -> new Item(new Item.Properties())
 							)));
+
+	public static final ItemRegistryObject<Item> RAW_CHULL_LEG = ITEMS.register("raw_chull_leg", ()-> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(5)
+					.meat()
+					.build())));
+
+	public static final ItemRegistryObject<Item> COOKED_CHULL_LEG = ITEMS.register("cooked_chull_leg", ()-> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(10)
+					.meat()
+					.build())));
+
+	public static final ItemRegistryObject<Item> RAW_CHULL_MEAT = ITEMS.register("raw_chull_meat", ()-> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(4)
+					.meat()
+					.build())));
+
+	public static final ItemRegistryObject<Item> COOKED_CHULL_MEAT = ITEMS.register("cooked_chull_meat", ()-> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(8)
+					.meat()
+					.build())));
 
 	public static final ItemRegistryObject<ForgeSpawnEggItem> CHULL_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CHULL, 0x6c482f, 0x8a1a08);
 	public static final ItemRegistryObject<ForgeSpawnEggItem> CRYPTIC_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CRYPTIC, 0x272727, 0x4d4d4d);
