@@ -1,4 +1,4 @@
-// 1.20.1	2026-03-03T15:54:10.3389974	Loot Tables
+// 1.20.1	2026-03-04T00:38:12.646093	Loot Tables
 a758c0c893df7df71bdc8aeed2272371ac643703 data/surgebinding/loot_tables/blocks/amethyst_block.json
 1d59888eae372d49109ca8a738cf88d4c203ea7f data/surgebinding/loot_tables/blocks/block_of_sapphire.json
 0bac0e9970f0744829759d24eda27e6b90f3bba2 data/surgebinding/loot_tables/blocks/deepslate_garnet_ore.json
@@ -20,6 +20,7 @@ d3837a17b94986b495f32435fd53b1f2f7c9b401 data/surgebinding/loot_tables/blocks/he
 c490882cd758fdb94f600da4440ab3dd9fc4ad82 data/surgebinding/loot_tables/blocks/ruby_block.json
 a7a9fd738579c0e252b51c07e3c480dc827e9fff data/surgebinding/loot_tables/blocks/ruby_ore.json
 d15b8e9e600e8e005fd6ae60c88233f818224c23 data/surgebinding/loot_tables/blocks/sapphire_block.json
+75a252c4e3945c6677f8eda1fdfc0fc38b9e03d5 data/surgebinding/loot_tables/blocks/sapphire_cluster.json
 c91329902baa3e7be40bfcfcba3e67dfc38c8ffb data/surgebinding/loot_tables/blocks/smokestone_block.json
 b63b77cf8eaa236135900d14f53807c3adea139f data/surgebinding/loot_tables/blocks/smokestone_ore.json
 5787c840881f70463d2ea51d5936999905e892fe data/surgebinding/loot_tables/blocks/topaz_block.json

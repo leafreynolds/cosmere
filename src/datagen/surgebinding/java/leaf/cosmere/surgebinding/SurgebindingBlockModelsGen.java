@@ -16,6 +16,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class SurgebindingBlockModelsGen extends BlockStateProvider
@@ -28,6 +29,9 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 	@Override
 	protected void registerStatesAndModels()
 	{
+		List<Block> irregularBlocks = List.of(SurgebindingBlocks.LAVIS_POLYP_BLOCK.getBlock(),SurgebindingBlocks.PRICKLETAC_BLOCK.getBlock(),SurgebindingBlocks.ROCKBUD_VARIANT_BLOCK.getBlock(),
+				SurgebindingBlocks.VINEBUD_BLOCK.getBlock(),SurgebindingBlocks.SMALL_SAPPHIRE_BUD.getBlock(),SurgebindingBlocks.MEDIUM_SAPPHIRE_BUD.getBlock(),SurgebindingBlocks.LARGE_SAPPHIRE_BUD.getBlock(),
+				SurgebindingBlocks.SAPPHIRE_CLUSTER.getBlock());
 		for (IBlockProvider itemRegistryObject : SurgebindingBlocks.BLOCKS.getAllBlocks())
 		{
 			final Block block = itemRegistryObject.getBlock();
@@ -55,7 +59,7 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 				simpleBlock(block, blockModel);
 				continue;
 			}
-			else if (block instanceof LavisPolypBlock || block instanceof PrickletacBlock || block instanceof RockbudVariantBlock || block instanceof VinebudBlock)
+			else if (irregularBlocks.contains(block))
 			{
 				continue;
 			}

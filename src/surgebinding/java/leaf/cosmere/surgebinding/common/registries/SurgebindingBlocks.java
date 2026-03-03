@@ -15,6 +15,7 @@ import leaf.cosmere.surgebinding.common.blocks.*;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -38,8 +39,21 @@ public class SurgebindingBlocks
 									gemstone==Roshar.Gemstone.DIAMOND?"rosharan_diamond_block":gemstone.getName() + Constants.RegNameStubs.BLOCK,
 									() -> new GemBlock(gemstone),
 									Rarity.UNCOMMON)));
+
 	public static final BlockRegistryObject<Block,BlockItem> BLOCK_OF_SAPPHIRE = BLOCKS.register("block_of_sapphire",
 			()-> new Block(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK).sound(SoundType.AMETHYST)));
+
+	public static final BlockRegistryObject<AmethystClusterBlock,BlockItem> SMALL_SAPPHIRE_BUD = BLOCKS.register("small_sapphire_bud",
+			()-> new AmethystClusterBlock(3,4,BlockBehaviour.Properties.copy(Blocks.SMALL_AMETHYST_BUD)));
+
+	public static final BlockRegistryObject<AmethystClusterBlock,BlockItem> MEDIUM_SAPPHIRE_BUD = BLOCKS.register("medium_sapphire_bud",
+			()-> new AmethystClusterBlock(4,3,BlockBehaviour.Properties.copy(Blocks.MEDIUM_AMETHYST_BUD)));
+
+	public static final BlockRegistryObject<AmethystClusterBlock,BlockItem> LARGE_SAPPHIRE_BUD = BLOCKS.register("large_sapphire_bud",
+			()-> new AmethystClusterBlock(5,3,BlockBehaviour.Properties.copy(Blocks.LARGE_AMETHYST_BUD)));
+
+	public static final BlockRegistryObject<AmethystClusterBlock,BlockItem> SAPPHIRE_CLUSTER = BLOCKS.register("sapphire_cluster",
+			()-> new AmethystClusterBlock(7,3,BlockBehaviour.Properties.copy(Blocks.AMETHYST_CLUSTER)));
 
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)

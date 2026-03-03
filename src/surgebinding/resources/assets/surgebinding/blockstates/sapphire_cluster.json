@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "surgebinding:block/sapphire_cluster",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "surgebinding:block/sapphire_cluster",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "surgebinding:block/sapphire_cluster",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "surgebinding:block/sapphire_cluster",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "surgebinding:block/sapphire_cluster"
+    },
+    "facing=west": {
+      "model": "surgebinding:block/sapphire_cluster",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

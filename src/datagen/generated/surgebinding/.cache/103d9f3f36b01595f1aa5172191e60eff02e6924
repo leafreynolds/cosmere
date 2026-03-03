@@ -1,4 +1,4 @@
-// 1.20.1	2026-03-03T15:54:10.3415117	Registries
+// 1.20.1	2026-03-04T00:26:28.6884555	Registries
 2ad4496c6fa4594585fb6aa13cc0bb52e78b2265 data/surgebinding/forge/biome_modifier/add_garnet_ore.json
 484981f293ce30217000cc55385717c6ec5096af data/surgebinding/forge/biome_modifier/add_heliodor_ore.json
 fbc1269b5de2a07b5a6bce73b0683a2011a6b92a data/surgebinding/forge/biome_modifier/add_rosharan_diamond_ore.json
@@ -14,7 +14,7 @@ d0f13bf6d8e11064c72bb723bc25b2cfb2ff33ec data/surgebinding/worldgen/configured_f
 a56f7077f613874efeef00a8eb7a29f4d7ead87b data/surgebinding/worldgen/configured_feature/ore_smokestone.json
 85e595d77f56cf0ad100745f15940cbc92ae53da data/surgebinding/worldgen/configured_feature/ore_topaz.json
 a541ec162088e15b9b518f8136d4cd9abea2b789 data/surgebinding/worldgen/configured_feature/ore_zircon.json
-25dad517e9fb28297fa3780761c35bf7c155daa2 data/surgebinding/worldgen/configured_feature/sapphire_geode_key.json
+0d5b753228e499398ef151918d0f4cd467dea044 data/surgebinding/worldgen/configured_feature/sapphire_geode_key.json
 dd546f6741b27a15bac296522d081456dbe5b161 data/surgebinding/worldgen/placed_feature/garnet_ore_placed.json
 39db934af125dd297a63fa0f13f4c1196cca743c data/surgebinding/worldgen/placed_feature/heliodor_ore_placed.json
 7bf58d240220711dd653cf9331631bd1568cac54 data/surgebinding/worldgen/placed_feature/rosharan_diamond_ore_placed.json

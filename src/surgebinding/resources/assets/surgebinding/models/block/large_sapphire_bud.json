@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "surgebinding:block/large_sapphire_bud"
+  }
+}

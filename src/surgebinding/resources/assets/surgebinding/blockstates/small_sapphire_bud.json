@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "surgebinding:block/small_sapphire_bud",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "surgebinding:block/small_sapphire_bud",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "surgebinding:block/small_sapphire_bud",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "surgebinding:block/small_sapphire_bud",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "surgebinding:block/small_sapphire_bud"
+    },
+    "facing=west": {
+      "model": "surgebinding:block/small_sapphire_bud",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

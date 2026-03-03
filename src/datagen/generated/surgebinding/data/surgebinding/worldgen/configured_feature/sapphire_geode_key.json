@@ -23,7 +23,32 @@
       },
       "inner_placements": [
         {
-          "Name": "minecraft:andesite"
+          "Name": "surgebinding:large_sapphire_bud",
+          "Properties": {
+            "facing": "up",
+            "waterlogged": "false"
+          }
+        },
+        {
+          "Name": "surgebinding:medium_sapphire_bud",
+          "Properties": {
+            "facing": "up",
+            "waterlogged": "false"
+          }
+        },
+        {
+          "Name": "surgebinding:small_sapphire_bud",
+          "Properties": {
+            "facing": "up",
+            "waterlogged": "false"
+          }
+        },
+        {
+          "Name": "surgebinding:sapphire_cluster",
+          "Properties": {
+            "facing": "up",
+            "waterlogged": "false"
+          }
         }
       ],
       "invalid_blocks": "#minecraft:geode_invalid_blocks",
