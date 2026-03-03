@@ -90,6 +90,10 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.BLOCK_OF_SAPPHIRE);
 		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
 		addToTag(BlockTags.NEEDS_STONE_TOOL,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.LARGE_SAPPHIRE_BUD);
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.MEDIUM_SAPPHIRE_BUD);
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.SMALL_SAPPHIRE_BUD);
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.SAPPHIRE_CLUSTER);
 
 		for (Roshar.Gemstone gemstone : gemstoneList)
 		{

@@ -76,6 +76,10 @@ public abstract class BaseBlockLootTables extends BlockLootSubProvider
 		}
 	}
 
+	protected void addToSkip(Block skip){
+		toSkip.add(skip);
+	}
+
 	protected boolean skipBlock(Block block)
 	{
 		//Skip any blocks that we already registered a table for or have marked to skip
