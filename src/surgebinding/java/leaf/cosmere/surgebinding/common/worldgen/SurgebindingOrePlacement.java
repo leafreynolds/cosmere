@@ -17,4 +17,8 @@ public class SurgebindingOrePlacement
 	public static List<PlacementModifier> rareOrePlacement(int pChance, PlacementModifier pHeightRange) {
 		return orePlacement(RarityFilter.onAverageOnceEvery(pChance), pHeightRange);
 	}
+
+	public static List<PlacementModifier> geodePlacement(int chance, PlacementModifier pHeightRange){
+		return List.of(RarityFilter.onAverageOnceEvery(chance), InSquarePlacement.spread(),pHeightRange);
+	}
 }

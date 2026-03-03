@@ -12,8 +12,13 @@ import leaf.cosmere.common.registration.impl.BlockDeferredRegister;
 import leaf.cosmere.common.registration.impl.BlockRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.*;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -33,6 +38,8 @@ public class SurgebindingBlocks
 									gemstone==Roshar.Gemstone.DIAMOND?"rosharan_diamond_block":gemstone.getName() + Constants.RegNameStubs.BLOCK,
 									() -> new GemBlock(gemstone),
 									Rarity.UNCOMMON)));
+	public static final BlockRegistryObject<Block,BlockItem> BLOCK_OF_SAPPHIRE = BLOCKS.register("block_of_sapphire",
+			()-> new Block(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK).sound(SoundType.AMETHYST)));
 
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)

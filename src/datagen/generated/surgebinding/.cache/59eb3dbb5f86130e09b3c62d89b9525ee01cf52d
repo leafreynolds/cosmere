@@ -1,5 +1,6 @@
-// 1.20.1	2026-03-02T15:40:15.3438571	Loot Tables
+// 1.20.1	2026-03-03T15:54:10.3389974	Loot Tables
 a758c0c893df7df71bdc8aeed2272371ac643703 data/surgebinding/loot_tables/blocks/amethyst_block.json
+1d59888eae372d49109ca8a738cf88d4c203ea7f data/surgebinding/loot_tables/blocks/block_of_sapphire.json
 0bac0e9970f0744829759d24eda27e6b90f3bba2 data/surgebinding/loot_tables/blocks/deepslate_garnet_ore.json
 a68be1212472a70e1947b2f04f52e4bdfd42cbfd data/surgebinding/loot_tables/blocks/deepslate_heliodor_ore.json
 54c8a53b4515ffec57d48c6e27822bbe355ea0ef data/surgebinding/loot_tables/blocks/deepslate_rosharan_diamond_ore.json

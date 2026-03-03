@@ -87,6 +87,7 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		Roshar.Gemstone[] gemstoneList = {Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
 		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.SAPPHIRE));
 		addToTag(BlockTags.NEEDS_STONE_TOOL,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.SAPPHIRE));
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.BLOCK_OF_SAPPHIRE);
 		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
 		addToTag(BlockTags.NEEDS_STONE_TOOL,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
 

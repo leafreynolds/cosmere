@@ -1,4 +1,4 @@
-// 1.20.1	2026-02-23T23:45:04.5947586	Tags: surgebinding
+// 1.20.1	2026-03-03T15:54:10.3339978	Tags: surgebinding
 1f4a893d33327a86f361b3e38f9dcf2af46287fc data/cosmere/tags/worldgen/biome/spawn_ores.json
 b4bf1a40695628bad3692a7d5d6044ffdbf07e9b data/forge/tags/blocks/ores/diamond.json
 535ffd326e438b4244fa9119ac3fc325a55e6769 data/forge/tags/blocks/ores/garnet.json
@@ -39,7 +39,7 @@ aeaede227bae14370d9c20b5fa1fde9a29521ebb data/forge/tags/items/storage_blocks/he
 ae4df19e89b4b9a611809c501a3885811ad302ae data/minecraft/tags/blocks/beacon_base_blocks.json
 526bdb7beebba5b784f4bc47dc8641958f867e6c data/minecraft/tags/blocks/dragon_immune.json
 0fbe76a3ddfbc63868c74a6b5cabf897deea3795 data/minecraft/tags/blocks/mineable/axe.json
-aac0768b0c488c2cee6cda916a3c6c6a90ef7d5b data/minecraft/tags/blocks/mineable/pickaxe.json
+19705d323a52da9c4eb84054090ef9c95d4a2fc7 data/minecraft/tags/blocks/mineable/pickaxe.json
 0fbe76a3ddfbc63868c74a6b5cabf897deea3795 data/minecraft/tags/blocks/mineable/shovel.json
 475a6e09d66fe9321d5b3ac3ca3d1d9c8adc4967 data/minecraft/tags/blocks/needs_iron_tool.json
 a36192a6cc128d34cd566fc1b18085a73d74c97c data/minecraft/tags/blocks/needs_stone_tool.json

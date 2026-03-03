@@ -27,6 +27,7 @@ public class SurgebindingBiomeModifiers
 							Function.identity(),
 							type -> registerKey(type== Roshar.Gemstone.DIAMOND?"add_rosharan_diamond_ore":"add_"+type.getName()+"_ore")
 					));
+	public static final ResourceKey<BiomeModifier> ADD_SAPPHIRE_GEODE = registerKey("add_sapphire_geode");
 
 	public static void bootstrap(BootstapContext<BiomeModifier> context) {
 		var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -38,6 +39,10 @@ public class SurgebindingBiomeModifiers
 					HolderSet.direct(placedFeatures.getOrThrow(SurgebindingPlacedFeatures.GEMSTONE_ORE_PLACED_KEY.get(gemstone))),
 					GenerationStep.Decoration.UNDERGROUND_ORES));
 		}
+		context.register(ADD_SAPPHIRE_GEODE, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+				biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+				HolderSet.direct(placedFeatures.getOrThrow(SurgebindingPlacedFeatures.SAPPHIRE_GEODE_PLACED_KEY)),
+				GenerationStep.Decoration.UNDERGROUND_ORES));
 	}
 
 
