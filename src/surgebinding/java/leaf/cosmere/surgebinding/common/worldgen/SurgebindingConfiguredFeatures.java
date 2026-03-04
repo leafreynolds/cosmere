@@ -56,7 +56,7 @@ public class SurgebindingConfiguredFeatures
 			register(context, GEMSTONE_ORE_KEY.get(gemstone), Feature.ORE, new OreConfiguration(overworldGemstoneOres.get(gemstone), 5));
 		}
 		register(context, SAPPHIRE_GEODE_KEY, Feature.GEODE, new GeodeConfiguration(
-				new GeodeBlockSettings(BlockStateProvider.simple(Blocks.AIR),BlockStateProvider.simple(SurgebindingBlocks.BLOCK_OF_SAPPHIRE.getBlock().defaultBlockState()),BlockStateProvider.simple(SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.SAPPHIRE).getBlock().defaultBlockState()),
+				new GeodeBlockSettings(BlockStateProvider.simple(Blocks.AIR),BlockStateProvider.simple(SurgebindingBlocks.BLOCK_OF_SAPPHIRE.getBlock()),BlockStateProvider.simple(SurgebindingBlocks.BUDDING_SAPPHIRE.getBlock()),
 						BlockStateProvider.simple(Blocks.CALCITE),BlockStateProvider.simple(Blocks.SMOOTH_BASALT),
 						List.of(SurgebindingBlocks.LARGE_SAPPHIRE_BUD.getBlock().defaultBlockState(),SurgebindingBlocks.MEDIUM_SAPPHIRE_BUD.getBlock().defaultBlockState(),SurgebindingBlocks.SMALL_SAPPHIRE_BUD.getBlock().defaultBlockState(), SurgebindingBlocks.SAPPHIRE_CLUSTER.getBlock().defaultBlockState()),
 						BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),

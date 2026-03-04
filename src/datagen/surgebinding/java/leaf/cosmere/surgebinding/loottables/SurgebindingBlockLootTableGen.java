@@ -9,6 +9,7 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.loottables.BaseBlockLootTables;
 import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
+import leaf.cosmere.surgebinding.common.blocks.SapphireClusterBlock;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -42,7 +43,10 @@ public class SurgebindingBlockLootTableGen extends BaseBlockLootTables
 			{
 				this.add(block,(cluster)-> createSilkTouchDispatchTable(cluster, LootItem.lootTableItem(SurgebindingItems.GEMSTONE.get(Roshar.Gemstone.SAPPHIRE)).apply(SetItemCountFunction.setCount(ConstantValue.exactly(4.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)).when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES))).otherwise(this.applyExplosionDecay(cluster, LootItem.lootTableItem(SurgebindingItems.GEMSTONE.get(Roshar.Gemstone.SAPPHIRE)).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))))));
 			}
-			if(block instanceof AmethystClusterBlock clusterBlock && block!=SurgebindingBlocks.SAPPHIRE_CLUSTER.getBlock()){
+			if(block instanceof SapphireClusterBlock clusterBlock && block!=SurgebindingBlocks.SAPPHIRE_CLUSTER.getBlock()){
+				this.addToSkip(block);
+			}
+			if(block == SurgebindingBlocks.BUDDING_SAPPHIRE.getBlock()){
 				this.addToSkip(block);
 			}
 		}
