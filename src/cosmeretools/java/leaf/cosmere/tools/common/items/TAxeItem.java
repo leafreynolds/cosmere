@@ -23,4 +23,10 @@ public class TAxeItem extends AxeItem implements IHasMetalType
 	{
 		return metalType;
 	}
+
+	@Override
+	public int getEnchantmentValue()
+	{
+		return metalType.getEnchantmentValue();
+	}
 }

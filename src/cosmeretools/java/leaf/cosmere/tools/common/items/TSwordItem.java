@@ -23,4 +23,10 @@ public class TSwordItem extends SwordItem implements IHasMetalType
 	{
 		return metalType;
 	}
+
+	@Override
+	public int getEnchantmentValue()
+	{
+		return metalType.getEnchantmentValue();
+	}
 }
