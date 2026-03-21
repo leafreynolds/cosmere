@@ -23,4 +23,10 @@ public class TPickaxeItem extends PickaxeItem implements IHasMetalType
 	{
 		return metalType;
 	}
+
+	@Override
+	public int getEnchantmentValue()
+	{
+		return metalType.getEnchantmentValue();
+	}
 }

@@ -23,4 +23,10 @@ public class THoeItem extends HoeItem implements IHasMetalType
 	{
 		return metalType;
 	}
+
+	@Override
+	public int getEnchantmentValue()
+	{
+		return metalType.getEnchantmentValue();
+	}
 }

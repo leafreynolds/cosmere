@@ -23,4 +23,10 @@ public class TShovelItem extends ShovelItem implements IHasMetalType
 	{
 		return metalType;
 	}
+
+	@Override
+	public int getEnchantmentValue()
+	{
+		return metalType.getEnchantmentValue();
+	}
 }
