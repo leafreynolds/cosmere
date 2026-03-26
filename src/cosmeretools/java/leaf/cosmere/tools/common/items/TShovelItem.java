@@ -7,6 +7,7 @@ package leaf.cosmere.tools.common.items;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.crafting.Ingredient;
 
 public class TShovelItem extends ShovelItem implements IHasMetalType
 {
@@ -28,5 +29,11 @@ public class TShovelItem extends ShovelItem implements IHasMetalType
 	public int getEnchantmentValue()
 	{
 		return metalType.getEnchantmentValue();
+	}
+
+	@Override
+	public Ingredient getRepairIngredient()
+	{
+		return metalType.getRepairIngredient();
 	}
 }
