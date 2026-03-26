@@ -8,10 +8,12 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
+import leaf.cosmere.sandmastery.common.commands.SandmasteryCommands;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.PotionItem;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,6 +21,12 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SandmasteryEntityEventHandler
 {
+	@SubscribeEvent
+	public static void registerCommands(RegisterCommandsEvent event)
+	{
+		SandmasteryCommands.register(event.getDispatcher());
+	}
+
 	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
