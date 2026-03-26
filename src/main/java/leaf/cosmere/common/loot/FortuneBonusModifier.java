@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -82,11 +83,14 @@ public class FortuneBonusModifier extends LootModifier
 
 					EnchantmentHelper.setEnchantments(enchantments, fakeTool);
 
+					BlockEntity blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+
 					LootParams lootparams = (new LootParams.Builder(context.getLevel()))
 							.withParameter(LootContextParams.ORIGIN, origin)
 							.withParameter(LootContextParams.THIS_ENTITY, entity)
 							.withParameter(LootContextParams.BLOCK_STATE, blockState)
 							.withParameter(LootContextParams.TOOL, fakeTool)
+							.withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockEntity)
 							.create(LootContextParamSets.BLOCK);
 
 
