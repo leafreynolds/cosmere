@@ -7,7 +7,7 @@ package leaf.cosmere.tools.common.items;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
 
 public class TSwordItem extends SwordItem implements IHasMetalType
 {
@@ -32,8 +32,8 @@ public class TSwordItem extends SwordItem implements IHasMetalType
 	}
 
 	@Override
-	public Ingredient getRepairIngredient()
+	public boolean isValidRepairItem(ItemStack pStack, ItemStack pRepairCandidate)
 	{
-		return metalType.getRepairIngredient();
+		return metalType.getRepairIngredient().test(pRepairCandidate);
 	}
 }

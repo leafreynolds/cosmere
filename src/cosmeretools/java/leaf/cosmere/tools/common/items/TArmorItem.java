@@ -12,8 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-
 import javax.annotation.Nonnull;
 
 // we use the DyeableLeatherItem interface to get free tinting,
@@ -32,12 +30,6 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	public Metals.MetalType getMetalType()
 	{
 		return metalType;
-	}
-
-	@Override
-	public Ingredient getRepairIngredient()
-	{
-		return metalType.getRepairIngredient();
 	}
 
 	@Override
@@ -60,6 +52,12 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	@Override
 	public void setColor(ItemStack pStack, int pColor)
 	{
+	}
+
+	@Override
+	public boolean isValidRepairItem(ItemStack pStack, ItemStack pRepairCandidate)
+	{
+		return metalType.getRepairIngredient().test(pRepairCandidate);
 	}
 
 	@Nonnull
