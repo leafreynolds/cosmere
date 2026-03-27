@@ -55,6 +55,12 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	}
 
 	@Override
+	public int getEnchantmentValue()
+	{
+		return metalType.getEnchantmentValue();
+	}
+
+	@Override
 	public boolean isValidRepairItem(ItemStack pStack, ItemStack pRepairCandidate)
 	{
 		return metalType.getRepairIngredient().test(pRepairCandidate);
