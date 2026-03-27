@@ -8,6 +8,7 @@ import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public class TShovelItem extends ShovelItem implements IHasMetalType
 {
@@ -29,6 +30,18 @@ public class TShovelItem extends ShovelItem implements IHasMetalType
 	public int getEnchantmentValue()
 	{
 		return metalType.getEnchantmentValue();
+	}
+
+	@Override
+	public boolean isEnchantable(ItemStack pStack)
+	{
+		return true;
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
+	{
+		return enchantment.category.canEnchant(stack.getItem());
 	}
 
 	@Override
