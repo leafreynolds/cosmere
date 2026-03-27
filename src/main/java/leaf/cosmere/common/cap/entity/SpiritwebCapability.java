@@ -62,29 +62,20 @@ import java.util.List;
     https://coppermind.net/wiki/Ars_Arcanum#The_Alloy_of_Law
  */
 
-/**
- * Capability-backed implementation of {@link ISpiritweb} for a living entity.
- * Tracks manifestation ownership/modes, active Cosmere effects, and submodule state,
- * and handles sync/serialization plus client rendering helpers.
- */
 public class SpiritwebCapability implements ISpiritweb
 {
-	// Injection
 	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
 	{
 	});
 
-	// Lifecycle flags
 	private boolean didSetup = false;
 	private boolean hasBeenInitialized = false;
 
 	private final LivingEntity livingEntity;
 
-	// Manifestation state
 	public final Map<Manifestation, Integer> MANIFESTATIONS_MODE = new HashMap<>();
 	private Manifestation selectedManifestation = ManifestationRegistry.NONE.get();
 
-	// Push/pull state for client interaction
 	public List<BlockPos> pushBlocks = new ArrayList<>(4);
 	public List<Integer> pushEntities = new ArrayList<>(4);
 	public List<BlockPos> pullBlocks = new ArrayList<>(4);
@@ -93,7 +84,6 @@ public class SpiritwebCapability implements ISpiritweb
 
 	private CompoundTag nbt;
 
-	// Active effects keyed by instance UUID
 	private final Map<UUID, CosmereEffectInstance> activeEffects = Maps.newHashMap();
 
 	private final Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
@@ -117,9 +107,6 @@ public class SpiritwebCapability implements ISpiritweb
 		spiritwebSubmodules = Cosmere.makeSpiritwebSubmodules();
 	}
 
-	/**
-	 * Retrieve the spiritweb capability for a living entity, if present.
-	 */
 	@Nonnull
 	public static LazyOptional<ISpiritweb> get(LivingEntity entity)
 	{
@@ -127,9 +114,6 @@ public class SpiritwebCapability implements ISpiritweb
 		                      : LazyOptional.empty();
 	}
 
-	/**
-	 * Serialize this spiritweb into the capability NBT payload.
-	 */
 	@Override
 	public CompoundTag serializeNBT()
 	{
@@ -188,9 +172,6 @@ public class SpiritwebCapability implements ISpiritweb
 		return nbt;
 	}
 
-	/**
-	 * Load spiritweb state from the capability NBT payload.
-	 */
 	@Override
 	public void deserializeNBT(CompoundTag compoundTag)
 	{
@@ -244,9 +225,10 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 		if (nbt.contains("PowerSaveStates"))
 		{
+			CompoundTag saveNBT = (CompoundTag) nbt.get("PowerSaveStates");
 			for(PowerSaveState state : powerSaveStorage)
 			{
-				CompoundTag data = (CompoundTag) nbt.get(Integer.toString(state.num));
+				CompoundTag data = (CompoundTag) saveNBT.get(Integer.toString(state.num));
 
 				if(data == null)
 				{
@@ -294,7 +276,6 @@ public class SpiritwebCapability implements ISpiritweb
 		return livingEntity;
 	}
 
-	// Effects
 	@Override
 	public void tickEffects()
 	{
@@ -419,9 +400,6 @@ public class SpiritwebCapability implements ISpiritweb
 		return this.activeEffects.values().stream().filter(effectInstance -> effectInstance.getEffect() == cosmereEffect).mapToInt(o -> (int) o.getStrength()).sum();
 	}
 
-	/**
-	 * Per-tick update for server/client spiritweb behavior.
-	 */
 	@Override
 	public void tick()
 	{
@@ -567,9 +545,6 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 	}
 
-	/**
-	 * Render the client HUD widget for the current selected manifestation.
-	 */
 	public void renderSelectedHUD(GuiGraphics gg)
 	{
 		if (CosmereConfigs.CLIENT_CONFIG.disableSelectedManifestationHud.get() || selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.NONE)
@@ -983,9 +958,6 @@ public class SpiritwebCapability implements ISpiritweb
 		return list;
 	}
 
-	/**
-	 * Cycle the selected manifestation and return its translation key.
-	 */
 	@Override
 	public String changeManifestation(int dir)
 	{
@@ -1072,9 +1044,6 @@ public class SpiritwebCapability implements ISpiritweb
 		return mode;
 	}
 
-	/**
-	 * Sync this spiritweb to one player or the entire world.
-	 */
 	@Override
 	public void syncToClients(@Nullable ServerPlayer serverPlayerEntity)
 	{
@@ -1104,12 +1073,22 @@ public class SpiritwebCapability implements ISpiritweb
 
 	public void saveNewState(int num)
 	{
+		if(num < 0 || num > 8)
+		{
+			return;
+		}
 		powerSaveStorage[num].addManifestations(this);
 	}
 
 	public void activatePowerState(int num)
 	{
+		//
+		if(num < 0 || num > 8)
+		{
+			return;
+		}
 		powerSaveStorage[num].activate(this);
+		syncToClients(null);
 	}
 
 	public class PowerSaveState
@@ -1129,13 +1108,17 @@ public class SpiritwebCapability implements ISpiritweb
 
 		public boolean isActive(SpiritwebCapability spiritweb)
 		{
+			/* isActive returns true if this.manifestations is empty.
+				If we ever want to do something with empty save states,
+				we may want to modify this.
+			 */
 			for (var manifest : manifestations.keySet())
 			{
 				if(!spiritweb.MANIFESTATIONS_MODE.containsKey(manifest))
 				{
 					return false;
 				}
-				else if (!Objects.equals(spiritweb.MANIFESTATIONS_MODE.get(manifest), manifestations.get(manifest)))
+				if (!Objects.equals(spiritweb.MANIFESTATIONS_MODE.get(manifest), manifestations.get(manifest)))
 				{
 					return false;
 				}
@@ -1155,55 +1138,20 @@ public class SpiritwebCapability implements ISpiritweb
 
 			for (Manifestation manifestation : manifestations.keySet())
 			{
-				int modifier = -(manifestation.getMode(spiritweb));
+				int mode = 0;
 				if (toActivate)
 				{
-					modifier += manifestations.get(manifestation);
+					mode = manifestations.get(manifestation);
 				}
-				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, modifier));
+				spiritweb.setMode(manifestation, mode);
 
 			}
-			if (CosmereConfigs.CLIENT_CONFIG.disableActivatorChatMessage.get())
-			{
-				return;
-			}
-
-			if (toActivate)
-			{
-				spiritweb.getLiving().sendSystemMessage(Component.literal("Activating " + getName()));
-			}
-			else
-			{
-				spiritweb.getLiving().sendSystemMessage(Component.literal("Deactivating " + getName()));
-			}
-			manifestations.keySet().forEach((manifest) ->
-
-
-					spiritweb.getLiving()
-							.sendSystemMessage(Component.literal(
-									Component.translatable(
-											manifest.getTranslationKey()
-									).getString() + ": " + (toActivate ? manifestations.get(manifest) : 0)
-							))
-			);
 
 		}
 
 		public void addManifestations(ISpiritweb spiritweb)
 		{
 			manifestations = spiritweb.getManifestations(false, true);
-			if (CosmereConfigs.CLIENT_CONFIG.disableActivatorChatMessage.get())
-			{
-				return;
-			}
-			spiritweb.getLiving().sendSystemMessage(Component.literal("Saved new " + getName()));
-			manifestations.forEach((manifestation, integer) ->
-					spiritweb.getLiving()
-							.sendSystemMessage(Component.literal(
-									Component.translatable(
-											manifestation.getTranslationKey()
-									).getString() + ": " + integer)));
-
 
 		}
 

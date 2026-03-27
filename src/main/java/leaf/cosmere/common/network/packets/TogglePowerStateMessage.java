@@ -9,7 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 public class TogglePowerStateMessage implements ICosmerePacket
 {
-	int powerState;
+	private final int powerState;
 
 	public TogglePowerStateMessage(int powerState)
 	{
