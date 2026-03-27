@@ -99,9 +99,10 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 	public boolean canAfford(ISpiritweb data, boolean simulate)
 	{
 		int adjustAmount = getCost(data);
-		final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(data, metalType, adjustAmount, !simulate, true);
+		boolean success = MetalmindChargeHelper.adjustMetalmindCharges(
+				data, metalType, adjustAmount, !simulate, true);
 
-		if (!metalmind.isEmpty())
+		if (success)
 		{
 			return true;
 		}

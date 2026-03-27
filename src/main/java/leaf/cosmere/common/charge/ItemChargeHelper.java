@@ -13,6 +13,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.items.CapWrapper;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
@@ -38,6 +39,39 @@ public class ItemChargeHelper
 		List<ItemStack> toReturn = getChargeableItemStacks(acc);
 
 		return toReturn;
+	}
+
+	/** Returns all IChargeable items in priority order: hotbar → curios → armor → main inventory. */
+	public static List<ItemStack> getOrderedChargeables(Player player)
+	{
+		if (player == null)
+		{
+			return Collections.emptyList();
+		}
+
+		Inventory inv = player.getInventory();
+		List<ItemStack> result = new ArrayList<>();
+
+		for (int i = 0; i < 9; i++)
+		{
+			ItemStack s = inv.items.get(i);
+			if (!s.isEmpty() && s.getItem() instanceof IChargeable) result.add(s);
+		}
+
+		result.addAll(getChargeCurios(player));
+
+		for (ItemStack s : inv.armor)
+		{
+			if (!s.isEmpty() && s.getItem() instanceof IChargeable) result.add(s);
+		}
+
+		for (int i = 9; i < inv.items.size(); i++)
+		{
+			ItemStack s = inv.items.get(i);
+			if (!s.isEmpty() && s.getItem() instanceof IChargeable) result.add(s);
+		}
+
+		return result;
 	}
 
 	public static List<ItemStack> getChargeCurios(Player player)
@@ -124,19 +158,6 @@ public class ItemChargeHelper
 	}
 
 
-	public static ItemStack adjustChargeExact(Player player, int chargeToGet, boolean remove)
-	{
-		return adjustChargeExact(player, chargeToGet, remove, false);
-	}
-
-	public static ItemStack adjustChargeExact(Player player, int chargeToGet, boolean remove, boolean checkPlayer)
-	{
-		List<ItemStack> items = getChargeItems(player);
-		List<ItemStack> acc = getChargeCurios(player);
-
-		return adjustChargeExact(player, chargeToGet, remove, checkPlayer, items, acc);
-	}
-
 	public static ItemStack adjustChargeExact(Player player, int adjustValue, boolean doAdjust, boolean checkPlayer, List<ItemStack> items, List<ItemStack> acc)
 	{
 		boolean isStoringIdentity = false;
@@ -149,43 +170,76 @@ public class ItemChargeHelper
 			}
 		}
 
+		boolean storing = adjustValue > 0;
+		int needed = Math.abs(adjustValue);
+
+		// Pass 1: collect accessible stacks and verify the full cost can be met.
+		List<ItemStack> accessible = new ArrayList<>();
+		int totalAvailable = 0;
+
 		for (ItemStack stackInSlot : Iterables.concat(items, acc))
 		{
 			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
-			boolean storing = adjustValue > 0;
-
 			int slotCharge = chargeItemSlot.getCharge(stackInSlot);
 			int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
 
-			//if draining, skip empty.
-			if (!storing && slotCharge <= 0 || storing && slotCharge >= slotMaxCharge)
+			int available = storing ? (slotMaxCharge - slotCharge) : slotCharge;
+			if (available <= 0)
 			{
 				continue;
 			}
 
-			boolean playerUnableToAccess = !chargeItemSlot.trySetAttunedPlayer(stackInSlot, player);
+			// Read-only access check — no NBT writes in the check pass.
 			final UUID attunedPlayer = chargeItemSlot.getAttunedPlayer(stackInSlot);
-			if (checkPlayer && playerUnableToAccess //if we need to make sure the player has access and they do not
-					|| //or if the player is trying to store in an unsealed metalmind but have identity
-					storing && !isStoringIdentity && attunedPlayer != null && attunedPlayer.compareTo(Constants.NBT.UNKEYED_UUID) == 0)
+			if (checkPlayer && attunedPlayer != null
+					&& attunedPlayer.compareTo(player.getUUID()) != 0
+					&& attunedPlayer.compareTo(Constants.NBT.UNKEYED_UUID) != 0)
 			{
-				continue;
+				continue; // attuned to a different player
+			}
+			if (storing && !isStoringIdentity && attunedPlayer != null && attunedPlayer.compareTo(Constants.NBT.UNKEYED_UUID) == 0)
+			{
+				continue; // can't store in an unsealed metalmind without storing identity
 			}
 
+			accessible.add(stackInSlot);
+			totalAvailable += available;
 
-			if ((storing && (slotCharge + adjustValue) <= slotMaxCharge)//storing and can fit in this item
-					|| !storing && slotCharge >= (-adjustValue))
+			if (totalAvailable >= needed)
 			{
-				if (doAdjust)
-				{
-					chargeItemSlot.adjustCharge(stackInSlot, adjustValue);
-				}
-
-				return stackInSlot;
+				break;
 			}
 		}
 
-		return ItemStack.EMPTY;
+		if (totalAvailable < needed)
+		{
+			return ItemStack.EMPTY;
+		}
+
+		// Pass 2: apply the charge adjustment across the cached stacks.
+		// trySetAttunedPlayer is called here so attunement side effects only happen when charge actually moves.
+		if (doAdjust)
+		{
+			int remaining = needed;
+			for (ItemStack stackInSlot : accessible)
+			{
+				if (remaining <= 0)
+				{
+					break;
+				}
+				IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+				int slotCharge = chargeItemSlot.getCharge(stackInSlot);
+				int slotMaxCharge = chargeItemSlot.getMaxCharge(stackInSlot);
+				int amount = storing
+						? Math.min(remaining, slotMaxCharge - slotCharge)
+						: Math.min(remaining, slotCharge);
+				chargeItemSlot.trySetAttunedPlayer(stackInSlot, player);
+				chargeItemSlot.adjustCharge(stackInSlot, storing ? amount : -amount);
+				remaining -= amount;
+			}
+		}
+
+		return accessible.get(0);
 	}
 
 
