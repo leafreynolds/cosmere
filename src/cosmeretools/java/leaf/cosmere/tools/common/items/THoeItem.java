@@ -8,7 +8,6 @@ import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 
 public class THoeItem extends HoeItem implements IHasMetalType
 {
@@ -36,12 +35,6 @@ public class THoeItem extends HoeItem implements IHasMetalType
 	public boolean isEnchantable(ItemStack pStack)
 	{
 		return true;
-	}
-
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
-	{
-		return enchantment.category.canEnchant(stack.getItem());
 	}
 
 	@Override

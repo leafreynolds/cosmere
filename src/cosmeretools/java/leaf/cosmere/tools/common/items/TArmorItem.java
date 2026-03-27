@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import javax.annotation.Nonnull;
 
 // we use the DyeableLeatherItem interface to get free tinting,
@@ -65,12 +64,6 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	public boolean isEnchantable(ItemStack pStack)
 	{
 		return true;
-	}
-
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
-	{
-		return enchantment.category.canEnchant(stack.getItem());
 	}
 
 	@Override
