@@ -78,7 +78,7 @@ public class MetalmindChargeHelper
 
 		boolean isStoringIdentity = false;
 		{
-			Optional<ISpiritweb> spiritwebData = SpiritwebCapability.get(player).filter(obj -> true);
+			Optional<ISpiritweb> spiritwebData = SpiritwebCapability.get(player);
 			if (spiritwebData.isPresent())
 			{
 				isStoringIdentity = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(Metals.MetalType.ALUMINUM.getID()).getMode(spiritwebData.get()) > 0;
@@ -175,9 +175,10 @@ public class MetalmindChargeHelper
 			if (isValid.test(s)) result.add(s);
 		}
 
-		List<ItemStack> curios = ItemChargeHelper.getChargeCurios(player);
-		curios.removeIf(isInvalid);
-		result.addAll(curios);
+		for (ItemStack s : ItemChargeHelper.getChargeCurios(player))
+		{
+			if (isValid.test(s)) result.add(s);
+		}
 
 		for (ItemStack s : inv.armor)
 		{

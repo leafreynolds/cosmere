@@ -13,7 +13,6 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.items.CapWrapper;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
@@ -39,39 +38,6 @@ public class ItemChargeHelper
 		List<ItemStack> toReturn = getChargeableItemStacks(acc);
 
 		return toReturn;
-	}
-
-	/** Returns all IChargeable items in priority order: hotbar → curios → armor → main inventory. */
-	public static List<ItemStack> getOrderedChargeables(Player player)
-	{
-		if (player == null)
-		{
-			return Collections.emptyList();
-		}
-
-		Inventory inv = player.getInventory();
-		List<ItemStack> result = new ArrayList<>();
-
-		for (int i = 0; i < 9; i++)
-		{
-			ItemStack s = inv.items.get(i);
-			if (!s.isEmpty() && s.getItem() instanceof IChargeable) result.add(s);
-		}
-
-		result.addAll(getChargeCurios(player));
-
-		for (ItemStack s : inv.armor)
-		{
-			if (!s.isEmpty() && s.getItem() instanceof IChargeable) result.add(s);
-		}
-
-		for (int i = 9; i < inv.items.size(); i++)
-		{
-			ItemStack s = inv.items.get(i);
-			if (!s.isEmpty() && s.getItem() instanceof IChargeable) result.add(s);
-		}
-
-		return result;
 	}
 
 	public static List<ItemStack> getChargeCurios(Player player)
@@ -163,7 +129,7 @@ public class ItemChargeHelper
 		boolean isStoringIdentity = false;
 		{
 			//do aluminum checks
-			Optional<ISpiritweb> data = SpiritwebCapability.get(player).filter(obj -> true);
+			Optional<ISpiritweb> data = SpiritwebCapability.get(player);
 			if (data.isPresent())
 			{
                 isStoringIdentity = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(Metals.MetalType.ALUMINUM.getID()).getMode(data.get()) > 0;
@@ -239,7 +205,7 @@ public class ItemChargeHelper
 			}
 		}
 
-		return accessible.get(0);
+		return accessible.isEmpty() ? ItemStack.EMPTY : accessible.get(0);
 	}
 
 
