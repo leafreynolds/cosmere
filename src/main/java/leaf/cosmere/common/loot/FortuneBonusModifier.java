@@ -17,7 +17,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -83,14 +82,21 @@ public class FortuneBonusModifier extends LootModifier
 
 					EnchantmentHelper.setEnchantments(enchantments, fakeTool);
 
-					BlockEntity blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+					// Block entities (e.g. shulker boxes) copy their contents via CopyNbtFunction
+					// at the time the original loot context is built — before the block entity is
+					// invalidated. Re-running the loot table here would read a stale/removed block
+					// entity and produce an empty drop. Since fortune doesn't affect block-entity
+					// blocks in vanilla, just return the already-correct generatedLoot unchanged.
+					if (context.getParamOrNull(LootContextParams.BLOCK_ENTITY) != null)
+					{
+						return generatedLoot;
+					}
 
 					LootParams lootparams = (new LootParams.Builder(context.getLevel()))
 							.withParameter(LootContextParams.ORIGIN, origin)
 							.withParameter(LootContextParams.THIS_ENTITY, entity)
 							.withParameter(LootContextParams.BLOCK_STATE, blockState)
 							.withParameter(LootContextParams.TOOL, fakeTool)
-							.withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockEntity)
 							.create(LootContextParamSets.BLOCK);
 
 
