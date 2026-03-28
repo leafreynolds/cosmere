@@ -1,1 +1,6 @@
-// 1.20.1	2024-10-09T13:22:13.2247512	Tags: cosmeretools
+// 1.20.1	2026-03-28T12:39:51.6674155	Tags: cosmeretools
+95e2f8c7ab5ef007fcf3eddc9b4f459e99b42416 data/minecraft/tags/items/axes.json
+7502e46030a53bcf86ebdaccb5c6cf41882e9dfa data/minecraft/tags/items/hoes.json
+7cf6e303ea72dc52a35e4221b85f7f717de0e109 data/minecraft/tags/items/pickaxes.json
+e4cd0ff79e75c0b066ef32b42b520454381976d9 data/minecraft/tags/items/shovels.json
+e8753114383c418794bfb77f9a72c5e0bcb9c409 data/minecraft/tags/items/swords.json
