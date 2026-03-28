@@ -57,6 +57,16 @@ public class FortuneBonusModifier extends LootModifier
 	{
 		final String hasCosmereFortuneBonus = "HasCosmereFortuneBonus";
 
+		// Block entities (e.g. shulker boxes) copy their contents via CopyNbtFunction
+		// at the time the original loot context is built — before the block entity is
+		// invalidated. Re-running the loot table here would read a stale/removed block
+		// entity and produce an empty drop. Since fortune doesn't affect block-entity
+		// blocks in vanilla, skip early.
+		if (context.getParamOrNull(LootContextParams.BLOCK_ENTITY) != null)
+		{
+			return generatedLoot;
+		}
+
 		ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
 
 		if (tool != null && (!tool.hasTag() || tool.getTag() == null || !tool.getTag().getBoolean(hasCosmereFortuneBonus)))
@@ -81,16 +91,6 @@ public class FortuneBonusModifier extends LootModifier
 					enchantments.put(Enchantments.BLOCK_FORTUNE, EnchantmentHelper.getTagEnchantmentLevel(Enchantments.BLOCK_FORTUNE, fakeTool) + totalFortuneBonus);
 
 					EnchantmentHelper.setEnchantments(enchantments, fakeTool);
-
-					// Block entities (e.g. shulker boxes) copy their contents via CopyNbtFunction
-					// at the time the original loot context is built — before the block entity is
-					// invalidated. Re-running the loot table here would read a stale/removed block
-					// entity and produce an empty drop. Since fortune doesn't affect block-entity
-					// blocks in vanilla, just return the already-correct generatedLoot unchanged.
-					if (context.getParamOrNull(LootContextParams.BLOCK_ENTITY) != null)
-					{
-						return generatedLoot;
-					}
 
 					LootParams lootparams = (new LootParams.Builder(context.getLevel()))
 							.withParameter(LootContextParams.ORIGIN, origin)
