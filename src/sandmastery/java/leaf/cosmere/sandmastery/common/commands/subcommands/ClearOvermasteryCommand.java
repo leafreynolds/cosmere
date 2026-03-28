@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import leaf.cosmere.common.commands.subcommands.ModCommand;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,6 +49,8 @@ public class ClearOvermasteryCommand extends ModCommand
 			{
 				availableRibbons.removeModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID);
 			}
+
+			context.getSource().sendSuccess(() -> Component.literal(String.format("Cleared overmastery for %s", player.getName().getString())), true);
 		}
 
 		return SINGLE_SUCCESS;

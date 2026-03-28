@@ -52,6 +52,7 @@ public class AddOvermasteryCommand extends ModCommand
 						ribbons,
 						AttributeModifier.Operation.ADDITION
 				));
+				context.getSource().sendSuccess(() -> Component.literal(String.format("Filled overmastery slot 1 with %d ribbons for %s", ribbons, player.getName().getString())), true);
 			}
 			else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID) == null)
 			{
@@ -61,6 +62,7 @@ public class AddOvermasteryCommand extends ModCommand
 						ribbons,
 						AttributeModifier.Operation.ADDITION
 				));
+				context.getSource().sendSuccess(() -> Component.literal(String.format("Filled overmastery slot 2 with %d ribbons for %s", ribbons, player.getName().getString())), true);
 			}
 			else
 			{
