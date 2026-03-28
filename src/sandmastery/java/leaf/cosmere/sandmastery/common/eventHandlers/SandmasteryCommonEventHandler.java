@@ -19,7 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class SandmasteryEntityEventHandler
+public class SandmasteryCommonEventHandler
 {
 	@SubscribeEvent
 	public static void registerCommands(RegisterCommandsEvent event)
