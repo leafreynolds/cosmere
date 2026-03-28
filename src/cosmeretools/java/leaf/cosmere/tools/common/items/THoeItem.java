@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 3 - 2024 ~ Leaf
+ * File updated ~ 28 - 3 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools.common.items;
@@ -23,6 +23,12 @@ public class THoeItem extends HoeItem implements IHasMetalType
 	public Metals.MetalType getMetalType()
 	{
 		return metalType;
+	}
+
+	@Override
+	public int getEnchantmentValue(ItemStack stack)
+	{
+		return getEnchantmentValue();
 	}
 
 	@Override

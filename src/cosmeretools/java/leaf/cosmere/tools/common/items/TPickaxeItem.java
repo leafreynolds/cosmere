@@ -1,13 +1,13 @@
 /*
- * File updated ~ 23 - 3 - 2024 ~ Leaf
+ * File updated ~ 28 - 3 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools.common.items;
 
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PickaxeItem;
 
 public class TPickaxeItem extends PickaxeItem implements IHasMetalType
 {
@@ -23,6 +23,12 @@ public class TPickaxeItem extends PickaxeItem implements IHasMetalType
 	public Metals.MetalType getMetalType()
 	{
 		return metalType;
+	}
+
+	@Override
+	public int getEnchantmentValue(ItemStack stack)
+	{
+		return getEnchantmentValue();
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 4 - 2024 ~ Leaf
+ * File updated ~ 28 - 3 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools.common.items;
@@ -12,6 +12,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
+
 import javax.annotation.Nonnull;
 
 // we use the DyeableLeatherItem interface to get free tinting,
@@ -52,6 +53,12 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	@Override
 	public void setColor(ItemStack pStack, int pColor)
 	{
+	}
+
+	@Override
+	public int getEnchantmentValue(ItemStack stack)
+	{
+		return getEnchantmentValue();
 	}
 
 	@Override
