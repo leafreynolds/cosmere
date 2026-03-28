@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 28 - 3 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.common.loot;
@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -62,14 +63,11 @@ public class FortuneBonusModifier extends LootModifier
 		// invalidated. Re-running the loot table here would read a stale/removed block
 		// entity and produce an empty drop. Since fortune doesn't affect block-entity
 		// blocks in vanilla, skip early.
-		if (context.getParamOrNull(LootContextParams.BLOCK_ENTITY) != null)
-		{
-			return generatedLoot;
-		}
 
 		ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
+		BlockEntity blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
 
-		if (tool != null && (!tool.hasTag() || tool.getTag() == null || !tool.getTag().getBoolean(hasCosmereFortuneBonus)))
+		if (blockEntity == null && tool != null && (!tool.hasTag() || tool.getTag() == null || !tool.getTag().getBoolean(hasCosmereFortuneBonus)))
 		{
 			Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
 			BlockState blockState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
