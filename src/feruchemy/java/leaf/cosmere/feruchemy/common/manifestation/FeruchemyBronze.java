@@ -191,8 +191,13 @@ public class FeruchemyBronze extends FeruchemyManifestation
 
 	public void sleepCheck(SleepingLocationCheckEvent event)
 	{
-		if (event.getEntity() instanceof Player)
+		if (event.getEntity() instanceof Player player)
 		{
+			if (!player.level().dimensionType().natural())
+			{
+				return;
+			}
+
 			SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 			{
 				if (isActive(iSpiritweb))
@@ -200,7 +205,6 @@ public class FeruchemyBronze extends FeruchemyManifestation
 					event.setResult(Event.Result.ALLOW);
 				}
 			});
-
 		}
 	}
 }
