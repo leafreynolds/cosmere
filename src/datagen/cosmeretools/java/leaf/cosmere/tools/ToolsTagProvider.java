@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 28 - 3 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools;
@@ -8,8 +8,10 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.tag.BaseTagProvider;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.registries.ToolsBlocks;
+import leaf.cosmere.tools.common.registries.ToolsItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -48,6 +50,20 @@ public class ToolsTagProvider extends BaseTagProvider
 
 	private void addItems()
 	{
+		for (var item : ToolsItems.METAL_SWORDS.values())
+			getItemBuilder(ItemTags.SWORDS).add(item);
+
+		for (var item : ToolsItems.METAL_AXES.values())
+			getItemBuilder(ItemTags.AXES).add(item);
+
+		for (var item : ToolsItems.METAL_SHOVEL.values())
+			getItemBuilder(ItemTags.SHOVELS).add(item);
+
+		for (var item : ToolsItems.METAL_PICKAXES.values())
+			getItemBuilder(ItemTags.PICKAXES).add(item);
+
+		for (var item : ToolsItems.METAL_HOE.values())
+			getItemBuilder(ItemTags.HOES).add(item);
 
 	}
 

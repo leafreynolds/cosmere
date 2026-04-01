@@ -1,0 +1,26 @@
+{
+  "values": [
+    "cosmeretools:chromium_pickaxe",
+    "cosmeretools:malatium_pickaxe",
+    "cosmeretools:atium_pickaxe",
+    "cosmeretools:copper_pickaxe",
+    "cosmeretools:aluminum_pickaxe",
+    "cosmeretools:zinc_pickaxe",
+    "cosmeretools:duralumin_pickaxe",
+    "cosmeretools:harmonium_pickaxe",
+    "cosmeretools:steel_pickaxe",
+    "cosmeretools:lerasium_pickaxe",
+    "cosmeretools:lead_pickaxe",
+    "cosmeretools:bendalloy_pickaxe",
+    "cosmeretools:silver_pickaxe",
+    "cosmeretools:electrum_pickaxe",
+    "cosmeretools:nicrosil_pickaxe",
+    "cosmeretools:pewter_pickaxe",
+    "cosmeretools:nickel_pickaxe",
+    "cosmeretools:tin_pickaxe",
+    "cosmeretools:cadmium_pickaxe",
+    "cosmeretools:brass_pickaxe",
+    "cosmeretools:bronze_pickaxe",
+    "cosmeretools:lerasatium_pickaxe"
+  ]
+}

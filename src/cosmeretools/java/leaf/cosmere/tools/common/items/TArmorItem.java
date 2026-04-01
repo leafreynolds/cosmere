@@ -1,5 +1,5 @@
 /*
- * File updated ~ 3 - 4 - 2024 ~ Leaf
+ * File updated ~ 28 - 3 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools.common.items;
@@ -53,6 +53,30 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	@Override
 	public void setColor(ItemStack pStack, int pColor)
 	{
+	}
+
+	@Override
+	public int getEnchantmentValue(ItemStack stack)
+	{
+		return getEnchantmentValue();
+	}
+
+	@Override
+	public int getEnchantmentValue()
+	{
+		return metalType.getEnchantmentValue();
+	}
+
+	@Override
+	public boolean isEnchantable(ItemStack pStack)
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isValidRepairItem(ItemStack pStack, ItemStack pRepairCandidate)
+	{
+		return metalType.getRepairIngredient().test(pRepairCandidate);
 	}
 
 	@Nonnull
