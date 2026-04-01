@@ -1,6 +1,7 @@
 /*
  * File updated ~ 5 - 3 - 2025 ~ Leaf
  */
+
 package leaf.cosmere.allomancy.common.eventHandlers;
 
 import leaf.cosmere.allomancy.common.Allomancy;
@@ -27,6 +28,8 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Allomancy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AllomancyEntityEventHandler
 {
+
+
 	@SubscribeEvent
 	public static void onEntityItemPickUp(EntityItemPickupEvent event)
 	{
@@ -35,6 +38,8 @@ public class AllomancyEntityEventHandler
 			event.setCanceled(true);
 		}
 	}
+
+
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
 	{
@@ -42,6 +47,7 @@ public class AllomancyEntityEventHandler
 		{
 			return;
 		}
+
 		ItemStack stack = event.getEntity().getMainHandItem();
 		if (!stack.isEmpty())
 		{
@@ -64,8 +70,11 @@ public class AllomancyEntityEventHandler
 		}
 		else
 		{
+
 		}
 	}
+
+
 	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
@@ -74,6 +83,7 @@ public class AllomancyEntityEventHandler
 			return;
 		}
 		final LivingEntity livingEntity = event.getEntity();
+
 		if (event.getItem().getItem() instanceof MetalNuggetItem metalNuggetItem)
 		{
 			// Only consume the nugget if it contains Lerasium
@@ -84,12 +94,15 @@ public class AllomancyEntityEventHandler
 			MiscHelper.consumeNugget(livingEntity, event.getItem(), 1);
 		}
 	}
+
+
 	//Attack event happens first
 	@SubscribeEvent
 	public static void onLivingAttackEvent(LivingAttackEvent event)
 	{
 		AllomancyAtium.onLivingAttackEvent(event);
 	}
+
 	//then living hurt event
 	@SubscribeEvent
 	public static void onLivingHurtEvent(LivingHurtEvent event)
