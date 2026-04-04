@@ -353,29 +353,17 @@ public class OuterRadialButton extends Button
 		String text = I18n.get(manifestation.getTranslationKey());
 		pGuiGraphics.drawString(font, text, x+5, y+10, 0xFFFFFFFF);
 
-		text = "";
+		int seconds = manifestation.getInvestitureRemaining(spiritweb);
+		int hours = seconds / 3600;
+		int minutes = (seconds % 3600) / 60;
+		seconds = seconds % 60;
 
-		for (String s : SpiritwebMenu.infoText)
-		{
-			if (s.toLowerCase().contains("a. " + metalType.getName()))
-			{
-				text = s.split(":")[1].stripLeading();
-
-				int seconds = Integer.parseInt(text);
-				int hours = seconds / 3600;
-				int minutes = (seconds % 3600) / 60;
-				seconds = seconds % 60;
-
-				if (hours > 0)
-					text = String.format("%d:%02d:%02d", hours, minutes, seconds);
-				else if (minutes > 0)
-					text = String.format("%d:%02d", minutes, seconds);
-				else
-					text = String.format("%02d", seconds);
-
-				break;
-			}
-		}
+		if (hours > 0)
+			text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+		else if (minutes > 0)
+			text = String.format("%d:%02d", minutes, seconds);
+		else
+			text = String.format("%02d", seconds);
 
 		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
 	}

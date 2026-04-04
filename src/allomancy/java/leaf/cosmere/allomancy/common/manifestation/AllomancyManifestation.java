@@ -266,7 +266,14 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	public float getInvestitureHud(ISpiritweb spiritweb)
 	{
 		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
-		final float retVal = (float)allo.getIngestedMetal(this.metalType)/AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get();
+		final float retVal = (float)allo.getIngestedMetal(metalType)/AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get();
 		return retVal;
+	}
+
+	@Override
+	public int getInvestitureRemaining(ISpiritweb spiritweb)
+	{
+		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
+		return allo.getIngestedMetal(metalType);
 	}
 }

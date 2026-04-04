@@ -136,6 +136,11 @@ public class Manifestation implements IManifestationProvider
 		return ForgeRegistries.ATTRIBUTES.getValue(getRegistryName());
 	}
 
+	public int getInvestitureRemaining(ISpiritweb spiritweb)
+	{
+		return 0;
+	}
+
 	public float getInvestitureHud(ISpiritweb spiritweb)
 	{
 		return 0.f;
