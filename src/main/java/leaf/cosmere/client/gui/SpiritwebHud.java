@@ -16,6 +16,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
+import java.awt.*;
+
 public class SpiritwebHud extends AbstractWidget
 {
 	private static SpiritwebHud INSTANCE;
@@ -71,11 +73,31 @@ public class SpiritwebHud extends AbstractWidget
 	{
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
+			float r, g, b;
+			float a = 0.2f;
+			r = g = b = 1.0f;
+
+			int mode = spiritweb.getSelectedManifestation().getMode(spiritweb);
+
+			// todo this won't work for feruchemy...
+			if (mode > 0)
+			{
+				g = g - 0.4f * mode;
+				b = b - 0.4f * mode;
+			}
+			else if (mode < 0)
+			{
+				r = r - 0.4f * -mode;
+				g = g - 0.4f * -mode;
+			}
+
+			int color = toHex(new Color(r, g, b, a));
+
 			float width = getWidth();
 			float usagePercentage = spiritweb.getSelectedManifestation().getInvestitureHud(spiritweb);
 
 			width = width * usagePercentage;
-			pGuiGraphics.fill(getX(), getY(), (int) (getX() + width), getY() + getHeight(), 0x33FFFFFF);
+			pGuiGraphics.fill(getX(), getY(), (int) (getX() + width), getY() + getHeight(), color);
 		});
 	}
 
@@ -139,5 +161,13 @@ public class SpiritwebHud extends AbstractWidget
 			String text = I18n.get(spiritweb.getSelectedManifestation().getTranslationKey());
 			pGuiGraphics.drawString(font, text, getX() + getHeight() + 2, getY() + getHeight() / 2 - font.lineHeight/2, 0xFFDDDDDD);
 		});
+	}
+
+	protected int toHex(Color color)
+	{
+		return (color.getAlpha() << 24) |
+				(color.getRed()   << 16) |
+				(color.getGreen() << 8)  |
+				color.getBlue();
 	}
 }
