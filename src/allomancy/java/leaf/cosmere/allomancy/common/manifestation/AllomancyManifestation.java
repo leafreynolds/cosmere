@@ -6,6 +6,7 @@ package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.client.AllomancyKeybindings;
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
+import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.registries.AllomancyStats;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
@@ -259,5 +260,13 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 		//no range if compounding.
 		final int mode = Math.max(getMode(data), 0);
 		return Mth.floor(allomanticStrength * mode);
+	}
+
+	@Override
+	public float getInvestitureHud(ISpiritweb spiritweb)
+	{
+		AllomancySpiritwebSubmodule allo = (AllomancySpiritwebSubmodule) spiritweb.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
+		final float retVal = (float)allo.getIngestedMetal(this.metalType)/AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get();
+		return retVal;
 	}
 }

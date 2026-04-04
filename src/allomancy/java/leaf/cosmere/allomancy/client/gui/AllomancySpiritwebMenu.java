@@ -1,14 +1,14 @@
 package leaf.cosmere.allomancy.client.gui;
 
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.client.gui.CosmereScreen;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
-public class AllomancySpiritwebMenu extends Screen
+public class AllomancySpiritwebMenu extends CosmereScreen
 {
 	LocalPlayer player;
 	public AllomancySpiritwebMenu()

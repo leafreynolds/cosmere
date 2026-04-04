@@ -1,11 +1,11 @@
 package leaf.cosmere.feruchemy.client.gui;
 
+import leaf.cosmere.client.gui.CosmereScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-public class FeruchemySpiritwebMenu extends Screen
+public class FeruchemySpiritwebMenu extends CosmereScreen
 {
 	public FeruchemySpiritwebMenu()
 	{

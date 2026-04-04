@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 public class SpiritwebRegistry
 {
 	private static SpiritwebRegistry INSTANCE;
-	private final HashMap<Manifestations.ManifestationTypes, Supplier<Screen>> manifestationScreenMap = new HashMap<>();
+	private final HashMap<Manifestations.ManifestationTypes, Supplier<CosmereScreen>> manifestationScreenMap = new HashMap<>();
 
 	public static SpiritwebRegistry getInstance()
 	{
@@ -20,12 +20,12 @@ public class SpiritwebRegistry
 		return INSTANCE;
 	}
 
-	public void register(Manifestations.ManifestationTypes maniType, Supplier<Screen> subScreen)
+	public void register(Manifestations.ManifestationTypes maniType, Supplier<CosmereScreen> subScreen)
 	{
 		manifestationScreenMap.put(maniType, subScreen);
 	}
 
-	public HashMap<Manifestations.ManifestationTypes, Supplier<Screen>> getManifestationScreenMap()
+	public HashMap<Manifestations.ManifestationTypes, Supplier<CosmereScreen>> getManifestationScreenMap()
 	{
 		return manifestationScreenMap;
 	}

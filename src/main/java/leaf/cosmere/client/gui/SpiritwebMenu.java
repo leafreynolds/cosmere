@@ -7,9 +7,12 @@ package leaf.cosmere.client.gui;
 import com.google.common.base.Stopwatch;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,8 +29,9 @@ public class SpiritwebMenu extends Screen
 	private Stopwatch lastChange = Stopwatch.createStarted();
 	private final ISpiritweb spiritweb;
 	private final SpiritwebRegistry registry;
-	private Screen selectedManifestationScreen = null;
+	private CosmereScreen selectedManifestationScreen = null;
 	public static Manifestations.ManifestationTypes selectedManifestationType = Manifestations.ManifestationTypes.NONE;
+	public static Manifestation selectedManifestation = null;
 	public static ArrayList<String> infoText = new ArrayList<>();
 
 	public SpiritwebMenu(Component pTitle, ISpiritweb spiritweb)
@@ -46,13 +50,17 @@ public class SpiritwebMenu extends Screen
 
 	private void CloseScreen()
 	{
+		prepareClose();
 		this.minecraft.setScreen(null);
 	}
 
 	public void prepareClose()
 	{
-		// todo
-		// will need later
+		if (selectedManifestationScreen != null && selectedManifestation != null)
+		{
+			Cosmere.packetHandler().sendToServer(new SetSelectedManifestationMessage(selectedManifestation));
+			selectedManifestation = null;
+		}
 	}
 
 	@Override
@@ -105,6 +113,7 @@ public class SpiritwebMenu extends Screen
 	public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		selectedManifestation = null;
 		raiseVisibility();
 		final int start = (int) (visibility * 98) << 24;
 		final int end = (int) (visibility * 128) << 24;

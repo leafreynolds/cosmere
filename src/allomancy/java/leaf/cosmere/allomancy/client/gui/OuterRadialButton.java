@@ -75,6 +75,7 @@ public class OuterRadialButton extends Button
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY)
 	{
+		boolean retVal;
 		double distanceX = mouseX - centerX;
 		double distanceY = mouseY - centerY;
 		double dSqr = distanceX * distanceX + distanceY * distanceY;
@@ -96,10 +97,20 @@ public class OuterRadialButton extends Button
 		angle = normalizeAngle(angle);
 
 		if (start <= end) {
-			return angle >= start && angle <= end;
+			retVal = angle >= start && angle <= end;
 		} else {
-			return angle >= start || angle <= end;
+			retVal = angle >= start || angle <= end;
 		}
+
+		if (hasManifestation)
+		{
+			if (retVal)
+			{
+				SpiritwebMenu.selectedManifestation = manifestation;
+			}
+		}
+
+		return retVal;
 	}
 
 	@Override

@@ -1,0 +1,143 @@
+package leaf.cosmere.client.gui;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.config.CosmereConfigs;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+
+public class SpiritwebHud extends AbstractWidget
+{
+	private static SpiritwebHud INSTANCE;
+	private Player player;
+
+	private SpiritwebHud(int pX, int pY, int pWidth, int pHeight, Component pMessage, Player player)
+	{
+		super(pX, pY, pWidth, pHeight, pMessage);
+		this.player = player;
+	}
+
+	public static SpiritwebHud Instance(Player player)
+	{
+		if (INSTANCE == null)
+		{
+			INSTANCE = new SpiritwebHud(CosmereConfigs.CLIENT_CONFIG.hudXCoordinate.get(),
+										CosmereConfigs.CLIENT_CONFIG.hudYCoordinate.get(),
+										CosmereConfigs.CLIENT_CONFIG.hudSizeX.get(),
+										CosmereConfigs.CLIENT_CONFIG.hudSizeY.get(),
+										Component.literal("Spiritweb HUD"),
+										player);  // should never be null
+		}
+
+		return INSTANCE;
+	}
+
+	public void setSelectedManifestation()
+	{
+
+	}
+
+	@Override
+	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
+	{
+		renderBackground(pGuiGraphics);
+		renderUsage(pGuiGraphics);
+		renderIcon(pGuiGraphics);
+		renderText(pGuiGraphics);
+	}
+
+	@Override
+	protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput)
+	{
+		// no
+	}
+
+	protected void renderBackground(GuiGraphics pGuiGraphics)
+	{
+		pGuiGraphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0xCC333333);
+	}
+
+	protected void renderUsage(GuiGraphics pGuiGraphics)
+	{
+		SpiritwebCapability.get(player).ifPresent(spiritweb ->
+		{
+			float width = getWidth();
+			float usagePercentage = spiritweb.getSelectedManifestation().getInvestitureHud(spiritweb);
+
+			width = width * usagePercentage;
+			pGuiGraphics.fill(getX(), getY(), (int) (getX() + width), getY() + getHeight(), 0x33FFFFFF);
+		});
+	}
+
+	protected void renderIcon(GuiGraphics pGuiGraphics)
+	{
+		SpiritwebCapability.get(player).ifPresent(spiritweb ->
+		{
+			Manifestation selectedManifestation = spiritweb.getSelectedManifestation();
+			if (selectedManifestation != null)
+			{
+				StringBuilder stringBuilder = new StringBuilder();
+				stringBuilder.setLength(0);
+				stringBuilder.append("textures/icon/")
+						.append(selectedManifestation.getManifestationType().getName())
+						.append("/");
+
+				switch (selectedManifestation.getManifestationType())
+				{
+					case ALLOMANCY:
+					case FERUCHEMY:
+						if (selectedManifestation instanceof IHasMetalType metalType)
+						{
+							stringBuilder.append(metalType.getMetalType().getName());
+						}
+						break;
+					case SURGEBINDING:
+						stringBuilder.append(selectedManifestation.getName());
+						break;
+					case AON_DOR:
+						break;
+					case AWAKENING:
+						break;
+				}
+
+				stringBuilder.append(".png");
+				final ResourceLocation resourceLocation = new ResourceLocation(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+				RenderSystem.setShader(GameRenderer::getPositionTexShader);
+				RenderSystem.enableBlend();
+				RenderSystem.defaultBlendFunc();
+
+				pGuiGraphics.blit(resourceLocation,
+						getX(),
+						getY() + 2,
+						getHeight()-4,
+						getHeight()-4,
+						0,
+						0,
+						18,
+						18,
+						18,
+						18);
+			}
+		});
+	}
+
+	protected void renderText(GuiGraphics pGuiGraphics)
+	{
+		SpiritwebCapability.get(player).ifPresent(spiritweb ->
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = I18n.get(spiritweb.getSelectedManifestation().getTranslationKey());
+			pGuiGraphics.drawString(font, text, getX() + getHeight() + 2, getY() + getHeight() / 2 - font.lineHeight/2, 0xFFDDDDDD);
+		});
+	}
+}
