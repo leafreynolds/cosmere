@@ -14,7 +14,8 @@ public class CosmereClientConfig implements ICosmereConfig
 	public final ForgeConfigSpec.BooleanValue disableSelectedManifestationHud;
 	public final ForgeConfigSpec.IntValue hudXCoordinate;
 	public final ForgeConfigSpec.IntValue hudYCoordinate;
-	public final ForgeConfigSpec.IntValue hudSize;
+	public final ForgeConfigSpec.IntValue hudSizeX;
+	public final ForgeConfigSpec.IntValue hudSizeY;
 	public final ForgeConfigSpec.BooleanValue disableActivatorChatMessage;
 
 
@@ -28,8 +29,9 @@ public class CosmereClientConfig implements ICosmereConfig
 		disableSelectedManifestationHud = builder.comment("Disables the HUD for selected power").define("disableSelectedManifestationHud", false);
 
 		hudXCoordinate = builder.comment("X coordinate for the HUD").defineInRange("hudXCoordinate", 10, 0, Integer.MAX_VALUE);
-		hudYCoordinate = builder.comment("Y coordinate for the HUD").defineInRange("hudYCoordinate", 20, 0, Integer.MAX_VALUE);
-		hudSize = builder.comment("Size of the icon in the HUD; both width and height").defineInRange("hudSize", 40, 0, Integer.MAX_VALUE);
+		hudYCoordinate = builder.comment("Y coordinate for the HUD").defineInRange("hudYCoordinate", 40, 0, Integer.MAX_VALUE);
+		hudSizeX = builder.comment("Width of the HUD").defineInRange("hudSizeX", 140, 0, Integer.MAX_VALUE);
+		hudSizeY = builder.comment("Height of the HUD").defineInRange("hudSizeY", 30, 0, Integer.MAX_VALUE);
 
 		disableActivatorChatMessage = builder.comment("Disables the chat message alerting you when you active or save a power state").define("disableActivatorChatMessage", false);
 		builder.pop();

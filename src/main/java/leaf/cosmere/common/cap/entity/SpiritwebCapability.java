@@ -6,13 +6,7 @@
 package leaf.cosmere.common.cap.entity;
 
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
@@ -27,14 +21,10 @@ import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -55,7 +45,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 /*
@@ -543,188 +532,6 @@ public class SpiritwebCapability implements ISpiritweb
 			if (!isDebugModule)
 			{
 				profiler.pop();
-			}
-		}
-	}
-
-	public void renderSelectedHUD(GuiGraphics gg)
-	{
-		if (CosmereConfigs.CLIENT_CONFIG.disableSelectedManifestationHud.get() || selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.NONE)
-		{
-			return;
-		}
-
-		Minecraft mc = Minecraft.getInstance();
-		int startX = CosmereConfigs.CLIENT_CONFIG.hudXCoordinate.get();
-		int startY = CosmereConfigs.CLIENT_CONFIG.hudYCoordinate.get();
-		int size = CosmereConfigs.CLIENT_CONFIG.hudSize.get();
-
-		String stringToDraw = I18n.get(selectedManifestation.getTextComponent().getString());
-		int xOffset = -5;
-		float textScale = size / (float) (mc.font.width(stringToDraw) - 20);
-		gg.pose().pushPose();
-		gg.pose().scale(textScale, textScale, 1f);
-		gg.drawString(mc.font, stringToDraw, (int) ((startX + xOffset) / textScale), (int) ((startY + size + 5) / textScale), 0xFFFFFF);
-		gg.pose().popPose();
-
-		int mode = getMode(selectedManifestation);
-
-		String stringToDraw2 = "";
-
-		gg.pose().pushPose();
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder buffer = tesselator.getBuilder();
-
-		// draw square
-		try {
-			final ResourceLocation textureLocation = new ResourceLocation(selectedManifestation.getRegistryName().getNamespace(), "textures/gui/hud_background.png");
-			mc.getResourceManager().getResourceOrThrow(textureLocation);
-
-			RenderSystem.setShaderTexture(0, textureLocation);
-			gg.blit(textureLocation,
-					startX,
-					startY,
-					size,
-					size,
-					0,
-					0,
-					18,
-					18,
-					18,
-					18);
-		}
-		catch (FileNotFoundException ex) // backup in case no texture
-		{
-			RenderSystem.setShader(GameRenderer::getPositionColorShader);
-			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-			int color = 0xCC000000;
-			//set first triangle
-			buffer.vertex(startX, startY, 0).color(color).endVertex();
-			buffer.vertex(startX, startY + size, 0).color(color).endVertex();
-			//set second triangle
-			buffer.vertex(startX + size, startY + size, 0).color(color).endVertex();
-			buffer.vertex(startX + size, startY, 0).color(color).endVertex();
-			tesselator.end();
-		}
-
-		// draw manifestation icon
-		{
-			final StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.setLength(0);
-			String manifestationTypeName = selectedManifestation.getManifestationType().getName();
-			stringBuilder
-					.append("textures/icon/")
-					.append(manifestationTypeName)
-					.append("/");
-			switch (selectedManifestation.getManifestationType())
-			{
-				case ALLOMANCY:
-				case FERUCHEMY:
-					if (selectedManifestation instanceof IHasMetalType metalType)
-					{
-						stringBuilder.append(metalType.getMetalType().getName());
-					}
-					break;
-				case SURGEBINDING:
-					stringBuilder.append(selectedManifestation.getName());
-					break;
-				case AON_DOR:
-					break;
-				case AWAKENING:
-					break;
-			}
-			stringBuilder.append(".png");
-
-			final ResourceLocation textureLocation = new ResourceLocation(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
-			RenderSystem.setShaderTexture(0, textureLocation);
-			int posX = startX + 4;
-			int posY = startY + 2;
-			if (selectedManifestation.getManifestationType() != Manifestations.ManifestationTypes.ALLOMANCY && selectedManifestation.getManifestationType() != Manifestations.ManifestationTypes.FERUCHEMY)
-			{
-				posX = startX + 2;
-			}
-			gg.blit(textureLocation,
-					posX,
-					posY,
-					size - 4,
-					size - 4,
-					0,
-					0,
-					18,
-					18,
-					18,
-					18);
-		}
-
-		// todo draw pentagon
-//		{
-//			int color = 0xCC000000;
-//			float centerX = (float) mc.getWindow().getGuiScaledWidth() /2;//startX + (float) size / 2;
-//			float centerY = (float) mc.getWindow().getGuiScaledHeight() /2;//startY + size + 10;
-//			float[][] pentagonVertices = calculatePentagonVertices(centerX, centerY, 40, 0.5f);
-//
-//			RenderSystem.setShader(GameRenderer::getPositionColorShader);
-//			buffer.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
-//
-//			buffer.vertex(centerX, centerY, 0).color(color).endVertex(); // Center point for triangle fan
-//			for (float[] vertex : pentagonVertices)
-//			{
-//				buffer.vertex(vertex[0], vertex[1], 0).color(color).endVertex();
-//			}
-//			buffer.vertex(pentagonVertices[0][0], pentagonVertices[0][1], 0).color(color).endVertex();
-//			tesselator.end();
-//		}
-
-		gg.pose().popPose();
-		RenderSystem.disableBlend();
-
-		//todo migrate drawing text to manifestation, this shouldn't be in main module.
-		if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
-		{
-			//todo translations
-			if (mode < 0)
-			{
-				stringToDraw2 = "T" + mode;
-			}
-			else if (mode > 0)
-			{
-				stringToDraw2 = "S" + mode;
-			}
-			else
-			{
-				//don't draw
-				//stringToDraw2 = "";
-			}
-		}
-		else if (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
-		{
-			String rate;
-
-			switch (mode)
-			{
-				case -2 -> rate = "CF";
-				case -1 -> rate = "C";
-				default -> rate = "";
-				case 1 -> rate = "B";
-				case 2, 3 -> rate = "F";//copper has a 3rd mode for only smoking self
-			}
-			stringToDraw2 = rate;
-		}
-
-		//todo translations
-		if (!stringToDraw2.isEmpty())
-		{
-			int yOffset = (size / 2) - (stringToDraw2.length() * mc.font.lineHeight) / 2; // center the text vertically
-			for (char c : stringToDraw2.toCharArray())
-			{
-				if (c == '-')
-					c = '|';
-				xOffset = mc.font.width(String.valueOf(c)) / 2 - 4;
-				gg.drawString(mc.font, String.valueOf(c), startX - xOffset, startY + yOffset, 0xFFFFFF);
-				yOffset += mc.font.lineHeight;
 			}
 		}
 	}

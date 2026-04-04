@@ -1,9 +1,9 @@
 package leaf.cosmere.sandmastery.client.gui;
 
-import net.minecraft.client.gui.screens.Screen;
+import leaf.cosmere.client.gui.CosmereScreen;
 import net.minecraft.network.chat.Component;
 
-public class SandmasterySpiritwebMenu extends Screen
+public class SandmasterySpiritwebMenu extends CosmereScreen
 {
 	public SandmasterySpiritwebMenu()
 	{
