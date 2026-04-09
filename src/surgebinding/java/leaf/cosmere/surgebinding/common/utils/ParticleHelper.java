@@ -43,11 +43,7 @@ public class ParticleHelper
 			double z = (2D) * Math.sin(rad);
 			double zSpeed = Math.sin(rad) * 0.75D;
 			double ySpeed = 0.2D;
-			//level.addParticle(particleOptions, true, x, entity.getY(), z, xSpeed, ySpeed, zSpeed);
-			level.sendParticles(,
-					entity.getX(), entity.getY(), entity.getZ(),
-					7,x, 0.1D, z,
-					15D);
+			level.addParticle(particleOptions, true, x, entity.getY(), z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 

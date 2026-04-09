@@ -117,8 +117,6 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 			if (stormlightStored > 0 && surgebindingActiveTick)
 			{
 				//being hurt takes priority
-
-
 				if (livingEntity.getHealth() < livingEntity.getMaxHealth())
 				{
 					//todo healing stormlight config
@@ -133,8 +131,6 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				//otherwise conditional effects
 				else
 				{
-					List<SlotResult> plate = CuriosHelper.getSlotsByIdentifier(livingEntity, "shardplate");
-
 					if (livingEntity.getCombatTracker().inCombat)
 					{
 						//todo combat effect cost

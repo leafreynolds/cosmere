@@ -47,21 +47,25 @@ public class SurgebindingModClientEvents
 	public static void registerItemColors(RegisterColorHandlersEvent.Item event)
 	{
 		event.register((stack, tintIndex) -> {
-			// We only want to tint layer1 (index 1)
+			// We only want to tint layer1 (index 0)
 			if (tintIndex != 0) return Color.WHITE.getRGB(); // white = no tint
 
 			return (stack.getCapability(ShardData.SHARD_DATA)
 					.map(cap -> {
-						DynamicShardplateData cap2 = (DynamicShardplateData)cap;
-						boolean living = cap2.isLiving();
-						boolean colored = cap2.isColored();
+						if (cap instanceof DynamicShardplateData cap2)
+						{
+							boolean living = cap2.isLiving();
+							boolean colored = cap2.isColored();
 
-						if (!living || !colored) {
-							return Roshar.getDeadplate().getRGB(); // grey when either is false
+							if (!living || !colored)
+							{
+								return Roshar.getDeadplate().getRGB(); // grey when either is false
+							}
+
+							return cap2.getOrder().getPlateColor().getRGB();
 						}
 
-						return cap2.getOrder().getPlateColor().getRGB();
-
+						return Roshar.getDeadplate().getRGB();
 					})
 					.orElse(Roshar.getDeadplate().getRGB()));
 			 // fallback if no cap

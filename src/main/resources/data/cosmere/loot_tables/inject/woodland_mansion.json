@@ -39,7 +39,7 @@
 
           "type": "minecraft:item",
           "_comment": "Shardblade is randomized.",
-          "weight": 30,
+          "weight": 20,
           "name": "surgebinding:shardblade",
           "functions": [
             {

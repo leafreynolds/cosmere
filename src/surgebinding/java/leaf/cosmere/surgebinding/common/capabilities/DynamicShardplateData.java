@@ -112,13 +112,6 @@ public class DynamicShardplateData extends ShardData implements ICapabilityProvi
 	{
 		super.deserializeNBT(compoundTag);
 
-
-		this.headID = nbt.getString("headID");
-		this.rightArmID = nbt.getString("rightArmID");
-		this.bodyID = nbt.getString("bodyID");
-		this.rightLegID = nbt.getString("rightLegID");
-		this.kamaID = nbt.getString("kamaID");
-
 		this.headID = nbt.getString("headID");
 		this.faceplateID = nbt.getString("faceplateID");
 		this.bodyID = nbt.getString("bodyID");

@@ -68,12 +68,7 @@ public class ArmorRenderer implements ICurioRenderer
 		ICurioRenderer.followBodyRotations(entity, this.model);
 
 		this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
-		//this.model.render(stack, slotContext, matrixStack, renderTypeBuffer, light);
-
-
 
 	}
-
-
 
 }

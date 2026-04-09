@@ -1,5 +1,5 @@
 {
-  "__comment": "This table is injected as its own pool into minecraft:chests/woodland_mansion",
+  "__comment": "This table is injected as its own pool into minecraft:chests/ancient_city",
   "pools": [
     {
       "name": "main",
@@ -44,7 +44,8 @@
             {
               "function": "surgebinding:setup_shard"
             }
-          ]
+          ],
+          "weight": 1
         },
         {
           "type": "minecraft:empty",

@@ -56,7 +56,7 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 	public static final int TOTAL_KAMA_IDS = 1;
 	public static final int TOTAL_BOOT_IDS = 1;
 
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "shardplate"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Surgebinding.rl("shardplate"), "main");
 	public final ModelPart root;
 	public final ModelPart head;
 	public final ModelPart head1;
@@ -435,6 +435,7 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 			Color glyphColor = item.getOrder(pStack).getColor();
 			glyphColor = glyphColor.brighter();
 /*
+		Trims, if and when we have them.
 			VertexConsumer lightLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(TRIM));
 			renderToBuffer(matrixStack,
 					lightLayer,

@@ -141,10 +141,10 @@ public class SurgebindingForgeEventsHandler
 			}
 		}
 		// Find the curio item that acts as armor
-		Optional<ICuriosItemHandler> sub = CuriosApi.getCuriosInventory(entity).resolve();
+		ICuriosItemHandler sub = CuriosHelper.getCuriosHandler(entity).orElse(null);
 
 
-		if (CuriosHelper.getCuriosHandler(entity) != null)
+		if (sub != null)
 		{
 
 			for (SlotResult slotResult : CuriosHelper.getSlotsWithItem(entity, SurgebindingItems.SHARDPLATE.asItem()))
@@ -173,6 +173,8 @@ public class SurgebindingForgeEventsHandler
 								item.getCharge(stack)
 						)
 				);
+				// Don't allow stacking shardplate.
+				break;
 			}
 		}
 	}

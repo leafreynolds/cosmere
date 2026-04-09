@@ -316,13 +316,11 @@ public class Roshar
 
 		public boolean hasBlade()
 		{
-			switch (this)
+			if(this == RadiantOrder.BONDSMITH)
 			{
-				case BONDSMITH:
-					return false;
-				default:
-					return true;
+				return false;
 			}
+			return true;
 		}
 
 		public Color getPlateColor()

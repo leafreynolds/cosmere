@@ -44,12 +44,12 @@ public class ShardData implements ICapabilityProvider, IShard
 		this.nbt = new CompoundTag();
 	}
 
-	public ShardData(ItemStack stack, int i)
+	public ShardData(ItemStack stack, boolean honorblade)
 	{
 		this.stack = stack;
 		this.nbt = new CompoundTag();
 
-		if(i == 1)
+		if(honorblade)
 		{
 			this.order = ((HonorbladeItem)stack.getItem()).getOrder(stack);
 		}
