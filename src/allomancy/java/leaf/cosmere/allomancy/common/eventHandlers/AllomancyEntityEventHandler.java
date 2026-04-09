@@ -139,7 +139,6 @@ public class AllomancyEntityEventHandler
 		{
 			if(source.is(type))
 			{
-				Optional<ICuriosItemHandler> sub = CuriosApi.getCuriosInventory(entity).resolve();
 				if (CuriosHelper.getCuriosHandler(entity) != null)
 				{
 
@@ -147,7 +146,7 @@ public class AllomancyEntityEventHandler
 					{
 						ItemStack stack = slotResult.stack();
 						MistcloakItem item = (MistcloakItem) stack.getItem();
-						if (item.getDamage(stack) == 0)
+						if (item.getDamage(stack) == item.getMaxDamage(stack))
 						{
 							continue;
 						}
@@ -159,7 +158,9 @@ public class AllomancyEntityEventHandler
 						// Reduce damage taken by entity
 						event.setAmount(remaining);
 
-						stack.setDamageValue((int) (stack.getDamageValue() - absorbed));
+						stack.setDamageValue((int) (stack.getDamageValue() + absorbed));
+						// If we successfully reduce damage, we don't need to keep going.
+						break;
 					}
 				}
 			}
@@ -168,10 +169,9 @@ public class AllomancyEntityEventHandler
 
 	}
 
-	private static ArrayList<ResourceKey<DamageType>> protectedDamageTypes = new ArrayList<>(
+	private static final List<ResourceKey<DamageType>> protectedDamageTypes =
 			List.of(DamageTypes.FALL,
-					DamageTypes.FLY_INTO_WALL,
-					DamageTypes.FREEZE
-			)
-	);
+					DamageTypes.FLY_INTO_WALL
+					//DamageTypes.FREEZE
+			);
 }

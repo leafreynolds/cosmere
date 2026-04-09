@@ -32,13 +32,7 @@ public class MistcloakItem extends Item implements ICurioItem
 	}
 
 	//todo increase dodge chance while in the mists
-
-	@Nonnull
-	@Override
-	public final String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
-	{
-		return Allomancy.MODID + ":" + "textures/models/armor/mistcloak.png";
-	}
+	
 
 	@Override
 	public boolean isDamageable(ItemStack stack)
@@ -50,14 +44,11 @@ public class MistcloakItem extends Item implements ICurioItem
 	{
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 
-		Multimap<Attribute, AttributeModifier> defaultModifiers;
-
 		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, uuid, stack));
-			builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Mistcloack modifier", 2, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Mistcloak modifier", 2, AttributeModifier.Operation.ADDITION));
 			builder.put(ForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(uuid, "Mistcloak glide", -0.02, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Mistcloack fly", 1.02, AttributeModifier.Operation.MULTIPLY_BASE));
-		defaultModifiers = builder.build();
-		return defaultModifiers;
+			builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Mistcloak fly", 1.02, AttributeModifier.Operation.MULTIPLY_BASE));
+		return builder.build();
 	}
 
 	/* If we were to not use curios, this is what we would attempt to use.

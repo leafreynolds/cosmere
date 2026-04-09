@@ -6,45 +6,47 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.*;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CuriosHelper
 {
-	public static ICuriosItemHandler getCuriosHandler(LivingEntity entity)
+	public static Optional<ICuriosItemHandler> getCuriosHandler(LivingEntity entity)
 	{
-		return CuriosApi.getCuriosInventory(entity).resolve().isPresent()? CuriosApi.getCuriosInventory(entity).resolve().get(): null;
+		return CuriosApi.getCuriosInventory(entity).resolve();
 	}
 
-	public static SlotResult getSlot(LivingEntity entity, String slotID, int index) {
-		ICuriosItemHandler sub = getCuriosHandler(entity);
-		assert sub != null;
-		return sub.findCurio(slotID, index).isPresent() ? sub.findCurio(slotID,index).get() : null;
+	public static Optional<SlotResult> getSlot(LivingEntity entity, String slotID, int index) {
+		ICuriosItemHandler sub = getCuriosHandler(entity).orElse(null);
+		if(sub == null)
+		{
+			return Optional.empty();
+		}
+		return sub.findCurio(slotID, index);
 	}
 
 	public static ItemStack getStackInSlot(LivingEntity entity, String slotID, int index)
 	{
-		if(getSlot(entity, slotID, index) == null)
+		var slot = getSlot(entity, slotID, index).orElse(null);
+		if(slot == null)
 		{
-			return null;
+			return ItemStack.EMPTY;
 		}
-		return Objects.requireNonNull(getSlot(entity, slotID, index)).stack();
+		return Objects.requireNonNull(slot).stack();
 	}
 
-	public static SlotContext getContextInSlot(LivingEntity entity, String slotID, int index)
+	public static Optional<SlotContext> getContextInSlot(LivingEntity entity, String slotID, int index)
 	{
-		if(getSlot(entity, slotID, index) == null)
+		var slot = getSlot(entity, slotID, index).orElse(null);
+		if(slot == null)
 		{
-			return null;
+			return Optional.empty();
 		}
-		return Objects.requireNonNull(getSlot(entity, slotID, index)).slotContext();
+		return Optional.of(slot.slotContext());
 	}
 
 	public static List<SlotResult> getSlotsWithItem(LivingEntity entity, Item item)
 	{
-		ICuriosItemHandler sub = getCuriosHandler(entity);
+		ICuriosItemHandler sub = getCuriosHandler(entity).orElse(null);
 		if (sub == null)
 		{
 			return new ArrayList<SlotResult> ();
@@ -56,9 +58,10 @@ public class CuriosHelper
 		List<SlotResult> results = new ArrayList<>();
 		for (Item item: items)
 		{
-			if (getSlotsWithItem(entity,item) != null && !getSlotsWithItem(entity,item).isEmpty())
+			var slotsWithItem = getSlotsWithItem(entity, item);
+			if (slotsWithItem != null && !slotsWithItem.isEmpty())
 			{
-				results.addAll(getSlotsWithItem(entity, item));
+				results.addAll(slotsWithItem);
 			}
 		}
 		return results;
@@ -68,9 +71,10 @@ public class CuriosHelper
 		List<SlotResult> results = new ArrayList<>();
 		for (Item item: items)
 		{
-			if (getSlotsWithItem(entity,item) != null && !getSlotsWithItem(entity,item).isEmpty())
+			var slotsWithItem = getSlotsWithItem(entity, item);
+			if (slotsWithItem != null && !slotsWithItem.isEmpty())
 			{
-				results.addAll(getSlotsWithItem(entity, item));
+				results.addAll(slotsWithItem);
 			}
 		}
 		return results;
@@ -78,7 +82,7 @@ public class CuriosHelper
 
 	public static List<SlotResult> getSlotsByIdentifier(LivingEntity entity, String... slotIDs)
 	{
-		ICuriosItemHandler sub = getCuriosHandler(entity);
+		ICuriosItemHandler sub = getCuriosHandler(entity).orElse(null);
 		if (sub == null)
 		{
 			return new ArrayList<SlotResult> ();
@@ -88,16 +92,18 @@ public class CuriosHelper
 
 	public static boolean hasItemInInventory(LivingEntity entity, Item item)
 	{
-		if(getCuriosHandler(entity) == null)
+		var handler = getCuriosHandler(entity).orElse(null);
+		if(handler == null)
 		{
 			return false;
 		}
-		return Objects.requireNonNull(getCuriosHandler(entity)).isEquipped(item);
+		return Objects.requireNonNull(handler).isEquipped(item);
 	}
 
 	public static boolean hasItemInSlot(LivingEntity entity, String slotID, int index, Item item)
 	{
-		if(getSlot(entity, slotID, index) == null)
+		var slot = getSlot(entity, slotID, index).orElse(null);
+		if(slot == null)
 		{
 			return false;
 		}
