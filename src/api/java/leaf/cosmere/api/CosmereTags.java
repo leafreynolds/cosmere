@@ -1,5 +1,5 @@
 /*
- * File updated ~ 20 - 11 - 2024 ~ Leaf
+ * File updated ~ 7 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -198,6 +198,7 @@ public class CosmereTags
 	public static class EntityTypes
 	{
 		public static final TagKey<EntityType<?>> CONTAINS_METAL = create("cosmere", "contains_metal");
+		public static final TagKey<EntityType<?>> HAS_SPIRITWEB = create("cosmere", "has_spiritweb");
 
 		private static TagKey<EntityType<?>> create(String namespace, String path)
 		{

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 4 - 2025 ~ Leaf
+ * File updated ~ 8 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tag;
@@ -65,7 +65,42 @@ public class CosmereTagProvider extends BaseTagProvider
 		addBiomes();
 
 		addContainsMetal();
+
+		addSpiritwebTag();
 	}
+
+	private void addSpiritwebTag()
+	{
+		final IntrinsicCosmereTagBuilder<EntityType<?>> entityTagBuilder = getEntityTypeBuilder(CosmereTags.EntityTypes.HAS_SPIRITWEB);
+
+		for (EntityType entityType : ENTITIES_THAT_CAN_HAVE_POWERS)
+		{
+			entityTagBuilder.add(entityType);
+		}
+	}
+
+	// it's just not feasible to try get the entity class from the entity type,
+	// so we have to define which ones we know we want to have powers
+	public final static EntityType[] ENTITIES_THAT_CAN_HAVE_POWERS = {
+			EntityType.PLAYER,
+
+			EntityType.VILLAGER,
+			EntityType.ZOMBIE_VILLAGER,
+			EntityType.WANDERING_TRADER,
+
+			EntityType.EVOKER,
+			EntityType.ILLUSIONER,
+			EntityType.PILLAGER,
+			EntityType.VINDICATOR,
+			EntityType.WITCH,
+
+			EntityType.PIGLIN,
+			EntityType.PIGLIN_BRUTE,
+
+			EntityType.CAT,
+			EntityType.LLAMA,
+			EntityType.TRADER_LLAMA,
+	};
 
 	private void addItems()
 	{
@@ -99,7 +134,10 @@ public class CosmereTagProvider extends BaseTagProvider
 				getItemBuilder(Tags.Items.NUGGETS).add(metalNuggetTag);
 
 				ItemRegistryObject<Item> nugRegObj = ItemsRegistry.METAL_NUGGETS.get(metalType);
-				if (nugRegObj == null) nugRegObj = ItemsRegistry.GOD_METAL_NUGGETS.get(metalType);
+				if (nugRegObj == null)
+				{
+					nugRegObj = ItemsRegistry.GOD_METAL_NUGGETS.get(metalType);
+				}
 
 				if (nugRegObj != null)
 				{// tell the Nugget that our Nuggets are related
@@ -113,9 +151,9 @@ public class CosmereTagProvider extends BaseTagProvider
 				}
 
 				// Add the metal alloy nugget to the nugget tags
-				if(!metalType.isGodMetal() && metalType.hasAssociatedManifestation())
+				if (!metalType.isGodMetal() && metalType.hasAssociatedManifestation())
 				{
-					for(Metals.MetalType godMetalType : new Metals.MetalType[] { Metals.MetalType.LERASIUM, Metals.MetalType.LERASATIUM})
+					for (Metals.MetalType godMetalType : new Metals.MetalType[]{Metals.MetalType.LERASIUM, Metals.MetalType.LERASATIUM})
 					{
 						final TagKey<Item> godMetalAlloyNuggetTag = godMetalType.getGodMetalAlloyNuggetTag(metalType);
 						getItemBuilder(Tags.Items.NUGGETS).add(godMetalAlloyNuggetTag);

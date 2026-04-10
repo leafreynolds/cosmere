@@ -1,16 +1,16 @@
 /*
- * File updated ~ 16 - 11 - 2023 ~ Leaf
+ * File updated ~ 7 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
+import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.eventHandlers.ModBusEventHandler;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,9 +20,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class AllomancyBronze extends AllomancyManifestation
@@ -96,11 +96,11 @@ public class AllomancyBronze extends AllomancyManifestation
 	public static boolean isValidSeekTarget(ISpiritweb seeker, LivingEntity potentialConcealed)
 	{
 		//can't get anything from entities that don't have powers
-		if (!Arrays.stream(ModBusEventHandler.ENTITIES_THAT_CAN_HAVE_POWERS).anyMatch(test -> test == potentialConcealed.getType()))
+		if (!potentialConcealed.getType().is(CosmereTags.EntityTypes.HAS_SPIRITWEB)
+				&& !(potentialConcealed instanceof Warden))
 		{
 			return false;
 		}
-
 
 		final AllomancyManifestation bronzeAllomancyManifestation = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.BRONZE).get();
 		//if the player does not have bronze, early exit
