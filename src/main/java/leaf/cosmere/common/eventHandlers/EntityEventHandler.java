@@ -296,12 +296,9 @@ public class EntityEventHandler
 				}
 				CosmereAPI.logger.info("Entity {} has been granted {}, with metal {}!",
 						spiritwebCapability.getLiving().getName().getString(),
-						isAllomancy
-						? Manifestations.ManifestationTypes.ALLOMANCY.getName()
-						: Manifestations.ManifestationTypes.FERUCHEMY.getName(),
-						isAllomancy
-						? allomancyMetal
-						: feruchemyMetal);
+						isAllomancy ? Manifestations.ManifestationTypes.ALLOMANCY.getName()
+						            : Manifestations.ManifestationTypes.FERUCHEMY.getName(),
+						isAllomancy ? allomancyMetal : feruchemyMetal);
 
 				//at this time, players are twin-born minimum, so no need to try give powers here
 			}
