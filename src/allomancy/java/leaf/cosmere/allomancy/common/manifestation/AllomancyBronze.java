@@ -20,7 +20,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
@@ -96,8 +95,7 @@ public class AllomancyBronze extends AllomancyManifestation
 	public static boolean isValidSeekTarget(ISpiritweb seeker, LivingEntity potentialConcealed)
 	{
 		//can't get anything from entities that don't have powers
-		if (!potentialConcealed.getType().is(CosmereTags.EntityTypes.HAS_SPIRITWEB)
-				&& !(potentialConcealed instanceof Warden))
+		if (!potentialConcealed.getType().is(CosmereTags.EntityTypes.HAS_SPIRITWEB))
 		{
 			return false;
 		}

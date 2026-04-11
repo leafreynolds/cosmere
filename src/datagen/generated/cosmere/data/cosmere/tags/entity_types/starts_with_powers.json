@@ -10,10 +10,6 @@
     "minecraft:vindicator",
     "minecraft:witch",
     "minecraft:piglin",
-    "minecraft:piglin_brute",
-    "minecraft:warden",
-    "minecraft:cat",
-    "minecraft:llama",
-    "minecraft:trader_llama"
+    "minecraft:piglin_brute"
   ]
 }

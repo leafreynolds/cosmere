@@ -71,17 +71,23 @@ public class CosmereTagProvider extends BaseTagProvider
 
 	private void addSpiritwebTag()
 	{
-		final IntrinsicCosmereTagBuilder<EntityType<?>> entityTagBuilder = getEntityTypeBuilder(CosmereTags.EntityTypes.HAS_SPIRITWEB);
+		final IntrinsicCosmereTagBuilder<EntityType<?>> spiritwebBuilder = getEntityTypeBuilder(CosmereTags.EntityTypes.HAS_SPIRITWEB);
 
-		for (EntityType entityType : ENTITIES_THAT_CAN_HAVE_POWERS)
+		for (EntityType entityType : ENTITIES_WITH_SPIRITWEB)
 		{
-			entityTagBuilder.add(entityType);
+			spiritwebBuilder.add(entityType);
+		}
+
+		final IntrinsicCosmereTagBuilder<EntityType<?>> powersBuilder = getEntityTypeBuilder(CosmereTags.EntityTypes.STARTS_WITH_POWERS);
+
+		for (EntityType entityType : ENTITIES_THAT_START_WITH_POWERS)
+		{
+			powersBuilder.add(entityType);
 		}
 	}
 
-	// it's just not feasible to try get the entity class from the entity type,
-	// so we have to define which ones we know we want to have powers
-	public final static EntityType[] ENTITIES_THAT_CAN_HAVE_POWERS = {
+	// Entities that get a spiritweb capability attached (can be targeted by hemalurgy, bronze seeking, etc.)
+	public final static EntityType[] ENTITIES_WITH_SPIRITWEB = {
 			EntityType.PLAYER,
 
 			EntityType.VILLAGER,
@@ -97,9 +103,29 @@ public class CosmereTagProvider extends BaseTagProvider
 			EntityType.PIGLIN,
 			EntityType.PIGLIN_BRUTE,
 
+			EntityType.WARDEN,
+
 			EntityType.CAT,
 			EntityType.LLAMA,
 			EntityType.TRADER_LLAMA,
+	};
+
+	// Entities that are randomly assigned manifestations on spawn
+	public final static EntityType[] ENTITIES_THAT_START_WITH_POWERS = {
+			EntityType.PLAYER,
+
+			EntityType.VILLAGER,
+			EntityType.ZOMBIE_VILLAGER,
+			EntityType.WANDERING_TRADER,
+
+			EntityType.EVOKER,
+			EntityType.ILLUSIONER,
+			EntityType.PILLAGER,
+			EntityType.VINDICATOR,
+			EntityType.WITCH,
+
+			EntityType.PIGLIN,
+			EntityType.PIGLIN_BRUTE,
 	};
 
 	private void addItems()

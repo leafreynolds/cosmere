@@ -132,16 +132,7 @@ public class EntityEventHandler
 
 	public static boolean canStartWithPowers(Entity entity)
 	{
-		return entity.getType().is(CosmereTags.EntityTypes.HAS_SPIRITWEB);
-
-		//thanks to type erasure, java neutered their generics system.
-		//No nice checking of parent types for us.
-		/*return entity.getType().is(CosmereTags.EntityTypes.HAS_SPIRITWEB)
-				|| entity instanceof Player
-				|| entity instanceof AbstractVillager
-				|| entity instanceof ZombieVillager
-				|| (entity instanceof Raider && !(entity instanceof Ravager))
-				|| entity instanceof AbstractPiglin;*/
+		return entity.getType().is(CosmereTags.EntityTypes.STARTS_WITH_POWERS);
 	}
 
 	//todo eventually we want to replace this.

@@ -199,6 +199,7 @@ public class CosmereTags
 	{
 		public static final TagKey<EntityType<?>> CONTAINS_METAL = create("cosmere", "contains_metal");
 		public static final TagKey<EntityType<?>> HAS_SPIRITWEB = create("cosmere", "has_spiritweb");
+		public static final TagKey<EntityType<?>> STARTS_WITH_POWERS = create("cosmere", "starts_with_powers");
 
 		private static TagKey<EntityType<?>> create(String namespace, String path)
 		{
