@@ -1,0 +1,26 @@
+{
+  "values": [
+    "cosmeretools:chromium_axe",
+    "cosmeretools:malatium_axe",
+    "cosmeretools:atium_axe",
+    "cosmeretools:copper_axe",
+    "cosmeretools:aluminum_axe",
+    "cosmeretools:zinc_axe",
+    "cosmeretools:duralumin_axe",
+    "cosmeretools:harmonium_axe",
+    "cosmeretools:steel_axe",
+    "cosmeretools:lerasium_axe",
+    "cosmeretools:lead_axe",
+    "cosmeretools:bendalloy_axe",
+    "cosmeretools:silver_axe",
+    "cosmeretools:electrum_axe",
+    "cosmeretools:nicrosil_axe",
+    "cosmeretools:pewter_axe",
+    "cosmeretools:nickel_axe",
+    "cosmeretools:tin_axe",
+    "cosmeretools:cadmium_axe",
+    "cosmeretools:brass_axe",
+    "cosmeretools:bronze_axe",
+    "cosmeretools:lerasatium_axe"
+  ]
+}

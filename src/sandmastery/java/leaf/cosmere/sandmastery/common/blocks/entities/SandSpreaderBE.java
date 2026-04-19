@@ -94,7 +94,7 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 	@Override
 	public Component getDisplayName()
 	{
-		return Component.literal("Sand Spreading Tub"); // TODO Translations
+		return Component.translatable("block.sandmastery.sand_spreading_tub");
 	}
 
 	@Nullable
