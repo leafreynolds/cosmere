@@ -7,21 +7,15 @@ package leaf.cosmere.allomancy.common.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import leaf.cosmere.allomancy.common.Allomancy;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class MistcloakItem extends Item implements ICurioItem
@@ -45,9 +39,9 @@ public class MistcloakItem extends Item implements ICurioItem
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 
 		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, uuid, stack));
-			builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Mistcloak modifier", 2, AttributeModifier.Operation.ADDITION));
-			builder.put(ForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(uuid, "Mistcloak glide", -0.02, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Mistcloak fly", 1.02, AttributeModifier.Operation.MULTIPLY_BASE));
+		builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Mistcloak modifier", 2, AttributeModifier.Operation.ADDITION));
+		builder.put(ForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(uuid, "Mistcloak glide", -0.02, AttributeModifier.Operation.ADDITION));
+		builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Mistcloak fly", 0.02, AttributeModifier.Operation.MULTIPLY_BASE));
 		return builder.build();
 	}
 

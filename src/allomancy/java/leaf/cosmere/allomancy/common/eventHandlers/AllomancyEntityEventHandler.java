@@ -134,35 +134,41 @@ public class AllomancyEntityEventHandler
 		{
 			return;
 		}
-		// Only do damage types that the mistcloak can protect.
-		for(ResourceKey<DamageType> type: protectedDamageTypes)
+		if (CuriosHelper.getCuriosHandler(entity).isPresent() && CuriosHelper.hasItemInInventory(entity, AllomancyItems.MISTCLOAK.asItem()))
 		{
-			if(source.is(type))
+			// Only do damage types that the mistcloak can protect.
+			for (ResourceKey<DamageType> type : protectedDamageTypes)
 			{
-				if (CuriosHelper.getCuriosHandler(entity) != null)
+				if (!source.is(type))
 				{
-
-					for (SlotResult slotResult : CuriosHelper.getSlotsWithItem(entity, AllomancyItems.MISTCLOAK.asItem()))
-					{
-						ItemStack stack = slotResult.stack();
-						MistcloakItem item = (MistcloakItem) stack.getItem();
-						if (item.getDamage(stack) == item.getMaxDamage(stack))
-						{
-							continue;
-						}
-
-						float original = event.getAmount();
-						float absorbed = original * 0.2f;
-						float remaining = original - absorbed;
-
-						// Reduce damage taken by entity
-						event.setAmount(remaining);
-
-						stack.setDamageValue((int) (stack.getDamageValue() + absorbed));
-						// If we successfully reduce damage, we don't need to keep going.
-						break;
-					}
+					continue;
 				}
+				for (SlotResult slotResult : CuriosHelper.getSlotsWithItem(entity, AllomancyItems.MISTCLOAK.asItem()))
+				{
+					ItemStack stack = slotResult.stack();
+					MistcloakItem item = (MistcloakItem) stack.getItem();
+					if (item.getDamage(stack) >= item.getMaxDamage(stack))
+					{
+						continue;
+					}
+
+					float original = event.getAmount();
+					float absorbed = original * 0.2f;
+					float remaining = original - absorbed;
+
+					// Reduce damage taken by entity
+					event.setAmount(remaining);
+
+					var damage =  (int) (item.getDamage(stack) + Math.ceil(absorbed));
+					item.setDamage(stack,  damage);
+					// If we successfully reduce damage, we don't need to keep going.
+
+					if (item.getDamage(stack) >= item.getMaxDamage(stack))
+					{
+						item.curioBreak(slotResult.slotContext(), stack);
+					}
+					break;
+					}
 			}
 		}
 		// Find the curio item that acts as armor
