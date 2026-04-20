@@ -37,16 +37,16 @@ public class SurgeAbrasion extends SurgebindingManifestation
 		int mode = getMode(data);
 		LivingEntity livingEntity = data.getLiving();
 		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		if(data.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation()) &&
-			SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation().isActive(data))
+		if(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation() instanceof SurgebindingManifestation sg &&
+	        sg.isActive(data))
 		{
-			if (mode>0 && submodule.adjustStormlight(-mode,true))
+			if (mode>0 && submodule.adjustStormlight(-4,true))
 			{
-				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, mode,2));
+				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, mode-1,2));
 			}
-			if (mode<0 && submodule.adjustStormlight(mode,true))
+			if (mode<0 && submodule.adjustStormlight(-4,true))
 			{
-				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode,2));
+				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode-1,2));
 			}
 		}
 		return super.tick(data);

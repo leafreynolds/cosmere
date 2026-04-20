@@ -13,6 +13,7 @@ import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmod
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,13 +52,15 @@ public class SurgeTransportation extends SurgebindingManifestation
 						entityList.add((LivingEntity)entity);
 					}
 				}
+
 				for(LivingEntity entity : entityList){
-					entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,4));
+					if(!entity.hasEffect(MobEffects.GLOWING)){
+						entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,4));
+					}
 				}
 			}
 
 		});
-
 		return super.tick(data);
 	}
 
@@ -68,29 +71,35 @@ public class SurgeTransportation extends SurgebindingManifestation
 	{
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
-			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).get()) &&
-				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation().isActive(iSpiritweb) &&
-				iSpiritweb.getMode(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation())>=3)
+			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(iSpiritweb) &&
+				iSpiritweb.getMode(sg) >= 3)
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-				if(event.getInput().shiftKeyDown){
-					if(!(submodule.getIdeal()>3)){
-						if(shiftDuration==10){
-							shiftDuration=10;
+				if (event.getInput().shiftKeyDown)
+				{
+					chargeUp(event);
+					if (!(submodule.getIdeal() > 3))
+					{
+						if (shiftDuration >= 10)
+						{
+							shiftDuration = 10;
 						}
 					}
-					chargeUp(event);
 				}
-				else{
-					if(shiftDuration>0){
-						shiftDuration=0;
-						System.out.println(targets);
-						if(!(submodule.getIdeal()>3)){
+				else
+				{
+					if (shiftDuration > 0)
+					{
+						shiftDuration = 0;
+						if (!(submodule.getIdeal() > 3))
+						{
 							targets.clear();
 						}
 						targets.add(0, iSpiritweb.getLiving());
-						for(Entity target : targets){
-							if(submodule.adjustStormlight(60,true))
+						for (Entity target : targets)
+						{
+							//	if(submodule.adjustStormlight(-60,true))
 							{
 								//Teleport Effect
 							}
@@ -108,28 +117,34 @@ public class SurgeTransportation extends SurgebindingManifestation
 		AABB box = AABB.ofSize(event.getEntity().getEyePosition().add(0,-0.5,0),shiftDuration*0.05,shiftDuration*0.05,shiftDuration*0.05);
 		targets = level.getEntities(event.getEntity(), box);
 		SimpleParticleType s = ParticleTypes.PORTAL;
-		for(double i = box.minX; i<box.maxX;i+=0.1){
-			level.addParticle(s,i,box.minY,box.minZ,0,0,0);
-			level.addParticle(s,i,box.maxY,box.minZ,0,0,0);
-			level.addParticle(s,i,box.maxY,box.maxZ,0,0,0);
-			level.addParticle(s,i,box.minY,box.maxZ,0,0,0);
-		}
-		for(double i = box.minY; i<box.maxY;i+=0.1){
-			level.addParticle(s,box.minX,i,box.minZ,0,0,0);
-			level.addParticle(s,box.maxX,i,box.minZ,0,0,0);
-			level.addParticle(s,box.minX,i,box.maxZ,0,0,0);
-			level.addParticle(s,box.maxX,i,box.maxZ,0,0,0);
-		}
-		for(double i = box.minZ; i<box.maxZ;i+=0.1){
-			level.addParticle(s,box.minX,box.minY,i,0,0,0);
-			level.addParticle(s,box.maxX,box.minY,i,0,0,0);
-			level.addParticle(s,box.minX,box.maxY,i,0,0,0);
-			level.addParticle(s,box.maxX,box.maxY,i,0,0,0);
-		}
-		for (Entity target : targets)
+		if(level instanceof ServerLevel serverLevel)
 		{
-			for(double y = 0; y<2.1; y+=0.2)
-				level.addParticle(ParticleTypes.END_ROD,target.getX(),target.getBbHeight()+target.getY()+y,target.getZ(),0,0,0);
+			for (double i = box.minX; i < box.maxX; i += 0.1)
+			{
+				serverLevel.sendParticles(s, i, box.minY, box.minZ, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, i, box.maxY, box.minZ, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, i, box.maxY, box.maxZ, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, i, box.minY, box.maxZ, 1, 0, 0,0,0.1);
+			}
+			for (double i = box.minY; i < box.maxY; i += 0.1)
+			{
+				serverLevel.sendParticles(s, box.minX, i, box.minZ, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, box.maxX, i, box.minZ, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, box.minX, i, box.maxZ, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, box.maxX, i, box.maxZ, 1, 0, 0,0,0.1);
+			}
+			for (double i = box.minZ; i < box.maxZ; i += 0.1)
+			{
+				serverLevel.sendParticles(s, box.minX, box.minY, i, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, box.maxX, box.minY, i, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, box.minX, box.maxY, i, 1, 0, 0,0,0.1);
+				serverLevel.sendParticles(s, box.maxX, box.maxY, i, 1, 0, 0,0,0.1);
+			}
+			for (Entity target : targets)
+			{
+				for (double y = 0; y < 2.1; y += 0.2)
+					serverLevel.sendParticles(ParticleTypes.END_ROD, target.getX(), target.getBbHeight() + target.getY() + y, target.getZ(), 2, 0, 0, 0, 0.1);
+			}
 		}
 	}
 }

@@ -37,11 +37,11 @@ public class SurgeTransformation extends SurgebindingManifestation
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb->
 		{
 			SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-			SurgebindingManifestation surge = (SurgebindingManifestation) SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSFORMATION).getManifestation();
-			if(iSpiritweb.hasManifestation(surge) && surge.isActive(iSpiritweb)){
+			if(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSFORMATION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(iSpiritweb)){
 				if(submodule.adjustStormlight(-50,true))
 				{
-					switch (surge.getMode(iSpiritweb))
+					switch (sg.getMode(iSpiritweb))
 					{
 						case 1:
 							event.getLevel().setBlock(blockPos, Blocks.AIR.defaultBlockState(), 1);

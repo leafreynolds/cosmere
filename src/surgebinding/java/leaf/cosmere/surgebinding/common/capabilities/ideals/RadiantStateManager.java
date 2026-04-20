@@ -220,35 +220,43 @@ public class RadiantStateManager
 		{
 			case WINDRUNNER ->
 			{
-
+				WindrunnerXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case SKYBREAKER ->
 			{
+				SkybreakerXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case DUSTBRINGER ->
 			{
+				DustbringerXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case EDGEDANCER ->
 			{
+				EdgedancerXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case TRUTHWATCHER ->
 			{
+				TruthwatcherXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case LIGHTWEAVER ->
 			{
+				LightweaverXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case ELSECALLER ->
 			{
+				ElsecallerXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case WILLSHAPER ->
 			{
+				WillshaperXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case STONEWARD ->
 			{
+				StonewardXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 			case BONDSMITH ->
 			{
-
+				BondsmithXPManager.validateIdeal(spiritweb, idealToSwear);
 			}
 		}
 

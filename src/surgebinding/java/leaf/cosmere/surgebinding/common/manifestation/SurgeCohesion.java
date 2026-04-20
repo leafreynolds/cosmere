@@ -57,10 +57,10 @@ public class SurgeCohesion extends SurgebindingManifestation
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
 			SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-			SurgebindingManifestation surge = (SurgebindingManifestation) SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.COHESION).getManifestation();
-			if(iSpiritweb.hasManifestation(surge) && isValidStoneBlock(block))
+			if(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.COHESION).getManifestation() instanceof SurgebindingManifestation sg &&
+				isValidStoneBlock(block))
 			{
-				if (surge.isActive(iSpiritweb) && event.getEntity().getMainHandItem().isEmpty())
+				if (sg.isActive(iSpiritweb) && event.getEntity().getMainHandItem().isEmpty())
 				{
 					if (!iSpiritweb.getLiving().isShiftKeyDown())
 					{

@@ -39,10 +39,9 @@ public class SurgeDivision extends SurgebindingManifestation
 
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
-			SurgebindingManifestation surge = (SurgebindingManifestation) SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation();
-			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).get()) &&
-					surge.isActive(iSpiritweb)&&
-					event.getEntity().getMainHandItem().isEmpty())
+			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(iSpiritweb)&&
+				event.getEntity().getMainHandItem().isEmpty())
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				if(iSpiritweb.getLiving().isShiftKeyDown())
@@ -64,8 +63,7 @@ public class SurgeDivision extends SurgebindingManifestation
 						if (event.getLevel() instanceof ServerLevel serverLevel)
 						{
 							serverLevel.destroyBlock(blockPos, false);
-							serverLevel.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, blockPos.getX(), blockPos.getY(), blockPos.getZ(), 0.0D, 0.1D, 0.0D);
-
+							serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, blockPos.getX(), blockPos.getY(), blockPos.getZ(), 2, 0, 0, 0, 0.1);
 						}
 					}
 				}
@@ -80,7 +78,8 @@ public class SurgeDivision extends SurgebindingManifestation
 		{
 			SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
 			{
-				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation().isActive(iSpiritweb))
+				if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation() instanceof SurgebindingManifestation sg &&
+					sg.isActive(iSpiritweb))
 				{
 					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 					if (submodule.adjustStormlight(-40, true))

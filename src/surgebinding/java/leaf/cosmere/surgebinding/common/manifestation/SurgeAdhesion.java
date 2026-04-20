@@ -29,8 +29,8 @@ public class SurgeAdhesion extends SurgebindingManifestation
 		LivingEntity target = event.getEntity();
 		SpiritwebCapability.get((LivingEntity) event.getSource().getEntity()).ifPresent(iSpiritweb ->
 		{
-			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ADHESION).get()) &&
-				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ADHESION).getManifestation().isActive(iSpiritweb))
+			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ADHESION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(iSpiritweb))
 			{
 				MobEffectInstance slowedEffect = target.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
