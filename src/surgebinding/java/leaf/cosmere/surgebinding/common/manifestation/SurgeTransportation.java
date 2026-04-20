@@ -22,11 +22,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class SurgeTransportation extends SurgebindingManifestation
 {
+	static Map<UUID, Integer> shiftDuration  = new HashMap<>();
+	static Map<UUID, List<Entity>> targets = new HashMap<>();
+
 	public SurgeTransportation(Roshar.Surges surge)
 	{
 		super(surge);
@@ -37,10 +39,13 @@ public class SurgeTransportation extends SurgebindingManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
+		shiftDuration.putIfAbsent(data.getLiving().getUUID(), 0);
+		targets.putIfAbsent(data.getLiving().getUUID(), new LinkedList<>());
 		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->
 		{
-			if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).get()) &&
-				SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation().isActive(iSpiritweb))
+
+			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(iSpiritweb))
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				LivingEntity living = data.getLiving();
@@ -54,8 +59,8 @@ public class SurgeTransportation extends SurgebindingManifestation
 				}
 
 				for(LivingEntity entity : entityList){
-					if(!entity.hasEffect(MobEffects.GLOWING)){
-						entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,4));
+					if(!entity.hasEffect(MobEffects.GLOWING) && submodule.adjustStormlight(-5,true)){
+						entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,10));
 					}
 				}
 			}
@@ -64,11 +69,11 @@ public class SurgeTransportation extends SurgebindingManifestation
 		return super.tick(data);
 	}
 
-	static List<Entity> targets = new LinkedList<>();
-	static int shiftDuration=0;
+
 
 	public static void onShift(MovementInputUpdateEvent event)
 	{
+		UUID uuid = event.getEntity().getUUID();
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
 			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation() instanceof SurgebindingManifestation sg &&
@@ -81,28 +86,25 @@ public class SurgeTransportation extends SurgebindingManifestation
 					chargeUp(event);
 					if (!(submodule.getIdeal() > 3))
 					{
-						if (shiftDuration >= 10)
+						if (shiftDuration.get(uuid) >= 10)
 						{
-							shiftDuration = 10;
+							shiftDuration.replace(uuid,10);
 						}
 					}
 				}
 				else
 				{
-					if (shiftDuration > 0)
+					if (shiftDuration.get(uuid) > 0)
 					{
-						shiftDuration = 0;
+						shiftDuration.replace(uuid,0);
 						if (!(submodule.getIdeal() > 3))
 						{
 							targets.clear();
 						}
-						targets.add(0, iSpiritweb.getLiving());
-						for (Entity target : targets)
+						targets.get(uuid).add(0, iSpiritweb.getLiving());
+						for (Entity target : targets.get(uuid))
 						{
-							//	if(submodule.adjustStormlight(-60,true))
-							{
-								//Teleport Effect
-							}
+							//to do Teleport effect and cost
 						}
 					}
 				}
@@ -112,10 +114,10 @@ public class SurgeTransportation extends SurgebindingManifestation
 
 	public static void chargeUp(MovementInputUpdateEvent event)
 	{
-		shiftDuration++;
+		shiftDuration.replace(event.getEntity().getUUID(),shiftDuration.get(event.getEntity().getUUID())+1);
 		Level level = event.getEntity().level();
-		AABB box = AABB.ofSize(event.getEntity().getEyePosition().add(0,-0.5,0),shiftDuration*0.05,shiftDuration*0.05,shiftDuration*0.05);
-		targets = level.getEntities(event.getEntity(), box);
+		AABB box = AABB.ofSize(event.getEntity().getEyePosition().add(0,-0.5,0),shiftDuration.get(event.getEntity().getUUID())*0.05,shiftDuration.get(event.getEntity().getUUID())*0.05,shiftDuration.get(event.getEntity().getUUID())*0.05);
+		targets.replace(event.getEntity().getUUID(),level.getEntities(event.getEntity(), box));
 		SimpleParticleType s = ParticleTypes.PORTAL;
 		if(level instanceof ServerLevel serverLevel)
 		{
@@ -140,7 +142,7 @@ public class SurgeTransportation extends SurgebindingManifestation
 				serverLevel.sendParticles(s, box.minX, box.maxY, i, 1, 0, 0,0,0.1);
 				serverLevel.sendParticles(s, box.maxX, box.maxY, i, 1, 0, 0,0,0.1);
 			}
-			for (Entity target : targets)
+			for (Entity target : targets.get(event.getEntity().getUUID()))
 			{
 				for (double y = 0; y < 2.1; y += 0.2)
 					serverLevel.sendParticles(ParticleTypes.END_ROD, target.getX(), target.getBbHeight() + target.getY() + y, target.getZ(), 2, 0, 0, 0, 0.1);

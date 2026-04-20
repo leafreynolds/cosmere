@@ -1,4 +1,4 @@
-// 1.20.1	2025-12-26T15:06:21.3344377	Recipes
+// 1.20.1	2026-03-28T12:39:51.5473742	Recipes
 d4f7b0297526734faaf6ce62cac5d49069fd2e40 data/cosmere/advancements/recipes/decorations/aluminum_block.json
 681730a85e0fbb20839f9be5421df41f7bda0251 data/cosmere/advancements/recipes/decorations/aluminum_ingot.json
 b750cee2b3d294b561b263647aefcc90eed3d535 data/cosmere/advancements/recipes/decorations/atium_block.json
@@ -105,6 +105,7 @@ b70611b765caed1df9458a40ea36b80d7e18f791 data/cosmere/advancements/recipes/misc/
 edd649debcc61d9de30b18a9507a7fc3fdc37bd2 data/cosmere/advancements/recipes/misc/conversions/cadmium_item_deconstruct.json
 5cc899f38e772555b5b4f4a7eaad8396ec981089 data/cosmere/advancements/recipes/misc/conversions/chromium_block_deconstruct.json
 ac26d2d5577a16c67e42c855a46c20c73f8b4aa8 data/cosmere/advancements/recipes/misc/conversions/chromium_item_deconstruct.json
+87022d6f54a114dba43d644718d0ff23a953e4f6 data/cosmere/advancements/recipes/misc/conversions/copper_block_deconstruct.json
 96d06c0eb7c7b4104022e5adf20841b5244f92af data/cosmere/advancements/recipes/misc/conversions/copper_item_deconstruct.json
 5e73ff7e74ba57b88043f66ed1a26affa3db9afc data/cosmere/advancements/recipes/misc/conversions/duralumin_block_deconstruct.json
 760eb4df0dd4e40ce4673da1cb51c2c06503ea36 data/cosmere/advancements/recipes/misc/conversions/duralumin_item_deconstruct.json
@@ -250,6 +251,7 @@ fa5a8654f1945037d77510f8ebbd8d8bc07cca3c data/cosmere/recipes/conversions/cadmiu
 c4f16c1dabbdf3deda2650b98f2272f448f4f01b data/cosmere/recipes/conversions/cadmium_item_deconstruct.json
 a0bf45a47386b68325b4e1984fd8626c5f87e309 data/cosmere/recipes/conversions/chromium_block_deconstruct.json
 1b67ce39eb539a3e3f84a96159f1cf2602b25b5e data/cosmere/recipes/conversions/chromium_item_deconstruct.json
+1db74a4e768e70f8795ecb6ac6d3c9a9decc39a1 data/cosmere/recipes/conversions/copper_block_deconstruct.json
 0084357fac5c24594265f91687d85d3ef237a9f7 data/cosmere/recipes/conversions/copper_item_deconstruct.json
 7f26451ae0f641c45a865a4c5427f4e23d8c0ab3 data/cosmere/recipes/conversions/duralumin_block_deconstruct.json
 ece851d4f1b9da48bee3133be5aba10f3d72ae8e data/cosmere/recipes/conversions/duralumin_item_deconstruct.json

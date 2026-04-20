@@ -1,0 +1,26 @@
+{
+  "values": [
+    "cosmeretools:chromium_shovel",
+    "cosmeretools:malatium_shovel",
+    "cosmeretools:atium_shovel",
+    "cosmeretools:copper_shovel",
+    "cosmeretools:aluminum_shovel",
+    "cosmeretools:zinc_shovel",
+    "cosmeretools:duralumin_shovel",
+    "cosmeretools:harmonium_shovel",
+    "cosmeretools:steel_shovel",
+    "cosmeretools:lerasium_shovel",
+    "cosmeretools:lead_shovel",
+    "cosmeretools:bendalloy_shovel",
+    "cosmeretools:silver_shovel",
+    "cosmeretools:electrum_shovel",
+    "cosmeretools:nicrosil_shovel",
+    "cosmeretools:pewter_shovel",
+    "cosmeretools:nickel_shovel",
+    "cosmeretools:tin_shovel",
+    "cosmeretools:cadmium_shovel",
+    "cosmeretools:brass_shovel",
+    "cosmeretools:bronze_shovel",
+    "cosmeretools:lerasatium_shovel"
+  ]
+}

@@ -28,7 +28,7 @@ public class SurgeTransformation extends SurgebindingManifestation
 	@Override
 	public int modeMax(ISpiritweb data)
 	{
-		return 10;
+		return this.getMode(data)*2;
 	}
 
 	public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event)

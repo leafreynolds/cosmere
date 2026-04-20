@@ -72,6 +72,7 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 			{
 				compressRecipe(Items.COPPER_INGOT, CosmereTags.Items.METAL_NUGGET_TAGS.get(metalType), ItemsRegistry.METAL_NUGGETS.get(metalType)).save(consumer, new ResourceLocation(Cosmere.MODID, "copper_ingot"));
 				decompressRecipe(consumer, ItemsRegistry.METAL_NUGGETS.get(metalType).get(), Tags.Items.INGOTS_COPPER, metalType.getName() + "_item_deconstruct");
+				decompressRecipe(consumer, Items.COPPER_INGOT, Tags.Items.STORAGE_BLOCKS_COPPER, metalType.getName() + "_block_deconstruct");
 				continue;
 			}
 
