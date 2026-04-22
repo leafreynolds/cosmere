@@ -10,7 +10,6 @@ displayName = "Cosmere: Sand Mastery"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "MoonlitJolty"
 credits = '''
-
 Leaf - A small amount of code and the initial cosmere framework that Sandmastery hooks into
 Hawktrav - Various models and textures
 Luke13234 - Who wrote much of the Ars Arcanum guide book entries.
@@ -20,7 +19,10 @@ description = '''Sand Mastery module for Cosmere.'''
 
 [[dependencies.sandmastery]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "sandmastery.mixins.json"

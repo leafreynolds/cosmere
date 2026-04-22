@@ -4,10 +4,10 @@ issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
 license = "MIT"
 
 [[mods]]
-modId = "aviar"
+modId = "cosmeretools"
 version = "${version}"
-displayName = "Cosmere: Aviar"
-displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+displayName = "Cosmere: Tools"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere-tools"
 authors = "Leaf"
 credits = '''
 
@@ -15,11 +15,14 @@ Special thanks go to:
 Ridanisaurus - For many item and block textures.
 '''
 logoFile = "logo.png"
-description = '''Aviar module for Cosmere.'''
+description = '''Tools module for Cosmere.'''
 
-[[dependencies.aviar]]
+[[dependencies.cosmeretools]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "cosmeretools.mixins.json"

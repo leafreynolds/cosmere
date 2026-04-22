@@ -4,40 +4,37 @@ issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
 license = "MIT"
 
 [[mods]]
-modId = "allomancy"
+modId = "surgebinding"
 version = "${version}"
-displayName = "Cosmere: Allomancy"
+displayName = "Cosmere: Surgebinding"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "Leafy"
 credits = '''
 
-Hawktrav - Various models and textures
+Hawktrav - Various models and textures.
 Luke13234 - Who wrote much of the Ars Arcanum guide book entries.
-Gerbagel - Many visual and performance improvements across iron/steel/zinc/brass/cadmium/bendalloy
+Eliot Lash - Implementation of Rosharan plant blocks and Cryptic model/animation.
 
 Special thanks go to:
 Ridanisaurus - For many item and block textures.
+AlaharranHonor - For Rosharan plant blocks and textures.
 '''
 logoFile = "logo.png"
-description = '''Allomancy module for Cosmere.'''
+description = '''Surgebinding module for Cosmere.'''
 
-[[dependencies.allomancy]]
+[[dependencies.surgebinding]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.allomancy]]
-modId = "feruchemy"
-mandatory = false
+[[dependencies.surgebinding]]
+modId = "hemalurgy"
+type = "optional"
 versionRange = "[${version}]"
 ordering = "BEFORE"
 side = "BOTH"
 
-[[dependencies.allomancy]]
-modId = "hemalurgy"
-mandatory = false
-versionRange = "[${version}]"
-ordering = "BEFORE"
-side = "BOTH"
+[[mixins]]
+config = "surgebinding.mixins.json"

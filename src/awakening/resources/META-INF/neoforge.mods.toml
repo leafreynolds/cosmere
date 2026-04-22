@@ -4,9 +4,9 @@ issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
 license = "MIT"
 
 [[mods]]
-modId = "soulforgery"
+modId = "awakening"
 version = "${version}"
-displayName = "Cosmere: Soulforgery"
+displayName = "Cosmere: Awakening"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "Leaf"
 credits = '''
@@ -15,11 +15,14 @@ Special thanks go to:
 Ridanisaurus - For many item and block textures.
 '''
 logoFile = "logo.png"
-description = '''Soulforgery module for Cosmere.'''
+description = '''Awakening module for Cosmere.'''
 
-[[dependencies.soulforgery]]
+[[dependencies.awakening]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "awakening.mixins.json"

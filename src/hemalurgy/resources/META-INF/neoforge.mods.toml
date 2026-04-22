@@ -22,21 +22,24 @@ description = '''Hemalurgy module for Cosmere.'''
 
 [[dependencies.hemalurgy]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.hemalurgy]]
 modId = "allomancy"
-mandatory = false
+type = "optional"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.hemalurgy]]
 modId = "feruchemy"
-mandatory = false
+type = "optional"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "hemalurgy.mixins.json"

@@ -4,22 +4,23 @@ issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
 license = "MIT"
 
 [[mods]]
-modId = "awakening"
+modId = "aondor"
 version = "${version}"
-displayName = "Cosmere: Awakening"
+displayName = "Cosmere: AonDor"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "Leaf"
 credits = '''
 
-Special thanks go to:
-Ridanisaurus - For many item and block textures.
 '''
 logoFile = "logo.png"
-description = '''Awakening module for Cosmere.'''
+description = '''AonDor module for Cosmere.'''
 
-[[dependencies.awakening]]
+[[dependencies.aondor]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "aondor.mixins.json"

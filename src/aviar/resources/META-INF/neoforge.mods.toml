@@ -4,20 +4,25 @@ issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
 license = "MIT"
 
 [[mods]]
-modId = "aondor"
+modId = "aviar"
 version = "${version}"
-displayName = "Cosmere: AonDor"
+displayName = "Cosmere: Aviar"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
 authors = "Leaf"
 credits = '''
 
+Special thanks go to:
+Ridanisaurus - For many item and block textures.
 '''
 logoFile = "logo.png"
-description = '''AonDor module for Cosmere.'''
+description = '''Aviar module for Cosmere.'''
 
-[[dependencies.aondor]]
+[[dependencies.aviar]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "aviar.mixins.json"
