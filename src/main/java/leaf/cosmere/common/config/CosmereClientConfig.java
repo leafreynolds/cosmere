@@ -4,23 +4,23 @@
 
 package leaf.cosmere.common.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class CosmereClientConfig implements ICosmereConfig
 {
-	private final ForgeConfigSpec configSpec;
-	public final ForgeConfigSpec.BooleanValue disableItemTinting;
-	public final ForgeConfigSpec.BooleanValue disableSelectedManifestationHud;
-	public final ForgeConfigSpec.IntValue hudXCoordinate;
-	public final ForgeConfigSpec.IntValue hudYCoordinate;
-	public final ForgeConfigSpec.IntValue hudSize;
-	public final ForgeConfigSpec.BooleanValue disableActivatorChatMessage;
+	private final ModConfigSpec configSpec;
+	public final ModConfigSpec.BooleanValue disableItemTinting;
+	public final ModConfigSpec.BooleanValue disableSelectedManifestationHud;
+	public final ModConfigSpec.IntValue hudXCoordinate;
+	public final ModConfigSpec.IntValue hudYCoordinate;
+	public final ModConfigSpec.IntValue hudSize;
+	public final ModConfigSpec.BooleanValue disableActivatorChatMessage;
 
 
 	CosmereClientConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Client Config. This config only exists on the client").push("cosmere");
 
 		disableItemTinting = builder.comment("Lets you disable cosmere item and block tinting for metal items and blocks").define("disableItemTinting", false);
@@ -43,7 +43,7 @@ public class CosmereClientConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

@@ -4,30 +4,30 @@
 
 package leaf.cosmere.common.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class CosmereServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
-	public final ForgeConfigSpec.IntValue CHARGEABLE_MAX_VALUE;
-	public final ForgeConfigSpec.BooleanValue SCULK_CAN_HEAR_KINETIC_INVESTITURE;
-	public final ForgeConfigSpec.IntValue PLAYER_METALBORN_CHANCE;
-	public final ForgeConfigSpec.IntValue FULLBORN_POWERS_CHANCE;
-	public final ForgeConfigSpec.IntValue TWINBORN_POWERS_CHANCE_PLAYER;
-	public final ForgeConfigSpec.IntValue TWINBORN_POWERS_CHANCE_MOB;
-	public final ForgeConfigSpec.IntValue PLAYER_MISTING_TO_FERRING_DISTRIBUTION;
-	public final ForgeConfigSpec.IntValue RAIDER_POWERS_CHANCE;
-	public final ForgeConfigSpec.IntValue MOB_POWERS_CHANCE;
-	public final ForgeConfigSpec.DoubleValue EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER;
-	public final ForgeConfigSpec.EnumValue<PowerGeneration> POWER_GENERATION;
+	public final ModConfigSpec.IntValue CHARGEABLE_MAX_VALUE;
+	public final ModConfigSpec.BooleanValue SCULK_CAN_HEAR_KINETIC_INVESTITURE;
+	public final ModConfigSpec.IntValue PLAYER_METALBORN_CHANCE;
+	public final ModConfigSpec.IntValue FULLBORN_POWERS_CHANCE;
+	public final ModConfigSpec.IntValue TWINBORN_POWERS_CHANCE_PLAYER;
+	public final ModConfigSpec.IntValue TWINBORN_POWERS_CHANCE_MOB;
+	public final ModConfigSpec.IntValue PLAYER_MISTING_TO_FERRING_DISTRIBUTION;
+	public final ModConfigSpec.IntValue RAIDER_POWERS_CHANCE;
+	public final ModConfigSpec.IntValue MOB_POWERS_CHANCE;
+	public final ModConfigSpec.DoubleValue EMOTIONAL_POWERS_SINGLE_TARGET_RANGE_MULTIPLIER;
+	public final ModConfigSpec.EnumValue<PowerGeneration> POWER_GENERATION;
 
 
 	CosmereServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Cosmere Server Config. This config is synced between server and client.").push("cosmere");
 
 		CHARGEABLE_MAX_VALUE = builder.comment("What is the max value for chargeables? This value is modified based on the object").defineInRange("chargeableMaxValue", 18000, 1000, 1000000);
@@ -57,7 +57,7 @@ public class CosmereServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

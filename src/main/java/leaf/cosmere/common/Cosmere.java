@@ -8,7 +8,7 @@ import leaf.cosmere.api.*;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.common.config.CosmereConfigs;
-import leaf.cosmere.common.config.CosmereModConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import leaf.cosmere.common.eventHandlers.ColorHandler;
 import leaf.cosmere.common.network.NetworkPacketHandler;
 import leaf.cosmere.common.registry.*;
@@ -22,6 +22,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Mod(Cosmere.MODID)
@@ -159,21 +160,33 @@ public class Cosmere
 		CosmereAPI.logger.info("Cosmere Version {} initializing...", versionNumber);
 	}
 
-	private void onConfigLoad(ModConfigEvent configEvent)
+	private void onConfigLoad(ModConfigEvent.Loading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(configEvent);
 	}
 
 	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		handleConfigEvent(configEvent);
+	}
+
+	private void handleConfigEvent(ModConfigEvent event)
+	{
+		ModConfig config = event.getConfig();
+		if (!config.getModId().equals(MODID))
 		{
-			cosmereModConfig.clearCache();
+			return;
+		}
+		for (ICosmereConfig cosmereConfig : List.of(
+				CosmereConfigs.CLIENT_CONFIG,
+				CosmereConfigs.SERVER_CONFIG,
+				CosmereConfigs.WORLD_CONFIG))
+		{
+			if (cosmereConfig.getConfigSpec() == config.getSpec())
+			{
+				cosmereConfig.clearCache();
+				return;
+			}
 		}
 	}
 

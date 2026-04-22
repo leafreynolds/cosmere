@@ -4,16 +4,19 @@
 
 package leaf.cosmere.common.config;
 
-import net.minecraftforge.fml.ModContainer;
+import leaf.cosmere.common.Cosmere;
+import net.neoforged.fml.ModContainer;
 
 public class CosmereConfigHelper
 {
 	public static void registerConfig(ModContainer modContainer, ICosmereConfig config)
 	{
-		CosmereModConfig modConfig = new CosmereModConfig(modContainer, config);
 		if (config.addToContainer())
 		{
-			modContainer.addConfig(modConfig);
+			modContainer.registerConfig(
+					config.getConfigType(),
+					config.getConfigSpec(),
+					Cosmere.MODID + "/" + config.getFileName() + ".toml");
 		}
 	}
 }

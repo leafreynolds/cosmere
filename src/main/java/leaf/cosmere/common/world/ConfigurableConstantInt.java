@@ -12,7 +12,7 @@ import leaf.cosmere.common.resource.ore.OreType.OreVeinType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.IntProviderType;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,9 +37,9 @@ public class ConfigurableConstantInt extends IntProvider
 
 	@Nullable
 	private final OreVeinType oreVeinType;
-	private final ForgeConfigSpec.ConfigValue<Integer> value;
+	private final ModConfigSpec.ConfigValue<Integer> value;
 
-	public ConfigurableConstantInt(@Nullable OreVeinType oreVeinType, ForgeConfigSpec.ConfigValue<Integer> value)
+	public ConfigurableConstantInt(@Nullable OreVeinType oreVeinType, ModConfigSpec.ConfigValue<Integer> value)
 	{
 		this.oreVeinType = oreVeinType;
 		this.value = value;

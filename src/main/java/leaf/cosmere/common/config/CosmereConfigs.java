@@ -4,8 +4,7 @@
 
 package leaf.cosmere.common.config;
 
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 
 public class CosmereConfigs
 {
@@ -13,9 +12,8 @@ public class CosmereConfigs
 	public static final CosmereServerConfig SERVER_CONFIG = new CosmereServerConfig();
 	public static final CosmereWorldConfig WORLD_CONFIG = new CosmereWorldConfig();
 
-	public static void registerConfigs(ModLoadingContext modLoadingContext)
+	public static void registerConfigs(ModContainer modContainer)
 	{
-		ModContainer modContainer = modLoadingContext.getActiveContainer();
 		CosmereConfigHelper.registerConfig(modContainer, CLIENT_CONFIG);
 		CosmereConfigHelper.registerConfig(modContainer, SERVER_CONFIG);
 		CosmereConfigHelper.registerConfig(modContainer, WORLD_CONFIG);

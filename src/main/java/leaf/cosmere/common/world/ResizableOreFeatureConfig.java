@@ -11,13 +11,13 @@ import leaf.cosmere.common.config.CosmereWorldConfig;
 import leaf.cosmere.common.resource.ore.OreType;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration.TargetBlockState;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
 public record ResizableOreFeatureConfig(List<TargetBlockState> targetStates, OreType.OreVeinType oreVeinType,
-                                        ForgeConfigSpec.ConfigValue<Integer> size,
-                                        ForgeConfigSpec.ConfigValue<Double> discardChanceOnAirExposure) implements FeatureConfiguration
+                                        ModConfigSpec.ConfigValue<Integer> size,
+                                        ModConfigSpec.ConfigValue<Double> discardChanceOnAirExposure) implements FeatureConfiguration
 {
 
 	public static final Codec<ResizableOreFeatureConfig> CODEC = RecordCodecBuilder.create(builder -> builder.group(

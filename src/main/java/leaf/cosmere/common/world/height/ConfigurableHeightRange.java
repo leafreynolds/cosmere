@@ -5,7 +5,7 @@
 package leaf.cosmere.common.world.height;
 
 import leaf.cosmere.common.resource.ore.BaseOreConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.function.Supplier;
 
@@ -14,12 +14,12 @@ import java.util.function.Supplier;
 public record ConfigurableHeightRange(Supplier<HeightShape> shape,
                                       ConfigurableVerticalAnchor minInclusive,
                                       ConfigurableVerticalAnchor maxInclusive,
-                                      ForgeConfigSpec.ConfigValue<Integer> plateau)
+                                      ModConfigSpec.ConfigValue<Integer> plateau)
 {
 
-	public static ConfigurableHeightRange create(ForgeConfigSpec.Builder builder, String veinType, BaseOreConfig baseConfig)
+	public static ConfigurableHeightRange create(ModConfigSpec.Builder builder, String veinType, BaseOreConfig baseConfig)
 	{
-		ForgeConfigSpec.EnumValue<HeightShape> shape =
+		ModConfigSpec.EnumValue<HeightShape> shape =
 				builder.comment("Distribution shape for placing " + veinType + "s.")
 						.defineEnum("shape", baseConfig.shape());
 
@@ -30,7 +30,7 @@ public record ConfigurableHeightRange(Supplier<HeightShape> shape,
 						"Minimum (inclusive) height anchor for " + veinType + "s.", baseConfig.min(),
 						null);
 
-		final ForgeConfigSpec.ConfigValue<Integer> plat = builder.comment("Half length of short side of trapezoid, only used if shape is TRAPEZOID. A value of zero means the shape is a triangle.")
+		final ModConfigSpec.ConfigValue<Integer> plat = builder.comment("Half length of short side of trapezoid, only used if shape is TRAPEZOID. A value of zero means the shape is a triangle.")
 				.define("plateau", baseConfig.plateau(), o ->
 				{
 					if (o instanceof Integer value)
