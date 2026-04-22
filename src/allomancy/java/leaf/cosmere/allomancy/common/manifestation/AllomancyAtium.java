@@ -11,8 +11,9 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+
+import java.util.Optional;
 
 public class AllomancyAtium extends AllomancyManifestation
 {
@@ -60,7 +61,7 @@ public class AllomancyAtium extends AllomancyManifestation
 				//if the attacker is capable of burning atium
 				if (event.getSource().getEntity() instanceof LivingEntity attackerLiving)
 				{
-					final LazyOptional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(attackerLiving);
+					final Optional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(attackerLiving);
 
 					if (iSpiritwebLazyOptional.isPresent())
 					{

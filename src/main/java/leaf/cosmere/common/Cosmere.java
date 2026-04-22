@@ -5,6 +5,7 @@
 package leaf.cosmere.common;
 
 import leaf.cosmere.api.*;
+import leaf.cosmere.common.cap.entity.SpiritwebAttachments;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.common.config.CosmereConfigs;
@@ -75,17 +76,14 @@ public class Cosmere
 		IntProviderTypesRegistry.INT_PROVIDER_TYPES.register(modBus);
 		HeightProviderTypesRegistry.HEIGHT_PROVIDER_TYPES.register(modBus);
 
+		SpiritwebAttachments.ATTACHMENT_TYPES.register(modBus);
+
 		DimensionRegistry.register();
 
 		AdvancementTriggerRegistry.init();
 
 		packetHandler = new NetworkPacketHandler();
 		packetHandler.register(modBus);
-
-		// TODO [NeoForge 1.21.1 port]: the old Forge Capability<T> / AttachCapabilitiesEvent system
-		//  has been removed. Spiritweb needs to migrate to an AttachmentType<SpiritwebCapability>
-		//  registered via a DeferredRegister<AttachmentType<?>> on NeoForgeRegistries.ATTACHMENT_TYPES.
-		//  See CapabilitiesHandler.java and src/main/java/leaf/cosmere/common/cap/.
 
 		// init cross mod compatibility stuff, if relevant
 		CuriosCompat.init();

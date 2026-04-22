@@ -65,7 +65,7 @@ public class SurgeGravitation extends SurgebindingManifestation
 	{
 		boolean canFly = false;
 		var spiritwebCapability = SpiritwebCapability.get(entity);
-		if (spiritwebCapability.isPresent() && spiritwebCapability.resolve().get() instanceof SpiritwebCapability data)
+		if (spiritwebCapability.isPresent() && spiritwebCapability.get() instanceof SpiritwebCapability data)
 		{
 
 			canFly = SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get().isActive(data);
@@ -93,7 +93,7 @@ public class SurgeGravitation extends SurgebindingManifestation
 		else
 		{
 			var spiritwebCapability = SpiritwebCapability.get(entity);
-			if (spiritwebCapability.isPresent() && spiritwebCapability.resolve().get() instanceof SpiritwebCapability data)
+			if (spiritwebCapability.isPresent() && spiritwebCapability.get() instanceof SpiritwebCapability data)
 			{
 				Vec3 lookAngle = entity.getLookAngle();
 				Vec3 deltaMovement = entity.getDeltaMovement();

@@ -28,6 +28,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -40,16 +41,20 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -63,11 +68,6 @@ import java.util.List;
 
 public class SpiritwebCapability implements ISpiritweb
 {
-	//Injection
-	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
-
 	//detect if capability has been set up yet
 	private boolean didSetup = false;
 	private boolean hasBeenInitialized = false;
@@ -101,15 +101,29 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 
-	@Nonnull
-	public static LazyOptional<ISpiritweb> get(LivingEntity entity)
+	public static Optional<ISpiritweb> get(LivingEntity entity)
 	{
-		return entity != null ? entity.getCapability(SpiritwebCapability.CAPABILITY, null)
-		                      : LazyOptional.empty();
+		if (entity == null || !isValidSpiritWebEntity(entity))
+		{
+			return Optional.empty();
+		}
+		return Optional.of(entity.getData(SpiritwebAttachments.SPIRITWEB.get()));
+	}
+
+	public static boolean isValidSpiritWebEntity(Entity entity)
+	{
+		return entity instanceof Player
+				|| entity instanceof AbstractVillager
+				|| entity instanceof ZombieVillager
+				|| (entity instanceof Raider && !(entity instanceof Ravager))
+				|| entity instanceof AbstractPiglin
+				|| entity instanceof Warden
+				|| entity instanceof Llama
+				|| entity instanceof Cat;
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (this.nbt == null)
 		{
@@ -155,7 +169,7 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag compoundTag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
 		this.nbt = compoundTag;
 
@@ -469,7 +483,8 @@ public class SpiritwebCapability implements ISpiritweb
 
 		//forcibly serialize the old web, then deserialize it into the new one
 		//before, it was just a copy of whatever was saved the last time it was synced.
-		deserializeNBT(oldWeb.serializeNBT().copy());
+		final HolderLookup.Provider provider = getLiving().level().registryAccess();
+		deserializeNBT(provider, oldWeb.serializeNBT(provider).copy());
 
 		if (event.isWasDeath())
 		{
@@ -1021,7 +1036,7 @@ public class SpiritwebCapability implements ISpiritweb
 			first.ifPresent(this::setSelectedManifestation);
 		}
 
-		CompoundTag nbt = serializeNBT();
+		CompoundTag nbt = serializeNBT(livingEntity.level().registryAccess());
 
 		if (serverPlayerEntity == null)
 		{

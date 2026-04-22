@@ -75,13 +75,36 @@ All 7 files in `src/main/java/leaf/cosmere/common/config/` ported; plus three ti
 - `common/world/ResizableOreFeatureConfig.java`, `common/world/ConfigurableConstantInt.java`, `common/world/height/ConfigurableHeightRange.java`, `common/world/height/ConfigurableVerticalAnchor.java` — `ForgeConfigSpec.{ConfigValue,Builder,EnumValue}` → `ModConfigSpec.*` (consume the `CosmereWorldConfig` spec values, so they had to move with it).
 - Note on `Type.SERVER` sync: `CosmereWorldConfig.addToContainer()` still returns `false`, so the world spec is never registered with the mod container. Its `ConfigValue`s therefore return **default values only** (same as before — the old code built but didn't register this spec either). If the world config needs to become per-world-editable, flip `addToContainer()` to `true` in a future pass.
 
+### Phase 4 — Capabilities → Attachments (ISpiritweb only)
+The player/villager/etc. `ISpiritweb` capability is now a NeoForge data attachment. The remaining world-level / item-level capabilities (Scadrial, Roshar, Hemalurgy world caps, DynamicShardbladeData, CoinPouch/SandPouch inventories) are untouched — they stay Forge-era stubs until their submodule port passes.
+- **New `src/main/java/leaf/cosmere/common/cap/entity/SpiritwebAttachments.java`** — `DeferredRegister<AttachmentType<?>>` on `NeoForgeRegistries.ATTACHMENT_TYPES`; single entry `"spiritweb"` registered via `AttachmentType.serializable(holder -> new SpiritwebCapability((LivingEntity) holder)).build()`. `copyOnDeath()` deliberately NOT set — the explicit `SpiritwebCapability.onPlayerClone` handler (to be re-wired via `PlayerEvent.Clone` in Phase 6) remains the single source of truth for post-death state transfer and `ISpiritwebSubmodule#resetOnDeath` dispatch.
+- `src/main/java/leaf/cosmere/common/cap/entity/SpiritwebCapability.java` —
+  - Dropped `Capability<ISpiritweb> CAPABILITY` field + `CapabilityManager` / `CapabilityToken` imports.
+  - `get(LivingEntity)` now returns `java.util.Optional<ISpiritweb>` (was `LazyOptional<ISpiritweb>`), gated by `isValidSpiritWebEntity`; calls `entity.getData(SpiritwebAttachments.SPIRITWEB.get())`.
+  - `isValidSpiritWebEntity(Entity)` moved here from the deleted `CapabilitiesHandler`.
+  - `INBTSerializable` (NeoForge flavour) method signatures updated: `serializeNBT(HolderLookup.Provider)` / `deserializeNBT(HolderLookup.Provider, CompoundTag)`.
+  - Internal callers (`syncToClients`, `onPlayerClone`) source the provider from `livingEntity.level().registryAccess()`.
+  - `@OnlyIn` / `Dist` imports moved `net.minecraftforge.api.distmarker.*` → `net.neoforged.api.distmarker.*`; `RenderLevelStageEvent` and `PlayerEvent` likewise repathed.
+- `src/api/java/leaf/cosmere/api/spiritweb/ISpiritweb.java` + `src/api/java/leaf/cosmere/api/ISpiritwebSubmodule.java` — `INBTSerializable`, `RenderLevelStageEvent`, `PlayerEvent`, `Dist`, `OnlyIn` imports all moved to the NeoForge packages. No method signatures changed at the API level — the new `HolderLookup.Provider` params come from the updated `INBTSerializable` parent.
+- **Deleted `src/main/java/leaf/cosmere/common/eventHandlers/CapabilitiesHandler.java`.** `AttachCapabilitiesEvent` no longer exists; attachments auto-attach on first access.
+- `src/main/java/leaf/cosmere/common/Cosmere.java` — `SpiritwebAttachments.ATTACHMENT_TYPES.register(modBus)` wired alongside the other `DeferredRegister`s; Phase 4 TODO comment removed.
+- Consumer fixes (files that stored `LazyOptional<ISpiritweb>` explicitly or used `LazyOptional`-specific idioms — most `.ifPresent(...)` callsites ported transparently because `Optional` implements the same method):
+  - `src/allomancy/.../AllomancyAtium.java` — `LazyOptional<ISpiritweb>` → `Optional<ISpiritweb>`; `LazyOptional` import removed.
+  - `src/allomancy/.../capabilities/world/ScadrialCapability.java` — same; `.resolve()` dropped (the value is already an `Optional`). The rest of that file (its own Forge-era world capability) stays until its submodule pass.
+  - `src/main/java/leaf/cosmere/mixin/LightTextureMixin.java` — same.
+  - `src/surgebinding/.../SurgeGravitation.java` — `.resolve().get()` → `.get()`.
+- `src/main/java/leaf/cosmere/common/network/packets/SyncPlayerSpiritwebMessage.java` — `c.deserializeNBT(entityNBT)` → `c.deserializeNBT(result.level().registryAccess(), entityNBT)` to match the new `INBTSerializable` shape. The rest of the packet file (`SimpleChannel` / `NetworkEvent.Context` plumbing) is still broken — that's Phase 5 work.
+
+Notes:
+- `renderSelectedHUD` in `SpiritwebCapability.java` still uses pre-1.21 render APIs (`BufferBuilder#vertex().color().endVertex()`, `new ResourceLocation(ns, path)`, `Tesselator#getBuilder()`). Pre-existing breaks; slated for Phase 7.
+- NeoForge `AttachmentType` has no built-in "attach only to entities of type X" filter. The gate lives in `SpiritwebCapability.get(...)` via `isValidSpiritWebEntity`. A Forge-era save could never have attached a spiritweb to a Ravager/Creeper/etc., so no migration for stale save data is needed.
+
 ---
 
 ## Remaining (in suggested order)
 
 | # | Phase | Scope | Complexity |
 |---|---|---|---|
-| 4 | **Capabilities → Attachments** | `common/eventHandlers/CapabilitiesHandler.java` + `common/cap/**` + every consumer of `ISpiritweb.getCapability(...)` | **Rewrite.** `Capability<T>` + `LazyOptional<T>` + `AttachCapabilitiesEvent` are **gone**. Replace with `AttachmentType<SpiritwebCapability>` registered via `DeferredRegister<AttachmentType<?>>` on `NeoForgeRegistries.ATTACHMENT_TYPES`. Auto-attaches on first access. Serialization moves to an `IAttachmentSerializer`. |
 | 5 | **Networking** | `common/network/` — `BasePacketHandler`, `NetworkPacketHandler`, `ICosmerePacket`, every packet in `network/packets/` | **Rewrite.** `SimpleChannel` + `NetworkEvent.Context` are gone. Replace with `PayloadRegistrar` (registered on `RegisterPayloadHandlersEvent`) + per-packet `CustomPacketPayload` + `StreamCodec<FriendlyByteBuf, PACKET>` + `CustomPacketPayload.Type<PACKET>` + `IPayloadContext`. |
 | 6 | **Event handlers** | `common/eventHandlers/**` ~10 files | `@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)` → `@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)`; package swaps; several events renamed/moved; `AttachCapabilitiesEvent` deleted entirely |
 | 7 | **Items / blocks / entities** | `items/`, `blocks/`, entity-related registries — largest bucket | Creative tab API tweaks; `Item.Properties` changes; Curios 9.x API; attributes use `Holder<Attribute>` now; `BlockItem` / `BlockEntityType` updates; tooltip `appendHoverText` signature changed (`Item.TooltipContext` param) |

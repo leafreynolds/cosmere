@@ -27,6 +27,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class ScadrialCapability implements IScadrial
 {
@@ -209,14 +210,13 @@ public class ScadrialCapability implements IScadrial
 			//check burning tin, if it even exists
 			float tinAlloVal = 0;
 			{
-				final LazyOptional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(player);
+				final Optional<ISpiritweb> spiritweb = SpiritwebCapability.get(player);
 
-				if (iSpiritwebLazyOptional.isPresent())
+				if (spiritweb.isPresent())
 				{
-					var spiritweb = iSpiritwebLazyOptional.resolve();
 					final AllomancyManifestation tinAllomancy = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
 					//if tin allomancy exists in this mod pack and it's currently active
-					if (spiritweb.isPresent() && spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isMetalBurning(data))
+					if (spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isMetalBurning(data))
 					{
 						//burning or flaring strength
 						double currentBurnStrength = tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy);

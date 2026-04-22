@@ -21,11 +21,12 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.util.LazyOptional;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+
+import java.util.Optional;
 
 @Mixin(LightTexture.class)
 public class LightTextureMixin
@@ -47,14 +48,13 @@ public class LightTextureMixin
 			return prev;
 		}
 
-		final LazyOptional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(clientPlayer);
+		final Optional<ISpiritweb> spiritweb = SpiritwebCapability.get(clientPlayer);
 		float tinAlloVal = 0;
 
-		if (iSpiritwebLazyOptional.isPresent())
+		if (spiritweb.isPresent())
 		{
-			var spiritweb = iSpiritwebLazyOptional.resolve();
 			final Manifestation tinAllomancy = CosmereAPI.manifestationRegistry().getValue(TIN_RL);
-			if (spiritweb.isPresent() && spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isActive(spiritweb.get()))
+			if (spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isActive(spiritweb.get()))
 			{
 				//burning or flaring strength
 				float currentBurnStrength = (float) (tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy));

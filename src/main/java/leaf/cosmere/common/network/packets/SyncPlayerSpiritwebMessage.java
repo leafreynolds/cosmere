@@ -44,7 +44,7 @@ public class SyncPlayerSpiritwebMessage implements ICosmerePacket
 		{
 			SpiritwebCapability.get((LivingEntity) result).ifPresent((c) ->
 			{
-				c.deserializeNBT(entityNBT);
+				c.deserializeNBT(result.level().registryAccess(), entityNBT);
 				c.getLiving().refreshDimensions();
 			});
 
