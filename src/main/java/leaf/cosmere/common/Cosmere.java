@@ -1,11 +1,10 @@
 /*
- * File updated ~ 20 - 12 - 2024 ~ Leaf
+ * File updated ~ 2026-04-23 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.common;
 
 import leaf.cosmere.api.*;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.common.config.CosmereConfigs;
@@ -14,15 +13,13 @@ import leaf.cosmere.common.eventHandlers.ColorHandler;
 import leaf.cosmere.common.network.NetworkPacketHandler;
 import leaf.cosmere.common.registry.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,21 +37,19 @@ public class Cosmere
 	private final NetworkPacketHandler packetHandler;
 
 
-	public Cosmere()
+	public Cosmere(IEventBus modBus, ModContainer modContainer)
 	{
 		instance = this;
 
-		CosmereConfigs.registerConfigs(ModLoadingContext.get());
+		CosmereConfigs.registerConfigs(modContainer);
 
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::onCommonSetup);
 		modBus.addListener(this::onClientSetup);
-		modBus.addListener(this::onAddCaps);
 		modBus.addListener(this::onConfigLoad);
 		modBus.addListener(this::onConfigReload);
 
-		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
-		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+		//Set our version number to match the neoforge.mods.toml file, which matches the one in our build.gradle
+		versionNumber = new Version(modContainer);
 
 
 		//Register our deferred registries
@@ -84,6 +79,12 @@ public class Cosmere
 		AdvancementTriggerRegistry.init();
 
 		packetHandler = new NetworkPacketHandler();
+		packetHandler.register(modBus);
+
+		// TODO [NeoForge 1.21.1 port]: the old Forge Capability<T> / AttachCapabilitiesEvent system
+		//  has been removed. Spiritweb needs to migrate to an AttachmentType<SpiritwebCapability>
+		//  registered via a DeferredRegister<AttachmentType<?>> on NeoForgeRegistries.ATTACHMENT_TYPES.
+		//  See CapabilitiesHandler.java and src/main/java/leaf/cosmere/common/cap/.
 
 		// init cross mod compatibility stuff, if relevant
 		CuriosCompat.init();
@@ -107,7 +108,7 @@ public class Cosmere
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(Cosmere.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Cosmere.MODID, path);
 	}
 
 	public static Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> makeSpiritwebSubmodules()
@@ -156,8 +157,6 @@ public class Cosmere
 	{
 		//Initialization notification
 		CosmereAPI.logger.info("Cosmere Version {} initializing...", versionNumber);
-
-		packetHandler.initialize();
 	}
 
 	private void onConfigLoad(ModConfigEvent configEvent)
@@ -176,11 +175,6 @@ public class Cosmere
 		{
 			cosmereModConfig.clearCache();
 		}
-	}
-
-	private void onAddCaps(RegisterCapabilitiesEvent capabilitiesEvent)
-	{
-		capabilitiesEvent.register(SpiritwebCapability.class);
 	}
 
 	private void onClientSetup(FMLClientSetupEvent event)

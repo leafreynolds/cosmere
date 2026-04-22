@@ -1,7 +1,6 @@
 package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 

@@ -4,13 +4,13 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.common.registration.WrappedRegistryObject;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityTypeRegistryObject<ENTITY extends Entity> extends WrappedRegistryObject<EntityType<ENTITY>> implements IEntityTypeProvider
 {
 
-	public EntityTypeRegistryObject(RegistryObject<EntityType<ENTITY>> registryObject)
+	public EntityTypeRegistryObject(DeferredHolder<?, EntityType<ENTITY>> registryObject)
 	{
 		super(registryObject);
 	}

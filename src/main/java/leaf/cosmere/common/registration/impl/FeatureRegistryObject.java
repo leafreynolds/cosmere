@@ -7,12 +7,12 @@ package leaf.cosmere.common.registration.impl;
 import leaf.cosmere.common.registration.WrappedRegistryObject;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class FeatureRegistryObject<CONFIG extends FeatureConfiguration, FEATURE extends Feature<CONFIG>> extends WrappedRegistryObject<FEATURE>
 {
 
-	public FeatureRegistryObject(RegistryObject<FEATURE> registryObject)
+	public FeatureRegistryObject(DeferredHolder<?, FEATURE> registryObject)
 	{
 		super(registryObject);
 	}

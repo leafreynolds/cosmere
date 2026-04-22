@@ -6,12 +6,12 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedRegistryObject;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class CreativeTabRegistryObject extends WrappedRegistryObject<CreativeModeTab>
 {
 
-	public CreativeTabRegistryObject(RegistryObject<CreativeModeTab> registryObject)
+	public CreativeTabRegistryObject(DeferredHolder<?, CreativeModeTab> registryObject)
 	{
 		super(registryObject);
 	}

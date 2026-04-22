@@ -4,13 +4,13 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.registration.DoubleWrappedRegistryObject;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockRegistryObject<BLOCK extends Block, ITEM extends Item> extends DoubleWrappedRegistryObject<BLOCK, ITEM> implements IBlockProvider
 {
 
-	public BlockRegistryObject(RegistryObject<BLOCK> blockRegistryObject, RegistryObject<ITEM> itemRegistryObject)
+	public BlockRegistryObject(DeferredHolder<?, BLOCK> blockRegistryObject, DeferredHolder<?, ITEM> itemRegistryObject)
 	{
 		super(blockRegistryObject, itemRegistryObject);
 	}

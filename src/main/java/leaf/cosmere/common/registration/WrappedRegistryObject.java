@@ -1,15 +1,15 @@
 package leaf.cosmere.common.registration;
 
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.function.Supplier;
 
 public class WrappedRegistryObject<T> implements Supplier<T>, INamedEntry
 {
 
-	protected RegistryObject<T> registryObject;
+	protected DeferredHolder<?, T> registryObject;
 
-	protected WrappedRegistryObject(RegistryObject<T> registryObject)
+	protected WrappedRegistryObject(DeferredHolder<?, T> registryObject)
 	{
 		this.registryObject = registryObject;
 	}
@@ -20,7 +20,7 @@ public class WrappedRegistryObject<T> implements Supplier<T>, INamedEntry
 		return registryObject.get();
 	}
 
-	public RegistryObject<T> getRegistryObject()
+	public DeferredHolder<?, T> getRegistryObject()
 	{
 		return registryObject;
 	}
