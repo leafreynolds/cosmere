@@ -19,7 +19,7 @@ public class ManifestationRegistry
 
 	public static Manifestation fromID(String location)
 	{
-		ResourceLocation resourceLocation = new ResourceLocation(location);
+		ResourceLocation resourceLocation = ResourceLocation.parse(location);
 		return fromID(resourceLocation);
 	}
 
