@@ -6,7 +6,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class MenuTypeRegistryObject<MENU_TYPE extends MenuType<?>> extends WrappedRegistryObject<MENU_TYPE>
 {
-	public MenuTypeRegistryObject(DeferredHolder<?, MENU_TYPE> registryObject)
+	public MenuTypeRegistryObject(DeferredHolder<? super MENU_TYPE, MENU_TYPE> registryObject)
 	{
 		super(registryObject);
 	}

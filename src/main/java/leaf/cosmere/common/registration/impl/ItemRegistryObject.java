@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemRegistryObject<ITEM extends Item> extends WrappedRegistryObject<ITEM> implements IItemProvider
 {
 
-	public ItemRegistryObject(DeferredHolder<?, ITEM> registryObject)
+	public ItemRegistryObject(DeferredHolder<? super ITEM, ITEM> registryObject)
 	{
 		super(registryObject);
 	}

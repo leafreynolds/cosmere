@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 public class WrappedRegistryObject<T> implements Supplier<T>, INamedEntry
 {
 
-	protected DeferredHolder<?, T> registryObject;
+	protected DeferredHolder<? super T, T> registryObject;
 
-	protected WrappedRegistryObject(DeferredHolder<?, T> registryObject)
+	protected WrappedRegistryObject(DeferredHolder<? super T, T> registryObject)
 	{
 		this.registryObject = registryObject;
 	}
@@ -20,7 +20,7 @@ public class WrappedRegistryObject<T> implements Supplier<T>, INamedEntry
 		return registryObject.get();
 	}
 
-	public DeferredHolder<?, T> getRegistryObject()
+	public DeferredHolder<? super T, T> getRegistryObject()
 	{
 		return registryObject;
 	}

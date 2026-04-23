@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class BiomeModifierSerializerRegistryObject<T extends BiomeModifier> extends WrappedRegistryObject<MapCodec<T>>
 {
 
-	public BiomeModifierSerializerRegistryObject(DeferredHolder<?, MapCodec<T>> registryObject)
+	public BiomeModifierSerializerRegistryObject(DeferredHolder<? super MapCodec<T>, MapCodec<T>> registryObject)
 	{
 		super(registryObject);
 	}

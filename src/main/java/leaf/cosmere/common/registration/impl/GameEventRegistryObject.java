@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class GameEventRegistryObject<GAME_EVENT extends GameEvent> extends WrappedRegistryObject<GAME_EVENT>
 {
 
-	public GameEventRegistryObject(DeferredHolder<?, GAME_EVENT> registryObject)
+	public GameEventRegistryObject(DeferredHolder<? super GAME_EVENT, GAME_EVENT> registryObject)
 	{
 		super(registryObject);
 	}

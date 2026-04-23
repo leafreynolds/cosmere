@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class StatRegistryObject extends WrappedRegistryObject<ResourceLocation>
 {
 
-	public StatRegistryObject(DeferredHolder<?, ResourceLocation> registryObject)
+	public StatRegistryObject(DeferredHolder<? super ResourceLocation, ResourceLocation> registryObject)
 	{
 		super(registryObject);
 	}

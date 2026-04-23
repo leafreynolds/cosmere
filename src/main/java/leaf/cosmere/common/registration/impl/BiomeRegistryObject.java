@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class BiomeRegistryObject<BIOME extends Biome> extends WrappedRegistryObject<BIOME>
 {
 
-	public BiomeRegistryObject(DeferredHolder<?, BIOME> registryObject)
+	public BiomeRegistryObject(DeferredHolder<? super BIOME, BIOME> registryObject)
 	{
 		super(registryObject);
 	}

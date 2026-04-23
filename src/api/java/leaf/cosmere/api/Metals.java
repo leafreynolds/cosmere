@@ -5,9 +5,13 @@
 package leaf.cosmere.api;
 
 import leaf.cosmere.api.helpers.TimeHelper;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +30,7 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -49,7 +53,12 @@ import java.util.stream.Collectors;
 public class Metals
 {
 
-	public enum MetalType implements Tier, ArmorMaterial
+	// NOTE: In 1.21.1 net.minecraft.world.item.ArmorMaterial is a record, not an interface, so
+	// MetalType can no longer `implements ArmorMaterial`. The ArmorMaterial-shaped getters below
+	// (getEquipSound / getToughness / getKnockbackResistance / getDurabilityForType /
+	// getDefenseForType) are kept as plain enum methods; armor item registration (Phase 7) will
+	// wrap them into a real ArmorMaterial record at construction time.
+	public enum MetalType implements Tier
 	{
 		//Physical/Physical
 		IRON(0, 0, 0, 0, 0, 0),//ignore tier data
@@ -706,12 +715,17 @@ public class Metals
 				case COPPER:
 					//Steals mental fortitude, memory, and intelligence
 					//increase base xp gain rate
-					final float potentialRewardRate = killedEntity.getExperienceReward() / 150f;
+					final float potentialRewardRate = killedEntity.level() instanceof ServerLevel serverLevel
+							? killedEntity.getExperienceReward(serverLevel, playerEntity) / 150f
+							: 0f;
 
 					if (killedEntity instanceof Player)
 					{
 						//todo do better
-						final Attribute xpAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(CosmereAPI.COSMERE_MODID, Metals.MetalType.COPPER.getName()));
+						final Holder<Attribute> xpAttribute = BuiltInRegistries.ATTRIBUTE
+								.getHolder(ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, Metals.MetalType.COPPER.getName()))
+								.map(h -> (Holder<Attribute>) h)
+								.orElse(null);
 						if (xpAttribute != null)
 						{
 							final AttributeInstance attribute = killedEntity.getAttribute(xpAttribute);
@@ -774,7 +788,7 @@ public class Metals
 					}
 					else if (killedEntity instanceof Cat cat)
 					{
-						final CatVariant catType = cat.getVariant();
+						final CatVariant catType = cat.getVariant().value();
 						if (catType.texture().getPath().contains("black"))//all black
 						{
 							strengthToAdd = -5;
@@ -907,10 +921,24 @@ public class Metals
 			return this.damage;
 		}
 
-		@Override
+		// 1.21.x Tier no longer has getLevel(); tool-vs-block gate moved to getIncorrectBlocksForDrops.
+		// Kept as a plain accessor because hemalurgy/feruchemy code still consults it for spike strength.
 		public int getLevel()
 		{
 			return this.level;
+		}
+
+		@Override
+		public TagKey<Block> getIncorrectBlocksForDrops()
+		{
+			return switch (this.level)
+			{
+				case 0 -> BlockTags.INCORRECT_FOR_WOODEN_TOOL;
+				case 1 -> BlockTags.INCORRECT_FOR_STONE_TOOL;
+				case 2 -> BlockTags.INCORRECT_FOR_IRON_TOOL;
+				case 3 -> BlockTags.INCORRECT_FOR_DIAMOND_TOOL;
+				default -> BlockTags.INCORRECT_FOR_IRON_TOOL;
+			};
 		}
 
 		@Override
@@ -925,25 +953,23 @@ public class Metals
 			return Ingredient.of(getMetalIngotTag());
 		}
 
-		@Override
-		public SoundEvent getEquipSound()
+		// ArmorMaterial-shaped getters: see note above the enum declaration. No @Override — the
+		// 1.21.1 ArmorMaterial is a record, not an interface.
+		public Holder<SoundEvent> getEquipSound()
 		{
 			return SoundEvents.ARMOR_EQUIP_IRON;
 		}
 
-		@Override
 		public float getToughness()
 		{
 			return 0;
 		}
 
-		@Override
 		public float getKnockbackResistance()
 		{
 			return 0;
 		}
 
-		@Override
 		public int getDurabilityForType(ArmorItem.Type pType)
 		{
 			float multiplier = switch (pType)
@@ -958,7 +984,6 @@ public class Metals
 			return Mth.floor(getUses() * multiplier);
 		}
 
-		@Override
 		public int getDefenseForType(ArmorItem.Type pType)
 		{
 			return getLevel() + switch (pType)
@@ -984,8 +1009,8 @@ public class Metals
 				}
 			}
 
-			var resourceLoc = new ResourceLocation(CosmereAPI.COSMERE_MODID, getName() + Constants.RegNameStubs.NUGGET);
-			return ForgeRegistries.ITEMS.getValue(resourceLoc);
+			var resourceLoc = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, getName() + Constants.RegNameStubs.NUGGET);
+			return BuiltInRegistries.ITEM.get(resourceLoc);
 		}
 
 		public String getTranslationKey()

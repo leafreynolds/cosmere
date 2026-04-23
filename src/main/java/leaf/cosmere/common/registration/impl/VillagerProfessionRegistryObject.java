@@ -6,7 +6,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class VillagerProfessionRegistryObject<VillagerProfession> extends WrappedRegistryObject<VillagerProfession>
 {
 
-	public VillagerProfessionRegistryObject(DeferredHolder<?, VillagerProfession> registryObject)
+	public VillagerProfessionRegistryObject(DeferredHolder<? super VillagerProfession, VillagerProfession> registryObject)
 	{
 		super(registryObject);
 	}

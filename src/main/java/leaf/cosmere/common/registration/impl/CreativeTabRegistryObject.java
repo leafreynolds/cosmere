@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class CreativeTabRegistryObject extends WrappedRegistryObject<CreativeModeTab>
 {
 
-	public CreativeTabRegistryObject(DeferredHolder<?, CreativeModeTab> registryObject)
+	public CreativeTabRegistryObject(DeferredHolder<? super CreativeModeTab, CreativeModeTab> registryObject)
 	{
 		super(registryObject);
 	}

@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class POITypeRegistryObject<POIType> extends WrappedRegistryObject<PoiType>
 {
 
-	public POITypeRegistryObject(DeferredHolder<?, PoiType> registryObject)
+	public POITypeRegistryObject(DeferredHolder<? super PoiType, PoiType> registryObject)
 	{
 		super(registryObject);
 	}

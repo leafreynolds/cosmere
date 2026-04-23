@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AttributeRegistryObject<ATTRIBUTE extends Attribute> extends WrappedRegistryObject<ATTRIBUTE> implements IAttributeProvider
 {
-	public AttributeRegistryObject(DeferredHolder<?, ATTRIBUTE> registryObject)
+	public AttributeRegistryObject(DeferredHolder<? super ATTRIBUTE, ATTRIBUTE> registryObject)
 	{
 		super(registryObject);
 	}

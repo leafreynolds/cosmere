@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class RecipeSerializerRegistryObject<RECIPE extends Recipe<?>> extends WrappedRegistryObject<RecipeSerializer<RECIPE>>
 {
-	public RecipeSerializerRegistryObject(DeferredHolder<?, RecipeSerializer<RECIPE>> registryObject)
+	public RecipeSerializerRegistryObject(DeferredHolder<? super RecipeSerializer<RECIPE>, RecipeSerializer<RECIPE>> registryObject)
 	{
 		super(registryObject);
 	}

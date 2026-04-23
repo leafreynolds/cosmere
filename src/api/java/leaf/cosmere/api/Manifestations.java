@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 11 - 2023 ~ Leaf
+ * File updated ~ 23 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -85,14 +85,14 @@ public class Manifestations
 					Optional<Metals.MetalType> metalType = Metals.MetalType.valueOf(powerID);
 					if (metalType.isPresent())
 					{
-						return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation(this.getName(), metalType.get().getName()));
+						return CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath(this.getName(), metalType.get().getName()));
 					}
 					break;
 				case SURGEBINDING:
 					Optional<Roshar.Surges> value = Roshar.Surges.valueOf(powerID);
 					if (value.isPresent())
 					{
-						return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation(this.getName(), value.get().getName()));
+						return CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath(this.getName(), value.get().getName()));
 					}
 					break;
 				case AON_DOR:
@@ -103,11 +103,11 @@ public class Manifestations
 					Optional<Taldain.Mastery> masteryStyle = Taldain.Mastery.valueOf(powerID);
 					if (masteryStyle.isPresent())
 					{
-						return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation(this.getName(), masteryStyle.get().getName()));
+						return CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath(this.getName(), masteryStyle.get().getName()));
 					}
 					break;
 			}
-			return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("cosmere", "none"));
+			return CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("cosmere", "none"));
 		}
 	}
 

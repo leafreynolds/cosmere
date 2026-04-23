@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MobEffectRegistryObject<MOB_EFFECT extends MobEffect> extends WrappedRegistryObject<MOB_EFFECT> implements IMobEffectProvider
 {
-	public MobEffectRegistryObject(DeferredHolder<?, MOB_EFFECT> registryObject)
+	public MobEffectRegistryObject(DeferredHolder<? super MOB_EFFECT, MOB_EFFECT> registryObject)
 	{
 		super(registryObject);
 	}

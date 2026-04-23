@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class HeightProviderTypeRegistryObject<PROVIDER extends HeightProvider> extends WrappedRegistryObject<HeightProviderType<PROVIDER>>
 {
-	public HeightProviderTypeRegistryObject(DeferredHolder<?, HeightProviderType<PROVIDER>> registryObject)
+	public HeightProviderTypeRegistryObject(DeferredHolder<? super HeightProviderType<PROVIDER>, HeightProviderType<PROVIDER>> registryObject)
 	{
 		super(registryObject);
 	}

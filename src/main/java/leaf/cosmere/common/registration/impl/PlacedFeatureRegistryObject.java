@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class PlacedFeatureRegistryObject<PLACED_FEATURE extends PlacedFeature> extends WrappedRegistryObject<PLACED_FEATURE>
 {
 
-	public PlacedFeatureRegistryObject(DeferredHolder<?, PLACED_FEATURE> registryObject)
+	public PlacedFeatureRegistryObject(DeferredHolder<? super PLACED_FEATURE, PLACED_FEATURE> registryObject)
 	{
 		super(registryObject);
 	}

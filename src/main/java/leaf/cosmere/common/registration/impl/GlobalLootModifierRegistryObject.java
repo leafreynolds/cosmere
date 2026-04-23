@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class GlobalLootModifierRegistryObject<GLOBAL_LOOT_MOD extends MapCodec<? extends IGlobalLootModifier>> extends WrappedRegistryObject<GLOBAL_LOOT_MOD>
 {
-	public GlobalLootModifierRegistryObject(DeferredHolder<?, GLOBAL_LOOT_MOD> registryObject)
+	public GlobalLootModifierRegistryObject(DeferredHolder<? super GLOBAL_LOOT_MOD, GLOBAL_LOOT_MOD> registryObject)
 	{
 		super(registryObject);
 	}

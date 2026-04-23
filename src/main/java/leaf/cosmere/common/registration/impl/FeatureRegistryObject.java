@@ -12,7 +12,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class FeatureRegistryObject<CONFIG extends FeatureConfiguration, FEATURE extends Feature<CONFIG>> extends WrappedRegistryObject<FEATURE>
 {
 
-	public FeatureRegistryObject(DeferredHolder<?, FEATURE> registryObject)
+	public FeatureRegistryObject(DeferredHolder<? super FEATURE, FEATURE> registryObject)
 	{
 		super(registryObject);
 	}

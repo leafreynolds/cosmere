@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class ManifestationRegistryObject<MANIFESTATION extends Manifestation> extends WrappedRegistryObject<MANIFESTATION> implements IManifestationProvider
 {
 
-	public ManifestationRegistryObject(DeferredHolder<?, MANIFESTATION> registryObject)
+	public ManifestationRegistryObject(DeferredHolder<? super MANIFESTATION, MANIFESTATION> registryObject)
 	{
 		super(registryObject);
 	}

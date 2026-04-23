@@ -17,13 +17,13 @@ public class Constants
 	public static class Resources
 	{
 
-		public static final ResourceLocation JEI = new ResourceLocation(CosmereAPI.COSMERE_MODID, "jei");
-		public static final ResourceLocation JEI_FERUCHEMY = new ResourceLocation("feruchemy", "jei");
-		public static final ResourceLocation JEI_HEMALURGY = new ResourceLocation("hemalurgy", "jei");
-		public static final ResourceLocation SPIRITWEB_CAP = new ResourceLocation(CosmereAPI.COSMERE_MODID, "spiritweb");
-		public static final ResourceLocation ROSHAR_CAP = new ResourceLocation("surgebinding", "roshar");
-		public static final ResourceLocation SCADRIAL_CAP = new ResourceLocation("allomancy", "scadrial");
-		public static final ResourceLocation HEMALURGY_WORLD_CAP = new ResourceLocation("hemalurgy", "world_cap");
+		public static final ResourceLocation JEI = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "jei");
+		public static final ResourceLocation JEI_FERUCHEMY = ResourceLocation.fromNamespaceAndPath("feruchemy", "jei");
+		public static final ResourceLocation JEI_HEMALURGY = ResourceLocation.fromNamespaceAndPath("hemalurgy", "jei");
+		public static final ResourceLocation SPIRITWEB_CAP = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "spiritweb");
+		public static final ResourceLocation ROSHAR_CAP = ResourceLocation.fromNamespaceAndPath("surgebinding", "roshar");
+		public static final ResourceLocation SCADRIAL_CAP = ResourceLocation.fromNamespaceAndPath("allomancy", "scadrial");
+		public static final ResourceLocation HEMALURGY_WORLD_CAP = ResourceLocation.fromNamespaceAndPath("hemalurgy", "world_cap");
 	}
 
 	public static class Suffix

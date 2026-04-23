@@ -4,6 +4,7 @@
 
 package leaf.cosmere.api;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -12,7 +13,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Arrays;
@@ -114,7 +114,7 @@ public class CosmereTags
 
 		public static TagKey<Item> makeItem(String domain, String path)
 		{
-			return ItemTags.create(new ResourceLocation(domain, path));
+			return ItemTags.create(ResourceLocation.fromNamespaceAndPath(domain, path));
 		}
 
 		public static TagKey<Item> makeItem(ResourceLocation resourceLocation)
@@ -124,7 +124,7 @@ public class CosmereTags
 
 		private static TagKey<Item> forgeItemTag(String name)
 		{
-			final ResourceLocation forgeTagToMake = new ResourceLocation("forge", name);
+			final ResourceLocation forgeTagToMake = ResourceLocation.fromNamespaceAndPath("c", name);
 			return makeItem(forgeTagToMake);
 		}
 	}
@@ -164,7 +164,7 @@ public class CosmereTags
 
 		public static TagKey<Block> makeBlock(String domain, String path)
 		{
-			return BlockTags.create(new ResourceLocation(domain, path));
+			return BlockTags.create(ResourceLocation.fromNamespaceAndPath(domain, path));
 		}
 
 		public static TagKey<Block> makeBlock(ResourceLocation resourceLocation)
@@ -174,7 +174,7 @@ public class CosmereTags
 
 		private static TagKey<Block> forgeTag(String name)
 		{
-			final ResourceLocation forgeTagToMake = new ResourceLocation("forge", name);
+			final ResourceLocation forgeTagToMake = ResourceLocation.fromNamespaceAndPath("c", name);
 			return makeBlock(forgeTagToMake);
 		}
 
@@ -184,14 +184,14 @@ public class CosmereTags
 	public static class Biomes
 	{
 		//todo move to surgebinding module
-		public static final TagKey<Biome> IS_ROSHAR = create(new ResourceLocation("surgebinding", "is_roshar"));
-		public static final TagKey<Biome> IS_SHADESMAR = create(new ResourceLocation(CosmereAPI.COSMERE_MODID, "is_shadesmar"));
+		public static final TagKey<Biome> IS_ROSHAR = create(ResourceLocation.fromNamespaceAndPath("surgebinding", "is_roshar"));
+		public static final TagKey<Biome> IS_SHADESMAR = create(ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "is_shadesmar"));
 
-		public static final TagKey<Biome> SPAWN_ORES = create(new ResourceLocation(CosmereAPI.COSMERE_MODID, "spawn_ores"));
+		public static final TagKey<Biome> SPAWN_ORES = create(ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "spawn_ores"));
 
 		private static TagKey<Biome> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), resourceLocation);
+			return TagKey.create(Registries.BIOME, resourceLocation);
 		}
 	}
 
@@ -201,12 +201,12 @@ public class CosmereTags
 
 		private static TagKey<EntityType<?>> create(String namespace, String path)
 		{
-			return create(new ResourceLocation(namespace, path));
+			return create(ResourceLocation.fromNamespaceAndPath(namespace, path));
 		}
 
 		private static TagKey<EntityType<?>> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), resourceLocation);
+			return TagKey.create(Registries.ENTITY_TYPE, resourceLocation);
 		}
 	}
 }

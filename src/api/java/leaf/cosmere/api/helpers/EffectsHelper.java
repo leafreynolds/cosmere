@@ -6,6 +6,8 @@ package leaf.cosmere.api.helpers;
 
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -17,8 +19,9 @@ public class EffectsHelper
 {
 	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier)
 	{
+		Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
 		MobEffectInstance effectInstance = new MobEffectInstance(
-				effect,
+				holder,
 				63,
 				Math.max(0, amplifier),
 				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
@@ -30,8 +33,9 @@ public class EffectsHelper
 
 	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier, int duration)
 	{
+		Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
 		MobEffectInstance effectInstance = new MobEffectInstance(
-				effect,
+				holder,
 				duration,
 				Math.max(0, amplifier),
 				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui

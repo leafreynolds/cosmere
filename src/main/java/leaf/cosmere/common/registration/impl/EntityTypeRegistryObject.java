@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class EntityTypeRegistryObject<ENTITY extends Entity> extends WrappedRegistryObject<EntityType<ENTITY>> implements IEntityTypeProvider
 {
 
-	public EntityTypeRegistryObject(DeferredHolder<?, EntityType<ENTITY>> registryObject)
+	public EntityTypeRegistryObject(DeferredHolder<? super EntityType<ENTITY>, EntityType<ENTITY>> registryObject)
 	{
 		super(registryObject);
 	}

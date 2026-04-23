@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.api.helpers;
@@ -41,7 +41,7 @@ public class PlayerHelper
 		final Minecraft minecraft = Minecraft.getInstance();
 		minecraft.getProfiler().push("cosmere-pick");
 
-		float partialTicks = minecraft.getFrameTime();
+		float partialTicks = minecraft.getFrameTimeNs();
 
 		HitResult hitResult = player.pick(range, partialTicks, false);
 		Vec3 eyePosition = player.getEyePosition(partialTicks);

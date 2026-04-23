@@ -4,8 +4,11 @@
 
 package leaf.cosmere.api;
 
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -167,10 +170,16 @@ public class Roshar
 			return 0;
 		}
 
-		@Override
+		// 1.21.x Tier no longer has getLevel() — kept as a plain accessor (unused by Tier itself).
 		public int getLevel()
 		{
 			return 0;
+		}
+
+		@Override
+		public TagKey<Block> getIncorrectBlocksForDrops()
+		{
+			return BlockTags.INCORRECT_FOR_WOODEN_TOOL;
 		}
 
 		@Override

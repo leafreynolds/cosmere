@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class BlockRegistryObject<BLOCK extends Block, ITEM extends Item> extends DoubleWrappedRegistryObject<BLOCK, ITEM> implements IBlockProvider
 {
 
-	public BlockRegistryObject(DeferredHolder<?, BLOCK> blockRegistryObject, DeferredHolder<?, ITEM> itemRegistryObject)
+	public BlockRegistryObject(DeferredHolder<? super BLOCK, BLOCK> blockRegistryObject, DeferredHolder<? super ITEM, ITEM> itemRegistryObject)
 	{
 		super(blockRegistryObject, itemRegistryObject);
 	}

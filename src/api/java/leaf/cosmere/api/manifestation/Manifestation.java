@@ -8,11 +8,12 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.providers.IManifestationProvider;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 
 public class Manifestation implements IManifestationProvider
 {
@@ -101,7 +102,8 @@ public class Manifestation implements IManifestationProvider
 
 	public double getStrength(ISpiritweb cap, boolean getBaseStrength)
 	{
-		AttributeInstance attribute = cap.getLiving().getAttribute(getAttribute());
+		Holder<Attribute> holder = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(getAttribute());
+		AttributeInstance attribute = cap.getLiving().getAttribute(holder);
 		if (attribute != null)
 		{
 			return getBaseStrength ? attribute.getBaseValue() : attribute.getValue();
@@ -113,7 +115,7 @@ public class Manifestation implements IManifestationProvider
 	public ResourceLocation getRegistryName()
 	{
 		//May be null if called before the object is registered
-		IForgeRegistry<Manifestation> registry = CosmereAPI.manifestationRegistry();
+		Registry<Manifestation> registry = CosmereAPI.manifestationRegistry();
 		return registry == null ? null : registry.getKey(this);
 	}
 
@@ -133,7 +135,7 @@ public class Manifestation implements IManifestationProvider
 
 	public Attribute getAttribute()
 	{
-		return ForgeRegistries.ATTRIBUTES.getValue(getRegistryName());
+		return BuiltInRegistries.ATTRIBUTE.get(getRegistryName());
 	}
 
 }

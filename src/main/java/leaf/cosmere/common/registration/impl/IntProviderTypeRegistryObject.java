@@ -12,7 +12,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public class IntProviderTypeRegistryObject<PROVIDER extends IntProvider> extends WrappedRegistryObject<IntProviderType<PROVIDER>>
 {
 
-	public IntProviderTypeRegistryObject(DeferredHolder<?, IntProviderType<PROVIDER>> registryObject)
+	public IntProviderTypeRegistryObject(DeferredHolder<? super IntProviderType<PROVIDER>, IntProviderType<PROVIDER>> registryObject)
 	{
 		super(registryObject);
 	}
