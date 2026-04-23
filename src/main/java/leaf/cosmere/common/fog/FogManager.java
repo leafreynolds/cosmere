@@ -102,19 +102,10 @@ public class FogManager
 				fogStart = (4 * 16) / renderDistance;
 				fogEnd = (8 * 16) / renderDistance;
 			}
-			else if (e.hasEffect(MobEffects.DARKNESS))
-			{
-				MobEffectInstance effect = e.getEffect(MobEffects.DARKNESS);
-				if (!effect.getFactorData().isEmpty())
-				{
-					float factor = this.mc.options.darknessEffectScale().get().floatValue();
-					float intensity = effect.getFactorData().get().getFactor(e, mc.getPartialTick()) * factor;
-					float darkness = 1 - (calculateDarknessScale(e, effect.getFactorData().get().getFactor(e, mc.getPartialTick()), mc.getPartialTick()));
-					CosmereAPI.logger.info("FogManager darkness intensity: " + intensity);
-					fogStart = ((8.0F * 16) / renderDistance) * darkness;
-					fogEnd = ((15.0F * 16) / renderDistance);
-				}
-			}
+			// TODO(Phase 7.5): DARKNESS-effect fog scaling. In 1.21.1 MobEffectInstance#getFactorData
+			// was removed; the darkness factor is now surfaced through biome effects / internal
+			// render state, not the effect instance. Until a replacement is wired up, this branch
+			// is inert — BLINDNESS handling above still works on 1.21.1.
 		}
 		this.fogStart.interpolate(fogStart);
 		this.fogEnd.interpolate(fogEnd);

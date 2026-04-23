@@ -5,10 +5,9 @@
 package leaf.cosmere.client.gui;
 
 import com.google.common.base.Stopwatch;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
@@ -21,13 +20,10 @@ import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -397,13 +393,7 @@ public class SpiritwebMenu extends Screen
 
 		guiGraphics.fillGradient(0, 0, width, height, start, end);
 
-		//RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
-		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-		final Tesselator tessellator = Tesselator.getInstance();
-		final BufferBuilder buffer = tessellator.getBuilder();
-
-		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		final double mouseVecX = mouseX - width / 2f;
 		final double mouseVecY = (mouseY - height / 2f);
@@ -414,17 +404,15 @@ public class SpiritwebMenu extends Screen
 		selectedManifestation = null;
 		doAction = null;
 
-		//render the button backgrounds
-		renderRadialButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
-		renderSidedButtons(buffer, mouseVecX, mouseVecY, middle_x, middle_y);
+		// TODO(render polish): button/quadrant background rectangles are stubbed for the 1.21 port
+		// (the old Tesselator.getBuilder / VertexConsumer#endVertex pipeline is gone). The hitbox
+		// math below still runs so keyboard/mouse selection works; only the filled backgrounds are
+		// missing. A future rendering pass should restore them via GuiGraphics#fill or a
+		// RenderType.LINES builder on the 1.21 BufferBuilder API.
+		updateRadialButtonHitboxes(mouseVecX, mouseVecY);
+		updateSidedButtonHitboxes(mouseVecX, mouseVecY);
 
-		//render the metal quadrant backgrounds
-		renderMetalQuadrants(buffer);
-
-		//draw out what we've asked for
-		tessellator.end();
-
-		drawIcons(guiGraphics, buffer, middle_x, middle_y);
+		drawIcons(guiGraphics, middle_x, middle_y);
 
 
 		// draw radial button strings
@@ -439,18 +427,11 @@ public class SpiritwebMenu extends Screen
 		matrixStack.popPose();
 	}
 
-	private void drawIcons(@NotNull GuiGraphics guiGraphics, BufferBuilder buffer, double middle_x, double middle_y)
+	private void drawIcons(GuiGraphics guiGraphics, double middle_x, double middle_y)
 	{
 		PoseStack matrixStack = guiGraphics.pose();
 		matrixStack.pushPose();
-		//RenderSystem.enableTexture();
 		RenderSystem.enableBlend();
-
-		//then we switch to icons
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		//RenderSystem.bindTexture(Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS).getId());
-		//buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
 		//put the icons on the region buttons
 		renderRadialButtonIcons(guiGraphics, middle_x, middle_y);
@@ -640,8 +621,8 @@ public class SpiritwebMenu extends Screen
 					.append(button.name)
 					.append(".png");
 
-			//RenderSystem.setShaderTexture(0, new ResourceLocation(button.name, stringBuilder.toString()));
-			guiGraphics.blit(new ResourceLocation(button.name, stringBuilder.toString()), (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
+			//RenderSystem.setShaderTexture(0, ResourceLocation.fromNamespaceAndPath(button.name, stringBuilder.toString()));
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(button.name, stringBuilder.toString()), (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
 
 		}
 	}
@@ -687,7 +668,7 @@ public class SpiritwebMenu extends Screen
 			}
 
 			stringBuilder.append(".png");
-			final ResourceLocation textureLocation = new ResourceLocation(mani.getRegistryName().getNamespace(), stringBuilder.toString());
+			final ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(mani.getRegistryName().getNamespace(), stringBuilder.toString());
 			RenderSystem.setShaderTexture(0, textureLocation);
 			guiGraphics.blit(textureLocation,
 					(int) (middleX + x1),
@@ -704,67 +685,23 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
-	private void renderSidedButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
+	private void updateSidedButtonHitboxes(double mouseVecX, double mouseVecY)
 	{
 		for (final SidedMenuButton button : sidedMenuButtons)
 		{
-			final float a = 0.5f;
-			float f;
-
 			if (button.x1 <= mouseVecX && button.x2 >= mouseVecX && button.y1 <= mouseVecY && button.y2 >= mouseVecY)
 			{
-				f = 1;
 				button.highlighted = true;
 				doAction = button;
 			}
 			else
 			{
 				button.highlighted = false;
-
-				//highlight button, but don't draw string unless mouse over
-				f = selectedPowerType.getID() == button.powerType
-				    ? 1
-				    : 0;
-			}
-
-			//set first triangle
-			buffer.vertex(middle_x + button.x1, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
-			buffer.vertex(middle_x + button.x1, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
-			//set second triangle
-			buffer.vertex(middle_x + button.x2, middle_y + button.y2, 0).color(f, f, f, a).endVertex();
-			buffer.vertex(middle_x + button.x2, middle_y + button.y1, 0).color(f, f, f, a).endVertex();
-		}
-	}
-
-	private void renderMetalQuadrants(BufferBuilder buffer)
-	{
-		List<Manifestation> maniList = spiritweb.getAvailableManifestations();
-		boolean manifestationIsSelected = selectedManifestation != null && maniList.size() <= 16 && (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY || selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY);
-		boolean allomancySubmenuOpen = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY && maniList.size() > 16;
-		boolean feruchemySubmenuOpen = selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && maniList.size() > 16;
-		boolean hasSubmenu = allomancySubmenuOpen || feruchemySubmenuOpen;
-		boolean allomancySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
-		boolean feruchemySelected = !hasSubmenu && manifestationIsSelected && selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
-		int r = 0, g = 0, b = 0, a = 127;		// 127 is halfway between 0 and 255, so 0.5 transparency
-
-		for (MetalQuadrant quadrant : metalQuadrants)
-		{
-			Manifestation alloMani = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quadrant.metalType.getID());
-			Manifestation feruMani = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quadrant.metalType.getID());
-
-			// if player doesn't have the manifestation, skip it
-			if ((hasSubmenu && ((allomancySubmenuOpen && maniList.contains(alloMani)) || (feruchemySubmenuOpen && maniList.contains(feruMani))))
-				|| (!hasSubmenu && ((allomancySelected && maniList.contains(alloMani)) || (feruchemySelected && maniList.contains(feruMani)))))
-			{
-				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX-MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY+MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(quadrant.centerX+MetalQuadrant.width/2, quadrant.centerY-MetalQuadrant.height/2, 0).color(r, g, b, a).endVertex();
 			}
 		}
 	}
 
-	private void renderRadialButtons(BufferBuilder buffer, double mouseVecX, double mouseVecY, double middle_x, double middle_y)
+	private void updateRadialButtonHitboxes(double mouseVecX, double mouseVecY)
 	{
 		if (!radialMenuButtons.isEmpty())
 		{
@@ -900,11 +837,8 @@ public class SpiritwebMenu extends Screen
 									mouseVecX, mouseVecY);
 				}
 
-				//if mouse is within the region, as defined by the two triangles
-				//if (begin_rad <= mouseAngle && mouseAngle <= end_rad && showHighlight)
 				if (showHighlight)
 				{
-					f = 0.1f;
 					region.highlighted = true;
 					selectedManifestation = region.manifestation;
 				}
@@ -912,44 +846,6 @@ public class SpiritwebMenu extends Screen
 				{
 					region.highlighted = false;
 				}
-
-				float lerpPositive = 0;
-				float lerpNegative = 0;
-
-				if (region.manifestation != null)
-				{
-					int mode = region.manifestation.getMode(spiritweb);
-					int modeMin = region.manifestation.modeMin(spiritweb);
-					int modeMax = region.manifestation.modeMax(spiritweb);
-
-					if (mode > 0)
-					{
-						lerpPositive = MathHelper.InverseLerp(0, modeMax, mode) - 0.1f;
-					}
-					else if (mode < 0)
-					{
-						lerpNegative = MathHelper.InverseLerp(0, Math.abs(modeMin), Math.abs(mode)) - 0.1f;
-					}
-				}
-
-				float r = lerpPositive + f;
-				float g = f;
-				float b = lerpNegative + f;
-
-				if (drawMode <= 2)
-				{
-					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, a).endVertex();
-					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, a).endVertex();
-				}
-				else
-				{
-					//set the square pos
-					buffer.vertex(middle_x + x1m1, middle_y + y1m1, 0).color(r, g, b, a).endVertex();
-					buffer.vertex(middle_x + x2m1, middle_y + y2m1, 0).color(r, g, b, a).endVertex();
-				}
-
-				buffer.vertex(middle_x + x2m2, middle_y + y2m2, 0).color(r, g, b, a).endVertex();
-				buffer.vertex(middle_x + x1m2, middle_y + y1m2, 0).color(r, g, b, a).endVertex();
 
 				i--;
 			}

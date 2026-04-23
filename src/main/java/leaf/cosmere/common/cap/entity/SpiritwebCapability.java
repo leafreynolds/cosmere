@@ -28,7 +28,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -41,6 +43,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.Ravager;
@@ -98,6 +101,12 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		this.livingEntity = ent;
 		spiritwebSubmodules = Cosmere.makeSpiritwebSubmodules();
+	}
+
+	// 1.21.1: AttributeMap / AttributeInstance APIs take Holder<Attribute> not Attribute.
+	private static Holder<Attribute> attrHolder(Attribute attribute)
+	{
+		return BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute);
 	}
 
 
@@ -410,7 +419,7 @@ public class SpiritwebCapability implements ISpiritweb
 				// if the target is properly concealed, we don't trigger investiture game events
 				final AttributeMap targetAttributes = spiritWebEntity.getAttributes();
 				double concealmentStrength = 0;
-				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				final Holder<Attribute> cognitiveConcealmentAttr = attrHolder(AttributesRegistry.COGNITIVE_CONCEALMENT.get());
 				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 				{
 					concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);
@@ -419,7 +428,7 @@ public class SpiritwebCapability implements ISpiritweb
 				//todo move this to a config so people can define how strong the concealment needs to be
 				if (concealmentStrength < 2)
 				{
-					spiritWebEntity.gameEvent(GameEventRegistry.KINETIC_INVESTITURE.get());
+					spiritWebEntity.gameEvent(BuiltInRegistries.GAME_EVENT.wrapAsHolder(GameEventRegistry.KINETIC_INVESTITURE.get()));
 				}
 			}
 
@@ -469,8 +478,9 @@ public class SpiritwebCapability implements ISpiritweb
 			Attribute attribute = manifestation.getAttribute();
 			if (attribute != null)
 			{
-				AttributeInstance oldAttr = oldAttMap.getInstance(attribute);
-				AttributeInstance newAttr = newAttMap.getInstance(attribute);
+				Holder<Attribute> holder = attrHolder(attribute);
+				AttributeInstance oldAttr = oldAttMap.getInstance(holder);
+				AttributeInstance newAttr = newAttMap.getInstance(holder);
 
 				if (newAttr != null && oldAttr != null)
 				{
@@ -549,15 +559,11 @@ public class SpiritwebCapability implements ISpiritweb
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder buffer = tesselator.getBuilder();
-
 		// draw square
 		try {
-			final ResourceLocation textureLocation = new ResourceLocation(selectedManifestation.getRegistryName().getNamespace(), "textures/gui/hud_background.png");
+			final ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(selectedManifestation.getRegistryName().getNamespace(), "textures/gui/hud_background.png");
 			mc.getResourceManager().getResourceOrThrow(textureLocation);
 
-			RenderSystem.setShaderTexture(0, textureLocation);
 			gg.blit(textureLocation,
 					startX,
 					startY,
@@ -572,16 +578,9 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 		catch (FileNotFoundException ex) // backup in case no texture
 		{
-			RenderSystem.setShader(GameRenderer::getPositionColorShader);
-			buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-			int color = 0xCC000000;
-			//set first triangle
-			buffer.vertex(startX, startY, 0).color(color).endVertex();
-			buffer.vertex(startX, startY + size, 0).color(color).endVertex();
-			//set second triangle
-			buffer.vertex(startX + size, startY + size, 0).color(color).endVertex();
-			buffer.vertex(startX + size, startY, 0).color(color).endVertex();
-			tesselator.end();
+			// Fallback — simple filled rectangle via GuiGraphics (replaces the pre-1.21 tesselator
+			// + VertexConsumer#endVertex pipeline which was removed).
+			gg.fill(startX, startY, startX + size, startY + size, 0xCC000000);
 		}
 
 		// draw manifestation icon
@@ -612,7 +611,7 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 			stringBuilder.append(".png");
 
-			final ResourceLocation textureLocation = new ResourceLocation(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+			final ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 			RenderSystem.setShaderTexture(0, textureLocation);
 			int posX = startX + 4;
 			int posY = startY + 2;
@@ -757,7 +756,7 @@ public class SpiritwebCapability implements ISpiritweb
 				continue;
 			}
 
-			AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+			AttributeInstance manifestationAttribute = livingEntity.getAttribute(attrHolder(attribute));
 			if (manifestationAttribute == null)
 			{
 				continue;
@@ -789,12 +788,13 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 
 		AttributeMap attributeManager = livingEntity.getAttributes();
-		if (attributeManager.hasAttribute(attribute))
+		Holder<Attribute> holder = attrHolder(attribute);
+		if (attributeManager.hasAttribute(holder))
 		{
 			double manifestationStrength =
 					ignoreTemporaryPower
-					? attributeManager.getBaseValue(attribute)
-					: attributeManager.getValue(attribute);
+					? attributeManager.getBaseValue(holder)
+					: attributeManager.getValue(holder);
 			return manifestationStrength >= 1;
 		}
 
@@ -810,7 +810,7 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			return;
 		}
-		AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+		AttributeInstance manifestationAttribute = livingEntity.getAttribute(attrHolder(attribute));
 
 		if (manifestationAttribute != null)
 		{
@@ -829,7 +829,7 @@ public class SpiritwebCapability implements ISpiritweb
 			return;
 		}
 
-		AttributeInstance manifestationAttribute = livingEntity.getAttribute(attribute);
+		AttributeInstance manifestationAttribute = livingEntity.getAttribute(attrHolder(attribute));
 		if (manifestationAttribute != null)
 		{
 			manifestationAttribute.setBaseValue(0);

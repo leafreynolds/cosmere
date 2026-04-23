@@ -15,12 +15,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +54,7 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		Integer size = readMetalAlloySizeNbtData(stack);
 
@@ -88,7 +85,9 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 		}
 	}
 
-	@Override
+	// 1.21.1 moved item rarity into DataComponents.RARITY (per-item, not per-stack). Dynamic
+	// per-stack rarity that reacts to the stored size needs a conditional DataComponent patch —
+	// left as a plain helper and a TODO for Phase 7.5 to flip the rarity component on size change.
 	public Rarity getRarity(ItemStack itemStack)
 	{
 		Integer size = readMetalAlloySizeNbtData(itemStack);

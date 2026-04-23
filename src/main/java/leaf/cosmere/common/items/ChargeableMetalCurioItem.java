@@ -11,7 +11,9 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.properties.PropTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -80,10 +82,12 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 						continue;
 					}
 
-					final AttributeInstance attributeInstance = data.getLiving().getAttribute(attribute);
+					final AttributeInstance attributeInstance = data.getLiving().getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute));
 					if (attributeInstance != null)
 					{
-						attributeInstance.removeModifier(Constants.NBT.FERU_NICROSIL_UUID);
+						// 1.21.1: AttributeModifier id is a ResourceLocation, not a UUID. Map the legacy
+						// constant UUID to a stable id under the cosmere namespace.
+						attributeInstance.removeModifier(ResourceLocation.fromNamespaceAndPath("cosmere", "feru_nicrosil_" + Constants.NBT.FERU_NICROSIL_UUID));
 					}
 				}
 			});

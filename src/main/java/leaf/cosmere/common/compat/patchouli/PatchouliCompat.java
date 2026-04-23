@@ -5,7 +5,7 @@
 package leaf.cosmere.common.compat.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public class PatchouliCompat
 {

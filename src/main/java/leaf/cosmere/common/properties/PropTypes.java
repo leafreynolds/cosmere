@@ -15,21 +15,21 @@ public class PropTypes
 {
 	public static class Blocks
 	{
-		public static final Supplier<Block.Properties> EXAMPLE = () -> Block.Properties.copy(net.minecraft.world.level.block.Blocks.GLASS).strength(2.0F, 6.0F);
+		public static final Supplier<Block.Properties> EXAMPLE = () -> Block.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.GLASS).strength(2.0F, 6.0F);
 		public static final Supplier<Block.Properties> ORE = () ->
 				Block.Properties
-						.copy(net.minecraft.world.level.block.Blocks.STONE)
+						.ofFullCopy(net.minecraft.world.level.block.Blocks.STONE)
 						.strength(2.0F, 6.0F)
 						.requiresCorrectToolForDrops();
 
 		public static final Supplier<Block.Properties> METAL = () ->
 				Block.Properties
-						.copy(net.minecraft.world.level.block.Blocks.IRON_BLOCK)
+						.ofFullCopy(net.minecraft.world.level.block.Blocks.IRON_BLOCK)
 						.strength(2.0F, 6.0F)
 						.requiresCorrectToolForDrops();
 		public static final Supplier<BlockBehaviour.Properties> SAND = () ->
 				BlockBehaviour.Properties
-						.copy(net.minecraft.world.level.block.Blocks.SAND)
+						.ofFullCopy(net.minecraft.world.level.block.Blocks.SAND)
 						.strength(0.5f);
 	}
 
