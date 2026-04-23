@@ -311,6 +311,18 @@ neoForge {
 			file('src/surgebinding/resources/META-INF/accesstransformer.cfg')
 	)
 
+	// MDG 2.x only attaches the Minecraft/NeoForge/Parchment classpath to sourceSets.main implicitly.
+	// Every other source set in the mod (api, each submodule, and every datagen/gameTest extra) must
+	// opt in — otherwise compile<SourceSet>Java fails with "package net.minecraft.* does not exist".
+	addModdingDependenciesTo sourceSets.api
+	addModdingDependenciesTo sourceSets.datagenMain
+	addModdingDependenciesTo sourceSets.gameTestMain
+	for (def name : secondaryModules) {
+		addModdingDependenciesTo sourceSets.getByName(name)
+		addModdingDependenciesTo getExtraSourceSet(name, 'datagen')
+		addModdingDependenciesTo getExtraSourceSet(name, 'gameTest')
+	}
+
 	def gameTestNamespaces = 'cosmere,allomancy,feruchemy,hemalurgy,surgebinding,sandmastery,cosmeretools'
 
 	runs {
