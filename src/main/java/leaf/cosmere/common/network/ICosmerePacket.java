@@ -1,23 +1,9 @@
 package leaf.cosmere.common.network;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
-
-public interface ICosmerePacket
+public interface ICosmerePacket extends CustomPacketPayload
 {
-	void handle(NetworkEvent.Context context);
-
-	void encode(FriendlyByteBuf buffer);
-
-	static <PACKET extends ICosmerePacket> void handle(PACKET message, Supplier<NetworkEvent.Context> ctx)
-	{
-		if (message != null)
-		{
-			NetworkEvent.Context context = ctx.get();
-			context.enqueueWork(() -> message.handle(context));
-			context.setPacketHandled(true);
-		}
-	}
+	void handle(IPayloadContext context);
 }

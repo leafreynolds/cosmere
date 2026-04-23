@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 2026-04-23 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  *
  * Special thank you to the New Tardis Mod team.
  * That mod taught me how to do proper syncing between server and client.
@@ -9,32 +9,46 @@
 package leaf.cosmere.common.network;
 
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.network.packets.*;
-import net.minecraftforge.network.simple.SimpleChannel;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
+import leaf.cosmere.common.network.packets.ChangeSelectedManifestationMessage;
+import leaf.cosmere.common.network.packets.DeactivateManifestationsMessage;
+import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class NetworkPacketHandler extends BasePacketHandler
 {
-	private final SimpleChannel NETWORK_CHANNEL = createChannel(Cosmere.rl(Cosmere.MODID), Cosmere.instance.versionNumber);
-
 	@Override
-	protected SimpleChannel getChannel()
+	protected String getProtocolVersion()
 	{
-		return NETWORK_CHANNEL;
+		return Cosmere.instance.versionNumber.toString();
 	}
 
 	@Override
-	public void initialize()
+	public void initialize(PayloadRegistrar registrar)
 	{
 		//server to client
-		registerServerToClient(SyncPlayerSpiritwebMessage.class, SyncPlayerSpiritwebMessage::decode);
+		registrar.playToClient(
+				SyncPlayerSpiritwebMessage.TYPE,
+				SyncPlayerSpiritwebMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
 
 		//client to server
-		registerClientToServer(DeactivateManifestationsMessage.class, DeactivateManifestationsMessage::new);
-		registerClientToServer(ChangeManifestationModeMessage.class, ChangeManifestationModeMessage::decode);
-		registerClientToServer(ChangeSelectedManifestationMessage.class, ChangeSelectedManifestationMessage::decode);
-		registerClientToServer(SetSelectedManifestationMessage.class, SetSelectedManifestationMessage::decode);
-
+		registrar.playToServer(
+				DeactivateManifestationsMessage.TYPE,
+				DeactivateManifestationsMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				ChangeManifestationModeMessage.TYPE,
+				ChangeManifestationModeMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				ChangeSelectedManifestationMessage.TYPE,
+				ChangeSelectedManifestationMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				SetSelectedManifestationMessage.TYPE,
+				SetSelectedManifestationMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
 	}
-
-
 }
