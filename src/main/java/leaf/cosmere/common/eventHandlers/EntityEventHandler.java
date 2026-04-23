@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 1 - 2025 ~ Leaf
+ * File updated ~ 23 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -16,6 +16,8 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.config.CosmereServerConfig;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -33,16 +35,14 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LootingLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Cosmere.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class EntityEventHandler
 {
 
@@ -116,7 +116,10 @@ public class EntityEventHandler
 			else if (eventEntity instanceof Warden warden)
 			{
 				//todo move this out
-				final Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation("allomancy:bronze"));
+				final Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE
+						.getHolder(ResourceLocation.parse("allomancy:bronze"))
+						.map(h -> (Holder<Attribute>) h)
+						.orElse(null);
 				if (attribute == null)
 				{
 					return;
@@ -164,7 +167,9 @@ public class EntityEventHandler
 		}
 
 		final Integer chanceOfFullPowers = CosmereConfigs.SERVER_CONFIG.FULLBORN_POWERS_CHANCE.get();
-		final Integer chanceOfTwinborn = isPlayerEntity ? CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE_PLAYER.get() : CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE_MOB.get();
+		final Integer chanceOfTwinborn =
+				isPlayerEntity ? CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE_PLAYER.get()
+				               : CosmereConfigs.SERVER_CONFIG.TWINBORN_POWERS_CHANCE_MOB.get();
 		//low chance of having full powers of one type
 		//0-15 inclusive is normal powers.
 		boolean isFullPowersFromOneType = MathHelper.chance(chanceOfFullPowers);
@@ -194,8 +199,8 @@ public class EntityEventHandler
 			if (allomancyLoaded && feruchemyLoaded)
 			{
 				manifestationType = isAllomancy
-									? Manifestations.ManifestationTypes.ALLOMANCY
-									: Manifestations.ManifestationTypes.FERUCHEMY;
+				                    ? Manifestations.ManifestationTypes.ALLOMANCY
+				                    : Manifestations.ManifestationTypes.FERUCHEMY;
 			}
 			else if (allomancyLoaded)
 			{
@@ -254,21 +259,23 @@ public class EntityEventHandler
 						spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, feruchemyPower);
 					}
 					CosmereAPI.logger.info(
-						"Entity {} has been granted feruchemical {}!",
-						spiritwebCapability.getLiving().getName().getString(),
-						feruchemyMetal);
+							"Entity {} has been granted feruchemical {}!",
+							spiritwebCapability.getLiving().getName().getString(),
+							feruchemyMetal);
 				}
 			}
 			else
 			{
 				Manifestation manifestation;
-				isAllomancy = isPlayerEntity ? MathHelper.randomInt(0, 99) < CosmereConfigs.SERVER_CONFIG.PLAYER_MISTING_TO_FERRING_DISTRIBUTION.get() : MathHelper.randomBool();
+				isAllomancy = isPlayerEntity
+				              ? MathHelper.randomInt(0, 99) < CosmereConfigs.SERVER_CONFIG.PLAYER_MISTING_TO_FERRING_DISTRIBUTION.get()
+				              : MathHelper.randomBool();
 				if (allomancyLoaded && feruchemyLoaded)
 				{
 					manifestation =
-						isAllomancy
-						? allomancyPower
-						: feruchemyPower;
+							isAllomancy
+							? allomancyPower
+							: feruchemyPower;
 				}
 				else if (allomancyLoaded)
 				{
@@ -287,7 +294,8 @@ public class EntityEventHandler
 				spiritwebCapability.giveManifestation(manifestation, 9);
 				if (spiritwebCapability.getLiving() instanceof Player player)
 				{
-					spiritwebCapability.getSubmodule(isAllomancy ? Manifestations.ManifestationTypes.ALLOMANCY : Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, manifestation);
+					spiritwebCapability.getSubmodule(isAllomancy ? Manifestations.ManifestationTypes.ALLOMANCY
+					                                             : Manifestations.ManifestationTypes.FERUCHEMY).GiveStartingItem(player, manifestation);
 				}
 				CosmereAPI.logger.info("Entity {} has been granted {}, with metal {}!",
 						spiritwebCapability.getLiving().getName().getString(),
@@ -323,37 +331,23 @@ public class EntityEventHandler
 
 
 	@SubscribeEvent
-	public static void onLivingTick(LivingEvent.LivingTickEvent event)
+	public static void onLivingTick(EntityTickEvent.Post event)
 	{
-		SpiritwebCapability.get(event.getEntity()).ifPresent(ISpiritweb::tick);
-	}
-
-
-	@SubscribeEvent
-	public static void onLootingLevelEvent(LootingLevelEvent event)
-	{
-		if (event.getDamageSource() == null)
+		if (event.getEntity() instanceof net.minecraft.world.entity.LivingEntity living)
 		{
-			return;
-		}
-		if (!event.getEntity().level().isClientSide && event.getDamageSource().getEntity() instanceof LivingEntity sourceLiving)
-		{
-			int total = (int) EntityHelper.getAttributeValue(sourceLiving, AttributesRegistry.COSMERE_FORTUNE.getAttribute());
-			if (total != 0)
-			{
-				event.setLootingLevel(event.getLootingLevel() + total);
-			}
+			SpiritwebCapability.get(living).ifPresent(ISpiritweb::tick);
 		}
 	}
 
-	@SubscribeEvent
-	public static void onLivingHurtEvent(LivingHurtEvent event)
-	{
-		if (event.isCanceled())
-		{
-			return;
-		}
 
+	// Phase 6 note: NeoForge 1.21.1 removed LootingLevelEvent (looting is now enchantment-effect
+	// driven via EnchantedItemInUse components + LootItemFunction). The COSMERE_FORTUNE attribute
+	// boost to drop rolls needs to be re-plumbed as a GlobalLootModifier or LootModifier in
+	// Phase 9; no event-level hook exists.
+
+	@SubscribeEvent
+	public static void onLivingIncomingDamageEvent(LivingIncomingDamageEvent event)
+	{
 		float total = (float) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.DETERMINATION.getAttribute());
 
 		//ignore if no determination changes, players default to 0

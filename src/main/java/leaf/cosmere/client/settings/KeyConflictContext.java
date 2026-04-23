@@ -4,7 +4,7 @@
 
 package leaf.cosmere.client.settings;
 
-import net.minecraftforge.client.settings.IKeyConflictContext;
+import net.neoforged.neoforge.client.settings.IKeyConflictContext;
 
 public class KeyConflictContext implements IKeyConflictContext
 {
