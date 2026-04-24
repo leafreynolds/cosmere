@@ -21,9 +21,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.level.gameevent.PositionSourceType;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class AllomancyTin extends AllomancyManifestation
 		}
 
 		//todo re-evaluate if this is fun or interesting. We want there to be drawbacks to powers too.
-		final int blockLighting = living.getFeetBlockState().getLightEmission();
+		final int blockLighting = living.getInBlockState().getLightEmission();
 		if (blockLighting > 14)
 		{
 			living.addEffect(EffectsHelper.getNewEffect(MobEffects.BLINDNESS, blockLighting - 14));

@@ -43,8 +43,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.*;
 
@@ -576,10 +576,11 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
 		final RecipeManager recipeManager = entity.level().getRecipeManager();
-		final Collection<Recipe<?>> recipes = recipeManager.getRecipes();
+		final Collection<net.minecraft.world.item.crafting.RecipeHolder<?>> recipes = recipeManager.getRecipes();
 
-		for (var recipe : recipes)
+		for (var recipeHolder : recipes)
 		{
+			final Recipe<?> recipe = recipeHolder.value();
 			final ItemStack resultItem = recipe.getResultItem(entity.level().registryAccess());
 
 			// check if is blacklisted, and if is, skip

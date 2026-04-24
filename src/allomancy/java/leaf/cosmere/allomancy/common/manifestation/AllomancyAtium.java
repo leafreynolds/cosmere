@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 1 - 2023 ~ Leaf
+ * File updated ~ 25 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -11,7 +11,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.Optional;
 
@@ -40,13 +40,8 @@ public class AllomancyAtium extends AllomancyManifestation
 	}
 
 
-	public static void onLivingAttackEvent(LivingAttackEvent event)
+	public static void onLivingAttackEvent(LivingIncomingDamageEvent event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
-
 		SpiritwebCapability.get(event.getEntity()).ifPresent((targetData) ->
 		{
 			AllomancyManifestation atium = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.ATIUM).get();

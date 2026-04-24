@@ -83,8 +83,8 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
-		final ResourceLocation feruchemyRL = new ResourceLocation("feruchemy", getRegistryName().getPath());
-		final Manifestation feruchemy = CosmereAPI.manifestationRegistry().getValue(feruchemyRL);
+		final ResourceLocation feruchemyRL = ResourceLocation.fromNamespaceAndPath("feruchemy", getRegistryName().getPath());
+		final Manifestation feruchemy = CosmereAPI.manifestationRegistry().get(feruchemyRL);
 		if (data.hasManifestation(feruchemy))
 		{
 			//compounding
@@ -191,7 +191,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	{
 		//if we get to this point, we are in an active burn state.
 		//check for compound.
-		final Manifestation feruchemyManifestation = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", getRegistryName().getPath()));
+		final Manifestation feruchemyManifestation = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("feruchemy", getRegistryName().getPath()));
 
 		//player has feruchemy in same metal
 		if (data.hasManifestation(feruchemyManifestation))

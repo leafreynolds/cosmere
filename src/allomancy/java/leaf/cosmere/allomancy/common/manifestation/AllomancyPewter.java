@@ -14,7 +14,7 @@ import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 //Increases Physical Abilities
 public class AllomancyPewter extends AllomancyManifestation
@@ -67,13 +67,8 @@ public class AllomancyPewter extends AllomancyManifestation
 
 	}
 
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingDamageEvent.Pre event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
-
 		LivingEntity livingEntity = event.getEntity();
 
 		SpiritwebCapability.get(livingEntity).ifPresent(data ->
@@ -81,7 +76,7 @@ public class AllomancyPewter extends AllomancyManifestation
 			AllomancyPewter pewter = (AllomancyPewter) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.PEWTER).get();
 			if (pewter.isAllomanticBurn(data))
 			{
-				float damage = event.getAmount();
+				float damage = event.getNewDamage();
 				//todo pewter damage reduction config
 				//half by default?
 				float damageReductionMultiplier = 0.5f;
@@ -97,7 +92,7 @@ public class AllomancyPewter extends AllomancyManifestation
 				final float newDamageAmount = damage * damageReductionMultiplier;
 				final float delayedDamage = damage - newDamageAmount;
 
-				event.setAmount(damage - newDamageAmount);
+				event.setNewDamage(newDamageAmount);
 				AllomancySpiritwebSubmodule asm = (AllomancySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.ALLOMANCY);
 				asm.setPewterDelayedDamage(asm.getPewterDelayedDamage() + delayedDamage);
 			}
