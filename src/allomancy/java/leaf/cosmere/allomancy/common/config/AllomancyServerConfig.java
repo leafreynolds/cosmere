@@ -1,29 +1,29 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class AllomancyServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
-	public final ForgeConfigSpec.DoubleValue IRON_STEEL_RANGE;
-	public final ForgeConfigSpec.DoubleValue PUSH_PULL_WEIGHT;
-	public final ForgeConfigSpec.DoubleValue MAX_PUSH_PULL_WEIGHT;
+	public final ModConfigSpec.DoubleValue IRON_STEEL_RANGE;
+	public final ModConfigSpec.DoubleValue PUSH_PULL_WEIGHT;
+	public final ModConfigSpec.DoubleValue MAX_PUSH_PULL_WEIGHT;
 
 	// Boost amount for Duralumin and Nicrosil
-	//public final ForgeConfigSpec.DoubleValue boostAmount;
+	//public final ModConfigSpec.DoubleValue boostAmount;
 
 
 	AllomancyServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Allomancy Config. This config is synced between server and client.").push("allomancy");
 
 		//can't modify registry objects like that
@@ -46,7 +46,7 @@ public class AllomancyServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

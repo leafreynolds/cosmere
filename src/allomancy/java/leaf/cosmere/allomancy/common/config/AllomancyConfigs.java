@@ -1,12 +1,11 @@
 /*
- * File updated ~ 7 - 6 - 2023 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common.config;
 
 import leaf.cosmere.common.config.CosmereConfigHelper;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 
 public class AllomancyConfigs
 {
@@ -18,9 +17,8 @@ public class AllomancyConfigs
 	public static final AllomancyServerConfig SERVER = new AllomancyServerConfig();
 	public static final AllomancyClientConfig CLIENT = new AllomancyClientConfig();
 
-	public static void registerConfigs(ModLoadingContext modLoadingContext)
+	public static void registerConfigs(ModContainer modContainer)
 	{
-		ModContainer modContainer = modLoadingContext.getActiveContainer();
 		CosmereConfigHelper.registerConfig(modContainer, SERVER);
 		CosmereConfigHelper.registerConfig(modContainer, CLIENT);
 	}

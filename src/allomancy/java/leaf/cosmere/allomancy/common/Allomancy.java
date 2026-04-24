@@ -1,11 +1,10 @@
 /*
- * File updated ~ 10 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
-import leaf.cosmere.allomancy.common.capabilities.world.IScadrial;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.network.AllomancyPacketHandler;
 import leaf.cosmere.allomancy.common.registries.*;
@@ -14,16 +13,16 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.config.CosmereModConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+
+import java.util.List;
 
 @Mod(Allomancy.MODID)
 public class Allomancy implements IModModule
@@ -33,16 +32,14 @@ public class Allomancy implements IModModule
 	public final Version versionNumber;
 	private final AllomancyPacketHandler packetHandler;
 
-	public Allomancy()
+	public Allomancy(IEventBus modBus, ModContainer modContainer)
 	{
 		Cosmere.addModule(instance = this);
-		AllomancyConfigs.registerConfigs(ModLoadingContext.get());
+		AllomancyConfigs.registerConfigs(modContainer);
 
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modBus.addListener(this::onConfigLoad);
 		modBus.addListener(this::onConfigReload);
 		modBus.addListener(this::commonSetup);
-		modBus.addListener(this::onAddCaps);
 
 		AllomancyItems.ITEMS.register(modBus);
 		AllomancyAttributes.ATTRIBUTES.register(modBus);
@@ -55,14 +52,15 @@ public class Allomancy implements IModModule
 		AllomancyStats.STATS.register(modBus);
 		AllomancyCreativeTabs.CREATIVE_TABS.register(modBus);
 
-		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
-		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+		//Set our version number to match the neoforge.mods.toml file, which matches the one in our build.gradle
+		versionNumber = new Version(modContainer);
 		packetHandler = new AllomancyPacketHandler();
+		packetHandler.register(modBus);
 	}
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(Allomancy.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, path);
 	}
 
 	@Override
@@ -88,23 +86,31 @@ public class Allomancy implements IModModule
 		return instance.packetHandler;
 	}
 
-	private void onConfigLoad(ModConfigEvent configEvent)
+	private void onConfigLoad(ModConfigEvent.Loading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(configEvent);
 	}
 
 	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		handleConfigEvent(configEvent);
+	}
+
+	private void handleConfigEvent(ModConfigEvent event)
+	{
+		ModConfig config = event.getConfig();
+		if (!config.getModId().equals(MODID))
 		{
-			cosmereModConfig.clearCache();
-			if (cosmereModConfig.getSpec() == AllomancyConfigs.CLIENT.getConfigSpec())
+			return;
+		}
+		for (ICosmereConfig cosmereConfig : List.of(
+				AllomancyConfigs.CLIENT,
+				AllomancyConfigs.SERVER))
+		{
+			if (cosmereConfig.getConfigSpec() == config.getSpec())
 			{
+				cosmereConfig.clearCache();
+				return;
 			}
 		}
 	}
@@ -113,18 +119,6 @@ public class Allomancy implements IModModule
 	{
 		CosmereAPI.logger.info("Cosmere: Allomancy module Version {} initializing...", versionNumber);
 
-		event.enqueueWork(() ->
-		{
-			//AllomancyEntityTypes.PrepareEntityAttributes();
-			AllomancyStats.initStatEntries();
-		});
-
-
-		packetHandler.initialize();
-	}
-
-	private void onAddCaps(RegisterCapabilitiesEvent capabilitiesEvent)
-	{
-		capabilitiesEvent.register(IScadrial.class);
+		event.enqueueWork(AllomancyStats::initStatEntries);
 	}
 }

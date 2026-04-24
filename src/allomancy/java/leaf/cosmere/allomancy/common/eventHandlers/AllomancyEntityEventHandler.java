@@ -1,15 +1,10 @@
 /*
- * File updated ~ 5 - 3 - 2025 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common.eventHandlers;
 
 import leaf.cosmere.allomancy.common.Allomancy;
-import leaf.cosmere.allomancy.common.items.CoinPouchItem;
-import leaf.cosmere.allomancy.common.manifestation.AllomancyAtium;
-import leaf.cosmere.allomancy.common.manifestation.AllomancyChromium;
-import leaf.cosmere.allomancy.common.manifestation.AllomancyNicrosil;
-import leaf.cosmere.allomancy.common.manifestation.AllomancyPewter;
 import leaf.cosmere.allomancy.common.utils.MiscHelper;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
@@ -17,28 +12,17 @@ import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.items.MetalNuggetItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = Allomancy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Allomancy.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class AllomancyEntityEventHandler
 {
 
-
-	@SubscribeEvent
-	public static void onEntityItemPickUp(EntityItemPickupEvent event)
-	{
-		if (CoinPouchItem.onPickupItem(event.getItem(), event.getEntity()))
-		{
-			event.setCanceled(true);
-		}
-	}
-
+	// TODO Phase 11.3: re-target to ItemEntityPickupEvent.Pre (EntityItemPickupEvent removed in NeoForge 1.21.1).
+	//                  Old body called CoinPouchItem.onPickupItem(event.getItem(), event.getEntity()) and event.setCanceled(true).
 
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
@@ -78,10 +62,6 @@ public class AllomancyEntityEventHandler
 	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
 		final LivingEntity livingEntity = event.getEntity();
 
 		if (event.getItem().getItem() instanceof MetalNuggetItem metalNuggetItem)
@@ -96,19 +76,9 @@ public class AllomancyEntityEventHandler
 	}
 
 
-	//Attack event happens first
-	@SubscribeEvent
-	public static void onLivingAttackEvent(LivingAttackEvent event)
-	{
-		AllomancyAtium.onLivingAttackEvent(event);
-	}
+	// TODO Phase 11.3: re-target to LivingIncomingDamageEvent (LivingAttackEvent removed in NeoForge 1.21.1).
+	//                  Old body called AllomancyAtium.onLivingAttackEvent(event).
 
-	//then living hurt event
-	@SubscribeEvent
-	public static void onLivingHurtEvent(LivingHurtEvent event)
-	{
-		AllomancyNicrosil.onLivingHurtEvent(event);
-		AllomancyPewter.onLivingHurtEvent(event);
-		AllomancyChromium.onLivingHurtEvent(event);
-	}
+	// TODO Phase 11.3: re-target to LivingIncomingDamageEvent or LivingDamageEvent.Pre (LivingHurtEvent removed in NeoForge 1.21.1).
+	//                  Old body called AllomancyNicrosil/Pewter/Chromium.onLivingHurtEvent(event) in that order.
 }
