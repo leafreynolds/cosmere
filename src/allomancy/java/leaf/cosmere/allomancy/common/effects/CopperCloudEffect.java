@@ -16,6 +16,6 @@ public class CopperCloudEffect extends CosmereEffect
 		addAttributeModifier(
 				AttributesRegistry.COGNITIVE_CONCEALMENT.get(),
 				1,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }

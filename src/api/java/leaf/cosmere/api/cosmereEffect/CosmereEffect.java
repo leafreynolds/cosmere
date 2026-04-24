@@ -49,6 +49,11 @@ public abstract class CosmereEffect implements ICosmereEffectProvider
 		return this;
 	}
 
+	public CosmereEffect addAttributeModifier(net.minecraft.core.Holder<Attribute> attribute, double amount, AttributeModifier.Operation operation)
+	{
+		return addAttributeModifier(attribute.value(), amount, operation);
+	}
+
 	protected int getTickToCheck(ISpiritweb data)
 	{
 		return data.getLiving().tickCount + this.getTickOffset();

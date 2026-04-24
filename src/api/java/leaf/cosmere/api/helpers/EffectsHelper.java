@@ -17,11 +17,10 @@ import java.util.UUID;
 
 public class EffectsHelper
 {
-	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier)
+	public static MobEffectInstance getNewEffect(Holder<MobEffect> effect, int amplifier)
 	{
-		Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
 		MobEffectInstance effectInstance = new MobEffectInstance(
-				holder,
+				effect,
 				63,
 				Math.max(0, amplifier),
 				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui
@@ -31,11 +30,10 @@ public class EffectsHelper
 		return effectInstance;
 	}
 
-	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier, int duration)
+	public static MobEffectInstance getNewEffect(Holder<MobEffect> effect, int amplifier, int duration)
 	{
-		Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
 		MobEffectInstance effectInstance = new MobEffectInstance(
-				holder,
+				effect,
 				duration,
 				Math.max(0, amplifier),
 				true, //usually means came from outside player means, eg beacon? if true, hides icon in non-inv gui

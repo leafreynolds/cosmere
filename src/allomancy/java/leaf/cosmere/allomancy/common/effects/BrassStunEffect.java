@@ -4,7 +4,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 
 public class BrassStunEffect extends MobEffect
 {
@@ -13,23 +12,24 @@ public class BrassStunEffect extends MobEffect
 		super(category, color);
 	}
 
+	// 1.21.1: addAttributeModifiers no longer receives LivingEntity, so the noAi toggle
+	// moved to onEffectAdded (set) and a paired MobEffectEvent.Remove/Expired handler
+	// in AllomancyEntityEventHandler (clear) — see clearStun below.
 	@Override
-	public void addAttributeModifiers(LivingEntity pLivingEntity, AttributeMap pAttributeMap, int pAmplifier)
+	public void onEffectAdded(LivingEntity pLivingEntity, int pAmplifier)
 	{
+		super.onEffectAdded(pLivingEntity, pAmplifier);
 		if (pLivingEntity instanceof Mob mob)
 		{
 			mob.setNoAi(true);
 		}
-		super.addAttributeModifiers(pLivingEntity, pAttributeMap, pAmplifier);
 	}
 
-	@Override
-	public void removeAttributeModifiers(LivingEntity pLivingEntity, AttributeMap pAttributeMap, int pAmplifier)
+	public static void clearStun(LivingEntity living)
 	{
-		if (pLivingEntity instanceof Mob mob)
+		if (living instanceof Mob mob)
 		{
 			mob.setNoAi(false);
 		}
-		super.removeAttributeModifiers(pLivingEntity, pAttributeMap, pAmplifier);
 	}
 }
