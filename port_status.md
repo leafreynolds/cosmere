@@ -208,14 +208,24 @@ Main source errors: **353 → 59** (294 errors cleared). Remaining 59 are all Ph
 
 **Registry lookups**: `CosmereAPI.manifestationRegistry().getValue(rl)` → `.get(rl)` in `ManifestationRegistry` itself. (Registry.getValue was a Forge extension; vanilla uses `Registry#get`.)
 
+### Phase 8 — Commands / argument types
+All 11 files in `src/main/java/leaf/cosmere/common/commands/**` and the supporting `ArgumentTypeRegistry` are green. Phase 7 pulled the heavy lifting forward (registry `getValue(rl)` → `get(rl)` + `ModList` package move) so the residual work here was minor:
+- `CosmereCommand.java` — dropped unused imports (`ArgumentTypeInfos`, `SingletonArgumentInfo`, and the three `*ArgumentType` imports). Those referenced the pre-1.21 inline-registration pattern; actual `ArgumentTypeInfo` registration lives in `ArgumentTypeRegistry` via `DeferredRegister<ArgumentTypeInfo<?,?>>` + `ArgumentTypeInfos.registerByClass(...)`.
+- `ArgumentTypeRegistry` — verified: `DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Cosmere.MODID)` with `DeferredHolder<ArgumentTypeInfo<?,?>, ArgumentTypeInfo<?,?>>` entries for `manifestation_argument_type`, `allomancy_argument_type`, `feruchemy_argument_type`. Registered on the mod bus in `Cosmere.java:69` (`ARGUMENT_TYPE_INFOS.register(modBus)`).
+- `CommonEvents.java` — verified: `@SubscribeEvent registerCommands(RegisterCommandsEvent)` is on the GAME bus, calls `CosmereCommand.register(event.getDispatcher())`. `RegisterCommandsEvent` import already repathed to `net.neoforged.neoforge.event.*` in Phase 6.
+- `ManifestationsArgumentType` / `AllomancyArgumentType` / `FeruchemyArgumentType` — all three use `ResourceLocation.read(StringReader)` (unchanged in 1.21.1), `CosmereAPI.manifestationRegistry().get(location)` (ported Phase 7), `SharedSuggestionProvider.suggest(...)`, and iterate `CosmereAPI.manifestationRegistry()` directly (Registry is Iterable in vanilla). `manifestation.getRegistryName().toString()` still works — `getRegistryName()` is the mod's own wrapper method on `Manifestation`, not the removed Forge `IForgeRegistryEntry#getRegistryName`.
+- `ModCommand`, `EyeCommand`, `SummonCommand`, `ManifestationCommand`, `CosmereEffectCommand`, `ChooseMetalbornPowersCommand`, `TestCommand` — all ported in earlier phases; no further changes needed. Permission API (`context.hasPermission(2)`) is still valid in 1.21.1 Brigadier.
+- `TestCommand` remains unregistered in `CosmereCommand.register` (matches pre-port; dev-only helper).
+
+**Build status after Phase 8**:
+- `./gradlew compileJava` — **58 errors**, all in `loot/`, `recipes/`, `registry/CosmereRecipesRegistry`, `registry/LootFunctionRegistry`, `registry/LootModifiersRegistry`, `registry/HeightProviderTypesRegistry`, `registry/IntProviderTypesRegistry`. Zero errors in `commands/`. Remaining failures are entirely Phase 9 (loot / world-features) and Phase 10 (recipes / datagen) scope.
+
 ---
 
 ## Remaining (in suggested order)
 
 | # | Phase | Scope | Complexity |
 |---|---|---|---|
-| 8 | **Commands / argument types** | `common/commands/**` — partial cleanup already done in Phase 7; remaining issues are limited | Minor; most errors are cleared. Check any remaining permission/suggestion API tweaks. |
-| 8 | **Commands / argument types** | `common/commands/**` ~8 files | `ResourceLocation` construction; argument-type registration pattern is the same shape but package moved; permission level API unchanged |
 | 9 | **Loot / world / features / biomes** | `loot/`, `world/`, feature+biome modifier registries | Loot function `Codec` → `MapCodec`; biome modifier codecs use `MapCodec`; global loot modifier serializer shape changed |
 | 10 | **Datagen** | `src/datagen/main/**` 25 files | `GatherDataEvent` + `PackOutput` pattern; provider constructors updated; `DatapackBuiltinEntriesProvider` for worldgen; tag providers take `CompletableFuture<HolderLookup.Provider>` lookup; recipe provider uses `RecipeOutput` |
 
