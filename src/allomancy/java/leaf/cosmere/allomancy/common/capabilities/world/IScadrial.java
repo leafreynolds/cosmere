@@ -1,13 +1,13 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common.capabilities.world;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public interface IScadrial extends INBTSerializable<CompoundTag>
 {

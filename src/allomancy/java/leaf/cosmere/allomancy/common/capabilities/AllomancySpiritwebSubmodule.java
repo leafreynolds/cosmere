@@ -27,9 +27,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -266,7 +266,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
 				Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 
-				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
+				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false)).add(0, -1, 0);
 
 				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
 				if (drawMetalLines && !scanResult.foundEntities.isEmpty())

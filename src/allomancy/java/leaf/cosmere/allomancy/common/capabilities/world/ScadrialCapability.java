@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common.capabilities.world;
@@ -13,59 +13,49 @@ import leaf.cosmere.api.math.Easing;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.fog.FogManager;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.ViewportEvent;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 public class ScadrialCapability implements IScadrial
 {
-	//Injection
-	public static final Capability<IScadrial> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
-
-	Level level;
-
-	CompoundTag nbt = null;
+	private final Level level;
+	private CompoundTag nbt = null;
 
 	public ScadrialCapability(Level level)
 	{
 		this.level = level;
 	}
 
-	@Nonnull
-	public static LazyOptional<IScadrial> get(Level level)
+	public static Optional<IScadrial> get(Level level)
 	{
-		return level != null ? level.getCapability(ScadrialCapability.CAPABILITY, null)
-		                     : LazyOptional.empty();
+		if (level == null)
+		{
+			return Optional.empty();
+		}
+		return Optional.of(level.getData(AllomancyAttachments.SCADRIAL.get()));
 	}
 
-
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (nbt == null)
 		{
 			nbt = new CompoundTag();
 		}
-
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 	{
 		this.nbt = nbt;
 	}

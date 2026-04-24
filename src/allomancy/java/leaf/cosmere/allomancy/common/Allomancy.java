@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common;
 
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
+import leaf.cosmere.allomancy.common.capabilities.world.AllomancyAttachments;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.network.AllomancyPacketHandler;
 import leaf.cosmere.allomancy.common.registries.*;
@@ -51,6 +52,7 @@ public class Allomancy implements IModModule
 		AllomancyRecipes.RECIPE_SERIALIZERS.register(modBus);
 		AllomancyStats.STATS.register(modBus);
 		AllomancyCreativeTabs.CREATIVE_TABS.register(modBus);
+		AllomancyAttachments.ATTACHMENT_TYPES.register(modBus);
 
 		//Set our version number to match the neoforge.mods.toml file, which matches the one in our build.gradle
 		versionNumber = new Version(modContainer);
