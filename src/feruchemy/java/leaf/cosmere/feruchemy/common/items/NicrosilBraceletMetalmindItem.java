@@ -28,11 +28,4 @@ public class NicrosilBraceletMetalmindItem extends PowerMetalCurioItem
 		return 2;
 	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
-	{
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
-	}
-
 }

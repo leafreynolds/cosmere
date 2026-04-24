@@ -1213,10 +1213,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb {
                 return null;
         }
 
-        if (type == ManifestationTypes.SANDMASTERY) {
-            int temp = 5;
-        }
-
         // assets/<modid>/textures/icon/<modid>/<name>.png
         String path = "textures/icon/" + modid + "/" + name + ".png";
 
