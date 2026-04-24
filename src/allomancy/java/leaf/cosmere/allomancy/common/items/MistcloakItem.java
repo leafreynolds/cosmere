@@ -5,6 +5,8 @@
 package leaf.cosmere.allomancy.common.items;
 
 import leaf.cosmere.allomancy.common.Allomancy;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
@@ -15,7 +17,10 @@ import javax.annotation.Nonnull;
 
 public class MistcloakItem extends ArmorItem
 {
-	public MistcloakItem(ArmorMaterial material, Type type, Properties properties)
+	private static final ResourceLocation MISTCLOAK_TEXTURE =
+			ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "textures/models/armor/mistcloak.png");
+
+	public MistcloakItem(Holder<ArmorMaterial> material, Type type, Properties properties)
 	{
 		super(material, type, properties);
 	}
@@ -24,9 +29,9 @@ public class MistcloakItem extends ArmorItem
 
 	@Nonnull
 	@Override
-	public final String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
+	public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel)
 	{
-		return Allomancy.MODID + ":" + "textures/models/armor/mistcloak.png";
+		return MISTCLOAK_TEXTURE;
 	}
 
 /* If we were to not use curios, this is what we would attempt to use.
