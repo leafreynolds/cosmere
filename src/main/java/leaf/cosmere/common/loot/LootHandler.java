@@ -5,16 +5,19 @@
 package leaf.cosmere.common.loot;
 
 import leaf.cosmere.common.Cosmere;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Cosmere.MODID, bus = EventBusSubscriber.Bus.GAME)
 public final class LootHandler
 {
 
@@ -62,8 +65,9 @@ public final class LootHandler
 
 	private static LootPoolEntryContainer.Builder<?> getInjectEntry(String name, int weight)
 	{
-		ResourceLocation table = Cosmere.rl("inject/" + name);
-		return LootTableReference.lootTableReference(table)
+		ResourceLocation rl = Cosmere.rl("inject/" + name);
+		ResourceKey<LootTable> table = ResourceKey.create(Registries.LOOT_TABLE, rl);
+		return NestedLootTable.lootTableReference(table)
 				.setWeight(weight);
 	}
 

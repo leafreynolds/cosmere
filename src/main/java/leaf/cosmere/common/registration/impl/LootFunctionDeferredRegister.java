@@ -1,7 +1,9 @@
 package leaf.cosmere.common.registration.impl;
 
+import com.mojang.serialization.MapCodec;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import java.util.function.Supplier;
@@ -14,8 +16,8 @@ public class LootFunctionDeferredRegister extends WrappedDeferredRegister<LootIt
 		super(modid, Registries.LOOT_FUNCTION_TYPE);
 	}
 
-	public <LOOT_ITEM_FUNCTION_TYPE extends LootItemFunctionType<?>> LootItemFunctionTypeRegistryObject<LOOT_ITEM_FUNCTION_TYPE> register(String name, Supplier<LOOT_ITEM_FUNCTION_TYPE> sup)
+	public <T extends LootItemFunction> LootItemFunctionTypeRegistryObject<T> register(String name, Supplier<MapCodec<T>> codec)
 	{
-		return register(name, sup, LootItemFunctionTypeRegistryObject::new);
+		return register(name, () -> new LootItemFunctionType<>(codec.get()), LootItemFunctionTypeRegistryObject::new);
 	}
 }

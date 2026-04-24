@@ -4,7 +4,7 @@
 
 package leaf.cosmere.common.world.height;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class ConfigurableHeightProvider extends HeightProvider
 {
 
-	public static final Codec<ConfigurableHeightProvider> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+	public static final MapCodec<ConfigurableHeightProvider> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 			OreVeinType.CODEC.fieldOf("oreVeinType").forGetter(config -> config.oreVeinType)
 	).apply(builder, type -> new ConfigurableHeightProvider(type, CosmereConfigs.WORLD_CONFIG.getVeinConfig(type))));
 

@@ -4,7 +4,7 @@
 
 package leaf.cosmere.common.world;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.registry.IntProviderTypesRegistry;
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class ConfigurableConstantInt extends IntProvider
 {
 
-	public static final Codec<ConfigurableConstantInt> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+	public static final MapCodec<ConfigurableConstantInt> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 			OreVeinType.CODEC.optionalFieldOf("oreVeinType").forGetter(config -> Optional.ofNullable(config.oreVeinType))
 	).apply(builder, oreType ->
 	{

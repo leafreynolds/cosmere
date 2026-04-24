@@ -220,14 +220,46 @@ All 11 files in `src/main/java/leaf/cosmere/common/commands/**` and the supporti
 **Build status after Phase 8**:
 - `./gradlew compileJava` — **58 errors**, all in `loot/`, `recipes/`, `registry/CosmereRecipesRegistry`, `registry/LootFunctionRegistry`, `registry/LootModifiersRegistry`, `registry/HeightProviderTypesRegistry`, `registry/IntProviderTypesRegistry`. Zero errors in `commands/`. Remaining failures are entirely Phase 9 (loot / world-features) and Phase 10 (recipes / datagen) scope.
 
+### Phase 9 — Loot / world / features / biomes
+Main source errors: **58 → 21** (37 errors cleared). All 21 residual errors are in `recipes/` + `CosmereRecipesRegistry` — pure Phase 10 (recipes) scope. Zero errors in `loot/`, `world/`, or any Phase 9 registry.
+
+- `common/world/height/ConfigurableHeightProvider.java` + `common/world/ConfigurableConstantInt.java` — `Codec<T> CODEC = RecordCodecBuilder.create(...)` → `MapCodec<T> CODEC = RecordCodecBuilder.mapCodec(...)`. In 1.21.1, `HeightProviderType` / `IntProviderType` are SAM interfaces returning `MapCodec`, and the `*DeferredRegister` wrappers already expected `MapCodec` (pulled forward in Phase 1). `ResizableOreFeatureConfig.CODEC` left as `Codec` (correct — `Feature<T>` constructor still takes `Codec<T>`).
+- `common/loot/FortuneBonusModifier.java` — mostly rewritten:
+  - `net.minecraftforge.common.loot.{IGlobalLootModifier,LootModifier}` → `net.neoforged.neoforge.common.loot.*`.
+  - `CODEC` now `Supplier<MapCodec<FortuneBonusModifier>>` using `RecordCodecBuilder.mapCodec(inst -> codecStart(inst).apply(inst, ::new))` (matches NeoForge's canonical `SmeltingEnchantmentModifier` pattern in `GlobalLootModifiersTest`).
+  - `codec()` return type → `MapCodec<? extends IGlobalLootModifier>` (IGlobalLootModifier#codec() signature change).
+  - Enchantment path rewritten for the 1.21.1 Holder-based API: `Enchantments.BLOCK_FORTUNE` (gone) → `Enchantments.FORTUNE` as `ResourceKey<Enchantment>`. Resolve via `server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.FORTUNE)`. The old `EnchantmentHelper.getEnchantments(stack)` / `setEnchantments(map, stack)` pattern is gone — replaced with `EnchantmentHelper.getItemEnchantmentLevel(Holder, stack)` to read + `fakeTool.enchant(Holder, newLevel)` to write (the new `enchant` method does `max(old, new)` via `EnchantmentHelper.updateEnchantments`, which is fine because we compute `existingLevel + bonus` explicitly).
+  - Tool marker tag (`HasCosmereFortuneBonus`) moved off `ItemStack#getOrCreateTag()` (gone) onto `DataComponents.CUSTOM_DATA`. Reads: `tool.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean(...)`. Writes: `CustomData.update(DataComponents.CUSTOM_DATA, fakeTool, t -> t.putBoolean(...))`.
+  - Loot table lookup: `context.getLevel().getServer().getLootData().getLootTable(rl)` → `server.reloadableRegistries().getLootTable(blockState.getBlock().getLootTable())`. `Block#getLootTable()` now returns `ResourceKey<LootTable>` directly (not ResourceLocation), which is what `reloadableRegistries().getLootTable` expects.
+- `common/loot/LootHandler.java` — event bus annotations ported (`@Mod.EventBusSubscriber(bus = Bus.FORGE)` → `@EventBusSubscriber(bus = Bus.GAME)`); `net.minecraftforge.{event,eventbus.api,fml.common}` → `net.neoforged.{neoforge.event,bus.api,fml.common}`. `LootTableReference` was renamed to `NestedLootTable` in 1.21.1 — import moved + static call updated. `NestedLootTable.lootTableReference(...)` now takes `ResourceKey<LootTable>` (not `ResourceLocation`), so wrap via `ResourceKey.create(Registries.LOOT_TABLE, Cosmere.rl("inject/" + name))`. `LootTableLoadEvent` itself still exists in NeoForge 1.21.1 (deprecated-but-functional; the Vampirism/AnvilCraft/etc pattern of `evt.getTable().addPool(...)` is unchanged).
+- `common/loot/RandomiseMetalTypeLootFunction.java` — rewritten for the 1.21.1 MapCodec loot-function pattern:
+  - Added `public static final MapCodec<RandomiseMetalTypeLootFunction> CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst).apply(inst, ::new))`. `commonFields(instance)` is the static helper on `LootItemConditionalFunction` that replaces the old Gson-based `LootItemConditionalFunction.Serializer` inner class.
+  - Constructor parameter `LootItemCondition[]` → `List<LootItemCondition>` (super-class signature change).
+  - Dropped the inner `Serializer` class entirely — registration now uses `MapCodec` directly.
+  - `LootItemFunctionType` is generic in 1.21.1 — `getType()` return type → `LootItemFunctionType<RandomiseMetalTypeLootFunction>`.
+  - `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM` (the registry is Iterable<Item>).
+  - `stack.getOrCreateTag().copy()` / `stack.setTag(nbt)` → `CustomData`: read the `CUSTOM_DATA` component from the old stack, construct the new item stack, then `stack.set(DataComponents.CUSTOM_DATA, customData)` if non-empty. This preserves the "copy NBT across metal-type randomisation" behaviour while respecting the 1.21 data-component model.
+- `common/registration/impl/LootFunctionDeferredRegister.java` — rewritten to match Mekanism's pattern:
+  - Old: `register(String name, Supplier<LOOT_ITEM_FUNCTION_TYPE> sup)` taking a `Supplier<LootItemFunctionType>` (from the old Gson-Serializer ctor).
+  - New: `register(String name, Supplier<MapCodec<T>> codec)` which internally does `new LootItemFunctionType<>(codec.get())` — `LootItemFunctionType<T>` is now generic with a `(MapCodec<T>)` constructor in 1.21.1.
+- `common/registration/impl/LootItemFunctionTypeRegistryObject.java` — generic bound tightened from `<T extends LootItemFunctionType<?>>` (the old pre-generic shape) to `<T extends LootItemFunction>` — the wrapper now parameterises over the **function type T**, and internally stores a `WrappedRegistryObject<LootItemFunctionType<T>>`. Mirrors the vanilla generic shape.
+- `common/registry/LootFunctionRegistry.java` — call site updated: `LOOT_FUNCTIONS.registerType("randomise_metaltype", Serializer::new)` → `LOOT_FUNCTIONS.register("randomise_metaltype", () -> RandomiseMetalTypeLootFunction.CODEC)`. Field type → `LootItemFunctionTypeRegistryObject<RandomiseMetalTypeLootFunction>`.
+- `common/registry/LootModifiersRegistry.java` — `LOOT_MODIFIERS` / `FORTUNE_BONUS` generics tightened from the over-broad `MapCodec<? extends IGlobalLootModifier>` to `MapCodec<FortuneBonusModifier>` — matches NeoForge's own `DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<SmeltingEnchantmentModifier>>` pattern in `GlobalLootModifiersTest.java`. The `IGlobalLootModifier` import is no longer needed at this registry (it's now a transitive type only), dropped.
+
+**Build status after Phase 9**:
+- `./gradlew compileJava` — **21 errors**, all in `recipes/` + `CosmereRecipesRegistry`. Phase 9 is entirely clear.
+
+Notes:
+- The `fortuneBonus` loot-modifier JSON file under `src/datagen/main/resources/.../data/.../loot_modifiers/` (if present as a datapack entry) will need to be re-verified during Phase 10 to ensure its serialised shape matches `LootModifier.codecStart` (conditions field only). No format change — the old Codec and new MapCodec both expect the same `{"type":"cosmere:fortune_bonus","conditions":[]}` JSON.
+- The `LootTableLoadEvent` path in `LootHandler` is still *deprecated-but-functional* in NeoForge 1.21.1. Future work (not Phase 9) could migrate the chest-injection to `AddTableLootModifier` GLM entries via datagen's `GlobalLootModifierProvider`.
+
 ---
 
 ## Remaining (in suggested order)
 
 | # | Phase | Scope | Complexity |
 |---|---|---|---|
-| 9 | **Loot / world / features / biomes** | `loot/`, `world/`, feature+biome modifier registries | Loot function `Codec` → `MapCodec`; biome modifier codecs use `MapCodec`; global loot modifier serializer shape changed |
-| 10 | **Datagen** | `src/datagen/main/**` 25 files | `GatherDataEvent` + `PackOutput` pattern; provider constructors updated; `DatapackBuiltinEntriesProvider` for worldgen; tag providers take `CompletableFuture<HolderLookup.Provider>` lookup; recipe provider uses `RecipeOutput` |
+| 10 | **Recipes + datagen** | `recipes/`, `registry/CosmereRecipesRegistry`, `src/datagen/main/**` 25 files | Recipe ctor drops `ResourceLocation` arg (1.21 moved ids out of the recipe object); `CraftingBookCategory`-only ctor; `assemble(CraftingInput, HolderLookup.Provider)` shape; `GatherDataEvent` + `PackOutput`; `DatapackBuiltinEntriesProvider`; tag providers take `CompletableFuture<HolderLookup.Provider>`; recipe provider uses `RecipeOutput` |
 
 ---
 
