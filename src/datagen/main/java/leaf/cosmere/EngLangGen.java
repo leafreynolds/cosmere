@@ -18,7 +18,7 @@ import leaf.cosmere.common.registry.*;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static leaf.cosmere.api.Constants.Strings.*;
 import static leaf.cosmere.common.registry.ItemsRegistry.METAL_NUGGETS;

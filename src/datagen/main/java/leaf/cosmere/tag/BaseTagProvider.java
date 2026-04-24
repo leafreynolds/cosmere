@@ -12,6 +12,7 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.common.registration.impl.GameEventRegistryObject;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -30,9 +31,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -138,39 +137,39 @@ public abstract class BaseTagProvider implements DataProvider
 		return new IntrinsicCosmereTagBuilder<>(keyExtractor, getTagBuilder(registry, tag), modid);
 	}
 
-	protected <TYPE> IntrinsicCosmereTagBuilder<TYPE> getBuilder(IForgeRegistry<TYPE> registry, TagKey<TYPE> tag)
+	private <TYPE> IntrinsicCosmereTagBuilder<TYPE> getIntrinsicBuilder(Registry<TYPE> registry, TagKey<TYPE> tag)
 	{
-		return new IntrinsicCosmereTagBuilder<>(element -> registry.getResourceKey(element).orElseThrow(), getTagBuilder(registry.getRegistryKey(), tag), modid);
+		return new IntrinsicCosmereTagBuilder<>(element -> registry.getResourceKey(element).orElseThrow(), getTagBuilder(registry.key(), tag), modid);
 	}
 
 	protected IntrinsicCosmereTagBuilder<Item> getItemBuilder(TagKey<Item> tag)
 	{
-		return getBuilder(ForgeRegistries.ITEMS, tag);
+		return getIntrinsicBuilder(BuiltInRegistries.ITEM, tag);
 	}
 
 	protected IntrinsicCosmereTagBuilder<Block> getBlockBuilder(TagKey<Block> tag)
 	{
-		return getBuilder(ForgeRegistries.BLOCKS, tag);
+		return getIntrinsicBuilder(BuiltInRegistries.BLOCK, tag);
 	}
 
 	protected IntrinsicCosmereTagBuilder<EntityType<?>> getEntityTypeBuilder(TagKey<EntityType<?>> tag)
 	{
-		return getBuilder(ForgeRegistries.ENTITY_TYPES, tag);
+		return getIntrinsicBuilder(BuiltInRegistries.ENTITY_TYPE, tag);
 	}
 
 	protected IntrinsicCosmereTagBuilder<Fluid> getFluidBuilder(TagKey<Fluid> tag)
 	{
-		return getBuilder(ForgeRegistries.FLUIDS, tag);
+		return getIntrinsicBuilder(BuiltInRegistries.FLUID, tag);
 	}
 
 	protected IntrinsicCosmereTagBuilder<BlockEntityType<?>> getTileEntityTypeBuilder(TagKey<BlockEntityType<?>> tag)
 	{
-		return getBuilder(ForgeRegistries.BLOCK_ENTITY_TYPES, tag);
+		return getIntrinsicBuilder(BuiltInRegistries.BLOCK_ENTITY_TYPE, tag);
 	}
 
 	protected IntrinsicCosmereTagBuilder<GameEvent> getGameEventBuilder(TagKey<GameEvent> tag)
 	{
-		return getBuilder(Registries.GAME_EVENT, gameEvent -> gameEvent.builtInRegistryHolder().key(), tag);
+		return getIntrinsicBuilder(BuiltInRegistries.GAME_EVENT, tag);
 	}
 
 	protected CosmereTagBuilder<DamageType, ?> getDamageTypeBuilder(TagKey<DamageType> tag)
@@ -185,7 +184,7 @@ public abstract class BaseTagProvider implements DataProvider
 
 	protected IntrinsicCosmereTagBuilder<MobEffect> getMobEffectBuilder(TagKey<MobEffect> tag)
 	{
-		return getBuilder(ForgeRegistries.MOB_EFFECTS, tag);
+		return getIntrinsicBuilder(BuiltInRegistries.MOB_EFFECT, tag);
 	}
 
 	protected void addToTag(TagKey<Item> tag, ItemLike... itemProviders)

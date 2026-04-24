@@ -255,11 +255,72 @@ Notes:
 
 ---
 
+### Phase 10 — Recipes + datagen (main module only)
+Main source errors: **21 → 0**. Main datagen errors: **191 → 0** (2 deprecation warnings in `CosmereTagBuilder` remain; harmless — `ITagBuilderExtension.removeElement/removeTag(ResourceLocation, String)` is deprecated-for-removal in favour of data-component replacements, but still functional). Submodule datagen source sets (`src/datagen/allomancy/…` etc.) are **deliberately out of scope** — they still reference the old `BaseRecipeProvider(PackOutput, ExistingFileHelper, String)` ctor + `Consumer<FinishedRecipe>` shape and will be ported with each submodule's port pass. The same applies to submodule `*Recipes.java` registries.
+
+**Recipe classes (`src/main/java/leaf/cosmere/common/recipes/*`)** — all 3 `CustomRecipe` subclasses ported to the 1.21.1 shape:
+- Constructor: dropped `ResourceLocation` arg; now `super(CraftingBookCategory)`. 1.21 moved recipe ids out of the recipe object — they live on the enclosing `RecipeHolder<T>` instead.
+- `matches(CraftingContainer, Level)` → `matches(CraftingInput, Level)`; `assemble(CraftingContainer, RegistryAccess)` → `assemble(CraftingInput, HolderLookup.Provider)`; `getRemainingItems(CraftingContainer)` → `getRemainingItems(CraftingInput)`.
+- Dropped `getId()` override (method removed from `Recipe` interface).
+- `inv.getContainerSize()` → `inv.size()`; `inv.getItem(i)` unchanged.
+- `CosmereRecipesRegistry.java` needed no edits — the `SimpleCraftingRecipeSerializer<>(GodMetalAlloyNuggetRecipe::new)` calls now resolve to the new `(CraftingBookCategory) -> CustomRecipe` constructor.
+
+**`src/datagen/main/**` (25 files)** — systematic NeoForge 1.21.1 port. Highlights:
+- **Package moves** (pure swaps): `net.minecraftforge.common.data.{ExistingFileHelper, LanguageProvider, DatapackBuiltinEntriesProvider}` → `net.neoforged.neoforge.common.data.*`; `net.minecraftforge.client.model.generators.*` → `net.neoforged.neoforge.client.model.generators.*`; `net.minecraftforge.common.Tags` → `net.neoforged.neoforge.common.Tags`; `net.minecraftforge.common.crafting.{DifferenceIngredient}` → `net.neoforged.neoforge.common.crafting.*`; `net.minecraftforge.common.world.{BiomeModifier, StructureModifier, ForgeBiomeModifiers}` → `net.neoforged.neoforge.common.world.{BiomeModifier, StructureModifier, BiomeModifiers}` (class rename + package move); `net.minecraftforge.registries.ForgeRegistries.Keys` → `net.neoforged.neoforge.registries.NeoForgeRegistries.Keys`; `net.minecraftforge.data.event.GatherDataEvent` → `net.neoforged.neoforge.data.event.GatherDataEvent`; `@Mod.EventBusSubscriber(bus = Bus.MOD)` → `@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)`.
+- **Typo fix (Mojang, not ours)**: `net.minecraft.data.worldgen.BootstapContext` → `BootstrapContext` (both signatures in `BaseDatapackRegistryProvider`).
+- **`BaseRecipeProvider.java`** — rewritten for the new recipe-provider contract:
+    - Ctor: `(PackOutput, ExistingFileHelper, String)` → `(PackOutput, CompletableFuture<HolderLookup.Provider>, String)` (matches `RecipeProvider`'s new 2-arg super).
+    - `buildRecipes(Consumer<FinishedRecipe>)` → `buildRecipes(RecipeOutput)`. `addRecipes(Consumer<FinishedRecipe>)` → `addRecipes(RecipeOutput)`.
+    - Dropped the Consumer-wrapping `trackingConsumer` that called `existingFileHelper.trackGenerated(recipe.getId(), ...)`: `RecipeOutput.accept(...)` no longer exposes the id to a simple consumer, and recipe-id tracking for existing-file validation is a datagen-quality hint, not functionality. Submodule ports can reinstate if needed via a wrapping `RecipeOutput`.
+    - Dropped the 3 `createIngredient(...)` helpers and `Ingredient.fromValues(...)` calls — `Ingredient.fromValues` and the `Ingredient.ItemValue` / `Ingredient.TagValue` inner classes are gone in 1.21.1 (Ingredient now wraps `HolderSet<Item>` directly). The helpers had zero callers in the repo. Kept `difference(TagKey, ItemLike)` via the still-present `DifferenceIngredient.of(...)`.
+    - `ItemStack#getOrCreateTag()` in `godMetalCompressRecipe` → `DataComponentIngredient.of(false, DataComponents.CUSTOM_DATA, CustomData.of(tag), input.asItem())` (NeoForge's 1.21.1 replacement for `PartialNBTIngredient`). The strict-mode flag is `false` (partial match) to match the old `PartialNBTIngredient` semantics. `"nuggetSize"` key preserved per Phase 0.8 contract.
+    - `new ResourceLocation(modid, path)` throughout → `ResourceLocation.fromNamespaceAndPath(modid, path)`.
+- **`RecipeGen.java`** — updated to match:
+    - Ctor shape change (mirrors `BaseRecipeProvider`).
+    - `SpecialRecipeBuilder.special(CosmereRecipesRegistry.X.get())` (passed a `RecipeSerializer`) → `SpecialRecipeBuilder.special(GodMetalAlloyNuggetRecipe::new)` etc. — the new 1.21.1 signature is `special(Function<CraftingBookCategory, Recipe<?>>)`, which matches our `(CraftingBookCategory) -> CustomRecipe` ctors directly.
+    - `Tags.Items.INGOTS_COPPER` / `Tags.Items.STORAGE_BLOCKS_COPPER` remain valid (NeoForge 1.21.1 kept the constants despite the common-tag namespace moving from `forge` to `c`).
+    - `IConditionBuilder` import moved: `net.minecraftforge.common.crafting.conditions.IConditionBuilder` → `net.neoforged.neoforge.common.conditions.IConditionBuilder`.
+- **`BaseTagProvider.java`** — dropped the `<TYPE> getBuilder(IForgeRegistry<TYPE>, TagKey<TYPE>)` overload (the `IForgeRegistry` type is gone) and replaced it with a private `getIntrinsicBuilder(Registry<TYPE>, TagKey<TYPE>)` helper using `BuiltInRegistries.*` singulars (`ITEM`, `BLOCK`, `ENTITY_TYPE`, `FLUID`, `BLOCK_ENTITY_TYPE`, `MOB_EFFECT`, `GAME_EVENT`). This also resolved the ambiguity on `getBuilder(Registries.DAMAGE_TYPE, tag)` / `Registries.BIOME`. `GameEvent.builtInRegistryHolder().key()` was the 1.20.1 lookup — removed; now `BuiltInRegistries.GAME_EVENT.getResourceKey(gameEvent).orElseThrow()` (via the shared intrinsic helper).
+- **`ForgeRegistryTagBuilder.java` — deleted.** Only `BaseTagProvider`'s now-removed `IForgeRegistry` overload instantiated it. No external callers.
+- **Loot tables (`src/datagen/main/java/leaf/cosmere/loottables/*`)** — all 6 files ported to the 1.21.1 sub-provider API:
+    - `LootTableProvider` ctor gained a `CompletableFuture<HolderLookup.Provider>` param: `BaseLootProvider` + `LootTableGen` updated; `Set<ResourceLocation>` → `Set<ResourceKey<LootTable>>`.
+    - `SubProviderEntry`'s factory param is now `Function<HolderLookup.Provider, ? extends LootTableSubProvider>` (was `Supplier`). `BlockLootTableGen` / `EntityLootTableGen` now have explicit `(HolderLookup.Provider)` ctors that forward to super.
+    - `BlockLootSubProvider` ctor: `(Set<Item>, FeatureFlagSet)` → `(Set<Item>, FeatureFlagSet, HolderLookup.Provider)`. `EntityLootSubProvider`: `(FeatureFlagSet)` → `(FeatureFlagSet, HolderLookup.Provider)`.
+    - `BaseBlockLootTables` simplified heavily: deleted the static `HAS_SILK_TOUCH` field + the `createSlabItemTable` / `createSingleItemTable` / `createSingleItemTableWithSilkTouch` / `createSilkTouchDispatchTable` / `createSelfDropDispatchTable` / `dropOther` overrides. All of these existed solely to add `LootPool.Builder.name("main")` — pools are no longer named in 1.21.1 (they're indexed). Vanilla's inherited versions now do the right thing.
+    - `createOreDrop` / `droppingWithFortuneOrRandomly` rewrote for the 1.21.1 Holder-based enchantment API: `ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)` → `addOreBonusCount(enchantments.getOrThrow(Enchantments.FORTUNE))`, where `enchantments = this.registries.lookupOrThrow(Registries.ENCHANTMENT)`. `Enchantments.FORTUNE` is a `ResourceKey<Enchantment>` in 1.21.1.
+- **`CosmereDatapackRegistryProvider.java`** — `ForgeBiomeModifiers.AddFeaturesBiomeModifier` → `BiomeModifiers.AddFeaturesBiomeModifier` (NeoForge renamed the enclosing class). `ForgeRegistries.Keys.BIOME_MODIFIERS` → `NeoForgeRegistries.Keys.BIOME_MODIFIERS`.
+- **`BlockModelsGen.java`** — `new ResourceLocation("block/cube")` → `ResourceLocation.withDefaultNamespace("block/cube")` for vanilla-namespaced parent references.
+- **`CosmereDataGenerator.java`** — wired `event.getLookupProvider()` through to both `LootTableGen` and `RecipeGen` constructors.
+
+**Build status after Phase 10**:
+- `./gradlew compileJava` — **green** (0 errors, 2 deprecation warnings from pre-Phase 7 Curios integration).
+- `./gradlew compileDatagenMainJava` — **green** (0 errors, 2 deprecation warnings in `CosmereTagBuilder` on `ITagBuilderExtension.removeElement/removeTag(ResourceLocation, String)` — slated-for-removal, replacement would be instance-scoped tag entries; functional).
+- `./gradlew runData` (the actual data-gen execution) was **not** run — this phase verified compilation only. Running data-gen will require the module-specific datagen source sets to be ported first, since `CosmereDataGenerator.gatherData` only registers main-module providers (submodule registrations happen in each submodule's own data-gen entrypoint).
+
+Notes / known residuals (not Phase 10 scope):
+- `AllomancyRecipeGen` / `FeruchemyRecipeGen` / `HemalurgyRecipeGen` / `SurgebindingRecipeGen` / `SandmasteryRecipeGen` / `AwakeningRecipeGen` / `AonDorRecipeGen` / `AviarRecipeGen` / `SoulforgeryRecipeGen` / `ToolsRecipeGen` / `ExampleRecipeGen` — each has the old `(PackOutput, ExistingFileHelper, String)` ctor + `Consumer<FinishedRecipe>` shape. Per-module port passes will migrate to the new `(PackOutput, CompletableFuture<HolderLookup.Provider>, String)` + `RecipeOutput` shape.
+- `CosmereTagBuilder` deprecation warnings: `builder.removeElement(rl, modID)` / `builder.removeTag(tag.location(), modID)` — both slated for removal in a future NeoForge minor. Not currently called from anywhere (only present to preserve API shape for submodules). Safe to leave; swap to the replacement when callers exist and the API lands.
+- The generated `neoforge:fortune_bonus` loot-modifier JSON from Phase 9 has not yet been (re-)emitted by a `GlobalLootModifierProvider`. If any such provider existed in the old codebase it would live in submodule datagen, which is out of scope here.
+
+---
+
 ## Remaining (in suggested order)
 
-| # | Phase | Scope | Complexity |
+Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module>/` + `src/gameTest/<module>/` (where present). Per-module scope template: packet handler (to `BasePacketHandler`'s new shape), recipe gens (to new `RecipeProvider` shape), item/block ports (`DataComponents`, `AttributeModifier(ResourceLocation, …)`), config registrations (`ForgeConfigSpec` → `ModConfigSpec`, `ModLoadingContext` → injected `ModContainer`), capability→attachment where applicable, `@Mod` ctor to `(IEventBus, ModContainer)`, event-handler annotation swaps.
+
+| # | Phase | Module | Notes |
 |---|---|---|---|
-| 10 | **Recipes + datagen** | `recipes/`, `registry/CosmereRecipesRegistry`, `src/datagen/main/**` 25 files | Recipe ctor drops `ResourceLocation` arg (1.21 moved ids out of the recipe object); `CraftingBookCategory`-only ctor; `assemble(CraftingInput, HolderLookup.Provider)` shape; `GatherDataEvent` + `PackOutput`; `DatapackBuiltinEntriesProvider`; tag providers take `CompletableFuture<HolderLookup.Provider>`; recipe provider uses `RecipeOutput` |
+| 11 | **Per-submodule port — allomancy** | `src/allomancy/` + `src/datagen/allomancy/` + `src/gameTest/allomancy/` | Metal-burning (Mistborn). Has its own `AllomancyPacketHandler` (still references removed `SimpleChannel` — see Phase 5 notes), `AllomancySpiritwebSubmodule` (consumes `DrawHelper` stubbed in Phase 0.8 — render bodies must be restored), `ScadrialCapability` (world cap, still Forge-era), `AllomancyAtium` (already partly ported in Phase 4), `AllomancyConfig`/`AllomancyConfigs`, `AllomancyRecipeGen`. |
+| 12 | **Per-submodule port — feruchemy** | `src/feruchemy/` + `src/datagen/feruchemy/` + `src/gameTest/feruchemy/` | Metal-storing (Mistborn). `ChargeableMetalCurioItem` partially touched in Phase 7. `StackNBTHelper#serializeStack` stub (Phase 0.8) needs real `ItemStack#save(HolderLookup.Provider)` here. `FeruchemyConfig`/`FeruchemyConfigs`, `FeruchemyRecipeGen`. |
+| 13 | **Per-submodule port — hemalurgy** | `src/hemalurgy/` + `src/datagen/hemalurgy/` + `src/gameTest/hemalurgy/` | Spike-based (Mistborn). World cap still Forge-era. `HemalurgyConfig`/`HemalurgyConfigs`, `HemalurgyRecipeGen`. Phase 7 already fixed copper-spike `getExperienceReward` + attribute Holder lookup in `api/Metals.java`. |
+| 14 | **Per-submodule port — surgebinding** | `src/surgebinding/` + `src/datagen/surgebinding/` + `src/gameTest/surgebinding/` | Knights Radiant (Stormlight). `SurgebindingPacketHandler` still broken. `SurgeGravitation` partly ported in Phase 4. `DynamicShardbladeData` item cap. `SurgebindingConfig`/`SurgebindingConfigs`, `SurgebindingRecipeGen`. Has its own AT file listed in `build.gradle`. |
+| 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |
+| 16 | **Per-submodule port — awakening** | `src/awakening/` + `src/datagen/awakening/` + `src/gameTest/awakening/` | Biochromatic Breath (Warbreaker). `AwakeningConfig`/`AwakeningConfigs`, `AwakeningRecipeGen`. |
+| 17 | **Per-submodule port — aondor** | `src/aondor/` + `src/datagen/aondor/` + `src/gameTest/aondor/` | Aon-based magic (Elantris). `AonDorConfig`/`AonDorConfigs`, `AonDorRecipeGen`. |
+| 18 | **Per-submodule port — aviar** | `src/aviar/` + `src/datagen/aviar/` + `src/gameTest/aviar/` | Bird companions (Sixth of Dusk). `AviarConfig`/`AviarConfigs`, `AviarRecipeGen`. |
+| 19 | **Per-submodule port — soulforgery** | `src/soulforgery/` + `src/datagen/soulforgery/` + `src/gameTest/soulforgery/` | Soul manipulation. `SoulforgeryConfig`/`SoulforgeryConfigs`, `SoulforgeryRecipeGen`. |
+| 20 | **Per-submodule port — cosmeretools** | `src/cosmeretools/` + `src/datagen/cosmeretools/` + `src/gameTest/cosmeretools/` | Dev commands/utilities. `ToolsRecipeGen`. Lighter touch; mostly command argument types + datagen. |
+| 21 | **Per-submodule port — example** | `src/example/` + `src/datagen/example/` + `src/gameTest/example/` | Dev-only template module. `ExampleRecipeGen`. Confirm whether to keep (see Open questions: "`example` module"). |
 
 ---
 

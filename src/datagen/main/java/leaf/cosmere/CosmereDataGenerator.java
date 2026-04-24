@@ -17,13 +17,12 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@EventBusSubscriber(modid = Cosmere.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = Cosmere.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class CosmereDataGenerator
 {
 	private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
@@ -41,8 +40,8 @@ public class CosmereDataGenerator
 
 		generator.addProvider(true, new ItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new BlockModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new LootTableGen(packOutput));
-		generator.addProvider(true, new RecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new LootTableGen(packOutput, event.getLookupProvider()));
+		generator.addProvider(true, new RecipeGen(packOutput, event.getLookupProvider()));
 
 		generator.addProvider(true, new PatchouliGen(packOutput));
 
