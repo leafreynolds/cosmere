@@ -276,7 +276,6 @@ public class NicrosilMenu extends Screen implements ISyncSpiritweb {
         sidedMenuButtons.clear();
         availableAttributes.removeIf(att -> att.getAttribute() == attribute);
         availableAttributes.add(spiritweb.getLiving().getAttribute(attribute));
-        spiritweb.getLiving().getAttribute(attribute).setBaseValue(strength);
         selectedPowerType = CosmereAttributeUtils.getManifestationType(attribute);
         availableAttributes.sort(Comparator.comparingInt(
                 (availableAttribute -> CosmereAttributeUtils.getAttributePowerId(availableAttribute.getAttribute()))));
