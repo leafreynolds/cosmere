@@ -13,8 +13,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 public class CoinPouchContainerMenu extends AbstractContainerMenu
@@ -35,7 +35,7 @@ public class CoinPouchContainerMenu extends AbstractContainerMenu
 		int i;
 		int j;
 
-		IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(Capabilities.ItemHandler.ITEM);
 
 		int invStart = 0;
 
@@ -49,7 +49,7 @@ public class CoinPouchContainerMenu extends AbstractContainerMenu
 			}
 		}
 
-		//Player Inventory slots	
+		//Player Inventory slots
 		for (i = 0; i < 3; ++i)
 		{
 			for (j = 0; j < 9; ++j)

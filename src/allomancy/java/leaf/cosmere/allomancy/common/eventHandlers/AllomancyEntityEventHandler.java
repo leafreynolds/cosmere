@@ -5,24 +5,42 @@
 package leaf.cosmere.allomancy.common.eventHandlers;
 
 import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.effects.BrassStunEffect;
+import leaf.cosmere.allomancy.common.items.CoinPouchItem;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyAtium;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyChromium;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyNicrosil;
+import leaf.cosmere.allomancy.common.manifestation.AllomancyPewter;
 import leaf.cosmere.allomancy.common.utils.MiscHelper;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
 import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.items.MetalNuggetItem;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = Allomancy.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class AllomancyEntityEventHandler
 {
 
-	// TODO Phase 11.3: re-target to ItemEntityPickupEvent.Pre (EntityItemPickupEvent removed in NeoForge 1.21.1).
-	//                  Old body called CoinPouchItem.onPickupItem(event.getItem(), event.getEntity()) and event.setCanceled(true).
+	@SubscribeEvent
+	public static void onItemPickup(ItemEntityPickupEvent.Pre event)
+	{
+		if (CoinPouchItem.onPickupItem(event.getItemEntity(), event.getPlayer()))
+		{
+			event.setCanPickup(TriState.FALSE);
+		}
+	}
 
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
@@ -76,9 +94,37 @@ public class AllomancyEntityEventHandler
 	}
 
 
-	// TODO Phase 11.3: re-target to LivingIncomingDamageEvent (LivingAttackEvent removed in NeoForge 1.21.1).
-	//                  Old body called AllomancyAtium.onLivingAttackEvent(event).
+	@SubscribeEvent
+	public static void onLivingIncomingDamage(LivingIncomingDamageEvent event)
+	{
+		AllomancyAtium.onLivingAttackEvent(event);
+	}
 
-	// TODO Phase 11.3: re-target to LivingIncomingDamageEvent or LivingDamageEvent.Pre (LivingHurtEvent removed in NeoForge 1.21.1).
-	//                  Old body called AllomancyNicrosil/Pewter/Chromium.onLivingHurtEvent(event) in that order.
+	@SubscribeEvent
+	public static void onLivingDamagePre(LivingDamageEvent.Pre event)
+	{
+		AllomancyNicrosil.onLivingHurtEvent(event);
+		AllomancyPewter.onLivingHurtEvent(event);
+		AllomancyChromium.onLivingHurtEvent(event);
+	}
+
+	@SubscribeEvent
+	public static void onMobEffectRemoved(MobEffectEvent.Remove event)
+	{
+		MobEffectInstance instance = event.getEffectInstance();
+		if (instance != null && instance.getEffect().value() instanceof BrassStunEffect)
+		{
+			BrassStunEffect.clearStun(event.getEntity());
+		}
+	}
+
+	@SubscribeEvent
+	public static void onMobEffectExpired(MobEffectEvent.Expired event)
+	{
+		MobEffectInstance instance = event.getEffectInstance();
+		if (instance != null && instance.getEffect().value() instanceof BrassStunEffect)
+		{
+			BrassStunEffect.clearStun(event.getEntity());
+		}
+	}
 }

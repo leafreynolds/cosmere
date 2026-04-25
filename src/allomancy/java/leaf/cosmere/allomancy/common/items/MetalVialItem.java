@@ -14,6 +14,7 @@ import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.items.BaseItem;
 import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.registry.ItemsRegistry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -21,9 +22,10 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -52,9 +54,24 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 		output.accept(filled);
 	}
 
+	private static CompoundTag getCustomData(ItemStack stack)
+	{
+		return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+	}
+
+	private static void setCustomData(ItemStack stack, CompoundTag customData)
+	{
+		stack.set(DataComponents.CUSTOM_DATA, CustomData.of(customData));
+	}
+
 	private static CompoundTag getContainedMetalsTag(ItemStack stack)
 	{
-		return stack.getOrCreateTagElement("metals_contained");
+		CompoundTag customData = getCustomData(stack);
+		if (!customData.contains("metals_contained"))
+		{
+			customData.put("metals_contained", new CompoundTag());
+		}
+		return customData.getCompound("metals_contained");
 	}
 
 	public static boolean isFull(ItemStack stack)
@@ -64,9 +81,9 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 
 	public static int getMaxFillCount(ItemStack stack)
 	{
-		final CompoundTag stackTags = stack.getOrCreateTag();
+		CompoundTag customData = getCustomData(stack);
 		final String max_count = "max_count";
-		return stackTags.contains(max_count) ? stackTags.getInt(max_count) : MAX_METALS_COUNT;
+		return customData.contains(max_count) ? customData.getInt(max_count) : MAX_METALS_COUNT;
 	}
 
 	@Nonnull
@@ -77,7 +94,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 	}
 
 	@Override
-	public int getUseDuration(ItemStack stack)
+	public int getUseDuration(ItemStack stack, LivingEntity entity)
 	{
 		//same drink time as normal potions
 		return 16;
@@ -190,10 +207,12 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 			return;
 		}
 
-		//todo refactor this? seems so convoluted compared to what I'm used to
-
-		//get and add
-		CompoundTag nbt = getContainedMetalsTag(stack);
+		CompoundTag customData = getCustomData(stack);
+		if (!customData.contains("metals_contained"))
+		{
+			customData.put("metals_contained", new CompoundTag());
+		}
+		CompoundTag nbt = customData.getCompound("metals_contained");
 
 		Map<Integer, Integer> sorted = getStoredMetalsMap(nbt);
 
@@ -208,6 +227,8 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 
 		CompoundNBTHelper.setIntArray(nbt, metal_ids, keys);
 		CompoundNBTHelper.setIntArray(nbt, metal_amounts, values);
+		customData.put("metals_contained", nbt);
+		setCustomData(stack, customData);
 	}
 
 	private static Map<Integer, Integer> getStoredMetalsMap(CompoundTag nbt)
@@ -224,9 +245,15 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 
 	public void emptyMetals(ItemStack stack)
 	{
-		CompoundTag nbt = getContainedMetalsTag(stack);
-		nbt.remove(metal_ids);
-		nbt.remove(metal_amounts);
+		CompoundTag customData = getCustomData(stack);
+		if (customData.contains("metals_contained"))
+		{
+			CompoundTag nbt = customData.getCompound("metals_contained");
+			nbt.remove(metal_ids);
+			nbt.remove(metal_amounts);
+			customData.put("metals_contained", nbt);
+			setCustomData(stack, customData);
+		}
 	}
 
 	@Override
@@ -249,7 +276,7 @@ public class MetalVialItem extends BaseItem implements IHasMetalType
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		Map<Integer, Integer> sorted = getStoredMetalsMap(getContainedMetalsTag(stack));
 		tooltip.add(TextHelper.createTranslatedText(CONTAINED_METALS));

@@ -351,6 +351,54 @@ Allomancy module errors: **239 → 194** (45 cleared). Zero errors in 11.2's own
 - `./gradlew compileApiJava` — **passes** (DrawHelper restoration verified).
 - `./gradlew compileAllomancyJava` — **194 errors** (down from 239). All residuals are 11.3 (items/manifestations/effects/coinpouch/recipes/compat/mixin) or 11.4 (client) scope. Two known cascade errors in 11.1 files (`AllomancyItems:24`, `AllomancyRecipes:19`) persist — blocked on 11.3 ctor signature changes.
 
+### Phase 11.3 — Allomancy manifestations + gameplay items/entities/effects/coinpouch
+Allomancy module errors: **194 → 60** (134 cleared). All 60 residuals are 11.4 (client) scope — zero server-side errors remain.
+
+**Manifestations + effects sub-phase**:
+- `AllomancyManifestation.java` — `new ResourceLocation(ns, path)` → `ResourceLocation.fromNamespaceAndPath`; registry `.getValue(rl)` → `.get(rl)`.
+- `api/.../helpers/EffectsHelper.java` — both `getNewEffect` overloads changed to `Holder<MobEffect>` parameter (removed internal `wrapAsHolder`).
+- `api/.../cosmereEffect/CosmereEffect.java` — added `Holder<Attribute>` overload for `addAttributeModifier` (delegates to `attribute.value()`).
+- `AllomancyAtium.java` — `LivingAttackEvent` → `LivingIncomingDamageEvent`; dropped stale `isCanceled()` guard.
+- `AllomancyBrass.java` — wrapped raw `MobEffect` with `BuiltInRegistries.MOB_EFFECT.wrapAsHolder(...)`.
+- `AllomancyBronze.java` — `Attribute` field → `Holder<Attribute>` via `BuiltInRegistries.ATTRIBUTE.wrapAsHolder(...)`.
+- `AllomancyChromium.java`, `AllomancyNicrosil.java` — `LivingHurtEvent` → `LivingDamageEvent.Pre`; `getAmount()`/`setAmount()` → `getNewDamage()`/`setNewDamage()`.
+- `AllomancyPewter.java` — same event migration.
+- `AllomancyTin.java` — Forge `Dist`/`OnlyIn`/`PlaySoundEvent` → neoforged; `getFeetBlockState()` → `getInBlockState()`.
+- `AllomancyIronSteel.java` — Forge `Dist`/`OnlyIn` → neoforged; `Collection<Recipe<?>>` → `Collection<RecipeHolder<?>>` with `.value()` unwrap.
+- `BrassStunEffect.java` — removed `addAttributeModifiers(LivingEntity, AttributeMap, int)` (gone in 1.21.1); added `onEffectAdded(LivingEntity, int)` for `setNoAi(true)`; added static `clearStun(LivingEntity)` for event-wired removal.
+- `CopperCloudEffect.java`, `PewterBurnEffect.java`, `AllomancyBoostEffect.java` — `ADDITION` → `ADD_VALUE`, `MULTIPLY_TOTAL` → `ADD_MULTIPLIED_TOTAL`.
+
+**Items sub-phase**:
+- `MistcloakItem.java` — constructor `ArmorMaterial` → `Holder<ArmorMaterial>`; `getArmorTexture` updated to 1.21.1 signature returning `ResourceLocation`.
+- `CoinPouchItem.java` — Forge imports → neoforged; `NetworkHooks.openScreen` → `player.openMenu`; `getUseDuration(ItemStack)` → `getUseDuration(ItemStack, LivingEntity)`; `Enchantments.INFINITY_ARROWS` → registry lookup of `Enchantments.INFINITY`; removed `initCapabilities` (→ `RegisterCapabilitiesEvent`); `ForgeCapabilities.ITEM_HANDLER` → `Capabilities.ItemHandler.ITEM`; `ForgeHooks.getProjectile` replaced with direct stack return; added `shootProjectile(...)` abstract method impl (no-op; custom shoot path used).
+- `MetalVialItem.java` — Forge `Dist`/`OnlyIn` → neoforged; `getUseDuration(ItemStack)` → `getUseDuration(ItemStack, LivingEntity)`; `appendHoverText(ItemStack, Level, ...)` → `appendHoverText(ItemStack, Item.TooltipContext, ...)`; `stack.getOrCreateTag()`/`getOrCreateTagElement(String)` → `DataComponents.CUSTOM_DATA` pattern (`getCustomData`/`setCustomData` helpers); write-through applied to `addMetals`/`emptyMetals`.
+
+**CoinPouch container trio**:
+- `CoinPouchInventory.java` — stripped `ICapabilityProvider`/`LazyOptional`/`ForgeCapabilities`; now a plain wrapper around `ItemStackHandler(18)` with `getHandler()` accessor; capability registration deferred to `RegisterCapabilitiesEvent`.
+- `CoinPouchContainerMenu.java` — `ForgeCapabilities.ITEM_HANDLER.orElse(null)` → `Capabilities.ItemHandler.ITEM` (direct return).
+- `CoinPouchSlot.java` — Forge `items.*` → neoforged.
+
+**Entities**:
+- `CoinProjectile.java` — removed `implements ItemSupplier`; constructor super call updated to `AbstractArrow(EntityType, LivingEntity, Level, ItemStack, null)` (1.21.1 signature); `getPickupItem()` → `getDefaultPickupItem()` (renamed abstract method); added plain `getItem()` method (no longer in AbstractArrow hierarchy — needed by `CoinPouchItem.onPickupItem`).
+
+**Recipes**:
+- `VialMixingRecipe.java` — Forge `Tags` → neoforged; `CustomRecipe(ResourceLocation, CraftingBookCategory)` → `CustomRecipe(CraftingBookCategory)` (ResourceLocation removed in 1.21.1); `matches`/`assemble` parameter `CraftingContainer` → `CraftingInput`, `RegistryAccess` → `HolderLookup.Provider`; `inv.getContainerSize()` → `inv.size()`; removed `getId()` override (no longer in Recipe API).
+
+**Commands**: `AllomancyCommands.java`, `FillMetalReservesCommand.java` — no changes needed (clean MC command API).
+
+**Compat**: `HwylaCompat.java`, `BronzeSeekerTooltip.java` — no code changes; added `compileOnly "maven.modrinth:jade:${jade_version}"` to `build.gradle` (was `runtimeOnly`-only, so Jade API wasn't on compile classpath).
+
+**Mixin**: `EntityMixin.java` — no changes needed (clean Mixin/vanilla API).
+
+**Event handler re-wire** (`AllomancyEntityEventHandler.java`):
+- Added `onItemPickup(ItemEntityPickupEvent.Pre)` — calls `CoinPouchItem.onPickupItem`; denies via `event.setCanPickup(TriState.FALSE)`.
+- Added `onLivingIncomingDamage(LivingIncomingDamageEvent)` → dispatches to `AllomancyAtium.onLivingAttackEvent`.
+- Added `onLivingDamagePre(LivingDamageEvent.Pre)` → dispatches to Nicrosil, Pewter, Chromium `onLivingHurtEvent`.
+- Added `onMobEffectRemoved(MobEffectEvent.Remove)` + `onMobEffectExpired(MobEffectEvent.Expired)` → call `BrassStunEffect.clearStun` when the stun effect ends.
+
+**Build status after Phase 11.3**:
+- `./gradlew compileAllomancyJava` — **60 errors**, all in `allomancy.client.*`. Zero server-side or common errors remain in allomancy. Phase 11.4 (client + datagen) is the final allomancy step.
+
 ---
 
 ## Remaining (in suggested order)

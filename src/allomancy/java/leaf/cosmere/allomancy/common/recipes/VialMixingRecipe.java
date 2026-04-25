@@ -4,26 +4,24 @@
 
 package leaf.cosmere.allomancy.common.recipes;
 
-import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.items.MetalVialItem;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.registries.AllomancyRecipes;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.IHasSize;
 import leaf.cosmere.api.Metals;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -34,13 +32,13 @@ public class VialMixingRecipe extends CustomRecipe
 {
 	private static final Ingredient INGREDIENT_BOTTLE = Ingredient.of(Items.GLASS_BOTTLE, AllomancyItems.METAL_VIAL.get());
 
-	public VialMixingRecipe(ResourceLocation loc, CraftingBookCategory pCategory)
+	public VialMixingRecipe(CraftingBookCategory pCategory)
 	{
-		super(loc, pCategory);
+		super(pCategory);
 	}
 
 	@Override
-	public boolean matches(CraftingContainer inv, @Nonnull Level world)
+	public boolean matches(CraftingInput inv, @Nonnull Level world)
 	{
 		boolean hasNugget = false;
 		ItemStack vialStack = null;
@@ -48,7 +46,7 @@ public class VialMixingRecipe extends CustomRecipe
 		int nuggetTotal = 0;
 		MetalVialItem metalVialItem = AllomancyItems.METAL_VIAL.get();
 
-		for (int i = 0; i < inv.getContainerSize(); i++)
+		for (int i = 0; i < inv.size(); i++)
 		{
 			ItemStack stack = inv.getItem(i);
 			if (stack.isEmpty())
@@ -131,12 +129,12 @@ public class VialMixingRecipe extends CustomRecipe
 
 
 	@Override
-	public ItemStack assemble(CraftingContainer inv, RegistryAccess pRegistryAccess)
+	public ItemStack assemble(CraftingInput inv, HolderLookup.Provider pRegistryAccess)
 	{
 		MetalVialItem metalVial = AllomancyItems.METAL_VIAL.get();
 		ItemStack itemstack = new ItemStack(metalVial);
 
-		for (int i = 0; i < inv.getContainerSize(); ++i)
+		for (int i = 0; i < inv.size(); ++i)
 		{
 			ItemStack stackInSlot = inv.getItem(i);
 			if (stackInSlot.isEmpty())
@@ -168,12 +166,6 @@ public class VialMixingRecipe extends CustomRecipe
 	{
 		//if you can fit 2 items, the bottle and a metal, you can combine
 		return width * height > 1;
-	}
-
-	@Override
-	public @Nonnull ResourceLocation getId()
-	{
-		return Allomancy.rl("vial_mix");
 	}
 
 	@Override
