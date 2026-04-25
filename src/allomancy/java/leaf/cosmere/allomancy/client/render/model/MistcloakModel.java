@@ -220,9 +220,9 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color)
 	{
-		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
 	}
 
 	@Override
@@ -257,10 +257,7 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				vertexBuilder,
 				light,
 				OverlayTexture.NO_OVERLAY,
-				1,
-				1,
-				1,
-				1
+				0xFFFFFFFF
 		);
 	}
 }

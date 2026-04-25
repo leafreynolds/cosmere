@@ -12,8 +12,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.projectile.ItemSupplier;
 
-public class CoinProjectile extends AbstractArrow
+public class CoinProjectile extends AbstractArrow implements ItemSupplier
 {
 	private ItemStack projectileStack = ItemsRegistry.METAL_NUGGETS.get(Metals.MetalType.COPPER).get().getDefaultInstance();
 

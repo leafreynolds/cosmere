@@ -23,8 +23,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
@@ -69,8 +69,8 @@ public class IronSteelLinesThread implements Runnable
 		aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
 		aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
 // these two below may or may not work, better to keep them than remove
-		aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
-		aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
+		aluminumSheet = BlockTags.create(ResourceLocation.withDefaultNamespace("sheetmetals/aluminum"));
+		aluminumWire = BlockTags.create(ResourceLocation.withDefaultNamespace("wires/aluminum"));
 	}
 
 

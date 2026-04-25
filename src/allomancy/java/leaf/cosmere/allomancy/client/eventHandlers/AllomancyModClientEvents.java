@@ -13,19 +13,16 @@ import leaf.cosmere.allomancy.common.coinpouch.CoinPouchContainerMenu;
 import leaf.cosmere.allomancy.common.registries.AllomancyEntityTypes;
 import leaf.cosmere.allomancy.common.registries.AllomancyMenuTypes;
 import leaf.cosmere.api.CosmereAPI;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
-@Mod.EventBusSubscriber(modid = Allomancy.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Allomancy.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class AllomancyModClientEvents
 {
 
@@ -36,14 +33,11 @@ public class AllomancyModClientEvents
 		CosmereAPI.logger.info("Allomancy client setup complete!");
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void registerContainers(RegisterEvent event)
+	@SubscribeEvent
+	public static void registerMenuScreens(RegisterMenuScreensEvent event)
 	{
-		event.register(Registries.MENU, helper ->
-		{
-			MenuScreens.register((MenuType<CoinPouchContainerMenu>) AllomancyMenuTypes.COIN_POUCH.get(), CoinPouchContainerScreen::new);
-			CosmereAPI.logger.info("Allomancy registered menutypes!");
-		});
+		event.register((MenuType<CoinPouchContainerMenu>) AllomancyMenuTypes.COIN_POUCH.get(), CoinPouchContainerScreen::new);
+		CosmereAPI.logger.info("Allomancy registered menutypes!");
 	}
 
 	@SubscribeEvent
