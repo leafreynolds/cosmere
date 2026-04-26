@@ -4,11 +4,11 @@
     "minecraft:armor_stand"
   ],
   "slots": [
-    "linchpin",
-    "spiritual",
-    "mental",
-    "physical",
     "eyes",
+    "linchpin",
+    "physical",
+    "mental",
+    "spiritual",
     "temporal"
   ]
 }

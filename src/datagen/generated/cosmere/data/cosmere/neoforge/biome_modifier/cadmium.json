@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmere:spawn_ores",
+  "features": [
+    "cosmere:ore_cadmium_normal",
+    "cosmere:ore_cadmium_abundant",
+    "cosmere:ore_cadmium_deep"
+  ],
+  "step": "underground_ores"
+}

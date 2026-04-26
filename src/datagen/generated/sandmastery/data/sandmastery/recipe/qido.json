@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "minecraft:goat_horn"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "S S",
+    " H "
+  ],
+  "result": {
+    "count": 1,
+    "id": "sandmastery:qido"
+  }
+}

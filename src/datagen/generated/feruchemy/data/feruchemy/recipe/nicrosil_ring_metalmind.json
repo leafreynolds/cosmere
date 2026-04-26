@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "ring",
+  "key": {
+    "X": {
+      "tag": "c:ingots/nicrosil"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "feruchemy:nicrosil_ring_metalmind"
+  }
+}

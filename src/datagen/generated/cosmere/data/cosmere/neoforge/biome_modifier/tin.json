@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmere:spawn_ores",
+  "features": [
+    "cosmere:ore_tin_small",
+    "cosmere:ore_tin_medium",
+    "cosmere:ore_tin_abundant"
+  ],
+  "step": "underground_ores"
+}

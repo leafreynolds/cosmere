@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "hoe",
+  "key": {
+    "X": {
+      "tag": "c:ingots/duralumin"
+    },
+    "Y": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "XX",
+    " Y",
+    " Y"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmeretools:duralumin_hoe"
+  }
+}

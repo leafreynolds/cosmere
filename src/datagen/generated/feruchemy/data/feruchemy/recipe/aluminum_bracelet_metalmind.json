@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "bracelet",
+  "key": {
+    "X": {
+      "tag": "c:ingots/aluminum"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "feruchemy:aluminum_bracelet_metalmind"
+  }
+}

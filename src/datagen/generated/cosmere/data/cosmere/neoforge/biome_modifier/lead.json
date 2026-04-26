@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmere:spawn_ores",
+  "features": [
+    "cosmere:ore_lead_normal",
+    "cosmere:ore_lead_abundant",
+    "cosmere:ore_lead_deep"
+  ],
+  "step": "underground_ores"
+}
