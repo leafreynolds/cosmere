@@ -1,68 +1,59 @@
-/*
- * File updated ~ 4 - 2 - 2025 ~ Leaf
- */
-
 package leaf.cosmere.surgebinding.common.items;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.Tier;
-
-import java.util.UUID;
 
 public class NightbloodItem extends ShardbladeItem
 {
-	private Multimap<Attribute, AttributeModifier> attributeModifiers = null;
-	protected static final UUID NIGHTBLOOD_SURGE_UUID = UUID.fromString("CB3F55D3-4865-4180-A497-9C13A33DB5CC");
-
 	public NightbloodItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, builderIn);
 	}
 
-
+	@Override
 	public boolean canSummonDismiss(Player player)
 	{
 		return false;
 	}
 
-	/**
-	 * Gets a map of item attribute modifiers, used by damage when used as melee weapon.
-	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack)
+	public ItemAttributeModifiers getDefaultAttributeModifiers()
 	{
-		if (attributeModifiers == null)
+		var builder = ItemAttributeModifiers.builder();
+
+		builder.add(Attributes.ATTACK_DAMAGE,
+				new AttributeModifier(ResourceLocation.withDefaultNamespace("base_attack_damage"),
+						attackDamage, AttributeModifier.Operation.ADD_VALUE),
+				EquipmentSlotGroup.MAINHAND);
+		builder.add(Attributes.ATTACK_SPEED,
+				new AttributeModifier(ResourceLocation.withDefaultNamespace("base_attack_speed"),
+						attackSpeedIn, AttributeModifier.Operation.ADD_VALUE),
+				EquipmentSlotGroup.MAINHAND);
+
+		if (SurgebindingConfigs.SERVER.NIGHTBLOOD_SPOILERS.get())
 		{
-			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeedIn, AttributeModifier.Operation.ADDITION));
-
-			if (SurgebindingConfigs.SERVER.NIGHTBLOOD_SPOILERS.get())
+			for (Roshar.Surges surge : EnumUtils.SURGES)
 			{
-				for (Roshar.Surges surge : EnumUtils.SURGES)
-				{
-					builder.put(SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(surge).getAttribute(), new AttributeModifier(NIGHTBLOOD_SURGE_UUID, "Nightblood", 5, AttributeModifier.Operation.ADDITION));
-				}
+				Attribute surgeAttr = SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(surge).getAttribute();
+				builder.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(surgeAttr),
+						new AttributeModifier(Surgebinding.rl("nightblood_" + surge.getName()),
+								5, AttributeModifier.Operation.ADD_VALUE),
+						EquipmentSlotGroup.MAINHAND);
 			}
-
-			this.attributeModifiers = builder.build();
 		}
 
-		return switch (equipmentSlot)
-		{
-			case MAINHAND, OFFHAND -> this.attributeModifiers;
-			default -> super.getAttributeModifiers(equipmentSlot, stack);
-		};
+		return builder.build();
 	}
 }

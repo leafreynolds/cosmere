@@ -5,8 +5,8 @@
 package leaf.cosmere.surgebinding.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig.Type;
 
 import java.util.List;
 import java.util.Locale;
@@ -14,29 +14,29 @@ import java.util.function.Predicate;
 
 public class SurgebindingServerConfig implements ICosmereConfig
 {
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
-	public final ForgeConfigSpec.IntValue MAX_SHARDBLADES;
-	public final ForgeConfigSpec.IntValue PLAYER_MAX_STORMLIGHT;
-	public final ForgeConfigSpec.IntValue PLAYER_DRAW_SPEED;
-	public final ForgeConfigSpec.IntValue STORMLIGHT_DRAIN_RATE;
-	public final ForgeConfigSpec.IntValue PROGRESSION_BONEMEAL_COST;
-	public final ForgeConfigSpec.IntValue PROGRESSION_HEAL_COST;
-	public final ForgeConfigSpec.IntValue PROGRESSION_AGE_UP_COST;
-	public final ForgeConfigSpec.BooleanValue NIGHTBLOOD_SPOILERS;
+	public final ModConfigSpec.IntValue MAX_SHARDBLADES;
+	public final ModConfigSpec.IntValue PLAYER_MAX_STORMLIGHT;
+	public final ModConfigSpec.IntValue PLAYER_DRAW_SPEED;
+	public final ModConfigSpec.IntValue STORMLIGHT_DRAIN_RATE;
+	public final ModConfigSpec.IntValue PROGRESSION_BONEMEAL_COST;
+	public final ModConfigSpec.IntValue PROGRESSION_HEAL_COST;
+	public final ModConfigSpec.IntValue PROGRESSION_AGE_UP_COST;
+	public final ModConfigSpec.BooleanValue NIGHTBLOOD_SPOILERS;
 
 
-	//public final ForgeConfigSpec.ConfigValue<List<? extends String>> FIRST_IDEALS;
-	public final ForgeConfigSpec.ConfigValue<List<? extends String>> SECOND_IDEALS;
-	public final ForgeConfigSpec.ConfigValue<List<? extends String>> THIRD_IDEALS;
-	public final ForgeConfigSpec.ConfigValue<List<? extends String>> FOURTH_IDEALS;
-	public final ForgeConfigSpec.ConfigValue<List<? extends String>> FIFTH_IDEALS;
+	//public final ModConfigSpec.ConfigValue<List<? extends String>> FIRST_IDEALS;
+	public final ModConfigSpec.ConfigValue<List<? extends String>> SECOND_IDEALS;
+	public final ModConfigSpec.ConfigValue<List<? extends String>> THIRD_IDEALS;
+	public final ModConfigSpec.ConfigValue<List<? extends String>> FOURTH_IDEALS;
+	public final ModConfigSpec.ConfigValue<List<? extends String>> FIFTH_IDEALS;
 
 	public static final String IDEAL_NOT_IMPLEMENTED = "notyetimplemented";
 
 	SurgebindingServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Surgebinding Config. This config is synced between server and client.").push("surgebinding");
 
 		MAX_SHARDBLADES = builder.comment("How many shardblades total that the user can bond").defineInRange("shardbladeBondAmount", 10, 0, 20);
@@ -127,7 +127,7 @@ public class SurgebindingServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

@@ -5,15 +5,20 @@
 package leaf.cosmere.surgebinding.loottables;
 
 import leaf.cosmere.api.providers.IBlockProvider;
-import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.loottables.BaseBlockLootTables;
 import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 
 public class SurgebindingBlockLootTableGen extends BaseBlockLootTables
 {
+	public SurgebindingBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{

@@ -1,55 +1,40 @@
-/*
- * File updated ~ 30 - 7 - 2023 ~ Leaf
- */
-
 package leaf.cosmere.surgebinding.common.capabilities.world;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class RosharCapability implements IRoshar
 {
-	//Injection
-	public static final Capability<IRoshar> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
+	private CompoundTag m_nbt = null;
+
+	public RosharCapability()
 	{
-	});
-
-	Level m_level;
-
-	CompoundTag m_nbt = null;
-
-	public RosharCapability(Level level)
-	{
-		m_level = level;
 	}
 
-	@Nonnull
-	public static LazyOptional<IRoshar> get(Level level)
+	public static Optional<IRoshar> get(Level level)
 	{
-		return level != null ? level.getCapability(RosharCapability.CAPABILITY, null)
-		                     : LazyOptional.empty();
+		if (level == null || !level.dimension().location().toString().contains("roshar"))
+		{
+			return Optional.empty();
+		}
+		return Optional.of(level.getData(SurgebindingAttachments.ROSHAR.get()));
 	}
-
 
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (m_nbt == null)
 		{
 			m_nbt = new CompoundTag();
 		}
-
 		return m_nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 	{
 		m_nbt = nbt;
 	}

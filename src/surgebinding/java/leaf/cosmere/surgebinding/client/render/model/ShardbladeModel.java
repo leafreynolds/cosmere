@@ -80,9 +80,9 @@ public class ShardbladeModel extends Model
 	}
 
 
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color)
 	{
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
 	}
 
 	public void setup(ItemStack pStack)
@@ -109,15 +109,12 @@ public class ShardbladeModel extends Model
 		this.pommel.visible = true;
 		this.cross_guard.visible = true;
 
-		//now we need to get the actual data from the itemstack
-		//and set the correct pieces to be visible
-
-		if (!pStack.getCapability(ShardbladeDynamicItem.CAPABILITY).isPresent())
+		if (!(pStack.getItem() instanceof ShardbladeDynamicItem))
 		{
 			return;
 		}
 
-		final IShardbladeDynamicData data = pStack.getCapability(ShardbladeDynamicItem.CAPABILITY).resolve().get();
+		final IShardbladeDynamicData data = ShardbladeDynamicItem.getData(pStack);
 
 		this.blade.getChild(data.getBladeID()).visible = true;
 		this.handle.getChild(data.getHandleID()).visible = true;

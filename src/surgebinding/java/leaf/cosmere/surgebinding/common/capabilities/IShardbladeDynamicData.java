@@ -4,10 +4,7 @@
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
-
-public interface IShardbladeDynamicData extends INBTSerializable<CompoundTag>
+public interface IShardbladeDynamicData
 {
 	String getBladeID();
 

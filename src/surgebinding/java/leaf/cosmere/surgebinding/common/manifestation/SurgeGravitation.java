@@ -15,7 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 public class SurgeGravitation extends SurgebindingManifestation
 {
@@ -27,7 +27,7 @@ public class SurgeGravitation extends SurgebindingManifestation
 	//gravitational attraction
 
 
-	public static void onLivingAttackEvent(LivingAttackEvent event)
+	public static void onLivingAttackEvent(LivingIncomingDamageEvent event)
 	{
 		if (event.getSource().getEntity() instanceof Player player && !event.getSource().is(DamageTypeTags.IS_PROJECTILE) && player.getMainHandItem().isEmpty())
 		{

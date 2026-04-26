@@ -15,11 +15,11 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static leaf.cosmere.api.Constants.Strings.KEY_SHARDBLADE;
 import static leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes.SURGEBINDING_ATTRIBUTES;
@@ -59,7 +59,7 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Surgebinding.MODID))

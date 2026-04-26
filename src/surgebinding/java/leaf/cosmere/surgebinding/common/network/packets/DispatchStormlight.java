@@ -1,57 +1,45 @@
-/*
- * File updated ~ 4 - 2 - 2025 ~ Leaf
- */
-
 package leaf.cosmere.surgebinding.common.network.packets;
 
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
+import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class DispatchStormlight implements ICosmerePacket
+import static net.minecraft.network.codec.ByteBufCodecs.BOOL;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+
+public record DispatchStormlight() implements ICosmerePacket
 {
+	public static final CustomPacketPayload.Type<DispatchStormlight> TYPE =
+			new CustomPacketPayload.Type<>(Surgebinding.rl("dispatch_stormlight"));
 
-	public DispatchStormlight()
-	{
-	}
+	public static final StreamCodec<ByteBuf, DispatchStormlight> STREAM_CODEC =
+			StreamCodec.unit(new DispatchStormlight());
 
-	public DispatchStormlight(FriendlyByteBuf buffer)
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
+		return TYPE;
 	}
 
 	@Override
-	public void handle(NetworkEvent.Context context)
+	public void handle(IPayloadContext context)
 	{
-		ServerPlayer sender = context.getSender();
-		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+		if (!(context.player() instanceof ServerPlayer sender))
+		{
+			return;
+		}
+		context.enqueueWork(() -> SpiritwebCapability.get(sender).ifPresent(cap ->
 		{
 			SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(cap);
-
-			if (ssm != null)
+			if (ssm != null && ssm.getStormlight() != 0 && (ssm.isOathed() || ssm.isHerald()))
 			{
-				if (ssm.getStormlight() != 0)
-				{
-					if (ssm.isOathed() || ssm.isHerald())
-					{
-						ssm.dispatchStormlight();
-					}
-				}
+				ssm.dispatchStormlight();
 			}
-
 		}));
-		context.setPacketHandled(true);
 	}
-
-
-	@Override
-	public void encode(FriendlyByteBuf buf)
-	{
-
-	}
-
 }

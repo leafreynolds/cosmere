@@ -25,8 +25,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.items.wrapper.PlayerInvWrapper;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.ArmorMaterial;
+import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +50,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	int drawSpeed = SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get();
 
 	//a little ew, I'd rather this in an enum utils, but it's the only place that needs it
-	public static final ShardplateArmorMaterial[] ARMOR_MATERIALS = ShardplateArmorMaterial.values();
+	public static final Holder<ArmorMaterial>[] ARMOR_MATERIALS = ShardplateArmorMaterial.ALL;
 	RadiantStateManager idealsManager = new RadiantStateManager();
 	private ISpiritweb spiritweb;
 
@@ -128,7 +130,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				//otherwise conditional effects
 				else
 				{
-					if (livingEntity.getCombatTracker().inCombat)
+					if (livingEntity.getLastHurtByMobTimestamp() > livingEntity.tickCount - 100)
 					{
 						//todo combat effect cost
 						//todo replace with non-vanilla effects
@@ -177,11 +179,11 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 			if (Stream.of(helmet, breastplate, leggings, boots).allMatch(armorStack -> !armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem))
 			{
 				//check armor matches same material
-				for (ShardplateArmorMaterial material : ARMOR_MATERIALS)
+				for (Holder<ArmorMaterial> material : ARMOR_MATERIALS)
 				{
-					if (Stream.of(helmet, breastplate, leggings, boots).allMatch((armorStack -> ((ArmorItem) armorStack.getItem()).getMaterial() == material)))
+					if (Stream.of(helmet, breastplate, leggings, boots).allMatch((armorStack -> ((ArmorItem) armorStack.getItem()).getMaterial().equals(material))))
 					{
-						int amplifier = material == ShardplateArmorMaterial.DEADPLATE ? 0 : 1;
+						int amplifier = material.equals(ShardplateArmorMaterial.DEADPLATE) ? 0 : 1;
 
 						//todo make our own effect for wearing shardplate
 						//todo replace with non-vanilla effects

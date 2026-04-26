@@ -4,6 +4,7 @@
 
 package leaf.cosmere.surgebinding.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -21,12 +22,24 @@ import org.jetbrains.annotations.NotNull;
 
 public class LavisPolypBlock extends HorizontalDirectionalBlock
 {
+	public static final MapCodec<LavisPolypBlock> CODEC = simpleCodec(LavisPolypBlock::new);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final VoxelShape SHAPE;
 
 	public LavisPolypBlock()
 	{
-		super(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).noCollission());
+		this(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).noCollission());
+	}
+
+	public LavisPolypBlock(BlockBehaviour.Properties properties)
+	{
+		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends HorizontalDirectionalBlock> codec()
+	{
+		return CODEC;
 	}
 
 	@Override

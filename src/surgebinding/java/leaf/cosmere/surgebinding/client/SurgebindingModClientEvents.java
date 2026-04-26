@@ -1,32 +1,27 @@
-/*
- * File updated ~ 14 - 1 - 2025 ~ Leaf
- */
-
 package leaf.cosmere.surgebinding.client;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.surgebinding.client.render.SurgebindingLayerDefinitions;
 import leaf.cosmere.surgebinding.client.render.SurgebindingRenderers;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-@Mod.EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class SurgebindingModClientEvents
 {
-
 	@SubscribeEvent
-	public static void registerGuiOverlays(RegisterGuiOverlaysEvent guiOverlaysEvent)
+	public static void registerGuiLayers(RegisterGuiLayersEvent event)
 	{
-		guiOverlaysEvent.registerAbove(
-				VanillaGuiOverlay.EXPERIENCE_BAR.id(),
-				"hud",
-				(forgeGui, gui, partialTick, width, height) -> HUDHandler.onDrawScreenPost(gui)
+		event.registerAbove(
+				VanillaGuiLayers.EXPERIENCE_BAR,
+				Surgebinding.rl("hud"),
+				(gui, deltaTracker) -> HUDHandler.onDrawScreenPost(gui)
 		);
 	}
 
@@ -36,13 +31,10 @@ public class SurgebindingModClientEvents
 		SurgebindingLayerDefinitions.register(evt);
 	}
 
-
 	@SubscribeEvent
 	public static void init(final FMLClientSetupEvent event)
 	{
 		SurgebindingRenderers.register();
-
 		CosmereAPI.logger.info("Surgebinding client setup complete!");
 	}
-
 }

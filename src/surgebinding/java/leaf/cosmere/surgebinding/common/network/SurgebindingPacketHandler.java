@@ -1,7 +1,3 @@
-/*
- * File updated ~ 4 - 2 - 2025 ~ Leaf
- */
-
 package leaf.cosmere.surgebinding.common.network;
 
 import leaf.cosmere.common.network.BasePacketHandler;
@@ -9,25 +5,22 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.network.packets.DispatchStormlight;
 import leaf.cosmere.surgebinding.common.network.packets.RequestStormlight;
 import leaf.cosmere.surgebinding.common.network.packets.SummonShardblade;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class SurgebindingPacketHandler extends BasePacketHandler
 {
-	private final SimpleChannel NETWORK_CHANNEL = createChannel(Surgebinding.rl(Surgebinding.MODID), Surgebinding.instance.versionNumber);
-
 	@Override
-	protected SimpleChannel getChannel()
+	protected String getProtocolVersion()
 	{
-		return NETWORK_CHANNEL;
+		return Surgebinding.instance.versionNumber.toString();
 	}
 
 	@Override
-	public void initialize()
+	public void initialize(PayloadRegistrar registrar)
 	{
-		registerClientToServer(SummonShardblade.class, SummonShardblade::new);
-		registerClientToServer(DispatchStormlight.class, DispatchStormlight::new);
-		registerClientToServer(RequestStormlight.class, RequestStormlight::new);
+		registrar.playToServer(SummonShardblade.TYPE, SummonShardblade.STREAM_CODEC, SummonShardblade::handle);
+		registrar.playToServer(DispatchStormlight.TYPE, DispatchStormlight.STREAM_CODEC, DispatchStormlight::handle);
+		registrar.playToServer(RequestStormlight.TYPE, RequestStormlight.STREAM_CODEC, RequestStormlight::handle);
 	}
-
-
 }

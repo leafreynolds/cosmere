@@ -6,7 +6,6 @@ package leaf.cosmere.surgebinding.common.blocks;
 
 import leaf.cosmere.common.blocks.BaseBlock;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -35,7 +34,7 @@ public class RockbudVariantBlock extends BaseBlock
 	}
 
 	@Override
-	public InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit)
+	protected InteractionResult useWithoutItem(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull BlockHitResult pHit)
 	{
         if (pLevel.isClientSide)
         {

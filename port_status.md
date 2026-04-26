@@ -613,13 +613,49 @@ Same pattern as Phase 16/17. Notable difference: `SoulforgeryModClientEvents.jav
 
 ---
 
+### Phase 14 — Per-submodule port — surgebinding
+`compileSurgebindingJava` and `compileSurgebindingDatagenJava` both **green** (0 errors, 2 deprecation warnings). No gameTest source set changes required.
+
+**Source sub-phase** (`src/surgebinding/**`):
+
+- `common/Surgebinding.java` — `@Mod` ctor `() → (IEventBus modBus, ModContainer modContainer)`. Drops `FMLJavaModLoadingContext.get()`, `ModLoadingContext.get()`. `new ResourceLocation(MODID, path)` → `ResourceLocation.fromNamespaceAndPath(...)`. `new Version(ModLoadingContext...)` → `new Version(modContainer)`. Imports: `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/network/SurgebindingPacketHandler.java` — `initialize(PayloadRegistrar)` changed from `protected` → `public` to match `BasePacketHandler` interface.
+- `common/registries/SurgebindingBiomes.java` — `BootstapContext` (1.20.1 typo) → `BootstrapContext` (corrected spelling in 1.21.1) — all occurrences in import and parameter types.
+- `common/registries/SurgebindingItems.java` — Removed `.durability(ShardplateArmorMaterial.DEADPLATE.value().getDurability(ArmorItem.Type.X))` calls from all four shardplate registrations; `getDurability(ArmorItem.Type)` removed in 1.21.1 — durability is now set directly via the armor material's `durability` field at construction time.
+- `common/blocks/GemOreBlock.java` — `DropExperienceBlock` constructor arg order flipped: `(Properties, IntProvider)` → `(IntProvider, Properties)`.
+- `common/blocks/LavisPolypBlock.java` — `HorizontalDirectionalBlock` now requires abstract `codec()` override. Added: `public static final MapCodec<LavisPolypBlock> CODEC = simpleCodec(LavisPolypBlock::new)`, two-arg constructor `LavisPolypBlock(BlockBehaviour.Properties)`, default no-arg ctor delegating to it, and `@Override protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }`.
+- `common/blocks/PrickletacBlock.java`, `RockbudVariantBlock.java`, `VinebudBlock.java` — `Block.use(BlockState, Level, BlockPos, Player, InteractionHand, BlockHitResult)` → `Block.useWithoutItem(BlockState, Level, BlockPos, Player, BlockHitResult)` (dropped `InteractionHand` param; access changed `public` → `protected`). Removed `InteractionHand` import.
+- `common/capabilities/SurgebindingSpiritwebSubmodule.java` — `CombatTracker.inCombat` field is private in 1.21.1 (no `isInCombat()` either). Replaced with: `livingEntity.getLastHurtByMobTimestamp() > livingEntity.tickCount - 100`.
+- `common/entity/Chull.java` — `dropCustomDeathLoot(DamageSource, int, boolean)` → `dropCustomDeathLoot(ServerLevel, DamageSource, boolean)` (added `ServerLevel` first param; dropped looting `int`). Removed `getEyeHeight(Pose)` override (removed from `Entity` in 1.21.1). Removed `getPassengersRidingOffset()` override (removed from `LivingEntity`). `getLeashOffset()` body: `getEyeHeight(Pose.STANDING)` → `getEyeHeight()` (no-arg). Removed `Pose` import.
+- `common/entity/spren/Honorspren.java` — `canBeLeashed(Player pPlayer)` → `canBeLeashed()` (no param in 1.21.1). Removed `Player` import.
+- `common/entity/spren/Cryptic.java` — `BlockPathTypes` → `PathType` (import + all usages). `ForgeEventFactory.onAnimalTame` → `net.neoforged.neoforge.event.EventHooks.onAnimalTame`. `finalizeSpawn` signature: removed `@Nullable CompoundTag pDataTag` parameter and matching `super` call; removed `CompoundTag` import. `new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true)` → `new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F)` (removed `boolean canFly` param removed in 1.21.1).
+- `common/items/HonorbladeItem.java`, `NightbloodItem.java` — `import net.minecraft.world.item.ItemAttributeModifiers` → `import net.minecraft.world.item.component.ItemAttributeModifiers` (moved package in 1.21.1).
+- `common/items/ShardbladeItem.java` — Removed `@Override isFireResistant(ItemStack stack)` method (NeoForge extension removed). Added `.fireResistant()` to item Properties chain in the constructor super-call instead.
+- `common/manifestation/SurgeProgression.java` — `PlayerInteractEvent` import: `net.minecraftforge.event.entity.player` → `net.neoforged.neoforge.event.entity.player`.
+- `client/render/renderer/HonorsprenRenderer.java` — `net.minecraftforge.api.distmarker.*` → `net.neoforged.api.distmarker.*`. `new ResourceLocation("textures/entity/allay/allay.png")` → `ResourceLocation.withDefaultNamespace("textures/entity/allay/allay.png")`.
+- `client/render/model/HonorsprenModel.java` — `net.minecraftforge.api.distmarker.*` → `net.neoforged.api.distmarker.*`.
+- `client/render/renderer/ShardbladeItemRenderer.java` — `BlockEntityWithoutLevelRenderer.entityModelSet` is private in 1.21.1. Added `private final EntityModelSet modelSet;` field; constructor stores `this.modelSet = pEntityModelSet;`; replaced both `this.entityModelSet` usages with `this.modelSet`.
+
+**Datagen sub-phase** (`src/datagen/surgebinding/**`):
+
+- `SurgebindingDataGenerator.java` — All `net.minecraftforge.*` → `net.neoforged.*`. Dropped `RegistrySetBuilder` usage. Wired `event.getLookupProvider()` to `SurgebindingLootTableGen` and `SurgebindingRecipeGen` constructors.
+- `SurgebindingEngLangGen.java` — `LanguageProvider` import moved to neoforged. `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM`; `ForgeRegistries` import dropped; `BuiltInRegistries` import added.
+- `SurgebindingItemModelsGen.java` — `ItemModelBuilder/ItemModelProvider/ModelFile` imports: `net.minecraftforge.client.model.generators.*` → `net.neoforged.neoforge.client.model.generators.*`. `ForgeSpawnEggItem` → `DeferredSpawnEggItem` (import and `instanceof` check). `ExistingFileHelper` import moved.
+- `SurgebindingRecipeGen.java` — Ctor `(PackOutput, ExistingFileHelper, String)` → `(PackOutput, CompletableFuture<HolderLookup.Provider>, String)`. `addRecipes(Consumer<FinishedRecipe>)` → `addRecipes(RecipeOutput)`. `IConditionBuilder` import: `net.minecraftforge.common.crafting.conditions` → `net.neoforged.neoforge.common.conditions`. Old `ExistingFileHelper`/`Consumer<FinishedRecipe>`/`FinishedRecipe` imports removed.
+- `SurgebindingTagsProvider.java` — `ExistingFileHelper` import: `net.minecraftforge.common.data` → `net.neoforged.neoforge.common.data`.
+- `SurgebindingBlockModelsGen.java` — model generator / `ExistingFileHelper` imports moved to neoforged.
+- `loottables/SurgebindingLootTableGen.java` — Added `CompletableFuture<HolderLookup.Provider> registries` ctor param; passes to `super(packOutput, List.of(new SubProviderEntry(SurgebindingBlockLootTableGen::new, LootContextParamSets.BLOCK), new SubProviderEntry(SurgebindingEntityLootTableGen::new, LootContextParamSets.ENTITY)), registries)`.
+- `loottables/SurgebindingBlockLootTableGen.java` — Added explicit `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)`.
+- `loottables/SurgebindingEntityLootTableGen.java` — `LootingEnchantFunction` → `EnchantedCountIncreaseFunction` (class renamed in 1.21.1). `LootItemRandomChanceWithLootingCondition` → `LootItemRandomChanceWithEnchantedBonusCondition`. Both new classes require `HolderLookup.Provider` as first argument: `.randomChanceAndLootingBoost(this.registries, 0.1F, 0.05F)` and `.lootingMultiplier(this.registries, UniformGenerator.between(...))`. Added `HolderLookup.Provider provider` ctor param; stored as `this.registries`.
+
+---
+
 ## Remaining (in suggested order)
 
 Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module>/` + `src/gameTest/<module>/` (where present). Per-module scope template: packet handler (to `BasePacketHandler`'s new shape), recipe gens (to new `RecipeProvider` shape), item/block ports (`DataComponents`, `AttributeModifier(ResourceLocation, …)`), config registrations (`ForgeConfigSpec` → `ModConfigSpec`, `ModLoadingContext` → injected `ModContainer`), capability→attachment where applicable, `@Mod` ctor to `(IEventBus, ModContainer)`, event-handler annotation swaps.
 
 | # | Phase | Module | Notes |
 |---|---|---|---|
-| 14 | **Per-submodule port — surgebinding** | `src/surgebinding/` + `src/datagen/surgebinding/` + `src/gameTest/surgebinding/` | Knights Radiant (Stormlight). `SurgebindingPacketHandler` still broken. `SurgeGravitation` partly ported in Phase 4. `DynamicShardbladeData` item cap. `SurgebindingConfig`/`SurgebindingConfigs`, `SurgebindingRecipeGen`. Has its own AT file listed in `build.gradle`. |
 | 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |
 
 ---
@@ -657,3 +693,22 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | Item NBT via `ItemStack#getTag()` | `DataComponents` (`ItemStack#get(DataComponentType)`) |
 | `Component.literal(...)` | unchanged |
 | Tag providers: `ForgeRegistryTagsProvider` | `TagsProvider<T>` with `CompletableFuture<HolderLookup.Provider>` lookup param |
+| `Block.use(state, level, pos, player, hand, hit)` | `Block.useWithoutItem(state, level, pos, player, hit)` — `InteractionHand` param dropped; access `public` → `protected` |
+| `HorizontalDirectionalBlock` (abstract, no codec) | Must add `public static final MapCodec<T> CODEC = simpleCodec(T::new)` and `@Override protected MapCodec<? extends HorizontalDirectionalBlock> codec()` |
+| `DropExperienceBlock(Properties, IntProvider)` | `DropExperienceBlock(IntProvider, Properties)` — arg order flipped |
+| `@Override boolean isFireResistant(ItemStack)` (NeoForge ext) | Add `.fireResistant()` to `Item.Properties` chain instead |
+| `ItemAttributeModifiers` in `net.minecraft.world.item` | Moved to `net.minecraft.world.item.component.ItemAttributeModifiers` |
+| `BlockPathTypes.X` | `PathType.X` (class renamed) |
+| `BootstapContext` (1.20.1 typo) | `BootstrapContext` (corrected in 1.21.1) |
+| `getEyeHeight(Pose)` override on `Entity` | Removed — use `getEyeHeight()` (no-arg) |
+| `getPassengersRidingOffset()` on `LivingEntity` | Removed in 1.21.1 |
+| `canBeLeashed(Player)` | `canBeLeashed()` — player param removed |
+| `finalizeSpawn(…, @Nullable CompoundTag pDataTag)` | `finalizeSpawn(…)` — `CompoundTag` param removed |
+| `new FollowOwnerGoal(entity, speed, min, max, canFly)` | `new FollowOwnerGoal(entity, speed, min, max)` — `canFly` param removed |
+| `ForgeEventFactory.onAnimalTame(entity, player)` | `EventHooks.onAnimalTame(entity, player)` (`net.neoforged.neoforge.event`) |
+| `CombatTracker.inCombat` (field, public) | No equivalent — use `entity.getLastHurtByMobTimestamp() > entity.tickCount - 100` |
+| `LootingEnchantFunction` | `EnchantedCountIncreaseFunction` (needs `HolderLookup.Provider` as first arg) |
+| `LootItemRandomChanceWithLootingCondition` | `LootItemRandomChanceWithEnchantedBonusCondition` (needs `HolderLookup.Provider` as first arg) |
+| `BlockEntityWithoutLevelRenderer.entityModelSet` (public field) | Private — store your own `EntityModelSet` reference in the renderer subclass |
+| `BasePacketHandler.initialize(PayloadRegistrar)` access | Must be `public` (not `protected`) in subclasses |
+| `ArmorMaterial.getDurability(ArmorItem.Type)` | Removed — durability configured at armor material definition time, not per-item |

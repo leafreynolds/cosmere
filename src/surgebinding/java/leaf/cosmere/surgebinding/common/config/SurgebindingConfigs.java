@@ -5,16 +5,14 @@
 package leaf.cosmere.surgebinding.common.config;
 
 import leaf.cosmere.common.config.CosmereConfigHelper;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 
 public class SurgebindingConfigs
 {
 	public static final SurgebindingServerConfig SERVER = new SurgebindingServerConfig();
 
-	public static void registerConfigs(ModLoadingContext modLoadingContext)
+	public static void registerConfigs(ModContainer modContainer)
 	{
-		ModContainer modContainer = modLoadingContext.getActiveContainer();
 		CosmereConfigHelper.registerConfig(modContainer, SERVER);
 	}
 

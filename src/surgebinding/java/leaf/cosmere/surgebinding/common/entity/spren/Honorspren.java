@@ -9,7 +9,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.allay.Allay;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -52,7 +51,7 @@ public class Honorspren extends Allay
 	}
 
 	@Override
-	public boolean canBeLeashed(Player pPlayer)
+	public boolean canBeLeashed()
 	{
 		return false;
 	}

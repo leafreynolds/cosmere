@@ -11,19 +11,19 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class SurgebindingRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public SurgebindingRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
+	public SurgebindingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
 	{
-		super(output, existingFileHelper, Surgebinding.MODID);
+		super(output, registries, Surgebinding.MODID);
 	}
 
 	@Override
@@ -33,16 +33,16 @@ public class SurgebindingRecipeGen extends BaseRecipeProvider implements ICondit
 	}
 
 	@Override
-	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	protected void addRecipes(RecipeOutput output)
 	{
 		for (Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES)
 		{
-			compressRecipe(SurgebindingBlocks.GEM_BLOCKS.get(gemstone).getBlock(), CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone)).save(consumer);
-			decompressRecipe(consumer, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), SurgebindingBlocks.GEM_BLOCKS.get(gemstone), gemstone.getName() + "_block_deconstruct");
+			compressRecipe(SurgebindingBlocks.GEM_BLOCKS.get(gemstone).getBlock(), CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone)).save(output);
+			decompressRecipe(output, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), SurgebindingBlocks.GEM_BLOCKS.get(gemstone), gemstone.getName() + "_block_deconstruct");
 
 			//ores no longer obtained from blocks?
-			//addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
-			//addOreSmeltingRecipes(consumer, SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), 1.0f, 1000);
+			//addOreSmeltingRecipes(output, SurgebindingBlocks.GEM_ORE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get(), 1.0f, 1000);
+			//addOreSmeltingRecipes(output, SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone).getBlock(), SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get(), 1.0f, 1000);
 		}
 	}
 }

@@ -1,7 +1,3 @@
-/*
- * File updated ~ 4 - 2 - 2025 ~ Leaf
- */
-
 package leaf.cosmere.surgebinding.client;
 
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -12,12 +8,12 @@ import leaf.cosmere.surgebinding.common.network.packets.SummonShardblade;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.InputEvent;
 
-@Mod.EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class SurgebindingForgeClientEvents
 {
 	@SubscribeEvent
@@ -32,7 +28,6 @@ public class SurgebindingForgeClientEvents
 
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
-
 			if (isKeyPressed(event, SurgebindingKeybindings.SHARDBLADE))
 			{
 				Surgebinding.packetHandler().sendToServer(new SummonShardblade());
@@ -53,5 +48,4 @@ public class SurgebindingForgeClientEvents
 	{
 		return event.getKey() == keyBinding.getKey().getValue() && keyBinding.consumeClick();
 	}
-
 }

@@ -22,12 +22,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraftforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.ServerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class RadiantStateManager
 {
-	private static ResourceLocation SWEAR_IDEAL = new ResourceLocation(Surgebinding.MODID, "swear_ideal");
+	private static ResourceLocation SWEAR_IDEAL = ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, "swear_ideal");
 
 	private SpiritwebCapability spiritweb;
 	private Roshar.RadiantOrder order = null;
