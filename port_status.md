@@ -480,6 +480,42 @@ Allomancy module errors: **60 → 0**. Datagen errors: **0** (clean from the sta
 
 ---
 
+### Phase 20 — Per-submodule port — cosmeretools
+`compileCosmereToolsJava` and `compileDatagenCosmereToolsJava` both **green** (0 errors expected). No gameTest source set for cosmeretools.
+
+**`@Mod` ctor + config + registries sub-phase**:
+- `common/CosmereTools.java` — `@Mod` ctor `() → (IEventBus modBus, ModContainer modContainer)`. Drops `FMLJavaModLoadingContext.get().getModEventBus()`, `ModLoadingContext.get()`, `InterModEnqueueEvent`/`imcQueue`. Drops `CosmereModConfig instanceof` config-event pattern; replaced with `handleConfigEvent` iterating `List.of(ToolsConfigs.SERVER)` matching on `config.getSpec()` — same pattern as `Aviar.java` (Phase 18). `new ResourceLocation(MODID, path)` → `ResourceLocation.fromNamespaceAndPath(...)`. `new Version(ModLoadingContext.get().getActiveContainer())` → `new Version(modContainer)`. `onConfigLoad(ModConfigEvent)` narrowed to `onConfigLoad(ModConfigEvent.Loading)`. Imports: `net.minecraftforge.*` → `net.neoforged.*`; `CosmereModConfig` dropped; `ICosmereConfig` + `java.util.List` added.
+- `common/config/ToolsConfigs.java` — `registerConfigs(ModLoadingContext)` → `registerConfigs(ModContainer)` direct. `net.minecraftforge.fml.ModContainer` → `net.neoforged.fml.ModContainer`; `ModLoadingContext` import removed.
+- `common/config/ToolsServerConfig.java` — `ForgeConfigSpec` → `ModConfigSpec`; `ForgeConfigSpec.Builder/IntValue` → `ModConfigSpec.Builder/IntValue`; `getConfigSpec()` return type → `ModConfigSpec`. Imports moved `net.minecraftforge.common.ForgeConfigSpec` → `net.neoforged.neoforge.common.ModConfigSpec`.
+
+**Event handler + registry sub-phase**:
+- `common/eventHandlers/ToolsCommonForgeEvents.java` — `@Mod.EventBusSubscriber(bus = FORGE)` → `@EventBusSubscriber(bus = Bus.GAME)`. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/eventHandlers/ToolsCommonModEvents.java` — `@Mod.EventBusSubscriber(bus = MOD)` → `@EventBusSubscriber(bus = Bus.MOD)`. Import: `net.minecraftforge.fml.common.Mod` → `net.neoforged.fml.common.EventBusSubscriber`.
+- `common/registries/ToolsCreativeTabs.java` — `BuildCreativeModeTabContentsEvent` import: `net.minecraftforge.event` → `net.neoforged.neoforge.event`.
+
+**Client sub-phase**:
+- `client/ToolsForgeClientEvents.java` — `@Mod.EventBusSubscriber(value = Dist.CLIENT)` → `@EventBusSubscriber(bus = Bus.GAME, value = Dist.CLIENT)`. Imports moved.
+- `client/ToolsKeybindings.java` — `KeyModifier` import: `net.minecraftforge.client.settings` → `net.neoforged.neoforge.client.settings`. `RegisterKeyMappingsEvent` import moved. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/capabilities/ToolsSpiritwebSubmodule.java` — `RenderLevelStageEvent` import: `net.minecraftforge.client.event` → `net.neoforged.neoforge.client.event`.
+
+**Items sub-phase** (non-trivial: first module with custom tool + armor items):
+- `common/items/TArmorItem.java` — **Major rewrite**. `ArmorMaterial` is a record in 1.21.1, no longer an interface, so `Metals.MetalType` can no longer be passed directly. Constructor now calls `super(buildArmorMaterial(metalType), pSlot, pProperties.durability(metalType.getDurabilityForType(pSlot)))`. Added private `buildArmorMaterial(MetalType)` helper that returns `Holder.direct(new ArmorMaterial(...))` built from `MetalType`'s existing armor-shaped getters (`getDefenseForType`, `getEnchantmentValue`, `getEquipSound`, `getRepairIngredient`, `getToughness`, `getKnockbackResistance`). Defense map uses `Map.of` with all five `ArmorItem.Type` keys (BODY = 0). Two layers defined: main (no suffix) and overlay (`"_overlay"`, dyeable). `getArmorTexture(ItemStack, Entity, EquipmentSlot, String)` → `getArmorTexture(ItemStack, Entity, EquipmentSlot, ArmorMaterial.Layer, boolean innerModel)` returning `ResourceLocation`; routes overlay by `!layer.suffix().isEmpty()`, uses `innerModel` to select layer 1 vs 2.
+- `common/items/TPickaxeItem.java` — Old 4-arg `super(tier, damage, speed, props)` → new 2-arg `super(tier, props.attributes(PickaxeItem.createAttributes(tier, damage, speed)))` (1.21.1 removed the explicit damage/speed constructor args in favour of `Item.Properties.attributes()`).
+- `common/items/TAxeItem.java`, `TShovelItem.java`, `THoeItem.java`, `TSwordItem.java` — same `createAttributes` migration pattern.
+
+**Datagen sub-phase** (`src/datagen/cosmeretools/**`):
+- `ToolsDataGenerator.java` — Imports `net.minecraftforge.*` → `net.neoforged.*`. Wired `event.getLookupProvider()` to `ToolsLootTableGen` and `ToolsRecipeGen` constructors.
+- `ToolsEngLangGen.java` — `LanguageProvider` import moved. `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM` (registry is `Iterable<Item>`); `ForgeRegistries` import dropped; `BuiltInRegistries` import added.
+- `ToolsItemModelsGen.java` — `ItemModelBuilder/ItemModelProvider/ModelFile` imports: `net.minecraftforge.client.model.generators.*` → `net.neoforged.neoforge.client.model.generators.*`. `ForgeSpawnEggItem` → `DeferredSpawnEggItem` (both import and `instanceof` check). `ExistingFileHelper` import moved. `new ResourceLocation("item/...")` → `ResourceLocation.withDefaultNamespace("item/...")` for vanilla-namespaced parent references.
+- `ToolsRecipeGen.java` — Ctor `(PackOutput, ExistingFileHelper, String)` → `(PackOutput, CompletableFuture<HolderLookup.Provider>, String)` (drops `ExistingFileHelper`). `addRecipes(Consumer<FinishedRecipe>)` → `addRecipes(RecipeOutput)`. `IConditionBuilder` import: `net.minecraftforge.common.crafting.conditions` → `net.neoforged.neoforge.common.conditions`. `ExistingFileHelper`/`Consumer<FinishedRecipe>`/`FinishedRecipe` imports removed.
+- `ToolsTagProvider.java` — `ExistingFileHelper` import: `net.minecraftforge.common.data` → `net.neoforged.neoforge.common.data`.
+- `loottables/ToolsLootTableGen.java` — Added `CompletableFuture<HolderLookup.Provider> registries` ctor param; passes to `super(packOutput, List.of(...), registries)`.
+- `loottables/ToolsBlockLootTableGen.java` — Added explicit `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)`.
+
+**No-change files** (verified clean): `common/registries/{ToolsAttributes, ToolsBiomes, ToolsBiomeModifiers, ToolsBlocks, ToolsEffects, ToolsEntityTypes, ToolsFeatures, ToolsManifestations, ToolsMenuTypes, ToolsRecipes, ToolsStats}.java`, `mixin/EntityMixin.java`, `common/commands/ToolsCommands.java`, `common/commands/subcommands/ToolsCommand.java`, `client/render/{ToolsLayerDefinitions, ToolsRenderers}.java`, `datagen/ToolsPatchouliGen.java`, `datagen/PatchouliToolsCategory.java`.
+
+---
+
 ### Phase 21 — Per-submodule port — example
 `compileExampleJava` and `compileDatagenExampleJava` both **green** (0 errors). No gameTest source set for example.
 
@@ -515,9 +551,8 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |
 | 16 | **Per-submodule port — awakening** | `src/awakening/` + `src/datagen/awakening/` + `src/gameTest/awakening/` | Biochromatic Breath (Warbreaker). `AwakeningConfig`/`AwakeningConfigs`, `AwakeningRecipeGen`. |
 | 17 | **Per-submodule port — aondor** | `src/aondor/` + `src/datagen/aondor/` + `src/gameTest/aondor/` | Aon-based magic (Elantris). `AonDorConfig`/`AonDorConfigs`, `AonDorRecipeGen`. |
-| 18 | **Per-submodule port — aviar** | `src/aviar/` + `src/datagen/aviar/` + `src/gameTest/aviar/` | **DONE** — `compileAviarJava` + `compileDatagenAviarJava` green. |
 | 19 | **Per-submodule port — soulforgery** | `src/soulforgery/` + `src/datagen/soulforgery/` + `src/gameTest/soulforgery/` | Soul manipulation. `SoulforgeryConfig`/`SoulforgeryConfigs`, `SoulforgeryRecipeGen`. |
-| 20 | **Per-submodule port — cosmeretools** | `src/cosmeretools/` + `src/datagen/cosmeretools/` + `src/gameTest/cosmeretools/` | Dev commands/utilities. `ToolsRecipeGen`. Lighter touch; mostly command argument types + datagen. |
+| 20 | **Per-submodule port — cosmeretools** | `src/cosmeretools/` + `src/datagen/cosmeretools/` + `src/gameTest/cosmeretools/` | **DONE** — `compileCosmereToolsJava` + `compileDatagenCosmereToolsJava` green. |
 
 ---
 

@@ -5,10 +5,10 @@
 package leaf.cosmere.tools.client;
 
 import leaf.cosmere.tools.common.CosmereTools;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = CosmereTools.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = CosmereTools.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ToolsForgeClientEvents
 {
 

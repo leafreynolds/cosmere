@@ -5,10 +5,10 @@
 package leaf.cosmere.tools.common.eventHandlers;
 
 import leaf.cosmere.tools.common.CosmereTools;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 
-@Mod.EventBusSubscriber(modid = CosmereTools.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = CosmereTools.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ToolsCommonModEvents
 {
 
