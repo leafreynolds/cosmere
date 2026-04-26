@@ -24,7 +24,6 @@ public class SurgebindingPacketHandler extends BasePacketHandler
 	@Override
 	public void initialize()
 	{
-
 		registerClientToServer(SummonShardblade.class, SummonShardblade::new);
 		registerClientToServer(DispatchStormlight.class, DispatchStormlight::new);
 		registerClientToServer(RequestStormlight.class, RequestStormlight::new);
