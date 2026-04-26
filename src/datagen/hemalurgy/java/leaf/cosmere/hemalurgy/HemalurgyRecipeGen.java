@@ -1,5 +1,5 @@
 /*
- * File updated ~ 4 - 1 - 2025 ~ Leaf
+ * File updated ~ 10 - 8 - 2024 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy;
@@ -10,23 +10,23 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class HemalurgyRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public HemalurgyRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
+	public HemalurgyRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
 	{
-		super(output, existingFileHelper, Hemalurgy.MODID);
+		super(output, lookupProvider, Hemalurgy.MODID);
 	}
 
 	@Override
@@ -36,17 +36,17 @@ public class HemalurgyRecipeGen extends BaseRecipeProvider implements ICondition
 	}
 
 	@Override
-	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	protected void addRecipes(RecipeOutput output)
 	{
-		addOreSmeltingRecipes(consumer, HemalurgyItems.METAL_SPIKE.get(Metals.MetalType.IRON), ItemsRegistry.GUIDE.get(), 1.0f, 200);
+		addOreSmeltingRecipes(output, HemalurgyItems.METAL_SPIKE.get(Metals.MetalType.IRON), ItemsRegistry.GUIDE.get(), 1.0f, 200);
 
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
-			addSpikes(consumer, metalType);
+			addSpikes(output, metalType);
 		}
 	}
 
-	protected static void addSpikes(Consumer<FinishedRecipe> consumer, Metals.MetalType metalType)
+	protected static void addSpikes(RecipeOutput output, Metals.MetalType metalType)
 	{
 		TagKey<Item> inputMaterial = metalType.getMetalIngotTag();
 
@@ -58,7 +58,7 @@ public class HemalurgyRecipeGen extends BaseRecipeProvider implements ICondition
 					.pattern("X")
 					.pattern("X")
 					.group("spike")
-					.unlockedBy("has_material", has(inputMaterial)).save(consumer);
+					.unlockedBy("has_material", has(inputMaterial)).save(output);
 		}
 	}
 

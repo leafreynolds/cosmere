@@ -35,9 +35,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
 
 public class Koloss extends AbstractIllager
@@ -70,7 +70,7 @@ public class Koloss extends AbstractIllager
 	}
 
 	@Override
-	public void applyRaidBuffs(int pWave, boolean pUnusedFalse)
+	public void applyRaidBuffs(ServerLevel pLevel, int pWave, boolean pUnusedFalse)
 	{
 
 	}
@@ -84,7 +84,8 @@ public class Koloss extends AbstractIllager
 
 	public static AttributeSupplier.Builder smallAttributes()
 	{
-
+		// STEP_HEIGHT_ADDITION (Forge) merged into vanilla Attributes.STEP_HEIGHT in 1.21.1;
+		// default base is 0.6, so 0.6 + 1.1 addon = 1.7 total.
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.33F)
 				.add(Attributes.FOLLOW_RANGE, 40.0D)
@@ -95,12 +96,11 @@ public class Koloss extends AbstractIllager
 				.add(Attributes.LUCK, -1.0d)
 				.add(Attributes.ATTACK_DAMAGE, 4.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.1D)
-				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+				.add(Attributes.STEP_HEIGHT, 1.7D);
 	}
 
 	public static AttributeSupplier.Builder mediumAttributes()
 	{
-
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.3F)
 				.add(Attributes.FOLLOW_RANGE, 40.0D)
@@ -111,13 +111,12 @@ public class Koloss extends AbstractIllager
 				.add(Attributes.LUCK, -1.0d)
 				.add(Attributes.ATTACK_DAMAGE, 8.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.3D)
-				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+				.add(Attributes.STEP_HEIGHT, 1.7D);
 
 	}
 
 	public static AttributeSupplier.Builder largeAttributes()
 	{
-
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.25F)
 				.add(Attributes.FOLLOW_RANGE, 40.0D)
@@ -128,18 +127,18 @@ public class Koloss extends AbstractIllager
 				.add(Attributes.LUCK, -1.0d)
 				.add(Attributes.ATTACK_DAMAGE, 12.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
-				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
-		}
+				.add(Attributes.STEP_HEIGHT, 1.7D);
+	}
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData)
 	{
-		SpawnGroupData spawngroupdata = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+		SpawnGroupData spawngroupdata = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData);
 		((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
 		RandomSource randomsource = pLevel.getRandom();
 		this.populateDefaultEquipmentSlots(randomsource, pDifficulty);
-		this.populateDefaultEquipmentEnchantments(randomsource, pDifficulty);
+		this.populateDefaultEquipmentEnchantments(pLevel, randomsource, pDifficulty);
 		return spawngroupdata;
 	}
 
@@ -157,9 +156,9 @@ public class Koloss extends AbstractIllager
 
 
 	@Override
-	protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit)
+	protected void dropCustomDeathLoot(ServerLevel pLevel, DamageSource pSource, boolean pRecentlyHit)
 	{
-		super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
+		super.dropCustomDeathLoot(pLevel, pSource, pRecentlyHit);
 
 		if (this.random.nextInt(100) < 25)
 		{

@@ -9,11 +9,11 @@ import leaf.cosmere.hemalurgy.patchouli.HemalurgyPatchouliGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -31,7 +31,7 @@ public class HemalurgyDataGenerator
 		generator.addProvider(true, new HemalurgyEngLangGen(packOutput));
 		generator.addProvider(true, new HemalurgyTagsProvider(packOutput, lookupProvider, existingFileHelper));
 		generator.addProvider(true, new HemalurgyItemModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new HemalurgyRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new HemalurgyRecipeGen(packOutput, lookupProvider));
 		generator.addProvider(true, new HemalurgyPatchouliGen(packOutput));
 		generator.addProvider(event.includeServer(), new HemalurgyCuriosProvider(packOutput, existingFileHelper, lookupProvider));
 	}

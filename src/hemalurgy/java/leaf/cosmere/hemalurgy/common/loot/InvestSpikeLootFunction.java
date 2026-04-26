@@ -4,8 +4,8 @@
 
 package leaf.cosmere.hemalurgy.common.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -20,20 +20,23 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class InvestSpikeLootFunction extends LootItemConditionalFunction
 {
+	public static final MapCodec<InvestSpikeLootFunction> CODEC =
+			RecordCodecBuilder.mapCodec(inst -> commonFields(inst).apply(inst, InvestSpikeLootFunction::new));
 
-	protected InvestSpikeLootFunction(LootItemCondition[] conditionsIn)
+	protected InvestSpikeLootFunction(List<LootItemCondition> conditionsIn)
 	{
 		super(conditionsIn);
 	}
 
 
 	@Override
-	public LootItemFunctionType getType()
+	public LootItemFunctionType<InvestSpikeLootFunction> getType()
 	{
 		return HemalurgyLootFunctions.INVEST_SPIKE.get();
 	}
@@ -72,32 +75,19 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 		}
 
 		final float strengthLevel = Mth.clamp(5 + lootContext.getLuck(), 1, 10);
-		Manifestation allomancyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", stealType.get().getName()));
-		Manifestation feruchemyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", stealType.get().getName()));
+		Manifestation allomancyMani = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("allomancy", stealType.get().getName()));
+		Manifestation feruchemyMani = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("feruchemy", stealType.get().getName()));
 
 		switch (spikeMetalType)
 		{
 			//todo metal types that aren't able to store powers.
-			/*
-			case IRON:
-				// add strength
-				item.Invest(stack, spikeMetalType, strengthLevel, UUID.randomUUID());
-
-				break;
-			case TIN:
-			case COPPER:
-			case CHROMIUM:
-			{
-				item.Invest(stack, spikeMetalType, strengthLevel / 10, UUID.randomUUID());
-			}
-			break;*/
 			//steals allomantic abilities
 			case STEEL:
 			case BRONZE:
 			case CADMIUM:
 			case ELECTRUM:
 			{
-				if (!stealType.isPresent())
+				if (stealType.isEmpty())
 				{
 					return stack;
 				}
@@ -110,7 +100,7 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 			case BENDALLOY:
 			case GOLD:
 			{
-				if (!stealType.isPresent())
+				if (stealType.isEmpty())
 				{
 					return stack;
 				}
@@ -120,7 +110,7 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 			break;
 			case ATIUM:
 
-				if (!stealType.isPresent())
+				if (stealType.isEmpty())
 				{
 					return stack;
 				}
@@ -145,14 +135,5 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 		}
 
 		return stack;
-	}
-
-	public static class Serializer extends LootItemConditionalFunction.Serializer<InvestSpikeLootFunction>
-	{
-		@Override
-		public InvestSpikeLootFunction deserialize(JsonObject jsonObject, JsonDeserializationContext deserializationContext, LootItemCondition[] lootConditions)
-		{
-			return new InvestSpikeLootFunction(lootConditions);
-		}
 	}
 }

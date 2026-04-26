@@ -5,16 +5,14 @@
 package leaf.cosmere.hemalurgy.common.config;
 
 import leaf.cosmere.common.config.CosmereConfigHelper;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 
 public class HemalurgyConfigs
 {
 	public static final HemalurgyServerConfig SERVER = new HemalurgyServerConfig();
 
-	public static void registerConfigs(ModLoadingContext modLoadingContext)
+	public static void registerConfigs(ModContainer modContainer)
 	{
-		ModContainer modContainer = modLoadingContext.getActiveContainer();
 		CosmereConfigHelper.registerConfig(modContainer, SERVER);
 	}
 

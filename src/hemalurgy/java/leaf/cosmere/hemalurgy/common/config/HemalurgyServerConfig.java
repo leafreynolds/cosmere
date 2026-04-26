@@ -5,27 +5,27 @@
 package leaf.cosmere.hemalurgy.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig.Type;
 
 public class HemalurgyServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
 	// Boost amount for Duralumin and Nicrosil
-	public final ForgeConfigSpec.IntValue SPIRITWEB_INTEGRITY_TICK_CHECK;
-	public final ForgeConfigSpec.IntValue LERASATIUM_MAX_SPIKE_STRENGTH;
-	public final ForgeConfigSpec.IntValue CHROMIUM_MAX_SPIKE_STRENGTH;
-	public final ForgeConfigSpec.IntValue DEFAULT_POWER_MAX_SPIKE_STRENGTH;
-    public final ForgeConfigSpec.IntValue LINCHPIN_SPIKE_SPIRITWEB_BONUS;
-    public final ForgeConfigSpec.IntValue ALLOMANTIC_PEWTER_SPIRITWEB_BONUS;
-    public final ForgeConfigSpec.IntValue FERUCHEMICAL_GOLD_SPIRITWEB_BONUS;
+	public final ModConfigSpec.IntValue SPIRITWEB_INTEGRITY_TICK_CHECK;
+	public final ModConfigSpec.IntValue LERASATIUM_MAX_SPIKE_STRENGTH;
+	public final ModConfigSpec.IntValue CHROMIUM_MAX_SPIKE_STRENGTH;
+	public final ModConfigSpec.IntValue DEFAULT_POWER_MAX_SPIKE_STRENGTH;
+    public final ModConfigSpec.IntValue LINCHPIN_SPIKE_SPIRITWEB_BONUS;
+    public final ModConfigSpec.IntValue ALLOMANTIC_PEWTER_SPIRITWEB_BONUS;
+    public final ModConfigSpec.IntValue FERUCHEMICAL_GOLD_SPIRITWEB_BONUS;
 
 
 	HemalurgyServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Hemalurgy Config. This config is synced between server and client.").push("hemalurgy");
 
 		SPIRITWEB_INTEGRITY_TICK_CHECK = builder.comment("What tick count should be used to check spiritweb integrity? There are 20 ticks in a second.").defineInRange("integrityCheckTick", 20, 1, 1234567890);
@@ -48,7 +48,7 @@ public class HemalurgyServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

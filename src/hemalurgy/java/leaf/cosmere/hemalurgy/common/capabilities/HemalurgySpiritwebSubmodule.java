@@ -4,13 +4,11 @@
 
 package leaf.cosmere.hemalurgy.common.capabilities;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
-import leaf.cosmere.hemalurgy.common.config.HemalurgyServerConfig;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -26,7 +24,8 @@ public class HemalurgySpiritwebSubmodule implements ISpiritwebSubmodule
 		final int tickToCheck = HemalurgyConfigs.SERVER.SPIRITWEB_INTEGRITY_TICK_CHECK.get();
 		if (spiritweb.getLiving().tickCount % tickToCheck == 0)
 		{
-			AttributeInstance attributeInstance = spiritweb.getLiving().getAttribute(HemalurgyAttributes.SPIRITWEB_INTEGRITY.get());
+			AttributeInstance attributeInstance = spiritweb.getLiving().getAttribute(
+					BuiltInRegistries.ATTRIBUTE.wrapAsHolder(HemalurgyAttributes.SPIRITWEB_INTEGRITY.getAttribute()));
 			if (attributeInstance != null)
 			{
 				int intensity = (int) attributeInstance.getValue();

@@ -9,17 +9,18 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = Hemalurgy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Hemalurgy.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class HemalurgyEntityEventHandler
 {
 	@SubscribeEvent
@@ -68,7 +69,7 @@ public class HemalurgyEntityEventHandler
 							spikeApplied = true;
 
 							final AttributeMap catAttributes = cat.getAttributes();
-							final AttributeInstance instance = catAttributes.getInstance(regAttribute);
+							final AttributeInstance instance = catAttributes.getInstance(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(regAttribute));
 
 							if (instance != null)
 							{

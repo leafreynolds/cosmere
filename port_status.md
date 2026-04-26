@@ -445,6 +445,51 @@ Allomancy module errors: **60 → 0**. Datagen errors: **0** (clean from the sta
 - `./gradlew compileDatagenFeruchemyJava` — **green**.
 - Next: Phase 13 (hemalurgy).
 
+### Phase 13 — Per-submodule port — hemalurgy
+`compileHemalurgyJava` and `compileDatagenHemalurgyJava` both **green** (0 errors). No gameTest source set for hemalurgy.
+
+**`@Mod` ctor + config + registries sub-phase**:
+- **`Hemalurgy.java`** — New `@Mod` ctor `(IEventBus, ModContainer)`. Removed `InterModEnqueueEvent`/IMC. Added `HemalurgyAttachments.ATTACHMENT_TYPES.register(modBus)`. New `handleConfigEvent` config pattern. `ResourceLocation.fromNamespaceAndPath` in `rl()`.
+- **`HemalurgyConfigs.java`** — `registerConfigs(ModLoadingContext)` → `registerConfigs(ModContainer)`.
+- **`HemalurgyServerConfig.java`** — `ForgeConfigSpec` → `ModConfigSpec` throughout.
+- **`HemalurgyItems.java`** — `ForgeSpawnEggItem` → `DeferredSpawnEggItem`. `SwordItem(Tiers.IRON, 10, -2.4F, props)` → `SwordItem(Tiers.IRON, props.attributes(SwordItem.createAttributes(Tiers.IRON, 10, -2.4F)))`.
+- **`HemalurgyCreativeTabs.java`** — `BuildCreativeModeTabContentsEvent` import: `net.minecraftforge.event` → `net.neoforged.neoforge.event`.
+
+**World capability → attachment sub-phase**:
+- **`IHemalurgyWorldCap.java`** — `INBTSerializable` import: `net.minecraftforge` → `net.neoforged.neoforge`.
+- **`HemalurgyWorldCapability.java`** — Removed `Capability`/`CapabilityManager`/`LazyOptional`. `get(Level)` now returns `Optional<IHemalurgyWorldCap>` via `level.getData(HemalurgyAttachments.HEMALURGY_WORLD.get())`. `serializeNBT/deserializeNBT` now take `HolderLookup.Provider`.
+- **`HemalurgyAttachments.java`** (new) — `DeferredRegister<AttachmentType<?>>` on `NeoForgeRegistries.ATTACHMENT_TYPES`. Registers `HEMALURGY_WORLD` attachment on all levels; dimension check moved to tick handler.
+- **`HemalurgyCapabilitiesHandler.java`** — Removed `AttachCapabilitiesEvent<Level>`. `TickEvent.LevelTickEvent` → `LevelTickEvent.Post`. Added `level.isClientSide()` + `level.dimension().equals(Level.OVERWORLD)` guards. `Bus.FORGE` → `Bus.GAME`.
+- **`KolossPatrolSpawner.java`** — `finalizeSpawn` CompoundTag param removed.
+
+**Entity sub-phase**:
+- **`Koloss.java`** — `ForgeMod.STEP_HEIGHT_ADDITION` → `Attributes.STEP_HEIGHT, 1.7D`. `finalizeSpawn` CompoundTag param removed. `populateDefaultEquipmentEnchantments` now takes `ServerLevelAccessor` first. `applyRaidBuffs(int, boolean)` → `applyRaidBuffs(ServerLevel, int, boolean)`. `dropCustomDeathLoot(DamageSource, int, boolean)` → `dropCustomDeathLoot(ServerLevel, DamageSource, boolean)`.
+
+**Items sub-phase**:
+- **`IHemalurgicInfo.java`** — `getHemalurgicInfo` uses `stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()`. Writes via `CustomData.update`. `Multimap<Holder<Attribute>, AttributeModifier>`. All `AttributeModifier(UUID, String, double, Operation)` → `AttributeModifier(ResourceLocation, double, ADD_VALUE)`. Registry lookup `getValue(rl)` → `get(rl)`. Removed `IForgeRegistry` import.
+- **`HemalurgicSpikeItem.java`** — `@EventBusSubscriber Bus.GAME`. `ItemAttributeModifiers` (from `net.minecraft.world.item.component`) builder for weapon modifiers. `getDefaultAttributeModifiers()` override. `getAttributeModifiers(SlotContext, UUID, ItemStack)` returns `Multimap<Holder<Attribute>, AttributeModifier>`. `Optional<ICuriosItemHandler>` (was `LazyOptional`). `appendHoverText` signature updated. `LivingDeathEvent` import moved.
+- **`SpikeModel.java`** — `ModelPart#render` 8-arg (RGBA floats) → 5-arg packed `FastColor.ARGB32.color(255, r, g, b)`.
+
+**Loot sub-phase**:
+- **`HemalurgyLootFunctions.java`** — `LootItemFunctionTypeRegistryObject<LootItemFunctionType>` → `LootItemFunctionTypeRegistryObject<InvestSpikeLootFunction>`. `register("invest_spike", () -> InvestSpikeLootFunction.CODEC)`.
+- **`InvestSpikeLootFunction.java`** — `MapCodec CODEC` via `RecordCodecBuilder`. `LootItemCondition[]` → `List<LootItemCondition>`. `LootItemFunctionType<InvestSpikeLootFunction>`. Removed `Serializer` inner class.
+
+**Client sub-phase**:
+- **`HemalurgyClientSetup.java`** — `Bus.MOD` annotation, all imports `net.neoforged.*`.
+- **`HemalurgyClientEvents.java`** — Fixed bus from `Bus.FORGE` → `Bus.MOD` (handles `EntityRenderersEvent.RegisterRenderers`).
+
+**Datagen sub-phase**:
+- **`HemalurgyDataGenerator.java`** — `net.minecraftforge.*` → `net.neoforged.*`. `HemalurgyRecipeGen(packOutput, existingFileHelper)` → `HemalurgyRecipeGen(packOutput, lookupProvider)`.
+- **`HemalurgyRecipeGen.java`** — Ctor takes `CompletableFuture<HolderLookup.Provider>`. `Consumer<FinishedRecipe>` → `RecipeOutput`. `IConditionBuilder` import: `net.minecraftforge` → `net.neoforged.neoforge`.
+- **`HemalurgyEngLangGen.java`** — `LanguageProvider` import `net.neoforged.*`. `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM`.
+- **`HemalurgyItemModelsGen.java`** — Model generator imports `net.neoforged.*`. `ForgeSpawnEggItem` → `DeferredSpawnEggItem`.
+- **`HemalurgyTagsProvider.java`** — `ExistingFileHelper` import `net.neoforged.neoforge.*`.
+- **`HemalurgyCuriosProvider.java`** — `ExistingFileHelper` import `net.neoforged.neoforge.*`. `new ResourceLocation("curios:...")` → `ResourceLocation.parse(...)`.
+
+**Build status after Phase 13**:
+- `./gradlew compileHemalurgyJava` — **green**.
+- `./gradlew compileDatagenHemalurgyJava` — **green**.
+
 ### Phase 18 — Per-submodule port — aviar
 `compileAviarJava` and `compileDatagenAviarJava` both **green** (0 errors). No gameTest source set for aviar.
 

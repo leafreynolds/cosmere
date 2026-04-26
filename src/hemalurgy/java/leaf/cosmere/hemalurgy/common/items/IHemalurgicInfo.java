@@ -12,7 +12,11 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +26,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraft.world.item.component.CustomData;
 
 import java.util.*;
 
@@ -60,7 +64,7 @@ public interface IHemalurgicInfo
 
 	default CompoundTag getHemalurgicInfo(ItemStack stack)
 	{
-		return stack.getOrCreateTagElement("hemalurgy");
+		return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getCompound("hemalurgy");
 	}
 
 	default void stealFromSpiritweb(ItemStack stack, Metals.MetalType spikeMetalType, Player playerEntity, LivingEntity entityKilled)
@@ -134,8 +138,8 @@ public interface IHemalurgicInfo
 						//Steals any one power
 						Manifestation manifestation;
 
-						Manifestation atiumAllomancy = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", Metals.MetalType.ATIUM.getName()));
-						Manifestation atiumFeruchemy = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", Metals.MetalType.ATIUM.getName()));
+						Manifestation atiumAllomancy = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("allomancy", Metals.MetalType.ATIUM.getName()));
+						Manifestation atiumFeruchemy = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("feruchemy", Metals.MetalType.ATIUM.getName()));
 
 						if (manifestationsFound.contains(atiumFeruchemy))
 						{
@@ -245,7 +249,7 @@ public interface IHemalurgicInfo
 		return null;
 	}
 
-	default Multimap<Attribute, AttributeModifier> getHemalurgicAttributes(Multimap<Attribute, AttributeModifier> attributeModifiers, ItemStack stack, Metals.MetalType metalType)
+	default Multimap<Holder<Attribute>, AttributeModifier> getHemalurgicAttributes(Multimap<Holder<Attribute>, AttributeModifier> attributeModifiers, ItemStack stack, Metals.MetalType metalType)
 	{
 		UUID hemalurgicIdentity = getHemalurgicIdentity(stack);
 
@@ -261,12 +265,11 @@ public interface IHemalurgicInfo
 
 				//prevent all other powers being used.
 				attributeModifiers.put(
-						attribute,
+						BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute),
 						new AttributeModifier(
-								Constants.NBT.ALUMINUM_UUID,
-								manifestation.getTranslationKey(),
+								ResourceLocation.fromNamespaceAndPath(Hemalurgy.MODID, Constants.NBT.ALUMINUM_UUID.toString()),
 								-100,
-								AttributeModifier.Operation.ADDITION));
+								AttributeModifier.Operation.ADD_VALUE));
 			}
 			return attributeModifiers;
 		}
@@ -278,8 +281,8 @@ public interface IHemalurgicInfo
 		final double strength = getHemalurgicStrength(stack, metalType);
 
 		{
-			Attribute attribute = null;
-			AttributeModifier.Operation attributeModifier = AttributeModifier.Operation.ADDITION;
+			Holder<Attribute> attribute = null;
+			AttributeModifier.Operation attributeModifier = AttributeModifier.Operation.ADD_VALUE;
 
 			switch (metalType)
 			{
@@ -288,23 +291,22 @@ public interface IHemalurgicInfo
 
 					final Attribute xpGainRate = AttributesRegistry.XP_RATE_ATTRIBUTE.getAttribute();
 					attributeModifiers.put(
-							xpGainRate,
+							BuiltInRegistries.ATTRIBUTE.wrapAsHolder(xpGainRate),
 							new AttributeModifier(
-									hemalurgicIdentity,
-									"Kolossification",
+									ResourceLocation.fromNamespaceAndPath(Hemalurgy.MODID, hemalurgicIdentity + "_koloss"),
 									-0.15,
-									AttributeModifier.Operation.ADDITION));
+									AttributeModifier.Operation.ADD_VALUE));
 					break;
 				case TIN:
 					//TIN:
 					//Steals senses
 					//a type of night vision
-					attribute = AttributesRegistry.NIGHT_VISION_ATTRIBUTE.getAttribute();
+					attribute = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(AttributesRegistry.NIGHT_VISION_ATTRIBUTE.getAttribute());
 					break;
 				case COPPER:
 					//Copper:
 					//Steals mental fortitude, memory, and intelligence
-					attribute = AttributesRegistry.XP_RATE_ATTRIBUTE.getAttribute();
+					attribute = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(AttributesRegistry.XP_RATE_ATTRIBUTE.getAttribute());
 					break;
 				case CHROMIUM:
 					attribute = Attributes.LUCK;
@@ -329,8 +331,7 @@ public interface IHemalurgicInfo
 				attributeModifiers.put(
 						attribute,
 						new AttributeModifier(
-								hemalurgicIdentity,
-								"Hemalurgic " + metalType.getName(),
+								ResourceLocation.fromNamespaceAndPath(Hemalurgy.MODID, hemalurgicIdentity.toString()),
 								strength,
 								attributeModifier));
 			}
@@ -339,8 +340,6 @@ public interface IHemalurgicInfo
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
-			String path = manifestation.getName();
-
 			final double hemalurgicStrength = getHemalurgicStrength(stack, manifestation);
 			if (hemalurgicStrength > 0)
 			{
@@ -351,12 +350,11 @@ public interface IHemalurgicInfo
 				}
 
 				attributeModifiers.put(
-						regAttribute,
+						BuiltInRegistries.ATTRIBUTE.wrapAsHolder(regAttribute),
 						new AttributeModifier(
-								hemalurgicIdentity,
-								String.format("Hemalurgic-%s: %s", path, hemalurgicIdentity.toString()),
+								ResourceLocation.fromNamespaceAndPath(Hemalurgy.MODID, hemalurgicIdentity + "_" + manifestation.getName()),
 								hemalurgicStrength,
-								AttributeModifier.Operation.ADDITION));
+								AttributeModifier.Operation.ADD_VALUE));
 			}
 		}
 
@@ -411,7 +409,12 @@ public interface IHemalurgicInfo
 
 	default void setHemalurgicStrength(ItemStack stack, String name, double val)
 	{
-		CompoundNBTHelper.setDouble(getHemalurgicInfo(stack), name, val);
+		CustomData.update(DataComponents.CUSTOM_DATA, stack, rootTag ->
+		{
+			CompoundTag hemalurgy = rootTag.getCompound("hemalurgy");
+			CompoundNBTHelper.setDouble(hemalurgy, name, val);
+			rootTag.put("hemalurgy", hemalurgy);
+		});
 	}
 
 
@@ -468,8 +471,7 @@ public interface IHemalurgicInfo
 			}
 		}
 
-		IForgeRegistry<Manifestation> manifestations = CosmereAPI.manifestationRegistry();
-		for (Manifestation manifestation : manifestations)
+		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
 			// if this spike has that power
 			if (hasHemalurgicPower(stack, manifestation))
@@ -514,4 +516,3 @@ public interface IHemalurgicInfo
 		StackNBTHelper.removeEntry(stack, stolen_identity_tag);
 	}
 }
-

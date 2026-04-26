@@ -8,22 +8,25 @@ import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.entity.Koloss;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
 
-@Mod.EventBusSubscriber(modid = Hemalurgy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Hemalurgy.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class HemalurgyModBusEventHandler
 {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
-		event.add(EntityType.PLAYER, HemalurgyAttributes.SPIRITWEB_INTEGRITY.getAttribute());
+		event.add(EntityType.PLAYER, holder(HemalurgyAttributes.SPIRITWEB_INTEGRITY.getAttribute()));
 	}
 
 
@@ -33,5 +36,10 @@ public class HemalurgyModBusEventHandler
 		event.put(HemalurgyEntityTypes.KOLOSS_LARGE.get(), Koloss.largeAttributes().build());
 		event.put(HemalurgyEntityTypes.KOLOSS_MEDIUM.get(), Koloss.mediumAttributes().build());
 		event.put(HemalurgyEntityTypes.KOLOSS_SMALL.get(), Koloss.smallAttributes().build());
+	}
+
+	private static Holder<Attribute> holder(Attribute attribute)
+	{
+		return BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute);
 	}
 }
