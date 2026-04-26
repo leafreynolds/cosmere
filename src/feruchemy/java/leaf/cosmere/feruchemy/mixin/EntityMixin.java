@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 8 - 2024 ~ Leaf
+ * File updated ~ 26 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.mixin;
@@ -12,9 +12,7 @@ import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
@@ -32,29 +30,6 @@ import java.util.Map;
 @Mixin(Entity.class)
 public class EntityMixin
 {
-
-	@Inject(at = @At("RETURN"), method = "canEnterPose", cancellable = true)
-	public void handleCanEnterPose(Pose pose, CallbackInfoReturnable<Boolean> cir)
-	{
-		Entity entity = (Entity) (Object) this;
-
-		if (entity instanceof LivingEntity livingEntity)
-		{
-			float scale = FeruchemyAtium.getScale(livingEntity);
-			if (scale > 0.01 || scale < -0.01)
-			{
-				EntityDimensions entityDimensions = livingEntity.getDimensions(pose);
-				entityDimensions = entityDimensions.scale(scale);
-				double f = entityDimensions.width() / 2.0F;
-				Vec3 vector3d = new Vec3(livingEntity.getX() - f, livingEntity.getY(), livingEntity.getZ() - f);
-				Vec3 vector3d1 = new Vec3(livingEntity.getX() + f, livingEntity.getY() + (double) entityDimensions.height(), livingEntity.getZ() + f);
-				AABB box = new AABB(vector3d, vector3d1);
-
-				cir.setReturnValue(livingEntity.level().noCollision(livingEntity, box.deflate(1.0E-7D)));
-			}
-		}
-	}
-
 	@Inject(at = @At("RETURN"), method = "isSteppingCarefully", cancellable = true)
 	public void handleIsSteppingCarefully(CallbackInfoReturnable<Boolean> cir)
 	{

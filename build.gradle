@@ -104,6 +104,18 @@ sourceSets {
 		compileClasspath += api.output
 		runtimeClasspath += api.output
 	}
+	// These source-sets only exist for the sake of assembling a dependency graph
+	// for IntelliJ runs. Each becomes an IntelliJ module on import and is set as the
+	// "main module" for IntelliJ runs. A compile dependency on the other source sets
+	// is enough — runtime classpath is managed by MDG via mods/loadedMods.
+	runMain {
+		runtimeClasspath += main.runtimeClasspath + api.runtimeClasspath
+		compileClasspath += main.output + api.output
+	}
+	runData {
+		compileClasspath += runMain.compileClasspath
+		runtimeClasspath += runMain.runtimeClasspath
+	}
 }
 
 //Add all extra source sets that the main sourceSet should have
@@ -121,7 +133,7 @@ configurations {
 // the corresponding data gen's resource directory excluding the cache. It also adds the api and main cosmere
 // module to the dependencies of the source set we are setting up, and sets up all extra source sets that are
 // based on the primary added source set
-for (def name : secondaryModules) {
+for (String name : secondaryModules) {
 	def sourceSet = sourceSets.create(name)
 	sourceSet.resources {
 		//Add the generated module resources
@@ -163,7 +175,15 @@ def setupExtraSourceSets(SourceSet base)
 		project.configurations.maybeCreate(extraSourceSet.getTaskName(null, "implementation")).extendsFrom(baseImplementation)
 		project.configurations.maybeCreate(extraSourceSet.getTaskName(null, "compileOnly")).extendsFrom(baseCompileOnly)
 		project.configurations.maybeCreate(extraSourceSet.getTaskName(null, "runtimeOnly")).extendsFrom(baseRuntimeOnly)
+		//datagen source sets contribute to runData's classpath so the data run can see them
+		if (extraType == 'datagen') {
+			sourceSets.runData.compileClasspath += extraSourceSet.output
+			sourceSets.runData.runtimeClasspath += extraSourceSet.runtimeClasspath
+		}
 	}
+	//runMain aggregates the main+secondary module outputs for IntelliJ's "main module" resolution
+	sourceSets.runMain.compileClasspath += base.output
+	sourceSets.runMain.runtimeClasspath += base.runtimeClasspath
 }
 
 SourceSet setupExtraSourceSet(SourceSet baseSourceSet, String extra)
@@ -177,7 +197,7 @@ SourceSet setupExtraSourceSet(SourceSet baseSourceSet, String extra)
 	extraSourceSet.compileClasspath += project.sourceSets.main.output
 	if (baseSourceSet != project.sourceSets.main) {
 		//If the base sourceSet is main it already is the extra source set and has a reference to the base one from before this if statement
-		extraSourceSet.compileClasspath += getExtraSourceSet(project.sourceSets.main, extra).output
+		extraSourceSet.compileClasspath += getExtraSourceSet(project.sourceSets.main, extra).get().output
 		extraSourceSet.compileClasspath += baseSourceSet.output
 	}
 	return extraSourceSet
@@ -190,14 +210,9 @@ static void extendConfigurations(Configuration base, Configuration... configurat
 	}
 }
 
-SourceSet getExtraSourceSet(String base, String name)
+Provider<SourceSet> getExtraSourceSet(SourceSet base, String name)
 {
-	return getExtraSourceSet(project.sourceSets.getByName(base), name)
-}
-
-SourceSet getExtraSourceSet(SourceSet base, String name)
-{
-	return project.sourceSets.getByName(base.getTaskName(name, null))
+	return project.sourceSets.named(base.getTaskName(name, null))
 }
 
 //Update book build number
@@ -213,7 +228,7 @@ processResources {
 }
 
 setupTasks(sourceSets.main)
-for (def name : secondaryModules) {
+for (String name : secondaryModules) {
 	setupTasks(sourceSets.getByName(name))
 }
 
@@ -270,8 +285,8 @@ def setupTasks(SourceSet sourceSet)
 		}
 	}
 	tasks.named(sourceSet.getCompileJavaTaskName(), JavaCompile).configure { setGroup("compile") }
-	for (def extraType : extraTypes) {
-		def extraSourceSet = getExtraSourceSet(sourceSet, extraType)
+	for (String extraType : extraTypes) {
+		def extraSourceSet = getExtraSourceSet(sourceSet, extraType).get()
 		tasks.named(extraSourceSet.getProcessResourcesTaskName(), ProcessResources).configure {
 			setGroup("process resources")
 			dependsOn(compileTask)
@@ -298,7 +313,12 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 
 
 neoForge {
-	version = project.neoforge_version
+	// Enables MDG and attaches Minecraft/NeoForge/Parchment to ALL source sets in one shot,
+	// instead of needing addModdingDependenciesTo for every datagen/gameTest extra.
+	enable {
+		version = project.neoforge_version
+		enabledSourceSets = sourceSets
+	}
 
 	parchment {
 		minecraftVersion = project.parchment_minecraft
@@ -311,21 +331,39 @@ neoForge {
 			file('src/surgebinding/resources/META-INF/accesstransformer.cfg')
 	)
 
-	// MDG 2.x only attaches the Minecraft/NeoForge/Parchment classpath to sourceSets.main implicitly.
-	// Every other source set in the mod (api, each submodule, and every datagen/gameTest extra) must
-	// opt in — otherwise compile<SourceSet>Java fails with "package net.minecraft.* does not exist".
-	addModdingDependenciesTo sourceSets.api
-	addModdingDependenciesTo sourceSets.datagenMain
-	addModdingDependenciesTo sourceSets.gameTestMain
-	for (def name : secondaryModules) {
-		addModdingDependenciesTo sourceSets.getByName(name)
-		addModdingDependenciesTo getExtraSourceSet(name, 'datagen')
-		addModdingDependenciesTo getExtraSourceSet(name, 'gameTest')
+	// Mod registration. The runtime mod (loaded by client/server runs) only contains api+main —
+	// datagen sources go into a parallel ${name}Data mod that only the data run loads.
+	// gameTest source sets are intentionally NOT registered with any mod for now since they
+	// are all empty — registering empty source sets makes runClient crash on missing output dirs.
+	mods {
+		cosmere {
+			sourceSet((SourceSet) sourceSets.api)
+			sourceSet((SourceSet) sourceSets.main)
+		}
+		// cosmereData: cosmere's source sets PLUS datagenMain, used only by the data run.
+		cosmereData {
+			modSourceSets = mods.cosmere.modSourceSets
+			sourceSet((SourceSet) sourceSets.datagenMain)
+		}
+	}
+	for (String name : secondaryModules) {
+		final sourceSet = sourceSets.named(name)
+		mods.maybeCreate(name).modSourceSets.add(sourceSet)
+		final datagenMod = mods.maybeCreate(name + 'Data')
+		datagenMod.modSourceSets.add(sourceSet)
+		datagenMod.modSourceSets.add(sourceSet.flatMap(s -> getExtraSourceSet(s, 'datagen')))
 	}
 
 	def gameTestNamespaces = 'cosmere,allomancy,feruchemy,hemalurgy,surgebinding,sandmastery,cosmeretools'
 
 	runs {
+		configureEach {
+			loadedMods = [mods.cosmere]
+			for (String name : secondaryModules) {
+				loadedMods.add(mods.named(name))
+			}
+			sourceSet = sourceSets.runMain
+		}
 		client {
 			client()
 			systemProperty 'neoforge.enabledGameTestNamespaces', gameTestNamespaces
@@ -346,37 +384,20 @@ neoForge {
 			server()
 			systemProperty 'neoforge.enabledGameTestNamespaces', gameTestNamespaces
 		}
-		gameTestServer {
-			type = 'gameTestServer'
-			systemProperty 'neoforge.enabledGameTestNamespaces', gameTestNamespaces
-		}
 		data {
 			data()
+			sourceSet = sourceSets.runData
+			loadedMods = [mods.cosmereData]
 			def dataArgs = ['--all',
 			                '--output', file('src/datagen/generated/').absolutePath,
 			                '--mod', 'cosmere',
 			                '--existing', file('src/main/resources/').absolutePath]
-			for (def name : secondaryModules) {
+			for (String name : secondaryModules) {
+				loadedMods.add(mods.named(name + 'Data'))
 				dataArgs.add('--mod'); dataArgs.add(name)
 				dataArgs.add('--existing'); dataArgs.add(file("src/${name}/resources/").absolutePath)
 			}
 			programArguments.addAll dataArgs
-		}
-	}
-
-	mods {
-		cosmere {
-			sourceSet sourceSets.api
-			sourceSet sourceSets.main
-			sourceSet sourceSets.datagenMain
-			sourceSet sourceSets.gameTestMain
-		}
-		for (def name : secondaryModules) {
-			create(name) {
-				sourceSet sourceSets.getByName(name)
-				sourceSet getExtraSourceSet(name, 'datagen')
-				sourceSet getExtraSourceSet(name, 'gameTest')
-			}
 		}
 	}
 }
@@ -536,24 +557,6 @@ tasks.withType(GenerateModuleMetadata) {
 	enabled = false
 }
 
-
-clean {
-	def filteredDelete = new HashSet<>()
-	for (def toDelete : getDelete()) {
-		for (def f : file(toDelete).listFiles()) {
-			if (f.getName() == "generated") {
-				for (def generated : file(f).listFiles()) {
-					if (generated.getName() != "data" && generated.getName() != "META-INF") {
-						filteredDelete.add(generated)
-					}
-				}
-			} else if (f.getName() != "fg_cache") {
-				filteredDelete.add(f)
-			}
-		}
-	}
-	setDelete(filteredDelete)
-}
 
 def resolvedChangelog = null
 

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 11 - 2023 ~ Leaf
+ * File updated ~ 26 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
@@ -47,7 +47,7 @@ public class PlayerEventHandler
 	}
 
 	@SubscribeEvent
-	public void onItemTossEvent(ItemTossEvent event)
+	public static void onItemTossEvent(ItemTossEvent event)
 	{
 		if (!event.getPlayer().level().isClientSide)
 		{
@@ -74,7 +74,7 @@ public class PlayerEventHandler
 	}
 
 	@SubscribeEvent
-	public void onXPChange(PlayerXpEvent.XpChange event)
+	public static void onXPChange(PlayerXpEvent.XpChange event)
 	{
 		boolean isRemote = event.getEntity().level().isClientSide;
 		if (isRemote)

@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 26 - 4 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.surgebinding.client;
 
 import leaf.cosmere.api.Activator;
@@ -40,8 +44,6 @@ public class SurgebindingKeybindings
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
-		event.register(SHARDBLADE = new KeyMapping(KEY_SHARDBLADE, GLFW.GLFW_KEY_X, KEYS_CATEGORY));
-
 		for (Roshar.Surges surge : SURGEBINDING_POWER.keySet())
 		{
 			KeyMapping key = SURGEBINDING_POWER.get(surge);

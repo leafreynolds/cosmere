@@ -719,6 +719,7 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 - **Version API.** `new Version(ModContainer)` — confirm the `leaf.cosmere.api.Version` constructor accepts a `ModContainer` (vs the old `ModLoadingContext.get().getActiveContainer()`).
 - **Submodule configs.** Each submodule has its own `*Configs.java` / `*Config.java` pair (allomancy, feruchemy, hemalurgy, surgebinding, awakening, aondor, aviar, cosmeretools, soulforgery, example) still on `ForgeConfigSpec` + `ModLoadingContext`. Phase 3 here covered only the main source set; submodules are deferred to their per-module port passes. (sandmastery config ported — Phase 15).
 - **`TArmorItem` metal color tinting removed.** `DyeableLeatherItem` was removed in 1.21.1, so `TArmorItem` no longer tints armor with its metal type's color. The fix is to register an item color handler in client events (e.g. in `ToolsForgeClientEvents` via `RegisterColorHandlersEvent.Item`) that always returns `metalType.getColorValue()` for instances of `TArmorItem`. Without this, metal armor will render without color tinting in-game.
+- **`Feruchemical Atium` has had some mixin related functions in vanilla code disappear, so will need fixing.
 
 ## Notable API migration cheatsheet (for future passes)
 
