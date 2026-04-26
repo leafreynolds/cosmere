@@ -445,6 +445,61 @@ Allomancy module errors: **60 → 0**. Datagen errors: **0** (clean from the sta
 - `./gradlew compileDatagenFeruchemyJava` — **green**.
 - Next: Phase 13 (hemalurgy).
 
+### Phase 18 — Per-submodule port — aviar
+`compileAviarJava` and `compileDatagenAviarJava` both **green** (0 errors). No gameTest source set for aviar.
+
+**`@Mod` ctor + config + registries sub-phase**:
+- `common/Aviar.java` — `@Mod` ctor `() → (IEventBus modBus, ModContainer modContainer)`. Drops `FMLJavaModLoadingContext.get().getModEventBus()` + `ModLoadingContext.get()` hops. Drops `InterModEnqueueEvent`/`imcQueue` (NeoForge has no IMC). Drops `CosmereModConfig instanceof` config-event pattern; replaced with `handleConfigEvent` iterating `List.of(AviarConfigs.SERVER)` matching on `config.getSpec()` — identical to `Allomancy.java` pattern (Phase 11.1). `new ResourceLocation(MODID, path)` → `ResourceLocation.fromNamespaceAndPath(...)`. `new Version(ModLoadingContext.get().getActiveContainer())` → `new Version(modContainer)`. `onConfigLoad(ModConfigEvent)` narrowed to `ModConfigEvent.Loading`. Imports: `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/config/AviarConfigs.java` — `registerConfigs(ModLoadingContext)` → `registerConfigs(ModContainer)` direct (drops `modLoadingContext.getActiveContainer()` hop). `net.minecraftforge.fml.ModContainer` import removed.
+- `common/config/AviarServerConfig.java` — `ForgeConfigSpec` → `ModConfigSpec`; `ForgeConfigSpec.Builder` → `ModConfigSpec.Builder`; `ForgeConfigSpec.DoubleValue` → `ModConfigSpec.DoubleValue`. `getConfigSpec()` return type → `ModConfigSpec`. Imports moved `net.minecraftforge.common.ForgeConfigSpec` → `net.neoforged.neoforge.common.ModConfigSpec`.
+
+**Event handler sub-phase**:
+- `common/eventHandlers/AviarCommonForgeEvents.java` — `@Mod.EventBusSubscriber(bus = FORGE)` → `@EventBusSubscriber(bus = Bus.GAME)`. `net.minecraftforge.common.BasicItemListing` → `net.neoforged.neoforge.common.BasicItemListing`. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/eventHandlers/AviarCommonModEvents.java` — `@Mod.EventBusSubscriber(bus = MOD)` → `@EventBusSubscriber(bus = Bus.MOD)`. `EntityAttributeModificationEvent.add(EntityType, Attribute)` → `add(EntityType, Holder<Attribute>)` via new private `holder(Attribute)` helper. `AttributeSupplier.Builder.add(Attribute, double)` → `add(Holder<Attribute>, double)` — 1.21.1 changed the method signature; wrapped `AttributesRegistry.COGNITIVE_CONCEALMENT.get()` via `BuiltInRegistries.ATTRIBUTE.wrapAsHolder(...)`. All imports moved.
+- `common/registries/AviarCreativeTabs.java` — `BuildCreativeModeTabContentsEvent` import: `net.minecraftforge.event` → `net.neoforged.neoforge.event`.
+- `common/registries/AviarItems.java` — `ForgeSpawnEggItem` → `DeferredSpawnEggItem` (`net.neoforged.neoforge.common.DeferredSpawnEggItem`).
+
+**Entity/effect/item sub-phase**:
+- `common/entity/AviarBird.java` — `AttributeModifier.Operation.ADDITION` → `AttributeModifier.Operation.ADD_VALUE` (1.21.1 enum rename, Phase 11.3 precedent).
+- `mixin/EntityMixin.java` — `clientPlayer.getAttribute(Attribute)` → `getAttribute(Holder<Attribute>)` via `BuiltInRegistries.ATTRIBUTE.wrapAsHolder(...)`. Added `Holder`/`BuiltInRegistries` imports.
+
+**Client sub-phase**:
+- `client/AviarForgeClientEvents.java` — `@Mod.EventBusSubscriber(value = Dist.CLIENT)` → `@EventBusSubscriber(bus = Bus.GAME, value = Dist.CLIENT)`. Imports moved.
+- `client/AviarModClientEvents.java` — `@Mod.EventBusSubscriber(bus = MOD)` → `@EventBusSubscriber(bus = Bus.MOD)`. `EntityRenderersEvent.AddLayers.getSkin(String)` → `getSkin(PlayerSkin.Model)`: `"default"` → `PlayerSkin.Model.WIDE`, `"slim"` → `PlayerSkin.Model.SLIM`. `addPlayerLayer` signature updated accordingly. Added `net.minecraft.client.resources.PlayerSkin` import. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `client/AviarKeybindings.java` — `Mod.EventBusSubscriber` → `EventBusSubscriber`; `net.minecraftforge.client.settings.KeyModifier` → `net.neoforged.neoforge.client.settings.KeyModifier`. All imports moved.
+- `client/render/layers/AviarOnShoulderLayer.java` — `net.minecraftforge.api.distmarker.*` → `net.neoforged.api.distmarker.*`.
+
+**Datagen sub-phase** (`src/datagen/aviar/**`):
+- `AviarDataGenerator.java` — Imports: `net.minecraftforge.*` → `net.neoforged.*`. Wired `event.getLookupProvider()` to `AviarLootTableGen` and `AviarRecipeGen` constructors.
+- `AviarRecipeGen.java` — Ctor `(PackOutput, ExistingFileHelper)` → `(PackOutput, CompletableFuture<HolderLookup.Provider>)`. `addRecipes(Consumer<FinishedRecipe>)` → `addRecipes(RecipeOutput)`. `IConditionBuilder` import: `net.minecraftforge.common.crafting.conditions` → `net.neoforged.neoforge.common.conditions`. `ExistingFileHelper` import removed.
+- `AviarTagProvider.java` — `ExistingFileHelper` import: `net.minecraftforge.common.data` → `net.neoforged.neoforge.common.data`.
+- `AviarEngLangGen.java` — `LanguageProvider` import: `net.minecraftforge.common.data` → `net.neoforged.neoforge.common.data`. `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM` (registry is `Iterable<Item>`). `ForgeRegistries` import dropped; `BuiltInRegistries` import added.
+- `items/AviarItemModelsGen.java` — `ItemModelBuilder/ItemModelProvider/ModelFile` imports: `net.minecraftforge.client.model.generators.*` → `net.neoforged.neoforge.client.model.generators.*`. `ForgeSpawnEggItem` → `DeferredSpawnEggItem` (both import and `instanceof` check). `ExistingFileHelper` import moved.
+- `loottables/AviarLootTableGen.java` — Added `CompletableFuture<HolderLookup.Provider> registries` ctor param; passes to `super(packOutput, List.of(...), registries)`.
+- `loottables/AviarBlockLootTableGen.java` — Added explicit `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)` (required because `BaseBlockLootTables` ctor takes `HolderLookup.Provider` in 1.21.1 and there is no no-arg ctor).
+
+---
+
+### Phase 21 — Per-submodule port — example
+`compileExampleJava` and `compileDatagenExampleJava` both **green** (0 errors). No gameTest source set for example.
+
+- `common/Example.java` — `@Mod` ctor `() → (IEventBus modBus, ModContainer modContainer)`. Drops `FMLJavaModLoadingContext.get().getModEventBus()`, `ModLoadingContext.get()`, `InterModEnqueueEvent`/`imcQueue`. Drops `CosmereModConfig instanceof` config-event pattern; replaced with `handleConfigEvent` iterating `List.of(ExampleConfigs.SERVER)` matching on `config.getSpec()` — same pattern as `Aviar.java` (Phase 18). `new ResourceLocation(MODID, path)` → `ResourceLocation.fromNamespaceAndPath(...)`. `new Version(ModLoadingContext.get().getActiveContainer())` → `new Version(modContainer)`. Added `ExampleCreativeTabs.CREATIVE_TABS.register(modBus)` (was missing from the Forge ctor). `onConfigLoad(ModConfigEvent)` narrowed to `onConfigLoad(ModConfigEvent.Loading)`. Imports: `net.minecraftforge.*` → `net.neoforged.*`; `CosmereModConfig` dropped; `ICosmereConfig` + `java.util.List` added.
+- `common/config/ExampleConfigs.java` — `registerConfigs(ModLoadingContext)` → `registerConfigs(ModContainer)` direct (drops `modLoadingContext.getActiveContainer()` hop). `net.minecraftforge.fml.ModContainer` → `net.neoforged.fml.ModContainer`; `ModLoadingContext` import removed.
+- `common/config/ExampleServerConfig.java` — `ForgeConfigSpec` → `ModConfigSpec`; `ForgeConfigSpec.Builder/IntValue` → `ModConfigSpec.Builder/IntValue`; `getConfigSpec()` return type → `ModConfigSpec`. Imports moved `net.minecraftforge.common.ForgeConfigSpec` → `net.neoforged.neoforge.common.ModConfigSpec`, `net.minecraftforge.fml.config.ModConfig.Type` → `net.neoforged.fml.config.ModConfig.Type`.
+- `common/eventHandlers/ExampleCommonForgeEvents.java` — `@Mod.EventBusSubscriber(bus = FORGE)` → `@EventBusSubscriber(bus = Bus.GAME)`. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/eventHandlers/ExampleCommonModEvents.java` — `@Mod.EventBusSubscriber(bus = MOD)` → `@EventBusSubscriber(bus = Bus.MOD)`. Import: `net.minecraftforge.fml.common.Mod` → `net.neoforged.fml.common.EventBusSubscriber`.
+- `common/registries/ExampleCreativeTabs.java` — `BuildCreativeModeTabContentsEvent` import: `net.minecraftforge.event` → `net.neoforged.neoforge.event`.
+- `common/capabilities/ExampleSpiritwebSubmodule.java` — `RenderLevelStageEvent` import: `net.minecraftforge.client.event` → `net.neoforged.neoforge.client.event`.
+- `client/ExampleForgeClientEvents.java` — `@Mod.EventBusSubscriber(value = Dist.CLIENT)` → `@EventBusSubscriber(bus = Bus.GAME, value = Dist.CLIENT)`. Imports moved.
+- `client/ExampleModClientEvents.java` — `@Mod.EventBusSubscriber(bus = MOD, value = CLIENT)` → `@EventBusSubscriber(bus = Bus.MOD, value = Dist.CLIENT)`. `EntityRenderersEvent` import moved. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `client/ExampleKeybindings.java` — `KeyModifier` import: `net.minecraftforge.client.settings` → `net.neoforged.neoforge.client.settings`. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `src/datagen/example/ExampleDataGenerator.java` — `@Mod.EventBusSubscriber` → `@EventBusSubscriber`. `ExistingFileHelper`/`GatherDataEvent`/`SubscribeEvent` imports moved to `net.neoforged.*`. Wired `event.getLookupProvider()` to `ExampleLootTableGen` and `ExampleRecipeGen` constructors.
+- `src/datagen/example/ExampleEngLangGen.java` — `LanguageProvider` import moved. `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM` (registry is `Iterable<Item>`); `ForgeRegistries` import dropped; `BuiltInRegistries` import added.
+- `src/datagen/example/ExampleItemModelsGen.java` — `ItemModelBuilder/ItemModelProvider/ModelFile` imports: `net.minecraftforge.client.model.generators.*` → `net.neoforged.neoforge.client.model.generators.*`. `ForgeSpawnEggItem` → `DeferredSpawnEggItem` (both import and `instanceof` check). `ExistingFileHelper` import moved.
+- `src/datagen/example/ExampleRecipeGen.java` — Ctor `(PackOutput, ExistingFileHelper)` → `(PackOutput, CompletableFuture<HolderLookup.Provider>)`. `addRecipes(Consumer<FinishedRecipe>)` → `addRecipes(RecipeOutput)`. `IConditionBuilder` import: `net.minecraftforge.common.crafting.conditions` → `net.neoforged.neoforge.common.conditions`. `ExistingFileHelper`/`Consumer<FinishedRecipe>` imports removed.
+- `src/datagen/example/ExampleTagProvider.java` — `ExistingFileHelper` import: `net.minecraftforge.common.data` → `net.neoforged.neoforge.common.data`.
+- `src/datagen/example/loottables/ExampleLootTableGen.java` — Added `CompletableFuture<HolderLookup.Provider> registries` ctor param; passes to `super(packOutput, List.of(...), registries)`.
+- `src/datagen/example/loottables/ExampleBlockLootTableGen.java` — Added explicit `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)`.
 ---
 
 ## Remaining (in suggested order)
@@ -460,7 +515,7 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |
 | 16 | **Per-submodule port — awakening** | `src/awakening/` + `src/datagen/awakening/` + `src/gameTest/awakening/` | Biochromatic Breath (Warbreaker). `AwakeningConfig`/`AwakeningConfigs`, `AwakeningRecipeGen`. |
 | 17 | **Per-submodule port — aondor** | `src/aondor/` + `src/datagen/aondor/` + `src/gameTest/aondor/` | Aon-based magic (Elantris). `AonDorConfig`/`AonDorConfigs`, `AonDorRecipeGen`. |
-| 18 | **Per-submodule port — aviar** | `src/aviar/` + `src/datagen/aviar/` + `src/gameTest/aviar/` | Bird companions (Sixth of Dusk). `AviarConfig`/`AviarConfigs`, `AviarRecipeGen`. |
+| 18 | **Per-submodule port — aviar** | `src/aviar/` + `src/datagen/aviar/` + `src/gameTest/aviar/` | **DONE** — `compileAviarJava` + `compileDatagenAviarJava` green. |
 | 19 | **Per-submodule port — soulforgery** | `src/soulforgery/` + `src/datagen/soulforgery/` + `src/gameTest/soulforgery/` | Soul manipulation. `SoulforgeryConfig`/`SoulforgeryConfigs`, `SoulforgeryRecipeGen`. |
 | 20 | **Per-submodule port — cosmeretools** | `src/cosmeretools/` + `src/datagen/cosmeretools/` + `src/gameTest/cosmeretools/` | Dev commands/utilities. `ToolsRecipeGen`. Lighter touch; mostly command argument types + datagen. |
 | 21 | **Per-submodule port — example** | `src/example/` + `src/datagen/example/` + `src/gameTest/example/` | Dev-only template module. `ExampleRecipeGen`. Confirm whether to keep (see Open questions: "`example` module"). |

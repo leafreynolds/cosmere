@@ -105,7 +105,7 @@ public class AviarBird extends Parrot
 			};
 
 			final CosmereEffectInstance effectInstance = CosmereEffectInstance.getOrCreateEffect(AviarEffects.AVIAR_BOND_EFFECT.get(), data, aviarUUID, 1);
-			effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADDITION);
+			effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADD_VALUE);
 
 			data.addEffect(effectInstance);
 		});

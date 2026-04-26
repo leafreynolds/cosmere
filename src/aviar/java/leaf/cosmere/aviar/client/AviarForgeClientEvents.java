@@ -5,10 +5,10 @@
 package leaf.cosmere.aviar.client;
 
 import leaf.cosmere.common.Cosmere;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class AviarForgeClientEvents
 {
 

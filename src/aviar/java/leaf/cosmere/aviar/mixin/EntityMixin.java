@@ -6,6 +6,8 @@ package leaf.cosmere.aviar.mixin;
 
 import leaf.cosmere.aviar.common.registries.AviarAttributes;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -43,7 +45,7 @@ public class EntityMixin
 
 		if (target instanceof Mob mob && mob.getTarget() == clientPlayer)
 		{
-			final Attribute attribute = AviarAttributes.HOSTILE_LIFE_SENSE.get();
+			final Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(AviarAttributes.HOSTILE_LIFE_SENSE.get());
 			final AttributeInstance attributeInstance = clientPlayer.getAttribute(attribute);
 			if (attributeInstance != null && attributeInstance.getValue() >= 1)
 			{

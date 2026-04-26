@@ -7,10 +7,16 @@ package leaf.cosmere.aviar.loottables;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.aviar.common.registries.AviarBlocks;
 import leaf.cosmere.loottables.BaseBlockLootTables;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 
 public class AviarBlockLootTableGen extends BaseBlockLootTables
 {
+	public AviarBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{
