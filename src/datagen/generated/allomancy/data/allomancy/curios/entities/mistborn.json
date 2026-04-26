@@ -4,8 +4,6 @@
     "minecraft:armor_stand"
   ],
   "slots": [
-    "ring",
-    "necklace",
-    "bracelet"
+    "head"
   ]
 }
