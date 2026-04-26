@@ -9,11 +9,11 @@ import leaf.cosmere.example.loottables.ExampleLootTableGen;
 import leaf.cosmere.example.patchouli.ExamplePatchouliGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
 @EventBusSubscriber(modid = Example.MODID, bus = Bus.MOD)
 public class ExampleDataGenerator
@@ -27,9 +27,9 @@ public class ExampleDataGenerator
 
 		generator.addProvider(true, new ExampleEngLangGen(packOutput));
 		generator.addProvider(true, new ExampleTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new ExampleLootTableGen(packOutput));
+		generator.addProvider(true, new ExampleLootTableGen(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new ExampleItemModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new ExampleRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new ExampleRecipeGen(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new ExamplePatchouliGen(packOutput));
 	}
 

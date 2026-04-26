@@ -7,10 +7,16 @@ package leaf.cosmere.example.loottables;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.example.common.registries.ExampleBlocks;
 import leaf.cosmere.loottables.BaseBlockLootTables;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 
 public class ExampleBlockLootTableGen extends BaseBlockLootTables
 {
+	public ExampleBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{

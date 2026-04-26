@@ -5,20 +5,20 @@
 package leaf.cosmere.example.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig.Type;
 
 public class ExampleServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
-	public final ForgeConfigSpec.IntValue EXAMPLE;
+	public final ModConfigSpec.IntValue EXAMPLE;
 
 
 	ExampleServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Example Config. This config is synced between server and client.").push("Example");
 
 		EXAMPLE = builder.comment("Example.").defineInRange("example", 0, 0, 100);
@@ -35,7 +35,7 @@ public class ExampleServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

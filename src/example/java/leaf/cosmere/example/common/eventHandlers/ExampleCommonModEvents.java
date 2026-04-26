@@ -5,10 +5,11 @@
 package leaf.cosmere.example.common.eventHandlers;
 
 import leaf.cosmere.example.common.Example;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
 
-@Mod.EventBusSubscriber(modid = Example.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Example.MODID, bus = Bus.MOD)
 public class ExampleCommonModEvents
 {
 

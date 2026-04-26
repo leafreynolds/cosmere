@@ -518,7 +518,6 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | 18 | **Per-submodule port — aviar** | `src/aviar/` + `src/datagen/aviar/` + `src/gameTest/aviar/` | **DONE** — `compileAviarJava` + `compileDatagenAviarJava` green. |
 | 19 | **Per-submodule port — soulforgery** | `src/soulforgery/` + `src/datagen/soulforgery/` + `src/gameTest/soulforgery/` | Soul manipulation. `SoulforgeryConfig`/`SoulforgeryConfigs`, `SoulforgeryRecipeGen`. |
 | 20 | **Per-submodule port — cosmeretools** | `src/cosmeretools/` + `src/datagen/cosmeretools/` + `src/gameTest/cosmeretools/` | Dev commands/utilities. `ToolsRecipeGen`. Lighter touch; mostly command argument types + datagen. |
-| 21 | **Per-submodule port — example** | `src/example/` + `src/datagen/example/` + `src/gameTest/example/` | Dev-only template module. `ExampleRecipeGen`. Confirm whether to keep (see Open questions: "`example` module"). |
 
 ---
 

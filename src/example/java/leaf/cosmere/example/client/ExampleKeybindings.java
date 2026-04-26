@@ -8,14 +8,14 @@ import com.mojang.blaze3d.platform.InputConstants;
 import leaf.cosmere.client.settings.KeyConflictContext;
 import leaf.cosmere.example.common.Example;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.settings.KeyModifier;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.settings.KeyModifier;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Example.MODID, bus = Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Example.MODID, bus = Bus.MOD)
 public class ExampleKeybindings
 {
 

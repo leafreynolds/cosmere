@@ -5,10 +5,11 @@
 package leaf.cosmere.example.client;
 
 import leaf.cosmere.example.common.Example;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
-@Mod.EventBusSubscriber(modid = Example.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Example.MODID, bus = Bus.GAME, value = Dist.CLIENT)
 public class ExampleForgeClientEvents
 {
 

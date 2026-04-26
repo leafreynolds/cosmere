@@ -10,7 +10,7 @@ import leaf.cosmere.example.common.registries.ExampleBlocks;
 import leaf.cosmere.tag.BaseTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;

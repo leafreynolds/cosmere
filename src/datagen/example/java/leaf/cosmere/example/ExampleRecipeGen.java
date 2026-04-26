@@ -6,19 +6,19 @@ package leaf.cosmere.example;
 
 import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.example.common.Example;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class ExampleRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public ExampleRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
+	public ExampleRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
 	{
-		super(output, existingFileHelper, Example.MODID);
+		super(output, lookupProvider, Example.MODID);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class ExampleRecipeGen extends BaseRecipeProvider implements IConditionBu
 	}
 
 	@Override
-	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	protected void addRecipes(RecipeOutput output)
 	{
 	}
 
