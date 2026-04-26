@@ -66,8 +66,11 @@ public class StoreTapPowerMessage implements ICosmerePacket
                     {
                         if(item.getPlayerIsAttuned(itemStack, sender))
                         {
-                            CosmereAttributeUtils.grantBaseAttribute(sender, (RangedAttribute) attribute, attributeStrength);
-                            item.removePower(itemStack, attribute);
+                            if (attribute instanceof RangedAttribute rangedAttribute)
+                            {
+                                CosmereAttributeUtils.grantBaseAttribute(sender, rangedAttribute, attributeStrength);
+                                item.removePower(itemStack, attribute);
+                            }
                         }
                     }
 				}

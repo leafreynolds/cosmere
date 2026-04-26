@@ -26,8 +26,9 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 
 	@Override
     @OnlyIn(Dist.CLIENT)
-	public void openMenu(Minecraft minecraft)
+	public void openMenu()
 	{
+		Minecraft minecraft = Minecraft.getInstance();
 		NicrosilMenu.instance.closeScreen();
 		minecraft.setScreen(NicrosilMenu.instance);
 	}

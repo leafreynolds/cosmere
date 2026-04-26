@@ -145,7 +145,7 @@ public class SpiritwebMenu extends Screen implements ISyncSpiritweb
 				//if  (selectedPower.getNamespace().equals("feruchemy") && selectedPower.getPath().equals("nicrosil"))
 				if (radialMenuButton.manifestation.hasMenu())
 				{
-					radialMenuButton.manifestation.openMenu(this.minecraft);
+					radialMenuButton.manifestation.openMenu();
 
 				}
 				else

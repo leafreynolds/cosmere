@@ -15,7 +15,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface IHoldsPowers
@@ -203,14 +205,20 @@ public interface IHoldsPowers
 
 			if (noAttunedPlayer)
 			{
-				ISpiritweb spiritweb = SpiritwebCapability.get(entity).resolve().get();
-				CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
-				if (spiritweb.hasEffect(aluminumEffect))
+				LazyOptional<ISpiritweb> spiritwebOpt = SpiritwebCapability.get(entity);
+
+				final Optional<ISpiritweb> optResolved = spiritwebOpt.resolve();
+				if (optResolved.isPresent())
 				{
-					// Then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
-					StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNKEYED_UUID);
-					StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unkeyed"); // todo translation
-					return true;
+					ISpiritweb spiritweb = optResolved.get();
+					CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+					if (spiritweb.hasEffect(aluminumEffect))
+					{
+						// Then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
+						StackNBTHelper.setUuid(itemStack, Constants.NBT.ATTUNED_PLAYER, Constants.NBT.UNKEYED_UUID);
+						StackNBTHelper.setString(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unkeyed"); // todo translation
+						return true;
+					}
 				}
 			}
 
