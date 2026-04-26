@@ -619,7 +619,6 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 
 | # | Phase | Module | Notes |
 |---|---|---|---|
-| 13 | **Per-submodule port — hemalurgy** | `src/hemalurgy/` + `src/datagen/hemalurgy/` + `src/gameTest/hemalurgy/` | Spike-based (Mistborn). World cap still Forge-era. `HemalurgyConfig`/`HemalurgyConfigs`, `HemalurgyRecipeGen`. Phase 7 already fixed copper-spike `getExperienceReward` + attribute Holder lookup in `api/Metals.java`. |
 | 14 | **Per-submodule port — surgebinding** | `src/surgebinding/` + `src/datagen/surgebinding/` + `src/gameTest/surgebinding/` | Knights Radiant (Stormlight). `SurgebindingPacketHandler` still broken. `SurgeGravitation` partly ported in Phase 4. `DynamicShardbladeData` item cap. `SurgebindingConfig`/`SurgebindingConfigs`, `SurgebindingRecipeGen`. Has its own AT file listed in `build.gradle`. |
 | 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |
 
@@ -634,6 +633,7 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 - **`example` module.** Still in `build.gradle` secondaryModules but not in publishing. Keep as dev-only?
 - **Version API.** `new Version(ModContainer)` — confirm the `leaf.cosmere.api.Version` constructor accepts a `ModContainer` (vs the old `ModLoadingContext.get().getActiveContainer()`).
 - **Submodule configs.** Each submodule has its own `*Configs.java` / `*Config.java` pair (allomancy, feruchemy, hemalurgy, surgebinding, sandmastery, awakening, aondor, aviar, cosmeretools, soulforgery, example) still on `ForgeConfigSpec` + `ModLoadingContext`. Phase 3 here covered only the main source set; submodules are deferred to their per-module port passes (and each submodule's `*Config.java` will match the same shape as `CosmereClientConfig` etc).
+- **`TArmorItem` metal color tinting removed.** `DyeableLeatherItem` was removed in 1.21.1, so `TArmorItem` no longer tints armor with its metal type's color. The fix is to register an item color handler in client events (e.g. in `ToolsForgeClientEvents` via `RegisterColorHandlersEvent.Item`) that always returns `metalType.getColorValue()` for instances of `TArmorItem`. Without this, metal armor will render without color tinting in-game.
 
 ## Notable API migration cheatsheet (for future passes)
 

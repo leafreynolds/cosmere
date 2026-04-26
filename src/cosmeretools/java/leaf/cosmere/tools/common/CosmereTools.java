@@ -5,7 +5,7 @@
 package leaf.cosmere.tools.common;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.ICosmereConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;

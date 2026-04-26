@@ -13,16 +13,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
-// we use the DyeableLeatherItem interface to get free tinting,
-// and then redirect requests for the overlay to a blank texture so it can't do anything with it
-public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeatherItem
+public class TArmorItem extends ArmorItem implements IHasMetalType
 {
 	Metals.MetalType metalType;
 
@@ -61,28 +58,6 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	}
 
 	@Override
-	public boolean hasCustomColor(ItemStack pStack)
-	{
-		return true;
-	}
-
-	@Override
-	public int getColor(ItemStack pStack)
-	{
-		return metalType.getColorValue();
-	}
-
-	@Override
-	public void clearColor(ItemStack pStack)
-	{
-	}
-
-	@Override
-	public void setColor(ItemStack pStack, int pColor)
-	{
-	}
-
-	@Override
 	public int getEnchantmentValue(ItemStack stack)
 	{
 		return getEnchantmentValue();
@@ -110,7 +85,7 @@ public class TArmorItem extends ArmorItem implements IHasMetalType, DyeableLeath
 	@Override
 	public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel)
 	{
-		return !layer.suffix().isEmpty()
+		return layer.dyeable()
 		       ? ResourceLocation.fromNamespaceAndPath(CosmereTools.MODID, "textures/models/armor/armor_overlay.png")
 		       : ResourceLocation.fromNamespaceAndPath(CosmereTools.MODID, "textures/models/armor/armor_layer_" + (innerModel ? 2 : 1) + ".png");
 	}
