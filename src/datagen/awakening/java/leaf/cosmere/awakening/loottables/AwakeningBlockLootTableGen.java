@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.awakening.loottables;
@@ -7,10 +7,16 @@ package leaf.cosmere.awakening.loottables;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.awakening.common.registries.AwakeningBlocks;
 import leaf.cosmere.loottables.BaseBlockLootTables;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 
 public class AwakeningBlockLootTableGen extends BaseBlockLootTables
 {
+	public AwakeningBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{

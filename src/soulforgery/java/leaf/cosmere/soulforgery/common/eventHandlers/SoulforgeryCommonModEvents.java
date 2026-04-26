@@ -1,14 +1,15 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.soulforgery.common.eventHandlers;
 
 import leaf.cosmere.soulforgery.common.Soulforgery;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
 
-@Mod.EventBusSubscriber(modid = Soulforgery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Soulforgery.MODID, bus = Bus.MOD)
 public class SoulforgeryCommonModEvents
 {
 

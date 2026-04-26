@@ -1,20 +1,18 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.awakening.common.config;
 
 import leaf.cosmere.common.config.CosmereConfigHelper;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 
 public class AwakeningConfigs
 {
 	public static final AwakeningServerConfig SERVER = new AwakeningServerConfig();
 
-	public static void registerConfigs(ModLoadingContext modLoadingContext)
+	public static void registerConfigs(ModContainer modContainer)
 	{
-		ModContainer modContainer = modLoadingContext.getActiveContainer();
 		CosmereConfigHelper.registerConfig(modContainer, SERVER);
 	}
 }

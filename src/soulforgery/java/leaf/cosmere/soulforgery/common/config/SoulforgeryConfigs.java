@@ -1,20 +1,18 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.soulforgery.common.config;
 
 import leaf.cosmere.common.config.CosmereConfigHelper;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 
 public class SoulforgeryConfigs
 {
 	public static final SoulforgeryServerConfig SERVER = new SoulforgeryServerConfig();
 
-	public static void registerConfigs(ModLoadingContext modLoadingContext)
+	public static void registerConfigs(ModContainer modContainer)
 	{
-		ModContainer modContainer = modLoadingContext.getActiveContainer();
 		CosmereConfigHelper.registerConfig(modContainer, SERVER);
 	}
 }

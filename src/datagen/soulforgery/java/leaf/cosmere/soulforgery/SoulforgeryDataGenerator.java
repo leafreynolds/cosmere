@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.soulforgery;
@@ -9,11 +9,11 @@ import leaf.cosmere.soulforgery.loottables.SoulforgeryLootTableGen;
 import leaf.cosmere.soulforgery.patchouli.SoulforgeryPatchouliGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
 @EventBusSubscriber(modid = Soulforgery.MODID, bus = Bus.MOD)
 public class SoulforgeryDataGenerator
@@ -27,9 +27,9 @@ public class SoulforgeryDataGenerator
 
 		generator.addProvider(true, new SoulforgeryEngLangGen(packOutput));
 		generator.addProvider(true, new SoulforgeryTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new SoulforgeryLootTableGen(packOutput));
+		generator.addProvider(true, new SoulforgeryLootTableGen(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new SoulforgeryItemModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new SoulforgeryRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new SoulforgeryRecipeGen(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new SoulforgeryPatchouliGen(packOutput));
 	}
 

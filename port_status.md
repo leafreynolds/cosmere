@@ -536,6 +536,36 @@ Allomancy module errors: **60 → 0**. Datagen errors: **0** (clean from the sta
 - `src/datagen/example/ExampleTagProvider.java` — `ExistingFileHelper` import: `net.minecraftforge.common.data` → `net.neoforged.neoforge.common.data`.
 - `src/datagen/example/loottables/ExampleLootTableGen.java` — Added `CompletableFuture<HolderLookup.Provider> registries` ctor param; passes to `super(packOutput, List.of(...), registries)`.
 - `src/datagen/example/loottables/ExampleBlockLootTableGen.java` — Added explicit `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)`.
+### Phase 16 — Per-submodule port — awakening
+`compileAwakeningJava` and `compileDatagenAwakeningJava` both **green** (0 errors). No gameTest source set for awakening.
+
+Identical pattern to Phase 21 (example). All files follow the same skeleton structure:
+- `common/Awakening.java` — `@Mod` ctor `() → (IEventBus modBus, ModContainer modContainer)`. Drops `FMLJavaModLoadingContext.get()`, `ModLoadingContext.get()`, `InterModEnqueueEvent`/`imcQueue`. Replaced `CosmereModConfig instanceof` config-event with `handleConfigEvent`. `new ResourceLocation(MODID, path)` → `ResourceLocation.fromNamespaceAndPath(...)`. `new Version(ModLoadingContext...)` → `new Version(modContainer)`. `onConfigLoad` narrowed to `ModConfigEvent.Loading`. `AwakeningEffects.EFFECTS.register(modBus)` remains commented out (pre-existing). Imports: `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/config/AwakeningConfigs.java` — `registerConfigs(ModLoadingContext)` → `registerConfigs(ModContainer)` direct. `net.minecraftforge.fml.ModContainer` → `net.neoforged.fml.ModContainer`; `ModLoadingContext` import removed.
+- `common/config/AwakeningServerConfig.java` — `ForgeConfigSpec` → `ModConfigSpec` throughout. Imports moved.
+- `common/eventHandlers/AwakeningCommonForgeEvents.java` — `@Mod.EventBusSubscriber(bus = FORGE)` → `@EventBusSubscriber(bus = Bus.GAME)`. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/eventHandlers/AwakeningCommonModEvents.java` — `@Mod.EventBusSubscriber(bus = MOD)` → `@EventBusSubscriber(bus = Bus.MOD)`. Import moved.
+- `common/capabilities/AwakeningSpiritwebSubmodule.java` — `RenderLevelStageEvent` import: `net.minecraftforge.client.event` → `net.neoforged.neoforge.client.event`.
+- `client/AwakeningForgeClientEvents.java` — `@Mod.EventBusSubscriber` → `@EventBusSubscriber(bus = Bus.GAME, ...)`. Imports moved.
+- `client/AwakeningKeybindings.java` — `KeyModifier` import moved; `@Mod.EventBusSubscriber` → `@EventBusSubscriber`. All imports moved.
+- `src/datagen/awakening/**` — same pattern as Phase 21 (example): `GatherDataEvent`/`ExistingFileHelper`/`SubscribeEvent` imports moved; `event.getLookupProvider()` wired to `AwakeningLootTableGen` and `AwakeningRecipeGen`; `LanguageProvider` import moved; `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM`; model generator imports moved; `ForgeSpawnEggItem` → `DeferredSpawnEggItem`; `ExistingFileHelper` import moved in `AwakeningTagProvider`; `BaseRecipeProvider` ctor updated to `CompletableFuture<HolderLookup.Provider>`; `addRecipes(Consumer<FinishedRecipe>)` → `addRecipes(RecipeOutput)`; `IConditionBuilder` import moved; loot provider ctor gains `CompletableFuture<HolderLookup.Provider>` param; `AwakeningBlockLootTableGen` gains `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)`.
+
+---
+
+### Phase 17 — Per-submodule port — aondor
+`compileAondorJava` and `compileDatagenAondorJava` both **green** (0 errors). No gameTest source set for aondor.
+
+Same pattern as Phase 16 (awakening). Notable difference: `AonDorEngLangGen` has an extra `addCreativeTabs()` method (pre-existing); preserved as-is. `AonDorBlockLootTableGen` had no `getKnownBlocks()` override — not added (consistent with original).
+
+Files touched: identical set to awakening (replacing "Awakening"/"awakening"/"AwakeningConfig" with "AonDor"/"aondor"/"AonDorConfig" throughout all 17 files).
+
+---
+
+### Phase 19 — Per-submodule port — soulforgery
+`compileSoulforgeryJava` and `compileDatagenSoulforgeryJava` both **green** (0 errors). No gameTest source set for soulforgery.
+
+Same pattern as Phase 16/17. Notable difference: `SoulforgeryModClientEvents.java` exists (awakening/aondor don't have it) — ported with `@Mod.EventBusSubscriber(bus = MOD)` → `@EventBusSubscriber(bus = Bus.MOD)` and all `net.minecraftforge.*` → `net.neoforged.*`. `SoulforgeryBlockLootTableGen` had a `getKnownBlocks()` override — preserved.
+
 ---
 
 ## Remaining (in suggested order)
@@ -544,15 +574,9 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 
 | # | Phase | Module | Notes |
 |---|---|---|---|
-| 11 | **Per-submodule port — allomancy** | `src/allomancy/` + `src/datagen/allomancy/` (`src/gameTest/allomancy/` does not exist) | **DONE** — all 4 sub-phases complete; `compileAllomancyJava` + `compileDatagenAllomancyJava` green. |
-| 12 | **Per-submodule port — feruchemy** | `src/feruchemy/` + `src/datagen/feruchemy/` + `src/gameTest/feruchemy/` | **DONE** — `compileFeruchemyJava` + `compileDatagenFeruchemyJava` green. |
 | 13 | **Per-submodule port — hemalurgy** | `src/hemalurgy/` + `src/datagen/hemalurgy/` + `src/gameTest/hemalurgy/` | Spike-based (Mistborn). World cap still Forge-era. `HemalurgyConfig`/`HemalurgyConfigs`, `HemalurgyRecipeGen`. Phase 7 already fixed copper-spike `getExperienceReward` + attribute Holder lookup in `api/Metals.java`. |
 | 14 | **Per-submodule port — surgebinding** | `src/surgebinding/` + `src/datagen/surgebinding/` + `src/gameTest/surgebinding/` | Knights Radiant (Stormlight). `SurgebindingPacketHandler` still broken. `SurgeGravitation` partly ported in Phase 4. `DynamicShardbladeData` item cap. `SurgebindingConfig`/`SurgebindingConfigs`, `SurgebindingRecipeGen`. Has its own AT file listed in `build.gradle`. |
 | 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |
-| 16 | **Per-submodule port — awakening** | `src/awakening/` + `src/datagen/awakening/` + `src/gameTest/awakening/` | Biochromatic Breath (Warbreaker). `AwakeningConfig`/`AwakeningConfigs`, `AwakeningRecipeGen`. |
-| 17 | **Per-submodule port — aondor** | `src/aondor/` + `src/datagen/aondor/` + `src/gameTest/aondor/` | Aon-based magic (Elantris). `AonDorConfig`/`AonDorConfigs`, `AonDorRecipeGen`. |
-| 19 | **Per-submodule port — soulforgery** | `src/soulforgery/` + `src/datagen/soulforgery/` + `src/gameTest/soulforgery/` | Soul manipulation. `SoulforgeryConfig`/`SoulforgeryConfigs`, `SoulforgeryRecipeGen`. |
-| 20 | **Per-submodule port — cosmeretools** | `src/cosmeretools/` + `src/datagen/cosmeretools/` + `src/gameTest/cosmeretools/` | **DONE** — `compileCosmereToolsJava` + `compileDatagenCosmereToolsJava` green. |
 
 ---
 

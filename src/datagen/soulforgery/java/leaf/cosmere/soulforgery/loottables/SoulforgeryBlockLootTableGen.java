@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.soulforgery.loottables;
@@ -7,10 +7,16 @@ package leaf.cosmere.soulforgery.loottables;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.loottables.BaseBlockLootTables;
 import leaf.cosmere.soulforgery.common.registries.SoulforgeryBlocks;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 
 public class SoulforgeryBlockLootTableGen extends BaseBlockLootTables
 {
+	public SoulforgeryBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{

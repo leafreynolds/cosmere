@@ -1,14 +1,15 @@
 /*
- * File updated ~ 30 - 11 - 2023 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.soulforgery.client;
 
-import leaf.cosmere.common.Cosmere;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
+import leaf.cosmere.soulforgery.common.Soulforgery;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.EventBusSubscriber.Bus;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Soulforgery.MODID, bus = Bus.GAME, value = Dist.CLIENT)
 public class SoulforgeryForgeClientEvents
 {
 

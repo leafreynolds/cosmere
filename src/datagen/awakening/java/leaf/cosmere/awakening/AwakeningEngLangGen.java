@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.awakening;
@@ -9,11 +9,11 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.awakening.common.Awakening;
 import leaf.cosmere.awakening.common.registries.AwakeningEntityTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 public class AwakeningEngLangGen extends LanguageProvider
 {
@@ -47,7 +47,7 @@ public class AwakeningEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Awakening.MODID))

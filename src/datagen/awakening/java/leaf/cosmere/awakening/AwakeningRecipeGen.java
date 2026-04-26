@@ -1,24 +1,24 @@
 /*
- * File updated ~ 4 - 1 - 2025 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.awakening;
 
 import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.awakening.common.Awakening;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class AwakeningRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public AwakeningRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
+	public AwakeningRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
 	{
-		super(output, existingFileHelper, Awakening.MODID);
+		super(output, lookupProvider, Awakening.MODID);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class AwakeningRecipeGen extends BaseRecipeProvider implements ICondition
 	}
 
 	@Override
-	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	protected void addRecipes(RecipeOutput output)
 	{
 
 	}
