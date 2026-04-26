@@ -1,20 +1,20 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.items.sandpouch;
 
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -90,11 +90,11 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 			case 0:
 				if (mode != MODES.ADD)
 				{
-					break; // This slot is input, and can accept both, don't update if it's removed
+					break;
 				}
 				if (sandBlock)
 				{
-					layers += 8 * count; // Blocks are worth 8 layers
+					layers += 8 * count;
 				}
 				else if (sandLayer)
 				{
@@ -104,14 +104,14 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 			case 1:
 				if (mode != MODES.REMOVE)
 				{
-					break; // this slot is output only, no item filter as only one item can ever be here
+					break;
 				}
-				layers -= 8 * count; // Blocks are worth 8 layers
+				layers -= 8 * count;
 				break;
 			case 2:
 				if (mode != MODES.REMOVE)
 				{
-					break; // this slot is output only, no item filter as only one item can ever be here
+					break;
 				}
 				layers -= count;
 				break;
@@ -172,7 +172,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
 		if (!existing.isEmpty())
 		{
-			if (!ItemHandlerHelper.canItemStacksStack(stack, existing))
+			if (!ItemStack.isSameItemSameComponents(stack, existing))
 			{
 				return stack;
 			}
@@ -191,7 +191,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 		{
 			if (existing.isEmpty())
 			{
-				this.stacks.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
+				this.stacks.set(slot, reachedLimit ? stack.copyWithCount(limit) : stack);
 			}
 			else
 			{
@@ -200,7 +200,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 			onContentsChanged(slot);
 		}
 
-		return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
+		return reachedLimit ? stack.copyWithCount(stack.getCount() - limit) : ItemStack.EMPTY;
 	}
 
 	protected int getStackLimit(int slot, @NotNull ItemStack stack)
@@ -245,11 +245,11 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 		{
 			if (!simulate)
 			{
-				this.stacks.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
+				this.stacks.set(slot, existing.copyWithCount(existing.getCount() - toExtract));
 				onContentsChanged(slot, toExtract, MODES.REMOVE);
 			}
 
-			return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
+			return existing.copyWithCount(toExtract);
 		}
 	}
 
@@ -260,7 +260,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider registries)
 	{
 		updateSlots();
 		ListTag nbtTagList = new ListTag();
@@ -270,7 +270,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 			{
 				CompoundTag itemTag = new CompoundTag();
 				itemTag.putInt("Slot", i);
-				stacks.get(i).save(itemTag);
+				stacks.get(i).save(registries, itemTag);
 				nbtTagList.add(itemTag);
 			}
 		}
@@ -282,7 +282,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(HolderLookup.Provider registries, CompoundTag nbt)
 	{
 		setSize(nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : stacks.size());
 		ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
@@ -293,7 +293,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
 			if (slot >= 0 && slot < stacks.size())
 			{
-				stacks.set(slot, ItemStack.of(itemTags));
+				stacks.set(slot, ItemStack.parseOptional(registries, itemTags));
 			}
 		}
 		setLayers(nbt.contains("Layers") ? nbt.getInt("Layers") : 0);

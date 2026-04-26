@@ -1,5 +1,5 @@
 /*
- * File updated ~ 4 - 1 - 2025 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery;
@@ -8,25 +8,25 @@ import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class SandmasteryRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public SandmasteryRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
+	public SandmasteryRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
 	{
-		super(output, existingFileHelper, Sandmastery.MODID);
+		super(output, lookupProvider, Sandmastery.MODID);
 	}
 
 	@Override
@@ -36,50 +36,50 @@ public class SandmasteryRecipeGen extends BaseRecipeProvider implements IConditi
 	}
 
 	@Override
-	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	protected void addRecipes(RecipeOutput output)
 	{
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SandmasteryItems.QIDO_ITEM.get())
 				.define('H', Items.GOAT_HORN)
-				.define('S', Tags.Items.STRING)
+				.define('S', Items.STRING)
 				.pattern("SSS")
 				.pattern("S S")
 				.pattern(" H ")
 				.unlockedBy("has_material", has(Items.GOAT_HORN))
-				.save(consumer);
+				.save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, SandmasteryItems.JAR_ITEM.get())
-				.define('G', Tags.Items.GLASS)
+				.define('G', Tags.Items.GLASS_BLOCKS)
 				.pattern("G G")
 				.pattern("G G")
 				.pattern(" G ")
-				.unlockedBy("has_material", has(Tags.Items.GLASS))
-				.save(consumer);
+				.unlockedBy("has_material", has(Tags.Items.GLASS_BLOCKS))
+				.save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SandmasteryItems.SAND_POUCH_ITEM.get())
-				.define('L', Tags.Items.LEATHER)
+				.define('L', Items.LEATHER)
 				.define('B', Items.LEAD)
 				.define('J', SandmasteryItems.SAND_JAR_ITEM)
 				.pattern("BLL")
 				.pattern("LJL")
 				.pattern("LLL")
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
-				.save(consumer);
+				.save(output);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SandmasteryBlocks.SAND_SPREADING_TUB_BLOCK.getBlock())
 				.define('W', ItemTags.WOODEN_SLABS)
 				.pattern("W W")
 				.pattern("WWW")
 				.unlockedBy("has_material", has(ItemTags.WOODEN_SLABS))
-				.save(consumer);
+				.save(output);
 
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, SandmasteryItems.SAND_JAR_ITEM.get())
 				.requires(SandmasteryBlocks.SAND_JAR_BLOCK.asItem())
 				.unlockedBy("has_material", has(SandmasteryItems.SAND_JAR_ITEM))
-				.save(consumer);
+				.save(output);
 
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, SandmasteryBlocks.SAND_JAR_BLOCK.asItem())
 				.requires(SandmasteryItems.SAND_JAR_ITEM)
 				.unlockedBy("has_material", has(SandmasteryBlocks.SAND_JAR_BLOCK.asItem()))
-				.save(consumer);
+				.save(output);
 	}
 }

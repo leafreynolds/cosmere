@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common;
@@ -9,20 +9,21 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.config.CosmereModConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.network.SandmasteryPacketHandler;
 import leaf.cosmere.sandmastery.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @Mod(Sandmastery.MODID)
 public class Sandmastery implements IModModule
@@ -33,13 +34,11 @@ public class Sandmastery implements IModModule
 
 	private final SandmasteryPacketHandler packetHandler;
 
-	public Sandmastery()
+	public Sandmastery(IEventBus modBus, ModContainer modContainer)
 	{
 		Cosmere.addModule(instance = this);
 
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-		SandmasteryConfigs.registerConfigs(ModLoadingContext.get());
+		SandmasteryConfigs.registerConfigs(modContainer);
 
 		modBus.addListener(this::onConfigLoad);
 		modBus.addListener(this::onConfigReload);
@@ -57,14 +56,14 @@ public class Sandmastery implements IModModule
 
 		SandmasteryDimensions.register();
 
-		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
-		this.versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+		this.versionNumber = new Version(modContainer);
 		this.packetHandler = new SandmasteryPacketHandler();
+		this.packetHandler.register(modBus);
 	}
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(Sandmastery.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Sandmastery.MODID, path);
 	}
 
 	@Override
@@ -91,21 +90,30 @@ public class Sandmastery implements IModModule
 		return new SandmasterySpiritwebSubmodule();
 	}
 
-	private void onConfigLoad(ModConfigEvent configEvent)
+	private void onConfigLoad(ModConfigEvent.Loading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(configEvent);
 	}
 
 	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		handleConfigEvent(configEvent);
+	}
+
+	private void handleConfigEvent(ModConfigEvent event)
+	{
+		ModConfig config = event.getConfig();
+		if (!config.getModId().equals(MODID))
 		{
-			cosmereModConfig.clearCache();
+			return;
+		}
+		for (ICosmereConfig cosmereConfig : List.of(SandmasteryConfigs.SERVER))
+		{
+			if (cosmereConfig.getConfigSpec() == config.getSpec())
+			{
+				cosmereConfig.clearCache();
+				return;
+			}
 		}
 	}
 
@@ -116,7 +124,5 @@ public class Sandmastery implements IModModule
 		event.enqueueWork(() ->
 		{
 		});
-
-		this.packetHandler.initialize();
 	}
 }

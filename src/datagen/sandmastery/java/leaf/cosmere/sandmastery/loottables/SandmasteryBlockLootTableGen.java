@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.loottables;
@@ -13,6 +13,7 @@ import leaf.cosmere.sandmastery.common.blocks.TemporarySandBlock;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -27,6 +28,11 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 {
+	public SandmasteryBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{
@@ -59,7 +65,6 @@ public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 	@Override
 	protected Iterable<Block> getKnownBlocks()
 	{
-		//todo delete this when moving generate function to use BaseBlockLootTables functions
 		return SandmasteryBlocks.BLOCKS.getAllBlocks().stream().map(IBlockProvider::getBlock)::iterator;
 	}
 }

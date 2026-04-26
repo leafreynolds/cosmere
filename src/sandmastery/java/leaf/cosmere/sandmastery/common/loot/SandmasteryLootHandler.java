@@ -1,17 +1,22 @@
+/*
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
+ */
+
 package leaf.cosmere.sandmastery.common.loot;
 
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.sandmastery.common.Sandmastery;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
 
-@Mod.EventBusSubscriber(modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Sandmastery.MODID, bus = EventBusSubscriber.Bus.GAME)
 public final class SandmasteryLootHandler
 {
 
@@ -59,10 +64,9 @@ public final class SandmasteryLootHandler
 
 	private static LootPoolEntryContainer.Builder<?> getInjectEntry(String name, int weight)
 	{
-		ResourceLocation table = Sandmastery.rl("inject/" + name);
-		return LootTableReference.lootTableReference(table)
+		ResourceKey<LootTable> table = ResourceKey.create(Registries.LOOT_TABLE, Sandmastery.rl("inject/" + name));
+		return NestedLootTable.lootTableReference(table)
 				.setWeight(weight);
-
 	}
 
 }

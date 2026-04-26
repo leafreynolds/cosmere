@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.items;
@@ -13,10 +13,10 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
 
@@ -36,7 +36,6 @@ public class SandmasteryItemModelsGen extends ItemModelProvider
 			String path = itemRegistryObject.getRegistryName().getPath();
 			Item item = itemRegistryObject.asItem();
 
-			//blocks have their own model rules
 			if (item instanceof BlockItem)
 			{
 				continue;
@@ -45,7 +44,6 @@ public class SandmasteryItemModelsGen extends ItemModelProvider
 			{
 				continue;
 			}
-			//else normal item texture rules apply
 			simpleItem(path, path);
 		}
 

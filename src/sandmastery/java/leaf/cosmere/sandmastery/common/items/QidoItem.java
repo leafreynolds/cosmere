@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.items;
@@ -11,6 +11,7 @@ import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -78,7 +79,8 @@ public class QidoItem extends ChargeableItemBase
 			{
 				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
 
-				if (data.getLiving().getAttribute(SandmasteryAttributes.RIBBONS.get()).getBaseValue() < 1)
+				if (data.getLiving().getAttribute(
+						BuiltInRegistries.ATTRIBUTE.wrapAsHolder(SandmasteryAttributes.RIBBONS.get())).getBaseValue() < 1)
 				{
 					return;
 				}
@@ -145,7 +147,7 @@ public class QidoItem extends ChargeableItemBase
 	}
 
 	@Override
-	public int getUseDuration(ItemStack pStack)
+	public int getUseDuration(ItemStack pStack, LivingEntity entity)
 	{
 		return 16000;
 	}

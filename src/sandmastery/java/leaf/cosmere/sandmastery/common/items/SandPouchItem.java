@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.items;
@@ -16,7 +16,6 @@ import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchInventory;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,11 +28,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
@@ -44,8 +41,6 @@ public class SandPouchItem extends ChargeableItemBase
 	{
 		super(PropTypes.Items.ONE.get());
 	}
-
-	private SandPouchInventory sandPouchInventory;
 
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
@@ -85,15 +80,6 @@ public class SandPouchItem extends ChargeableItemBase
 		return res;
 	}
 
-	/*@Override
-	public void fillItemCategory(@Nonnull CreativeModeTab tab, @Nonnull NonNullList<ItemStack> stacks)
-	{
-		if (allowedIn(tab))
-		{
-			stacks.add(new ItemStack(this));
-		}
-	}*/
-
 	@Override
 	public boolean isFoil(@NotNull ItemStack stack)
 	{
@@ -106,30 +92,19 @@ public class SandPouchItem extends ChargeableItemBase
 		ItemStack pouchStack = player.getItemInHand(interactionHand);
 		if (interactionHand == InteractionHand.MAIN_HAND)
 		{
-			if (!player.level().isClientSide() && player instanceof ServerPlayer)
+			if (!player.level().isClientSide() && player instanceof ServerPlayer serverPlayer)
 			{
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyer) ->
 						new SandPouchContainerMenu(windowID, playerInv, pouchStack), pouchStack.getHoverName());
-				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
+				serverPlayer.openMenu(container, buf -> buf.writeBoolean(true));
 			}
 		}
 		return InteractionResultHolder.consume(pouchStack);
 	}
 
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt)
-	{
-		this.sandPouchInventory = new SandPouchInventory();
-		if (oldCapNbt != null)
-		{
-			sandPouchInventory.deserializeNBT(oldCapNbt); // todo check if this breaks things?
-		}
-		return this.sandPouchInventory;
-	}
-
 	public static IItemHandlerModifiable getPouchInv(ItemStack pouchStack)
 	{
-		return (IItemHandlerModifiable) pouchStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		return (IItemHandlerModifiable) pouchStack.getCapability(Capabilities.ItemHandler.ITEM);
 	}
 
 	public void shoot(ItemStack pouch, Player player)
@@ -143,7 +118,6 @@ public class SandPouchItem extends ChargeableItemBase
 			{
 				final ItemStack stackToShoot = ammo.copy().split(1);
 				ammo.shrink(1);
-				//shoot?
 
 				if (!player.level().isClientSide)
 				{

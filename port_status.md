@@ -100,7 +100,7 @@ Notes:
 - NeoForge `AttachmentType` has no built-in "attach only to entities of type X" filter. The gate lives in `SpiritwebCapability.get(...)` via `isValidSpiritWebEntity`. A Forge-era save could never have attached a spiritweb to a Ravager/Creeper/etc., so no migration for stale save data is needed.
 
 ### Phase 5 — Networking (main source set only)
-`SimpleChannel` + `NetworkEvent.Context` replaced with `PayloadRegistrar` + `CustomPacketPayload` + `StreamCodec` + `IPayloadContext`. Submodule packet handlers (allomancy/surgebinding/sandmastery) still reference the removed `SimpleChannel`/`createChannel` — they remain broken until their per-module port passes.
+`SimpleChannel` + `NetworkEvent.Context` replaced with `PayloadRegistrar` + `CustomPacketPayload` + `StreamCodec` + `IPayloadContext`. Submodule packet handlers (allomancy/surgebinding) still reference the removed `SimpleChannel`/`createChannel` — they remain broken until their per-module port passes. (sandmastery now ported — Phase 15).
 - `ICosmerePacket` — now extends `net.minecraft.network.protocol.common.custom.CustomPacketPayload`; sole method is `handle(IPayloadContext)`. Dropped `encode(FriendlyByteBuf)` (replaced by per-packet `STREAM_CODEC`) and the static `handle(PACKET, Supplier<Context>)` helper (unused).
 - `BasePacketHandler` — rewritten. Dropped `SimpleChannel createChannel(...)`, `getChannel()`, and the old varargs `registerMessage`. New shape:
   - `register(IEventBus modBus)` — subscribes `onRegisterPayloadHandlers` (the stub `Cosmere.java:86` was calling).
@@ -648,6 +648,56 @@ Same pattern as Phase 16/17. Notable difference: `SoulforgeryModClientEvents.jav
 - `loottables/SurgebindingBlockLootTableGen.java` — Added explicit `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)`.
 - `loottables/SurgebindingEntityLootTableGen.java` — `LootingEnchantFunction` → `EnchantedCountIncreaseFunction` (class renamed in 1.21.1). `LootItemRandomChanceWithLootingCondition` → `LootItemRandomChanceWithEnchantedBonusCondition`. Both new classes require `HolderLookup.Provider` as first argument: `.randomChanceAndLootingBoost(this.registries, 0.1F, 0.05F)` and `.lootingMultiplier(this.registries, UniformGenerator.between(...))`. Added `HolderLookup.Provider provider` ctor param; stored as `this.registries`.
 
+### Phase 15 — Per-submodule port — sandmastery
+`compileSandmasteryJava` and `compileDatagenSandmasteryJava` both **green** (0 errors). No gameTest source set for sandmastery.
+
+**Source sub-phase** (`src/sandmastery/**`):
+
+- `common/Sandmastery.java` — `@Mod` ctor `() → (IEventBus modBus, ModContainer modContainer)`. Removed `CosmereModConfig instanceof` pattern; replaced with `handleConfigEvent` iterating `List.of(SandmasteryConfigs.SERVER)`. Removed `packetHandler.initialize()` from `commonSetup`; added `packetHandler.register(modBus)` in ctor. All `net.minecraftforge.*` → `net.neoforged.*`.
+- `common/config/SandmasteryConfigs.java` — `registerConfigs(ModLoadingContext)` → `registerConfigs(ModContainer)` direct.
+- `common/config/SandmasteryServerConfig.java` — `ForgeConfigSpec` → `ModConfigSpec` throughout.
+- `common/eventHandlers/SandmasteryModBusEventHandler.java` — `@EventBusSubscriber(bus = Bus.MOD)`. Added `holder(Attribute)` helper. Added `registerCapabilities(RegisterCapabilitiesEvent)` handler to expose `SandSpreaderBE`'s item handler via `Capabilities.ItemHandler.BLOCK`.
+- `common/eventHandlers/SandmasteryCommonEventHandler.java` — `@EventBusSubscriber(bus = Bus.GAME)`. Removed `event.isCanceled()` check on `LivingEntityUseItemEvent.Finish` (no longer cancellable in 1.21.1). Imports moved to neoforged.
+- `common/network/SandmasteryPacketHandler.java` — Rewritten to extend `BasePacketHandler`. `initialize(PayloadRegistrar)` changed to `public`. Two `playToServer` packets registered.
+- `common/network/packets/PlayerShootSandProjectileMessage.java` — Rewritten as `record` with `TYPE`, `STREAM_CODEC`, `handle(IPayloadContext)`.
+- `common/network/packets/SyncMasteryBindsMessage.java` — Rewritten as `record SyncMasteryBindsMessage(int flags)` with `StreamCodec.composite(ByteBufCodecs.INT, ...)`.
+- `common/registries/SandmasteryAttributes.java` — Removed UUID constants; replaced with `ResourceLocation` modifier IDs `sandmastery:overmastery` and `sandmastery:overmastery_secondary`.
+- `common/registries/SandmasteryBlockEntitiesRegistry.java` — `DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ...)` → `DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ...)`. `RegistryObject<BlockEntityType<T>>` → `DeferredHolder<BlockEntityType<?>, BlockEntityType<T>>`.
+- `common/registries/SandmasteryCreativeTabs.java` — `BuildCreativeModeTabContentsEvent` import moved to neoforged.
+- `common/registries/SandmasteryMenuTypes.java` — `IForgeMenuType.create(...)` → `IMenuTypeExtension.create(...)`.
+- `common/blocks/SandJarBlock.java`, `TemporarySandBlock.java`, `SandSpreadingTubBlock.java` — Added `public static final MapCodec<T> CODEC = simpleCodec(p -> new T())` and `@Override public MapCodec<T> codec()` (required by `BaseEntityBlock` in 1.21.1).
+- `common/blocks/SandSpreadingTubBlock.java` — `Block.use(…, InteractionHand, …)` → `Block.useWithoutItem(…)` (InteractionHand param dropped). `NetworkHooks.openScreen` → `player.openMenu`. Removed unused `SandJarBE` and `Block` imports.
+- `common/blocks/TaldainBlackSandLayerBlock.java`, `TaldainWhiteSandLayerBlock.java` — `isPathfindable(BlockState, BlockGetter, BlockPos, PathComputationType)` → `isPathfindable(BlockState, PathComputationType)` (BlockGetter/BlockPos removed in 1.21.1). Removed `BlockGetter` import from method signature (kept for other shape methods).
+- `common/blocks/entities/SandSpreaderBE.java` — Stripped `LazyOptional<IItemHandler>`, `getCapability(Capability, Direction)`, `onLoad()`, `invalidateCaps()`. Added `getItemHandler()`. Updated `saveAdditional(CompoundTag, HolderLookup.Provider)` and `loadAdditional(CompoundTag, HolderLookup.Provider)` (renamed from `load`). Fixed pre-existing bug where `load` called `super.saveAdditional` instead of `super.load`. `itemHandler.serializeNBT()` → `serializeNBT(registries)`; `deserializeNBT(tag)` → `deserializeNBT(registries, tag)`. Imports moved to neoforged.
+- `common/blocks/entities/SandJarBE.java`, `TemporarySandBE.java` — Removed empty `saveAdditional(CompoundTag)` / `load(CompoundTag)` overrides (old 1.20.1 signatures that override nothing in 1.21.1; calls were no-ops). Removed unused `CompoundTag` import.
+- `common/blocks/entities/SandSpreader/SandSpreaderMenu.java` — `getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null)` → `blockEntity.getItemHandler()` directly. `IItemHandlerModifiable`/`SlotItemHandler` imports moved to neoforged.
+- `common/capabilities/SandmasterySpiritwebSubmodule.java` — `getAttribute(Attribute)` → `getAttribute(Holder<Attribute>)` via `BuiltInRegistries.ATTRIBUTE.wrapAsHolder(...)`. `getModifier(UUID)` → `getModifier(ResourceLocation)`. `makeOvermasteryModifier` now uses `new AttributeModifier(ResourceLocation, double, ADD_VALUE)`. Imports moved to neoforged.
+- `common/commands/subcommands/AddOvermasteryCommand.java`, `ClearOvermasteryCommand.java` — `getAttribute(Attribute)` → wrapped with `BuiltInRegistries.ATTRIBUTE.wrapAsHolder(...)`. UUID constants → `OVERMASTERY_MODIFIER_ID` / `OVERMASTERY_SECONDARY_MODIFIER_ID`. `getModifier(UUID)` → `getModifier(ResourceLocation)`. `removeModifier(UUID)` → `removeModifier(ResourceLocation)`. `new AttributeModifier(UUID, String, double, ADDITION)` → `new AttributeModifier(ResourceLocation, double, ADD_VALUE)`.
+- `common/effects/OvermasteredEffect.java` — `addAttributeModifier` uses `BuiltInRegistries.ATTRIBUTE.wrapAsHolder(...)` and `ADD_VALUE`.
+- `common/entities/SandProjectile.java` — Constructor updated to 5-arg `AbstractArrow` form. `getPickupItem()` → `getDefaultPickupItem()`.
+- `common/items/SandPouchItem.java` — Removed `initCapabilities`. `NetworkHooks.openScreen` → `serverPlayer.openMenu`. Item handler accessed via `Capabilities.ItemHandler.ITEM` directly.
+- `common/items/QidoItem.java` — `getUseDuration(ItemStack)` → `getUseDuration(ItemStack, LivingEntity)`. `getAttribute(Attribute)` → wrapped with `wrapAsHolder`.
+- `common/items/sandpouch/SandPouchInventory.java` — Stripped `ICapabilityProvider`, `LazyOptional`. Added `getHandler()` returning `IItemHandler`.
+- `common/items/sandpouch/SandpouchItemHandler.java` — `serializeNBT()` → `serializeNBT(HolderLookup.Provider)`. `deserializeNBT(tag)` → `deserializeNBT(HolderLookup.Provider, tag)`. `ItemStack.of(tag)` → `ItemStack.parseOptional(registries, tag)`. `ItemHandlerHelper.canItemStacksStack` → `ItemStack.isSameItemSameComponents`. `ItemHandlerHelper.copyStackWithSize(stack, n)` → `stack.copyWithCount(n)`.
+- `common/items/sandpouch/SandPouchContainerMenu.java`, `SandPouchSlot.java` — Imports moved to neoforged.
+- `common/loot/SandmasteryLootHandler.java` — `LootTableReference.lootTableReference(rl)` → `NestedLootTable.lootTableReference(ResourceKey.create(Registries.LOOT_TABLE, rl))`. Imports moved.
+- `common/utils/MiscHelper.java` — `ItemStackHandler` import: `net.minecraftforge.items` → `net.neoforged.neoforge.items`. `AttributeMap.hasAttribute(Attribute)` → `hasAttribute(Holder<Attribute>)` via `BuiltInRegistries.ATTRIBUTE.wrapAsHolder(...)`.
+- `client/SandmasteryKeybindings.java` — Imports moved to neoforged.
+- `client/eventHandlers/SandmasteryClientEvents.java` — `RegisterGuiOverlaysEvent` → `RegisterGuiLayersEvent`. `VanillaGuiOverlay.FOOD_LEVEL.id()` → `VanillaGuiLayers.FOOD_LEVEL`. Overlay lambda signature updated.
+- `client/eventHandlers/SandmasteryModClientEvents.java` — `RegisterEvent` + `MenuScreens.register` → `RegisterMenuScreensEvent`. Imports moved.
+- `client/gui/HUDHandler.java` — `new ResourceLocation(ns, path)` → `ResourceLocation.fromNamespaceAndPath(...)`.
+- `client/gui/SandPouchContainerScreen.java`, `SandSpreaderScreen.java` — `new ResourceLocation(ns, path)` → `ResourceLocation.fromNamespaceAndPath(...)`. `renderBackground(guiGraphics)` → `renderBackground(guiGraphics, mouseX, mouseY, partialTick)` (signature change in 1.21.1).
+
+**Datagen sub-phase** (`src/datagen/sandmastery/**`):
+
+- `SandmasteryDataGenerator.java` — All `net.minecraftforge.*` → `net.neoforged.*`. `event.getLookupProvider()` wired to `SandmasteryLootTableGen` and `SandmasteryRecipeGen`.
+- `SandmasteryEngLangGen.java` — `LanguageProvider` import moved to neoforged. `ForgeRegistries.ITEMS.getValues()` → `BuiltInRegistries.ITEM`.
+- `SandmasteryRecipeGen.java` — Ctor `(PackOutput, ExistingFileHelper, String)` → `(PackOutput, CompletableFuture<HolderLookup.Provider>, String)`. `addRecipes(Consumer<FinishedRecipe>)` → `addRecipes(RecipeOutput)`. `Tags.Items.STRING`/`LEATHER` replaced with `Items.STRING`/`Items.LEATHER` (removed in 1.21.1). `Tags.Items.GLASS` → `Tags.Items.GLASS_BLOCKS`. `IConditionBuilder` import moved.
+- `items/SandmasteryItemModelsGen.java` — Model generator imports moved to neoforged.
+- `items/SandmasteryTagsProvider.java` — `ExistingFileHelper` import moved to neoforged.
+- `loottables/SandmasteryLootTableGen.java` — Added `CompletableFuture<HolderLookup.Provider> registries` ctor param; passes to `super`.
+- `loottables/SandmasteryBlockLootTableGen.java` — Added `(HolderLookup.Provider provider)` ctor forwarding to `super(provider)`.
+
 ---
 
 ## Remaining (in suggested order)
@@ -656,7 +706,6 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 
 | # | Phase | Module | Notes |
 |---|---|---|---|
-| 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |
 
 ---
 
@@ -668,7 +717,7 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 - **Parchment version.** `2024.11.17` is reasonable; bump freely.
 - **`example` module.** Still in `build.gradle` secondaryModules but not in publishing. Keep as dev-only?
 - **Version API.** `new Version(ModContainer)` — confirm the `leaf.cosmere.api.Version` constructor accepts a `ModContainer` (vs the old `ModLoadingContext.get().getActiveContainer()`).
-- **Submodule configs.** Each submodule has its own `*Configs.java` / `*Config.java` pair (allomancy, feruchemy, hemalurgy, surgebinding, sandmastery, awakening, aondor, aviar, cosmeretools, soulforgery, example) still on `ForgeConfigSpec` + `ModLoadingContext`. Phase 3 here covered only the main source set; submodules are deferred to their per-module port passes (and each submodule's `*Config.java` will match the same shape as `CosmereClientConfig` etc).
+- **Submodule configs.** Each submodule has its own `*Configs.java` / `*Config.java` pair (allomancy, feruchemy, hemalurgy, surgebinding, awakening, aondor, aviar, cosmeretools, soulforgery, example) still on `ForgeConfigSpec` + `ModLoadingContext`. Phase 3 here covered only the main source set; submodules are deferred to their per-module port passes. (sandmastery config ported — Phase 15).
 - **`TArmorItem` metal color tinting removed.** `DyeableLeatherItem` was removed in 1.21.1, so `TArmorItem` no longer tints armor with its metal type's color. The fix is to register an item color handler in client events (e.g. in `ToolsForgeClientEvents` via `RegisterColorHandlersEvent.Item`) that always returns `metalType.getColorValue()` for instances of `TArmorItem`. Without this, metal armor will render without color tinting in-game.
 
 ## Notable API migration cheatsheet (for future passes)
@@ -712,3 +761,14 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | `BlockEntityWithoutLevelRenderer.entityModelSet` (public field) | Private — store your own `EntityModelSet` reference in the renderer subclass |
 | `BasePacketHandler.initialize(PayloadRegistrar)` access | Must be `public` (not `protected`) in subclasses |
 | `ArmorMaterial.getDurability(ArmorItem.Type)` | Removed — durability configured at armor material definition time, not per-item |
+| `Block.isPathfindable(BlockState, BlockGetter, BlockPos, PathComputationType)` | `Block.isPathfindable(BlockState, PathComputationType)` — BlockGetter and BlockPos params removed; access `public` → `protected` |
+| `BaseEntityBlock` (and any `Block` subclass) — abstract `codec()` | Must add `public static final MapCodec<T> CODEC = simpleCodec(p -> new T())` and `@Override public MapCodec<T> codec()`. Use `p -> new T()` if constructor ignores Properties. |
+| `Screen.renderBackground(GuiGraphics)` | `Screen.renderBackground(GuiGraphics, int mouseX, int mouseY, float partialTick)` — mouse position + partialTick required in 1.21.1 |
+| `ItemHandlerHelper.canItemStacksStack(s1, s2)` | `ItemStack.isSameItemSameComponents(s1, s2)` |
+| `ItemHandlerHelper.copyStackWithSize(stack, n)` | `stack.copyWithCount(n)` (vanilla `ItemStack` method) |
+| `Capability<T>` + `LazyOptional<T>` + `getCapability(Capability, Direction)` on `BlockEntity` | Remove from `BlockEntity`. Expose handler via `getXxx()` method. Register in `RegisterCapabilitiesEvent`: `event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MY_BE_TYPE, (be, side) -> be.getItemHandler())` |
+| `DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modid)` | `DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, modid)` |
+| `BlockEntity.saveAdditional(CompoundTag)` | `BlockEntity.saveAdditional(CompoundTag, HolderLookup.Provider)` |
+| `BlockEntity.load(CompoundTag)` | `BlockEntity.loadAdditional(CompoundTag, HolderLookup.Provider)` (method renamed) |
+| `ItemStackHandler.serializeNBT()` / `deserializeNBT(CompoundTag)` | `serializeNBT(HolderLookup.Provider)` / `deserializeNBT(HolderLookup.Provider, CompoundTag)` |
+| `LivingEntityUseItemEvent.Finish.isCanceled()` | Not available — `Finish` is no longer cancellable in NeoForge 1.21.1; remove the check |

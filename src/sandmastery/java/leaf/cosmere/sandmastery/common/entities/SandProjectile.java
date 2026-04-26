@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.entities;
@@ -19,7 +19,7 @@ public class SandProjectile extends AbstractArrow implements ItemSupplier
 
 	public SandProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack)
 	{
-		super(SandmasteryEntityTypes.SAND_PROJECTILE.get(), livingEntity, level);
+		super(SandmasteryEntityTypes.SAND_PROJECTILE.get(), livingEntity, level, itemStack.copy(), null);
 		this.projectileStack = itemStack.copy();
 	}
 
@@ -29,7 +29,7 @@ public class SandProjectile extends AbstractArrow implements ItemSupplier
 	}
 
 	@Override
-	protected ItemStack getPickupItem()
+	public ItemStack getDefaultPickupItem()
 	{
 		return ItemStack.EMPTY;
 	}

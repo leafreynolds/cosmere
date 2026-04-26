@@ -3,6 +3,7 @@ package leaf.cosmere.sandmastery.common.blocks;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandJarBE;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -19,6 +20,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class SandJarBlock extends BaseEntityBlock
 {
+	public static final MapCodec<SandJarBlock> CODEC = simpleCodec(p -> new SandJarBlock());
+
+	@Override
+	public MapCodec<SandJarBlock> codec()
+	{
+		return CODEC;
+	}
+
 	public SandJarBlock()
 	{
 		super(PropTypes.Blocks.SAND.get().noOcclusion());

@@ -3,6 +3,7 @@ package leaf.cosmere.sandmastery.common.blocks;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.entities.TemporarySandBE;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -19,6 +20,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class TemporarySandBlock extends BaseEntityBlock
 {
+	public static final MapCodec<TemporarySandBlock> CODEC = simpleCodec(p -> new TemporarySandBlock());
+
+	@Override
+	public MapCodec<TemporarySandBlock> codec()
+	{
+		return CODEC;
+	}
+
 	public TemporarySandBlock()
 	{
 		super(PropTypes.Blocks.SAND.get().noOcclusion());

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 26 - 7 - 2025 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.capabilities;
@@ -22,20 +22,21 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
@@ -97,18 +98,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 				Sandmastery.packetHandler().sendToServer(new SyncMasteryBindsMessage(currentFlags));
 			}
 		}
-		//if we are only tracking hotkeys when a sandmastery manifestation is selected
-		//then things turn off when not selecting one. Would that be correct behaviour?
-		//Todo more elegant way of checking if the user is wanting to use sandmastery?
 		else if (hotkeyFlags != 0)
 		{
-			//don't create references unless needed
-			//final CompoundTag dataTag = spiritweb.getCompoundTag();
-			//reset flag
 			hotkeyFlags = 0;
-			//save
 			sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
-			//update server
 			Sandmastery.packetHandler().sendToServer(new SyncMasteryBindsMessage(hotkeyFlags));
 		}
 	}
@@ -116,13 +109,11 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void tickServer(ISpiritweb spiritweb)
 	{
-		//offload to tick 19 out of 20
 		if ((spiritweb.getLiving().tickCount - 1) % 20 != 0)
 		{
 			return;
 		}
 
-		//let the spiritweb submodule check for dehydration and handle the effect
 		double percentage = (((double) this.getHydrationLevel()) / ((double) SandmasteryConfigs.SERVER.MAX_HYDRATION.get())) * 100;
 		if (percentage <= SandmasteryConfigs.SERVER.DEHYDRATION_THRESHOLD.get())
 		{
@@ -134,9 +125,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	public void deserialize(ISpiritweb spiritweb)
 	{
 		final CompoundTag compoundTag = spiritweb.getCompoundTag();
-		//save a reference to the tag
 		sandmasteryTag = CompoundNBTHelper.getOrCreate(compoundTag, Sandmastery.MODID);
-		//unload the player specific fields
 		hydrationLevel = sandmasteryTag.getInt(SandmasteryConstants.HYDRATION_TAG);
 		projectileCooldown = sandmasteryTag.getInt(SandmasteryConstants.PROJECTILE_COOLDOWN_TAG);
 		launchCooldown = sandmasteryTag.getInt(SandmasteryConstants.LAUNCH_COOLDOWN_TAG);
@@ -162,8 +151,6 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
 		sandmasteryTag.putInt(SandmasteryConstants.RIBBONS_IN_USE_TAG, numRibbonsInUse);
 
-		//this shouldn't be necessary, as the spiritweb tag should already have the reference
-		//but we are hunting a null ref, so maybe something gets unassigned somewhere
 		compoundTag.put(Sandmastery.MODID, sandmasteryTag);
 	}
 
@@ -176,15 +163,13 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void drainInvestiture(ISpiritweb data, double strength)
 	{
-		//todo - how should we handle draining sandmastery?
-		// we could force it to turn off ribbons?
+		// todo - how should we handle draining sandmastery?
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void collectMenuInfo(List<String> m_infoText)
 	{
-		//todo Localization
 		final String text = "Hydration: " + getHydrationLevel();
 		m_infoText.add(text);
 	}
@@ -231,7 +216,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private static void overmaster(ISpiritweb data)
 	{
 		final LivingEntity living = data.getLiving();
-		AttributeInstance availableRibbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
+		AttributeInstance availableRibbons = living.getAttribute(
+				BuiltInRegistries.ATTRIBUTE.wrapAsHolder(SandmasteryAttributes.RIBBONS.getAttribute()));
 
 		if (availableRibbons == null)
 		{
@@ -241,7 +227,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		int ribbons = (int) availableRibbons.getBaseValue();
 		int gainedRibbons;
 
-		if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_UUID) == null)
+		if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_MODIFIER_ID) == null)
 		{
 			if (ribbons < 5)
 			{
@@ -260,11 +246,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 				gainedRibbons = 6;
 			}
 
-			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_UUID);
-
-			availableRibbons.addPermanentModifier(overmasteryAttributeModifier);
+			availableRibbons.addPermanentModifier(
+					makeOvermasteryModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_MODIFIER_ID));
 		}
-		else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID) == null)
+		else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_MODIFIER_ID) == null)
 		{
 			if (ribbons < 5)
 			{
@@ -283,26 +268,18 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 				gainedRibbons = 4;
 			}
 
-			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID);
-			availableRibbons.addPermanentModifier(overmasteryAttributeModifier);
+			availableRibbons.addPermanentModifier(
+					makeOvermasteryModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_SECONDARY_MODIFIER_ID));
 		}
 
-		//damage and disable powers regardless
-		//todo replace dryout
 		living.hurt(living.damageSources().dryOut(), 10F);
-		data.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERED_EFFECT.get(), living, 1, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60)); //  * 20 * 60 to convert minutes to ticks
+		data.addEffect(EffectsHelper.getNewEffect(SandmasteryEffects.OVERMASTERED_EFFECT.get(), living, 1, SandmasteryConfigs.SERVER.OVERMASTERY_DURATION.get() * 20 * 60));
 	}
 
 	@NotNull
-	private static AttributeModifier getOvermasteryAttributeModifier(int gainedRibbons, UUID uuid)
+	private static AttributeModifier makeOvermasteryModifier(int gainedRibbons, ResourceLocation id)
 	{
-		final AttributeModifier overmasteryAttributeModifier = new AttributeModifier(
-				uuid,
-				String.format("%s - gained %s ribbons: %s", "Overmastery", gainedRibbons, uuid),
-				gainedRibbons,
-				AttributeModifier.Operation.ADDITION
-		);
-		return overmasteryAttributeModifier;
+		return new AttributeModifier(id, gainedRibbons, AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	public void tickProjectileCooldown()
@@ -398,7 +375,6 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	public void updateFlags(int flags)
 	{
 		this.hotkeyFlags = flags;
-		//update the tag value for later serialization.
 		this.sandmasteryTag.putInt("hotkeys", hotkeyFlags);
 	}
 }

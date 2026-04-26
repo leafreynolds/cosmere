@@ -1,31 +1,31 @@
 /*
- * File updated ~ 18 - 11 - 2023 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class SandmasteryServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
-	public final ForgeConfigSpec.IntValue PROJECTILE_COOLDOWN;
-	public final ForgeConfigSpec.DoubleValue HYDRATION_COST_MULTIPLIER;
-	public final ForgeConfigSpec.IntValue CHARGE_COST_MULTIPLIER;
-	public final ForgeConfigSpec.IntValue STARTING_HYDRATION;
-	public final ForgeConfigSpec.IntValue MAX_HYDRATION;
-	public final ForgeConfigSpec.IntValue OVERMASTERY_DURATION;
-	public final ForgeConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
-	public final ForgeConfigSpec.BooleanValue GIVE_QIDO_ON_FIRST_LOGIN;
-	public final ForgeConfigSpec.IntValue QIDO_MAX_FILL;
+	public final ModConfigSpec.IntValue PROJECTILE_COOLDOWN;
+	public final ModConfigSpec.DoubleValue HYDRATION_COST_MULTIPLIER;
+	public final ModConfigSpec.IntValue CHARGE_COST_MULTIPLIER;
+	public final ModConfigSpec.IntValue STARTING_HYDRATION;
+	public final ModConfigSpec.IntValue MAX_HYDRATION;
+	public final ModConfigSpec.IntValue OVERMASTERY_DURATION;
+	public final ModConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
+	public final ModConfigSpec.BooleanValue GIVE_QIDO_ON_FIRST_LOGIN;
+	public final ModConfigSpec.IntValue QIDO_MAX_FILL;
 
 	SandmasteryServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
 
 		PROJECTILE_COOLDOWN = builder.comment("How many ticks between projectiles at 1 ribbon allocated in ticks. (1 second = 20 ticks)").defineInRange("projectileCooldown", 100, 24, 1000);
@@ -56,7 +56,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

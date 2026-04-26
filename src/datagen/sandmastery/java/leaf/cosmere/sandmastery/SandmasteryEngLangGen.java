@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery;
@@ -14,11 +14,11 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.Locale;
 
@@ -60,8 +60,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addItemsAndBlocks()
 	{
-		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Sandmastery.MODID))
@@ -92,10 +91,8 @@ public class SandmasteryEngLangGen extends LanguageProvider
 		{
 			SandmasteryManifestation manifestation = manifestationRegistryObject.getManifestation();
 
-			//power type
 			String key = manifestation.getTranslationKey();
 
-			//description
 			String name;
 			String description;
 
@@ -104,10 +101,8 @@ public class SandmasteryEngLangGen extends LanguageProvider
 			name = "Sand Mastery " + abilityName;
 			description = "Masters can use " + abilityName;
 
-			//Name
 			add(key, StringHelper.fixCapitalisation(name));
 
-			//todo decide about manifestation descriptions?
 			final ResourceLocation regName = manifestation.getRegistryName();
 			add("manifestation." + regName.getNamespace() + "." + regName.getPath() + ".description", description);
 		}
@@ -115,10 +110,8 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addAttributes()
 	{
-		//Attribute
 		final String descriptionId = RIBBONS.getAttribute().getDescriptionId();
 		final String name = "Sand Mastery " + RIBBONS.getName();
-		// Attributes are the powers themselves, they need their own names.
 		add(descriptionId, StringHelper.fixCapitalisation(name));
 	}
 
@@ -137,7 +130,6 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addDamageSources()
 	{
-		//Damage Sources
 		add("death.attack.dehydrated", "%1$s died of dehydration");
 	}
 
@@ -160,7 +152,6 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addKeybindings()
 	{
-		//KeyBindings
 		add(KEY_SANDMASTERY_LAUNCH, "Use Launch Mastery");
 		add(KEY_SANDMASTERY_ELEVATE, "Use Elevate Mastery");
 		add(KEY_SANDMASTERY_PROJECTILE, "Use Projectile Mastery");
@@ -169,6 +160,5 @@ public class SandmasteryEngLangGen extends LanguageProvider
 
 	private void addStats()
 	{
-		//stats
 	}
 }

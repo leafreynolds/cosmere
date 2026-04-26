@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.blocks.entities;
@@ -9,7 +9,7 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegist
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -25,12 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class SandSpreaderBE extends BlockEntity implements MenuProvider
@@ -49,8 +44,6 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 			return 8;
 		}
 	};
-
-	private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
 	protected final ContainerData data;
 	private int progress = 0;
@@ -104,42 +97,23 @@ public class SandSpreaderBE extends BlockEntity implements MenuProvider
 		return new SandSpreaderMenu(pContainerId, pPlayerInventory, this, this.data);
 	}
 
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
+	public ItemStackHandler getItemHandler()
 	{
-		if (cap == ForgeCapabilities.ITEM_HANDLER)
-		{
-			return lazyItemHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		return itemHandler;
 	}
 
 	@Override
-	public void onLoad()
+	protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries)
 	{
-		super.onLoad();
-		lazyItemHandler = LazyOptional.of(() -> itemHandler);
+		nbt.put("inventory", itemHandler.serializeNBT(registries));
+		super.saveAdditional(nbt, registries);
 	}
 
 	@Override
-	public void invalidateCaps()
+	public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries)
 	{
-		super.invalidateCaps();
-		lazyItemHandler.invalidate();
-	}
-
-	@Override
-	protected void saveAdditional(CompoundTag nbt)
-	{
-		nbt.put("inventory", itemHandler.serializeNBT());
-		super.saveAdditional(nbt);
-	}
-
-	@Override
-	public void load(CompoundTag nbt)
-	{
-		super.saveAdditional(nbt);
-		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+		super.loadAdditional(nbt, registries);
+		itemHandler.deserializeNBT(registries, nbt.getCompound("inventory"));
 	}
 
 	public void drops()

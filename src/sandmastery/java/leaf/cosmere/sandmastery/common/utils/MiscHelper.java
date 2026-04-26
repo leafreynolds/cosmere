@@ -28,6 +28,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
@@ -36,7 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,7 @@ public class MiscHelper
 			{
 				boolean concealed = false;
 				final AttributeMap targetAttributes = target.getAttributes();
-				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				final Holder<Attribute> cognitiveConcealmentAttr = BuiltInRegistries.ATTRIBUTE.wrapAsHolder(AttributesRegistry.COGNITIVE_CONCEALMENT.get());
 				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 				{
 					concealed = targetAttributes.getValue(cognitiveConcealmentAttr) > 0;

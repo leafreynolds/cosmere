@@ -1,42 +1,39 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2026-04-26 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.sandmastery.common.network.packets;
 
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
+import leaf.cosmere.sandmastery.common.Sandmastery;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class PlayerShootSandProjectileMessage implements ICosmerePacket
+public record PlayerShootSandProjectileMessage() implements ICosmerePacket
 {
-	public PlayerShootSandProjectileMessage()
+	public static final CustomPacketPayload.Type<PlayerShootSandProjectileMessage> TYPE =
+			new CustomPacketPayload.Type<>(Sandmastery.rl("player_shoot_sand_projectile"));
+
+	public static final StreamCodec<io.netty.buffer.ByteBuf, PlayerShootSandProjectileMessage> STREAM_CODEC =
+			StreamCodec.unit(new PlayerShootSandProjectileMessage());
+
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
-		//empty
+		return TYPE;
 	}
 
 	@Override
-	public void encode(FriendlyByteBuf buf)
+	public void handle(IPayloadContext context)
 	{
-		//empty
+		if (!(context.player() instanceof net.minecraft.server.level.ServerPlayer))
+		{
+			return;
+		}
+		context.enqueueWork(() ->
+		{
+			// TODO: server-side shoot logic
+		});
 	}
-
-	public static PlayerShootSandProjectileMessage decode(FriendlyByteBuf buf)
-	{
-		return new PlayerShootSandProjectileMessage();
-	}
-
-	@Override
-	public void handle(NetworkEvent.Context context)
-	{
-		ServerPlayer player = context.getSender();
-		MinecraftServer server = player.getServer();
-
-	}
-
 }
