@@ -36,6 +36,13 @@ public class AllomancyRecipeGen extends BaseRecipeProvider implements ICondition
 				.requires(Tags.Items.STRING)
 				.save(consumer);
 
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, AllomancyItems.MISTCLOAK.get())
+				.unlockedBy("has_item", has(Items.BLACK_WOOL))
+				.define('X', Items.BLACK_WOOL)
+				.pattern("X X")
+				.pattern("XXX")
+				.pattern("XXX").save(consumer);
+
 		SpecialRecipeBuilder
 				.special(AllomancyRecipes.VIAL_MIX.get())
 				.save(consumer, Allomancy.rl("vial_mixing").toString());

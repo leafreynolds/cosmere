@@ -289,17 +289,11 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 		{
 			return;
 		}
-
-
 		//stolen identities listed?
 
-		//extra investiture powers added
-		addInvestitureInformation(stack, tooltip);
+        //don't need to do the attributes, since thats covered by curio
 
-		//etc?
-
-		//don't need to do the attributes, since thats covered by curio
-	}
+    }
 
 	@SubscribeEvent
 	public static void onEntityDeath(LivingDeathEvent event)

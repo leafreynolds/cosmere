@@ -1,35 +1,51 @@
 /*
  * File updated ~ 7 - 8 - 2023 ~ Leaf
+ * File updated ~ 12 - 7 - 2025 ~ Soar
  */
 
 package leaf.cosmere.allomancy.common.items;
 
-import leaf.cosmere.allomancy.common.Allomancy;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.ForgeMod;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import javax.annotation.Nonnull;
+import java.util.UUID;
 
-public class MistcloakItem extends ArmorItem
+public class MistcloakItem extends Item implements ICurioItem
 {
-	public MistcloakItem(ArmorMaterial material, Type type, Properties properties)
+	public MistcloakItem(Properties properties)
 	{
-		super(material, type, properties);
+		super( properties);
 	}
 
 	//todo increase dodge chance while in the mists
+	
 
-	@Nonnull
 	@Override
-	public final String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
+	public boolean isDamageable(ItemStack stack)
 	{
-		return Allomancy.MODID + ":" + "textures/models/armor/mistcloak.png";
+		return true;
 	}
 
-/* If we were to not use curios, this is what we would attempt to use.
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
+	{
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+
+		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, uuid, stack));
+		builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Mistcloak modifier", 2, AttributeModifier.Operation.ADDITION));
+		builder.put(ForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(uuid, "Mistcloak glide", -0.02, AttributeModifier.Operation.ADDITION));
+		builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Mistcloak fly", 0.02, AttributeModifier.Operation.MULTIPLY_BASE));
+		return builder.build();
+	}
+
+	/* If we were to not use curios, this is what we would attempt to use.
 	There's a weird interaction with some vanilla code that gets run afterward, resetting some of the values we set
 	Ideally don't deal with it.
 	@OnlyIn(Dist.CLIENT)
