@@ -711,7 +711,7 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 
 ## Open questions / decisions to confirm
 
-- **`Feruchemical Atium` has had some mixin related functions in vanilla code disappear, so will need fixing.
+_(none open)_
 
 ## Notable API migration cheatsheet (for future passes)
 
@@ -766,3 +766,4 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | `ItemStackHandler.serializeNBT()` / `deserializeNBT(CompoundTag)` | `serializeNBT(HolderLookup.Provider)` / `deserializeNBT(HolderLookup.Provider, CompoundTag)` |
 | `LivingEntityUseItemEvent.Finish.isCanceled()` | Not available — `Finish` is no longer cancellable in NeoForge 1.21.1; remove the check |
 | `DyeableLeatherItem` interface (`getColor`/`hasCustomColor`) | Removed. Vanilla pipeline moved to `DataComponents.DYED_COLOR` + `DyedItemColor`, but only honored for items in `#minecraft:dyeable`. For non-dyeable armor that needs a forced tint (e.g. metal-colored), override `IClientItemExtensions#getArmorLayerTintColor` via `Item#initializeClient` instead — NeoForge's `HumanoidArmorLayer` patch routes the dyeable-layer color through it regardless of tag membership. |
+| Custom "size" attribute + `Entity#canEnterPose` mixin + manual pose-stack scaling in `RenderPlayerEvent`/`RenderLivingEvent` + `EntityEvent.Size` size-scaling listener + `LivingEntity#getJumpPower`/`getSpeed`/`Entity#maxUpStep` mixins | Vanilla `Attributes.SCALE` (added 1.20.5+, default present on all `LivingEntity`). It auto-drives bounding box, eye height, step height, attack reach, and model render scale. Migration: register modifiers against `Attributes.SCALE` instead of a custom attribute, call `entity.refreshDimensions()` after modifier changes (vanilla doesn't auto-fire it), and delete all the mixins / event listeners that used to bridge the visual-vs-collision gap. `canEnterPose` was removed in 1.21.1 because pose-fit checks now use the already-scaled `getDimensions(Pose)`. |

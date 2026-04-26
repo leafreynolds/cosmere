@@ -53,7 +53,6 @@ public class ModBusEventHandler
 	{
 		event.add(EntityType.PLAYER, holder(AttributesRegistry.XP_RATE_ATTRIBUTE.getAttribute()));
 		event.add(EntityType.PLAYER, holder(AttributesRegistry.NIGHT_VISION_ATTRIBUTE.getAttribute()));
-		event.add(EntityType.PLAYER, holder(AttributesRegistry.SIZE_ATTRIBUTE.get()));
 
 		for (EntityType<? extends LivingEntity> entityType : ENTITIES_THAT_CAN_HAVE_POWERS)
 		{

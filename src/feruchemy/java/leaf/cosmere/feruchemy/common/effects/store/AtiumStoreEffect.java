@@ -6,7 +6,6 @@ package leaf.cosmere.feruchemy.common.effects.store;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,7 +20,7 @@ public class AtiumStoreEffect extends FeruchemyEffectBase
 
 		//atium attribute, size
 		addAttributeModifier(
-				AttributesRegistry.SIZE_ATTRIBUTE.get(),
+				Attributes.SCALE,
 				-0.15D,
 				AttributeModifier.Operation.ADD_VALUE);
 

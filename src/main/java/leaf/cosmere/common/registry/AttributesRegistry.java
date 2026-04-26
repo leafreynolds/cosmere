@@ -16,9 +16,6 @@ public class AttributesRegistry
 	public static final AttributeRegistryObject<Attribute> NIGHT_VISION_ATTRIBUTE = ATTRIBUTES.register("night_vision", Cosmere.MODID, 0, 0, 1);
 	public static final AttributeRegistryObject<Attribute> XP_RATE_ATTRIBUTE = ATTRIBUTES.register("xp_gain_rate", Cosmere.MODID, 1, 0, 20);
 
-	public static final AttributeRegistryObject<Attribute> SIZE_ATTRIBUTE = ATTRIBUTES.register("size", Cosmere.MODID, 1, 0.1f, 20);
-
-
 	//copper clouds, aviaar, light weavers, aluminum cages?
 	public static final AttributeRegistryObject<Attribute> COGNITIVE_CONCEALMENT =
 			ATTRIBUTES.register(

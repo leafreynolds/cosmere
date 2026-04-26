@@ -7,7 +7,6 @@ package leaf.cosmere.feruchemy.mixin;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -187,16 +186,5 @@ public class EntityMixin
 		return false;
 	}
 	//endregion
-
-	@Inject(at = @At("RETURN"), method = "maxUpStep", cancellable = true)
-	private void handleMaxUpStep(CallbackInfoReturnable<Float> cir)
-	{
-		Entity entity = (Entity) (Object) this;
-		if (entity instanceof LivingEntity living)
-		{
-			float scaled = cir.getReturnValue() * FeruchemyAtium.getScale(living);
-			cir.setReturnValue(Math.max(0, scaled));
-		}
-	}
 }
 
