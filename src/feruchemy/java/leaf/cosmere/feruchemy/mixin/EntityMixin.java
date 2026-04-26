@@ -45,9 +45,9 @@ public class EntityMixin
 			{
 				EntityDimensions entityDimensions = livingEntity.getDimensions(pose);
 				entityDimensions = entityDimensions.scale(scale);
-				double f = entityDimensions.width / 2.0F;
+				double f = entityDimensions.width() / 2.0F;
 				Vec3 vector3d = new Vec3(livingEntity.getX() - f, livingEntity.getY(), livingEntity.getZ() - f);
-				Vec3 vector3d1 = new Vec3(livingEntity.getX() + f, livingEntity.getY() + (double) entityDimensions.height, livingEntity.getZ() + f);
+				Vec3 vector3d1 = new Vec3(livingEntity.getX() + f, livingEntity.getY() + (double) entityDimensions.height(), livingEntity.getZ() + f);
 				AABB box = new AABB(vector3d, vector3d1);
 
 				cir.setReturnValue(livingEntity.level().noCollision(livingEntity, box.deflate(1.0E-7D)));
@@ -141,7 +141,7 @@ public class EntityMixin
 		points.put(new Vec3(box.maxX, box.minY, box.minZ), null);
 		points.put(new Vec3(box.maxX, box.minY, box.maxZ), null);
 
-		double fluidStepHeight = entity.onGround() ? Math.max(1.0, entity.getStepHeight()) : 0.0;
+		double fluidStepHeight = entity.onGround() ? Math.max(1.0, entity.maxUpStep()) : 0.0;
 
 		for (Map.Entry<Vec3, Double> entry : points.entrySet())
 		{
@@ -212,5 +212,16 @@ public class EntityMixin
 		return false;
 	}
 	//endregion
+
+	@Inject(at = @At("RETURN"), method = "maxUpStep", cancellable = true)
+	private void handleMaxUpStep(CallbackInfoReturnable<Float> cir)
+	{
+		Entity entity = (Entity) (Object) this;
+		if (entity instanceof LivingEntity living)
+		{
+			float scaled = cir.getReturnValue() * FeruchemyAtium.getScale(living);
+			cir.setReturnValue(Math.max(0, scaled));
+		}
+	}
 }
 

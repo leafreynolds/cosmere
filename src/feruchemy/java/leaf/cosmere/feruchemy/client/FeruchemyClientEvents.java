@@ -11,22 +11,22 @@ import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderNameTagEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.neoforge.client.event.RenderNameTagEvent;
+import net.neoforged.neoforge.client.event.RenderPlayerEvent;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-@Mod.EventBusSubscriber(modid = Feruchemy.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Feruchemy.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
 public class FeruchemyClientEvents
 {
 	@SubscribeEvent
 	public static void onRenderNameplateEvent(RenderNameTagEvent event)
 	{
-		if (event.isCanceled() || !(event.getEntity() instanceof LivingEntity livingEntity))
+		if (!(event.getEntity() instanceof LivingEntity livingEntity))
 		{
 			return;
 		}
@@ -34,7 +34,7 @@ public class FeruchemyClientEvents
 		int connection = (int) EntityHelper.getAttributeValue(livingEntity, AttributesRegistry.CONNECTION.getAttribute());
 		if (connection <= -2)
 		{
-			event.setResult(Event.Result.DENY);
+			event.setCanRender(TriState.FALSE);
 		}
 
 		final float atiumScale = FeruchemyAtium.getScale(livingEntity);
@@ -85,7 +85,7 @@ public class FeruchemyClientEvents
 	}
 
 	@SubscribeEvent
-	public static void onLivingRenderPre(RenderLivingEvent.Pre event)
+	public static void onLivingRenderPre(RenderLivingEvent.Pre<?, ?> event)
 	{
 		if (event.getEntity() instanceof Player)
 		{
@@ -109,7 +109,7 @@ public class FeruchemyClientEvents
 	}
 
 	@SubscribeEvent
-	public static void onLivingRenderPost(RenderLivingEvent.Post event)
+	public static void onLivingRenderPost(RenderLivingEvent.Post<?, ?> event)
 	{
 		if (event.getEntity() instanceof Player)
 		{

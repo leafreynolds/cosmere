@@ -10,8 +10,8 @@ import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 //warmth
 public class BrassStoreEffect extends FeruchemyEffectBase
@@ -22,12 +22,12 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				AttributesRegistry.WARMTH.get(),
 				-1, // colder when storing
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingDamageEvent.Pre event)
 	{
-		if (!event.getSource().is(DamageTypes.ON_FIRE) || event.isCanceled())
+		if (!event.getSource().is(DamageTypes.ON_FIRE))
 		{
 			return;
 		}
@@ -43,26 +43,26 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 			switch (warmth)
 			{
 				case 1:
-					amount = event.getAmount() / 2;
+					amount = event.getNewDamage() / 2;
 					break;
 				case 2:
-					amount = event.getAmount() / 4;
+					amount = event.getNewDamage() / 4;
 					break;
 				default:
 				case 3:
-					event.setCanceled(true);
+					event.setNewDamage(0);
 					return;
 			}
-			event.setAmount(amount);
+			event.setNewDamage(amount);
 		}
 	}
 
 
-	public static void onLivingAttackEvent(LivingAttackEvent event)
+	public static void onLivingAttackEvent(LivingIncomingDamageEvent event)
 	{
 		//todo - check if on fire is what this is meant to be
 		//and whether we should actually be cancelling damage outright is correct
-		if (!event.getSource().is(DamageTypes.ON_FIRE) || event.isCanceled())
+		if (!event.getSource().is(DamageTypes.ON_FIRE))
 		{
 			return;
 		}

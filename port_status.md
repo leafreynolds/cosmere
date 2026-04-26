@@ -425,6 +425,26 @@ Allomancy module errors: **60 → 0**. Datagen errors: **0** (clean from the sta
 - `./gradlew compileDatagenAllomancyJava` — **green** (0 errors).
 - Allomancy is fully ported. Next: Phase 12 (feruchemy).
 
+### Phase 12 — Feruchemy
+`compileFeruchemyJava` **green** (0 errors, 2 deprecation warnings). `compileDatagenFeruchemyJava` **green**.
+
+- **Deleted `IForgeEntityMixin.java`** — targeted `IForgeEntity.class` which no longer exists in NeoForge. Step-height scaling is already handled by `EntityMixin.handleMaxUpStep` injecting into `Entity#maxUpStep()`.
+- **`EntityMixin.java`** — `EntityDimensions.width`/`.height` field access → `.width()`/`.height()` record accessor calls (NeoForge 1.21.1 made `EntityDimensions` a record). `entity.getStepHeight()` (Forge extension, gone) → `entity.maxUpStep()`.
+- **`BrassTapEffect.java`** — `LivingEntity#setSecondsOnFire(int)` → `igniteForSeconds(float)` (1.21.1 rename, takes float seconds).
+- **`GoldTapEffect.java`** — `activeEffect.getEffect().isBeneficial()` → `activeEffect.getEffect().value().isBeneficial()` (`getEffect()` now returns `Holder<MobEffect>`, not `MobEffect`).
+- **`FeruchemyEntityEventHandler.java`**:
+  - `EntityEvent.Size#setNewEyeHeight` removed — eye height is now embedded in `EntityDimensions` itself; `EntityDimensions.scale(float)` already scales it, so the separate call was dropped.
+  - `BlockEvent.BreakEvent#setExpToDrop` **deleted outright** in NeoForge 1.21.1 — `BreakEvent` no longer carries exp state. The XP portion of the cosmere fortune attribute cannot be applied via this event. Item-drop fortune bonus is already handled by `FortuneBonusModifier` (Phase 9). XP bonus is stubbed as TODO (requires a Mixin into `Block#spawnAfterBreak` or a dedicated GlobalLootModifier).
+- **`BandsOfMourningItem.java`** — `getAttributeModifiers` return type `Multimap<Attribute, AttributeModifier>` → `Multimap<Holder<Attribute>, AttributeModifier>` (Curios 9.x API change). `attributeModifiers.put(attribute, …)` → `put(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute), …)`. Warning: the method is deprecated-for-removal in Curios 9.x; functional but should be migrated to the new Curios attribute API in a future pass.
+- **`FeruchemyAtium.java`** — `living.getAttribute(metalRelatedAttribute.get())` → `getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(…))` (`LivingEntity#getAttribute` now takes `Holder<Attribute>`).
+- **`FeruchemyGold.java`** — `Attributes.MAX_HEALTH` is `Holder<Attribute>` in 1.21.1; `CosmereEffectInstance#setDynamicAttribute` still takes `Attribute` → unwrap via `.value()`.
+- **`BraceletModel.java`** — `ModelPart#render` color argument changed from 4 floats (R, G, B, A) to a single packed ARGB `int`; replaced with `FastColor.ARGB32.color(255, r, g, b)`.
+
+**Build status after Phase 12**:
+- `./gradlew compileFeruchemyJava` — **green** (0 errors, 2 deprecation warnings from Curios `getAttributeModifiers`).
+- `./gradlew compileDatagenFeruchemyJava` — **green**.
+- Next: Phase 13 (hemalurgy).
+
 ---
 
 ## Remaining (in suggested order)
@@ -434,7 +454,7 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | # | Phase | Module | Notes |
 |---|---|---|---|
 | 11 | **Per-submodule port — allomancy** | `src/allomancy/` + `src/datagen/allomancy/` (`src/gameTest/allomancy/` does not exist) | **DONE** — all 4 sub-phases complete; `compileAllomancyJava` + `compileDatagenAllomancyJava` green. |
-| 12 | **Per-submodule port — feruchemy** | `src/feruchemy/` + `src/datagen/feruchemy/` + `src/gameTest/feruchemy/` | Metal-storing (Mistborn). `ChargeableMetalCurioItem` partially touched in Phase 7. `StackNBTHelper#serializeStack` stub (Phase 0.8) needs real `ItemStack#save(HolderLookup.Provider)` here. `FeruchemyConfig`/`FeruchemyConfigs`, `FeruchemyRecipeGen`. |
+| 12 | **Per-submodule port — feruchemy** | `src/feruchemy/` + `src/datagen/feruchemy/` + `src/gameTest/feruchemy/` | **DONE** — `compileFeruchemyJava` + `compileDatagenFeruchemyJava` green. |
 | 13 | **Per-submodule port — hemalurgy** | `src/hemalurgy/` + `src/datagen/hemalurgy/` + `src/gameTest/hemalurgy/` | Spike-based (Mistborn). World cap still Forge-era. `HemalurgyConfig`/`HemalurgyConfigs`, `HemalurgyRecipeGen`. Phase 7 already fixed copper-spike `getExperienceReward` + attribute Holder lookup in `api/Metals.java`. |
 | 14 | **Per-submodule port — surgebinding** | `src/surgebinding/` + `src/datagen/surgebinding/` + `src/gameTest/surgebinding/` | Knights Radiant (Stormlight). `SurgebindingPacketHandler` still broken. `SurgeGravitation` partly ported in Phase 4. `DynamicShardbladeData` item cap. `SurgebindingConfig`/`SurgebindingConfigs`, `SurgebindingRecipeGen`. Has its own AT file listed in `build.gradle`. |
 | 15 | **Per-submodule port — sandmastery** | `src/sandmastery/` + `src/datagen/sandmastery/` + `src/gameTest/sandmastery/` | Sand manipulation (White Sand). `SandmasteryPacketHandler` still broken. `SandPouch` item inventory still Forge-era. `SandmasteryConfig`/`SandmasteryConfigs`, `SandmasteryRecipeGen`. |

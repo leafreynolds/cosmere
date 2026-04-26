@@ -16,11 +16,13 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyManifestations;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 
 //storing all the available powers on the user individually
 public class FeruchemyNicrosil extends FeruchemyManifestation
@@ -117,7 +119,8 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 		//player is storing investiture,
 		//set the powers they have to the stack.
 
-		CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
+		CompoundTag customData = metalmind.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+		CompoundTag nbt = customData.contains("StoredInvestiture") ? customData.getCompound("StoredInvestiture") : new CompoundTag();
 
 		int identity = (int) EntityHelper.getAttributeValue(data.getLiving(), AttributesRegistry.IDENTITY.getAttribute());
 		boolean isStoringIdentity = identity < 1;
@@ -166,15 +169,19 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 			}
 
 			//also disable all powers
-			effectInstance.setDynamicAttribute(manifestation.getAttribute(), -1000, AttributeModifier.Operation.ADDITION);
+			effectInstance.setDynamicAttribute(manifestation.getAttribute(), -1000, AttributeModifier.Operation.ADD_VALUE);
 		}
+
+		customData.put("StoredInvestiture", nbt);
+		metalmind.set(DataComponents.CUSTOM_DATA, CustomData.of(customData));
 
 		data.addEffect(effectInstance);
 	}
 
 	private void checkTapNicrosil(ISpiritweb data, ItemStack metalmind)
 	{
-		CompoundTag nbt = metalmind.getOrCreateTagElement("StoredInvestiture");
+		CompoundTag customData = metalmind.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+		CompoundTag nbt = customData.getCompound("StoredInvestiture");
 		//for each power the user has access to
 		//todo add the stored investiture identity to spiritweb data if not there already?
 
@@ -192,7 +199,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 								manifestationName,
 								0);
 
-				effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADDITION);
+				effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADD_VALUE);
 			}
 			else
 			{

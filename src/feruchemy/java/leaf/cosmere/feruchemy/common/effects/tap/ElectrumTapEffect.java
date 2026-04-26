@@ -18,6 +18,6 @@ public class ElectrumTapEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				AttributesRegistry.DETERMINATION.getAttribute(),
 				1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }

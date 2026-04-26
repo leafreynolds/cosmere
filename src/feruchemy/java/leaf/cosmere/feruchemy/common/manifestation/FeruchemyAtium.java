@@ -9,6 +9,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -58,7 +59,7 @@ public class FeruchemyAtium extends FeruchemyManifestation
 			final AttributeRegistryObject<Attribute> metalRelatedAttribute = AttributesRegistry.SIZE_ATTRIBUTE;
 			if (metalRelatedAttribute != null)
 			{
-				AttributeInstance attribute = living.getAttribute(metalRelatedAttribute.get());
+				AttributeInstance attribute = living.getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(metalRelatedAttribute.get()));
 				//return modded val
 				final float v = attribute != null ? (float) attribute.getValue() : 1;
 				return v;

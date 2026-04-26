@@ -21,11 +21,11 @@ public class GoldStoreEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				Attributes.MAX_HEALTH,
 				-4.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 		addAttributeModifier(
 				AttributesRegistry.HEALING_STRENGTH.getAttribute(),
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	@Override

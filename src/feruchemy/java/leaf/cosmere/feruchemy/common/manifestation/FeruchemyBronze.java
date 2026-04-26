@@ -16,21 +16,19 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.CanContinueSleepingEvent;
+import net.neoforged.neoforge.event.entity.player.CanPlayerSleepEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 public class FeruchemyBronze extends FeruchemyManifestation
 {
 	public FeruchemyBronze(Metals.MetalType metalType)
 	{
 		super(metalType);
-		MinecraftForge.EVENT_BUS.addListener(this::sleepCheck);
+		NeoForge.EVENT_BUS.addListener(this::sleepCheck);
 	}
 
 	@Override
@@ -69,9 +67,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 	private void resetSleepTimers(ISpiritweb data)
 	{
 		ServerPlayer player = (ServerPlayer) data.getLiving();
-		//ServerStatsCounter serverstatscounter = player.getStats();
 		player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
-
 	}
 
 	private void trySleep(ISpiritweb data)
@@ -83,7 +79,6 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			return;
 		}
 
-
 		boolean canSleep = canSleep(player);
 
 		if (!canSleep)
@@ -92,7 +87,6 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			data.setMode(this, 0);
 			return;
 		}
-
 
 		player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
 		if (player.isPassenger())
@@ -103,10 +97,6 @@ public class FeruchemyBronze extends FeruchemyManifestation
 		try
 		{
 			player.setPose(Pose.SLEEPING);
-            /*
-            Method setPose = ObfuscationReflectionHelper.findMethod(Entity.class, "func_213301_b", Pose.class);
-            setPose.invoke(player, Pose.SLEEPING);
-            */
 		}
 		catch (Exception e)
 		{
@@ -137,36 +127,37 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			serverLevel.updateSleepingPlayerList();
 		}
 
-
 		player.awardStat(Stats.SLEEP_IN_BED);
 		CriteriaTriggers.SLEPT_IN_BED.trigger(player);
 	}
 
-	private boolean canSleep(Player player)
+	private boolean canSleep(ServerPlayer player)
 	{
-		Player.BedSleepingProblem ret = ForgeEventFactory.onPlayerSleepInBed(player, Optional.empty());
-		if (ret != null)
+		// replaces ForgeEventFactory.onPlayerSleepInBed
+		CanPlayerSleepEvent sleepEvent = NeoForge.EVENT_BUS.post(new CanPlayerSleepEvent(player, player.blockPosition(), null));
+		if (sleepEvent.getProblem() != null)
 		{
 			return false;
 		}
 
 		if (player.isSleeping() || !player.isAlive())
 		{
-			return false;//(PlayerEntity.SleepResult.OTHER_PROBLEM);
+			return false;
 		}
 
 		if (!player.level().dimensionType().natural())
 		{
-			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_HERE);
+			return false;
 		}
 		if (player.level().isDay())
 		{
-			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
+			return false;
 		}
 
-		if (!ForgeEventFactory.fireSleepingTimeCheck(player, Optional.empty()))
+		// replaces ForgeEventFactory.fireSleepingTimeCheck
+		if (!NeoForge.EVENT_BUS.post(new CanContinueSleepingEvent(player, null)).mayContinueSleeping())
 		{
-			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
+			return false;
 		}
 
 		if (!player.isCreative())
@@ -183,13 +174,13 @@ public class FeruchemyBronze extends FeruchemyManifestation
 							vector3d.z() + 8D),
 					(entity) -> entity.isPreventingPlayerRest(player));
 
-			return list.isEmpty(); //(PlayerEntity.SleepResult.NOT_SAFE);
+			return list.isEmpty();
 		}
 
 		return true;
 	}
 
-	public void sleepCheck(SleepingLocationCheckEvent event)
+	public void sleepCheck(CanContinueSleepingEvent event)
 	{
 		if (event.getEntity() instanceof Player player)
 		{
@@ -202,7 +193,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			{
 				if (isActive(iSpiritweb))
 				{
-					event.setResult(Event.Result.ALLOW);
+					event.setContinueSleeping(true);
 				}
 			});
 		}

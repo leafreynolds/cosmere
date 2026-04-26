@@ -9,19 +9,16 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.config.CosmereModConfig;
 import leaf.cosmere.feruchemy.common.capabilities.FeruchemySpiritwebSubmodule;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod(Feruchemy.MODID)
 public class Feruchemy implements IModModule
@@ -32,14 +29,11 @@ public class Feruchemy implements IModModule
 
 	public final Version versionNumber;
 
-	public Feruchemy()
+	public Feruchemy(IEventBus modBus, ModContainer modContainer)
 	{
 		Cosmere.addModule(instance = this);
 
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-
-		FeruchemyConfigs.registerConfigs(ModLoadingContext.get());
+		FeruchemyConfigs.registerConfigs(modContainer);
 
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigLoad);
@@ -51,20 +45,17 @@ public class Feruchemy implements IModModule
 		FeruchemyEffects.EFFECTS.register(modBus);
 		FeruchemyCreativeTabs.CREATIVE_TABS.register(modBus);
 
-		//Set our version number to match the mods.toml file, which matches the one in our build.gradle
-		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+		versionNumber = new Version(modContainer);
 	}
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(Feruchemy.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Feruchemy.MODID, path);
 	}
 
 	public void commonSetup(FMLCommonSetupEvent event)
 	{
 		CosmereAPI.logger.info("Cosmere: Feruchemy module Version {} initializing...", versionNumber);
-		MinecraftForge.EVENT_BUS.register(this);
-
 	}
 
 	@Override
@@ -85,21 +76,22 @@ public class Feruchemy implements IModModule
 		return new FeruchemySpiritwebSubmodule();
 	}
 
-	private void onConfigLoad(ModConfigEvent configEvent)
+	private void handleConfigEvent(ModConfigEvent configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		if (config.getSpec() == FeruchemyConfigs.SERVER.getConfigSpec())
 		{
-			cosmereModConfig.clearCache();
+			FeruchemyConfigs.SERVER.clearCache();
 		}
+	}
+
+	private void onConfigLoad(ModConfigEvent.Loading configEvent)
+	{
+		handleConfigEvent(configEvent);
 	}
 
 	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(configEvent);
 	}
 }

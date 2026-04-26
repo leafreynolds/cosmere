@@ -23,7 +23,7 @@ public class DuraluminTapEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				AttributesRegistry.CONNECTION.getAttribute(),
 				1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	@Override

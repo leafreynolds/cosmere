@@ -17,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 
 public class GoldTapEffect extends FeruchemyEffectBase
@@ -29,7 +29,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				AttributesRegistry.HEALING_STRENGTH.getAttribute(),
 				1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
 			//remove harmful effects over time
 			for (MobEffectInstance activeEffect : living.getActiveEffects())
 			{
-				if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
+				if (!activeEffect.getEffect().value().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
 				{
 					//never reduce down below 5 ticks
 					final double clamped = Math.max(ticksNeededLeftToReduce, activeEffect.getDuration() - timeToReduceByInTicks);
@@ -87,14 +87,9 @@ public class GoldTapEffect extends FeruchemyEffectBase
 
 
 
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingDamageEvent.Pre event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
-
-		if (event.getAmount() > event.getEntity().getHealth())
+		if (event.getNewDamage() > event.getEntity().getHealth())
 		{
 			int strength = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.HEALING_STRENGTH.getAttribute(), 0);
 
@@ -102,12 +97,12 @@ public class GoldTapEffect extends FeruchemyEffectBase
 			if (strength > 6 && event.getEntity() instanceof Player player)
 			{
 				// the cost of not dying should be all the extra damage * 50
-				int amount = (int) (event.getAmount() - player.getHealth()) * 50;
+				int amount = (int) (event.getNewDamage() - player.getHealth()) * 50;
 				final ItemStack metalmind = MetalmindChargeHelper.adjustMetalmindChargeExact(player, Metals.MetalType.GOLD, -amount, true, true);
 
 				if (!metalmind.isEmpty())
 				{
-					event.setAmount((float) Math.floor(player.getHealth() - 1));
+					event.setNewDamage((float) Math.floor(player.getHealth() - 1));
 				}
 			}
 		}

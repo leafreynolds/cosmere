@@ -65,7 +65,7 @@ public class FeruchemyGold extends FeruchemyManifestation
 		{
 			int bonusHealth = Math.max(0, -mode - MIN_TAP_FOR_EXTRA_HEALTH + 1);
 
-			currentEffect.setDynamicAttribute(Attributes.MAX_HEALTH, (double) bonusHealth / -mode, AttributeModifier.Operation.ADDITION);
+			currentEffect.setDynamicAttribute(Attributes.MAX_HEALTH.value(), (double) bonusHealth / -mode, AttributeModifier.Operation.ADD_VALUE);
 		}
 
 		data.addEffect(currentEffect);

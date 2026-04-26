@@ -19,19 +19,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = Feruchemy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Feruchemy.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class FeruchemyEntityEventHandler
 {
 	@SubscribeEvent
@@ -62,11 +58,6 @@ public class FeruchemyEntityEventHandler
 	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
-
 		final LivingEntity livingEntity = event.getEntity();
 		if (event.getItem().getItem() instanceof MetalNuggetItem metalNuggetItem)
 		{
@@ -93,52 +84,28 @@ public class FeruchemyEntityEventHandler
 			if (scale != 1)
 			{
 				event.setNewSize(event.getNewSize().scale(scale));
-				event.setNewEyeHeight(event.getNewEyeHeight() * scale);
 			}
 		}
 	}
 
 	//Attack event happens first
 	@SubscribeEvent
-	public static void onLivingAttackEvent(LivingAttackEvent event)
+	public static void onLivingAttackEvent(LivingIncomingDamageEvent event)
 	{
 		BrassStoreEffect.onLivingAttackEvent(event);
 	}
 
 	//then living hurt event
 	@SubscribeEvent
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingDamageEvent.Pre event)
 	{
 		BrassStoreEffect.onLivingHurtEvent(event);
 		GoldTapEffect.onLivingHurtEvent(event);
 	}
 
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onBreakBlock(BlockEvent.BreakEvent evt)
-	{
-		Player player = evt.getPlayer();
-
-		int totalFortuneBonus = (int) EntityHelper.getAttributeValue(player, AttributesRegistry.COSMERE_FORTUNE.getAttribute());
-
-		if (totalFortuneBonus == 0)
-		{
-			return;
-		}
-
-		ItemStack stack = player.getMainHandItem();
-		int bonusLevel = stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
-		int silklevel = stack.getEnchantmentLevel(Enchantments.SILK_TOUCH);
-
-		LevelAccessor level = evt.getLevel();
-		evt.setExpToDrop(
-				evt.getState().getExpDrop(
-						level,
-						level.getRandom(),
-						evt.getPos(),
-						bonusLevel + totalFortuneBonus,
-						silklevel
-				)
-		);
-	}
+	// TODO: NeoForge 1.21.1 removed setExpToDrop from BlockEvent.BreakEvent.
+	// The COSMERE_FORTUNE XP bonus can no longer be applied this way.
+	// Item-drop fortune bonus is handled by FortuneBonusModifier (main module, Phase 9).
+	// XP bonus will require a Mixin into Block#spawnAfterBreak or a GlobalLootModifier approach.
 }

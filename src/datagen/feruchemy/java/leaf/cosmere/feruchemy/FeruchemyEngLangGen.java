@@ -17,13 +17,13 @@ import leaf.cosmere.common.items.ChargeableMetalCurioItem;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.Locale;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Feruchemy.MODID))
@@ -87,7 +87,7 @@ public class FeruchemyEngLangGen extends LanguageProvider
 	private void addEntities()
 	{
 		//Entities
-		for (Map.Entry<ResourceKey<EntityType<?>>, EntityType<?>> type : ForgeRegistries.ENTITY_TYPES.getEntries())
+		for (Map.Entry<ResourceKey<EntityType<?>>, EntityType<?>> type : BuiltInRegistries.ENTITY_TYPE.entrySet())
 		{
 			final ResourceLocation id = type.getKey().location();
 			if (id.getNamespace().equals(Feruchemy.MODID))

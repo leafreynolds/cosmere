@@ -18,10 +18,10 @@ public class PewterStoreEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				Attributes.ATTACK_DAMAGE,
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 		addAttributeModifier(
 				Attributes.ATTACK_KNOCKBACK,
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }

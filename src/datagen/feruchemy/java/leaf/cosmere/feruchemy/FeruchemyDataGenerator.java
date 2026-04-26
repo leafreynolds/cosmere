@@ -9,15 +9,14 @@ import leaf.cosmere.feruchemy.patchouli.FeruchemyPatchouliGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = Feruchemy.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = Feruchemy.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class FeruchemyDataGenerator
 {
 	@SubscribeEvent
@@ -30,8 +29,8 @@ public class FeruchemyDataGenerator
 
 		generator.addProvider(true, new FeruchemyEngLangGen(packOutput));
 		generator.addProvider(true, new FeruchemyItemModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new FeruchemyTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new FeruchemyRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new FeruchemyTagProvider(packOutput, lookupProvider, existingFileHelper));
+		generator.addProvider(true, new FeruchemyRecipeGen(packOutput, lookupProvider));
 		generator.addProvider(true, new FeruchemyPatchouliGen(packOutput));
 		generator.addProvider(event.includeServer(), new FeruchemyCuriosProvider(packOutput, existingFileHelper, lookupProvider));
 	}

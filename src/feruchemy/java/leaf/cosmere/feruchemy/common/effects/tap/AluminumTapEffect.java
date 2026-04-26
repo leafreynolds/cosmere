@@ -18,6 +18,6 @@ public class AluminumTapEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				AttributesRegistry.IDENTITY.getAttribute(),
 				1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }

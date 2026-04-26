@@ -2,11 +2,10 @@
   "required": true,
   "minVersion": "0.8",
   "package": "leaf.cosmere.feruchemy.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "refmap": "mixins.cosmere.feruchemy.refmap.json",
   "mixins": [
-    "EntityMixin",
-    "IForgeEntityMixin"
+    "EntityMixin"
   ],
   "client": [
     "GameRendererMixin"
