@@ -34,6 +34,8 @@ public class NetworkPacketHandler extends BasePacketHandler
 		registerClientToServer(ChangeSelectedManifestationMessage.class, ChangeSelectedManifestationMessage::decode);
 		registerClientToServer(SetSelectedManifestationMessage.class, SetSelectedManifestationMessage::decode);
 		registerClientToServer(StoreTapPowerMessage.class, StoreTapPowerMessage::decode);
+		registerClientToServer(SavePowerStateMessage.class, SavePowerStateMessage::decode);
+		registerClientToServer(TogglePowerStateMessage.class, TogglePowerStateMessage::decode);
 
 	}
 
