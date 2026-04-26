@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 3 - 2026 ~ Leaf
+ * File updated ~ 26 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools.common.items;
@@ -11,13 +11,18 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class TArmorItem extends ArmorItem implements IHasMetalType
 {
@@ -25,7 +30,11 @@ public class TArmorItem extends ArmorItem implements IHasMetalType
 
 	public TArmorItem(Metals.MetalType metalType, Type pSlot, Properties pProperties)
 	{
-		super(buildArmorMaterial(metalType), pSlot, pProperties.durability(metalType.getDurabilityForType(pSlot)));
+		super(buildArmorMaterial(metalType),
+				pSlot,
+				pProperties
+						.durability(metalType.getDurabilityForType(pSlot))
+		);
 		this.metalType = metalType;
 	}
 
@@ -87,6 +96,21 @@ public class TArmorItem extends ArmorItem implements IHasMetalType
 	{
 		return layer.dyeable()
 		       ? ResourceLocation.fromNamespaceAndPath(CosmereTools.MODID, "textures/models/armor/armor_overlay.png")
-		       : ResourceLocation.fromNamespaceAndPath(CosmereTools.MODID, "textures/models/armor/armor_layer_" + (innerModel ? 2 : 1) + ".png");
+		       : ResourceLocation.fromNamespaceAndPath(CosmereTools.MODID, "textures/models/armor/armor_layer_" + (
+				       innerModel ? 2 : 1) + ".png");
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void initializeClient(Consumer<IClientItemExtensions> consumer)
+	{
+		consumer.accept(new IClientItemExtensions()
+		{
+			@Override
+			public int getArmorLayerTintColor(ItemStack stack, LivingEntity entity, ArmorMaterial.Layer layer, int layerIdx, int fallbackColor)
+			{
+				return getColourValue();
+			}
+		});
 	}
 }

@@ -711,14 +711,6 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 
 ## Open questions / decisions to confirm
 
-- **Submodule platform deps.** Submodule `neoforge.mods.toml` files currently only declare `cosmere` + sibling deps. If submodules should declare `minecraft` + `neoforge` explicitly (as in modern NeoForge practice), add those blocks.
-- **MDG `mods { create(name) { … } }` inside a Groovy `for` loop.** If ModDevGradle rejects the iteration pattern, rewrite with `secondaryModules.each { name -> mods.create(name) { … } }`.
-- **Access transformer scope.** Only `main`, `allomancy`, `surgebinding` AT files are listed in `build.gradle`. Confirm no other module accumulated ATs.
-- **Parchment version.** `2024.11.17` is reasonable; bump freely.
-- **`example` module.** Still in `build.gradle` secondaryModules but not in publishing. Keep as dev-only?
-- **Version API.** `new Version(ModContainer)` — confirm the `leaf.cosmere.api.Version` constructor accepts a `ModContainer` (vs the old `ModLoadingContext.get().getActiveContainer()`).
-- **Submodule configs.** Each submodule has its own `*Configs.java` / `*Config.java` pair (allomancy, feruchemy, hemalurgy, surgebinding, awakening, aondor, aviar, cosmeretools, soulforgery, example) still on `ForgeConfigSpec` + `ModLoadingContext`. Phase 3 here covered only the main source set; submodules are deferred to their per-module port passes. (sandmastery config ported — Phase 15).
-- **`TArmorItem` metal color tinting removed.** `DyeableLeatherItem` was removed in 1.21.1, so `TArmorItem` no longer tints armor with its metal type's color. The fix is to register an item color handler in client events (e.g. in `ToolsForgeClientEvents` via `RegisterColorHandlersEvent.Item`) that always returns `metalType.getColorValue()` for instances of `TArmorItem`. Without this, metal armor will render without color tinting in-game.
 - **`Feruchemical Atium` has had some mixin related functions in vanilla code disappear, so will need fixing.
 
 ## Notable API migration cheatsheet (for future passes)
@@ -773,3 +765,4 @@ Each submodule is its own phase, covering `src/<module>/` + `src/datagen/<module
 | `BlockEntity.load(CompoundTag)` | `BlockEntity.loadAdditional(CompoundTag, HolderLookup.Provider)` (method renamed) |
 | `ItemStackHandler.serializeNBT()` / `deserializeNBT(CompoundTag)` | `serializeNBT(HolderLookup.Provider)` / `deserializeNBT(HolderLookup.Provider, CompoundTag)` |
 | `LivingEntityUseItemEvent.Finish.isCanceled()` | Not available — `Finish` is no longer cancellable in NeoForge 1.21.1; remove the check |
+| `DyeableLeatherItem` interface (`getColor`/`hasCustomColor`) | Removed. Vanilla pipeline moved to `DataComponents.DYED_COLOR` + `DyedItemColor`, but only honored for items in `#minecraft:dyeable`. For non-dyeable armor that needs a forced tint (e.g. metal-colored), override `IClientItemExtensions#getArmorLayerTintColor` via `Item#initializeClient` instead — NeoForge's `HumanoidArmorLayer` patch routes the dyeable-layer color through it regardless of tag membership. |

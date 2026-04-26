@@ -1,5 +1,5 @@
 /*
- * File updated ~ 22 - 3 - 2024 ~ Leaf
+ * File updated ~ 26 - 4 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools.common.eventHandlers;
@@ -18,8 +18,6 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 @EventBusSubscriber(modid = CosmereTools.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ToolsCommonForgeEvents
 {
-
-
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
 	{
