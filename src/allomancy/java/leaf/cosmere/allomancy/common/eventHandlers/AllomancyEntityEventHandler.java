@@ -6,15 +6,22 @@ package leaf.cosmere.allomancy.common.eventHandlers;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.items.CoinPouchItem;
+import leaf.cosmere.allomancy.common.items.MistcloakItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyAtium;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyChromium;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyNicrosil;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyPewter;
+import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.allomancy.common.utils.MiscHelper;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.helpers.CuriosHelper;
 import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
 import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.items.MetalNuggetItem;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -24,6 +31,13 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Allomancy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AllomancyEntityEventHandler
@@ -110,5 +124,60 @@ public class AllomancyEntityEventHandler
 		AllomancyNicrosil.onLivingHurtEvent(event);
 		AllomancyPewter.onLivingHurtEvent(event);
 		AllomancyChromium.onLivingHurtEvent(event);
+
+		DamageSource source = event.getSource();
+
+		LivingEntity entity = event.getEntity();
+
+		// Skip if dead or no damage
+		if (entity.level().isClientSide || event.getAmount() <= 0)
+		{
+			return;
+		}
+		if (CuriosHelper.getCuriosHandler(entity).isPresent() && CuriosHelper.hasItemInInventory(entity, AllomancyItems.MISTCLOAK.asItem()))
+		{
+			// Only do damage types that the mistcloak can protect.
+			for (ResourceKey<DamageType> type : protectedDamageTypes)
+			{
+				if (!source.is(type))
+				{
+					continue;
+				}
+				for (SlotResult slotResult : CuriosHelper.getSlotsWithItem(entity, AllomancyItems.MISTCLOAK.asItem()))
+				{
+					ItemStack stack = slotResult.stack();
+					MistcloakItem item = (MistcloakItem) stack.getItem();
+					if (item.getDamage(stack) >= item.getMaxDamage(stack))
+					{
+						continue;
+					}
+
+					float original = event.getAmount();
+					float absorbed = original * 0.2f;
+					float remaining = original - absorbed;
+
+					// Reduce damage taken by entity
+					event.setAmount(remaining);
+
+					var damage =  (int) (item.getDamage(stack) + Math.ceil(absorbed));
+					item.setDamage(stack,  damage);
+					// If we successfully reduce damage, we don't need to keep going.
+
+					if (item.getDamage(stack) >= item.getMaxDamage(stack))
+					{
+						item.curioBreak(slotResult.slotContext(), stack);
+					}
+					break;
+					}
+			}
+		}
+		// Find the curio item that acts as armor
+
 	}
+
+	private static final List<ResourceKey<DamageType>> protectedDamageTypes =
+			List.of(DamageTypes.FALL,
+					DamageTypes.FLY_INTO_WALL
+					//DamageTypes.FREEZE
+			);
 }

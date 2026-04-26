@@ -99,4 +99,9 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	boolean hasEffect(CosmereEffect effect);
 
 	Set<Map.Entry<UUID, CosmereEffectInstance>> getEffects();
+
+	void saveNewState(int num);
+
+	void activatePowerState(int num);
+
 }

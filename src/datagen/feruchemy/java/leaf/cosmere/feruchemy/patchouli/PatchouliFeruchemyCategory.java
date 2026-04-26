@@ -119,7 +119,7 @@ public class PatchouliFeruchemyCategory
 					break;
 				case NICROSIL:
 					pages.add(new BookStuff.TextPage("A ferring who taps " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(ferringName) + "\", and stores Investiture. " +
-							"Little is known- more research required. (Not yet implemented)"));
+							"Terris experimentation has lead to the discovery that storing/tapping Nicrosil will store/tap the Investiture that grants Invested Arts."));
 					break;
 				case CADMIUM:
 					pages.add(new BookStuff.TextPage("A ferring who taps " + PatchouliTextFormat.Thing(metalName) + " is known as a \"" + PatchouliTextFormat.Thing(ferringName) + "\", and stores Breaths. " +

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A ferring who taps $(thing)nicrosil$() is known as a \"$(thing)Soulbearer$()\", and stores Investiture. Little is known- more research required. (Not yet implemented)"
+      "text": "A ferring who taps $(thing)nicrosil$() is known as a \"$(thing)Soulbearer$()\", and stores Investiture. Terris experimentation has lead to the discovery that storing/tapping Nicrosil will store/tap the Investiture that grants Invested Arts."
     },
     {
       "type": "patchouli:crafting",
