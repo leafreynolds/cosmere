@@ -4,20 +4,17 @@
 
 package leaf.cosmere.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.client.gui.ISyncSpiritweb;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.client.render.CosmereRenderers;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -78,7 +75,7 @@ public class ClientModEvents
 			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
 
 			//normal hud stuff
-			if (mc.screen != SpiritwebMenu.instance)
+			if (!(mc.screen instanceof ISyncSpiritweb))
 			{
 				spiritweb.renderSelectedHUD(guiGraphics);
 			}

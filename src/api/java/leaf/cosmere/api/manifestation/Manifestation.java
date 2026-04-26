@@ -130,6 +130,15 @@ public class Manifestation implements IManifestationProvider
 		return this;
 	}
 
+	public boolean hasMenu()
+	{
+		return false;
+	}
+
+	public void openMenu()
+	{
+
+	}
 
 	public Attribute getAttribute()
 	{

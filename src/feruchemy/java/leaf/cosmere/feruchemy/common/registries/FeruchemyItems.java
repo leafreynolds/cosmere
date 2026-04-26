@@ -10,10 +10,8 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.registration.impl.ItemDeferredRegister;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.feruchemy.common.Feruchemy;
-import leaf.cosmere.feruchemy.common.items.BandsOfMourningItem;
-import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
-import leaf.cosmere.feruchemy.common.items.NecklaceMetalmindItem;
-import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
+import leaf.cosmere.feruchemy.common.items.*;
+import net.minecraft.world.item.Item;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -27,34 +25,61 @@ public class FeruchemyItems
 
 	public static final ItemRegistryObject<BandsOfMourningItem> BANDS_OF_MOURNING = ITEMS.register("bands_of_mourning", BandsOfMourningItem::new);
 
-	public static final Map<Metals.MetalType, ItemRegistryObject<RingMetalmindItem>> METAL_RINGS =
+	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_RINGS =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasFeruchemicalEffect)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + RegNameStubs.RING + RegNameStubs.METALMIND,
-									() -> new RingMetalmindItem(type)
-							)));
+									() -> {
+										if(type == Metals.MetalType.NICROSIL)
+										{
+											return new NicrosilRingMetalmindItem(type);
+										}
+										else
+										{
+											return new RingMetalmindItem(type);
+										}
+									})
+					));
 
-	public static final Map<Metals.MetalType, ItemRegistryObject<BraceletMetalmindItem>> METAL_BRACELETS =
+	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_BRACELETS =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasFeruchemicalEffect)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + RegNameStubs.BRACELET + RegNameStubs.METALMIND,
-									() -> new BraceletMetalmindItem(type)
-							)));
+									() -> {
+										if(type == Metals.MetalType.NICROSIL)
+										{
+											return new NicrosilBraceletMetalmindItem(type);
+										}
+										else
+										{
+											return new BraceletMetalmindItem(type);
+										}
+									})
+							));
 
-	public static final Map<Metals.MetalType, ItemRegistryObject<NecklaceMetalmindItem>> METAL_NECKLACES =
+	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_NECKLACES =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasFeruchemicalEffect)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + RegNameStubs.NECKLACE + RegNameStubs.METALMIND,
-									() -> new NecklaceMetalmindItem(type)
-							)));
+									() -> {
+										if(type == Metals.MetalType.NICROSIL)
+										{
+											return new NicrosilNecklaceMetalmindItem(type);
+										}
+										else
+										{
+											return new NecklaceMetalmindItem(type);
+										}
+									})
+							));
 
 }
