@@ -27,7 +27,6 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 
 	public void addFilled(CreativeModeTab.Output output)
 	{
-		output.accept(new ItemStack(this));
 		ItemStack fullPower = new ItemStack(this);
 		setCharge(fullPower, getMaxCharge(fullPower));
 		output.accept(fullPower);

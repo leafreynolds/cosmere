@@ -18,8 +18,10 @@ public class Constants
 	{
 
 		public static final ResourceLocation JEI = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "jei");
+		public static final ResourceLocation JEI_ALLOMANCY = ResourceLocation.fromNamespaceAndPath("allomancy", "jei");
 		public static final ResourceLocation JEI_FERUCHEMY = ResourceLocation.fromNamespaceAndPath("feruchemy", "jei");
 		public static final ResourceLocation JEI_HEMALURGY = ResourceLocation.fromNamespaceAndPath("hemalurgy", "jei");
+		public static final ResourceLocation JEI_SANDMASTERY = ResourceLocation.fromNamespaceAndPath("sandmastery", "jei");
 		public static final ResourceLocation SPIRITWEB_CAP = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "spiritweb");
 		public static final ResourceLocation ROSHAR_CAP = ResourceLocation.fromNamespaceAndPath("surgebinding", "roshar");
 		public static final ResourceLocation SCADRIAL_CAP = ResourceLocation.fromNamespaceAndPath("allomancy", "scadrial");
