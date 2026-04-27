@@ -26,8 +26,8 @@ import java.util.*;
 
 public class SurgeTransportation extends SurgebindingManifestation
 {
-	static Map<UUID, Integer> shiftDuration  = new HashMap<>();
-	static Map<UUID, List<Entity>> targets = new HashMap<>();
+	//static Map<UUID, Integer> shiftDuration  = new HashMap<>();
+	//static Map<UUID, List<Entity>> targets = new HashMap<>();
 
 	public SurgeTransportation(Roshar.Surges surge)
 	{
@@ -39,8 +39,8 @@ public class SurgeTransportation extends SurgebindingManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		shiftDuration.putIfAbsent(data.getLiving().getUUID(), 0);
-		targets.putIfAbsent(data.getLiving().getUUID(), new LinkedList<>());
+		//shiftDuration.putIfAbsent(data.getLiving().getUUID(), 0);
+		//targets.putIfAbsent(data.getLiving().getUUID(), new LinkedList<>());
 		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->
 		{
 
@@ -70,7 +70,7 @@ public class SurgeTransportation extends SurgebindingManifestation
 	}
 
 
-
+/*
 	public static void onShift(MovementInputUpdateEvent event)
 	{
 		UUID uuid = event.getEntity().getUUID();
@@ -149,4 +149,5 @@ public class SurgeTransportation extends SurgebindingManifestation
 			}
 		}
 	}
+ */
 }
