@@ -1,11 +1,11 @@
 {
-  "type": "advancement_reward",
+  "type": "minecraft:advancement_reward",
   "pools": [
     {
       "rolls": 1,
       "entries": [
         {
-          "type": "item",
+          "type": "minecraft:item",
           "name": "cosmere:guide"
         }
       ]

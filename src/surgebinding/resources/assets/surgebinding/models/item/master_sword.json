@@ -1,6 +1,6 @@
 {
   "credit": "Made with Blockbench",
-  "parent": "forge:item/default",
+  "gui_light": "front",
   "textures": {
     "1": "surgebinding:item/models/shardblade_model/master_sword",
     "particle": "surgebinding:item/models/shardblade_model/master_sword"
