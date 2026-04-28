@@ -35,17 +35,17 @@ public class SurgebindingEntityLootTableGen extends BaseEntityLootTables
 		for (var gemType : EnumUtils.GEMSTONE_TYPES)
 		{
 			lootPool.add(
-					LootItem.lootTableItem(SurgebindingItems.GEMSTONE_BROAMS.get(gemType))
+					LootItem.lootTableItem(SurgebindingItems.GEMSTONE_LARGE.get(gemType))
 							.apply(SetItemCountFunction.setCount(UniformGenerator.between(-1.0F, 1.0F)))
 			);
 			lootPool.add(
-					LootItem.lootTableItem(SurgebindingItems.GEMSTONE_MARKS.get(gemType))
+					LootItem.lootTableItem(SurgebindingItems.GEMSTONE_MEDIUM.get(gemType))
 							.apply(SetItemCountFunction.setCount(UniformGenerator.between(-1.0F, 2.0F)))
 							.apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F)))
 			);
 			//chips are small enough that surely you'll get at least some
 			lootPool.add(
-					LootItem.lootTableItem(SurgebindingItems.GEMSTONE_CHIPS.get(gemType))
+					LootItem.lootTableItem(SurgebindingItems.GEMSTONE_SMALL.get(gemType))
 							.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))
 							.apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F)))
 			);

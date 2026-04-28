@@ -10,8 +10,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
+import leaf.cosmere.surgebinding.common.manifestation.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
@@ -51,6 +50,9 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeProgression.onBlockInteract(event);
+		SurgeDivision.onBlockInteract(event);
+		SurgeCohesion.onBlockInteract(event);
+		SurgeTransformation.onBlockInteract(event);
 	}
 
 	@SubscribeEvent
@@ -70,7 +72,6 @@ public class SurgebindingForgeEventsHandler
 		SurgeProgression.onEntityInteract(event);
 	}
 
-
 	//Attack event happens first
 	@SubscribeEvent
 	public static void onLivingAttackEvent(LivingAttackEvent event)
@@ -81,8 +82,9 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeGravitation.onLivingAttackEvent(event);
+		SurgeDivision.onLivingAttackEvent(event);
+		SurgeAdhesion.onLivingAttackEvent(event);
 	}
-
 
 	@SubscribeEvent
 	public static void onServerChatEvent(ServerChatEvent event)

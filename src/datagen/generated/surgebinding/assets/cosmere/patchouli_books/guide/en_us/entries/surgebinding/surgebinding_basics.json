@@ -1,12 +1,12 @@
 {
   "category": "cosmere:surgebinding",
-  "icon": "surgebinding:amethyst_broam",
+  "icon": "surgebinding:cut_amethyst_medium",
   "name": "Surgebinding Basics",
   "pages": [
     {
       "type": "text",
       "text": "One who enters a Nahel Bond with a spren will gain the surgebinding abilities of their specific order. (WIP)",
-      "title": "surgebinding:amethyst_broam"
+      "title": "surgebinding:cut_amethyst_medium"
     }
   ],
   "priority": true,

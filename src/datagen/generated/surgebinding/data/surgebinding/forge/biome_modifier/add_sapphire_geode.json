@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "surgebinding:sapphire_geode_placed_key",
+  "step": "underground_ores"
+}

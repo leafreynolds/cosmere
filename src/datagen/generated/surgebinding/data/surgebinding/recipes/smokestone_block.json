@@ -3,15 +3,12 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:gems/smokestone"
-    },
-    "J": {
-      "item": "surgebinding:smokestone_broam"
+      "item": "surgebinding:smokestone"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {

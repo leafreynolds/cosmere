@@ -55,14 +55,14 @@ public class SurgebindingServerConfig implements ICosmereConfig
 				"second_ideals",
 				List.of(
 						"I will protect those who cannot protect themselves.", //windrunner
-						"I will put the law before all else.", //skybreaker
-						"I will seek self-mastery", //dustbringer
-						"I will remember those who have been forgotten", //edgedancer
-						"I will seek the truth", //truthwatcher //todo better?
+						"I swear to seek justice, to let it guide me, until I find a more perfect Ideal.", //skybreaker
+						"To control my power, I will control myself.", //dustbringer
+						"I will remember those who have been forgotten.", //edgedancer
+						"I will seek the truth wherever it is hidden.", //truthwatcher
 						IDEAL_NOT_IMPLEMENTED, //lightweaver
-						"I will reach my potential", //elsecaller
+						"I will reach my potential.", //elsecaller //Needs to be better, not accurate to canon
 						"I will seek freedom for those in bondage.", //willshaper
-						"I will stand when others fall.", //stoneward
+						"I will step forward when others fall back.", //stoneward
 						"I will unite instead of divide." //bondsmith
 				),
 				elementValidator);
@@ -72,12 +72,12 @@ public class SurgebindingServerConfig implements ICosmereConfig
 				List.of(
 						"I will protect even those I hate, so long as it is right.", //windrunner
 						IDEAL_NOT_IMPLEMENTED, //skybreaker
-						"I will strive to create rather than destroy", //dustbringer
+						"To understand my power, I will understand what power is", //dustbringer
 						"I will listen to those who have been ignored.", //edgedancer
 						IDEAL_NOT_IMPLEMENTED, //truthwatcher
 						IDEAL_NOT_IMPLEMENTED, //lightweaver
 						"I will achieve my goals, no matter the cost", //elsecaller
-						IDEAL_NOT_IMPLEMENTED, //willshaper
+						"I will fight oppression", //willshaper
 						"I will be the foundation on which others can build.", //stoneward
 						"I will take responsibility for what I have done. If I must fall, I will rise each time a better" //bondsmith
 				),
@@ -103,7 +103,7 @@ public class SurgebindingServerConfig implements ICosmereConfig
 				"fifth_ideals",
 				List.of(
 						"I will protect myself, so that I may continue to protect others. ", //windrunner
-						"I am the law", //skybreaker
+						"I am THE LAW", //skybreaker
 						IDEAL_NOT_IMPLEMENTED, //dustbringer
 						IDEAL_NOT_IMPLEMENTED, //edgedancer
 						IDEAL_NOT_IMPLEMENTED, //truthwatcher

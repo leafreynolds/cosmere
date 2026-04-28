@@ -41,12 +41,6 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 	private boolean herald = false;
 
-	//Since I'm referencing it so often. For readability if nothing else
-	int maxPlayerStormlight = SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get();
-
-	//Somewhat temporary value. How fast stormlight is drawn in/breathed out. Maybe make this a config value?
-	int drawSpeed = SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get();
-
 	//a little ew, I'd rather this in an enum utils, but it's the only place that needs it
 	public static final ShardplateArmorMaterial[] ARMOR_MATERIALS = ShardplateArmorMaterial.values();
 	RadiantStateManager idealsManager = new RadiantStateManager();
@@ -66,6 +60,11 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	{
 		//boolean anySurges = SurgebindingManifestations.SURGEBINDING_POWERS.values().stream().anyMatch((manifestation -> spiritweb.hasManifestation(manifestation.getManifestation())));
 		return idealsManager.getOrder() != null;
+	}
+
+	public int getIdeal()
+	{
+		return idealsManager.getIdeal();
 	}
 
 	@Override
@@ -213,7 +212,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	{
 		GemstoneItem gemstoneItem = (GemstoneItem) item.getItem();
 
-		int availableSpace = maxPlayerStormlight - stormlightStored;
+		int availableSpace = SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get() - stormlightStored;
 
 		if (availableSpace < amountDrawn)
 		{
@@ -241,13 +240,13 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 		if (isInHighstorm(entity))
 		{
-			if (maxPlayerStormlight - stormlightStored >= drawSpeed)
+			if (SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get() - stormlightStored >= SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get())
 			{
-				stormlightStored += drawSpeed;
+				stormlightStored += SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get();
 			}
 			else
 			{
-				stormlightStored += maxPlayerStormlight - stormlightStored;
+				stormlightStored += SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get() - stormlightStored;
 			}
 		}
 		else if (entity instanceof Player player)
@@ -257,7 +256,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 			if (item.getItem() instanceof GemstoneItem gemstoneItem && gemstoneItem.getCharge(item) != 0)
 			{
-				requestGemStormlight(item, drawSpeed);
+				requestGemStormlight(item, SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get());
 			}
 			else
 			{
@@ -272,7 +271,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				if (!chargedGems.isEmpty())
 				{
 
-					int requestAmount = drawSpeed / gemAmount;
+					int requestAmount = SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get() / gemAmount;
 
 					for (ItemStack gem : chargedGems)
 					{
@@ -326,7 +325,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 			//If the hand item is a gemstone focus on that one.
 			if (handItem.getItem() instanceof GemstoneItem)
 			{
-				dispatchGemStormlight(handItem, drawSpeed);
+				dispatchGemStormlight(handItem, SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get());
 			}
 			//Otherwise affect all gemstoneItems in inventory.
 			else
@@ -344,11 +343,11 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				//If there are none, just breathe out into air.
 				if (unchargedGems.isEmpty())
 				{
-					adjustStormlight(-drawSpeed, true);
+					adjustStormlight(-SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get(), true);
 				}
 				else
 				{
-					int dispatchAmount = drawSpeed / unchargedGems.size();
+					int dispatchAmount = SurgebindingConfigs.SERVER.PLAYER_DRAW_SPEED.get() / unchargedGems.size();
 
 					//For every gem that is not fully charged.
 					for (ItemStack gem : unchargedGems)
@@ -408,7 +407,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		{
 			if (doAdjust)
 			{
-				stormlightStored = Mth.clamp(newSLValue, 0, maxPlayerStormlight);
+				stormlightStored = Mth.clamp(newSLValue, 0, SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get());
 			}
 
 			return true;
@@ -419,7 +418,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 
 	public void setStormlight(int amount)
 	{
-		stormlightStored = Mth.clamp(amount, 0, maxPlayerStormlight);
+		stormlightStored = Mth.clamp(amount, 0, SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get());
 	}
 
 	public void onChatMessageReceived(ServerChatEvent event)

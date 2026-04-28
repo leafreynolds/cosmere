@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:gems/zircon"
+            "items": [
+              "surgebinding:zircon"
+            ]
           }
         ]
       },
