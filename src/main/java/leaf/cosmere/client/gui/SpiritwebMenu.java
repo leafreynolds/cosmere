@@ -8,6 +8,7 @@ import com.google.common.base.Stopwatch;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.api.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
@@ -20,10 +21,12 @@ import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -224,6 +227,10 @@ public class SpiritwebMenu extends Screen
 		public double centerY;
 		public boolean highlighted;
 
+		// quad corners in screen space, populated by updateRadialButtonHitboxes and re-used for background rendering.
+		public double x1m1, y1m1, x2m1, y2m1, x1m2, y1m2, x2m2, y2m2;
+		public int drawMode;
+
 		public RadialMenuButton(final Manifestation manifestation)
 		{
 			this.manifestation = manifestation;
@@ -404,13 +411,12 @@ public class SpiritwebMenu extends Screen
 		selectedManifestation = null;
 		doAction = null;
 
-		// TODO(render polish): button/quadrant background rectangles are stubbed for the 1.21 port
-		// (the old Tesselator.getBuilder / VertexConsumer#endVertex pipeline is gone). The hitbox
-		// math below still runs so keyboard/mouse selection works; only the filled backgrounds are
-		// missing. A future rendering pass should restore them via GuiGraphics#fill or a
-		// RenderType.LINES builder on the 1.21 BufferBuilder API.
 		updateRadialButtonHitboxes(mouseVecX, mouseVecY);
 		updateSidedButtonHitboxes(mouseVecX, mouseVecY);
+
+		renderRadialButtonBackgrounds(guiGraphics, middle_x, middle_y);
+		renderSidedButtonBackgrounds(guiGraphics, middle_x, middle_y);
+		renderMetalQuadrantBackgrounds(guiGraphics);
 
 		drawIcons(guiGraphics, middle_x, middle_y);
 
@@ -685,6 +691,141 @@ public class SpiritwebMenu extends Screen
 		}
 	}
 
+	private static int packColor(float r, float g, float b, float a)
+	{
+		int ia = Math.round(MathHelper.clamp01(a) * 255f) & 0xFF;
+		int ir = Math.round(MathHelper.clamp01(r) * 255f) & 0xFF;
+		int ig = Math.round(MathHelper.clamp01(g) * 255f) & 0xFF;
+		int ib = Math.round(MathHelper.clamp01(b) * 255f) & 0xFF;
+		return (ia << 24) | (ir << 16) | (ig << 8) | ib;
+	}
+
+	private void renderSidedButtonBackgrounds(GuiGraphics guiGraphics, double middle_x, double middle_y)
+	{
+		final float a = 0.5f;
+		for (final SidedMenuButton button : sidedMenuButtons)
+		{
+			final float f;
+			if (button.highlighted)
+			{
+				f = 1f;
+			}
+			else
+			{
+				// faintly highlight the button matching the active power category
+				f = selectedPowerType.getID() == button.powerType ? 1f : 0f;
+			}
+
+			final int color = packColor(f, f, f, a);
+			guiGraphics.fill(
+					(int) (middle_x + button.x1),
+					(int) (middle_y + button.y1),
+					(int) (middle_x + button.x2),
+					(int) (middle_y + button.y2),
+					color);
+		}
+	}
+
+	private void renderMetalQuadrantBackgrounds(GuiGraphics guiGraphics)
+	{
+		final List<Manifestation> maniList = spiritweb.getAvailableManifestations();
+		final boolean manifestationIsSelected = selectedManifestation != null && maniList.size() <= 16
+				&& (selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY
+				|| selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY);
+		final boolean allomancySubmenuOpen = selectedPowerType == Manifestations.ManifestationTypes.ALLOMANCY && maniList.size() > 16;
+		final boolean feruchemySubmenuOpen = selectedPowerType == Manifestations.ManifestationTypes.FERUCHEMY && maniList.size() > 16;
+		final boolean hasSubmenu = allomancySubmenuOpen || feruchemySubmenuOpen;
+		final boolean allomancySelected = !hasSubmenu && manifestationIsSelected
+				&& selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY;
+		final boolean feruchemySelected = !hasSubmenu && manifestationIsSelected
+				&& selectedManifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY;
+
+		final int color = packColor(0f, 0f, 0f, 127f / 255f);
+
+		for (MetalQuadrant quadrant : metalQuadrants)
+		{
+			Manifestation alloMani = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(quadrant.metalType.getID());
+			Manifestation feruMani = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(quadrant.metalType.getID());
+
+			final boolean shouldDraw = (hasSubmenu && ((allomancySubmenuOpen && maniList.contains(alloMani))
+					|| (feruchemySubmenuOpen && maniList.contains(feruMani))))
+					|| (!hasSubmenu && ((allomancySelected && maniList.contains(alloMani))
+					|| (feruchemySelected && maniList.contains(feruMani))));
+
+			if (!shouldDraw)
+			{
+				continue;
+			}
+
+			guiGraphics.fill(
+					(int) (quadrant.centerX - MetalQuadrant.width / 2),
+					(int) (quadrant.centerY - MetalQuadrant.height / 2),
+					(int) (quadrant.centerX + MetalQuadrant.width / 2),
+					(int) (quadrant.centerY + MetalQuadrant.height / 2),
+					color);
+		}
+	}
+
+	private void renderRadialButtonBackgrounds(GuiGraphics guiGraphics, double middle_x, double middle_y)
+	{
+		if (radialMenuButtons.isEmpty())
+		{
+			return;
+		}
+
+		final Matrix4f matrix = guiGraphics.pose().last().pose();
+		final VertexConsumer vc = guiGraphics.bufferSource().getBuffer(RenderType.gui());
+		final float a = 0.5f;
+
+		for (final RadialMenuButton region : radialMenuButtons)
+		{
+			final float f = region.highlighted ? 0.1f : 0f;
+
+			float lerpPositive = 0;
+			float lerpNegative = 0;
+
+			if (region.manifestation != null)
+			{
+				int mode = region.manifestation.getMode(spiritweb);
+				int modeMin = region.manifestation.modeMin(spiritweb);
+				int modeMax = region.manifestation.modeMax(spiritweb);
+
+				if (mode > 0)
+				{
+					lerpPositive = MathHelper.InverseLerp(0, modeMax, mode) - 0.1f;
+				}
+				else if (mode < 0)
+				{
+					lerpNegative = MathHelper.InverseLerp(0, Math.abs(modeMin), Math.abs(mode)) - 0.1f;
+				}
+			}
+
+			final int color = packColor(lerpPositive + f, f, lerpNegative + f, a);
+
+			// vertex order matches the original BufferBuilder QUADS winding so blending stays consistent
+			final double v1x, v1y, v2x, v2y;
+			if (region.drawMode <= 2)
+			{
+				v1x = middle_x + region.x2m1; v1y = middle_y + region.y2m1;
+				v2x = middle_x + region.x1m1; v2y = middle_y + region.y1m1;
+			}
+			else
+			{
+				v1x = middle_x + region.x1m1; v1y = middle_y + region.y1m1;
+				v2x = middle_x + region.x2m1; v2y = middle_y + region.y2m1;
+			}
+			final double v3x = middle_x + region.x2m2;
+			final double v3y = middle_y + region.y2m2;
+			final double v4x = middle_x + region.x1m2;
+			final double v4y = middle_y + region.y1m2;
+
+			vc.addVertex(matrix, (float) v1x, (float) v1y, 0).setColor(color);
+			vc.addVertex(matrix, (float) v2x, (float) v2y, 0).setColor(color);
+			vc.addVertex(matrix, (float) v3x, (float) v3y, 0).setColor(color);
+			vc.addVertex(matrix, (float) v4x, (float) v4y, 0).setColor(color);
+		}
+	}
+
 	private void updateSidedButtonHitboxes(double mouseVecX, double mouseVecY)
 	{
 		for (final SidedMenuButton button : sidedMenuButtons)
@@ -803,9 +944,15 @@ public class SpiritwebMenu extends Screen
 				region.centerX = (x1m1 + x2m1 + x1m2 + x2m2) / 4;
 				region.centerY = (y1m1 + y2m1 + y1m2 + y2m2) / 4;
 
-
-				final float a = 0.5f;
-				float f = 0f;
+				region.x1m1 = x1m1;
+				region.y1m1 = y1m1;
+				region.x2m1 = x2m1;
+				region.y2m1 = y2m1;
+				region.x1m2 = x1m2;
+				region.y1m2 = y1m2;
+				region.x2m2 = x2m2;
+				region.y2m2 = y2m2;
+				region.drawMode = drawMode;
 
 				final boolean showHighlight;
 				if (drawMode <= 2)
