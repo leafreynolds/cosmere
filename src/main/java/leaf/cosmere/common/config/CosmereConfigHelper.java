@@ -11,12 +11,9 @@ public class CosmereConfigHelper
 {
 	public static void registerConfig(ModContainer modContainer, ICosmereConfig config)
 	{
-		if (config.addToContainer())
-		{
-			modContainer.registerConfig(
-					config.getConfigType(),
-					config.getConfigSpec(),
-					Cosmere.MODID + "/" + config.getFileName() + ".toml");
-		}
+		modContainer.registerConfig(
+				config.getConfigType(),
+				config.getConfigSpec(),
+				Cosmere.MODID + "/" + config.getFileName() + ".toml");
 	}
 }

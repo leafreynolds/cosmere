@@ -8,14 +8,13 @@ import leaf.cosmere.common.resource.ore.OreAnchor;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.neoforged.neoforge.common.ModConfigSpec.EnumValue;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 
 //based on ConfigurableVerticalAnchor from Mekanism
 // https://github.com/mekanism/Mekanism/blob/7de496745c721fb15d00d590ddcacf00570f3f1b/src/main/java/mekanism/common/world/height/ConfigurableVerticalAnchor.java#L14
-public record ConfigurableVerticalAnchor(Supplier<AnchorType> anchorType, Supplier<Integer> value)
+public record ConfigurableVerticalAnchor(EnumValue<AnchorType> anchorType, ConfigValue<Integer> value)
 {
 
 	public static ConfigurableVerticalAnchor create(ModConfigSpec.Builder builder,
@@ -45,7 +44,9 @@ public record ConfigurableVerticalAnchor(Supplier<AnchorType> anchorType, Suppli
 			{
 				if (o instanceof Integer v)
 				{
-					return minAnchor.anchorType.get() != type.get() || v >= minAnchor.value.get();
+					// validators run during ModConfigSpec.correct before childConfig is set,
+					// so cross-references must use getDefault() instead of get()
+					return minAnchor.anchorType.getDefault() != type.getDefault() || v >= minAnchor.value.getDefault();
 				}
 				return false;
 			});

@@ -7,11 +7,9 @@ package leaf.cosmere.common.world.height;
 import leaf.cosmere.common.resource.ore.BaseOreConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.util.function.Supplier;
-
 //based on ConfigurableHeightRange from Mekanism
 // https://github.com/mekanism/Mekanism/blob/7de496745c721fb15d00d590ddcacf00570f3f1b/src/main/java/mekanism/common/world/height/ConfigurableHeightRange.java#L13
-public record ConfigurableHeightRange(Supplier<HeightShape> shape,
+public record ConfigurableHeightRange(ModConfigSpec.EnumValue<HeightShape> shape,
                                       ConfigurableVerticalAnchor minInclusive,
                                       ConfigurableVerticalAnchor maxInclusive,
                                       ModConfigSpec.ConfigValue<Integer> plateau)
@@ -39,7 +37,9 @@ public record ConfigurableHeightRange(Supplier<HeightShape> shape,
 						{
 							return true;
 						}
-						return value > 0 && shape.get() == HeightShape.TRAPEZOID;
+						// validators run during ModConfigSpec.correct before childConfig is set,
+						// so cross-references must use getDefault() instead of get()
+						return value > 0 && shape.getDefault() == HeightShape.TRAPEZOID;
 					}
 					return false;
 				});

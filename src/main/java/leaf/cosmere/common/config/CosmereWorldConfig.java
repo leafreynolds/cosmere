@@ -59,12 +59,6 @@ public class CosmereWorldConfig implements ICosmereConfig
 		return Type.SERVER;
 	}
 
-	@Override
-	public boolean addToContainer()
-	{
-		return false;
-	}
-
 	public OreVeinConfig getVeinConfig(OreType.OreVeinType oreVeinType)
 	{
 		return ores.get(oreVeinType.type()).veinConfigs.get(oreVeinType.index());
