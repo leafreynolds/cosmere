@@ -12,17 +12,16 @@ public class DividedEffect extends MobEffect
 		super(pCategory, pColor);
 	}
 
-	int counterToDamage = 0;
-
 	@Override
 	public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier)
 	{
-		counterToDamage++;
-		if (counterToDamage == 100)
-		{
-			pLivingEntity.setHealth(pLivingEntity.getHealth() - 1);
-			counterToDamage = 0;
-		}
-		super.applyEffectTick(pLivingEntity, pAmplifier);
+		pLivingEntity.hurt(pLivingEntity.damageSources().magic(), 1.0F);
+	}
+
+	@Override
+	public boolean isDurationEffectTick(int pDuration, int pAmplifier)
+	{
+		int interval = 100 >> pAmplifier;
+		return interval <= 0 || pDuration % interval == 0;
 	}
 }

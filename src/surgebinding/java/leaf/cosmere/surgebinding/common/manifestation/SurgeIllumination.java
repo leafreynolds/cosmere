@@ -8,7 +8,6 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.world.effect.MobEffects;
@@ -28,18 +27,15 @@ public class SurgeIllumination extends SurgebindingManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->
+		if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ILLUMINATION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(data))
 		{
-			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ILLUMINATION).getManifestation() instanceof SurgebindingManifestation sg &&
-					sg.isActive(iSpiritweb))
+			SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+			if (submodule.adjustStormlight(-2, true))
 			{
-				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-				if (submodule.adjustStormlight(-2, true))
-				{
-					data.getLiving().addEffect(EffectsHelper.getNewEffect(MobEffects.NIGHT_VISION, 9, 60));
-				}
+				data.getLiving().addEffect(EffectsHelper.getNewEffect(MobEffects.NIGHT_VISION, 9, 60));
 			}
-		});
+		}
 
 		return super.tick(data);
 	}

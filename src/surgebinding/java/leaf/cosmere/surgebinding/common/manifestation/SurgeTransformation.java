@@ -48,38 +48,38 @@ public class SurgeTransformation extends SurgebindingManifestation
 					switch (mode)
 					{
 						case 1:
-							event.getLevel().setBlock(blockPos, Blocks.AIR.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.AIR.defaultBlockState(), 3);
 							break;
 						case 2:
-							event.getLevel().setBlock(blockPos, Blocks.AIR.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.AIR.defaultBlockState(), 3);
 							if (event.getLevel() instanceof ServerLevel serverLevel)
 							{
 								serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1, 0, 0, 0, 0);
 							}
 							break;
 						case 3:
-							event.getLevel().setBlock(blockPos, Blocks.FIRE.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.FIRE.defaultBlockState(), 3);
 							break;
 						case 4:
-							event.getLevel().setBlock(blockPos, Blocks.QUARTZ_BLOCK.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.QUARTZ_BLOCK.defaultBlockState(), 3);
 							break;
 						case 5:
-							event.getLevel().setBlock(blockPos, Blocks.OAK_LEAVES.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.OAK_LEAVES.defaultBlockState(), 3);
 							break;
 						case 6:
-							event.getLevel().setBlock(blockPos, Blocks.WATER.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.WATER.defaultBlockState(), 3);
 							break;
 						case 7:
-							event.getLevel().setBlock(blockPos, Blocks.ICE.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.ICE.defaultBlockState(), 3);
 							break;
 						case 8:
-							event.getLevel().setBlock(blockPos, Blocks.IRON_BLOCK.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.IRON_BLOCK.defaultBlockState(), 3);
 							break;
 						case 9:
-							event.getLevel().setBlock(blockPos, Blocks.STONE.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.STONE.defaultBlockState(), 3);
 							break;
 						case 10:
-							event.getLevel().setBlock(blockPos, Blocks.NETHERRACK.defaultBlockState(), 1);
+							event.getLevel().setBlock(blockPos, Blocks.NETHERRACK.defaultBlockState(), 3);
 							break;
 
 					}

@@ -49,7 +49,7 @@ public class SurgeDivision extends SurgebindingManifestation
 						{
 							Direction direc = event.getHitVec().getDirection();
 							BlockPos targetBlock = new BlockPos(blockPos.getX() + direc.getStepX(), blockPos.getY() + direc.getStepY(), blockPos.getZ() + direc.getStepZ());
-							serverLevel.setBlock(targetBlock, Blocks.FIRE.defaultBlockState(), 1);
+							serverLevel.setBlock(targetBlock, Blocks.FIRE.defaultBlockState(), 3);
 						}
 					}
 				}

@@ -58,8 +58,6 @@ public class SurgeGravitation extends SurgebindingManifestation
 				}
 			});
 		}
-
-
 	}
 
 	public static boolean canFly(LivingEntity entity)
@@ -68,7 +66,6 @@ public class SurgeGravitation extends SurgebindingManifestation
 		var spiritwebCapability = SpiritwebCapability.get(entity);
 		if (spiritwebCapability.isPresent() && spiritwebCapability.resolve().get() instanceof SpiritwebCapability data)
 		{
-
 			canFly = SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.GRAVITATION).get().isActive(data);
 		}
 

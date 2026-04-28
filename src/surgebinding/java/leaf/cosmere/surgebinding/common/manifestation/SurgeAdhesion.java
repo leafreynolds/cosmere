@@ -27,8 +27,12 @@ public class SurgeAdhesion extends SurgebindingManifestation
 
 	public static void onLivingAttackEvent(LivingAttackEvent event)
 	{
+		if (!(event.getSource().getEntity() instanceof LivingEntity attacker))
+		{
+			return;
+		}
 		LivingEntity target = event.getEntity();
-		SpiritwebCapability.get((LivingEntity) event.getSource().getEntity()).ifPresent(iSpiritweb ->
+		SpiritwebCapability.get(attacker).ifPresent(iSpiritweb ->
 		{
 			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ADHESION).getManifestation() instanceof SurgebindingManifestation sg &&
 					sg.isActive(iSpiritweb))

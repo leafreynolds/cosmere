@@ -109,19 +109,17 @@ public class SurgeProgression extends SurgebindingManifestation
 	{
 		livingEntity.setHealth(setHealthTo);
 
-		for (int i = 0; i < 20; ++i)
+		if (livingEntity.level() instanceof ServerLevel serverLevel)
 		{
-			double xSpeed = livingEntity.getRandom().nextGaussian() * 0.02D;
-			double ySpeed = livingEntity.getRandom().nextGaussian() * 0.02D;
-			double zSpeed = livingEntity.getRandom().nextGaussian() * 0.02D;
-
-			livingEntity.level().addParticle(ParticleTypes.HAPPY_VILLAGER,
-					livingEntity.getX(1.0D) - xSpeed * 10.0D,
-					livingEntity.getRandomY() - ySpeed * 10.0D,
-					livingEntity.getRandomZ(1.0D) - zSpeed * 10.0D,
-					xSpeed,
-					ySpeed,
-					zSpeed);
+			serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+					livingEntity.getX(),
+					livingEntity.getY() + livingEntity.getBbHeight() / 2.0D,
+					livingEntity.getZ(),
+					20,
+					livingEntity.getBbWidth() / 2.0D,
+					livingEntity.getBbHeight() / 2.0D,
+					livingEntity.getBbWidth() / 2.0D,
+					0.02D);
 		}
 
 		//this gets very annoying quick
@@ -140,19 +138,17 @@ public class SurgeProgression extends SurgebindingManifestation
 	{
 		ageableMob.ageUp(ageUpAmount);
 
-		for (int i = 0; i < 20; ++i)
+		if (ageableMob.level() instanceof ServerLevel serverLevel)
 		{
-			double xSpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
-			double ySpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
-			double zSpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
-
-			ageableMob.level().addParticle(ParticleTypes.HAPPY_VILLAGER,
-					ageableMob.getX(1.0D) - xSpeed * 10.0D,
-					ageableMob.getRandomY() - ySpeed * 10.0D,
-					ageableMob.getRandomZ(1.0D) - zSpeed * 10.0D,
-					xSpeed,
-					ySpeed,
-					zSpeed);
+			serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+					ageableMob.getX(),
+					ageableMob.getY() + ageableMob.getBbHeight() / 2.0D,
+					ageableMob.getZ(),
+					20,
+					ageableMob.getBbWidth() / 2.0D,
+					ageableMob.getBbHeight() / 2.0D,
+					ageableMob.getBbWidth() / 2.0D,
+					0.02D);
 		}
 	}
 
@@ -229,7 +225,7 @@ public class SurgeProgression extends SurgebindingManifestation
 									}
 								}
 
-								event.getLevel().setBlock(blockPos, newState, 0);
+								event.getLevel().setBlock(blockPos, newState, 3);
 							}
 							else
 							{
