@@ -6,9 +6,12 @@
   "refmap": "mixins.cosmere.feruchemy.refmap.json",
   "mixins": [
     "EntityMixin",
-    "IForgeEntityMixin"
+    "IForgeEntityMixin",
+    "LivingEntityMixin",
+    "PlayerMixin"
   ],
   "client": [
+    "EntityRenderDispatcherMixin",
     "GameRendererMixin"
   ],
   "injectors": {
