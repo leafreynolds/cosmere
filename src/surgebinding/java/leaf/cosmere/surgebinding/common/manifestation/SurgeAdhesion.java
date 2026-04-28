@@ -25,22 +25,25 @@ public class SurgeAdhesion extends SurgebindingManifestation
 
 	//bind things together
 
-	public static void onLivingAttackEvent(LivingAttackEvent event) {
+	public static void onLivingAttackEvent(LivingAttackEvent event)
+	{
 		LivingEntity target = event.getEntity();
 		SpiritwebCapability.get((LivingEntity) event.getSource().getEntity()).ifPresent(iSpiritweb ->
 		{
 			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ADHESION).getManifestation() instanceof SurgebindingManifestation sg &&
-				sg.isActive(iSpiritweb))
+					sg.isActive(iSpiritweb))
 			{
 				MobEffectInstance slowedEffect = target.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-				if(slowedEffect!=null && slowedEffect.getAmplifier()==50)
+				if (slowedEffect != null && slowedEffect.getAmplifier() == 50)
 				{
-					if(submodule.adjustStormlight(slowedEffect.getDuration()/20,true)){
+					if (submodule.adjustStormlight(slowedEffect.getDuration() / 20, true))
+					{
 						target.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 					}
 				}
-				else{
+				else
+				{
 					if (submodule.adjustStormlight(-60, true))
 					{
 						target.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, 50, 1200));

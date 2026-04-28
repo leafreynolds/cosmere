@@ -30,23 +30,23 @@ public class SurgeAbrasion extends SurgebindingManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		if(!isActive(data))
+		if (!isActive(data))
 		{
 			return false;
 		}
 		int mode = getMode(data);
 		LivingEntity livingEntity = data.getLiving();
 		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		if(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation() instanceof SurgebindingManifestation sg &&
-	        sg.isActive(data))
+		if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ABRASION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(data))
 		{
-			if (mode>0 && submodule.adjustStormlight(-4,true))
+			if (mode > 0 && submodule.adjustStormlight(-4, true))
 			{
-				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, mode-1,2));
+				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SPEED, mode - 1, 2));
 			}
-			if (mode<0 && submodule.adjustStormlight(-4,true))
+			if (mode < 0 && submodule.adjustStormlight(-4, true))
 			{
-				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, mode-1,2));
+				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.MOVEMENT_SLOWDOWN, -mode - 1, 2));
 			}
 		}
 		return super.tick(data);

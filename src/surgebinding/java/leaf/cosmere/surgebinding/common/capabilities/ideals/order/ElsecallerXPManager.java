@@ -2,18 +2,27 @@ package leaf.cosmere.surgebinding.common.capabilities.ideals.order;
 
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 
-public class ElsecallerXPManager {
+public class ElsecallerXPManager
+{
 	public int ecXP = 0;
-	public static boolean validateIdeal(SpiritwebCapability spiritweb, int ideal){
+
+	public static boolean validateIdeal(SpiritwebCapability spiritweb, int ideal)
+	{
 		//Implement XP thresholds
-		return false;
+		return switch (ideal)
+		{
+			case 1 -> true;
+			default -> false;
+		};
 	}
 
-	public static void xpUp(){
+	public static void xpUp()
+	{
 
 	}
 
-	public static void xpDown(){
+	public static void xpDown()
+	{
 
 	}
 }

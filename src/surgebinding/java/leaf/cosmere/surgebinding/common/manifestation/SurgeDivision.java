@@ -4,11 +4,9 @@
 
 package leaf.cosmere.surgebinding.common.manifestation;
 
-import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
-import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
@@ -21,7 +19,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
@@ -40,19 +37,19 @@ public class SurgeDivision extends SurgebindingManifestation
 		SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 		{
 			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation() instanceof SurgebindingManifestation sg &&
-				sg.isActive(iSpiritweb)&&
-				event.getEntity().getMainHandItem().isEmpty())
+					sg.isActive(iSpiritweb) &&
+					event.getEntity().getMainHandItem().isEmpty())
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-				if(iSpiritweb.getLiving().isShiftKeyDown())
+				if (iSpiritweb.getLiving().isShiftKeyDown())
 				{
 					if (submodule.adjustStormlight(-15, true))
 					{
 						if (event.getLevel() instanceof ServerLevel serverLevel)
 						{
 							Direction direc = event.getHitVec().getDirection();
-							BlockPos targetBlock = new BlockPos(blockPos.getX()+direc.getStepX(),blockPos.getY()+direc.getStepY(),blockPos.getZ()+direc.getStepZ());
-							serverLevel.setBlock(targetBlock,Blocks.FIRE.defaultBlockState(),1);
+							BlockPos targetBlock = new BlockPos(blockPos.getX() + direc.getStepX(), blockPos.getY() + direc.getStepY(), blockPos.getZ() + direc.getStepZ());
+							serverLevel.setBlock(targetBlock, Blocks.FIRE.defaultBlockState(), 1);
 						}
 					}
 				}
@@ -79,7 +76,7 @@ public class SurgeDivision extends SurgebindingManifestation
 			SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
 			{
 				if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.DIVISION).getManifestation() instanceof SurgebindingManifestation sg &&
-					sg.isActive(iSpiritweb))
+						sg.isActive(iSpiritweb))
 				{
 					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 					if (submodule.adjustStormlight(-40, true))

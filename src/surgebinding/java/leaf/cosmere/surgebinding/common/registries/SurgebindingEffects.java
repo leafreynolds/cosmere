@@ -13,5 +13,5 @@ public class SurgebindingEffects
 	public static final MobEffectDeferredRegister MOB_EFFECTS = new MobEffectDeferredRegister(Surgebinding.MODID);
 
 	public static final MobEffectRegistryObject<DividedEffect> DIVIDED = MOB_EFFECTS.register("divided",
-			()-> new DividedEffect(MobEffectCategory.HARMFUL,0));
+			() -> new DividedEffect(MobEffectCategory.HARMFUL, 0));
 }

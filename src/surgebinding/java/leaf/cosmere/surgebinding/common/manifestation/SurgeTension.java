@@ -28,20 +28,20 @@ public class SurgeTension extends SurgebindingManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		if(!isActive(data))
+		if (!isActive(data))
 		{
 			return false;
 		}
 		int mode = getMode(data);
 		LivingEntity livingEntity = data.getLiving();
 		SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		if(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TENSION).getManifestation() instanceof SurgebindingManifestation sg &&
-			sg.isActive(data) &&
-			livingEntity.isShiftKeyDown())
+		if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TENSION).getManifestation() instanceof SurgebindingManifestation sg &&
+				sg.isActive(data) &&
+				livingEntity.isShiftKeyDown())
 		{
-			if (submodule.adjustStormlight(-2*mode,true))
+			if (submodule.adjustStormlight(-2 * mode, true))
 			{
-				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_RESISTANCE, mode-1,2));
+				livingEntity.addEffect(EffectsHelper.getNewEffect(MobEffects.DAMAGE_RESISTANCE, mode - 1, 2));
 			}
 		}
 		return super.tick(data);

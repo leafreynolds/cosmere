@@ -21,19 +21,22 @@ import java.util.stream.Collectors;
 
 public class SurgebindingBiomeModifiers
 {
-	public static final Map<Roshar.Gemstone,ResourceKey<BiomeModifier>> ADD_GEMSTONE_ORE =
+	public static final Map<Roshar.Gemstone, ResourceKey<BiomeModifier>> ADD_GEMSTONE_ORE =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)
 					.collect(Collectors.toMap(
 							Function.identity(),
-							type -> registerKey(type== Roshar.Gemstone.DIAMOND?"add_rosharan_diamond_ore":"add_"+type.getName()+"_ore")
+							type -> registerKey(type == Roshar.Gemstone.DIAMOND ? "add_rosharan_diamond_ore"
+							                                                    : "add_" + type.getName() + "_ore")
 					));
 	public static final ResourceKey<BiomeModifier> ADD_SAPPHIRE_GEODE = registerKey("add_sapphire_geode");
 
-	public static void bootstrap(BootstapContext<BiomeModifier> context) {
+	public static void bootstrap(BootstapContext<BiomeModifier> context)
+	{
 		var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 		var biomes = context.lookup(Registries.BIOME);
 
-		for(Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES_ORE){
+		for (Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES_ORE)
+		{
 			context.register(ADD_GEMSTONE_ORE.get(gemstone), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
 					biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
 					HolderSet.direct(placedFeatures.getOrThrow(SurgebindingPlacedFeatures.GEMSTONE_ORE_PLACED_KEY.get(gemstone))),
@@ -46,7 +49,8 @@ public class SurgebindingBiomeModifiers
 	}
 
 
-	private static ResourceKey<BiomeModifier> registerKey(String name) {
+	private static ResourceKey<BiomeModifier> registerKey(String name)
+	{
 		return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(Surgebinding.MODID, name));
 	}
 }

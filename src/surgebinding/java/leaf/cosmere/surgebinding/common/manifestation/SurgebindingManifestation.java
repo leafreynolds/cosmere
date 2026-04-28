@@ -22,15 +22,21 @@ public class SurgebindingManifestation extends Manifestation
 	}
 
 	@Override
-	public boolean modeWraps(ISpiritweb data) { return true; }
+	public boolean modeWraps(ISpiritweb data)
+	{
+		return true;
+	}
 
 	@Override
-	public int modeMin(ISpiritweb data) {return 0;}
+	public int modeMin(ISpiritweb data)
+	{
+		return 0;
+	}
 
 	@Override
 	public int modeMax(ISpiritweb data)
 	{
-		SurgebindingSpiritwebSubmodule spiritweb = (SurgebindingSpiritwebSubmodule)data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
+		SurgebindingSpiritwebSubmodule spiritweb = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 		return spiritweb.getIdeal();
 	}
 
@@ -47,6 +53,6 @@ public class SurgebindingManifestation extends Manifestation
 
 		final SpiritwebCapability spiritwebCapability = (SpiritwebCapability) data;
 		SurgebindingSpiritwebSubmodule sb = (SurgebindingSpiritwebSubmodule) spiritwebCapability.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-		return data.hasManifestation(this) && sb.getStormlight() > 0 && data.getMode(this)!=0;
+		return data.hasManifestation(this) && sb.getStormlight() > 0 && data.getMode(this) != 0;
 	}
 }

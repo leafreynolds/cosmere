@@ -11,18 +11,14 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.MovementInputUpdateEvent;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SurgeTransportation extends SurgebindingManifestation
 {
@@ -45,22 +41,26 @@ public class SurgeTransportation extends SurgebindingManifestation
 		{
 
 			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.TRANSPORTATION).getManifestation() instanceof SurgebindingManifestation sg &&
-				sg.isActive(iSpiritweb))
+					sg.isActive(iSpiritweb))
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) iSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				LivingEntity living = data.getLiving();
-				AABB areaEffect = new AABB(new Vec3(living.getX()-3, living.getY()-3, living.getZ()-3), new Vec3(living.getX()+3, living.getY()+3, living.getZ()+3));
-				List<Entity> entitiesNear = living.level().getEntities(living,areaEffect);
-				List<LivingEntity> entityList= new LinkedList<>();
-				for(Entity entity : entitiesNear){
-					if(entity instanceof LivingEntity){
-						entityList.add((LivingEntity)entity);
+				AABB areaEffect = new AABB(new Vec3(living.getX() - 3, living.getY() - 3, living.getZ() - 3), new Vec3(living.getX() + 3, living.getY() + 3, living.getZ() + 3));
+				List<Entity> entitiesNear = living.level().getEntities(living, areaEffect);
+				List<LivingEntity> entityList = new LinkedList<>();
+				for (Entity entity : entitiesNear)
+				{
+					if (entity instanceof LivingEntity)
+					{
+						entityList.add((LivingEntity) entity);
 					}
 				}
 
-				for(LivingEntity entity : entityList){
-					if(!entity.hasEffect(MobEffects.GLOWING) && submodule.adjustStormlight(-5,true)){
-						entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING,9,10));
+				for (LivingEntity entity : entityList)
+				{
+					if (!entity.hasEffect(MobEffects.GLOWING) && submodule.adjustStormlight(-5, true))
+					{
+						entity.addEffect(EffectsHelper.getNewEffect(MobEffects.GLOWING, 9, 10));
 					}
 				}
 			}

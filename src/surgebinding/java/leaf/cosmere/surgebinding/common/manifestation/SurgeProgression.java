@@ -50,7 +50,7 @@ public class SurgeProgression extends SurgebindingManifestation
 				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
 					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) &&
-						SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
+							SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
 					{
 						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
 						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
@@ -80,7 +80,7 @@ public class SurgeProgression extends SurgebindingManifestation
 				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
 					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) &&
-						SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
+							SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
 					{
 						int ageUpAmount = (int) Math.floor(-(ageableMob.getAge() / 20D) * 0.1);       // get age in seconds, then 10% of that
 						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
@@ -208,7 +208,7 @@ public class SurgeProgression extends SurgebindingManifestation
 			{
 				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
-					if(iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
+					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
 					{
 						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
 						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);

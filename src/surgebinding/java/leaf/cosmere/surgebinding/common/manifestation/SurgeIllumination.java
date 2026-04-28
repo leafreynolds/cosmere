@@ -28,9 +28,10 @@ public class SurgeIllumination extends SurgebindingManifestation
 	@Override
 	public boolean tick(ISpiritweb data)
 	{
-		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->{
+		SpiritwebCapability.get(data.getLiving()).ifPresent(iSpiritweb ->
+		{
 			if (SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.ILLUMINATION).getManifestation() instanceof SurgebindingManifestation sg &&
-				sg.isActive(iSpiritweb))
+					sg.isActive(iSpiritweb))
 			{
 				SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 				if (submodule.adjustStormlight(-2, true))

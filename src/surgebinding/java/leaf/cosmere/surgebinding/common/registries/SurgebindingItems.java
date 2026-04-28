@@ -46,8 +46,8 @@ public class SurgebindingItems
 	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_LEGGINGS = ITEMS.register("shardplate_leggings", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.LEGGINGS, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_BOOTS = ITEMS.register("shardplate_boots", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.BOOTS, PropTypes.Items.SHARDBLADE.get()));
 
-	public static final ItemRegistryObject<BannerPatternItem> SURGE_BANNER_PATTERN = ITEMS.register("surge_banner_pattern",()-> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_SURGE, new Item.Properties().stacksTo(1)));
-	public static final ItemRegistryObject<BannerPatternItem> RADIANT_ORDER_BANNER_PATTER = ITEMS.register("radiant_order_banner_pattern", ()-> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_RADIANT_ORDER, new Item.Properties().stacksTo(1)));
+	public static final ItemRegistryObject<BannerPatternItem> SURGE_BANNER_PATTERN = ITEMS.register("surge_banner_pattern", () -> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_SURGE, new Item.Properties().stacksTo(1)));
+	public static final ItemRegistryObject<BannerPatternItem> RADIANT_ORDER_BANNER_PATTER = ITEMS.register("radiant_order_banner_pattern", () -> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_RADIANT_ORDER, new Item.Properties().stacksTo(1)));
 
 	public static final Map<Roshar.RadiantOrder, ItemRegistryObject<HonorbladeItem>> HONORBLADES =
 			Arrays.stream(EnumUtils.RADIANT_ORDERS)
@@ -62,33 +62,34 @@ public class SurgebindingItems
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
-							type -> ITEMS.register("cut_"+type.getName()+"_small",
-									()-> new GemstoneItem(type, Roshar.GemSize.SMALL))
-							));
+							type -> ITEMS.register("cut_" + type.getName() + "_small",
+									() -> new GemstoneItem(type, Roshar.GemSize.SMALL))
+					));
 
 	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_MEDIUM =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
-							type -> ITEMS.register("cut_"+type.getName()+"_medium",
-									()-> new GemstoneItem(type, Roshar.GemSize.MEDIUM))
-							));
+							type -> ITEMS.register("cut_" + type.getName() + "_medium",
+									() -> new GemstoneItem(type, Roshar.GemSize.MEDIUM))
+					));
 
 	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_LARGE =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
-							type -> ITEMS.register("cut_"+type.getName()+"_large",
-									()-> new GemstoneItem(type, Roshar.GemSize.LARGE))
-							));
+							type -> ITEMS.register("cut_" + type.getName() + "_large",
+									() -> new GemstoneItem(type, Roshar.GemSize.LARGE))
+					));
 
 	static Roshar.Gemstone[] gemstone = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
 	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE =
 			Arrays.stream(gemstone)
 					.collect(Collectors.toMap(
 							Function.identity(),
-							type -> ITEMS.register(type==Roshar.Gemstone.DIAMOND?"rosharan_diamond":type.getName(),
-									()-> new Item(new Item.Properties()))
+							type -> ITEMS.register(
+									type == Roshar.Gemstone.DIAMOND ? "rosharan_diamond" : type.getName(),
+									() -> new Item(new Item.Properties()))
 					));
 
 	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_MARKS =
@@ -100,25 +101,25 @@ public class SurgebindingItems
 									() -> new Item(new Item.Properties())
 							)));
 
-	public static final ItemRegistryObject<Item> RAW_CHULL_LEG = ITEMS.register("raw_chull_leg", ()-> new Item(new Item.Properties()
+	public static final ItemRegistryObject<Item> RAW_CHULL_LEG = ITEMS.register("raw_chull_leg", () -> new Item(new Item.Properties()
 			.food(new FoodProperties.Builder()
 					.nutrition(5)
 					.meat()
 					.build())));
 
-	public static final ItemRegistryObject<Item> COOKED_CHULL_LEG = ITEMS.register("cooked_chull_leg", ()-> new Item(new Item.Properties()
+	public static final ItemRegistryObject<Item> COOKED_CHULL_LEG = ITEMS.register("cooked_chull_leg", () -> new Item(new Item.Properties()
 			.food(new FoodProperties.Builder()
 					.nutrition(10)
 					.meat()
 					.build())));
 
-	public static final ItemRegistryObject<Item> RAW_CHULL_MEAT = ITEMS.register("raw_chull_meat", ()-> new Item(new Item.Properties()
+	public static final ItemRegistryObject<Item> RAW_CHULL_MEAT = ITEMS.register("raw_chull_meat", () -> new Item(new Item.Properties()
 			.food(new FoodProperties.Builder()
 					.nutrition(4)
 					.meat()
 					.build())));
 
-	public static final ItemRegistryObject<Item> COOKED_CHULL_MEAT = ITEMS.register("cooked_chull_meat", ()-> new Item(new Item.Properties()
+	public static final ItemRegistryObject<Item> COOKED_CHULL_MEAT = ITEMS.register("cooked_chull_meat", () -> new Item(new Item.Properties()
 			.food(new FoodProperties.Builder()
 					.nutrition(8)
 					.meat()

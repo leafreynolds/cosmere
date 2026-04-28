@@ -12,7 +12,6 @@ import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmod
 import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
 import leaf.cosmere.surgebinding.common.manifestation.*;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -86,15 +85,6 @@ public class SurgebindingForgeEventsHandler
 		SurgeDivision.onLivingAttackEvent(event);
 		SurgeAdhesion.onLivingAttackEvent(event);
 	}
-
-	@SubscribeEvent
-	public static void onShift(MovementInputUpdateEvent event){
-		if(event.isCanceled()){
-			return;
-		}
-		SurgeTransportation.onShift(event);
-	}
-
 
 	@SubscribeEvent
 	public static void onServerChatEvent(ServerChatEvent event)
