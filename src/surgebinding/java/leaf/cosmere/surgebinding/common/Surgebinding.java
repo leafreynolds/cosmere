@@ -16,6 +16,7 @@ import leaf.cosmere.surgebinding.common.capabilities.world.IRoshar;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.network.SurgebindingPacketHandler;
 import leaf.cosmere.surgebinding.common.registries.*;
+import leaf.cosmere.surgebinding.common.worldgen.SurgebindingConfiguredFeatures;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -55,13 +56,13 @@ public class Surgebinding implements IModModule
 		SurgebindingEntityTypes.ENTITY_TYPES.register(modBus);
 		SurgebindingAttributes.ATTRIBUTES.register(modBus);
 		SurgebindingManifestations.MANIFESTATIONS.register(modBus);
+		SurgebindingEffects.EFFECTS.register(modBus);
+		SurgebindingEffects.MOB_EFFECTS.register(modBus);
+		SurgebindingBannerPatterns.BANNER_PATTERNS.register(modBus);
 		SurgebindingRecipes.RECIPE_SERIALIZERS.register(modBus);
 
 		SurgebindingBiomes.BIOMES.register(modBus);
-		SurgebindingBiomeModifiers.BIOME_MODIFIER_SERIALIZERS.register(modBus);
 
-		SurgebindingFeatures.CONFIGURED_FEATURES.register(modBus);
-		SurgebindingFeatures.PLACED_FEATURES.register(modBus);
 		SurgebindingCreativeTabs.CREATIVE_TABS.register(modBus);
 
 		SurgebindingArgumentTypes.ARGUMENT_TYPE_INFOS.register(modBus);

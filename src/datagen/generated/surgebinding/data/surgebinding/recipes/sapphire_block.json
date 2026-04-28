@@ -3,15 +3,12 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:gems/sapphire"
-    },
-    "J": {
-      "item": "surgebinding:sapphire_broam"
+      "item": "surgebinding:sapphire"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {

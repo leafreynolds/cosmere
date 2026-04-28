@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "surgebinding:item/surge_banner_pattern"
+  }
+}

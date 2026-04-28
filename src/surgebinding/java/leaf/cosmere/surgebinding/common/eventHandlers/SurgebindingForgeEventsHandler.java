@@ -14,8 +14,7 @@ import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmod
 import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeGravitation;
-import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
+import leaf.cosmere.surgebinding.common.manifestation.*;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.utils.ParticleHelper;
 import net.minecraft.resources.ResourceKey;
@@ -75,6 +74,9 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeProgression.onBlockInteract(event);
+		SurgeDivision.onBlockInteract(event);
+		SurgeCohesion.onBlockInteract(event);
+		SurgeTransformation.onBlockInteract(event);
 	}
 
 	@SubscribeEvent
@@ -94,7 +96,6 @@ public class SurgebindingForgeEventsHandler
 		SurgeProgression.onEntityInteract(event);
 	}
 
-
 	//Attack event happens first
 	@SubscribeEvent
 	public static void onLivingAttackEvent(LivingAttackEvent event)
@@ -105,8 +106,9 @@ public class SurgebindingForgeEventsHandler
 		}
 
 		SurgeGravitation.onLivingAttackEvent(event);
+		SurgeDivision.onLivingAttackEvent(event);
+		SurgeAdhesion.onLivingAttackEvent(event);
 	}
-
 
 	@SubscribeEvent
 	public static void onServerChatEvent(ServerChatEvent event)

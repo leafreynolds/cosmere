@@ -3,15 +3,12 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:gems/zircon"
-    },
-    "J": {
-      "item": "surgebinding:zircon_broam"
+      "item": "surgebinding:zircon"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {

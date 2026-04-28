@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 
 public class SurgebindingCreativeTabs
@@ -41,9 +42,9 @@ public class SurgebindingCreativeTabs
 	{
 		for (var gemstone : EnumUtils.GEMSTONE_TYPES)
 		{
-			SurgebindingItems.GEMSTONE_CHIPS.get(gemstone).get().addFilled(output);
-			SurgebindingItems.GEMSTONE_MARKS.get(gemstone).get().addFilled(output);
-			SurgebindingItems.GEMSTONE_BROAMS.get(gemstone).get().addFilled(output);
+			SurgebindingItems.GEMSTONE_SMALL.get(gemstone).get().addFilled(output);
+			SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone).get().addFilled(output);
+			SurgebindingItems.GEMSTONE_LARGE.get(gemstone).get().addFilled(output);
 		}
 
 
@@ -70,11 +71,13 @@ public class SurgebindingCreativeTabs
 		}
 		else if (tabKey == CreativeModeTabs.COLORED_BLOCKS)
 		{
-			for (var gemstone : EnumUtils.GEMSTONE_TYPES)
+			Roshar.Gemstone[] gemstonesTypes = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR, Roshar.Gemstone.AMETHYST};
+			for (var gemstone : gemstonesTypes)
 			{
 				BlockRegistryObject<GemBlock, BlockItem> item = SurgebindingBlocks.GEM_BLOCKS.get(gemstone);
 				CreativeTabDeferredRegister.addToDisplay(event, item);
 			}
+			CreativeTabDeferredRegister.addToDisplay(event, Items.EMERALD_BLOCK);
 		}
 		else if (tabKey == CreativeModeTabs.FUNCTIONAL_BLOCKS)
 		{
@@ -108,9 +111,10 @@ public class SurgebindingCreativeTabs
 		{
 			for (var gemstone : EnumUtils.GEMSTONE_TYPES)
 			{
-				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_CHIPS.get(gemstone));
+				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_SMALL.get(gemstone));
+				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone));
+				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_LARGE.get(gemstone));
 				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_MARKS.get(gemstone));
-				CreativeTabDeferredRegister.addToDisplay(event, SurgebindingItems.GEMSTONE_BROAMS.get(gemstone));
 			}
 		}
 	}

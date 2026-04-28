@@ -15,6 +15,7 @@ public class EnumUtils
 	//roshar
 	public static final Roshar.RadiantOrder[] RADIANT_ORDERS = Roshar.RadiantOrder.values();
 	public static final Roshar.Gemstone[] GEMSTONE_TYPES = Roshar.Gemstone.values();
+	public static final Roshar.Gemstone[] GEMSTONE_TYPES_ORE = {Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
 	public static final Roshar.GemSize[] GEM_SIZES = Roshar.GemSize.values();
 	public static final Roshar.Surges[] SURGES = Roshar.Surges.values();
 

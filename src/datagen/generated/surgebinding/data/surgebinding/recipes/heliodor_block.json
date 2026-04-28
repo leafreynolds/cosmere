@@ -3,15 +3,12 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:gems/heliodor"
-    },
-    "J": {
-      "item": "surgebinding:heliodor_broam"
+      "item": "surgebinding:heliodor"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {

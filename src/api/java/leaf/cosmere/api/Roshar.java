@@ -19,17 +19,17 @@ public class Roshar
 {
 	public enum GemSize
 	{
-		BROAM,
-		MARK,
-		CHIP;
+		LARGE,
+		MEDIUM,
+		SMALL;
 
 		public float getChargeModifier()
 		{
 			return switch (this)
 			{
-				case BROAM -> 1f;
-				case MARK -> 0.5f;
-				case CHIP -> 0.1f;
+				case LARGE -> 1f;
+				case MEDIUM -> 0.5f;
+				case SMALL -> 0.1f;
 			};
 		}
 	}

@@ -55,6 +55,13 @@
   "block.surgebinding.vinebud": "Vinebud",
   "block.surgebinding.zircon_block": "Zircon Block",
   "block.surgebinding.zircon_ore": "Zircon Ore",
+
+  "item.surgebinding.surge_banner_pattern": "Banner Pattern",
+  "item.surgebinding.surge_banner_pattern.desc": "Surges",
+  "block.minecraft.banner.surgebinding.windrunner.blue": "Blue Windrunner Glyph",
+  "block.minecraft.banner.surgebinding.windrunner.light_gray": "Light Gray Open Circle",
+
+
   "entity.surgebinding.chull": "Chull",
   "entity.surgebinding.cryptic": "Cryptic",
   "item.surgebinding.amethyst_broam": "Amethyst Broam",
@@ -126,5 +133,7 @@
   "manifestation.surgebinding.transformation": "Transformation",
   "manifestation.surgebinding.transformation.description": "Needs description",
   "manifestation.surgebinding.transportation": "Transportation",
-  "manifestation.surgebinding.transportation.description": "Needs description"
+  "manifestation.surgebinding.transportation.description": "Needs description",
+
+
 }

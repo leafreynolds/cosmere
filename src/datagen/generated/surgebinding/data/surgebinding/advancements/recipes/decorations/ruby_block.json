@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:gems/ruby"
+            "items": [
+              "surgebinding:ruby"
+            ]
           }
         ]
       },

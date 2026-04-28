@@ -3,15 +3,12 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:gems/topaz"
-    },
-    "J": {
-      "item": "surgebinding:topaz_broam"
+      "item": "surgebinding:topaz"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {

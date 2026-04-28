@@ -1,0 +1,14 @@
+{
+  "values": [
+    "surgebinding:abrasion",
+    "surgebinding:adhesion",
+    "surgebinding:cohesion",
+    "surgebinding:division",
+    "surgebinding:gravitation",
+    "surgebinding:illumination",
+    "surgebinding:progression",
+    "surgebinding:tension",
+    "surgebinding:transformation",
+    "surgebinding:transportation"
+  ]
+}

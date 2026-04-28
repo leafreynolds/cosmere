@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 16,
+  "ingredient": {
+    "item": "surgebinding:smokestone"
+  },
+  "result": "surgebinding:cut_smokestone_small"
+}

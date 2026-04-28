@@ -47,6 +47,7 @@ public class SurgebindingDataGenerator
 		generator.addProvider(true, new SurgebindingRecipeGen(packOutput, existingFileHelper));
 
 		generator.addProvider(true, new SurgebindingPatchouliGen(packOutput));
+		generator.addProvider(true, new SurgebindingWorldGenProvider(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new SurgebindingCuriosProvider(packOutput, existingFileHelper, lookupProvider));
 	}
 

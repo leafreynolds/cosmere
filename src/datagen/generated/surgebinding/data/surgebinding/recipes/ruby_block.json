@@ -3,15 +3,12 @@
   "category": "misc",
   "key": {
     "I": {
-      "tag": "forge:gems/ruby"
-    },
-    "J": {
-      "item": "surgebinding:ruby_broam"
+      "item": "surgebinding:ruby"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {

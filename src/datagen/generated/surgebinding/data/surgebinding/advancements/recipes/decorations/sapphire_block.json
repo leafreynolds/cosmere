@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:gems/sapphire"
+            "items": [
+              "surgebinding:sapphire"
+            ]
           }
         ]
       },

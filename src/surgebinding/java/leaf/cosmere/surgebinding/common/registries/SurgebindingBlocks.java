@@ -14,6 +14,10 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -24,32 +28,54 @@ public class SurgebindingBlocks
 {
 	public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(Surgebinding.MODID);
 
+	static Roshar.Gemstone[] gemstone = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.AMETHYST, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemBlock, BlockItem>> GEM_BLOCKS =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+			Arrays.stream(gemstone)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
-									gemstone.getName() + Constants.RegNameStubs.BLOCK,
+									gemstone == Roshar.Gemstone.DIAMOND ? "rosharan_diamond_block"
+									                                    : gemstone.getName() + Constants.RegNameStubs.BLOCK,
 									() -> new GemBlock(gemstone),
 									Rarity.UNCOMMON)));
 
-/*	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+	public static final BlockRegistryObject<Block, BlockItem> BLOCK_OF_SAPPHIRE = BLOCKS.register("block_of_sapphire",
+			() -> new Block(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK).sound(SoundType.AMETHYST)));
+
+	public static final BlockRegistryObject<BuddingSapphireBlock, BlockItem> BUDDING_SAPPHIRE = BLOCKS.register("budding_sapphire",
+			() -> new BuddingSapphireBlock(BlockBehaviour.Properties.copy(Blocks.BUDDING_AMETHYST)));
+
+	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> SMALL_SAPPHIRE_BUD = BLOCKS.register("small_sapphire_bud",
+			() -> new SapphireClusterBlock(3, 4, BlockBehaviour.Properties.copy(Blocks.SMALL_AMETHYST_BUD)));
+
+	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> MEDIUM_SAPPHIRE_BUD = BLOCKS.register("medium_sapphire_bud",
+			() -> new SapphireClusterBlock(4, 3, BlockBehaviour.Properties.copy(Blocks.MEDIUM_AMETHYST_BUD)));
+
+	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> LARGE_SAPPHIRE_BUD = BLOCKS.register("large_sapphire_bud",
+			() -> new SapphireClusterBlock(5, 3, BlockBehaviour.Properties.copy(Blocks.LARGE_AMETHYST_BUD)));
+
+	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> SAPPHIRE_CLUSTER = BLOCKS.register("sapphire_cluster",
+			() -> new SapphireClusterBlock(7, 3, BlockBehaviour.Properties.copy(Blocks.AMETHYST_CLUSTER)));
+
+	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
-									gemstone.getName() + Constants.RegNameStubs.ORE,
+									gemstone == Roshar.Gemstone.DIAMOND ? "rosharan_diamond_ore"
+									                                    : gemstone.getName() + Constants.RegNameStubs.ORE,
 									() -> new GemOreBlock(gemstone),
 									Rarity.UNCOMMON)));
 
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE_DEEPSLATE =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							gemstone -> BLOCKS.registerWithRarity(
-									Constants.RegNameStubs.DEEPSLATE + gemstone.getName() + Constants.RegNameStubs.ORE,
+									gemstone == Roshar.Gemstone.DIAMOND ? "deepslate_rosharan_diamond_ore"
+									                                    : Constants.RegNameStubs.DEEPSLATE + gemstone.getName() + Constants.RegNameStubs.ORE,
 									() -> new GemOreBlock(gemstone),
-									Rarity.UNCOMMON)));*/
+									Rarity.UNCOMMON)));
 
 	public static final BlockRegistryObject<LavisPolypBlock, BlockItem> LAVIS_POLYP_BLOCK = BLOCKS.register("lavis_polyp", LavisPolypBlock::new);
 	public static final BlockRegistryObject<PrickletacBlock, BlockItem> PRICKLETAC_BLOCK = BLOCKS.register("prickletac", PrickletacBlock::new);

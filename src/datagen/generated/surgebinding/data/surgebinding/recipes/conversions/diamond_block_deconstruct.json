@@ -3,11 +3,11 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "surgebinding:diamond_block"
+      "item": "surgebinding:rosharan_diamond_block"
     }
   ],
   "result": {
     "count": 9,
-    "item": "surgebinding:diamond_broam"
+    "item": "surgebinding:rosharan_diamond"
   }
 }

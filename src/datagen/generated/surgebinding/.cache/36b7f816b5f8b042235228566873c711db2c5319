@@ -1,4 +1,9 @@
-// 1.20.1	2024-10-09T13:38:50.237255	Surgebinding PatchouliGeneration
-297b263fd7587254dc36dd2c24ba67a4227b5616 assets/cosmere/patchouli_books/guide/en_us/categories/surgebinding.json
-68e618712b476910666bc2bcbced96e48f6adecd assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/chull.json
-2d8b8601eefb0f6bcf8adfee0f29e907d10dcdd2 assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/surgebinding_basics.json
+// 1.20.1	2026-03-02T15:58:30.7759329	Surgebinding PatchouliGeneration
+b4894ef372c6c564961873bfe643f3c7091e72cd assets/cosmere/patchouli_books/guide/en_us/categories/surgebinding.json
+63db411bb591a56b8d8c6e7637ab042c7b0d942b assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/abrasion_surge.json
+c954ef02f8175cd75add9a681fd57eafc809ee08 assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/adhesion_surge.json
+ac472a6af93c759fa72d4d491480857179f59914 assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/chull.json
+0420bff3c5fa65dc1691c60b760548eab2563366 assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/division_surge.json
+f77f0c1f4c81a4325022e2b64b1d55bdbfb87cc1 assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/gravitation_surge.json
+d3863ea5ef7ab096dc4f637a18bc88805c27a3b1 assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/progression_surge.json
+7ae4d29a436a4b779ecd719a367006c26224ab9b assets/cosmere/patchouli_books/guide/en_us/entries/surgebinding/surgebinding_basics.json
