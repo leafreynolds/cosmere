@@ -972,8 +972,8 @@ public class SpiritwebCapability implements ISpiritweb
 		final int pMax = manifestation.modeMax(this);
 		final int pMin = manifestation.modeMin(this);
 		mode = Mth.clamp(mode, pMin, pMax);
-		int lastMode = MANIFESTATIONS_MODE.put(manifestation, mode);
-		manifestation.onModeChange(this, lastMode);
+		Integer lastMode = MANIFESTATIONS_MODE.put(manifestation, mode);
+		manifestation.onModeChange(this, lastMode == null ? 0 : lastMode);
 	}
 
 	@Override
