@@ -187,7 +187,9 @@ public class OuterRadialButton extends Button
 
 		float radsPerSegment = (float) Math.PI * 2 / 8;
 		float startAngle = segmentNr * radsPerSegment;
-		float radiusSq = outerRadius * outerRadius;
+
+		float outerRadiusSq = outerRadius * outerRadius;
+		float innerRadiusSq = innerRadius * innerRadius;
 
 		// Defines the "chunkiness" of the pixelation
 		// 1 GUI pixel = 1 screen pixel at 1x scale, or scaled automatically by the game's GUI scale
@@ -204,7 +206,6 @@ public class OuterRadialButton extends Button
 
 		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		// Use ceil to ensure the bounding box completely covers the outermost pixels
 		int rInt = (int) Math.ceil(outerRadius);
 
 		for (int x = -rInt; x <= rInt; x += pixelSize)
@@ -216,7 +217,7 @@ public class OuterRadialButton extends Button
 
 				float distSq = pixelCenterX * pixelCenterX + pixelCenterY * pixelCenterY;
 
-				if (distSq <= radiusSq)
+				if (distSq <= outerRadiusSq && distSq >= innerRadiusSq)
 				{
 					float angle = (float) Math.atan2(pixelCenterY, pixelCenterX);
 					if (angle < 0) angle += (float) (Math.PI * 2);
