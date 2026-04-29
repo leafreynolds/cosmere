@@ -47,7 +47,7 @@ public class SurgebindingModClientEvents
 	public static void registerItemColors(RegisterColorHandlersEvent.Item event)
 	{
 		event.register((stack, tintIndex) -> {
-			// We only want to tint layer1 (index 0)
+			// We only want to tint layer0 (the plate body); layer1 is the visor overlay
 			if (tintIndex != 0) return Color.WHITE.getRGB(); // white = no tint
 
 			return (stack.getCapability(ShardData.SHARD_DATA)

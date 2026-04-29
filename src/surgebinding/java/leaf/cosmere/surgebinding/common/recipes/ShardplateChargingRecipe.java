@@ -242,7 +242,7 @@ public class ShardplateChargingRecipe extends CustomRecipe
 	@Override
 	public @Nonnull ResourceLocation getId()
 	{
-		return Surgebinding.rl("vial_mix");
+		return Surgebinding.rl("plate_charging");
 	}
 
 	@Override

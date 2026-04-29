@@ -1,5 +1,5 @@
 /*
-* File created ~ 12 - 7 - 2025 ~ Soar
+ * File created ~ 12 - 7 - 2025 ~ Soar
  */
 package leaf.cosmere.surgebinding.client.render.model;
 
@@ -8,32 +8,19 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
 import leaf.cosmere.surgebinding.common.capabilities.ShardData;
-import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.*;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.monster.AbstractIllager;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -41,7 +28,6 @@ import java.awt.*;
 
 public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ResourceLocation TEXTURE = Surgebinding.rl("textures/models/armor/shardplate_base.png");
 	public static final ResourceLocation VISOR = Surgebinding.rl("textures/models/armor/shardplate_visors.png");
 	public static final ResourceLocation CRACKS1 = Surgebinding.rl("textures/models/armor/shardplate_cracks_1.png");
@@ -56,7 +42,6 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 	public static final int TOTAL_KAMA_IDS = 1;
 	public static final int TOTAL_BOOT_IDS = 1;
 
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Surgebinding.rl("shardplate"), "main");
 	public final ModelPart root;
 	public final ModelPart head;
 	public final ModelPart head1;

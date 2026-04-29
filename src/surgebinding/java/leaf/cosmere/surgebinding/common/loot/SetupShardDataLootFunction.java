@@ -13,8 +13,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.Random;
-
 public class SetupShardDataLootFunction extends LootItemConditionalFunction
 {
 	protected SetupShardDataLootFunction(LootItemCondition[] pPredicates)
@@ -27,8 +25,7 @@ public class SetupShardDataLootFunction extends LootItemConditionalFunction
 	{
 		if(pStack.getItem() instanceof IShardItem shard)
 		{
-			Random rand = new Random();
-			int chance = rand.nextInt(0, 40);
+			int chance = pContext.getRandom().nextInt(0, 40);
 
 			if(chance <= 3)
 			{

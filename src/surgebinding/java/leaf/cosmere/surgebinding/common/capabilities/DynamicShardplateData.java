@@ -57,13 +57,13 @@ public class DynamicShardplateData extends ShardData implements ICapabilityProvi
 		this.rightPaldronsID = "right_paldron" + MathHelper.randomInt(0, DynamicShardplateModel.TOTAL_PALDRON_IDS);
 		this.rightLegID = "rightleg_top" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_LEG_IDS);
 		this.rightBootOutsideID = "rightboot_outside" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_BOOT_IDS);
-		this.rightBootTipID = new String(rightBootOutsideID).replace("outside","tip");
+		this.rightBootTipID = rightBootOutsideID.replace("outside","tip");
 
-		this.leftArmID = new String(rightArmID).replace("right","left");
-		this.leftPaldronsID = new String(rightPaldronsID).replace("right","left");
-		this.leftLegID = new String(rightLegID).replace("right","left");
-		this.leftBootOutsideID = new String(rightBootOutsideID).replace("right","left");
-		this.leftBootTipID = new String(rightBootTipID).replace("right","left");
+		this.leftArmID = rightArmID.replace("right","left");
+		this.leftPaldronsID = rightPaldronsID.replace("right","left");
+		this.leftLegID = rightLegID.replace("right","left");
+		this.leftBootOutsideID = rightBootOutsideID.replace("right","left");
+		this.leftBootTipID = rightBootTipID.replace("right","left");
 
 		this.colored = true;
 	}
