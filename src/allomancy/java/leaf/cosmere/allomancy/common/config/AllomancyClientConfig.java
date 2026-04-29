@@ -14,6 +14,7 @@ public class AllomancyClientConfig implements ICosmereConfig
 	public final ForgeConfigSpec.BooleanValue drawMetalLines;
 	public final ForgeConfigSpec.BooleanValue drawMetalBoxes;
 	public final ForgeConfigSpec.BooleanValue canHearRain;
+	public final ForgeConfigSpec.IntValue pixelationAmount;
 
 	AllomancyClientConfig()
 	{
@@ -23,6 +24,7 @@ public class AllomancyClientConfig implements ICosmereConfig
 		drawMetalLines = builder.comment("Iron/Steel vision draws metal lines between the user and the source of metal").define("drawMetalLines", true);
 		drawMetalBoxes = builder.comment("Iron/Steel vision draws a blue box overlay over blocks that contain metal").define("drawMetalBoxes", true);
 		canHearRain = builder.comment("Allomantic Tin picks up rain sounds, generating a sculk particle to player and showing an image at position of sound").define("canHearRain", true);
+		pixelationAmount = builder.comment("Amount of pixelation on the Allomancy power wheel").defineInRange("pixelationAmount", 1, 1, 10);
 
 		builder.pop();
 		configSpec = builder.build();

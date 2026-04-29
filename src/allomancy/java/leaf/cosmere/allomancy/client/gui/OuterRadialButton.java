@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
@@ -23,10 +24,11 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class OuterRadialButton extends Button
 {
@@ -147,72 +149,111 @@ public class OuterRadialButton extends Button
 		return angle;
 	}
 
-	// inspired by SteelCodeTeam's Metallic Arts https://github.com/SteelCodeTeam/Metallics-Arts/blob/main/src/main/java/net/rudahee/metallics_arts/modules/logic/client/custom_guis/selectors/AllomanticSelector.java
 	private void renderSegment(@NotNull GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r, g, b;
+		float r = 61/255.f, g = 70/255.f, b = 76/255.f;
 		float a = 1f;
 
 		if (!hasManifestation)
 		{
-			r = g = b = 0.1f;
-		}
-		else
-		{
-			r = g = b = 0.5f;
+			r *= 0.1f;
+			g *= 0.1f;
+			b *= 0.1f;
 		}
 
 		if (isHovered && hasManifestation)
 		{
-			r = g = b = 0.6f;
+			r *= 1.1f;
+			g *= 1.1f;
+			b *= 1.1f;
 		}
 
-		if (manifestation instanceof AllomancyManifestation allomancyManifestation)
-		{
+		if (manifestation instanceof AllomancyManifestation allomancyManifestation) {
 			int mode = allomancyManifestation.getMode(spiritweb);
+			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f); // Cap intensity
 
-			if (mode > 0)
-				r = r + 0.2f * mode;
-			else if (mode < 0)
-				b = b + 0.2f * mode;
+			if (mode > 0) {
+				// Blend toward pure red
+				r = lerp(r, 1.0f, intensity);
+				g = lerp(g, 0.0f, intensity);
+				b = lerp(b, 0.0f, intensity);
+			} else if (mode < 0) {
+				// Blend toward pure blue
+				r = lerp(r, 0.0f, intensity);
+				g = lerp(g, 0.0f, intensity);
+				b = lerp(b, 1.0f, intensity);
+			}
 		}
 
 		float radsPerSegment = (float) Math.PI * 2 / 8;
-		float step = (float) Math.PI / 180;
-		float radius = outerRadius;
+		float startAngle = segmentNr * radsPerSegment;
+		float radiusSq = outerRadius * outerRadius;
+
+		// Defines the "chunkiness" of the pixelation
+		// 1 GUI pixel = 1 screen pixel at 1x scale, or scaled automatically by the game's GUI scale
+		int pixelSize = AllomancyConfigs.CLIENT.pixelationAmount.get();
 
 		RenderSystem.disableCull();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
-
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
+
 		Tesselator tess = Tesselator.getInstance();
 		BufferBuilder buf = tess.getBuilder();
 
-		buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
-		buf.vertex(pose, centerX, centerY, 0).color(r, g, b, a).endVertex();
+		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		for (float f = 0f; f < radsPerSegment + step/2; f += step)
+		// Use ceil to ensure the bounding box completely covers the outermost pixels
+		int rInt = (int) Math.ceil(outerRadius);
+
+		for (int x = -rInt; x <= rInt; x += pixelSize)
 		{
-			float rad = f + segmentNr * radsPerSegment;
-			float x = centerX + Mth.cos(rad) * radius;
-			float y = centerY + Mth.sin(rad) * radius;
-
-			if (f == 0)
+			for (int y = -rInt; y <= rInt; y += pixelSize)
 			{
-				buf.vertex(pose, x, y, 0).color(r,g,b,a).endVertex();
+				float pixelCenterX = x + (pixelSize / 2f);
+				float pixelCenterY = y + (pixelSize / 2f);
+
+				float distSq = pixelCenterX * pixelCenterX + pixelCenterY * pixelCenterY;
+
+				if (distSq <= radiusSq)
+				{
+					float angle = (float) Math.atan2(pixelCenterY, pixelCenterX);
+					if (angle < 0) angle += (float) (Math.PI * 2);
+
+					float diff = angle - startAngle;
+					if (diff < 0) diff += (float) (Math.PI * 2);
+
+					if (diff < radsPerSegment)
+					{
+						float px = centerX + x;
+						float py = centerY + y;
+
+						buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
+						buf.vertex(pose, px, py + pixelSize, 0).color(r, g, b, a).endVertex();
+						buf.vertex(pose, px + pixelSize, py + pixelSize, 0).color(r, g, b, a).endVertex();
+						buf.vertex(pose, px + pixelSize, py, 0).color(r, g, b, a).endVertex();
+					}
+				}
 			}
-			buf.vertex(pose, x, y, 0).color(r,g,b,a).endVertex();
 		}
 
 		tess.end();
-
 		RenderSystem.disableBlend();
 	}
 
 	private void renderIcon(@NotNull GuiGraphics pGuiGraphics)
 	{
+		Color metalColor = metalType.getColor();
+		float r = metalColor.getRed()/255.f, g = metalColor.getGreen()/255.f, b = metalColor.getBlue()/255.f;
+
+		if (!hasManifestation)
+		{
+			r *= 0.1f;
+			g *= 0.1f;
+			b *= 0.1f;
+		}
+
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.setLength(0);
 		stringBuilder.append("textures/icon/")
@@ -229,7 +270,7 @@ public class OuterRadialButton extends Button
 		final ResourceLocation location = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 		float alpha = hasManifestation ? 1.0f : 0.25f;
 		RenderSystem.setShaderTexture(0, location);
-		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
+
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
@@ -239,6 +280,20 @@ public class OuterRadialButton extends Button
 		int posX = centerX + (int)(Math.cos(midAngle) * midRadius) - iconSize/2;
 		int posY = centerY + (int)(Math.sin(midAngle) * midRadius) - iconSize/2;
 
+		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
+		pGuiGraphics.blit(location,
+				posX+1,
+				posY+1,
+				iconSize,
+				iconSize,
+				0,
+				0,
+				width,
+				height,
+				width,
+				height);
+
+		RenderSystem.setShaderColor(r, g, b, alpha);
 		pGuiGraphics.blit(location,
 				posX,
 				posY,
@@ -252,60 +307,6 @@ public class OuterRadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-
-	private void renderNameText(GuiGraphics pGuiGraphics)
-	{
-		Font font = Minecraft.getInstance().font;
-		int color = 0xffffffff;
-
-		float radsPerSegment = (float) Math.PI * 2 / 8;
-		float f = (float) ((radsPerSegment + (Math.PI / 180f / 2f)) / 2f);
-		float rad = f + segmentNr * radsPerSegment;
-		float textRadius = outerRadius + 10;
-		float x = centerX + Mth.cos(rad) * textRadius;
-		float y = centerY + Mth.sin(rad) * textRadius;
-
-		final String text = I18n.get(manifestation.getTranslationKey());
-
-		if (x < centerX)
-		{
-			x = x - (font.width(text));
-		}
-
-		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
-	}
-
-	private void renderStoresText(GuiGraphics pGuiGraphics)
-	{
-		Font font = Minecraft.getInstance().font;
-		int color = 0xffffffff;
-
-		float radsPerSegment = (float) Math.PI * 2 / 8;
-		float f = (float) ((radsPerSegment + (Math.PI / 180f / 2f)) / 2f);
-		float rad = f + segmentNr * radsPerSegment;
-		float textRadius = outerRadius + 10;
-		float x = centerX + Mth.cos(rad) * textRadius;
-		float y = centerY + Mth.sin(rad) * textRadius;
-
-		String text = "";
-		for (String s : SpiritwebMenu.infoText)
-		{
-			if (s.toLowerCase().contains("a. " + metalType.getName()))
-			{
-				text = s.split(":")[1].stripLeading();
-
-				break;
-			}
-		}
-
-		if (x < centerX)
-		{
-			x = x - (font.width(text));
-		}
-		y += font.lineHeight*1.5f;
-
-		pGuiGraphics.drawString(Minecraft.getInstance().font, text, (int)x, (int)y, color);
 	}
 
 	private void renderInfoBlock(GuiGraphics pGuiGraphics)
@@ -366,5 +367,10 @@ public class OuterRadialButton extends Button
 			text = String.format("%02d", seconds);
 
 		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
+	}
+
+	public float lerp(float start, float end, float pct)
+	{
+		return start + pct * (end - start);
 	}
 }
