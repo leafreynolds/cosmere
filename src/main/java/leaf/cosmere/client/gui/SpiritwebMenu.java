@@ -5,7 +5,6 @@
 package leaf.cosmere.client.gui;
 
 import com.google.common.base.Stopwatch;
-import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
@@ -19,7 +18,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,7 +30,6 @@ public class SpiritwebMenu extends Screen
 	private CosmereScreen selectedManifestationScreen = null;
 	public static Manifestations.ManifestationTypes selectedManifestationType = Manifestations.ManifestationTypes.NONE;
 	public static Manifestation selectedManifestation = null;
-	public static ArrayList<String> infoText = new ArrayList<>();
 
 	public SpiritwebMenu(Component pTitle, ISpiritweb spiritweb)
 	{
@@ -85,6 +82,7 @@ public class SpiritwebMenu extends Screen
 						{
 							selectedManifestationType = maniType;
 							selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
+							selectedManifestationScreen.init(Minecraft.getInstance(), this.width, this.height);
 						}
 					}), maniType));
 
@@ -102,21 +100,8 @@ public class SpiritwebMenu extends Screen
 				}
 			});
 		}
-	}
-
-	@Override
-	public void tick()
-	{
-		assert Minecraft.getInstance().player != null;
-		if (Minecraft.getInstance().player.tickCount % 20 == 0)
-		{
-			infoText.clear();
-			for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.getSubmodules().values())
-			{
-				//spiritwebSubmodule.collectMenuInfo(infoText);
-			}
-		}
-		super.tick();
+		if (selectedManifestationScreen != null)
+			selectedManifestationScreen.init(Minecraft.getInstance(), this.width, this.height);
 	}
 
 	@Override

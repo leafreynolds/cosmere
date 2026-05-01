@@ -19,15 +19,12 @@ public class AllomancySpiritwebMenu extends CosmereScreen
 	{
 		super(Component.literal("Allomancy"));
 		player = Minecraft.getInstance().player;
-		init();
 	}
 
 	@Override
 	protected void init()
 	{
 		super.init();
-		this.width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-		this.height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
 		SpiritwebCapability.get(player).ifPresent( (iSpiritweb -> {
 			int circleCenterX = width/2;
