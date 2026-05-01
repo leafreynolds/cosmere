@@ -31,7 +31,6 @@ import java.awt.*;
 
 public class InnerRadialButton extends Button
 {
-	private static final int TEXT_DISTANCE = 30;
 	private final float outerRadius;
 	private final float innerRadius;
 	private final double startAngle;
@@ -146,7 +145,6 @@ public class InnerRadialButton extends Button
 		return angle;
 	}
 
-	// inspired by SteelCodeTeam's Metallic Arts https://github.com/SteelCodeTeam/Metallics-Arts/blob/main/src/main/java/net/rudahee/metallics_arts/modules/logic/client/custom_guis/selectors/AllomanticSelector.java
 	private void renderSegment(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
 		float r = 61/255.f, g = 70/255.f, b = 76/255.f;
