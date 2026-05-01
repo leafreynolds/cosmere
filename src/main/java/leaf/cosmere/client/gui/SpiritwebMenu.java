@@ -66,6 +66,10 @@ public class SpiritwebMenu extends Screen
 	@Override
 	protected void init()
 	{
+		if (spiritweb.getSelectedManifestation() != null)
+		{
+			selectedManifestationType = spiritweb.getSelectedManifestation().getManifestationType();
+		}
 		AtomicInteger added = new AtomicInteger(0);
 		int count = registry.getManifestationScreenMap().size();
 		for (int i = 0; i < Manifestations.ManifestationTypes.AVIAR.getID(); i++)
@@ -83,8 +87,14 @@ public class SpiritwebMenu extends Screen
 							selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
 						}
 					}), maniType));
+					
 					added.set(added.get()+1);
-					if (added.get() == 1)
+
+					if (selectedManifestationType == maniType)
+					{
+						selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
+					}
+					else if (added.get() == 1 && selectedManifestationScreen != null)
 					{
 						selectedManifestationType = maniType;
 						selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
