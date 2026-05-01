@@ -15,9 +15,11 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
@@ -49,6 +51,10 @@ public class DiamondButton extends Button
 		boolean isHover = isMouseOver(pMouseX, pMouseY);
 		renderDiamond(pGuiGraphics, isHover);
 		renderIcon(pGuiGraphics);
+		if (isHover && hasManifestation)
+		{
+			renderInfoBlock(pGuiGraphics);
+		}
 	}
 
 	@Override
@@ -118,7 +124,11 @@ public class DiamondButton extends Button
 
 		if (manifestation instanceof FeruchemyManifestation feruchemyManifestation) {
 			int mode = feruchemyManifestation.getMode(spiritweb);
-			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f); // Cap intensity
+			float intensity = 0;
+			if (mode < 0)
+				intensity = Math.min(Math.abs(mode) * (1f/16f), 1.0f);
+			if (mode > 0)
+				intensity = Math.min(Math.abs(mode) * (1f/5f), 1.0f);
 
 			if (mode > 0) {
 				// Blend toward pure red
@@ -257,6 +267,71 @@ public class DiamondButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderInfoBlock(GuiGraphics pGuiGraphics)
+	{
+		Font font = Minecraft.getInstance().font;
+		int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+		int x = 0;
+		int y = 0;
+		int width = screenWidth / 4;
+		int height = screenHeight / 5;
+		int color = 0x99333333;
+
+		boolean isLeft = getX() < screenWidth/2;
+		boolean isTop = getY() < screenHeight/2;
+
+		if (!isLeft && !isTop)
+		{
+			// bottom right display
+			x = screenWidth - width - 10;
+			y = screenHeight - height - 10;
+		}
+		if (isLeft && !isTop)
+		{
+			// bottom left display
+			x = 10;
+			y = screenHeight - height - 10;
+		}
+		if (isLeft && isTop)
+		{
+			// top left display
+			x = 10;
+			y = 10;
+		}
+		if (!isLeft && isTop)
+		{
+			// top right display
+			x = screenWidth - width - 10;
+			y = 10;
+		}
+
+		RenderSystem.disableCull();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+
+		pGuiGraphics.fill(x, y, x + width,  y + height, color);
+
+		String text = I18n.get(manifestation.getTranslationKey());
+		pGuiGraphics.drawString(font, text, x+5, y+10, 0xFFFFFFFF);
+
+		int seconds = manifestation.getInvestitureRemaining(spiritweb);
+		int hours = seconds / 3600;
+		int minutes = (seconds % 3600) / 60;
+		seconds = seconds % 60;
+
+		if (hours > 0)
+			text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+		else if (minutes > 0)
+			text = String.format("%d:%02d", minutes, seconds);
+		else if (seconds > 0)
+			text = String.format("%02d", seconds);
+		else
+			text = "Empty";
+
+		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
 	}
 
 	public float lerp(float start, float end, float pct) {

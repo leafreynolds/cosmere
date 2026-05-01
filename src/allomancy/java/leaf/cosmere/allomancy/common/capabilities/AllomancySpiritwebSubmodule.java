@@ -32,14 +32,11 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -307,23 +304,6 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 			Minecraft.getInstance().getProfiler().push("cosmere-getDrawSoundIndicator");
 			DrawHelper.drawSquareAtPoint(viewModelStack, Color.WHITE, AllomancyTin.getTinSoundList(), spiritweb.getLiving().getEyePosition());
 			Minecraft.getInstance().getProfiler().pop();
-		}
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void collectMenuInfo(List<String> m_infoText)
-	{
-		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
-		{
-			int value = METALS_INGESTED.get(metalType);
-
-			if (value > 0)
-			{
-				//todo localisation check
-				final String text = "A. " + metalType.getName() + ": " + value;
-				m_infoText.add(text);
-			}
 		}
 	}
 

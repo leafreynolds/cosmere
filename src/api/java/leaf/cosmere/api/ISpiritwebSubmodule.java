@@ -40,10 +40,6 @@ public interface ISpiritwebSubmodule
 	{
 	}
 
-	default void collectMenuInfo(List<String> m_infoText)
-	{
-	}
-
 	//give a random starting item from this power set
 	default void GiveStartingItem(Player player)
 	{

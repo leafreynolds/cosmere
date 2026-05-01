@@ -87,7 +87,7 @@ public class SpiritwebMenu extends Screen
 							selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
 						}
 					}), maniType));
-					
+
 					added.set(added.get()+1);
 
 					if (selectedManifestationType == maniType)
@@ -113,7 +113,7 @@ public class SpiritwebMenu extends Screen
 			infoText.clear();
 			for (ISpiritwebSubmodule spiritwebSubmodule : spiritweb.getSubmodules().values())
 			{
-				spiritwebSubmodule.collectMenuInfo(infoText);
+				//spiritwebSubmodule.collectMenuInfo(infoText);
 			}
 		}
 		super.tick();
