@@ -1,5 +1,7 @@
 package leaf.cosmere.allomancy.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.client.gui.CosmereScreen;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -7,6 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class AllomancySpiritwebMenu extends CosmereScreen
 {
@@ -69,5 +73,34 @@ public class AllomancySpiritwebMenu extends CosmereScreen
 	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		renderBorder(pGuiGraphics);
+	}
+
+	private void renderBorder(GuiGraphics pGuiGraphics)
+	{
+		final ResourceLocation location = new ResourceLocation(Allomancy.MODID, "textures/gui/allo_border.png");
+
+		RenderSystem.setShaderTexture(0, location);
+		RenderSystem.enableBlend();
+		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+		final int diameter = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3 * 2 + 2;
+		final int x = width/2 - diameter/2, y = height/2 - diameter/2 + height/16;
+		final int iconSize = 256;
+
+		pGuiGraphics.blit(location,
+				x,
+				y,
+				diameter,
+				diameter,
+				0,
+				0,
+				iconSize,
+				iconSize,
+				iconSize,
+				iconSize);
+
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
