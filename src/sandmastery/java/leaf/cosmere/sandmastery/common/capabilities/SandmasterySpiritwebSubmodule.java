@@ -31,11 +31,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -182,14 +179,14 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		// we could force it to turn off ribbons?
 	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void collectMenuInfo(List<String> m_infoText)
-	{
-		//todo Localization
-		final String text = "Hydration: " + getHydrationLevel();
-		m_infoText.add(text);
-	}
+//	@Override
+//	@OnlyIn(Dist.CLIENT)
+//	public void collectMenuInfo(List<String> m_infoText)
+//	{
+//		//todo Localization
+//		final String text = "Hydration: " + getHydrationLevel();
+//		m_infoText.add(text);
+//	}
 
 	@Override
 	public void GiveStartingItem(Player player)

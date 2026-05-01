@@ -13,13 +13,19 @@ import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
+import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.HashMap;
+
 public class FeruchemyManifestation extends Manifestation implements IHasMetalType
 {
+	private static final HashMap<Metals.MetalType, Double> metalmindChargesMap = new HashMap<>();
+	private static final HashMap<Metals.MetalType, Double> metalmindMaxChargesMap = new HashMap<>();
 	protected final Metals.MetalType metalType;
 
 	public FeruchemyManifestation(Metals.MetalType metalType)
@@ -74,6 +80,34 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 			data.removeEffect(EffectsHelper.getEffectUUID(getStoringEffect(), effectSource));
 			data.removeEffect(EffectsHelper.getEffectUUID(getTappingEffect(), effectSource));
 		}
+	}
+
+	private void collectMenuInfo()
+	{
+		if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.tickCount % 2 == 1)    // only do on odd tick
+		{
+			metalmindChargesMap.clear();
+			metalmindChargesMap.putAll(FeruchemyChargeThread.getInstance().getCharges());
+
+			metalmindMaxChargesMap.clear();
+			metalmindMaxChargesMap.putAll(FeruchemyChargeThread.getInstance().getMaximumCharges());
+		}
+	}
+
+	@Override
+	public int getInvestitureRemaining(ISpiritweb spiritweb)
+	{
+		collectMenuInfo();
+		return (int) Math.floor(metalmindChargesMap.getOrDefault(metalType, 0d));
+	}
+
+	@Override
+	public float getInvestitureHud(ISpiritweb spiritweb)
+	{
+		collectMenuInfo();
+		double maximum = metalmindMaxChargesMap.getOrDefault(metalType, 0d);
+		double charge = metalmindChargesMap.getOrDefault(metalType, 0d);
+		return (float) (maximum/charge);
 	}
 
 	protected CosmereEffect getTappingEffect()

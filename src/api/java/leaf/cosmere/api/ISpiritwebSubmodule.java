@@ -11,8 +11,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
-import java.util.List;
-
 public interface ISpiritwebSubmodule
 {
 	default void deserialize(ISpiritweb spiritweb)
@@ -33,10 +31,6 @@ public interface ISpiritwebSubmodule
 
 	@OnlyIn(Dist.CLIENT)
 	default void renderWorldEffects(ISpiritweb spiritweb, RenderLevelStageEvent event)
-	{
-	}
-
-	default void collectMenuInfo(List<String> m_infoText)
 	{
 	}
 

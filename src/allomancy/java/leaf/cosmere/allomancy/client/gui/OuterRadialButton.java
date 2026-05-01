@@ -364,8 +364,10 @@ public class OuterRadialButton extends Button
 			text = String.format("%d:%02d:%02d", hours, minutes, seconds);
 		else if (minutes > 0)
 			text = String.format("%d:%02d", minutes, seconds);
-		else
+		else if (seconds > 0)
 			text = String.format("%02d", seconds);
+		else
+			text = "Empty";
 
 		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
 	}

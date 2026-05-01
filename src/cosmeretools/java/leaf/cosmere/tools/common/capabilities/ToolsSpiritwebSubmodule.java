@@ -10,8 +10,6 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
-import java.util.List;
-
 public class ToolsSpiritwebSubmodule implements ISpiritwebSubmodule
 {
 	@Override
@@ -34,12 +32,6 @@ public class ToolsSpiritwebSubmodule implements ISpiritwebSubmodule
 
 	@Override
 	public void tickServer(ISpiritweb spiritweb)
-	{
-
-	}
-
-	@Override
-	public void collectMenuInfo(List<String> m_infoText)
 	{
 
 	}
