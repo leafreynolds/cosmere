@@ -14,6 +14,7 @@ import leaf.cosmere.surgebinding.common.capabilities.ShardData;
 import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -80,27 +82,38 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 		return (ShardData)stack.getCapability(ShardData.SHARD_DATA).resolve().get();
 	}
 
+	@Override
+	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
+	{
+		final ShardData shardData = new ShardData(stack);
+		if (nbt != null)
+		{
+			shardData.deserializeNBT(nbt);
+		}
+		return shardData;
+	}
+
 
 	@Override
 	public void bond(ItemStack stack, Player entity)
 	{
+		ShardData data = getShardData(stack);
 		// if bonded, then don't bond again
-		if (getBond(stack) != null)
+		if (data.isBonded())
 		{
 			return;
 		}
 
-
-		getShardData(stack).setBondedEntity(entity);
-
+		data.setBondedEntity(entity);
 	}
 
 	@Override
 	public void releaseBond(ItemStack stack)
 	{
-		if(getBond(stack) != null)
+		ShardData data = getShardData(stack);
+		if (data.isBonded())
 		{
-			getShardData(stack).setEmptyBond();
+			data.setEmptyBond();
 		}
 	}
 
@@ -113,11 +126,7 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 	@Override
 	public boolean canSummonDismiss(LivingEntity player, ItemStack stack)
 	{
-		if (getBond(stack).is(player))
-		{
-			return true;
-		}
-		return false;
+		return isBondedTo(stack, player);
 	}
 
 	@Override

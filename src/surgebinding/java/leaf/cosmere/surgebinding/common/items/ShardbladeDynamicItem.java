@@ -5,13 +5,11 @@
 package leaf.cosmere.surgebinding.common.items;
 
 import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.surgebinding.client.render.renderer.ShardbladeItemRenderer;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardbladeData;
 import leaf.cosmere.surgebinding.common.capabilities.ShardData;
-import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -31,8 +29,6 @@ import java.util.function.Consumer;
 
 public class ShardbladeDynamicItem extends ShardbladeItem
 {
-
-
 	public ShardbladeDynamicItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
 	{
 		super(tier, attackDamageIn, attackSpeedIn, builderIn);
@@ -92,16 +88,14 @@ public class ShardbladeDynamicItem extends ShardbladeItem
 			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
 		}
 
-		if(!data.isLiving())
+		if (!data.isLiving())
 		{
 			pTooltipComponents.add(TextHelper.createText("Deadblade"));
 		}
-		else if(data.getOrder() != null)
+		else if (data.getOrder() != null)
 		{
 			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
 		}
-
-
 
 		if (!InventoryScreen.hasShiftDown())
 		{

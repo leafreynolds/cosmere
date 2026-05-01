@@ -2,12 +2,10 @@ package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Roshar;
-import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
 import leaf.cosmere.surgebinding.common.items.HonorbladeItem;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -49,9 +47,9 @@ public class ShardData implements ICapabilityProvider, IShard
 		this.stack = stack;
 		this.nbt = new CompoundTag();
 
-		if(honorblade)
+		if (honorblade)
 		{
-			this.order = ((HonorbladeItem)stack.getItem()).getOrder(stack);
+			this.order = ((HonorbladeItem) stack.getItem()).getOrder(stack);
 		}
 	}
 
@@ -142,7 +140,7 @@ public class ShardData implements ICapabilityProvider, IShard
 	@Override
 	public CompoundTag serializeNBT()
 	{
-		if(order != null)
+		if (order != null)
 		{
 			this.nbt.putInt("radiantOrder", order.getID());
 		}
@@ -165,12 +163,12 @@ public class ShardData implements ICapabilityProvider, IShard
 	public void deserializeNBT(CompoundTag compoundTag)
 	{
 		this.nbt = compoundTag;
-		if(nbt.contains("radiantOrder"))
+		if (nbt.contains("radiantOrder"))
 		{
 			this.order = Roshar.RadiantOrder.valueOf(nbt.getInt("radiantOrder")).get();
 		}
 		this.living = nbt.getBoolean("isLiving");
-		if(nbt.contains(Constants.NBT.ATTUNED_PLAYER))
+		if (nbt.contains(Constants.NBT.ATTUNED_PLAYER))
 		{
 			this.bond = nbt.getUUID(Constants.NBT.ATTUNED_PLAYER);
 			this.bondedName = nbt.getString(Constants.NBT.ATTUNED_PLAYER_NAME);
@@ -178,7 +176,4 @@ public class ShardData implements ICapabilityProvider, IShard
 
 		this.bondTicks = nbt.getInt("bondTicks");
 	}
-
-
-
 }

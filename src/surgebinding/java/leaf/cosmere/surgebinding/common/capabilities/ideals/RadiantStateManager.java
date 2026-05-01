@@ -13,7 +13,6 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.util.TaskQueueManager;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.capabilities.ideals.order.SkybreakerIdealStateManager;
 import leaf.cosmere.surgebinding.common.capabilities.ideals.order.*;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.config.SurgebindingServerConfig;
@@ -258,16 +257,16 @@ public class RadiantStateManager
 					player.sendSystemMessage(Component.literal("THESE WORDS ARE ACCEPTED."));
 					updatePowerState();
 				}
-				if(ideal == 3)
+				if (ideal == 3)
 				{
 					blade = new ItemStack(SurgebindingItems.SHARDBLADE.asItem());
-					CompoundTag tag = plate.getOrCreateTag();
+					CompoundTag tag = blade.getOrCreateTag();
 					tag.putUUID(Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
 					tag.putBoolean("isLiving", true);
 					tag.putInt("order", order.getID());
 					bladeInventory = spiritweb.getLiving();
 				}
-				if(ideal == 4)
+				if (ideal == 4)
 				{
 					plate = new ItemStack(SurgebindingItems.SHARDPLATE.asItem());
 					CompoundTag tag = plate.getOrCreateTag();
@@ -320,16 +319,16 @@ public class RadiantStateManager
 	{
 		this.ideal = idealToSwear;
 		onSuccessfulIdealSworn(spiritweb);
-		if(ideal >= 3 && blade == null)
+		if (ideal >= 3 && blade == null)
 		{
 			blade = new ItemStack(SurgebindingItems.SHARDBLADE.asItem());
-			CompoundTag tag = plate.getOrCreateTag();
+			CompoundTag tag = blade.getOrCreateTag();
 			tag.putUUID(Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
 			tag.putBoolean("isLiving", true);
 			tag.putInt("order", order.getID());
 			bladeInventory = spiritweb.getLiving();
 		}
-		if(ideal >= 4 && plate == null)
+		if (ideal >= 4 && plate == null)
 		{
 			plate = new ItemStack(SurgebindingItems.SHARDPLATE.asItem());
 			CompoundTag tag = plate.getOrCreateTag();
