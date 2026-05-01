@@ -2,6 +2,7 @@ package leaf.cosmere.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.api.IHasMetalType;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
@@ -73,23 +74,62 @@ public class SpiritwebHud extends AbstractWidget
 	{
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
+			Manifestation manifestation = spiritweb.getSelectedManifestation();
 			float r, g, b;
 			float a = 0.2f;
 			r = g = b = 1.0f;
 
-			int mode = spiritweb.getSelectedManifestation().getMode(spiritweb);
+			int mode = manifestation.getMode(spiritweb);
+
+			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
+			{
+				float intensity = 0;
+				if (mode < 0)
+					intensity = Math.min(Math.abs(mode) * (1f/16f), 1.0f);
+				if (mode > 0)
+					intensity = Math.min(Math.abs(mode) * (1f/5f), 1.0f);
+
+				if (mode > 0)
+				{
+					r = lerp(r, 1.0f, intensity);
+					g = lerp(g, 0.0f, intensity);
+					b = lerp(b, 0.0f, intensity);
+				}
+				else if (mode < 0) {
+					r = lerp(r, 0.0f, intensity);
+					g = lerp(g, 0.0f, intensity);
+					b = lerp(b, 1.0f, intensity);
+				}
+			}
+			else if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.ALLOMANCY)
+			{
+				float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f);
+
+				if (mode > 0)
+				{
+					r = lerp(r, 1.0f, intensity);
+					g = lerp(g, 0.0f, intensity);
+					b = lerp(b, 0.0f, intensity);
+				}
+				else if (mode < 0)
+				{
+					r = lerp(r, 0.0f, intensity);
+					g = lerp(g, 0.0f, intensity);
+					b = lerp(b, 1.0f, intensity);
+				}
+			}
 
 			// todo this won't work for feruchemy...
-			if (mode > 0)
-			{
-				g = g - 0.4f * mode;
-				b = b - 0.4f * mode;
-			}
-			else if (mode < 0)
-			{
-				r = r - 0.4f * -mode;
-				g = g - 0.4f * -mode;
-			}
+//			if (mode > 0)
+//			{
+//				g = g - 0.4f * mode;
+//				b = b - 0.4f * mode;
+//			}
+//			else if (mode < 0)
+//			{
+//				r = r - 0.4f * -mode;
+//				g = g - 0.4f * -mode;
+//			}
 
 			int color = toHex(new Color(r, g, b, a));
 
@@ -180,5 +220,9 @@ public class SpiritwebHud extends AbstractWidget
 				(color.getRed()   << 16) |
 				(color.getGreen() << 8)  |
 				color.getBlue();
+	}
+
+	public float lerp(float start, float end, float pct) {
+		return start + pct * (end - start);
 	}
 }
