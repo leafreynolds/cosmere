@@ -8,7 +8,9 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.items.CapWrapper;
+import leaf.cosmere.surgebinding.client.gui.SurgebindingSpiritwebMenu;
 import leaf.cosmere.surgebinding.common.capabilities.ideals.RadiantStateManager;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
@@ -207,6 +209,11 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 		stormlightStored = (int) (stormlightStored * 0.1f);
 	}
 
+	@Override
+	public void registerMenu()
+	{
+		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SURGEBINDING, SurgebindingSpiritwebMenu::new);
+	}
 
 	private void requestGemStormlight(ItemStack item, int amountDrawn)
 	{

@@ -21,14 +21,12 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 	{
 		super(Component.literal("Feruchemy"));
 		player = Minecraft.getInstance().player;
-		init();
+		//init();
 	}
 
 	@Override
 	protected void init()
 	{
-		this.width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-		this.height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		distance = this.height / 6;
 		final float topLeftRot = 0.f;
 		final float topRightRot = QUARTER_PI_F;

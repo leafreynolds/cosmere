@@ -208,6 +208,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@Override
 	public void registerMenu()
 	{
+		// todo: add check for if actually has Sandmastery
 		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SANDMASTERY, SandmasterySpiritwebMenu::new);
 	}
 
