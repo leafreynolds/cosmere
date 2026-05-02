@@ -12,6 +12,7 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.SpiritwebRegistry;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.feruchemy.client.gui.FeruchemySpiritwebMenu;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
@@ -20,6 +21,7 @@ import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -76,7 +78,10 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
-		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.FERUCHEMY, FeruchemySpiritwebMenu::new);
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent( (spiritweb) -> {
+			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.FERUCHEMY))
+				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.FERUCHEMY, FeruchemySpiritwebMenu::new);
+		});
 	}
 
 	private static void GiveStartingItem(Player player, Metals.MetalType metalType, float fillAmount)

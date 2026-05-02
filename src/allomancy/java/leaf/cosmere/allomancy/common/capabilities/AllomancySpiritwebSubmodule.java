@@ -24,6 +24,7 @@ import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.client.gui.SpiritwebRegistry;
 import net.minecraft.client.Minecraft;
@@ -343,7 +344,10 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
-		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.ALLOMANCY, AllomancySpiritwebMenu::new);
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent( (spiritweb) -> {
+			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.ALLOMANCY))
+				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.ALLOMANCY, AllomancySpiritwebMenu::new);
+		});
 	}
 
 	public int getIngestedMetal(Metals.MetalType metalType)
