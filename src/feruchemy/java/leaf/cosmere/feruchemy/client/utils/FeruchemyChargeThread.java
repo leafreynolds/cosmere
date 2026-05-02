@@ -40,40 +40,34 @@ public class FeruchemyChargeThread implements Runnable
 
 	public HashMap<Metals.MetalType, Double> getCharges()
 	{
-		try
+		HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
+		if (lock.tryLock())
 		{
-			HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
-			if (lock.tryLock())
+			try
 			{
 				retVal.putAll(feruchemyChargeMap);
+			}
+			finally
+			{
 				lock.unlock();
 			}
-			return retVal;
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			lock.unlock();
-		}
-		return new HashMap<>();
+		return retVal;
 	}
 
 	public HashMap<Metals.MetalType, Double> getMaximumCharges()
 	{
 		HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
-		try
+		if (lock.tryLock())
 		{
-			if (lock.tryLock())
+			try
 			{
 				retVal.putAll(feruchemyMaxChargeMap);
+			}
+			finally
+			{
 				lock.unlock();
 			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			retVal = new HashMap<>();
-			lock.unlock();
 		}
 
 		return retVal;
