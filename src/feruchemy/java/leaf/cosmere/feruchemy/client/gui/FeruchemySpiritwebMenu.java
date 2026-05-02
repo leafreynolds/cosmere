@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 public class FeruchemySpiritwebMenu extends CosmereScreen
 {
 	private static final ResourceLocation BORDER_LOCATION = new ResourceLocation(Feruchemy.MODID, "textures/gui/feru_border.png");
+	private static final ResourceLocation SINGLE_BORDER_LOCATION = new ResourceLocation(Feruchemy.MODID, "textures/gui/feru_single_border.png");
 	private static final float QUARTER_PI_F = (float) (Math.PI/2.f);
 	private int distance;
 	final LocalPlayer player;
@@ -82,6 +83,12 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 												  distance, bottomRightRot, Metals.MetalType.NICROSIL, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x, y + distance,
 												  distance, bottomLeftRot, Metals.MetalType.ALUMINUM, spiritweb, manifestationConsumer));
+
+			x = this.width / 2 - (int) (distance*1.75);
+			y = this.height/2 + (int) (distance*0.75);
+
+			addRenderableWidget(new TriangleButton(x, y,
+					distance, topRightRot, Metals.MetalType.ATIUM, spiritweb, manifestationConsumer));
 		}));
 	}
 
@@ -90,6 +97,7 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 	{
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		renderBorder(pGuiGraphics);
+		renderAtiumBorder(pGuiGraphics);
 	}
 
 	private void renderBorder(GuiGraphics pGuiGraphics)
@@ -104,6 +112,32 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 		final int iconSize = 256;
 
 		pGuiGraphics.blit(BORDER_LOCATION,
+				x,
+				y,
+				screenSize,
+				screenSize,
+				0,
+				0,
+				iconSize,
+				iconSize,
+				iconSize,
+				iconSize);
+
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderAtiumBorder(GuiGraphics pGuiGraphics)
+	{
+		RenderSystem.setShaderTexture(0, SINGLE_BORDER_LOCATION);
+		RenderSystem.enableBlend();
+		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+		final int x = this.width / 2 - (int) (distance*1.75), y = this.height/2 + (int) (distance*0.75);
+		final int screenSize = distance;
+		final int iconSize = 64;
+
+		pGuiGraphics.blit(SINGLE_BORDER_LOCATION,
 				x,
 				y,
 				screenSize,
