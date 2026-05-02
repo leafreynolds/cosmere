@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
@@ -91,12 +92,20 @@ public class DiamondButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
+		CosmereAPI.logger.info("Metal clicked: " + metal.getName() + " | Mouse over: " + isMouseOver(pMouseX, pMouseY));
 		if (isMouseOver(pMouseX, pMouseY) && hasManifestation)
 		{
-			if (pButton == 0)
-				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
+			if (manifestation.hasMenu())
+			{
+				manifestation.openMenu();
+			}
 			else
-				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+			{
+				if (pButton == 0)
+					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
+				else
+					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+			}
 
 			playDownSound(Minecraft.getInstance().getSoundManager());
 		}
@@ -276,7 +285,7 @@ public class DiamondButton extends Button
 		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		int x = 0;
 		int y = 0;
-		int width = screenWidth / 4;
+		int width = (int) (screenWidth * 0.3);
 		int height = screenHeight / 5;
 		int color = 0x99333333;
 
@@ -317,21 +326,32 @@ public class DiamondButton extends Button
 		String text = I18n.get(manifestation.getTranslationKey());
 		pGuiGraphics.drawString(font, text, x+5, y+10, 0xFFFFFFFF);
 
-		int seconds = manifestation.getInvestitureRemaining(spiritweb);
-		int hours = seconds / 3600;
-		int minutes = (seconds % 3600) / 60;
-		seconds = seconds % 60;
+		if (metal != Metals.MetalType.NICROSIL)
+		{
+			int seconds = manifestation.getInvestitureRemaining(spiritweb);
+			int hours = seconds / 3600;
+			int minutes = (seconds % 3600) / 60;
+			seconds = seconds % 60;
 
-		if (hours > 0)
-			text = String.format("%d:%02d:%02d", hours, minutes, seconds);
-		else if (minutes > 0)
-			text = String.format("%d:%02d", minutes, seconds);
-		else if (seconds > 0)
-			text = String.format("%02d", seconds);
-		else
-			text = "Empty";
+			if (hours > 0)
+			{
+				text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+			}
+			else if (minutes > 0)
+			{
+				text = String.format("%d:%02d", minutes, seconds);
+			}
+			else if (seconds > 0)
+			{
+				text = String.format("%02d", seconds);
+			}
+			else
+			{
+				text = "Empty";
+			}
 
-		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
+			pGuiGraphics.drawString(font, text, x + 5, y + 10 + font.lineHeight + 5, 0xFFFFFFFF);
+		}
 	}
 
 	public float lerp(float start, float end, float pct) {

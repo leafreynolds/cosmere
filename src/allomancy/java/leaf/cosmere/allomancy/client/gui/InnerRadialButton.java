@@ -311,7 +311,7 @@ public class InnerRadialButton extends Button
 		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		int x = 0;
 		int y = 0;
-		int width = screenWidth / 4;
+		int width = (int) (screenWidth * 0.3);
 		int height = screenHeight / 5;
 		int color = 0x99333333;
 

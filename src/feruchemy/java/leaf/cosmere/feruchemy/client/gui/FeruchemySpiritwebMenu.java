@@ -21,7 +21,6 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 	{
 		super(Component.literal("Feruchemy"));
 		player = Minecraft.getInstance().player;
-		//init();
 	}
 
 	@Override
