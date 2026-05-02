@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -329,7 +329,7 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		//now we need to get the actual data from the itemstack
 		//and set the correct pieces to be visible
 
-		if (!pStack.getCapability(ShardData.SHARD_DATA).isPresent())
+		if (!pStack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).isPresent())
 		{
 			return;
 		}

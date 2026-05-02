@@ -4,16 +4,11 @@
 
 package leaf.cosmere.surgebinding.common.items;
 
-import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.TimeHelper;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
-import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
-import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import leaf.cosmere.surgebinding.common.capabilities.BondableRadiantShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +19,6 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ShardbladeItem extends SwordItem implements IShardItem
+public class ShardbladeItem extends SwordItem implements IRadiantShardItem, IBondableItem, ISummonableItem
 {
 	protected final float attackDamage;
 	protected final float attackSpeedIn;
@@ -77,15 +71,15 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 	}
 
 	@Override
-	public ShardData getShardData(ItemStack stack)
+	public BondableRadiantShardData getShardData(ItemStack stack)
 	{
-		return (ShardData)stack.getCapability(ShardData.SHARD_DATA).resolve().get();
+		return (BondableRadiantShardData) stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).resolve().get();
 	}
 
 	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
 	{
-		final ShardData shardData = new ShardData(stack);
+		final BondableRadiantShardData shardData = new BondableRadiantShardData(stack);
 		if (nbt != null)
 		{
 			shardData.deserializeNBT(nbt);
@@ -93,11 +87,10 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 		return shardData;
 	}
 
-
 	@Override
 	public void bond(ItemStack stack, Player entity)
 	{
-		ShardData data = getShardData(stack);
+		BondableRadiantShardData data = getShardData(stack);
 		// if bonded, then don't bond again
 		if (data.isBonded())
 		{
@@ -110,7 +103,7 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 	@Override
 	public void releaseBond(ItemStack stack)
 	{
-		ShardData data = getShardData(stack);
+		BondableRadiantShardData data = getShardData(stack);
 		if (data.isBonded())
 		{
 			data.setEmptyBond();
@@ -132,14 +125,14 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
 	{
-		ShardData data = getShardData(pStack);
-		if(pEntity instanceof Player player)
+		BondableRadiantShardData data = getShardData(pStack);
+		if (pEntity instanceof Player player)
 		{
-			if(data.isLiving())
+			if (data.isLiving())
 			{
 				bond(pStack, player);
 			}
-			else if(data.bondTicks() >= bondTime())
+			else if (data.bondTicks() >= bondTime())
 			{
 				bond(pStack, player);
 			}
@@ -158,8 +151,7 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 	@Override
 	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
-
-		final ShardData data = getShardData(pStack);
+		final BondableRadiantShardData data = getShardData(pStack);
 		String attunedPlayerName = data.getBondedName();
 		UUID attunedPlayer = data.getBondedEntity();
 		if (attunedPlayer != null)
@@ -167,17 +159,9 @@ public class ShardbladeItem extends SwordItem implements IShardItem
 			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
 		}
 
-		if(!data.isLiving())
-		{
-			pTooltipComponents.add(TextHelper.createText("Deadblade"));
-		}
-		else if(data.getOrder() != null)
+		if (data.getOrder() != null)
 		{
 			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
 		}
-
-
-
-
 	}
 }

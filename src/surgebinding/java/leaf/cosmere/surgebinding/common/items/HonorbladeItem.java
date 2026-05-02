@@ -10,8 +10,9 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.TimeHelper;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
-import leaf.cosmere.surgebinding.common.capabilities.IShard;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.capabilities.BondableRadiantShardData;
+import leaf.cosmere.surgebinding.common.capabilities.IRadiantShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -79,7 +80,7 @@ public class HonorbladeItem extends ShardbladeItem
 	public ItemStack getDefaultInstance()
 	{
 		ItemStack stack = super.getDefaultInstance();
-		IShard data = stack.getCapability(ShardData.SHARD_DATA).orElseGet(() -> {return new ShardData(stack);});
+		IRadiantShardData data = stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).orElseGet(() -> {return new BondableRadiantShardData(stack);});
 		data.setOrder(radiantOrder);
 		return stack;
 	}
@@ -106,7 +107,7 @@ public class HonorbladeItem extends ShardbladeItem
 	@Override
 	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
-		final ShardData data = getShardData(pStack);
+		final BondableRadiantShardData data = getShardData(pStack);
 		String attunedPlayerName = data.getBondedName();
 		UUID attunedPlayer = data.getBondedEntity();
 		if (attunedPlayer != null)
@@ -124,7 +125,7 @@ public class HonorbladeItem extends ShardbladeItem
 	@Override
 	public ItemStack randomizedLootData(ItemStack stack)
 	{
-		ShardData data = getShardData(stack);
+		BondableRadiantShardData data = getShardData(stack);
 		data.setLiving(false);
 		data.setOrder(radiantOrder);
 		return stack;

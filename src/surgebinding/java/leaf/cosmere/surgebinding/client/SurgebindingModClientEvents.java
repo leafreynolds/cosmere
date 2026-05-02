@@ -10,7 +10,7 @@ import leaf.cosmere.surgebinding.client.render.SurgebindingLayerDefinitions;
 import leaf.cosmere.surgebinding.client.render.SurgebindingRenderers;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -46,12 +46,17 @@ public class SurgebindingModClientEvents
 	@SubscribeEvent
 	public static void registerItemColors(RegisterColorHandlersEvent.Item event)
 	{
-		event.register((stack, tintIndex) -> {
+		event.register((stack, tintIndex) ->
+		{
 			// We only want to tint layer0 (the plate body); layer1 is the visor overlay
-			if (tintIndex != 0) return Color.WHITE.getRGB(); // white = no tint
+			if (tintIndex != 0)
+			{
+				return Color.WHITE.getRGB(); // white = no tint
+			}
 
-			return (stack.getCapability(ShardData.SHARD_DATA)
-					.map(cap -> {
+			return (stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA)
+					.map(cap ->
+					{
 						if (cap instanceof DynamicShardplateData cap2)
 						{
 							boolean living = cap2.isLiving();
@@ -68,7 +73,7 @@ public class SurgebindingModClientEvents
 						return Roshar.getDeadplate().getRGB();
 					})
 					.orElse(Roshar.getDeadplate().getRGB()));
-			 // fallback if no cap
+			// fallback if no cap
 		}, SurgebindingItems.SHARDPLATE.get());
 	}
 
@@ -77,8 +82,6 @@ public class SurgebindingModClientEvents
 	public static void init(final FMLClientSetupEvent event)
 	{
 		SurgebindingRenderers.register();
-
 		CosmereAPI.logger.info("Surgebinding client render complete!");
 	}
-
 }

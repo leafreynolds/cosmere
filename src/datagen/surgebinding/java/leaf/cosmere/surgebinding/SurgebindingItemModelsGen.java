@@ -10,6 +10,7 @@ import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
+import leaf.cosmere.surgebinding.common.items.NightbloodItem;
 import leaf.cosmere.surgebinding.common.items.ShardbladeItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
@@ -62,6 +63,11 @@ public class SurgebindingItemModelsGen extends ItemModelProvider
 							.parent(new ModelFile.UncheckedModelFile("cosmere:item/test_blade"));
 				}*/
 
+				continue;
+			}
+			else if (item instanceof NightbloodItem)
+			{
+				// hand-written model in resources/assets/surgebinding/models/item/nightblood.json
 				continue;
 			}
 			else if(item instanceof ShardplateCurioItem)

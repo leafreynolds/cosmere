@@ -2,16 +2,17 @@ package leaf.cosmere.surgebinding.common.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import leaf.cosmere.api.*;
+import leaf.cosmere.api.Constants;
+import leaf.cosmere.api.EnumUtils;
+import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.EffectsHelper;
-import leaf.cosmere.api.helpers.TimeHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.utils.ParticleHelper;
 import net.minecraft.ChatFormatting;
@@ -19,13 +20,13 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.Capability;
@@ -34,15 +35,15 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.curios.api.*;
+import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.UUID;
 
 
-public class ShardplateCurioItem extends ChargeableItemBase implements ICurioItem, IShardItem
+public class ShardplateCurioItem extends ChargeableItemBase implements ICurioItem, IRadiantShardItem
 {
 	public static final Capability<DynamicShardplateData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
 	{
@@ -62,9 +63,9 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 
 	public int chargeWithRadiant(ISpiritweb spiritweb, ItemStack itemStack, int amount)
 	{
-		ShardplateCurioItem item = (ShardplateCurioItem)itemStack.getItem();
+		ShardplateCurioItem item = (ShardplateCurioItem) itemStack.getItem();
 		int charge = Math.min(amount, item.getMaxCharge(itemStack) - item.getCharge(itemStack));
-		if(SurgebindingSpiritwebSubmodule.getSubmodule(spiritweb).getStormlight() >= charge)
+		if (SurgebindingSpiritwebSubmodule.getSubmodule(spiritweb).getStormlight() >= charge)
 		{
 			item.adjustCharge(itemStack, charge);
 			return charge;
@@ -75,7 +76,7 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	@Override
 	public DynamicShardplateData getShardData(ItemStack stack)
 	{
-		return (DynamicShardplateData) stack.getCapability(ShardData.SHARD_DATA).resolve().get();
+		return (DynamicShardplateData) stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).resolve().get();
 	}
 
 	public boolean isFullCharged(ItemStack itemStack)
@@ -94,79 +95,46 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	{
 		LivingEntity entity = slotContext.entity();
 		SpiritwebCapability cap;
-		if(SpiritwebCapability.get(entity).isPresent())
+		final ShardplateCurioItem shardplateCurioItem = (ShardplateCurioItem) stack.getItem();
+
+		if (SpiritwebCapability.get(entity).isPresent())
 		{
 			cap = (SpiritwebCapability) SpiritwebCapability.get(entity).resolve().get();
 			SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(cap);
-			if(ssm.getStormlight() > 0 && !((ShardplateCurioItem)stack.getItem()).isFullCharged(stack))
+			if (ssm.getStormlight() > 0 && !shardplateCurioItem.isFullCharged(stack))
 			{
 				int charge = chargeWithRadiant(cap, stack, Math.min(ssm.getStormlight(), 30));
 				ssm.adjustStormlight(-charge, true);
 			}
 		}
-		if(((ShardplateCurioItem)stack.getItem()).getCharge(stack) != 0)
+		if (!entity.level().isClientSide)
 		{
-			entity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 1));
-		}
-		if(((ShardplateCurioItem)stack.getItem()).getCharge(stack) <= ((ShardplateCurioItem)stack.getItem()).getMaxCharge(stack)/4)
-		{
-			ParticleHelper.spawnLeakEffect((ServerLevel) entity.level(), 2, entity);
-		}
-
-		DynamicShardplateData data = getShardData(stack);
-		if(entity instanceof Player player)
-		{
-			if(data.bondTicks() >= bondTime())
+			if (shardplateCurioItem.getCharge(stack) != 0)
 			{
-				bond(stack, player);
+				entity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 1));
 			}
-			else
+			if (shardplateCurioItem.getCharge(stack) <= shardplateCurioItem.getMaxCharge(stack) / 4)
 			{
-				data.tickBondUp();
+				ParticleHelper.spawnLeakEffect((ServerLevel) entity.level(), 2, entity);
 			}
-		}
-		else
-		{
-			data.resetBondTicks();
 		}
 
 		ICurioItem.super.curioTick(slotContext, stack);
 	}
 
 	@Override
-	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
-	{
-		DynamicShardplateData data = getShardData(pStack);
-		if(pEntity instanceof Player player)
-		{
-			if(data.isLiving())
-			{
-				bond(pStack, player);
-			}
-			else if(data.bondTicks() >= bondTime())
-			{
-				bond(pStack, player);
-			}
-			else
-			{
-				data.tickBondUp();
-			}
-		}
-		else
-		{
-			data.resetBondTicks();
-		}
-		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
-	}
-
-	@Override
 	public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
 	{
-		if (slotContext.entity().level().isClientSide) return;
+		if (slotContext.entity().level().isClientSide)
+		{
+			return;
+		}
 
 		// Copy the capability data if present
-		prevStack.getCapability(ShardData.SHARD_DATA).ifPresent(fromCap -> {
-			stack.getCapability(ShardData.SHARD_DATA).ifPresent(toCap -> {
+		prevStack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(fromCap ->
+		{
+			stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(toCap ->
+			{
 				CompoundTag nbt = fromCap.serializeNBT();
 				toCap.deserializeNBT(nbt);
 			});
@@ -177,11 +145,16 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	@Override
 	public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack)
 	{
-		if (slotContext.entity().level().isClientSide) return;
+		if (slotContext.entity().level().isClientSide)
+		{
+			return;
+		}
 
 		// Copy the capability data if present
-		stack.getCapability(ShardData.SHARD_DATA).ifPresent(fromCap -> {
-			newStack.getCapability(ShardData.SHARD_DATA).ifPresent(toCap -> {
+		stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(fromCap ->
+		{
+			newStack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(toCap ->
+			{
 				CompoundTag nbt = fromCap.serializeNBT();
 				toCap.deserializeNBT(nbt);
 			});
@@ -191,8 +164,6 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	}
 
 
-
-
 	@Override
 	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
 	{
@@ -200,50 +171,15 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 
 		if (nbt != null && nbt.contains("shard_data"))
 		{
-			dynamicShardplateData.deserializeNBT(nbt.getCompound("shard_data")); // todo check if this breaks things?
-			if(dynamicShardplateData.getOrder() == null)
+			dynamicShardplateData.deserializeNBT(nbt.getCompound("shard_data"));
+			if (dynamicShardplateData.getOrder() == null)
 			{
-				int i = (int)(Math.random()*10);
+				int i = (int) (Math.random() * 10);
 				dynamicShardplateData.setOrder(Roshar.RadiantOrder.valueOf(i).get());
 			}
 		}
 
 		return dynamicShardplateData;
-	}
-
-	@Override
-	public boolean canSummonDismiss(LivingEntity player, ItemStack stack)
-	{
-		return isBondedTo(stack, player) && isLiving(stack);
-	}
-
-	@Override
-	public void bond(ItemStack stack, Player entity)
-	{
-		DynamicShardplateData data = getShardData(stack);
-		if(!data.isBonded())
-		{
-			data.setBondedEntity(entity);
-			setAttunedPlayer(stack, entity);
-			setAttunedPlayerName(stack, entity);
-		}
-	}
-
-	@Override
-	public void releaseBond(ItemStack stack)
-	{
-		getShardData(stack).setEmptyBond();
-	}
-
-	@Override
-	public int bondTime()
-	{
-		return (int)TimeHelper.MinutesToSeconds(30.0) * 20;
-	}
-
-	public boolean canSummonDismiss(Player player, ItemStack stack)
-	{
-		return getBond(stack).is(player) && isLiving(stack);
 	}
 
 
@@ -252,11 +188,11 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		DynamicShardplateData data = getShardData(stack);
 		Roshar.RadiantOrder order = getOrder(stack);
 
-		if(!isLiving(stack))
+		if (!isLiving(stack))
 		{
 			return Roshar.getDeadplate();
 		}
-		else if(data.isColored())
+		else if (data.isColored())
 		{
 			return order.getPlateColor();
 		}
@@ -308,16 +244,10 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 
 		final DynamicShardplateData data = getShardData(pStack);
 
-		if(!data.isLiving())
-		{
-			pTooltipComponents.add(TextHelper.createText("Deadplate"));
-		}
-		else if(data.getOrder() != null)
+		if (data.getOrder() != null)
 		{
 			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
 		}
-
-
 
 
 		if (!InventoryScreen.hasShiftDown())
@@ -343,8 +273,6 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		pTooltipComponents.add(TextHelper.createText(String.format("Right Boot Outside: %s", data.getRightBootOutsideID())));
 		pTooltipComponents.add(TextHelper.createText(String.format("Right Boot Tip: %s", data.getRightBootTipID())));
 	}
-
-
 
 
 	@Override
@@ -376,31 +304,29 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	}
 
 
-
 	@Override
 	public void addFilled(CreativeModeTab.Output output)
 	{
-		for(Roshar.RadiantOrder order: EnumUtils.RADIANT_ORDERS)
+		for (Roshar.RadiantOrder order : EnumUtils.RADIANT_ORDERS)
 		{
-			if(order.equals(Roshar.RadiantOrder.BONDSMITH))
+			if (order.equals(Roshar.RadiantOrder.BONDSMITH))
 			{
 				continue;
 			}
 			//dead
-			output.accept(buildData(new ItemStack(this), order, false, null));
+			output.accept(buildData(new ItemStack(this), order, false));
 			ItemStack fullPower = new ItemStack(this);
 			setCharge(fullPower, getMaxCharge(fullPower));
-			buildData(fullPower, order, false, null);
+			buildData(fullPower, order, false);
 			output.accept(fullPower);
 
 			//living
-			output.accept(buildData(new ItemStack(this), order, true, null));
+			output.accept(buildData(new ItemStack(this), order, true));
 			ItemStack fullPowerLiving = new ItemStack(this);
 			setCharge(fullPowerLiving, getMaxCharge(fullPower));
-			buildData(fullPowerLiving, order, true, null);
+			buildData(fullPowerLiving, order, true);
 			output.accept(fullPowerLiving);
 		}
 	}
 
 }
-

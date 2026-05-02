@@ -1,28 +1,15 @@
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.surgebinding.client.render.model.DynamicShardplateModel;
-import leaf.cosmere.surgebinding.common.eventHandlers.SurgebindingCapabilitiesHandler;
-import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
-
-public class DynamicShardplateData extends ShardData implements ICapabilityProvider, INBTSerializable<CompoundTag>, IShardplateDynamicData
+public class DynamicShardplateData extends RadiantShardData implements ICapabilityProvider, INBTSerializable<CompoundTag>, IShardplateDynamicData
 {
-	private final LazyOptional<IShard> opt = LazyOptional.of(() -> this);
-
 	private String headID;
 	private String faceplateID;
 	private String bodyID;
@@ -66,17 +53,6 @@ public class DynamicShardplateData extends ShardData implements ICapabilityProvi
 		this.leftBootTipID = rightBootTipID.replace("right","left");
 
 		this.colored = true;
-	}
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction)
-	{
-		return ShardData.SHARD_DATA.orEmpty(capability, opt);
-	}
-
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap)
-	{
-		return super.getCapability(cap);
 	}
 
 	@Override

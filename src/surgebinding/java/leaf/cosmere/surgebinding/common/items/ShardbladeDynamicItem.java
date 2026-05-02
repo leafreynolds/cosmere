@@ -9,7 +9,7 @@ import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.surgebinding.client.render.renderer.ShardbladeItemRenderer;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardbladeData;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -37,7 +37,7 @@ public class ShardbladeDynamicItem extends ShardbladeItem
 	@Override
 	public DynamicShardbladeData getShardData(ItemStack stack)
 	{
-		return (DynamicShardbladeData) stack.getCapability(ShardData.SHARD_DATA).resolve().get();
+		return (DynamicShardbladeData) stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).resolve().get();
 	}
 
 	@Override
@@ -88,11 +88,7 @@ public class ShardbladeDynamicItem extends ShardbladeItem
 			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
 		}
 
-		if (!data.isLiving())
-		{
-			pTooltipComponents.add(TextHelper.createText("Deadblade"));
-		}
-		else if (data.getOrder() != null)
+		if (data.getOrder() != null)
 		{
 			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
 		}

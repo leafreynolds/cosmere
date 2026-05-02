@@ -1,11 +1,8 @@
 package leaf.cosmere.surgebinding.common.capabilities;
 
-import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Roshar;
-import leaf.cosmere.surgebinding.common.items.HonorbladeItem;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -15,48 +12,31 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
-public class ShardData implements ICapabilityProvider, IShard
+public class RadiantShardData implements ICapabilityProvider, IRadiantShardData
 {
-	public static final Capability<IShard> SHARD_DATA = CapabilityManager.get(new CapabilityToken<>()
+	public static final Capability<IRadiantShardData> RADIANT_SHARD_DATA = CapabilityManager.get(new CapabilityToken<>()
 	{
 	});
 
 
-	private final LazyOptional<IShard> opt = LazyOptional.of(() -> this);
+	private final LazyOptional<IRadiantShardData> opt = LazyOptional.of(() -> this);
 	protected Roshar.RadiantOrder order;
 	protected boolean living;
-	protected UUID bond;
-	protected String bondedName;
-
-	protected int bondTicks;
 
 	protected CompoundTag nbt;
 
 	protected final ItemStack stack;
 
-	public ShardData(ItemStack stack)
+	public RadiantShardData(ItemStack stack)
 	{
 		this.stack = stack;
 		this.nbt = new CompoundTag();
-	}
-
-	public ShardData(ItemStack stack, boolean honorblade)
-	{
-		this.stack = stack;
-		this.nbt = new CompoundTag();
-
-		if (honorblade)
-		{
-			this.order = ((HonorbladeItem) stack.getItem()).getOrder(stack);
-		}
 	}
 
 	@Override
 	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
 	{
-		return SHARD_DATA.orEmpty(cap, opt);
+		return RADIANT_SHARD_DATA.orEmpty(cap, opt);
 	}
 
 	@Override
@@ -78,24 +58,6 @@ public class ShardData implements ICapabilityProvider, IShard
 	}
 
 	@Override
-	public UUID getBondedEntity()
-	{
-		return bond;
-	}
-
-	@Override
-	public String getBondedName()
-	{
-		return bondedName;
-	}
-
-	@Override
-	public boolean isBonded()
-	{
-		return bond != null;
-	}
-
-	@Override
 	public void setOrder(Roshar.RadiantOrder order)
 	{
 		this.order = order;
@@ -108,36 +70,6 @@ public class ShardData implements ICapabilityProvider, IShard
 	}
 
 	@Override
-	public void setBondedEntity(LivingEntity entity)
-	{
-		this.bond = entity.getUUID();
-		this.bondedName = entity.getName().getString();
-	}
-
-	@Override
-	public int bondTicks()
-	{
-		return bondTicks;
-	}
-
-	@Override
-	public void tickBondUp()
-	{
-		bondTicks++;
-	}
-
-	@Override
-	public void resetBondTicks()
-	{
-		bondTicks = 0;
-	}
-
-	public void setEmptyBond()
-	{
-		this.bond = null;
-	}
-
-	@Override
 	public CompoundTag serializeNBT()
 	{
 		if (order != null)
@@ -146,15 +78,6 @@ public class ShardData implements ICapabilityProvider, IShard
 		}
 
 		this.nbt.putBoolean("isLiving", living);
-
-		if (bond != null)
-		{
-			this.nbt.putUUID(Constants.NBT.ATTUNED_PLAYER, bond);
-			this.nbt.putString(Constants.NBT.ATTUNED_PLAYER_NAME, bondedName);
-		}
-
-
-		this.nbt.putInt("bondTicks", bondTicks);
 
 		return nbt;
 	}
@@ -168,12 +91,5 @@ public class ShardData implements ICapabilityProvider, IShard
 			this.order = Roshar.RadiantOrder.valueOf(nbt.getInt("radiantOrder")).get();
 		}
 		this.living = nbt.getBoolean("isLiving");
-		if (nbt.contains(Constants.NBT.ATTUNED_PLAYER))
-		{
-			this.bond = nbt.getUUID(Constants.NBT.ATTUNED_PLAYER);
-			this.bondedName = nbt.getString(Constants.NBT.ATTUNED_PLAYER_NAME);
-		}
-
-		this.bondTicks = nbt.getInt("bondTicks");
 	}
 }

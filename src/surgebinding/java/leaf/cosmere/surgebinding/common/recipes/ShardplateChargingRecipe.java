@@ -3,14 +3,12 @@ package leaf.cosmere.surgebinding.common.recipes;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
-import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.IShard;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.capabilities.IRadiantShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -74,7 +72,7 @@ public class ShardplateChargingRecipe extends CustomRecipe
 			}
 			else if (testForGem(stack).isPresent())
 			{
-				if(stack.getCount() == 1)
+				if (stack.getCount() == 1)
 				{
 					//but multiple nuggets allowed
 					hasGem = true;
@@ -109,7 +107,7 @@ public class ShardplateChargingRecipe extends CustomRecipe
 
 	private Optional<TagKey<Item>> testForGem(ItemStack stack)
 	{
-		for (Roshar.Gemstone value: EnumUtils.GEMSTONE_TYPES)
+		for (Roshar.Gemstone value : EnumUtils.GEMSTONE_TYPES)
 		{
 			TagKey<Item> gemstoneTag = CosmereTags.Items.GEM_TAGS.get(value);
 			if (stack.is(gemstoneTag))
@@ -129,20 +127,18 @@ public class ShardplateChargingRecipe extends CustomRecipe
 		ShardplateCurioItem shardplateItem = null;
 		CompoundTag tag = new CompoundTag();
 		CompoundTag dataTag = new CompoundTag();
-		for(ItemStack item: inv.getItems())
+		for (ItemStack item : inv.getItems())
 		{
 			if (item.is(CosmereTags.Items.CURIO_SHARDPLATE))
 			{
 				shardplateItem = (ShardplateCurioItem) item.getItem();
-				tag = item.getTag();
-				IShard cap = item.getCapability(ShardData.SHARD_DATA).orElseGet(() -> new DynamicShardplateData(item));
+				IRadiantShardData cap = item.getCapability(RadiantShardData.RADIANT_SHARD_DATA).orElseGet(() -> new DynamicShardplateData(item));
 				dataTag = cap.serializeNBT();
 			}
 		}
 
 		ItemStack itemstack = new ItemStack(shardplateItem);
-		//itemstack.setTag(tag);
-		itemstack.getCapability(ShardData.SHARD_DATA).orElseGet(() -> new DynamicShardplateData(itemstack)).deserializeNBT(dataTag);
+		itemstack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).orElseGet(() -> new DynamicShardplateData(itemstack)).deserializeNBT(dataTag);
 
 		for (int i = 0; i < inv.getContainerSize(); ++i)
 		{
@@ -154,14 +150,14 @@ public class ShardplateChargingRecipe extends CustomRecipe
 
 			if (stackInSlot.is(Tags.Items.GEMS))
 			{
-				for (Roshar.Gemstone gemstone: EnumUtils.GEMSTONE_TYPES)
+				for (Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES)
 				{
 					if (stackInSlot.is(CosmereTags.Items.GEM_TAGS.get(gemstone)))
 					{
 						GemstoneItem gemstoneItem = (GemstoneItem) stackInSlot.getItem();
 						shardplateItem.adjustCharge(itemstack,
-													Math.min(gemstoneItem.getCharge(stackInSlot),
-															shardplateItem.getMaxCharge(itemstack)- shardplateItem.getCharge(itemstack)));
+								Math.min(gemstoneItem.getCharge(stackInSlot),
+										shardplateItem.getMaxCharge(itemstack) - shardplateItem.getCharge(itemstack)));
 						break;
 					}
 				}
@@ -176,7 +172,8 @@ public class ShardplateChargingRecipe extends CustomRecipe
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
+	public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv)
+	{
 		NonNullList<ItemStack> remaining = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
 		List<ItemStack> gemstones = new ArrayList<>();
@@ -187,15 +184,22 @@ public class ShardplateChargingRecipe extends CustomRecipe
 		int missing = 0;
 
 		// Step 1: Identify armor and gemstones
-		for (int i = 0; i < inv.getContainerSize(); i++) {
+		for (int i = 0; i < inv.getContainerSize(); i++)
+		{
 			ItemStack stack = inv.getItem(i);
-			if (stack.isEmpty()) continue;
+			if (stack.isEmpty())
+			{
+				continue;
+			}
 
-			if (stack.is(CosmereTags.Items.CURIO_SHARDPLATE)) {
+			if (stack.is(CosmereTags.Items.CURIO_SHARDPLATE))
+			{
 				armor = stack;
 				ShardplateCurioItem sp = (ShardplateCurioItem) stack.getItem();
 				missing = sp.getMaxCharge(stack) - sp.getCharge(stack);
-			} else if (stack.is(Tags.Items.GEMS)) {
+			}
+			else if (stack.is(Tags.Items.GEMS))
+			{
 				gemstones.add(stack.copy());
 				gemstoneIndices.add(i);
 				GemstoneItem gi = (GemstoneItem) stack.getItem();
@@ -203,20 +207,25 @@ public class ShardplateChargingRecipe extends CustomRecipe
 			}
 		}
 
-		if (armor.isEmpty() || gemstones.isEmpty() || missing <= 0) return remaining;
+		if (armor.isEmpty() || gemstones.isEmpty() || missing <= 0)
+		{
+			return remaining;
+		}
 
 		int totalAvailable = gemstoneCharges.stream().mapToInt(Integer::intValue).sum();
 		int toTransfer = Math.min(missing, totalAvailable);
 
 		// Step 2: Weighted drain
 		int transferred = 0;
-		for (int j = 0; j < gemstones.size(); j++) {
+		for (int j = 0; j < gemstones.size(); j++)
+		{
 			int available = gemstoneCharges.get(j);
 			double ratio = (double) available / totalAvailable;
 			int amountToDrain = (int) Math.floor(toTransfer * ratio);
 
 			// If last donor, absorb remainder
-			if (j == gemstones.size() - 1) {
+			if (j == gemstones.size() - 1)
+			{
 				amountToDrain = toTransfer - transferred;
 			}
 
