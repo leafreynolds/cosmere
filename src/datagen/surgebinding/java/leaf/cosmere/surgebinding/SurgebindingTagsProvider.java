@@ -16,6 +16,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.GemBlock;
 import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
+import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBiomes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
@@ -81,6 +82,12 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE.get(gemstone));
 			addToTag(CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE.get(gemstone));
 		}
+
+			final ItemRegistryObject<ShardplateCurioItem> shardplateItem = SurgebindingItems.SHARDPLATE;
+
+			addToTag(Tags.Items.ARMORS, shardplateItem);
+			addToTag(CosmereTags.Items.CURIO_SHARDPLATE, shardplateItem);
+
 	}
 
 	private void addBlocks()
