@@ -21,6 +21,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -85,6 +86,26 @@ public class ShardbladeItem extends SwordItem implements IRadiantShardItem, IBon
 			shardData.deserializeNBT(nbt);
 		}
 		return shardData;
+	}
+
+	@Override
+	public @Nullable CompoundTag getShareTag(@NotNull ItemStack stack)
+	{
+		final BondableRadiantShardData data = getShardData(stack);
+		CompoundTag tag = stack.getOrCreateTag();
+		tag.put("shard_data", data.serializeNBT());
+		return tag;
+	}
+
+	@Override
+	public void readShareTag(@NotNull ItemStack stack, @Nullable CompoundTag nbt)
+	{
+		super.readShareTag(stack, nbt);
+		if (nbt != null && nbt.contains("shard_data"))
+		{
+			final BondableRadiantShardData data = getShardData(stack);
+			data.deserializeNBT(nbt.getCompound("shard_data"));
+		}
 	}
 
 	@Override
