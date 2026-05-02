@@ -34,26 +34,6 @@ public class SpiritwebHud extends AbstractWidget
 		this.player = player;
 	}
 
-//	public static SpiritwebHud Instance(Player player)
-//	{
-//		if (INSTANCE == null)
-//		{
-//			INSTANCE = new SpiritwebHud(CosmereConfigs.CLIENT_CONFIG.hudXCoordinate.get(),
-//										CosmereConfigs.CLIENT_CONFIG.hudYCoordinate.get(),
-//										CosmereConfigs.CLIENT_CONFIG.hudSizeX.get(),
-//										CosmereConfigs.CLIENT_CONFIG.hudSizeY.get(),
-//										Component.literal("Spiritweb HUD"),
-//										player);  // should never be null
-//		}
-//
-//		return INSTANCE;
-//	}
-//
-//	public static void killInstance()
-//	{
-//		INSTANCE = null;
-//	}
-
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{

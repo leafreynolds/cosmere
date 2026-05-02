@@ -15,6 +15,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -105,6 +107,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	void activatePowerState(int num);
 
+	@OnlyIn(Dist.CLIENT)
 	AbstractWidget getSpiritwebHud();
 
 }

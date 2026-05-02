@@ -8,15 +8,11 @@ import java.util.function.Supplier;
 
 public class SpiritwebRegistry
 {
-	private static volatile SpiritwebRegistry INSTANCE;
+	private static volatile SpiritwebRegistry INSTANCE = new SpiritwebRegistry();
 	private final HashMap<Manifestations.ManifestationTypes, Supplier<CosmereScreen>> manifestationScreenMap = new HashMap<>();
 
 	public static SpiritwebRegistry getInstance()
 	{
-		if (INSTANCE == null)
-		{
-			INSTANCE = new SpiritwebRegistry();
-		}
 		return INSTANCE;
 	}
 

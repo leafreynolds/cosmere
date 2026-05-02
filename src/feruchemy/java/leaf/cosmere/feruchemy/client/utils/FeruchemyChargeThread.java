@@ -202,21 +202,17 @@ public class FeruchemyChargeThread implements Runnable
 							return true;
 						});
 
+				if (lock.tryLock())
 				try
 				{
-					if (lock.tryLock())
-					{
-						feruchemyChargeMap.clear();
-						feruchemyChargeMap.putAll(metalmindCharges);
+					feruchemyChargeMap.clear();
+					feruchemyChargeMap.putAll(metalmindCharges);
 
-						feruchemyMaxChargeMap.clear();
-						feruchemyMaxChargeMap.putAll(metalmindMaxCharges);
-						lock.unlock();
-					}
+					feruchemyMaxChargeMap.clear();
+					feruchemyMaxChargeMap.putAll(metalmindMaxCharges);
 				}
-				catch (Exception e)
+				finally
 				{
-					e.printStackTrace();
 					lock.unlock();
 				}
 			}

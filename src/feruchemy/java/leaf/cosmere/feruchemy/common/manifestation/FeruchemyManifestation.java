@@ -19,6 +19,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 
@@ -82,6 +84,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		}
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	private void collectMenuInfo()
 	{
 		if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.tickCount % 2 == 1)    // only do on odd tick
@@ -107,6 +110,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		collectMenuInfo();
 		double maximum = metalmindMaxChargesMap.getOrDefault(metalType, 0d);
 		double charge = metalmindChargesMap.getOrDefault(metalType, 0d);
+		if (maximum <= 0) return 0.f;
 		return (float) (charge/maximum);
 	}
 

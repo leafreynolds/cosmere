@@ -69,6 +69,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 	public final Map<Manifestation, Integer> MANIFESTATIONS_MODE = new HashMap<>();
 	private Manifestation selectedManifestation = ManifestationRegistry.NONE.get();
+	@OnlyIn(Dist.CLIENT)
 	private SpiritwebHud spiritwebHud;
 
 	public List<BlockPos> pushBlocks = new ArrayList<>(4);
