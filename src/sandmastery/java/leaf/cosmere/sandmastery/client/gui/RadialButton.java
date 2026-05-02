@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.GuiUtils;
 import leaf.cosmere.client.gui.SpiritwebMenu;
@@ -21,16 +22,18 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class RadialButton extends Button
 {
 	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
+	private final Consumer<Manifestation> manifestationConsumer;
 	private final int radius, centerX, centerY, segmentNr;
 	private final float startAngle;
 	private final float endAngle;
 	private final Manifestation manifestation;
-	protected RadialButton(int pX, int pY, int radius, int segmentNr, Manifestation manifestation)
+	protected RadialButton(int pX, int pY, int radius, int segmentNr, Manifestation manifestation, Consumer<Manifestation> maniConsumer)
 	{
 		super(pX, pY, 16, 16, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
 		this.manifestation = manifestation;
@@ -50,6 +53,8 @@ public class RadialButton extends Button
 				.append("/.png");
 
 		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+
+		manifestationConsumer = maniConsumer;
 
 		calculateVertexes(centerX, centerY, radius, segmentNr);
 	}
@@ -88,7 +93,7 @@ public class RadialButton extends Button
 
 		if (retVal)
 		{
-			SpiritwebMenu.selectedManifestation = manifestation;
+			manifestationConsumer.accept(manifestation);
 		}
 
 

@@ -3,6 +3,7 @@ package leaf.cosmere.surgebinding.client.gui;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.CosmereScreen;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,7 +17,7 @@ public class SurgebindingSpiritwebMenu extends CosmereScreen
 	final LocalPlayer player;
 	public SurgebindingSpiritwebMenu()
 	{
-		super(Component.literal("Surgebinding"));
+		super(Component.literal("Surgebinding"), SpiritwebMenu::selectManiCallback);
 		player = Minecraft.getInstance().player;
 	}
 
@@ -35,7 +36,7 @@ public class SurgebindingSpiritwebMenu extends CosmereScreen
 			{
 				if (mani.getManifestationType() == Manifestations.ManifestationTypes.SURGEBINDING)
 				{
-					addRenderableWidget(new CircleButton((int) (width/2f - radius*1.5 + (radius*3) * i), height/2, radius, spiritweb, mani));
+					addRenderableWidget(new CircleButton((int) (width/2f - radius*1.5 + (radius*3) * i), height/2, radius, spiritweb, mani, manifestationConsumer));
 					i++;
 				}
 			}

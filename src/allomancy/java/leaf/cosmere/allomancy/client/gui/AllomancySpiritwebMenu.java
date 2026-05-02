@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.client.gui.CosmereScreen;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,7 +19,7 @@ public class AllomancySpiritwebMenu extends CosmereScreen
 	LocalPlayer player;
 	public AllomancySpiritwebMenu()
 	{
-		super(Component.literal("Allomancy"));
+		super(Component.literal("Allomancy"), SpiritwebMenu::selectManiCallback);
 		player = Minecraft.getInstance().player;
 	}
 
@@ -32,38 +33,38 @@ public class AllomancySpiritwebMenu extends CosmereScreen
 			int circleCenterY = height/2 + height/16;   // heh, 16, nice
 
 			// Steel
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 4, Metals.MetalType.STEEL, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 4, Metals.MetalType.STEEL, iSpiritweb, manifestationConsumer));
 			// Iron
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 5, Metals.MetalType.IRON, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 5, Metals.MetalType.IRON, iSpiritweb, manifestationConsumer));
 			// Zinc
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 6, Metals.MetalType.ZINC, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 6, Metals.MetalType.ZINC, iSpiritweb, manifestationConsumer));
 			// Brass
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 7, Metals.MetalType.BRASS, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 7, Metals.MetalType.BRASS, iSpiritweb, manifestationConsumer));
 			// Bendalloy
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 0, Metals.MetalType.BENDALLOY, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 0, Metals.MetalType.BENDALLOY, iSpiritweb, manifestationConsumer));
 			// Cadmium
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 1, Metals.MetalType.CADMIUM, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 1, Metals.MetalType.CADMIUM, iSpiritweb, manifestationConsumer));
 			// Chromium
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 2, Metals.MetalType.CHROMIUM, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 2, Metals.MetalType.CHROMIUM, iSpiritweb, manifestationConsumer));
 			// Nicrosil
-			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 3, Metals.MetalType.NICROSIL, iSpiritweb));
+			addRenderableWidget(new OuterRadialButton(circleCenterX, circleCenterY, 3, Metals.MetalType.NICROSIL, iSpiritweb, manifestationConsumer));
 
 			// Pewter
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 4, Metals.MetalType.PEWTER, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 4, Metals.MetalType.PEWTER, iSpiritweb, manifestationConsumer));
 			// Tin
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 5, Metals.MetalType.TIN, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 5, Metals.MetalType.TIN, iSpiritweb, manifestationConsumer));
 			// Copper
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 6, Metals.MetalType.COPPER, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 6, Metals.MetalType.COPPER, iSpiritweb, manifestationConsumer));
 			// Bronze
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 7, Metals.MetalType.BRONZE, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 7, Metals.MetalType.BRONZE, iSpiritweb, manifestationConsumer));
 			// Electrum
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 0, Metals.MetalType.ELECTRUM, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 0, Metals.MetalType.ELECTRUM, iSpiritweb, manifestationConsumer));
 			// Gold
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 1, Metals.MetalType.GOLD, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 1, Metals.MetalType.GOLD, iSpiritweb, manifestationConsumer));
 			// Aluminum
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 2, Metals.MetalType.ALUMINUM, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 2, Metals.MetalType.ALUMINUM, iSpiritweb, manifestationConsumer));
 			// Duralumin
-			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 3, Metals.MetalType.DURALUMIN, iSpiritweb));
+			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 3, Metals.MetalType.DURALUMIN, iSpiritweb, manifestationConsumer));
 		}));
 	}
 

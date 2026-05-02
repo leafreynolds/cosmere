@@ -5,6 +5,7 @@
 package leaf.cosmere.client.gui;
 
 import com.google.common.base.Stopwatch;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
@@ -29,7 +30,7 @@ public class SpiritwebMenu extends Screen
 	private final SpiritwebRegistry registry;
 	private CosmereScreen selectedManifestationScreen = null;
 	public static Manifestations.ManifestationTypes selectedManifestationType = Manifestations.ManifestationTypes.NONE;
-	public static Manifestation selectedManifestation = null;
+	private static Manifestation selectedManifestation = null;
 
 	public SpiritwebMenu(Component pTitle, ISpiritweb spiritweb)
 	{
@@ -147,5 +148,11 @@ public class SpiritwebMenu extends Screen
 	{
 		// no pause >:(
 		return false;
+	}
+
+	public static void selectManiCallback(Manifestation manifestation)
+	{
+		selectedManifestation = manifestation;
+		selectedManifestationType = manifestation.getManifestationType();
 	}
 }

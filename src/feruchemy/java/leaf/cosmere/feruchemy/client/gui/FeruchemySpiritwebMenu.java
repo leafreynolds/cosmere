@@ -3,6 +3,7 @@ package leaf.cosmere.feruchemy.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.client.gui.CosmereScreen;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,7 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 	final LocalPlayer player;
 	public FeruchemySpiritwebMenu()
 	{
-		super(Component.literal("Feruchemy"));
+		super(Component.literal("Feruchemy"), SpiritwebMenu::selectManiCallback);
 		player = Minecraft.getInstance().player;
 	}
 
@@ -38,49 +39,49 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 			int y = this.height/2 - distance*2;
 
 			addRenderableWidget(new TriangleButton(x, y,
-												  distance, topLeftRot, Metals.MetalType.IRON, spiritweb));
+												  distance, topLeftRot, Metals.MetalType.IRON, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y,
-												  distance, topRightRot, Metals.MetalType.STEEL, spiritweb));
+												  distance, topRightRot, Metals.MetalType.STEEL, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y + distance,
-												  distance, bottomRightRot, Metals.MetalType.TIN, spiritweb));
+												  distance, bottomRightRot, Metals.MetalType.TIN, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x, y + distance,
-												  distance, bottomLeftRot, Metals.MetalType.PEWTER, spiritweb));
+												  distance, bottomLeftRot, Metals.MetalType.PEWTER, spiritweb, manifestationConsumer));
 
 			x = this.width / 2;
 			y = this.height / 2 - distance;
 
 			addRenderableWidget(new TriangleButton(x, y,
-												  distance, topLeftRot, Metals.MetalType.ZINC, spiritweb));
+												  distance, topLeftRot, Metals.MetalType.ZINC, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y,
-												  distance, topRightRot, Metals.MetalType.COPPER, spiritweb));
+												  distance, topRightRot, Metals.MetalType.COPPER, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y + distance,
-												  distance, bottomRightRot, Metals.MetalType.BRASS, spiritweb));
+												  distance, bottomRightRot, Metals.MetalType.BRASS, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x, y + distance,
-												  distance, bottomLeftRot, Metals.MetalType.BRONZE, spiritweb));
+												  distance, bottomLeftRot, Metals.MetalType.BRONZE, spiritweb, manifestationConsumer));
 
 			x = this.width / 2 - distance;
 			y = this.height / 2;
 
 			addRenderableWidget(new TriangleButton(x, y,
-												  distance, topLeftRot, Metals.MetalType.GOLD, spiritweb));
+												  distance, topLeftRot, Metals.MetalType.GOLD, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y,
-												  distance, topRightRot, Metals.MetalType.ELECTRUM, spiritweb));
+												  distance, topRightRot, Metals.MetalType.ELECTRUM, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y + distance,
-												  distance, bottomRightRot, Metals.MetalType.CADMIUM, spiritweb));
+												  distance, bottomRightRot, Metals.MetalType.CADMIUM, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x, y + distance,
-												  distance, bottomLeftRot, Metals.MetalType.BENDALLOY, spiritweb));
+												  distance, bottomLeftRot, Metals.MetalType.BENDALLOY, spiritweb, manifestationConsumer));
 
 			x = this.width / 2 - distance*2;
 			y = this.height / 2 - distance;
 
 			addRenderableWidget(new TriangleButton(x, y,
-												  distance, topLeftRot, Metals.MetalType.CHROMIUM, spiritweb));
+												  distance, topLeftRot, Metals.MetalType.CHROMIUM, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y,
-												  distance, topRightRot, Metals.MetalType.DURALUMIN, spiritweb));
+												  distance, topRightRot, Metals.MetalType.DURALUMIN, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x + distance, y + distance,
-												  distance, bottomRightRot, Metals.MetalType.NICROSIL, spiritweb));
+												  distance, bottomRightRot, Metals.MetalType.NICROSIL, spiritweb, manifestationConsumer));
 			addRenderableWidget(new TriangleButton(x, y + distance,
-												  distance, bottomLeftRot, Metals.MetalType.ALUMINUM, spiritweb));
+												  distance, bottomLeftRot, Metals.MetalType.ALUMINUM, spiritweb, manifestationConsumer));
 		}));
 	}
 

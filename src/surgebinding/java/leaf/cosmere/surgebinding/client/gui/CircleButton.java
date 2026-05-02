@@ -22,17 +22,19 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CircleButton extends Button
 {
 	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
+	private final Consumer<Manifestation> manifestationConsumer;
 	final ISpiritweb spiritweb;
 	final Manifestation manifestation;
 	final int centerX, centerY;
 	final int radius;
 
-	public CircleButton(int pX, int pY, int radius, ISpiritweb spiritweb, Manifestation manifestation)
+	public CircleButton(int pX, int pY, int radius, ISpiritweb spiritweb, Manifestation manifestation, Consumer<Manifestation> maniConsumer)
 	{
 		super(pX, pY, radius, radius, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
 
@@ -53,6 +55,8 @@ public class CircleButton extends Button
 
 		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
+		manifestationConsumer = maniConsumer;
+
 		calculateVertexes(centerX, centerY, radius);
 	}
 
@@ -62,7 +66,7 @@ public class CircleButton extends Button
 		double distanceY = mouseY - centerY;
 
 		if ((distanceX * distanceX + distanceY * distanceY) <= (radius * radius)) {
-			SpiritwebMenu.selectedManifestation = manifestation;
+			manifestationConsumer.accept(manifestation);
 			return true;
 		}
 

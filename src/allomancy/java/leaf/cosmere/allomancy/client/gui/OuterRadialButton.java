@@ -32,11 +32,13 @@ import org.lwjgl.opengl.GL11;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class OuterRadialButton extends Button
 {
 	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
+	private final Consumer<Manifestation> manifestationConsumer;
 	private final float outerRadius;
 	private final float innerRadius;
 	private final double startAngle;
@@ -49,7 +51,7 @@ public class OuterRadialButton extends Button
 	private final ISpiritweb spiritweb;
 	private final Metals.MetalType metalType;
 
-	protected OuterRadialButton(int centerX, int centerY, int segmentNr, Metals.MetalType metal, ISpiritweb spiritweb)
+	protected OuterRadialButton(int centerX, int centerY, int segmentNr, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
 		super(centerX, centerY, 16, 16, CommonComponents.EMPTY, (button) -> {}, DEFAULT_NARRATION);
 		this.spiritweb = spiritweb;
@@ -80,6 +82,8 @@ public class OuterRadialButton extends Button
 
 		stringBuilder.append(".png");
 		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+
+		manifestationConsumer = maniConsumer;
 
 		calculateVertexes(this.centerX, this.centerY, innerRadius, outerRadius, segmentNr);
 	}
@@ -130,7 +134,7 @@ public class OuterRadialButton extends Button
 		{
 			if (retVal)
 			{
-				SpiritwebMenu.selectedManifestation = manifestation;
+				manifestationConsumer.accept(manifestation);
 			}
 		}
 

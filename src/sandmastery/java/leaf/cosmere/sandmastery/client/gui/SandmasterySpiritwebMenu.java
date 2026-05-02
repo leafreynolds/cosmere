@@ -3,6 +3,7 @@ package leaf.cosmere.sandmastery.client.gui;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.CosmereScreen;
+import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -15,7 +16,7 @@ public class SandmasterySpiritwebMenu extends CosmereScreen
 	final LocalPlayer player;
 	public SandmasterySpiritwebMenu()
 	{
-		super(Component.literal("Sandmastery"));
+		super(Component.literal("Sandmastery"), SpiritwebMenu::selectManiCallback);
 		player = Minecraft.getInstance().player;
 	}
 
@@ -35,7 +36,7 @@ public class SandmasterySpiritwebMenu extends CosmereScreen
 			{
 				if (mani.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)
 				{
-					addRenderableWidget(new RadialButton(centerX, centerY, height/3, i, mani));
+					addRenderableWidget(new RadialButton(centerX, centerY, height/3, i, mani, manifestationConsumer));
 					i++;
 				}
 			}

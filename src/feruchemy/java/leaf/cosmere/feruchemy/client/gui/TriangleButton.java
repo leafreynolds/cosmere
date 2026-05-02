@@ -29,18 +29,20 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TriangleButton extends Button
 {
 	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
+	private final Consumer<Manifestation> manifestationConsumer;
 	private final ISpiritweb spiritweb;
 	private final Manifestation manifestation;
 	private final Metals.MetalType metal;
 	private final boolean hasManifestation;
 	private final float rotation;
 
-	public TriangleButton(int pX, int pY, int distance, float rotation, Metals.MetalType metal, ISpiritweb spiritweb)
+	public TriangleButton(int pX, int pY, int distance, float rotation, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
 		super(pX, pY, distance, distance, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
 		this.rotation = rotation;
@@ -63,6 +65,8 @@ public class TriangleButton extends Button
 
 		stringBuilder.append(".png");
 		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+
+		manifestationConsumer = maniConsumer;
 
 		calculateVertexes(pX, pY, getWidth(), rotation);
 	}
@@ -103,7 +107,7 @@ public class TriangleButton extends Button
 		{
 			if (retVal)
 			{
-				SpiritwebMenu.selectedManifestation = manifestation;
+				manifestationConsumer.accept(manifestation);
 			}
 		}
 
