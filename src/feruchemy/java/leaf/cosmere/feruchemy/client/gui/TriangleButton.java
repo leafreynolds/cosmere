@@ -10,6 +10,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.GuiUtils;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
@@ -26,9 +27,12 @@ import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TriangleButton extends Button
 {
+	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	private final ISpiritweb spiritweb;
 	private final Manifestation manifestation;
 	private final Metals.MetalType metal;
@@ -43,13 +47,15 @@ public class TriangleButton extends Button
 		this.metal = metal;
 		manifestation = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(metal.getID());
 		hasManifestation = spiritweb.hasManifestation(manifestation);
+
+		calculateVertexes(pX, pY, getWidth(), rotation);
 	}
 
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		boolean isHover = isMouseOver(pMouseX, pMouseY);
-		renderDiamond(pGuiGraphics, isHover);
+		renderTriangle(pGuiGraphics, isHover);
 		renderIcon(pGuiGraphics);
 		if (isHover && hasManifestation)
 		{
@@ -111,9 +117,9 @@ public class TriangleButton extends Button
 		return isMouseOver;
 	}
 
-	private void renderDiamond(GuiGraphics pGuiGraphics, boolean isHovered)
+	private void renderTriangle(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r = 61/255.f, g = 70/255.f, b = 76/255.f;
+		float r = GuiUtils.BACKGROUND_COLOR.getRed()/255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen()/255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue()/255.f;
 		float a = 1f;
 
 		if (!hasManifestation)
@@ -130,7 +136,8 @@ public class TriangleButton extends Button
 			b *= 1.1f;
 		}
 
-		if (manifestation instanceof FeruchemyManifestation feruchemyManifestation) {
+		if (manifestation instanceof FeruchemyManifestation feruchemyManifestation)
+		{
 			int mode = feruchemyManifestation.getMode(spiritweb);
 			float intensity = 0;
 			if (mode < 0)
@@ -138,12 +145,15 @@ public class TriangleButton extends Button
 			if (mode > 0)
 				intensity = Math.min(Math.abs(mode) * (1f/5f), 1.0f);
 
-			if (mode > 0) {
+			if (mode > 0)
+			{
 				// Blend toward pure red
 				r = lerp(r, 1.0f, intensity);
 				g = lerp(g, 0.0f, intensity);
 				b = lerp(b, 0.0f, intensity);
-			} else if (mode < 0) {
+			}
+			else if (mode < 0)
+			{
 				// Blend toward pure blue
 				r = lerp(r, 0.0f, intensity);
 				g = lerp(g, 0.0f, intensity);
@@ -163,39 +173,16 @@ public class TriangleButton extends Button
 
 		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		float size = getWidth();
-		float radius = size / 2.0f;
-		float centerX = getX() + radius;
-		float centerY = getY() + radius;
-
-		int pixelSize = 1;
-
-		int maxR = (int) Math.ceil(Math.sqrt(radius * radius + radius * radius));
-
-		float cos = (float) Math.cos(-rotation);
-		float sin = (float) Math.sin(-rotation);
-
-		for (int x = -maxR; x <= maxR; x += pixelSize)
+		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
-			for (int y = -maxR; y <= maxR; y += pixelSize)
-			{
-				float pixelCenterX = x + (pixelSize / 2f);
-				float pixelCenterY = y + (pixelSize / 2f);
+			float px = quad.px();
+			float py = quad.py();
+			float size = quad.size();
 
-				float px = pixelCenterX * cos - pixelCenterY * sin;
-				float py = pixelCenterX * sin + pixelCenterY * cos;
-
-				if (px <= radius && py <= radius && px + py >= 0)
-				{
-					float screenX = centerX + x;
-					float screenY = centerY + y;
-
-					buf.vertex(pose, screenX, screenY, 0).color(r,g,b,a).endVertex();
-					buf.vertex(pose, screenX, screenY + pixelSize, 0).color(r,g,b,a).endVertex();
-					buf.vertex(pose, screenX + pixelSize, screenY + pixelSize, 0).color(r,g,b,a).endVertex();
-					buf.vertex(pose, screenX + pixelSize, screenY, 0).color(r,g,b,a).endVertex();
-				}
-			}
+			buf.vertex(pose, px, py, 0).color(r,g,b,a).endVertex();
+			buf.vertex(pose, px, py + size, 0).color(r,g,b,a).endVertex();
+			buf.vertex(pose, px + size, py + size, 0).color(r,g,b,a).endVertex();
+			buf.vertex(pose, px + size, py, 0).color(r,g,b,a).endVertex();
 		}
 
 		tess.end();
@@ -350,6 +337,37 @@ public class TriangleButton extends Button
 			}
 
 			pGuiGraphics.drawString(font, text, x + 5, y + 10 + font.lineHeight + 5, 0xFFFFFFFF);
+		}
+	}
+
+	private void calculateVertexes(float posX, float posY, float size, float rotation)
+	{
+		cachedQuads.clear();
+
+		float radius = size / 2.0f;
+		int pixelSize = 1;
+		float centerX = posX + radius;
+		float centerY = posY + radius;
+		int maxR = (int) Math.ceil(Math.sqrt(radius * radius + radius * radius));
+
+		float cos = (float) Math.cos(-rotation);
+		float sin = (float) Math.sin(-rotation);
+
+		for (int x = -maxR; x <= maxR; x += pixelSize)
+		{
+			for (int y = -maxR; y <= maxR; y += pixelSize)
+			{
+				float pixelCenterX = x + (pixelSize / 2f);
+				float pixelCenterY = y + (pixelSize / 2f);
+
+				float px = pixelCenterX * cos - pixelCenterY * sin;
+				float py = pixelCenterX * sin + pixelCenterY * cos;
+
+				if (px <= radius && py <= radius && px + py >= 0)
+				{
+					cachedQuads.add(new GuiUtils.CachedQuad(centerX + x, centerY + y, pixelSize));
+				}
+			}
 		}
 	}
 

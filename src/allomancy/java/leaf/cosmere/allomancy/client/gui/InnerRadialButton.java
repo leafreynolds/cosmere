@@ -12,6 +12,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.GuiUtils;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
@@ -28,9 +29,12 @@ import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InnerRadialButton extends Button
 {
+	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	private final float outerRadius;
 	private final float innerRadius;
 	private final double startAngle;
@@ -59,6 +63,8 @@ public class InnerRadialButton extends Button
 
 		outerRadius = (float) Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3f * 0.7f;
 		innerRadius = 0;
+
+		calculateVertexes(this.centerX, this.centerY, outerRadius, segmentNr);
 	}
 
 	@Override
@@ -148,7 +154,7 @@ public class InnerRadialButton extends Button
 
 	private void renderSegment(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r = 61/255.f, g = 70/255.f, b = 76/255.f;
+		float r = GuiUtils.BACKGROUND_COLOR.getRed()/255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen()/255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue()/255.f;
 		float a = 1f;
 
 		if (!hasManifestation)
@@ -182,14 +188,6 @@ public class InnerRadialButton extends Button
 			}
 		}
 
-		float radsPerSegment = (float) Math.PI * 2 / 8;
-		float startAngle = segmentNr * radsPerSegment;
-		float radiusSq = outerRadius * outerRadius;
-
-		// Defines the "chunkiness" of the pixelation
-		// 1 GUI pixel = 1 screen pixel at 1x scale, or scaled automatically by the game's GUI scale
-		int pixelSize = AllomancyConfigs.CLIENT.pixelationAmount.get();
-
 		RenderSystem.disableCull();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
@@ -201,38 +199,16 @@ public class InnerRadialButton extends Button
 
 		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		// Use ceil to ensure the bounding box completely covers the outermost pixels
-		int rInt = (int) Math.ceil(outerRadius);
-
-		for (int x = -rInt; x <= rInt; x += pixelSize)
+		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
-			for (int y = -rInt; y <= rInt; y += pixelSize)
-			{
-				float pixelCenterX = x + (pixelSize / 2f);
-				float pixelCenterY = y + (pixelSize / 2f);
+			float px = quad.px();
+			float py = quad.py();
+			float size = quad.size();
 
-				float distSq = pixelCenterX * pixelCenterX + pixelCenterY * pixelCenterY;
-
-				if (distSq <= radiusSq)
-				{
-					float angle = (float) Math.atan2(pixelCenterY, pixelCenterX);
-					if (angle < 0) angle += (float) (Math.PI * 2);
-
-					float diff = angle - startAngle;
-					if (diff < 0) diff += (float) (Math.PI * 2);
-
-					if (diff < radsPerSegment)
-					{
-						float px = centerX + x;
-						float py = centerY + y;
-
-						buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
-						buf.vertex(pose, px, py + pixelSize, 0).color(r, g, b, a).endVertex();
-						buf.vertex(pose, px + pixelSize, py + pixelSize, 0).color(r, g, b, a).endVertex();
-						buf.vertex(pose, px + pixelSize, py, 0).color(r, g, b, a).endVertex();
-					}
-				}
-			}
+			buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
+			buf.vertex(pose, px, py + size, 0).color(r, g, b, a).endVertex();
+			buf.vertex(pose, px + size, py + size, 0).color(r, g, b, a).endVertex();
+			buf.vertex(pose, px + size, py, 0).color(r, g, b, a).endVertex();
 		}
 
 		tess.end();
@@ -365,6 +341,43 @@ public class InnerRadialButton extends Button
 			text = "Empty";
 
 		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
+	}
+
+	private void calculateVertexes(float centerX, float centerY, float outerRadius, int segmentNr)
+	{
+		cachedQuads.clear();
+
+		float radsPerSegment = (float) Math.PI * 2 / 8;
+		float startAngle = segmentNr * radsPerSegment;
+		float radiusSq = outerRadius * outerRadius;
+
+		int pixelSize = AllomancyConfigs.CLIENT.pixelationAmount.get();
+		int rInt = (int) Math.ceil(outerRadius);
+
+		for (int x = -rInt; x <= rInt; x += pixelSize)
+		{
+			for (int y = -rInt; y <= rInt; y += pixelSize)
+			{
+				float pixelCenterX = x + (pixelSize / 2f);
+				float pixelCenterY = y + (pixelSize / 2f);
+
+				float distSq = pixelCenterX * pixelCenterX + pixelCenterY * pixelCenterY;
+
+				if (distSq <= radiusSq)
+				{
+					float angle = (float) Math.atan2(pixelCenterY, pixelCenterX);
+					if (angle < 0) angle += (float) (Math.PI * 2);
+
+					float diff = angle - startAngle;
+					if (diff < 0) diff += (float) (Math.PI * 2);
+
+					if (diff < radsPerSegment)
+					{
+						cachedQuads.add(new GuiUtils.CachedQuad(centerX + x, centerY + y, pixelSize));
+					}
+				}
+			}
+		}
 	}
 
 	public float lerp(float start, float end, float pct) {

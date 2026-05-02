@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.GuiUtils;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -19,14 +20,18 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CircleButton extends Button
 {
+	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	final ISpiritweb spiritweb;
 	final Manifestation manifestation;
 	final int centerX, centerY;
 	final int radius;
 
-	protected CircleButton(int pX, int pY, int radius, ISpiritweb spiritweb, Manifestation manifestation)
+	public CircleButton(int pX, int pY, int radius, ISpiritweb spiritweb, Manifestation manifestation)
 	{
 		super(pX, pY, radius, radius, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
 
@@ -35,6 +40,8 @@ public class CircleButton extends Button
 		this.centerY = pY;
 		this.radius = radius;
 		this.manifestation = manifestation;
+
+		calculateVertexes(centerX, centerY, radius);
 	}
 
 	@Override
@@ -68,17 +75,15 @@ public class CircleButton extends Button
 
 	private void renderCircle(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r = 61/255.f, g = 70/255.f, b = 76/255.f;
+		float r = GuiUtils.BACKGROUND_COLOR.getRed()/255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen()/255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue()/255.f;
 		float a = 1f;
 
-		if (isHovered) {
+		if (isHovered)
+		{
 			r *= 1.1f;
 			g *= 1.1f;
 			b *= 1.1f;
 		}
-
-		float radiusSq = radius * radius;
-		int pixelSize = 1;
 
 		RenderSystem.disableCull();
 		RenderSystem.enableBlend();
@@ -91,21 +96,16 @@ public class CircleButton extends Button
 
 		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		for (int x = -radius; x <= radius; x += pixelSize) {
-			for (int y = -radius; y <= radius; y += pixelSize) {
-				float pixelCenterX = x + (pixelSize / 2f);
-				float pixelCenterY = y + (pixelSize / 2f);
+		for (GuiUtils.CachedQuad quad : cachedQuads)
+		{
+			float px = quad.px();
+			float py = quad.py();
+			float size = quad.size();
 
-				if ((pixelCenterX * pixelCenterX + pixelCenterY * pixelCenterY) <= radiusSq) {
-					float px = centerX + x;
-					float py = centerY + y;
-
-					buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
-					buf.vertex(pose, px, py + pixelSize, 0).color(r, g, b, a).endVertex();
-					buf.vertex(pose, px + pixelSize, py + pixelSize, 0).color(r, g, b, a).endVertex();
-					buf.vertex(pose, px + pixelSize, py, 0).color(r, g, b, a).endVertex();
-				}
-			}
+			buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
+			buf.vertex(pose, px, py + size, 0).color(r, g, b, a).endVertex();
+			buf.vertex(pose, px + size, py + size, 0).color(r, g, b, a).endVertex();
+			buf.vertex(pose, px + size, py, 0).color(r, g, b, a).endVertex();
 		}
 
 		tess.end();
@@ -180,5 +180,27 @@ public class CircleButton extends Button
 		}
 
 		pGuiGraphics.drawString(font, text, x, y-font.lineHeight/2, 0xFFFFFFFF);
+	}
+
+	private void calculateVertexes(float centerX, float centerY, int radius)
+	{
+		cachedQuads.clear();
+
+		float radiusSq = radius * radius;
+		int pixelSize = 1;
+
+		for (int x = -radius; x <= radius; x += pixelSize)
+		{
+			for (int y = -radius; y <= radius; y += pixelSize)
+			{
+				float pixelCenterX = x + (pixelSize / 2f);
+				float pixelCenterY = y + (pixelSize / 2f);
+
+				if ((pixelCenterX * pixelCenterX + pixelCenterY * pixelCenterY) <= radiusSq)
+				{
+					cachedQuads.add(new GuiUtils.CachedQuad(centerX + x, centerY + y, pixelSize));
+				}
+			}
+		}
 	}
 }
