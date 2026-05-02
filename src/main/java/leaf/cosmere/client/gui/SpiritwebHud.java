@@ -21,7 +21,6 @@ import java.awt.*;
 
 public class SpiritwebHud extends AbstractWidget
 {
-	private static SpiritwebHud INSTANCE;
 	private Player player;
 
 	public SpiritwebHud(Player player)
