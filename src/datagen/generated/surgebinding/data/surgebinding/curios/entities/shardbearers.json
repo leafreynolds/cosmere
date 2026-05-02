@@ -1,0 +1,12 @@
+{
+  "entities": [
+    "minecraft:vindicator",
+    "minecraft:pillager",
+    "minecraft:armor_stand",
+    "minecraft:villager",
+    "minecraft:player"
+  ],
+  "slots": [
+    "shardplate"
+  ]
+}

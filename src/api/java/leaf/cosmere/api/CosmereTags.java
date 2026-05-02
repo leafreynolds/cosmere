@@ -38,6 +38,7 @@ public class CosmereTags
 		public static final TagKey<Item> CURIO_RING = makeItem(CuriosApi.MODID, "ring");
 		public static final TagKey<Item> CURIO_LEGS = makeItem(CuriosApi.MODID, "legs");
 		public static final TagKey<Item> CURIO_FEET = makeItem(CuriosApi.MODID, "feet");
+		public static final TagKey<Item> CURIO_SHARDPLATE = makeItem(CuriosApi.MODID, "shardplate");
 
 
 		public static final TagKey<Item> CURIO_EYES = makeItem(CuriosApi.MODID, "eyes");

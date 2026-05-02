@@ -23,8 +23,6 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Surgebinding.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SurgebindingCapabilitiesHandler
 {
-
-
 	@SubscribeEvent
 	public static void attachWorldCapabilities(AttachCapabilitiesEvent<Level> event)
 	{
@@ -58,7 +56,5 @@ public class SurgebindingCapabilitiesHandler
 				}
 			});
 		}
-
 	}
-
 }
