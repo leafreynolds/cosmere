@@ -12,8 +12,10 @@ import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingRecipes;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -60,6 +62,11 @@ public class SurgebindingRecipeGen extends BaseRecipeProvider implements ICondit
 			RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(gemstone),SurgebindingItems.GEMSTONE.get(gemstone),4);
 			RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_LARGE.get(gemstone),SurgebindingItems.GEMSTONE.get(gemstone),1);
 		}
+
+		SpecialRecipeBuilder
+				.special(SurgebindingRecipes.PLATE_CHARGE.get())
+				.save(consumer, Surgebinding.rl("plate_charging").toString());
+
 		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_SMALL.get(Roshar.Gemstone.EMERALD),Items.EMERALD,16);
 		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_MEDIUM.get(Roshar.Gemstone.EMERALD),Items.EMERALD,4);
 		RecipeProvider.stonecutterResultFromBase(consumer,RecipeCategory.MISC,SurgebindingItems.GEMSTONE_LARGE.get(Roshar.Gemstone.EMERALD),Items.EMERALD,1);

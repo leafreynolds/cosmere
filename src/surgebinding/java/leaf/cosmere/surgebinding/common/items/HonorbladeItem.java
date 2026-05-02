@@ -7,15 +7,28 @@ package leaf.cosmere.surgebinding.common.items;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.helpers.TimeHelper;
+import leaf.cosmere.api.text.StringHelper;
+import leaf.cosmere.api.text.TextHelper;
+import leaf.cosmere.surgebinding.common.capabilities.BondableRadiantShardData;
+import leaf.cosmere.surgebinding.common.capabilities.IRadiantShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public class HonorbladeItem extends ShardbladeItem
@@ -63,10 +76,58 @@ public class HonorbladeItem extends ShardbladeItem
 
 	}
 
-
-	public boolean canSummonDismiss(Player player)
+	@Override
+	public ItemStack getDefaultInstance()
 	{
-		//honorblades can always be dismissed
+		ItemStack stack = super.getDefaultInstance();
+		IRadiantShardData data = stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).orElseGet(() -> {return new BondableRadiantShardData(stack);});
+		data.setOrder(radiantOrder);
+		return stack;
+	}
+
+	@Override
+	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
+	{
+		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
+		getShardData(pStack).setOrder(getOrder(pStack));
+	}
+
+	@Override
+	public int bondTime()
+	{
+		return 5;
+	}
+
+	@Override
+	public boolean canSummonDismiss(LivingEntity entity, ItemStack stack)
+	{
 		return true;
+	}
+
+	@Override
+	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	{
+		final BondableRadiantShardData data = getShardData(pStack);
+		String attunedPlayerName = data.getBondedName();
+		UUID attunedPlayer = data.getBondedEntity();
+		if (attunedPlayer != null)
+		{
+			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
+		}
+
+		if(data.getOrder() != null)
+		{
+			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
+		}
+
+	}
+
+	@Override
+	public ItemStack randomizedLootData(ItemStack stack)
+	{
+		BondableRadiantShardData data = getShardData(stack);
+		data.setLiving(false);
+		data.setOrder(radiantOrder);
+		return stack;
 	}
 }
