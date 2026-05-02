@@ -1,11 +1,10 @@
 package leaf.cosmere.surgebinding.common.network.packets;
 
 import leaf.cosmere.common.network.ICosmerePacket;
-import leaf.cosmere.surgebinding.common.capabilities.ShardData;
+import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -32,13 +31,15 @@ public class SyncShardCapMessage implements ICosmerePacket
 	{
 		context.enqueueWork(() ->
 		{
-			Player player = Minecraft.getInstance().player;
-			if (player != null)
+			Minecraft mc = Minecraft.getInstance();
+			if (mc.player == null)
 			{
-				ItemStack stack = player.getInventory().getItem(slot);
-				stack.getCapability(ShardData.SHARD_DATA)
-						.ifPresent(cap -> cap.deserializeNBT(nbt));
+				return;
 			}
+
+			ItemStack stack = mc.player.getInventory().getItem(slot);
+			stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA)
+					.ifPresent(cap -> cap.deserializeNBT(nbt));
 		});
 		context.setPacketHandled(true);
 	}
