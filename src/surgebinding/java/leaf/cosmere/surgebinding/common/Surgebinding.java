@@ -60,6 +60,7 @@ public class Surgebinding implements IModModule
 		SurgebindingEffects.MOB_EFFECTS.register(modBus);
 		SurgebindingBannerPatterns.BANNER_PATTERNS.register(modBus);
 		SurgebindingRecipes.RECIPE_SERIALIZERS.register(modBus);
+		SurgebindingLootFunctions.LOOT_FUNCTIONS.register(modBus);
 
 		SurgebindingBiomes.BIOMES.register(modBus);
 

@@ -2,9 +2,7 @@ package leaf.cosmere.surgebinding.common.loot;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import leaf.cosmere.surgebinding.common.items.HonorbladeItem;
-import leaf.cosmere.surgebinding.common.items.IShardItem;
-import leaf.cosmere.surgebinding.common.items.NightbloodItem;
+import leaf.cosmere.surgebinding.common.items.IRadiantShardItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingLootFunctions;
 import net.minecraft.world.item.ItemStack;
@@ -23,25 +21,23 @@ public class SetupShardDataLootFunction extends LootItemConditionalFunction
 	@Override
 	protected ItemStack run(ItemStack pStack, LootContext pContext)
 	{
-		if(pStack.getItem() instanceof IShardItem shard)
+		if (pStack.getItem() instanceof IRadiantShardItem shard)
 		{
 			int chance = pContext.getRandom().nextInt(0, 40);
 
-			if(chance <= 3)
+			if (chance <= 3)
 			{
 				pStack = new ItemStack(SurgebindingItems.SHARDBLADE);
-				shard = (IShardItem) pStack.getItem();
 				shard.randomizedLootData(pStack);
 				return pStack;
 			}
-			else if(chance <= 5)
+			else if (chance <= 5)
 			{
 				pStack = new ItemStack(SurgebindingItems.SHARDPLATE);
-				shard = (IShardItem) pStack.getItem();
 				shard.randomizedLootData(pStack);
 				return pStack;
 			}
-			else if(chance == 39)
+			else if (chance == 39)
 			{
 				pStack = new ItemStack(SurgebindingItems.NIGHTBLOOD);
 				return pStack;
