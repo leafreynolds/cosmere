@@ -65,6 +65,9 @@ public class AllomancySpiritwebMenu extends CosmereScreen
 			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 2, Metals.MetalType.ALUMINUM, iSpiritweb, manifestationConsumer));
 			// Duralumin
 			addRenderableWidget(new InnerRadialButton(circleCenterX, circleCenterY, 3, Metals.MetalType.DURALUMIN, iSpiritweb, manifestationConsumer));
+
+			// Atium
+			addRenderableWidget(new SquareButton(circleCenterX + height/3, circleCenterY + height/3 - height/16, height/8, Metals.MetalType.ATIUM, iSpiritweb, manifestationConsumer));
 		}));
 	}
 
