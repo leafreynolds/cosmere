@@ -36,13 +36,16 @@ public class SpiritwebHud extends AbstractWidget
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
-		if (!CosmereConfigs.CLIENT_CONFIG.disableSelectedManifestationHud.get())
-		{
-			renderBackground(pGuiGraphics);
-			renderUsage(pGuiGraphics);
-			renderIcon(pGuiGraphics);
-			renderText(pGuiGraphics);
-		}
+		SpiritwebCapability.get(player).ifPresent( (spiritweb -> {
+			if (!CosmereConfigs.CLIENT_CONFIG.disableSelectedManifestationHud.get()
+					&& spiritweb.getSelectedManifestation().getManifestationType() != Manifestations.ManifestationTypes.NONE)
+			{
+				renderBackground(pGuiGraphics);
+				renderUsage(pGuiGraphics);
+				renderIcon(pGuiGraphics);
+				renderText(pGuiGraphics);
+			}
+		}));
 	}
 
 	@Override
