@@ -7,9 +7,12 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.SpiritwebMenu;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
@@ -88,6 +91,8 @@ public class RadialButton extends Button
 		boolean isHovered = isMouseOver(pMouseX, pMouseY);
 		renderRadial(pGuiGraphics, isHovered);
 		renderIcon(pGuiGraphics);
+		if (isHovered)
+			renderInfoBlock(pGuiGraphics);
 	}
 
 	private void renderRadial(GuiGraphics pGuiGraphics, boolean isHovered)
@@ -201,6 +206,25 @@ public class RadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderInfoBlock(GuiGraphics pGuiGraphics)
+	{
+		Font font = Minecraft.getInstance().font;
+		float radsPerSegment = (float) (Math.PI * 2 / 5);
+		float midAngle = (segmentNr * radsPerSegment) + (radsPerSegment / 2f);
+
+		int padding = 15;
+		float textOffsetDist = radius + padding;
+
+		int textCenterX = (int) (centerX + Math.cos(midAngle) * textOffsetDist);
+		int textCenterY = (int) (centerY + Math.sin(midAngle) * textOffsetDist);
+
+		int drawY = textCenterY - (font.lineHeight / 2);
+
+		String text = I18n.get(manifestation.getTranslationKey()).replace("Sand Mastery ", "");
+
+		pGuiGraphics.drawCenteredString(font, text, textCenterX, drawY, 0xFFFFFF);
 	}
 
 	private double normalizeAngle(double angle)
