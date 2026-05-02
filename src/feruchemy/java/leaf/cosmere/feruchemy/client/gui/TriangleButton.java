@@ -277,8 +277,8 @@ public class TriangleButton extends Button
 		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		int x = 0;
 		int y = 0;
-		int width = (int) (screenWidth * 0.3);
-		int height = screenHeight / 5;
+		int width = GuiUtils.getInfoBoxWidth(Minecraft.getInstance());
+		int height = GuiUtils.getInfoBoxHeight(Minecraft.getInstance());
 		int color = 0x99333333;
 
 		boolean isLeft = getX() < screenWidth/2;
@@ -316,7 +316,8 @@ public class TriangleButton extends Button
 		pGuiGraphics.fill(x, y, x + width,  y + height, color);
 
 		String text = I18n.get(manifestation.getTranslationKey());
-		pGuiGraphics.drawString(font, text, x+5, y+10, 0xFFFFFFFF);
+		float scale = 0.8f;
+		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+10, scale, 0xFFFFFFFF);
 
 		if (metal != Metals.MetalType.NICROSIL)
 		{
@@ -342,7 +343,7 @@ public class TriangleButton extends Button
 				text = "Empty";
 			}
 
-			pGuiGraphics.drawString(font, text, x + 5, y + 10 + font.lineHeight + 5, 0xFFFFFFFF);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+12+font.lineHeight*scale, scale, 0xFFFFFFFF);
 		}
 	}
 

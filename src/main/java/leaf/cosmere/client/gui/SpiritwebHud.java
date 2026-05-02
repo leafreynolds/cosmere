@@ -175,16 +175,10 @@ public class SpiritwebHud extends AbstractWidget
 			String text = I18n.get(spiritweb.getSelectedManifestation().getTranslationKey());
 			float scale = 0.8f;
 
-			pGuiGraphics.pose().pushPose();
-
 			float targetX = getX() + getHeight() + 2;
 			float targetY = getY() + (getHeight() / 2f) - ((font.lineHeight * scale) / 2f);
 
-			pGuiGraphics.pose().translate(targetX, targetY, 0);
-			pGuiGraphics.pose().scale(scale, scale, 1.0f);
-			pGuiGraphics.drawString(font, text, 0, 0, 0xFFDDDDDD, false);
-
-			pGuiGraphics.pose().popPose();
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, targetX, targetY, scale, 0xFFDDDDDD);
 		});
 	}
 

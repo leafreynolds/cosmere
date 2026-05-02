@@ -299,8 +299,8 @@ public class OuterRadialButton extends Button
 		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		int x = 0;
 		int y = 0;
-		int width = (int) (screenWidth * 0.3);
-		int height = screenHeight / 5;
+		int width = GuiUtils.getInfoBoxWidth(Minecraft.getInstance());
+		int height = GuiUtils.getInfoBoxHeight(Minecraft.getInstance());
 		int color = 0x99333333;
 
 		if (segmentNr <= 1)
@@ -335,7 +335,8 @@ public class OuterRadialButton extends Button
 		pGuiGraphics.fill(x, y, x + width,  y + height, color);
 
 		String text = I18n.get(manifestation.getTranslationKey());
-		pGuiGraphics.drawString(font, text, x+5, y+10, 0xFFFFFFFF);
+		float scale = 0.8f;
+		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+10, scale, 0xFFFFFFFF);
 
 		int seconds = manifestation.getInvestitureRemaining(spiritweb);
 		int hours = seconds / 3600;
@@ -351,7 +352,7 @@ public class OuterRadialButton extends Button
 		else
 			text = "Empty";
 
-		pGuiGraphics.drawString(font, text, x+5, y+10+font.lineHeight+5, 0xFFFFFFFF);
+		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+12+font.lineHeight*scale, scale, 0xFFFFFFFF);
 	}
 
 	private void calculateVertexes(float centerX, float centerY, float innerRadius, float outerRadius, int segmentNr)
