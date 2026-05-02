@@ -32,6 +32,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -207,6 +209,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
 		// todo: add check for if actually has Sandmastery

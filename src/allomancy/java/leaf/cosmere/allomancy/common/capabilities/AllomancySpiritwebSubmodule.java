@@ -32,6 +32,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
 import java.awt.*;
@@ -336,7 +338,9 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 		return AllomancyAttributes.ALLOMANCY_ATTRIBUTES.values().stream()
 				.map((AttributeRegistryObject::getAttribute)).collect(Collectors.toList());
 	}
-	
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
 		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.ALLOMANCY, AllomancySpiritwebMenu::new);

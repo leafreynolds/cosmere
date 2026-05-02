@@ -27,6 +27,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
 
@@ -210,6 +212,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
 		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SURGEBINDING, SurgebindingSpiritwebMenu::new);

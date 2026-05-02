@@ -54,6 +54,7 @@ public interface ISpiritwebSubmodule
 	{
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	default void registerMenu()
 	{
 	}
