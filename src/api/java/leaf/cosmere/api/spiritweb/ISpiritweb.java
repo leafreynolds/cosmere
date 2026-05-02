@@ -10,6 +10,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.manifestation.Manifestation;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -103,5 +104,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	void saveNewState(int num);
 
 	void activatePowerState(int num);
+
+	AbstractWidget getSpiritwebHud();
 
 }

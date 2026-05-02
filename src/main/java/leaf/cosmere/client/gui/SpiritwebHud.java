@@ -24,31 +24,35 @@ public class SpiritwebHud extends AbstractWidget
 	private static SpiritwebHud INSTANCE;
 	private Player player;
 
-	private SpiritwebHud(int pX, int pY, int pWidth, int pHeight, Component pMessage, Player player)
+	public SpiritwebHud(Player player)
 	{
-		super(pX, pY, pWidth, pHeight, pMessage);
+		super(CosmereConfigs.CLIENT_CONFIG.hudXCoordinate.get(),
+				CosmereConfigs.CLIENT_CONFIG.hudYCoordinate.get(),
+				CosmereConfigs.CLIENT_CONFIG.hudSizeX.get(),
+				CosmereConfigs.CLIENT_CONFIG.hudSizeY.get(),
+				Component.literal("Spiritweb HUD"));
 		this.player = player;
 	}
 
-	public static SpiritwebHud Instance(Player player)
-	{
-		if (INSTANCE == null)
-		{
-			INSTANCE = new SpiritwebHud(CosmereConfigs.CLIENT_CONFIG.hudXCoordinate.get(),
-										CosmereConfigs.CLIENT_CONFIG.hudYCoordinate.get(),
-										CosmereConfigs.CLIENT_CONFIG.hudSizeX.get(),
-										CosmereConfigs.CLIENT_CONFIG.hudSizeY.get(),
-										Component.literal("Spiritweb HUD"),
-										player);  // should never be null
-		}
-
-		return INSTANCE;
-	}
-
-	public void setSelectedManifestation()
-	{
-
-	}
+//	public static SpiritwebHud Instance(Player player)
+//	{
+//		if (INSTANCE == null)
+//		{
+//			INSTANCE = new SpiritwebHud(CosmereConfigs.CLIENT_CONFIG.hudXCoordinate.get(),
+//										CosmereConfigs.CLIENT_CONFIG.hudYCoordinate.get(),
+//										CosmereConfigs.CLIENT_CONFIG.hudSizeX.get(),
+//										CosmereConfigs.CLIENT_CONFIG.hudSizeY.get(),
+//										Component.literal("Spiritweb HUD"),
+//										player);  // should never be null
+//		}
+//
+//		return INSTANCE;
+//	}
+//
+//	public static void killInstance()
+//	{
+//		INSTANCE = null;
+//	}
 
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)

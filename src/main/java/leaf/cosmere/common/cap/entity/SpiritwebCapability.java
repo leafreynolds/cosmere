@@ -13,6 +13,7 @@ import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.SpiritwebHud;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
@@ -21,6 +22,7 @@ import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -34,6 +36,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -66,6 +69,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 	public final Map<Manifestation, Integer> MANIFESTATIONS_MODE = new HashMap<>();
 	private Manifestation selectedManifestation = ManifestationRegistry.NONE.get();
+	private SpiritwebHud spiritwebHud;
 
 	public List<BlockPos> pushBlocks = new ArrayList<>(4);
 	public List<Integer> pushEntities = new ArrayList<>(4);
@@ -536,23 +540,6 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 	}
 
-	static float[][] calculatePentagonVertices(float centerX, float centerY, float radius, float scaleY)
-	{
-//		for i in range(5):
-//		    angle = 2 * math.pi * i / 5  # Divide 360° into 5 angles (in radians)
-//		    x = cx + radius * math.cos(angle)
-//		    y = cy + radius * math.sin(angle)
-//		    vertices.append((x, y))
-//		return vertices
-		float[][] vertices = new float[5][2];
-		for (int i = 0; i < 5; i++) {
-			double angle = 2 * Math.PI * ((double) i / 5);
-			vertices[i][0] = centerX + (float) (radius * Math.cos(angle));
-			vertices[i][1] = centerY + (float) (radius * Math.sin(angle)); // Scale Y
-		}
-		return vertices;
-	}
-
 	@Override
 	public void setSelectedManifestation(Manifestation manifestation)
 	{
@@ -878,6 +865,15 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			Cosmere.packetHandler().sendTo(new SyncPlayerSpiritwebMessage(this.livingEntity.getId(), nbt), serverPlayerEntity);
 		}
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public AbstractWidget getSpiritwebHud()
+	{
+		if (spiritwebHud == null && livingEntity instanceof Player player)
+			spiritwebHud = new SpiritwebHud(player);
+		return spiritwebHud;
 	}
 
 	public void saveNewState(int num)

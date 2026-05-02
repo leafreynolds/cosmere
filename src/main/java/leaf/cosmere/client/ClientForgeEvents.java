@@ -7,6 +7,7 @@ package leaf.cosmere.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import leaf.cosmere.api.Activator;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.SpiritwebHud;
 import leaf.cosmere.client.gui.SpiritwebMenu;
@@ -232,7 +233,7 @@ public class ClientForgeEvents
 				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
 				{
 					// Shouldn't need mouse location, will only render as a HUD element
-					SpiritwebHud.Instance(playerEntity).render(event.getGuiGraphics(), 0, 0, event.getPartialTick());
+					spiritweb.getSpiritwebHud().render(event.getGuiGraphics(), 0, 0, event.getPartialTick());
 				});
 			}
 			profiler.pop();
