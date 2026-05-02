@@ -36,49 +36,49 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 			int x = this.width/2 - distance;
 			int y = this.height/2 - distance*2;
 
-			addRenderableWidget(new DiamondButton(x, y,
+			addRenderableWidget(new TriangleButton(x, y,
 												  distance, topLeftRot, Metals.MetalType.IRON, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y,
+			addRenderableWidget(new TriangleButton(x + distance, y,
 												  distance, topRightRot, Metals.MetalType.STEEL, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y + distance,
+			addRenderableWidget(new TriangleButton(x + distance, y + distance,
 												  distance, bottomRightRot, Metals.MetalType.TIN, spiritweb));
-			addRenderableWidget(new DiamondButton(x, y + distance,
+			addRenderableWidget(new TriangleButton(x, y + distance,
 												  distance, bottomLeftRot, Metals.MetalType.PEWTER, spiritweb));
 
 			x = this.width / 2;
 			y = this.height / 2 - distance;
 
-			addRenderableWidget(new DiamondButton(x, y,
+			addRenderableWidget(new TriangleButton(x, y,
 												  distance, topLeftRot, Metals.MetalType.ZINC, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y,
+			addRenderableWidget(new TriangleButton(x + distance, y,
 												  distance, topRightRot, Metals.MetalType.COPPER, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y + distance,
+			addRenderableWidget(new TriangleButton(x + distance, y + distance,
 												  distance, bottomRightRot, Metals.MetalType.BRASS, spiritweb));
-			addRenderableWidget(new DiamondButton(x, y + distance,
+			addRenderableWidget(new TriangleButton(x, y + distance,
 												  distance, bottomLeftRot, Metals.MetalType.BRONZE, spiritweb));
 
 			x = this.width / 2 - distance;
 			y = this.height / 2;
 
-			addRenderableWidget(new DiamondButton(x, y,
+			addRenderableWidget(new TriangleButton(x, y,
 												  distance, topLeftRot, Metals.MetalType.GOLD, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y,
+			addRenderableWidget(new TriangleButton(x + distance, y,
 												  distance, topRightRot, Metals.MetalType.ELECTRUM, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y + distance,
+			addRenderableWidget(new TriangleButton(x + distance, y + distance,
 												  distance, bottomRightRot, Metals.MetalType.CADMIUM, spiritweb));
-			addRenderableWidget(new DiamondButton(x, y + distance,
+			addRenderableWidget(new TriangleButton(x, y + distance,
 												  distance, bottomLeftRot, Metals.MetalType.BENDALLOY, spiritweb));
 
 			x = this.width / 2 - distance*2;
 			y = this.height / 2 - distance;
 
-			addRenderableWidget(new DiamondButton(x, y,
+			addRenderableWidget(new TriangleButton(x, y,
 												  distance, topLeftRot, Metals.MetalType.CHROMIUM, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y,
+			addRenderableWidget(new TriangleButton(x + distance, y,
 												  distance, topRightRot, Metals.MetalType.DURALUMIN, spiritweb));
-			addRenderableWidget(new DiamondButton(x + distance, y + distance,
+			addRenderableWidget(new TriangleButton(x + distance, y + distance,
 												  distance, bottomRightRot, Metals.MetalType.NICROSIL, spiritweb));
-			addRenderableWidget(new DiamondButton(x, y + distance,
+			addRenderableWidget(new TriangleButton(x, y + distance,
 												  distance, bottomLeftRot, Metals.MetalType.ALUMINUM, spiritweb));
 		}));
 	}

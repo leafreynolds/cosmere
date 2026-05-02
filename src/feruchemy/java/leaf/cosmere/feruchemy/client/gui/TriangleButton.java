@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
@@ -28,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class DiamondButton extends Button
+public class TriangleButton extends Button
 {
 	private final ISpiritweb spiritweb;
 	private final Manifestation manifestation;
@@ -36,7 +35,7 @@ public class DiamondButton extends Button
 	private final boolean hasManifestation;
 	private final float rotation;
 
-	public DiamondButton(int pX, int pY, int distance, float rotation, Metals.MetalType metal, ISpiritweb spiritweb)
+	public TriangleButton(int pX, int pY, int distance, float rotation, Metals.MetalType metal, ISpiritweb spiritweb)
 	{
 		super(pX, pY, distance, distance, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
 		this.rotation = rotation;
