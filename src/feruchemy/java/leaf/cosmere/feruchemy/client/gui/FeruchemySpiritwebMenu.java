@@ -84,8 +84,7 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 			addRenderableWidget(new TriangleButton(x, y + distance,
 												  distance, bottomLeftRot, Metals.MetalType.ALUMINUM, spiritweb, manifestationConsumer));
 
-			x = this.width / 2 - (int) (distance*1.75);
-			y = this.height/2 + (int) (distance*0.75);
+			y = this.height/2 + distance;
 
 			addRenderableWidget(new TriangleButton(x, y,
 					distance, topRightRot, Metals.MetalType.ATIUM, spiritweb, manifestationConsumer));
@@ -133,7 +132,7 @@ public class FeruchemySpiritwebMenu extends CosmereScreen
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-		final int x = this.width / 2 - (int) (distance*1.75), y = this.height/2 + (int) (distance*0.75);
+		final int x = this.width / 2 - distance*2-1, y = this.height/2 + distance+1;
 		final int screenSize = distance;
 		final int iconSize = 64;
 

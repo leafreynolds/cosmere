@@ -25,4 +25,9 @@ public class SpiritwebRegistry
 	{
 		return manifestationScreenMap;
 	}
+
+	public void clear()
+	{
+		manifestationScreenMap.clear();
+	}
 }

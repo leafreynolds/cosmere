@@ -623,6 +623,17 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
+	public boolean hasManifestationOfType(Manifestations.ManifestationTypes type)
+	{
+		for (int i = 0; i < type.getNumberOfManifestations(); i++)
+		{
+			if (hasManifestation(type.getManifestation(i)))
+				return true;
+		}
+		return false;
+	}
+
+	@Override
 	public void giveManifestation(Manifestation manifestation, int baseValue)
 	{
 		final Attribute attribute = manifestation.getAttribute();

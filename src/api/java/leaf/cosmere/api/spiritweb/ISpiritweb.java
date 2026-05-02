@@ -34,6 +34,8 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	boolean hasManifestation(Manifestation manifestation, boolean ignoreTemporaryPower);
 
+	boolean hasManifestationOfType(Manifestations.ManifestationTypes type);
+
 	void giveManifestation(Manifestation manifestation, int i);
 
 	void removeManifestation(Manifestation manifestation);

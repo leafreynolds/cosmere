@@ -11,6 +11,7 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.SpiritwebHud;
 import leaf.cosmere.client.gui.SpiritwebMenu;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.fog.FogManager;
@@ -74,6 +75,7 @@ public class ClientForgeEvents
 		{
 			if (Keybindings.MANIFESTATION_MENU.consumeClick())
 			{
+				SpiritwebRegistry.getInstance().clear();
 				SpiritwebCapability.get(player).ifPresent( (iSpiritweb ->
 				{
 					iSpiritweb.getSubmodules().forEach( ((manifestationTypes, iSpiritwebSubmodule) -> {

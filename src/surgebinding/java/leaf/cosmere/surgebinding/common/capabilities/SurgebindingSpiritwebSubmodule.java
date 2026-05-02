@@ -10,6 +10,7 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.SpiritwebRegistry;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.CapWrapper;
 import leaf.cosmere.surgebinding.client.gui.SurgebindingSpiritwebMenu;
 import leaf.cosmere.api.helpers.CuriosHelper;
@@ -22,6 +23,7 @@ import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -188,7 +190,10 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
-		SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SURGEBINDING, SurgebindingSpiritwebMenu::new);
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent((spiritweb -> {
+			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.SURGEBINDING))
+				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SURGEBINDING, SurgebindingSpiritwebMenu::new);
+		}));
 	}
 
 	private void requestGemStormlight(ItemStack item, int amountDrawn)
