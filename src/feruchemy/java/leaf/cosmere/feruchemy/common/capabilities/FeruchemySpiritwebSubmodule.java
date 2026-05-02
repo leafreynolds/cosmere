@@ -5,13 +5,16 @@
 package leaf.cosmere.feruchemy.common.capabilities;
 
 import leaf.cosmere.api.ISpiritwebSubmodule;
+import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.feruchemy.client.gui.FeruchemySpiritwebMenu;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
-import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.config.FeruchemyConfigs;
 import leaf.cosmere.feruchemy.common.items.NicrosilRingMetalmindItem;
 import leaf.cosmere.feruchemy.common.items.RingMetalmindItem;
@@ -26,14 +29,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 {
-	private static final HashMap<Metals.MetalType, Double> metalmindChargesMap = new HashMap<>();
-
 	@Override
 	public void GiveStartingItem(Player player)
 	{
@@ -76,25 +76,12 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void collectMenuInfo(List<String> m_infoText)
+	public void registerMenu()
 	{
-		if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.tickCount % 2 == 1)    // only do on odd tick
-		{
-			metalmindChargesMap.clear();
-			metalmindChargesMap.putAll(FeruchemyChargeThread.getInstance().getCharges());
-		}
-
-		if (!metalmindChargesMap.isEmpty())
-		{
-			for (Metals.MetalType metalType : metalmindChargesMap.keySet())
-			{
-				// todo localisation check
-				final String text = "F. " + metalType.getName() + ": " + metalmindChargesMap.getOrDefault(metalType, 0D).intValue();
-				m_infoText.add(text);
-			}
-		}
-
-		ISpiritwebSubmodule.super.collectMenuInfo(m_infoText);
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent( (spiritweb) -> {
+			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.FERUCHEMY))
+				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.FERUCHEMY, FeruchemySpiritwebMenu::new);
+		});
 	}
 
 	private static void GiveStartingItem(Player player, Metals.MetalType metalType, float fillAmount)

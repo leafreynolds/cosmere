@@ -109,6 +109,24 @@ public class Manifestations
 			}
 			return CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("cosmere", "none"));
 		}
+
+		public int getNumberOfManifestations()
+		{
+			switch (this)
+			{
+				case ALLOMANCY:
+				case FERUCHEMY:
+					return 17;
+				case SURGEBINDING:
+					return 10;
+				case AON_DOR:
+				case AWAKENING:
+					break;
+				case SANDMASTERY:
+					return 5;
+			}
+			return 0;
+		}
 	}
 
 }

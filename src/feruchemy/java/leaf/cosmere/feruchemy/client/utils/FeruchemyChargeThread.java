@@ -24,6 +24,7 @@ public class FeruchemyChargeThread implements Runnable
 	private static final Lock lock = new ReentrantLock();
 	private static FeruchemyChargeThread INSTANCE;
 	private static final HashMap<Metals.MetalType, Double> feruchemyChargeMap = new HashMap<>();
+	private static final HashMap<Metals.MetalType, Double> feruchemyMaxChargeMap = new HashMap<>();
 	static Thread t;
 	static boolean isStopping = false;
 
@@ -39,22 +40,37 @@ public class FeruchemyChargeThread implements Runnable
 
 	public HashMap<Metals.MetalType, Double> getCharges()
 	{
-		try
+		HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
+		if (lock.tryLock())
 		{
-			HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
-			if (lock.tryLock())
+			try
 			{
 				retVal.putAll(feruchemyChargeMap);
+			}
+			finally
+			{
 				lock.unlock();
 			}
-			return retVal;
 		}
-		catch (Exception e)
+		return retVal;
+	}
+
+	public HashMap<Metals.MetalType, Double> getMaximumCharges()
+	{
+		HashMap<Metals.MetalType, Double> retVal = new HashMap<>();
+		if (lock.tryLock())
 		{
-			e.printStackTrace();
-			lock.unlock();
+			try
+			{
+				retVal.putAll(feruchemyMaxChargeMap);
+			}
+			finally
+			{
+				lock.unlock();
+			}
 		}
-		return new HashMap<>();
+
+		return retVal;
 	}
 
 	public void start()
@@ -83,6 +99,7 @@ public class FeruchemyChargeThread implements Runnable
 
 		// hashmap to keep track of each metal's f-charge in the inventory
 		final HashMap<Metals.MetalType, Double> metalmindCharges = new HashMap<>();
+		final HashMap<Metals.MetalType, Double> metalmindMaxCharges = new HashMap<>();
 
 		while (!isStopping)
 		{
@@ -108,6 +125,7 @@ public class FeruchemyChargeThread implements Runnable
 				}
 
 				metalmindCharges.clear();
+				metalmindMaxCharges.clear();
 
 				// all inventory metalminds are counted
 				for (ItemStack stack : mc.player.getInventory().items)
@@ -125,6 +143,16 @@ public class FeruchemyChargeThread implements Runnable
 							else
 							{
 								metalmindCharges.put(item.getMetalType(), chargeToAdd);
+							}
+
+							Double maxToAdd = (double) item.getMaxCharge(stack);
+							if (metalmindMaxCharges.containsKey(item.getMetalType()))
+							{
+								metalmindMaxCharges.put(item.getMetalType(), metalmindMaxCharges.get(item.getMetalType()) + maxToAdd);
+							}
+							else
+							{
+								metalmindMaxCharges.put(item.getMetalType(), maxToAdd);
 							}
 						}
 					}
@@ -152,6 +180,16 @@ public class FeruchemyChargeThread implements Runnable
 								{
 									metalmindCharges.put(item.getMetalType(), chargeToAdd);
 								}
+
+								Double maxToAdd = (double) item.getMaxCharge(stackInSlot);
+								if (metalmindMaxCharges.containsKey(item.getMetalType()))
+								{
+									metalmindMaxCharges.put(item.getMetalType(), metalmindMaxCharges.get(item.getMetalType()) + maxToAdd);
+								}
+								else
+								{
+									metalmindMaxCharges.put(item.getMetalType(), maxToAdd);
+								}
 							}
 						}
 					}
@@ -164,18 +202,17 @@ public class FeruchemyChargeThread implements Runnable
 							return true;
 						});
 
+				if (lock.tryLock())
 				try
 				{
-					if (lock.tryLock())
-					{
-						feruchemyChargeMap.clear();
-						feruchemyChargeMap.putAll(metalmindCharges);
-						lock.unlock();
-					}
+					feruchemyChargeMap.clear();
+					feruchemyChargeMap.putAll(metalmindCharges);
+
+					feruchemyMaxChargeMap.clear();
+					feruchemyMaxChargeMap.putAll(metalmindMaxCharges);
 				}
-				catch (Exception e)
+				finally
 				{
-					e.printStackTrace();
 					lock.unlock();
 				}
 			}

@@ -16,6 +16,7 @@ public class AllomancyServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.DoubleValue IRON_STEEL_RANGE;
 	public final ForgeConfigSpec.DoubleValue PUSH_PULL_WEIGHT;
 	public final ForgeConfigSpec.DoubleValue MAX_PUSH_PULL_WEIGHT;
+	public final ForgeConfigSpec.IntValue MAX_INGESTIBLE_METAL;
 
 	// Boost amount for Duralumin and Nicrosil
 	//public final ForgeConfigSpec.DoubleValue boostAmount;
@@ -34,6 +35,8 @@ public class AllomancyServerConfig implements ICosmereConfig
 
 		PUSH_PULL_WEIGHT = builder.comment("Push/pull weight adjustment per block.").defineInRange("pushPullWeight", 0.05D, 0.01D, 100.0D);
 		MAX_PUSH_PULL_WEIGHT = builder.comment("Maximum pull/push weight adjustment. At 1.0 (default), push/pull power maxes out at 2 times (20 blocks)").defineInRange("maxPushPullWeight", 1.0D, 0D, 999999.0D);
+
+		MAX_INGESTIBLE_METAL = builder.comment("Maximum amount of metal possible to ingest in seconds").defineInRange("maxIngestibleMetal", 7200, 1, 999999);
 
 		builder.pop();
 		configSpec = builder.build();

@@ -1,4 +1,4 @@
-// 1.20.1	2026-03-02T03:22:01.8457524	Recipes
+// 1.20.1	2026-05-02T23:37:02.487450468	Recipes
 4a484301203532f8e76dbd4dc854a2869ce2cbdc data/minecraft/advancements/recipes/misc/cut_amethyst_large_from_amethyst_shard_stonecutting.json
 b6af109fe2db6d0b5b0fc46dfc3e1fcb1bd36f82 data/minecraft/advancements/recipes/misc/cut_amethyst_medium_from_amethyst_shard_stonecutting.json
 9cc4ea7f31a0e883bdd6185a51ea8eff5d2adbb0 data/minecraft/advancements/recipes/misc/cut_amethyst_small_from_amethyst_shard_stonecutting.json
@@ -93,6 +93,7 @@ b8166393ff084e93d43d2867715f5cd4113521b0 data/surgebinding/recipes/conversions/z
 d0b8c41bf8cbc79ecb34acbaab234e7562602964 data/surgebinding/recipes/cooked_chull_meat.json
 22c5810cae232dd766e9cf13db3134fc02c81ccb data/surgebinding/recipes/garnet_block.json
 f576d70fd168df476d29b0341b67edd6f6952d53 data/surgebinding/recipes/heliodor_block.json
+191264d7369d8dd7d03596b160b0a28b37a58544 data/surgebinding/recipes/plate_charging.json
 e2c4e98de7566305d536524fb4334b61dbe18f0f data/surgebinding/recipes/rosharan_diamond_block.json
 850b0804e90c35bd588551599916c9b01d5a8792 data/surgebinding/recipes/ruby_block.json
 70b3a858f88b4b31446282f8c8f96e0d376473fd data/surgebinding/recipes/sapphire_block.json

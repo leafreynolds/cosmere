@@ -1,4 +1,4 @@
-// 1.20.1	2026-04-27T10:20:37.587036	Item Models: surgebinding
+// 1.20.1	2026-05-02T23:37:02.487998506	Item Models: surgebinding
 f11fb5b2de87bddd0918dffcc40c267bcc6b4da7 assets/surgebinding/models/item/amethyst_mark.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/surgebinding/models/item/chull_spawn_egg.json
 e48028cab31d580fbb89862d7fd4717bd06fd66a assets/surgebinding/models/item/cooked_chull_leg.json
@@ -48,10 +48,7 @@ a2fab60aae34e89444507b186249f22ba45612a0 assets/surgebinding/models/item/heliodo
 a91ca4972b8d3422763281c9cb8be570a54a5339 assets/surgebinding/models/item/ruby_mark.json
 258e0d8e4ad57decd1a39dae134b836ce98f7f14 assets/surgebinding/models/item/sapphire.json
 e1a1241601f1e134a276a6beac7c6491344a004d assets/surgebinding/models/item/sapphire_mark.json
-7817652b27f6e14fee558b9f7ed79a803bcc9651 assets/surgebinding/models/item/shardplate_boots.json
-fbee7654e8cdfae717bccf39f76848666cc51bb5 assets/surgebinding/models/item/shardplate_chest.json
-095355a2bd3bcf962839dd947514af66d6dd9639 assets/surgebinding/models/item/shardplate_helmet.json
-0fc29fc960fce820dfb1b37d580efb2bdbd7d052 assets/surgebinding/models/item/shardplate_leggings.json
+8b5900e5e58805cdeb319817cdd965b796e36c2d assets/surgebinding/models/item/shardplate.json
 f92f7e1e4564703f4c2e0007c9f8c521b080c721 assets/surgebinding/models/item/smokestone.json
 273b3611916007e08e308048afb1d444167a0acd assets/surgebinding/models/item/smokestone_mark.json
 b50c314162637445327770e943368dd644413878 assets/surgebinding/models/item/surge_banner_pattern.json

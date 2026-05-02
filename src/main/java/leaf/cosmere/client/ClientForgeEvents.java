@@ -7,7 +7,11 @@ package leaf.cosmere.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import leaf.cosmere.api.Activator;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.client.gui.SpiritwebHud;
+import leaf.cosmere.client.gui.SpiritwebMenu;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.fog.FogManager;
@@ -25,7 +29,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -67,6 +73,18 @@ public class ClientForgeEvents
 
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
+			if (Keybindings.MANIFESTATION_MENU.consumeClick())
+			{
+				SpiritwebRegistry.getInstance().clear();
+				SpiritwebCapability.get(player).ifPresent( (iSpiritweb ->
+				{
+					iSpiritweb.getSubmodules().forEach( ((manifestationTypes, iSpiritwebSubmodule) -> {
+						iSpiritwebSubmodule.registerMenu();
+					}));
+				}));
+				Minecraft.getInstance().setScreen(new SpiritwebMenu(Component.literal("Spiritweb Menu"), spiritweb));
+			}
+
 			Manifestation selected = spiritweb.getSelectedManifestation();
 			if (isKeyPressed(event, Keybindings.MANIFESTATIONS_DEACTIVATE))
 			{
@@ -202,6 +220,28 @@ public class ClientForgeEvents
 		}
 
 	}
+
+	@SubscribeEvent
+	public static void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event)
+	{
+		// make sure it only renders once per frame
+		if (event.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id()))
+		{
+			Minecraft mc = Minecraft.getInstance();
+			ProfilerFiller profiler = mc.getProfiler();
+			LocalPlayer playerEntity = mc.player;
+			profiler.push("cosmere-spiritweb-hud");
+			{
+				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
+				{
+					// Shouldn't need mouse location, will only render as a HUD element
+					spiritweb.getSpiritwebHud().render(event.getGuiGraphics(), 0, 0, event.getPartialTick());
+				});
+			}
+			profiler.pop();
+		}
+	}
+
 
 	@SubscribeEvent
 	public static void onClientPlayerClone(ClientPlayerNetworkEvent.Clone event)

@@ -30,6 +30,7 @@ public class FeruchemyNicrosil extends FeruchemyManifestation
 	{
 		Minecraft minecraft = Minecraft.getInstance();
 		NicrosilMenu.instance.closeScreen();
+		// todo: replace with SpiritwebMenu call. might also be good to send a supplier instead of a singleton
 		minecraft.setScreen(NicrosilMenu.instance);
 	}
 
