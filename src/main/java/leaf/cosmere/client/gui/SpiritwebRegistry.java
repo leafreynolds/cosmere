@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 public class SpiritwebRegistry
 {
-	private static SpiritwebRegistry INSTANCE;
+	private static volatile SpiritwebRegistry INSTANCE;
 	private final HashMap<Manifestations.ManifestationTypes, Supplier<CosmereScreen>> manifestationScreenMap = new HashMap<>();
 
 	public static SpiritwebRegistry getInstance()

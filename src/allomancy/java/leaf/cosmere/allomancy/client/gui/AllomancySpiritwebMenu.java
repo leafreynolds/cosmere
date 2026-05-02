@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 public class AllomancySpiritwebMenu extends CosmereScreen
 {
+	private static final ResourceLocation BORDER_LOCATION = new ResourceLocation(Allomancy.MODID, "textures/gui/allo_border.png");
 	LocalPlayer player;
 	public AllomancySpiritwebMenu()
 	{
@@ -75,9 +76,7 @@ public class AllomancySpiritwebMenu extends CosmereScreen
 
 	private void renderBorder(GuiGraphics pGuiGraphics)
 	{
-		final ResourceLocation location = new ResourceLocation(Allomancy.MODID, "textures/gui/allo_border.png");
-
-		RenderSystem.setShaderTexture(0, location);
+		RenderSystem.setShaderTexture(0, BORDER_LOCATION);
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -86,7 +85,7 @@ public class AllomancySpiritwebMenu extends CosmereScreen
 		final int x = width/2 - diameter/2, y = height/2 - diameter/2 + height/16;
 		final int iconSize = 256;
 
-		pGuiGraphics.blit(location,
+		pGuiGraphics.blit(BORDER_LOCATION,
 				x,
 				y,
 				diameter,

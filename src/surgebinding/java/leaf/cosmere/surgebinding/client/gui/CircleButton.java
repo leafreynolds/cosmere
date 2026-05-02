@@ -25,6 +25,7 @@ import java.util.List;
 
 public class CircleButton extends Button
 {
+	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	final ISpiritweb spiritweb;
 	final Manifestation manifestation;
@@ -40,6 +41,17 @@ public class CircleButton extends Button
 		this.centerY = pY;
 		this.radius = radius;
 		this.manifestation = manifestation;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.setLength(0);
+		stringBuilder.append("textures/icon/")
+				.append(manifestation.getManifestationType().getName())
+				.append("/");
+
+		stringBuilder.append(manifestation.getName());
+		stringBuilder.append(".png");
+
+		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		calculateVertexes(centerX, centerY, radius);
 	}
@@ -114,18 +126,8 @@ public class CircleButton extends Button
 
 	public void renderIcon(GuiGraphics pGuiGraphics)
 	{
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.setLength(0);
-		stringBuilder.append("textures/icon/")
-				.append(manifestation.getManifestationType().getName())
-				.append("/");
-
-		stringBuilder.append(manifestation.getName());
-		stringBuilder.append(".png");
-
-		final ResourceLocation location = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 		float alpha = 1.0f;
-		RenderSystem.setShaderTexture(0, location);
+		RenderSystem.setShaderTexture(0, iconLocation);
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
@@ -134,7 +136,7 @@ public class CircleButton extends Button
 		int posY = centerY - iconSize/2;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
-		pGuiGraphics.blit(location,
+		pGuiGraphics.blit(iconLocation,
 				posX+1,
 				posY+1,
 				iconSize,
@@ -147,7 +149,7 @@ public class CircleButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
-		pGuiGraphics.blit(location,
+		pGuiGraphics.blit(iconLocation,
 				posX,
 				posY,
 				iconSize,

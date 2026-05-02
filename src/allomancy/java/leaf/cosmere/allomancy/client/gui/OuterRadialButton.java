@@ -35,6 +35,7 @@ import java.util.List;
 
 public class OuterRadialButton extends Button
 {
+	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	private final float outerRadius;
 	private final float innerRadius;
@@ -64,6 +65,21 @@ public class OuterRadialButton extends Button
 
 		outerRadius = (float) Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3;
 		innerRadius = outerRadius * 0.7f;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.setLength(0);
+		stringBuilder.append("textures/icon/")
+				.append(manifestation.getManifestationType().getName())
+				.append("/");
+
+		// no need for a switch case, always allomancy
+		if (manifestation instanceof IHasMetalType metalType)
+		{
+			stringBuilder.append(metalType.getMetalType().getName());
+		}
+
+		stringBuilder.append(".png");
+		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		calculateVertexes(this.centerX, this.centerY, innerRadius, outerRadius, segmentNr);
 	}
@@ -231,22 +247,8 @@ public class OuterRadialButton extends Button
 			b *= 0.1f;
 		}
 
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.setLength(0);
-		stringBuilder.append("textures/icon/")
-				.append(manifestation.getManifestationType().getName())
-				.append("/");
-
-		// no need for a switch case, always allomancy
-		if (manifestation instanceof IHasMetalType metalType)
-		{
-			stringBuilder.append(metalType.getMetalType().getName());
-		}
-
-		stringBuilder.append(".png");
-		final ResourceLocation location = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 		float alpha = hasManifestation ? 1.0f : 0.25f;
-		RenderSystem.setShaderTexture(0, location);
+		RenderSystem.setShaderTexture(0, iconLocation);
 
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -258,7 +260,7 @@ public class OuterRadialButton extends Button
 		int posY = centerY + (int)(Math.sin(midAngle) * midRadius) - iconSize/2;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
-		pGuiGraphics.blit(location,
+		pGuiGraphics.blit(iconLocation,
 				posX+1,
 				posY+1,
 				iconSize,
@@ -271,7 +273,7 @@ public class OuterRadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(r, g, b, alpha);
-		pGuiGraphics.blit(location,
+		pGuiGraphics.blit(iconLocation,
 				posX,
 				posY,
 				iconSize,

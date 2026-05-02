@@ -24,6 +24,7 @@ import java.util.List;
 
 public class RadialButton extends Button
 {
+	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	private final int radius, centerX, centerY, segmentNr;
 	private final float startAngle;
@@ -41,6 +42,14 @@ public class RadialButton extends Button
 		float fifthCircle = (float) Math.toRadians(360d/5d);
 		startAngle = (float) (fifthCircle*segmentNr);
 		endAngle = startAngle + fifthCircle;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.setLength(0);
+		stringBuilder.append("textures/icon/")
+				.append(manifestation.getManifestationType().getName())
+				.append("/.png");
+
+		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		calculateVertexes(centerX, centerY, radius, segmentNr);
 	}
@@ -143,15 +152,8 @@ public class RadialButton extends Button
 
 	private void renderIcon(GuiGraphics pGuiGraphics)
 	{
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.setLength(0);
-		stringBuilder.append("textures/icon/")
-				.append(manifestation.getManifestationType().getName())
-				.append("/.png");
-
-		final ResourceLocation location = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 		float alpha = 1.0f;
-		RenderSystem.setShaderTexture(0, location);
+		RenderSystem.setShaderTexture(0, iconLocation);
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
@@ -162,7 +164,7 @@ public class RadialButton extends Button
 		int posY = centerY + (int)(Math.sin(midAngle) * midRadius) - iconSize/2;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
-		pGuiGraphics.blit(location,
+		pGuiGraphics.blit(iconLocation,
 				posX+1,
 				posY+1,
 				iconSize,
@@ -175,7 +177,7 @@ public class RadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
-		pGuiGraphics.blit(location,
+		pGuiGraphics.blit(iconLocation,
 				posX,
 				posY,
 				iconSize,
