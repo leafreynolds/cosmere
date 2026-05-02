@@ -46,16 +46,13 @@ public class SurgebindingKeybindings
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
-
-		event.register(SHARDBLADE = new KeyMapping(KEY_SHARDBLADE, GLFW.GLFW_KEY_X, KEYS_CATEGORY));
-
 		for (Roshar.Surges surge : SURGEBINDING_POWER.keySet())
 		{
 			KeyMapping key = SURGEBINDING_POWER.get(surge);
 			SurgebindingManifestation manifest = (SurgebindingManifestation) SURGEBINDING_POWERS.get(surge).getManifestation();
 			event.register(key);
 			Activator entry = new Activator(key, manifest);
-			entry.setCategory("stormlight");
+			entry.setCategory("keys.surgebinding.main");
 			Keybindings.activators.add(entry);
 		}
 
