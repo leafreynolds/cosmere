@@ -478,18 +478,18 @@ dependencies {
 
 mixin {
 	// MixinGradle Settings
-	add sourceSets.main, 'mixins.cosmere.refmap.json'
-	add sourceSets.api, 'mixins.cosmere.api.refmap.json'
-	add sourceSets.allomancy, 'mixins.cosmere.allomancy.refmap.json'
-	add sourceSets.feruchemy, 'mixins.cosmere.feruchemy.refmap.json'
-	add sourceSets.hemalurgy, 'mixins.cosmere.hemalurgy.refmap.json'
-	add sourceSets.surgebinding, 'mixins.cosmere.surgebinding.refmap.json'
-	add sourceSets.sandmastery, 'mixins.cosmere.sandmastery.refmap.json'
-	add sourceSets.aviar, 'mixins.cosmere.aviar.refmap.json'
-	add sourceSets.awakening, 'mixins.cosmere.awakening.refmap.json'
-	add sourceSets.aondor, 'mixins.cosmere.aondor.refmap.json'
-	add sourceSets.soulforgery, 'mixins.cosmere.soulforgery.refmap.json'
-	add sourceSets.cosmeretools, 'mixins.cosmere.cosmeretools.refmap.json'
+	//add sourceSets.main, 'mixins.cosmere.refmap.json'
+	//add sourceSets.api, 'mixins.cosmere.api.refmap.json'
+	//add sourceSets.allomancy, 'mixins.cosmere.allomancy.refmap.json'
+	//add sourceSets.feruchemy, 'mixins.cosmere.feruchemy.refmap.json'
+	//add sourceSets.hemalurgy, 'mixins.cosmere.hemalurgy.refmap.json'
+	//add sourceSets.surgebinding, 'mixins.cosmere.surgebinding.refmap.json'
+	//add sourceSets.sandmastery, 'mixins.cosmere.sandmastery.refmap.json'
+	//add sourceSets.aviar, 'mixins.cosmere.aviar.refmap.json'
+	//add sourceSets.awakening, 'mixins.cosmere.awakening.refmap.json'
+	//add sourceSets.aondor, 'mixins.cosmere.aondor.refmap.json'
+	//add sourceSets.soulforgery, 'mixins.cosmere.soulforgery.refmap.json'
+	//add sourceSets.cosmeretools, 'mixins.cosmere.cosmeretools.refmap.json'
 
 	config 'cosmere.mixins.json'
 	//config 'cosmere.mixins.api.json'
@@ -523,6 +523,7 @@ def getManifestAttributes(String title)
 tasks.named('jar', Jar).configure {
 	duplicatesStrategy(DuplicatesStrategy.FAIL)
 	from([sourceSets.api.output, sourceSets.main.output])
+    exclude 'mixin.refmap.json'
 	manifest.attributes(getManifestAttributes("Cosmere"))
 }
 
@@ -565,6 +566,7 @@ def secondaryJar(SourceSet sourceSet, String title)
 		duplicatesStrategy(DuplicatesStrategy.FAIL)
 		archiveClassifier.set(sourceSet.name)
 		from sourceSet.output
+        exclude 'mixin.refmap.json'
 		if (!title.isEmpty()) {
 			def filename = "${title}-${project.version}.jar"
 			//basically don't add cosmere if it already has cosmere in it
@@ -588,9 +590,28 @@ def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'SoulForgery')
 def exampleJar = secondaryJar(sourceSets.example, 'Example')
 def cosmeretoolsJar = secondaryJar(sourceSets.cosmeretools, 'CosmereTools')
 
-tasks.withType(JavaCompile).configureEach({
-	options.encoding = 'UTF-8'
-	options.compilerArgs.addAll(["-Xmaxerrs", "100000"])
+tasks.withType(JavaCompile).configureEach({task ->
+    options.encoding = 'UTF-8'
+    options.compilerArgs.addAll(["-Xmaxerrs", "100000"])
+
+    def matcher = task.name =~ /compile(.*)Java/
+    if (matcher.matches() && matcher.group(1) != 'Test') {
+        def sourceSetName = matcher.group(1).toLowerCase()
+
+        // Use 'main' for the standard compileJava task
+        if (task.name == 'compileJava') sourceSetName = 'main'
+
+        task.doFirst {
+            // Strip out any outRefMapFile arguments appended by ForgeGradle/MixinGradle
+            options.compilerArgs.removeIf { it.startsWith('-AoutRefMapFile=') }
+
+            // Format the refmap name correctly: omit '.main' if it's the main source set
+            def refmapName = sourceSetName == 'main' ? 'mixins.cosmere.refmap.json' : "mixins.cosmere.${sourceSetName}.refmap.json"
+
+            // Force the AP to output directly to the classes directory
+            options.compilerArgs << "-AoutRefMapFile=${layout.buildDirectory.dir("classes/java/${sourceSetName}").get().asFile}/${refmapName}"
+        }
+    }
 })
 
 artifacts {

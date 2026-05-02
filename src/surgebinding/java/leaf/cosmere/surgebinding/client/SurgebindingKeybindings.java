@@ -46,12 +46,11 @@ public class SurgebindingKeybindings
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
-		for (Roshar.Surges surge : SURGEBINDING_POWER.keySet())
+		for (Map.Entry<Roshar.Surges, KeyMapping> kvPair : SURGEBINDING_POWER.entrySet())
 		{
-			KeyMapping key = SURGEBINDING_POWER.get(surge);
-			SurgebindingManifestation manifest = (SurgebindingManifestation) SURGEBINDING_POWERS.get(surge).getManifestation();
-			event.register(key);
-			Activator entry = new Activator(key, manifest);
+			SurgebindingManifestation manifest = (SurgebindingManifestation) SURGEBINDING_POWERS.get(kvPair.getKey()).getManifestation();
+			event.register(kvPair.getValue());
+			Activator entry = new Activator(kvPair.getValue(), manifest);
 			entry.setCategory("keys.surgebinding.main");
 			Keybindings.activators.add(entry);
 		}
@@ -59,7 +58,6 @@ public class SurgebindingKeybindings
 		event.register(SHARDBLADE = new KeyMapping(KEY_SHARDBLADE, GLFW.GLFW_KEY_X, "keys.surgebinding.main"));
 		event.register(REQUEST_STORMLIGHT = new KeyMapping(KEY_REQUEST_STORMLIGHT, GLFW.GLFW_KEY_Z, "keys.surgebinding.main"));
 		event.register(DISPATCH_STORMLIGHT = new KeyMapping(KEY_DISPATCH_STORMLIGHT, GLFW.GLFW_KEY_Y, "keys.surgebinding.main"));
-
 	}
 
 }
