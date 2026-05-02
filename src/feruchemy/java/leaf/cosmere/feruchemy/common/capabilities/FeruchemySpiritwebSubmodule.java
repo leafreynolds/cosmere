@@ -24,6 +24,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
