@@ -92,8 +92,8 @@ public class DiamondButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
-		CosmereAPI.logger.info("Metal clicked: " + metal.getName() + " | Mouse over: " + isMouseOver(pMouseX, pMouseY));
-		if (isMouseOver(pMouseX, pMouseY) && hasManifestation)
+		boolean isMouseOver = isMouseOver(pMouseX, pMouseY);
+		if (isMouseOver && hasManifestation)
 		{
 			if (manifestation.hasMenu())
 			{
@@ -109,7 +109,7 @@ public class DiamondButton extends Button
 
 			playDownSound(Minecraft.getInstance().getSoundManager());
 		}
-		return super.mouseClicked(pMouseX, pMouseY, pButton);
+		return isMouseOver;
 	}
 
 	private void renderDiamond(GuiGraphics pGuiGraphics, boolean isHovered)

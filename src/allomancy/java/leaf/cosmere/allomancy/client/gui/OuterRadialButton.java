@@ -118,7 +118,8 @@ public class OuterRadialButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
-		if (isMouseOver(pMouseX, pMouseY) && hasManifestation)
+		boolean isMouseOver = isMouseOver(pMouseX, pMouseY);
+		if (isMouseOver && hasManifestation)
 		{
 			if (pButton == 0)
 				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
@@ -127,7 +128,7 @@ public class OuterRadialButton extends Button
 
 			playDownSound(Minecraft.getInstance().getSoundManager());
 		}
-		return super.mouseClicked(pMouseX, pMouseY, pButton);
+		return isMouseOver;
 	}
 
 	@Override
