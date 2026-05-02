@@ -16,9 +16,9 @@ import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.client.PowerSaveState;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereConfigs;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
@@ -33,6 +33,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -78,24 +79,32 @@ public class SpiritwebCapability implements ISpiritweb
 	private final LivingEntity livingEntity;
 
 	public final Map<Manifestation, Integer> MANIFESTATIONS_MODE = new HashMap<>();
-
 	private Manifestation selectedManifestation = ManifestationRegistry.NONE.get();
-
 
 	public List<BlockPos> pushBlocks = new ArrayList<>(4);
 	public List<Integer> pushEntities = new ArrayList<>(4);
-
 	public List<BlockPos> pullBlocks = new ArrayList<>(4);
 	public List<Integer> pullEntities = new ArrayList<>(4);
 	public int pushPullWeight = 1;
+
 	private CompoundTag nbt;
 
 	private final Map<UUID, CosmereEffectInstance> activeEffects = Maps.newHashMap();
 
 	private final Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> spiritwebSubmodules;
 
-	private Map<Integer, Map<Manifestation, Integer>> powerSaveStorage;
-
+	// Doesn't like arrays with generic types. Need to use this instead.
+	private final PowerSaveState[] powerSaveStorage = new PowerSaveState[]{
+			new PowerSaveState(0),
+			new PowerSaveState(1),
+			new PowerSaveState(2),
+			new PowerSaveState(3),
+			new PowerSaveState(4),
+			new PowerSaveState(5),
+			new PowerSaveState(6),
+			new PowerSaveState(7),
+			new PowerSaveState(8)
+	};
 
 	public SpiritwebCapability(LivingEntity ent)
 	{
@@ -172,7 +181,19 @@ public class SpiritwebCapability implements ISpiritweb
 			spiritwebSubmodule.serialize(this);
 		}
 
-		nbt.put("PowerSaveStates", PowerSaveState.serialize());
+		CompoundTag powerSaveList = new CompoundTag();
+		for(PowerSaveState saveState: powerSaveStorage)
+		{
+			CompoundTag data = new CompoundTag();
+			for(Manifestation manifest: saveState.manifestations.keySet())
+			{
+				data.putInt(manifest.getRegistryName().toString(),saveState.manifestations.get(manifest));
+			}
+			powerSaveList.put(Integer.toString(saveState.num), data);
+		}
+
+
+		nbt.put("PowerSaveStates", powerSaveList);
 
 		return nbt;
 	}
@@ -228,9 +249,32 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			spiritwebSubmodule.deserialize(this);
 		}
-		if(nbt.contains("PowerSaveStates"))
+		if (nbt.contains("PowerSaveStates"))
 		{
-			PowerSaveState.deserialize((CompoundTag) nbt.get("PowerSaveStates"));
+			CompoundTag saveNBT = (CompoundTag) nbt.get("PowerSaveStates");
+			for(PowerSaveState state : powerSaveStorage)
+			{
+				CompoundTag data = (CompoundTag) saveNBT.get(Integer.toString(state.num));
+
+				if(data == null)
+				{
+					continue;
+				}
+
+				HashMap<Manifestation,Integer> manifestations = new HashMap<>();
+
+				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+				{
+					final String manifestationLoc = manifestation.getRegistryName().toString();
+
+					if (data.contains(manifestationLoc))
+					{
+						manifestations.put(manifestation, data.getInt(manifestationLoc));
+					}
+				}
+
+				state.setManifestations(manifestations);
+			}
 		}
 	}
 
@@ -250,6 +294,12 @@ public class SpiritwebCapability implements ISpiritweb
 	public Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> getSubmodules()
 	{
 		return spiritwebSubmodules;
+	}
+
+	@Override
+	public LivingEntity getLiving()
+	{
+		return livingEntity;
 	}
 
 	@Override
@@ -449,13 +499,6 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 	}
 
-	@Override
-	public LivingEntity getLiving()
-	{
-		return livingEntity;
-	}
-
-
 	//Copy things from an old spiritweb into the new one.
 	//Eg a player has died and we need to make sure they get their stormlight and breaths back.
 	@Override
@@ -529,7 +572,6 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 		}
 	}
-
 
 	public void renderSelectedHUD(GuiGraphics gg)
 	{
@@ -622,8 +664,8 @@ public class SpiritwebCapability implements ISpiritweb
 			gg.blit(textureLocation,
 					posX,
 					posY,
-					size-4,
-					size-4,
+					size - 4,
+					size - 4,
 					0,
 					0,
 					18,
@@ -801,7 +843,6 @@ public class SpiritwebCapability implements ISpiritweb
 		return false;
 	}
 
-
 	@Override
 	public void giveManifestation(Manifestation manifestation, int baseValue)
 	{
@@ -913,7 +954,7 @@ public class SpiritwebCapability implements ISpiritweb
 	public HashMap<Manifestation, Integer> getManifestations(boolean ignoreTemporaryPower, boolean ignoreInactivePower)
 	{
 		HashMap<Manifestation, Integer> list = new HashMap<>();
-		for(Manifestation manifestation: CosmereAPI.manifestationRegistry())
+		for (Manifestation manifestation: CosmereAPI.manifestationRegistry())
 		{
 			if (manifestation == ManifestationRegistry.NONE.getManifestation())
 			{
@@ -921,13 +962,13 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 			if (hasManifestation(manifestation, ignoreTemporaryPower))
 			{
-				if(!ignoreInactivePower)
+				if (!ignoreInactivePower)
 				{
-					list.put(manifestation,MANIFESTATIONS_MODE.get(manifestation));
+					list.put(manifestation, MANIFESTATIONS_MODE.get(manifestation));
 				}
-				else if((MANIFESTATIONS_MODE.get(manifestation)) != null && MANIFESTATIONS_MODE.get(manifestation) != 0)
+				else if ((MANIFESTATIONS_MODE.get(manifestation)) != null && MANIFESTATIONS_MODE.get(manifestation) != 0)
 				{
-					list.put(manifestation,MANIFESTATIONS_MODE.get(manifestation));
+					list.put(manifestation, MANIFESTATIONS_MODE.get(manifestation));
 				}
 
 			}
@@ -1046,5 +1087,96 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			Cosmere.packetHandler().sendTo(new SyncPlayerSpiritwebMessage(this.livingEntity.getId(), nbt), serverPlayerEntity);
 		}
+	}
+
+	public void saveNewState(int num)
+	{
+		if(num < 0 || num > 8)
+		{
+			return;
+		}
+		powerSaveStorage[num].addManifestations(this);
+	}
+
+	public void activatePowerState(int num)
+	{
+		//
+		if(num < 0 || num > 8)
+		{
+			return;
+		}
+		powerSaveStorage[num].activate(this);
+		syncToClients(null);
+	}
+
+	public class PowerSaveState
+	{
+		Map<Manifestation, Integer> manifestations = new HashMap<>();
+		int num;
+
+		public PowerSaveState(int num)
+		{
+			this.num = num;
+		}
+
+		public String getName()
+		{
+			return "Power Save State " + (num + 1);
+		}
+
+		public boolean isActive(SpiritwebCapability spiritweb)
+		{
+			/* isActive returns true if this.manifestations is empty.
+				If we ever want to do something with empty save states,
+				we may want to modify this.
+			 */
+			for (var manifest : manifestations.keySet())
+			{
+				if(!spiritweb.MANIFESTATIONS_MODE.containsKey(manifest))
+				{
+					return false;
+				}
+				if (!Objects.equals(spiritweb.MANIFESTATIONS_MODE.get(manifest), manifestations.get(manifest)))
+				{
+					return false;
+				}
+
+			}
+			return true;
+		}
+
+		public boolean hasManifestation(Manifestation manifestation)
+		{
+			return manifestations.containsKey(manifestation);
+		}
+
+		public void activate(SpiritwebCapability spiritweb)
+		{
+			boolean toActivate = !isActive(spiritweb);
+
+			for (Manifestation manifestation : manifestations.keySet())
+			{
+				int mode = 0;
+				if (toActivate)
+				{
+					mode = manifestations.get(manifestation);
+				}
+				spiritweb.setMode(manifestation, mode);
+
+			}
+
+		}
+
+		public void addManifestations(ISpiritweb spiritweb)
+		{
+			manifestations = spiritweb.getManifestations(false, true);
+
+		}
+
+		private void setManifestations(HashMap<Manifestation, Integer> manifestations)
+		{
+			this.manifestations = manifestations;
+		}
+
 	}
 }

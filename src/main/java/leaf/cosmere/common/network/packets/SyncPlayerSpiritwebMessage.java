@@ -5,6 +5,7 @@
 package leaf.cosmere.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
+import leaf.cosmere.client.gui.ISyncSpiritweb;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
@@ -40,15 +41,31 @@ public record SyncPlayerSpiritwebMessage(int entityID, CompoundTag entityNBT) im
 	{
 		context.enqueueWork(() ->
 		{
-			Entity result = Minecraft.getInstance().level.getEntity(entityID);
-			if (result != null)
+			Minecraft mc = Minecraft.getInstance();
+			if (mc.level == null)
 			{
-				SpiritwebCapability.get((LivingEntity) result).ifPresent((c) ->
-				{
-					c.deserializeNBT(result.level().registryAccess(), entityNBT);
-					c.getLiving().refreshDimensions();
-				});
+				return;
 			}
+
+			Entity result = mc.level.getEntity(entityID);
+			if (!(result instanceof LivingEntity living))
+			{
+				return;
+			}
+
+			SpiritwebCapability.get(living).ifPresent((c) ->
+			{
+				c.deserializeNBT(result.level().registryAccess(), entityNBT);
+				c.getLiving().refreshDimensions();
+
+				if (living == mc.player && mc.screen instanceof ISyncSpiritweb spiritMenu)
+				{
+					if (spiritMenu.getSpiritweb() == c)
+					{
+						spiritMenu.onSpiritwebUpdated((SpiritwebCapability) c);
+					}
+				}
+			});
 		});
 	}
 }

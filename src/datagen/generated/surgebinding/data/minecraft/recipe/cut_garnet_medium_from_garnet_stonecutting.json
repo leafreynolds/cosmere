@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "surgebinding:garnet"
+  },
+  "result": {
+    "count": 4,
+    "id": "surgebinding:cut_garnet_medium"
+  }
+}

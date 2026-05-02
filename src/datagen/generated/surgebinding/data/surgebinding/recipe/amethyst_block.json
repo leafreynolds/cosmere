@@ -4,14 +4,11 @@
   "key": {
     "I": {
       "tag": "c:gems/amethyst"
-    },
-    "J": {
-      "item": "surgebinding:amethyst_broam"
     }
   },
   "pattern": [
     "III",
-    "IJI",
+    "III",
     "III"
   ],
   "result": {

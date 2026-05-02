@@ -12,8 +12,11 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.ChangeSelectedManifestationMessage;
 import leaf.cosmere.common.network.packets.DeactivateManifestationsMessage;
+import leaf.cosmere.common.network.packets.SavePowerStateMessage;
 import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.common.network.packets.StoreTapPowerMessage;
 import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
+import leaf.cosmere.common.network.packets.TogglePowerStateMessage;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class NetworkPacketHandler extends BasePacketHandler
@@ -49,6 +52,18 @@ public class NetworkPacketHandler extends BasePacketHandler
 		registrar.playToServer(
 				SetSelectedManifestationMessage.TYPE,
 				SetSelectedManifestationMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				StoreTapPowerMessage.TYPE,
+				StoreTapPowerMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				SavePowerStateMessage.TYPE,
+				SavePowerStateMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				TogglePowerStateMessage.TYPE,
+				TogglePowerStateMessage.STREAM_CODEC,
 				ICosmerePacket::handle);
 	}
 }

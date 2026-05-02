@@ -1,16 +1,19 @@
+/*
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
+ */
+
 package leaf.cosmere.surgebinding.common.network.packets;
 
+import io.netty.buffer.ByteBuf;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-
-import static net.minecraft.network.codec.ByteBufCodecs.BOOL;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
 public record DispatchStormlight() implements ICosmerePacket
 {
@@ -36,9 +39,19 @@ public record DispatchStormlight() implements ICosmerePacket
 		context.enqueueWork(() -> SpiritwebCapability.get(sender).ifPresent(cap ->
 		{
 			SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(cap);
-			if (ssm != null && ssm.getStormlight() != 0 && (ssm.isOathed() || ssm.isHerald()))
+			if (ssm == null)
 			{
-				ssm.dispatchStormlight();
+				return;
+			}
+			if (ssm.getStormlight() != 0)
+			{
+				if (ssm.isOathed()
+						|| ssm.isHerald()
+						|| SurgebindingManifestations.SURGEBINDING_POWERS.values().stream()
+								.anyMatch((manifestation -> cap.hasManifestation(manifestation.getManifestation()))))
+				{
+					ssm.dispatchStormlight();
+				}
 			}
 		}));
 	}

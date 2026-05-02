@@ -1,12 +1,15 @@
+/*
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
+ */
+
 package leaf.cosmere.surgebinding.common.capabilities;
 
+import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.surgebinding.client.render.model.ShardbladeModel;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
-
-import leaf.cosmere.api.math.MathHelper;
 
 public class DynamicShardbladeData implements IShardbladeDynamicData
 {

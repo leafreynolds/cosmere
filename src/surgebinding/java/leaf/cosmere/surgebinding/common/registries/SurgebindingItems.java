@@ -1,5 +1,5 @@
 /*
- * File updated ~ 6 - 2 - 2025 ~ Leaf
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.surgebinding.common.registries;
@@ -13,8 +13,9 @@ import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.items.*;
 import leaf.cosmere.surgebinding.common.items.tiers.ShardbladeItemTier;
-import leaf.cosmere.surgebinding.common.items.tiers.ShardplateArmorMaterial;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BannerPatternItem;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.Arrays;
@@ -33,16 +34,15 @@ public class SurgebindingItems
 
 	public static final ShardbladeItemTier SHARDBLADE_ITEM_TIER = new ShardbladeItemTier(10);
 
-	public static final ItemRegistryObject<ShardbladeItem> NIGHTBLOOD = ITEMS.register("nightblood", () -> new NightbloodItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get()));
+	public static final ItemRegistryObject<NightbloodItem> NIGHTBLOOD = ITEMS.register("nightblood", () -> new NightbloodItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardbladeItem> TEST_BLADE = ITEMS.register("test_blade", () -> new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardbladeItem> SHARDBLADE = ITEMS.register("shardblade", () -> new ShardbladeDynamicItem(SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 	public static final ItemRegistryObject<ShardbladeItem> MASTER_SWORD = ITEMS.register("master_sword", () -> new ShardbladeItem(SHARDBLADE_ITEM_TIER, 10, -2.4F, PropTypes.Items.SHARDBLADE.get()));
 
-	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_HELMET = ITEMS.register("shardplate_helmet", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.HELMET, PropTypes.Items.SHARDBLADE.get()));
-	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_CHEST = ITEMS.register("shardplate_chest", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.CHESTPLATE, PropTypes.Items.SHARDBLADE.get()));
-	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_LEGGINGS = ITEMS.register("shardplate_leggings", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.LEGGINGS, PropTypes.Items.SHARDBLADE.get()));
-	public static final ItemRegistryObject<ShardplateItem> SHARDPLATE_BOOTS = ITEMS.register("shardplate_boots", () -> new ShardplateItem(ShardplateArmorMaterial.DEADPLATE, ArmorItem.Type.BOOTS, PropTypes.Items.SHARDBLADE.get()));
+	public static final ItemRegistryObject<ShardplateCurioItem> SHARDPLATE = ITEMS.register("shardplate", () -> new ShardplateCurioItem(PropTypes.Items.SHARDPLATE.get()));
 
+	public static final ItemRegistryObject<BannerPatternItem> SURGE_BANNER_PATTERN = ITEMS.register("surge_banner_pattern", () -> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_SURGE, new Item.Properties().stacksTo(1)));
+	public static final ItemRegistryObject<BannerPatternItem> RADIANT_ORDER_BANNER_PATTER = ITEMS.register("radiant_order_banner_pattern", () -> new BannerPatternItem(SurgebindingTags.BannerPatterns.PATTERN_ITEM_RADIANT_ORDER, new Item.Properties().stacksTo(1)));
 
 	public static final Map<Roshar.RadiantOrder, ItemRegistryObject<HonorbladeItem>> HONORBLADES =
 			Arrays.stream(EnumUtils.RADIANT_ORDERS)
@@ -53,35 +53,71 @@ public class SurgebindingItems
 									() -> new HonorbladeItem(type, SHARDBLADE_ITEM_TIER, 24, -2.4F, PropTypes.Items.SHARDBLADE.get())
 							)));
 
-
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_CHIPS =
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_SMALL =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
+							type -> ITEMS.register("cut_" + type.getName() + "_small",
+									() -> new GemstoneItem(type, Roshar.GemSize.SMALL))
+					));
+
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_MEDIUM =
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> ITEMS.register("cut_" + type.getName() + "_medium",
+									() -> new GemstoneItem(type, Roshar.GemSize.MEDIUM))
+					));
+
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_LARGE =
+			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+					.collect(Collectors.toMap(
+							Function.identity(),
+							type -> ITEMS.register("cut_" + type.getName() + "_large",
+									() -> new GemstoneItem(type, Roshar.GemSize.LARGE))
+					));
+
+	static Roshar.Gemstone[] gemstone = {Roshar.Gemstone.SAPPHIRE, Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE =
+			Arrays.stream(gemstone)
+					.collect(Collectors.toMap(
+							Function.identity(),
 							type -> ITEMS.register(
-									type.getName() + Constants.RegNameStubs.CHIP,
-									() -> new GemstoneItem(type, Roshar.GemSize.CHIP)
-							)));
+									type == Roshar.Gemstone.DIAMOND ? "rosharan_diamond" : type.getName(),
+									() -> new Item(new Item.Properties()))
+					));
 
-
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_MARKS =
+	public static final Map<Roshar.Gemstone, ItemRegistryObject<Item>> GEMSTONE_MARKS =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 					.collect(Collectors.toMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + Constants.RegNameStubs.MARK,
-									() -> new GemstoneItem(type, Roshar.GemSize.MARK)
+									() -> new Item(new Item.Properties())
 							)));
 
+	// 1.21.1: meat-flag wolf-eating behaviour now comes from the `#minecraft:wolf_food` item tag,
+	// not the FoodProperties builder. Add raw chull leg/meat to that tag in datagen if wolves should eat them.
+	public static final ItemRegistryObject<Item> RAW_CHULL_LEG = ITEMS.register("raw_chull_leg", () -> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(5)
+					.build())));
 
-	public static final Map<Roshar.Gemstone, ItemRegistryObject<GemstoneItem>> GEMSTONE_BROAMS =
-			Arrays.stream(EnumUtils.GEMSTONE_TYPES)
-					.collect(Collectors.toMap(
-							Function.identity(),
-							type -> ITEMS.register(
-									type.getName() + Constants.RegNameStubs.BROAM,
-									() -> new GemstoneItem(type, Roshar.GemSize.BROAM)
-							)));
+	public static final ItemRegistryObject<Item> COOKED_CHULL_LEG = ITEMS.register("cooked_chull_leg", () -> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(10)
+					.build())));
+
+	public static final ItemRegistryObject<Item> RAW_CHULL_MEAT = ITEMS.register("raw_chull_meat", () -> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(4)
+					.build())));
+
+	public static final ItemRegistryObject<Item> COOKED_CHULL_MEAT = ITEMS.register("cooked_chull_meat", () -> new Item(new Item.Properties()
+			.food(new FoodProperties.Builder()
+					.nutrition(8)
+					.build())));
+
 
 	public static final ItemRegistryObject<DeferredSpawnEggItem> CHULL_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CHULL, 0x6c482f, 0x8a1a08);
 	public static final ItemRegistryObject<DeferredSpawnEggItem> CRYPTIC_EGG = ITEMS.registerSpawnEgg(SurgebindingEntityTypes.CRYPTIC, 0x272727, 0x4d4d4d);

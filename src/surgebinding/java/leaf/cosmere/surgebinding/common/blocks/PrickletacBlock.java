@@ -47,10 +47,10 @@ public class PrickletacBlock extends BaseBlock
 	@Override
 	protected InteractionResult useWithoutItem(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull BlockHitResult pHit)
 	{
-        if (pLevel.isClientSide)
-        {
-            return InteractionResult.SUCCESS;
-        }
+		if (pLevel.isClientSide)
+		{
+			return InteractionResult.SUCCESS;
+		}
 
 		pLevel.setBlockAndUpdate(pPos, pState.cycle(STATE));
 

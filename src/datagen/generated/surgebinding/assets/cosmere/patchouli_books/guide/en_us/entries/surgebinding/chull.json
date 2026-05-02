@@ -1,12 +1,12 @@
 {
   "category": "cosmere:surgebinding",
-  "icon": "surgebinding:amethyst_broam",
+  "icon": "surgebinding:cut_amethyst_medium",
   "name": "Chull",
   "pages": [
     {
       "type": "text",
       "text": "Chull exist, but don't do much as of yet. They are adorable though. (WIP)",
-      "title": "surgebinding:amethyst_broam"
+      "title": "surgebinding:cut_amethyst_medium"
     },
     {
       "type": "entity",

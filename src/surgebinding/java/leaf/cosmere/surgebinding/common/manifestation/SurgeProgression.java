@@ -49,7 +49,8 @@ public class SurgeProgression extends SurgebindingManifestation
 			{
 				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
-					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()))
+					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) &&
+							SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
 					{
 						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
 						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
@@ -78,7 +79,8 @@ public class SurgeProgression extends SurgebindingManifestation
 			{
 				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
-					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()))
+					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) &&
+							SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
 					{
 						int ageUpAmount = (int) Math.floor(-(ageableMob.getAge() / 20D) * 0.1);       // get age in seconds, then 10% of that
 						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
@@ -107,19 +109,17 @@ public class SurgeProgression extends SurgebindingManifestation
 	{
 		livingEntity.setHealth(setHealthTo);
 
-		for (int i = 0; i < 20; ++i)
+		if (livingEntity.level() instanceof ServerLevel serverLevel)
 		{
-			double xSpeed = livingEntity.getRandom().nextGaussian() * 0.02D;
-			double ySpeed = livingEntity.getRandom().nextGaussian() * 0.02D;
-			double zSpeed = livingEntity.getRandom().nextGaussian() * 0.02D;
-
-			livingEntity.level().addParticle(ParticleTypes.HAPPY_VILLAGER,
-					livingEntity.getX(1.0D) - xSpeed * 10.0D,
-					livingEntity.getRandomY() - ySpeed * 10.0D,
-					livingEntity.getRandomZ(1.0D) - zSpeed * 10.0D,
-					xSpeed,
-					ySpeed,
-					zSpeed);
+			serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+					livingEntity.getX(),
+					livingEntity.getY() + livingEntity.getBbHeight() / 2.0D,
+					livingEntity.getZ(),
+					20,
+					livingEntity.getBbWidth() / 2.0D,
+					livingEntity.getBbHeight() / 2.0D,
+					livingEntity.getBbWidth() / 2.0D,
+					0.02D);
 		}
 
 		//this gets very annoying quick
@@ -138,19 +138,17 @@ public class SurgeProgression extends SurgebindingManifestation
 	{
 		ageableMob.ageUp(ageUpAmount);
 
-		for (int i = 0; i < 20; ++i)
+		if (ageableMob.level() instanceof ServerLevel serverLevel)
 		{
-			double xSpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
-			double ySpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
-			double zSpeed = ageableMob.getRandom().nextGaussian() * 0.02D;
-
-			ageableMob.level().addParticle(ParticleTypes.HAPPY_VILLAGER,
-					ageableMob.getX(1.0D) - xSpeed * 10.0D,
-					ageableMob.getRandomY() - ySpeed * 10.0D,
-					ageableMob.getRandomZ(1.0D) - zSpeed * 10.0D,
-					xSpeed,
-					ySpeed,
-					zSpeed);
+			serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+					ageableMob.getX(),
+					ageableMob.getY() + ageableMob.getBbHeight() / 2.0D,
+					ageableMob.getZ(),
+					20,
+					ageableMob.getBbWidth() / 2.0D,
+					ageableMob.getBbHeight() / 2.0D,
+					ageableMob.getBbWidth() / 2.0D,
+					0.02D);
 		}
 	}
 
@@ -168,7 +166,7 @@ public class SurgeProgression extends SurgebindingManifestation
 		{
 			SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 			{
-				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()))
+				if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
 				{
 					SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
 					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
@@ -206,30 +204,33 @@ public class SurgeProgression extends SurgebindingManifestation
 			{
 				SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
 				{
-					SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
-					SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
-
-					final int stormlightBonemealCostMultiplier = SurgebindingConfigs.SERVER.PROGRESSION_BONEMEAL_COST.get();
-					if (submodule.adjustStormlight(-stormlightBonemealCostMultiplier, true))
+					if (iSpiritweb.hasManifestation(SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).get()) && SurgebindingManifestations.SURGEBINDING_POWERS.get(Roshar.Surges.PROGRESSION).getManifestation().isActive(iSpiritweb))
 					{
-						if (event.getLevel() instanceof ServerLevel)
-						{
-							BlockState newState = targetBlockType.defaultBlockState();
+						SpiritwebCapability playerSpiritweb = (SpiritwebCapability) iSpiritweb;
+						SurgebindingSpiritwebSubmodule submodule = (SurgebindingSpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SURGEBINDING);
 
-							// copy over all block properties
-							for (Property<?> prop : blockState.getProperties())
+						final int stormlightBonemealCostMultiplier = SurgebindingConfigs.SERVER.PROGRESSION_BONEMEAL_COST.get();
+						if (submodule.adjustStormlight(-stormlightBonemealCostMultiplier, true))
+						{
+							if (event.getLevel() instanceof ServerLevel)
 							{
-								if (newState.hasProperty(prop))
-								{
-									newState = copyProperty(blockState, newState, prop);
-								}
-							}
+								BlockState newState = targetBlockType.defaultBlockState();
 
-							event.getLevel().setBlock(blockPos, newState, 0);
-						}
-						else
-						{
-							BoneMealItem.addGrowthParticles(event.getLevel(), blockPos, 0);
+								// copy over all block properties
+								for (Property<?> prop : blockState.getProperties())
+								{
+									if (newState.hasProperty(prop))
+									{
+										newState = copyProperty(blockState, newState, prop);
+									}
+								}
+
+								event.getLevel().setBlock(blockPos, newState, 3);
+							}
+							else
+							{
+								BoneMealItem.addGrowthParticles(event.getLevel(), blockPos, 0);
+							}
 						}
 					}
 				});

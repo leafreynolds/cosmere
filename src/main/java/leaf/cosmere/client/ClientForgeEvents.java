@@ -11,10 +11,7 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.fog.FogManager;
-import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
-import leaf.cosmere.common.network.packets.ChangeSelectedManifestationMessage;
-import leaf.cosmere.common.network.packets.DeactivateManifestationsMessage;
-import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
+import leaf.cosmere.common.network.packets.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -150,17 +147,17 @@ public class ClientForgeEvents
                 return;
             }
 
-			for (PowerSaveState.PowerSaves powerSave: PowerSaveState.PowerSaves.values())
+			for (ClientPowerSaveState.PowerSaves powerSave: ClientPowerSaveState.PowerSaves.values())
 			{
 				if(isKeyPressed(event, Keybindings.getKey(powerSave.getNum())))
 				{
 					if(isKeyHeld(Keybindings.ACTIVATE_POWER_SAVE))
 					{
-						powerSave.activate(spiritweb);
+						Cosmere.packetHandler().sendToServer(new TogglePowerStateMessage(powerSave.getNum()));
 					}
 					else if(isKeyHeld(Keybindings.SAVE_POWER_SAVE))
 					{
-						powerSave.addManifestations(spiritweb);
+						Cosmere.packetHandler().sendToServer(new SavePowerStateMessage(powerSave.getNum()));
 					}
 				}
 			}

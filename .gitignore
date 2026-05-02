@@ -5,6 +5,7 @@ output
 *.ipr
 *.iws
 out
+.vscode
 
 Cosmere*.jar
 MDK.zip

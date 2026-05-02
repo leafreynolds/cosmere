@@ -109,6 +109,8 @@ public class ShardbladeModel extends Model
 		this.pommel.visible = true;
 		this.cross_guard.visible = true;
 
+		//now we need to get the actual data from the itemstack
+		//and set the correct pieces to be visible
 		if (!(pStack.getItem() instanceof ShardbladeDynamicItem))
 		{
 			return;

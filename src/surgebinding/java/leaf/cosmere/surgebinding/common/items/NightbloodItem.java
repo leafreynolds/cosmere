@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
+ */
+
 package leaf.cosmere.surgebinding.common.items;
 
 import leaf.cosmere.api.EnumUtils;
@@ -11,9 +15,8 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 public class NightbloodItem extends ShardbladeItem
 {
@@ -22,11 +25,7 @@ public class NightbloodItem extends ShardbladeItem
 		super(tier, attackDamageIn, attackSpeedIn, builderIn);
 	}
 
-	@Override
-	public boolean canSummonDismiss(Player player)
-	{
-		return false;
-	}
+	// canSummonDismiss intentionally inherits ShardbladeItem's bonded-user gate.
 
 	@Override
 	public ItemAttributeModifiers getDefaultAttributeModifiers()

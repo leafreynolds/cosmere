@@ -1,16 +1,20 @@
+/*
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
+ */
+
 package leaf.cosmere.surgebinding.common.network.packets;
 
+import io.netty.buffer.ByteBuf;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-
-import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
 public record RequestStormlight() implements ICosmerePacket
 {
@@ -40,9 +44,15 @@ public record RequestStormlight() implements ICosmerePacket
 			{
 				if (ssm.isHerald())
 				{
+					//heralds had a direct line to honor's investiture
 					ssm.setStormlight(SurgebindingConfigs.SERVER.PLAYER_MAX_STORMLIGHT.get());
 				}
 				else if (ssm.isOathed())
+				{
+					ssm.requestStormlight();
+				}
+				else if (SurgebindingManifestations.SURGEBINDING_POWERS.values().stream()
+						.anyMatch((manifestation -> cap.hasManifestation(manifestation.getManifestation()))))
 				{
 					ssm.requestStormlight();
 				}

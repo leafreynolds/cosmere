@@ -5,6 +5,7 @@
 package leaf.cosmere.client;
 
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.client.gui.ISyncSpiritweb;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.client.render.CosmereRenderers;
 import leaf.cosmere.common.Cosmere;
@@ -52,7 +53,7 @@ public class ClientModEvents
 			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
 
 			//normal hud stuff
-			if (mc.screen != SpiritwebMenu.instance)
+			if (!(mc.screen instanceof ISyncSpiritweb))
 			{
 				spiritweb.renderSelectedHUD(guiGraphics);
 			}

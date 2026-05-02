@@ -4,6 +4,7 @@
 
 package leaf.cosmere.surgebinding.common.entity.spren;
 
+import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -152,7 +153,7 @@ public class Cryptic extends TamableAnimal
 
 	static
 	{
-		TAMING_INGREDIENTS = SurgebindingItems.GEMSTONE_BROAMS.values().stream()
-				.map(registryItem -> registryItem.asItem()).collect(Collectors.toSet());
+		TAMING_INGREDIENTS = SurgebindingItems.GEMSTONE_LARGE.values().stream()
+				.map(ItemRegistryObject::asItem).collect(Collectors.toSet());
 	}
 }

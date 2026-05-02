@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 1 - 2026 ~ Leaf
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.surgebinding.common.capabilities.ideals;
@@ -12,26 +12,39 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.util.TaskQueueManager;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.capabilities.ideals.order.WindrunnerIdealStateManager;
+import leaf.cosmere.surgebinding.common.capabilities.BondData;
+import leaf.cosmere.surgebinding.common.capabilities.BondableRadiantShardData;
+import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
+import leaf.cosmere.surgebinding.common.capabilities.ideals.order.*;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.config.SurgebindingServerConfig;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class RadiantStateManager
 {
-	private static ResourceLocation SWEAR_IDEAL = ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, "swear_ideal");
+	private static final ResourceLocation SWEAR_IDEAL = ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, "swear_ideal");
 
 	private SpiritwebCapability spiritweb;
 	private Roshar.RadiantOrder order = null;
 	private int ideal = 0;
+
+	private ItemStack plate;
+	private Entity plateInventory;
+	private ItemStack blade;
+	private Entity bladeInventory;
+
 
 	public Roshar.RadiantOrder getOrder()
 	{
@@ -186,7 +199,6 @@ public class RadiantStateManager
 		//else they must be trying to swear a higher ideal
 		if (this.order.equals(idealOrder))
 		{
-			boolean swearingHigherIdeal = idealToSwear > 2;
 			//swearing a higher ideal
 			if (idealToSwear == this.ideal + 1)
 			{
@@ -202,7 +214,9 @@ public class RadiantStateManager
 			{
 				//only the higher ideas tell you if words are accepted?
 				//todo translatable
-				event.setCanceled(true);
+				// 1.21.1: ServerChatEvent is no longer cancellable, so the spoken words still
+				// broadcast publicly (which actually fits the in-fiction "speak it aloud" feel).
+				// The rejection comes back as a private system message to the speaker only.
 				event.getPlayer().sendSystemMessage(Component.literal("THESE WORDS ARE NOT ACCEPTED."));
 			}
 		}
@@ -216,43 +230,19 @@ public class RadiantStateManager
 			return true;
 		}
 
-		switch (idealOrder)
+		return switch (idealOrder)
 		{
-			case WINDRUNNER ->
-			{
-				return WindrunnerIdealStateManager.validateIdeal(spiritweb, idealToSwear);
-			}
-			case SKYBREAKER ->
-			{
-			}
-			case DUSTBRINGER ->
-			{
-			}
-			case EDGEDANCER ->
-			{
-			}
-			case TRUTHWATCHER ->
-			{
-			}
-			case LIGHTWEAVER ->
-			{
-			}
-			case ELSECALLER ->
-			{
-			}
-			case WILLSHAPER ->
-			{
-			}
-			case STONEWARD ->
-			{
-			}
-			case BONDSMITH ->
-			{
-			}
-		}
-
-
-		return false;
+			case WINDRUNNER -> WindrunnerXPManager.validateIdeal(spiritweb, idealToSwear);
+			case SKYBREAKER -> SkybreakerXPManager.validateIdeal(spiritweb, idealToSwear);
+			case DUSTBRINGER -> DustbringerXPManager.validateIdeal(spiritweb, idealToSwear);
+			case EDGEDANCER -> EdgedancerXPManager.validateIdeal(spiritweb, idealToSwear);
+			case TRUTHWATCHER -> TruthwatcherXPManager.validateIdeal(spiritweb, idealToSwear);
+			case LIGHTWEAVER -> LightweaverXPManager.validateIdeal(spiritweb, idealToSwear);
+			case ELSECALLER -> ElsecallerXPManager.validateIdeal(spiritweb, idealToSwear);
+			case WILLSHAPER -> WillshaperXPManager.validateIdeal(spiritweb, idealToSwear);
+			case STONEWARD -> StonewardXPManager.validateIdeal(spiritweb, idealToSwear);
+			case BONDSMITH -> BondsmithXPManager.validateIdeal(spiritweb, idealToSwear);
+		};
 	}
 
 
@@ -270,6 +260,18 @@ public class RadiantStateManager
 				{
 					player.sendSystemMessage(Component.literal("THESE WORDS ARE ACCEPTED."));
 					updatePowerState();
+				}
+				if (ideal == 3)
+				{
+					blade = new ItemStack(SurgebindingItems.SHARDBLADE.asItem());
+					stampShardData(blade, spiritweb.getLiving());
+					bladeInventory = spiritweb.getLiving();
+				}
+				if (ideal == 4)
+				{
+					plate = new ItemStack(SurgebindingItems.SHARDPLATE.asItem());
+					stampPlateData(plate, spiritweb.getLiving());
+					plateInventory = spiritweb.getLiving();
 				}
 				//player.playSound(SoundEvents.LIGHTNING_BOLT_THUNDER, 1000, 0.8F + player.getRandom().nextFloat() * 0.2F);
 				player.level().playSound(
@@ -309,4 +311,79 @@ public class RadiantStateManager
 		spiritweb.giveManifestation(firstSurge, getIdeal());
 		spiritweb.giveManifestation(secondSurge, getIdeal());
 	}
+
+	// For use with commands. Possible bondsmith applications?
+	public void forceSwear(int idealToSwear, Roshar.RadiantOrder idealOrder)
+	{
+		this.ideal = idealToSwear;
+		onSuccessfulIdealSworn(spiritweb);
+		if (ideal >= 3 && blade == null)
+		{
+			blade = new ItemStack(SurgebindingItems.SHARDBLADE.asItem());
+			stampShardData(blade, spiritweb.getLiving());
+			bladeInventory = spiritweb.getLiving();
+		}
+		if (ideal >= 4 && plate == null)
+		{
+			plate = new ItemStack(SurgebindingItems.SHARDPLATE.asItem());
+			stampPlateData(plate, spiritweb.getLiving());
+			plateInventory = spiritweb.getLiving();
+		}
+	}
+
+	private void stampShardData(ItemStack stack, LivingEntity owner)
+	{
+		BondableRadiantShardData data = new BondableRadiantShardData(stack);
+		data.setOrder(this.order);
+		data.setLiving(true);
+		if (owner != null)
+		{
+			data.setBondedEntity(owner);
+		}
+	}
+
+	private void stampPlateData(ItemStack stack, LivingEntity owner)
+	{
+		DynamicShardplateData data = new DynamicShardplateData(stack);
+		data.setOrder(this.order);
+		data.setLiving(true);
+		if (owner != null)
+		{
+			BondData.of(stack).setBondedEntity(owner);
+		}
+	}
+
+	public ItemStack getBlade()
+	{
+		return blade;
+	}
+
+	public void updateBlade(ItemStack blade, Entity bladeInventory)
+	{
+		this.blade = blade;
+		this.bladeInventory = bladeInventory;
+	}
+
+	public Entity getBladeInventory()
+	{
+		return bladeInventory;
+	}
+
+	public ItemStack getPlate()
+	{
+		return plate;
+	}
+
+	public void updatePlate(ItemStack plate, Entity plateInventory)
+	{
+		this.plate = plate;
+		this.plateInventory = plateInventory;
+	}
+
+	public Entity getPlateInventory()
+	{
+		return plateInventory;
+	}
+
+
 }

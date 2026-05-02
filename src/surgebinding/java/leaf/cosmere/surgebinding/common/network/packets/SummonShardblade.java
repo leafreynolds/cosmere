@@ -76,7 +76,7 @@ public record SummonShardblade() implements ICosmerePacket
 			}
 			else if (itemInHand.getItem() instanceof ShardbladeItem shardbladeItem)
 			{
-				if (shardbladeItem.canSummonDismiss(sender))
+				if (shardbladeItem.canSummonDismiss(sender, itemInHand))
 				{
 					for (int i = 0; i < maxShardblades; i++)
 					{
