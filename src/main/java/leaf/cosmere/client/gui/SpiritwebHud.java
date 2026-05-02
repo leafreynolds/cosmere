@@ -119,18 +119,6 @@ public class SpiritwebHud extends AbstractWidget
 				}
 			}
 
-			// todo this won't work for feruchemy...
-//			if (mode > 0)
-//			{
-//				g = g - 0.4f * mode;
-//				b = b - 0.4f * mode;
-//			}
-//			else if (mode < 0)
-//			{
-//				r = r - 0.4f * -mode;
-//				g = g - 0.4f * -mode;
-//			}
-
 			int color = toHex(new Color(r, g, b, a));
 
 			float width = getWidth();

@@ -107,7 +107,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		collectMenuInfo();
 		double maximum = metalmindMaxChargesMap.getOrDefault(metalType, 0d);
 		double charge = metalmindChargesMap.getOrDefault(metalType, 0d);
-		return (float) (maximum/charge);
+		return (float) (charge/maximum);
 	}
 
 	protected CosmereEffect getTappingEffect()

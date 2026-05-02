@@ -152,9 +152,9 @@ public class InnerRadialButton extends Button
 
 		if (!hasManifestation)
 		{
-			r *= 0.1f;
-			g *= 0.1f;
-			b *= 0.1f;
+			r *= 0.6f;
+			g *= 0.6f;
+			b *= 0.6f;
 		}
 
 		if (isHovered && hasManifestation)
