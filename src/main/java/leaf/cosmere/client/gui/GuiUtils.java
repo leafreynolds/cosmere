@@ -1,8 +1,11 @@
 package leaf.cosmere.client.gui;
 
+import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.api.Metals;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.resources.language.I18n;
 
 import java.awt.*;
 
@@ -12,7 +15,8 @@ public class GuiUtils
 
 	public static final int getInfoBoxWidth(Minecraft minecraft)
 	{
-		return (int) (minecraft.getWindow().getGuiScaledWidth() * 0.2);
+		int maxFontWidth = minecraft.font.width("Feruchemical Duralumin -16"); // widest possible string in English; probably needs a proper translation string
+		return (int) (maxFontWidth*0.8) + 10; // 0.8 because that's the scaling we use in UI elements, and + 10 so it's not jammed up to the edge
 	}
 
 	public static final int getInfoBoxHeight(Minecraft minecraft)

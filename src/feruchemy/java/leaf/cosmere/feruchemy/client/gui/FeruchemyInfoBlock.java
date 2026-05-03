@@ -43,7 +43,12 @@ public class FeruchemyInfoBlock extends AbstractWidget
 
 		pGuiGraphics.fill(x, y, x + width,  y + height, color);
 
+		int mode = manifestation.getMode(spiritweb);
 		String text = I18n.get(manifestation.getTranslationKey());
+		if (mode != 0)
+		{
+			text +=  ((mode > 0) ? " +" + mode : " " + (mode));
+		}
 		float scale = 0.8f;
 		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+10, scale, 0xFFFFFFFF);
 
@@ -73,8 +78,6 @@ public class FeruchemyInfoBlock extends AbstractWidget
 
 			GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+12+font.lineHeight*scale, scale, 0xFFFFFFFF);
 		}
-
-		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+12+font.lineHeight*scale, scale, 0xFFFFFFFF);
 	}
 
 	@Override
