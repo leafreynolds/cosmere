@@ -64,11 +64,22 @@ public class SpiritwebHud extends AbstractWidget
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
 			Manifestation manifestation = spiritweb.getSelectedManifestation();
-			float r, g, b;
-			float a = 0.2f;
-			r = g = b = 1.0f;
 
 			int mode = manifestation.getMode(spiritweb);
+			float r, g, b, a;
+			// yes this is strange, but I'm min-maxxing contrast when a power mode is 0
+			if (mode != 0)
+			{
+				r = GuiUtils.BACKGROUND_COLOR.getRed() / 256.f;
+				g = GuiUtils.BACKGROUND_COLOR.getGreen() / 256.f;
+				b = GuiUtils.BACKGROUND_COLOR.getBlue() / 256.f;
+				a = 0.8f;
+			}
+			else
+			{
+				r = g = b = 0.6f;
+				a = 0.2f;
+			}
 
 			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.FERUCHEMY)
 			{
