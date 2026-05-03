@@ -15,6 +15,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +90,8 @@ public class SpiritwebMenu extends Screen
 							selectedManifestationScreen = registry.getManifestationScreenMap().get(maniType).get();
 							selectedManifestationScreen.init(Minecraft.getInstance(), this.width, this.height);
 						}
-					}), maniType));
+					}), maniType,
+							() -> selectedManifestationType));
 
 					added.set(added.get()+1);
 
@@ -113,13 +115,15 @@ public class SpiritwebMenu extends Screen
 	public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-		selectedManifestation = null;
 		raiseVisibility();
 		final int start = (int) (visibility * 98) << 24;
 		final int end = (int) (visibility * 128) << 24;
 
 		pGuiGraphics.fillGradient(0, 0, width, height, start, end);
 
+		renderInfoBlock(pGuiGraphics);
+
+		selectedManifestation = null;
 		if (selectedManifestationScreen != null)
 		{
 			selectedManifestationScreen.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
@@ -152,6 +156,12 @@ public class SpiritwebMenu extends Screen
 	{
 		// no pause >:(
 		return false;
+	}
+
+	private void renderInfoBlock(GuiGraphics pGuiGraphics)
+	{
+		if (selectedManifestation != null && selectedManifestation.getInfoBlock() != null)
+			selectedManifestation.getInfoBlock().render(pGuiGraphics, 0, 0, 0f);
 	}
 
 	public static void selectManiCallback(Manifestation manifestation)

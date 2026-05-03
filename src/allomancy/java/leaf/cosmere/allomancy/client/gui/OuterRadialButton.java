@@ -94,10 +94,6 @@ public class OuterRadialButton extends Button
 		boolean isHover =isMouseOver(pMouseX, pMouseY);
 		renderSegment(pGuiGraphics, isHover);
 		renderIcon(pGuiGraphics);
-		if (isHover && hasManifestation)
-		{
-			renderInfoBlock(pGuiGraphics);
-		}
 	}
 
 	@Override
@@ -155,12 +151,6 @@ public class OuterRadialButton extends Button
 			playDownSound(Minecraft.getInstance().getSoundManager());
 		}
 		return isMouseOver;
-	}
-
-	@Override
-	public void playDownSound(SoundManager pHandler)
-	{
-		super.playDownSound(pHandler);
 	}
 
 	private double normalizeAngle(double angle)
@@ -290,69 +280,6 @@ public class OuterRadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-
-	private void renderInfoBlock(GuiGraphics pGuiGraphics)
-	{
-		Font font = Minecraft.getInstance().font;
-		int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-		int x = 0;
-		int y = 0;
-		int width = GuiUtils.getInfoBoxWidth(Minecraft.getInstance());
-		int height = GuiUtils.getInfoBoxHeight(Minecraft.getInstance());
-		int color = 0x99333333;
-
-		if (segmentNr <= 1)
-		{
-			// bottom right display
-			x = screenWidth - width - 10;
-			y = screenHeight - height - 10;
-		}
-		else if (segmentNr <= 3)
-		{
-			// bottom left display
-			x = 10;
-			y = screenHeight - height - 10;
-		}
-		else if (segmentNr <= 5)
-		{
-			// top left display
-			x = 10;
-			y = 10;
-		}
-		else if (segmentNr <= 7)
-		{
-			// top right display
-			x = screenWidth - width - 10;
-			y = 10;
-		}
-
-		RenderSystem.disableCull();
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-
-		pGuiGraphics.fill(x, y, x + width,  y + height, color);
-
-		String text = I18n.get(manifestation.getTranslationKey());
-		float scale = 0.8f;
-		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+10, scale, 0xFFFFFFFF);
-
-		int seconds = manifestation.getInvestitureRemaining(spiritweb);
-		int hours = seconds / 3600;
-		int minutes = (seconds % 3600) / 60;
-		seconds = seconds % 60;
-
-		if (hours > 0)
-			text = String.format("%d:%02d:%02d", hours, minutes, seconds);
-		else if (minutes > 0)
-			text = String.format("%d:%02d", minutes, seconds);
-		else if (seconds > 0)
-			text = String.format("%02d", seconds);
-		else
-			text = "Empty";
-
-		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+12+font.lineHeight*scale, scale, 0xFFFFFFFF);
 	}
 
 	private void calculateVertexes(float centerX, float centerY, float innerRadius, float outerRadius, int segmentNr)

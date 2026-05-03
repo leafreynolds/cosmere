@@ -72,11 +72,7 @@ public class SquareButton extends Button
 		renderIcon(pGuiGraphics);
 		renderBorder(pGuiGraphics);
 		if (isHovered)
-		{
-			if (hasManifestation)
-				renderInfoBlock(pGuiGraphics);
 			manifestationConsumer.accept(manifestation);
-		}
 	}
 
 	private void renderBackground(GuiGraphics pGuiGraphics, boolean isHovered)
@@ -231,47 +227,6 @@ public class SquareButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-
-	private void renderInfoBlock(GuiGraphics pGuiGraphics)
-	{
-		Font font = Minecraft.getInstance().font;
-		int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-		int x = 0;
-		int y = 0;
-		int width = GuiUtils.getInfoBoxWidth(Minecraft.getInstance());
-		int height = GuiUtils.getInfoBoxHeight(Minecraft.getInstance());
-		int color = 0x99333333;
-
-		x = screenWidth - width - 10;
-		y = screenHeight - height - 10;
-
-		RenderSystem.disableCull();
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-
-		pGuiGraphics.fill(x, y, x + width,  y + height, color);
-
-		String text = I18n.get(manifestation.getTranslationKey());
-		float scale = 0.8f;
-		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+10, scale, 0xFFFFFFFF);
-
-		int seconds = manifestation.getInvestitureRemaining(spiritweb);
-		int hours = seconds / 3600;
-		int minutes = (seconds % 3600) / 60;
-		seconds = seconds % 60;
-
-		if (hours > 0)
-			text = String.format("%d:%02d:%02d", hours, minutes, seconds);
-		else if (minutes > 0)
-			text = String.format("%d:%02d", minutes, seconds);
-		else if (seconds > 0)
-			text = String.format("%02d", seconds);
-		else
-			text = "Empty";
-
-		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+12+font.lineHeight*scale, scale, 0xFFFFFFFF);
 	}
 
 	public float lerp(float start, float end, float pct) {

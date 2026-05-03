@@ -9,17 +9,22 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.util.function.Supplier;
+
 public class TabButton extends Button
 {
 	private static final int WIDTH = 32;
 	private static final int HEIGHT = 32;
 	private static final int START_Y = 10;
+	private final Supplier<Manifestations.ManifestationTypes> selectedTypeSupplier;
 	public Manifestations.ManifestationTypes manifestation;
 
-	public TabButton(int x, Button.OnPress onPress, Manifestations.ManifestationTypes manifestation)
+	public TabButton(int x, Button.OnPress onPress, Manifestations.ManifestationTypes manifestation, Supplier<Manifestations.ManifestationTypes> selectedTypeSupplier)
 	{
 		super(x, START_Y, WIDTH, HEIGHT, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION);
 		this.manifestation = manifestation;
+
+		this.selectedTypeSupplier = selectedTypeSupplier;
 	}
 
 	@Override
@@ -32,7 +37,7 @@ public class TabButton extends Button
 	private void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY)
 	{
 		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
-		alpha = (SpiritwebMenu.selectedManifestationType == this.manifestation) ? 1.0f : alpha;
+		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = new ResourceLocation(manifestation.getName(), "textures/gui/hud_background.png");
 
 		if (Minecraft.getInstance().getResourceManager().getResource(resourceLocation).isPresent())
@@ -66,7 +71,7 @@ public class TabButton extends Button
 	private void renderIcon(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY)
 	{
 		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
-		alpha = (SpiritwebMenu.selectedManifestationType == this.manifestation) ? 1.0f : alpha;
+		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = new ResourceLocation(manifestation.getName(), "textures/icon/" + manifestation.getName() + ".png");
 		RenderSystem.setShaderTexture(0, resourceLocation);
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);

@@ -12,10 +12,14 @@ import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.GuiUtils;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
+import leaf.cosmere.feruchemy.client.gui.FeruchemyInfoBlock;
 import leaf.cosmere.feruchemy.client.utils.FeruchemyChargeThread;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FeruchemyManifestation extends Manifestation implements IHasMetalType
 {
@@ -210,6 +215,64 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		CosmereEffectInstance currentEffect = EffectsHelper.getNewEffect(effect, data.getLiving(), Math.abs(mode));//todo check this strength
 
 		data.addEffect(currentEffect);
+	}
+
+	@Override
+	public AbstractWidget getInfoBlock()
+	{
+		AtomicReference<FeruchemyInfoBlock> retVal = new AtomicReference<>(null);
+
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent( spiritweb -> {
+			int x = 0;
+			int y = 0;
+			int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+			int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+			int width = GuiUtils.getInfoBoxWidth(Minecraft.getInstance());
+			int height = GuiUtils.getInfoBoxHeight(Minecraft.getInstance());
+
+			switch (this.metalType)
+			{
+				// top left
+				case IRON:
+				case PEWTER:
+				case DURALUMIN:
+				case CHROMIUM:
+					x = 10;
+					y = 10;
+					break;
+				// top right
+				case COPPER:
+				case ZINC:
+				case STEEL:
+				case TIN:
+					x = screenWidth - width - 10;
+					y = 10;
+					break;
+				// bottom left
+				case ALUMINUM:
+				case NICROSIL:
+				case GOLD:
+				case BENDALLOY:
+				case ATIUM:
+					x = 10;
+					y = screenHeight - height - 10;
+					break;
+				// bottom right
+				case CADMIUM:
+				case ELECTRUM:
+				case BRASS:
+				case BRONZE:
+					x = screenWidth - width - 10;
+					y = screenHeight - height - 10;
+					break;
+				default:
+					break;
+			}
+
+			retVal.set(new FeruchemyInfoBlock(x, y, width, height, spiritweb, this));
+		});
+
+		return retVal.get();
 	}
 
 	protected CosmereEffect getEffect(int mode)

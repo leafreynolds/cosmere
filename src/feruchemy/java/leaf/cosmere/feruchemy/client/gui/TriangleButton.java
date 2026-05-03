@@ -77,10 +77,6 @@ public class TriangleButton extends Button
 		boolean isHover = isMouseOver(pMouseX, pMouseY);
 		renderTriangle(pGuiGraphics, isHover);
 		renderIcon(pGuiGraphics);
-		if (isHover && hasManifestation)
-		{
-			renderInfoBlock(pGuiGraphics);
-		}
 	}
 
 	@Override
@@ -268,83 +264,6 @@ public class TriangleButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-
-	private void renderInfoBlock(GuiGraphics pGuiGraphics)
-	{
-		Font font = Minecraft.getInstance().font;
-		int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-		int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-		int x = 0;
-		int y = 0;
-		int width = GuiUtils.getInfoBoxWidth(Minecraft.getInstance());
-		int height = GuiUtils.getInfoBoxHeight(Minecraft.getInstance());
-		int color = 0x99333333;
-
-		boolean isLeft = getX() < screenWidth/2;
-		boolean isTop = getY() < screenHeight/2;
-
-		if (!isLeft && !isTop)
-		{
-			// bottom right display
-			x = screenWidth - width - 10;
-			y = screenHeight - height - 10;
-		}
-		if (isLeft && !isTop)
-		{
-			// bottom left display
-			x = 10;
-			y = screenHeight - height - 10;
-		}
-		if (isLeft && isTop)
-		{
-			// top left display
-			x = 10;
-			y = 10;
-		}
-		if (!isLeft && isTop)
-		{
-			// top right display
-			x = screenWidth - width - 10;
-			y = 10;
-		}
-
-		RenderSystem.disableCull();
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-
-		pGuiGraphics.fill(x, y, x + width,  y + height, color);
-
-		String text = I18n.get(manifestation.getTranslationKey());
-		float scale = 0.8f;
-		GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+10, scale, 0xFFFFFFFF);
-
-		if (metal != Metals.MetalType.NICROSIL)
-		{
-			int seconds = manifestation.getInvestitureRemaining(spiritweb);
-			int hours = seconds / 3600;
-			int minutes = (seconds % 3600) / 60;
-			seconds = seconds % 60;
-
-			if (hours > 0)
-			{
-				text = String.format("%d:%02d:%02d", hours, minutes, seconds);
-			}
-			else if (minutes > 0)
-			{
-				text = String.format("%d:%02d", minutes, seconds);
-			}
-			else if (seconds > 0)
-			{
-				text = String.format("%02d", seconds);
-			}
-			else
-			{
-				text = "Empty";
-			}
-
-			GuiUtils.drawScaledString(font, pGuiGraphics, text, x+5, y+12+font.lineHeight*scale, scale, 0xFFFFFFFF);
-		}
 	}
 
 	private void calculateVertexes(float posX, float posY, float size, float rotation)
