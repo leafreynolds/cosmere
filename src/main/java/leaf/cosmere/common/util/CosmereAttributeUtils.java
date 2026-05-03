@@ -96,7 +96,7 @@ public class CosmereAttributeUtils
 			return;
 		}
 
-		currentStrength = (int) entityAttributeInstance.getValue();
+		currentStrength = (int) entityAttributeInstance.getBaseValue();
 
 		// Let's ensure not to exceed the base value if it's out of range,
 		// even if it will get sanitized
