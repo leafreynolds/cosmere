@@ -54,7 +54,8 @@ public class FillMetalReservesCommand extends ModCommand
 						final Manifestation manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalTypeID);
 						if (spiritweb.hasManifestation(manifestation))
 						{
-							asm.adjustIngestedMetal(metalType, AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get(), true);
+							int amount = metalType.getAllomancyBurnTimeSeconds() * AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get();
+							asm.adjustIngestedMetal(metalType, amount, true);
 						}
 					}
 				}

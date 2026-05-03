@@ -359,7 +359,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	{
 		int ingestedMetal = getIngestedMetal(metalType);
 
-		final int newValue = Math.min(ingestedMetal + amountToAdjust, AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get());
+		final int newValue = Math.min(ingestedMetal + amountToAdjust, AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get() * metalType.getAllomancyBurnTimeSeconds());
 		if (newValue >= 0)
 		{
 			if (doAdjust)
