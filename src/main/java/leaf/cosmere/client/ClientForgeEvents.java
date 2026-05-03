@@ -62,7 +62,7 @@ public class ClientForgeEvents
 	}
 
 	@SubscribeEvent
-	public static void onKey(InputEvent.Key event)
+	public static void onInput(InputEvent event)
 	{
 		final LocalPlayer player = Minecraft.getInstance().player;
 
@@ -86,7 +86,7 @@ public class ClientForgeEvents
 			}
 
 			Manifestation selected = spiritweb.getSelectedManifestation();
-			if (isKeyPressed(event, Keybindings.MANIFESTATIONS_DEACTIVATE))
+			if (Keybindings.MANIFESTATIONS_DEACTIVATE.consumeClick())
 			{
 				// just deactivate
 				Cosmere.packetHandler().sendToServer(new DeactivateManifestationsMessage());
@@ -95,17 +95,17 @@ public class ClientForgeEvents
 			}
 
 			//check keybinds with modifiers first?
-			if (isKeyPressed(event, Keybindings.MANIFESTATION_PREVIOUS))
+			if (Keybindings.MANIFESTATION_PREVIOUS.consumeClick())
 			{
 				Cosmere.packetHandler().sendToServer(new ChangeSelectedManifestationMessage(-1));
 			}
-			else if (isKeyPressed(event, Keybindings.MANIFESTATION_NEXT))
+			else if (Keybindings.MANIFESTATION_NEXT.consumeClick())
 			{
 				Cosmere.packetHandler().sendToServer(new ChangeSelectedManifestationMessage(1));
 			}
 
-			final boolean modeIncreasePressed = isKeyPressed(event, Keybindings.MANIFESTATION_MODE_INCREASE);
-			final boolean modeDecreasedPressed = isKeyPressed(event, Keybindings.MANIFESTATION_MODE_DECREASE);
+			final boolean modeIncreasePressed = Keybindings.MANIFESTATION_MODE_INCREASE.consumeClick();
+			final boolean modeDecreasedPressed = Keybindings.MANIFESTATION_MODE_DECREASE.consumeClick();
 
 			if (modeIncreasePressed || modeDecreasedPressed)
 			{
@@ -127,7 +127,7 @@ public class ClientForgeEvents
 
 			for (Activator activator : Keybindings.activators)
 			{
-				if (isKeyPressed(event, activator.getKeyMapping()))
+				if (activator.getKeyMapping().consumeClick())
 				{
 					Manifestation manifestation = activator.getManifestation();
 					Cosmere.packetHandler().sendToServer(new SetSelectedManifestationMessage(manifestation));
@@ -160,41 +160,27 @@ public class ClientForgeEvents
 			}
 
 			//PowerSaveActivator/Saver
-			if(!(isKeyHeld(Keybindings.ACTIVATE_POWER_SAVE) || isKeyHeld(Keybindings.SAVE_POWER_SAVE)))
-            {
-                return;
-            }
-
-			for (ClientPowerSaveState.PowerSaves powerSave: ClientPowerSaveState.PowerSaves.values())
+			boolean activateSave = Keybindings.ACTIVATE_POWER_SAVE.isDown();
+			boolean savePowerState = Keybindings.SAVE_POWER_SAVE.isDown();
+			if (activateSave || savePowerState)
 			{
-				if(isKeyPressed(event, Keybindings.getKey(powerSave.getNum())))
+				for (ClientPowerSaveState.PowerSaves powerSave : ClientPowerSaveState.PowerSaves.values())
 				{
-					if(isKeyHeld(Keybindings.ACTIVATE_POWER_SAVE))
+					boolean numKeyPressed = Keybindings.getKey(powerSave.getNum()).consumeClick();
+					if (numKeyPressed)
 					{
-						Cosmere.packetHandler().sendToServer(new TogglePowerStateMessage(powerSave.getNum()));
-					}
-					else if(isKeyHeld(Keybindings.SAVE_POWER_SAVE))
-					{
-						Cosmere.packetHandler().sendToServer(new SavePowerStateMessage(powerSave.getNum()));
+						if (activateSave)
+						{
+							Cosmere.packetHandler().sendToServer(new TogglePowerStateMessage(powerSave.getNum()));
+						}
+						else if (savePowerState)
+						{
+							Cosmere.packetHandler().sendToServer(new SavePowerStateMessage(powerSave.getNum()));
+						}
 					}
 				}
 			}
-
 		});
-	}
-
-	private static boolean isKeyPressed(InputEvent.Key event, KeyMapping keyBinding)
-	{
-		return event.getKey() == keyBinding.getKey().getValue() && keyBinding.consumeClick();
-	}
-
-	private static boolean isKeyHeld(KeyMapping keyBinding)
-	{
-		InputConstants.Key key = keyBinding.getKey();
-		return InputConstants.isKeyDown(Minecraft.getInstance()
-				.getWindow()
-				.getWindow(),
-				key.getValue());
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
