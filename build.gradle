@@ -398,10 +398,6 @@ def setupRunConfig(RunConfig runConfig, boolean supportsGameTests, String direct
 
 repositories {
 	maven {
-		// location of the maven that hosts JEI files
-		url "https://dvs1.progwml6.com/files/maven/"
-	}
-	maven {
 		//used for patchouli
 		url "https://maven.blamejared.com/"
 	}
