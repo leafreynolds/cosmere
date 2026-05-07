@@ -11,6 +11,8 @@ import java.awt.*;
 
 public class GuiUtils
 {
+	public static final Color POSITIVE_USE_COLOR = new Color(255, 0, 0);
+	public static final Color NEGATIVE_USE_COLOR = new Color(0, 0, 255);
 	public static final Color BACKGROUND_COLOR = new Color(61, 61, 71);
 
 	public static final int getInfoBoxWidth(Minecraft minecraft)
@@ -31,6 +33,22 @@ public class GuiUtils
 		pGuiGraphics.pose().scale(scale, scale, 1.0f);
 		pGuiGraphics.drawString(font, text, 0, 0, color, false);
 		pGuiGraphics.pose().popPose();
+	}
+
+	public static Color shiftColor(Color input, float intensity, Color target)
+	{
+		float r = input.getRed()/256.f, g = input.getGreen()/256.f, b = input.getBlue()/256.f;
+		float tR = target.getRed()/256.f, tG = target.getGreen()/256.f, tB = target.getBlue()/256.f;
+
+		r = lerp(r, tR, intensity);
+		g = lerp(g, tG, intensity);
+		b = lerp(b, tB, intensity);
+
+		return new Color(r, g, b);
+	}
+
+	public static float lerp(float start, float end, float pct) {
+		return start + pct * (end - start);
 	}
 
 	public record CachedQuad(float px, float py, float size) {}

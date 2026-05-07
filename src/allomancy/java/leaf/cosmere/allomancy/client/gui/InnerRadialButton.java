@@ -170,37 +170,29 @@ public class InnerRadialButton extends Button
 
 	private void renderSegment(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r = GuiUtils.BACKGROUND_COLOR.getRed()/255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen()/255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue()/255.f;
-		float a = 1f;
+		Color color = GuiUtils.BACKGROUND_COLOR;
 
 		if (!hasManifestation)
 		{
-			r *= 0.6f;
-			g *= 0.6f;
-			b *= 0.6f;
+			color = color.darker();
 		}
 
 		if (isHovered && hasManifestation)
 		{
-			r *= 1.1f;
-			g *= 1.1f;
-			b *= 1.1f;
+			color = color.brighter();
 		}
 
 		if (manifestation instanceof AllomancyManifestation allomancyManifestation) {
 			int mode = allomancyManifestation.getMode(spiritweb);
-			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f); // Cap intensity
+			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f);
 
-			if (mode > 0) {
-				// Blend toward pure red
-				r = lerp(r, 1.0f, intensity);
-				g = lerp(g, 0.0f, intensity);
-				b = lerp(b, 0.0f, intensity);
-			} else if (mode < 0) {
-				// Blend toward pure blue
-				r = lerp(r, 0.0f, intensity);
-				g = lerp(g, 0.0f, intensity);
-				b = lerp(b, 1.0f, intensity);
+			if (mode > 0)
+			{
+				color = GuiUtils.shiftColor(color, intensity, GuiUtils.POSITIVE_USE_COLOR);
+			}
+			else if (mode < 0)
+			{
+				color = GuiUtils.shiftColor(color, intensity, GuiUtils.NEGATIVE_USE_COLOR);
 			}
 		}
 
@@ -221,10 +213,10 @@ public class InnerRadialButton extends Button
 			float py = quad.py();
 			float size = quad.size();
 
-			buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px, py + size, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px + size, py + size, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px + size, py, 0).color(r, g, b, a).endVertex();
+			buf.vertex(pose, px, py, 0).color(color.getRGB()).endVertex();
+			buf.vertex(pose, px, py + size, 0).color(color.getRGB()).endVertex();
+			buf.vertex(pose, px + size, py + size, 0).color(color.getRGB()).endVertex();
+			buf.vertex(pose, px + size, py, 0).color(color.getRGB()).endVertex();
 		}
 
 		tess.end();
@@ -318,9 +310,5 @@ public class InnerRadialButton extends Button
 				}
 			}
 		}
-	}
-
-	public float lerp(float start, float end, float pct) {
-		return start + pct * (end - start);
 	}
 }
