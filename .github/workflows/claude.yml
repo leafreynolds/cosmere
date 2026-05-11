@@ -10,6 +10,10 @@ on:
   pull_request_review:
     types: [submitted]
 
+concurrency:
+  group: claude-mention-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
 jobs:
   claude:
     if: |
@@ -40,11 +44,10 @@ jobs:
           additional_permissions: |
             actions: read
 
-          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
-
-          # Optional: Add claude_args to customize behavior and configuration
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr:*)'
+          # No `prompt:` is set — the @claude mention's comment body is the user's
+          # instruction. The `--append-system-prompt` below adds standing behavioural
+          # guidance without overriding that.
+          claude_args: |
+            --append-system-prompt "You are being invoked from an @claude mention on a GitHub issue or PR. The user's actual instruction is the comment that triggered this run — do that. Before acting: (1) Read the surrounding conversation — for PRs, run 'gh pr view --comments' and 'gh api repos/<repo>/pulls/<n>/reviews' and 'gh api repos/<repo>/pulls/<n>/comments'; for issues, 'gh issue view --comments'. (2) If you have replied earlier in this thread, build on that — do not restate or contradict yourself. (3) If a point has already been raised and the author has addressed or rejected it with reasoning, treat it as resolved; do not re-litigate. (4) Be concise. A short focused answer beats one padded with restated context or minor nits. When the request is a Java/Forge code review, apply this priority order: client/server sided code → thread safety → capability lookups → registry correctness via DeferredRegister → mixin safety → performance → NBT/network correctness → NPE/cast risk → code quality."
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh issue comment:*),Bash(gh issue view:*),Bash(gh api:*)"
 

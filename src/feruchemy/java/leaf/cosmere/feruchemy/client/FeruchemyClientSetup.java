@@ -5,6 +5,9 @@
 package leaf.cosmere.feruchemy.client;
 
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.Manifestations;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
+import leaf.cosmere.feruchemy.client.gui.FeruchemySpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.feruchemy.client.gui.NicrosilMenu;
 import leaf.cosmere.feruchemy.client.render.FeruchemyLayerDefinitions;

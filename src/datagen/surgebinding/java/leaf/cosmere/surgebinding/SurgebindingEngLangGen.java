@@ -22,7 +22,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.List;
 
-import static leaf.cosmere.api.Constants.Strings.KEY_SHARDBLADE;
+import static leaf.cosmere.api.Constants.Strings.*;
 import static leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes.SURGEBINDING_ATTRIBUTES;
 
 public class SurgebindingEngLangGen extends LanguageProvider
@@ -183,6 +183,9 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addKeybindings()
 	{
 		add(KEY_SHARDBLADE, "Summon/Dismiss Shardblade");
+		add(KEY_REQUEST_STORMLIGHT, "Request Stormlight");
+		add(KEY_DISPATCH_STORMLIGHT, "Dispatch Stormlight");
+		add("keys.surgebinding.main", "Surgebinding");
 	}
 
 	private void addStats()

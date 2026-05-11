@@ -7,7 +7,11 @@ package leaf.cosmere.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import leaf.cosmere.api.Activator;
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.client.gui.SpiritwebHud;
+import leaf.cosmere.client.gui.SpiritwebMenu;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.fog.FogManager;
@@ -67,6 +71,18 @@ public class ClientForgeEvents
 
 		SpiritwebCapability.get(player).ifPresent(spiritweb ->
 		{
+			if (Keybindings.MANIFESTATION_MENU.consumeClick())
+			{
+				SpiritwebRegistry.getInstance().clear();
+				SpiritwebCapability.get(player).ifPresent( (iSpiritweb ->
+				{
+					iSpiritweb.getSubmodules().forEach( ((manifestationTypes, iSpiritwebSubmodule) -> {
+						iSpiritwebSubmodule.registerMenu();
+					}));
+				}));
+				Minecraft.getInstance().setScreen(new SpiritwebMenu(Component.literal("Spiritweb Menu"), spiritweb));
+			}
+
 			Manifestation selected = spiritweb.getSelectedManifestation();
 			if (isKeyPressed(event, Keybindings.MANIFESTATIONS_DEACTIVATE))
 			{

@@ -5,7 +5,6 @@
 package leaf.cosmere.client;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.client.gui.ISyncSpiritweb;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.client.render.CosmereRenderers;
 import leaf.cosmere.common.Cosmere;
@@ -41,25 +40,16 @@ public class ClientModEvents
 		event.registerBelow(
 				VanillaGuiLayers.DEBUG_OVERLAY,
 				Cosmere.rl("spiritweb_hud"),
-				(guiGraphics, deltaTracker) -> renderSpiritwebHUD(guiGraphics)
+				(guiGraphics, deltaTracker) ->
+				{
+					final Minecraft mc = Minecraft.getInstance();
+					if (mc.screen instanceof SpiritwebMenu)
+					{
+						return;
+					}
+					SpiritwebCapability.get(mc.player).ifPresent(cap ->
+							cap.getSpiritwebHud().render(guiGraphics, 0, 0, deltaTracker.getGameTimeDeltaPartialTick(true)));
+				}
 		);
-	}
-
-	public static void renderSpiritwebHUD(final GuiGraphics guiGraphics)
-	{
-		final Minecraft mc = Minecraft.getInstance();
-		SpiritwebCapability.get(mc.player).ifPresent(cap ->
-		{
-			SpiritwebCapability spiritweb = (SpiritwebCapability) cap;
-
-			//normal hud stuff
-			if (!(mc.screen instanceof ISyncSpiritweb))
-			{
-				spiritweb.renderSelectedHUD(guiGraphics);
-			}
-
-			//actual menu stuff
-			SpiritwebMenu.instance.postRender(spiritweb);
-		});
 	}
 }

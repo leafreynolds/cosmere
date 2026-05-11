@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common.capabilities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import leaf.cosmere.allomancy.client.gui.AllomancySpiritwebMenu;
 import leaf.cosmere.allomancy.client.metalScanning.IronSteelLinesThread;
 import leaf.cosmere.allomancy.client.metalScanning.ScanResult;
 import leaf.cosmere.allomancy.common.Allomancy;
@@ -23,7 +24,9 @@ import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -309,23 +312,6 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void collectMenuInfo(List<String> m_infoText)
-	{
-		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
-		{
-			int value = METALS_INGESTED.get(metalType);
-
-			if (value > 0)
-			{
-				//todo localisation check
-				final String text = "A. " + metalType.getName() + ": " + value;
-				m_infoText.add(text);
-			}
-		}
-	}
-
-	@Override
 	public void GiveStartingItem(Player player)
 	{
 		ItemStack itemStack = new ItemStack(AllomancyItems.METAL_VIAL.get());
@@ -354,6 +340,16 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				.map((AttributeRegistryObject::getAttribute)).collect(Collectors.toList());
 	}
 
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerMenu()
+	{
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent( (spiritweb) -> {
+			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.ALLOMANCY))
+				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.ALLOMANCY, AllomancySpiritwebMenu::new);
+		});
+	}
+
 	public int getIngestedMetal(Metals.MetalType metalType)
 	{
 		return METALS_INGESTED.get(metalType);
@@ -363,7 +359,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	{
 		int ingestedMetal = getIngestedMetal(metalType);
 
-		final int newValue = ingestedMetal + amountToAdjust;
+		final int newValue = Math.min(ingestedMetal + amountToAdjust, AllomancyConfigs.SERVER.MAX_INGESTIBLE_METAL.get());
 		if (newValue >= 0)
 		{
 			if (doAdjust)

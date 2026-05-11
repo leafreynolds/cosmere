@@ -10,10 +10,13 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.manifestation.Manifestation;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -30,6 +33,8 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	boolean hasManifestation(Manifestation manifestation);
 
 	boolean hasManifestation(Manifestation manifestation, boolean ignoreTemporaryPower);
+
+	boolean hasManifestationOfType(Manifestations.ManifestationTypes type);
 
 	void giveManifestation(Manifestation manifestation, int i);
 
@@ -103,5 +108,8 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 	void saveNewState(int num);
 
 	void activatePowerState(int num);
+
+	@OnlyIn(Dist.CLIENT)
+	AbstractWidget getSpiritwebHud();
 
 }

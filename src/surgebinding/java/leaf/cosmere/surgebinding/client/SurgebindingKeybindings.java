@@ -50,7 +50,7 @@ public class SurgebindingKeybindings
 			SurgebindingManifestation manifest = (SurgebindingManifestation) SURGEBINDING_POWERS.get(surge).getManifestation();
 			event.register(key);
 			Activator entry = new Activator(key, manifest);
-			entry.setCategory("stormlight");
+			entry.setCategory("keys.surgebinding.main");
 			Keybindings.activators.add(entry);
 		}
 

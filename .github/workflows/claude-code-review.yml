@@ -2,10 +2,21 @@ name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
+    types: [opened, ready_for_review, reopened]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: string
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+  cancel-in-progress: true
 
 jobs:
   claude-review:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,6 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          ref: refs/pull/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/merge
 
       - name: Run Claude Code Review
         id: claude-review
@@ -25,11 +37,23 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
+            PR NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
 
             You are a senior Minecraft mod developer reviewing a Forge mod written in Java. You have deep knowledge of how Minecraft's engine works, including its server/client architecture, tick loop, threading model, and mod API conventions. Be thorough and detail-oriented.
 
-            Review this pull request with focus on the following, roughly in priority order:
+            **STEP 1 — Read the existing PR conversation before reviewing.**
+
+            Run these and read the output carefully:
+            - `gh pr view <PR> --comments` — top-level discussion
+            - `gh api repos/<repo>/pulls/<PR>/reviews` — prior submitted reviews (including yours from earlier runs)
+            - `gh api repos/<repo>/pulls/<PR>/comments` — inline review threads with replies
+
+            Use that history to constrain what you post:
+            - **Do not repeat suggestions.** If you (or another reviewer) have already raised a point on this PR, do not raise it again, even if the code still hasn't changed. Once is enough.
+            - **Honour author responses.** If the PR author has replied explaining why a suggestion was rejected, dismissed, deferred, or is out of scope, treat it as resolved. Do not re-litigate it. Only push back if you have a substantively new technical argument the author did not address.
+            - **Silence beats noise.** It is better to post a single short comment saying "reviewed the latest changes — no new issues found" than to restate concerns that are already in the thread. If you genuinely have nothing new to add, say so briefly and stop. Do NOT pad the review with minor stylistic nits to look thorough.
+
+            **STEP 2 — Review focus**, in priority order. Only raise points that are NEW relative to the existing thread:
 
             **Minecraft-specific correctness**
             - Client/server sided code: flag any code that touches client-only APIs (e.g. Minecraft.getInstance(), rendering, KeyBindings) without proper sided guards (@OnlyIn, DistExecutor, or client event handlers). This is the most common crash cause.
@@ -55,9 +79,9 @@ jobs:
 
             Note: The PR branch is already checked out in the current working directory.
 
-            Use `gh pr comment` for a top-level summary of your findings.
-            Use `mcp__github_inline_comment__create_inline_comment` (with `confirmed: true`) to flag specific lines.
-            Only post GitHub comments - don't submit review text as messages.
+            **STEP 3 — Post results.**
+            - Use `gh pr comment` for a top-level summary of NEW findings only. If there are no new findings, post a single brief comment stating that and stop.
+            - Use `mcp__github_inline_comment__create_inline_comment` (with `confirmed: true`) to flag specific lines, but only for issues not already flagged in an existing inline thread.
+            - Only post GitHub comments — don't submit review text as messages.
           claude_args: |
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
-
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh api:*)"
