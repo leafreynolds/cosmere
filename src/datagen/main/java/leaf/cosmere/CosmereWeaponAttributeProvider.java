@@ -31,10 +31,6 @@ public abstract class CosmereWeaponAttributeProvider implements DataProvider
 		return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
 	}
 
-	/**
-	 * Override this in your mod-specific subclass to register weapon attributes.
-	 * Call consumer.accept(name, parent) for each item.
-	 */
 	protected abstract void registerWeaponAttributes(BiConsumer<String, String> consumer);
 
 	private CompletableFuture<?> saveWeaponAttribute(CachedOutput cache, String name, String parent)
