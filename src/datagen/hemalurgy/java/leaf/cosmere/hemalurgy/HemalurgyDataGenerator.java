@@ -9,11 +9,11 @@ import leaf.cosmere.hemalurgy.patchouli.HemalurgyPatchouliGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -34,6 +34,7 @@ public class HemalurgyDataGenerator
 		generator.addProvider(true, new HemalurgyRecipeGen(packOutput, lookupProvider));
 		generator.addProvider(true, new HemalurgyPatchouliGen(packOutput));
 		generator.addProvider(event.includeServer(), new HemalurgyCuriosProvider(packOutput, existingFileHelper, lookupProvider));
+		generator.addProvider(event.includeServer(), new HemalurgyWeaponAttributeProvider(packOutput));
 	}
 
 }
