@@ -34,6 +34,8 @@ public class GodMetalAlloyNuggetRecipe extends CustomRecipe
 	@Override
 	public boolean matches(CraftingInput inv, @Nonnull Level world)
 	{
+		if (inv.width() != 3 || inv.height() != 3) return false;
+
 		Ingredient INGREDIENT_GOD_METAL_NUG = Ingredient.of(
 				ItemsRegistry.GOD_METAL_NUGGETS.get(MetalType.LERASIUM).getItemStack(),
 				ItemsRegistry.GOD_METAL_NUGGETS.get(MetalType.LERASATIUM).getItemStack()

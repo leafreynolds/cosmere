@@ -1,6 +1,6 @@
-// 1.21.1	2026-05-16T02:02:42.4609959	Tags: cosmeretools
-fadd263bd5164a3ea8032c9cbf4cd665c0bf5fa5 data/minecraft/tags/item/axes.json
-d0335d39501aab4f312d0336ca72ceaafd8dd925 data/minecraft/tags/item/hoes.json
-f8bd20414448a6c873f483931d6f9000232d0255 data/minecraft/tags/item/pickaxes.json
-84d7d50a788ffdbea5f40e32cb9a3a0d78f076ab data/minecraft/tags/item/shovels.json
-7091f1caef6009dd7f552f8411b11b3b40dfe2ec data/minecraft/tags/item/swords.json
+// 1.21.1	2026-05-04T17:06:14.7657907	Tags: cosmeretools
+163552520652083ac674724ff49c4460e8f2d768 data/minecraft/tags/item/axes.json
+d1158444eb4aba92178f2b2c72663d3c1a5336ba data/minecraft/tags/item/hoes.json
+41687b569327f99da7a266a41dff18eaaa5e2316 data/minecraft/tags/item/pickaxes.json
+679f5a46d60d75b575ab3c4f85341fa56fbdd16a data/minecraft/tags/item/shovels.json
+ca4531da1b6fb5fe795b79d7a2f4580461b0e71d data/minecraft/tags/item/swords.json
