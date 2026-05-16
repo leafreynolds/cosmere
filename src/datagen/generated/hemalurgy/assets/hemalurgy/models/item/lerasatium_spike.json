@@ -1,5 +1,41 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "translation": [
+        0,
+        2,
+        1
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        33.75,
+        -90,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "translation": [
+        0,
+        2,
+        1
+      ]
+    }
+  },
   "textures": {
     "layer0": "hemalurgy:item/lerasatium_spike"
   }

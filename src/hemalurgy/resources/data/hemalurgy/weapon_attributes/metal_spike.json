@@ -1,0 +1,21 @@
+{
+  "attributes": {
+    "range_bonus": -0.5,
+    "two_handed": false,
+    "category": "dagger",
+    "attacks": [
+      {
+        "hitbox": "FORWARD_BOX",
+        "damage_multiplier": 1,
+        "upswing": 0.5,
+        "animation": "bettercombat:one_handed_stab",
+        "swing_sound": {
+          "id": "bettercombat:spear_stab"
+        },
+        "impact_sound": {
+          "id": "bettercombat:hammer_slam"
+        }
+      }
+    ]
+  }
+}

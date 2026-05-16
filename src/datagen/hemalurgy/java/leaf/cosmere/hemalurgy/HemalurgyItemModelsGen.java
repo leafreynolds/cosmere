@@ -11,6 +11,7 @@ import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.SwordItem;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -55,7 +56,7 @@ public class HemalurgyItemModelsGen extends ItemModelProvider
 			}
 
 			//else normal item texture rules apply
-			simpleItem(path, path);
+			spikeItem(path, path);
 		}
 
 	}
@@ -66,10 +67,22 @@ public class HemalurgyItemModelsGen extends ItemModelProvider
 		return location.getPath();
 	}
 
-	public ItemModelBuilder simpleItem(String path, String texturePath)
+	private ItemModelBuilder spikeItem(String path, String texturePath)
 	{
 		return this.getBuilder(path)
-				.parent(new ModelFile.UncheckedModelFile("item/generated"))
-				.texture("layer0", modLoc("item/" + texturePath));
+				.parent(new ModelFile.UncheckedModelFile("minecraft:item/handheld"))
+				.texture("layer0", modLoc("item/" + texturePath))
+				.transforms()
+				.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+				.rotation(33.75f, -90f, 0f)
+				.scale(0.5f, 0.5f, 0.5f)
+				.translation(0f, 2f, 1f)
+				.end()
+				.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+				.rotation(0f, -90f, 0f)
+				.scale(0.5f, 0.5f, 0.5f)
+				.translation(0f, 2f, 1f)
+				.end()
+				.end();
 	}
 }
