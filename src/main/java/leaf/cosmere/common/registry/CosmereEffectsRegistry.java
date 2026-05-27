@@ -10,6 +10,7 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.effects.DrainInvestitureEffect;
 import leaf.cosmere.common.registration.impl.CosmereEffectDeferredRegister;
 import leaf.cosmere.common.registration.impl.CosmereEffectRegistryObject;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 
 public class CosmereEffectsRegistry
@@ -22,8 +23,8 @@ public class CosmereEffectsRegistry
 			"drain_investiture",
 			DrainInvestitureEffect::new);
 
-	public static CosmereEffect fromID(ResourceLocation location)
+	public static Holder<CosmereEffect> fromID(ResourceLocation location)
 	{
-		return CosmereAPI.cosmereEffectRegistry().getValue(location);
+		return CosmereAPI.cosmereEffectRegistry().getHolder(location).get();
 	}
 }

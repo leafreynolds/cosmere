@@ -3,7 +3,6 @@ package leaf.cosmere.common.registration.impl;
 import com.google.common.collect.ImmutableSet;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -21,8 +20,8 @@ public class VillagerProfessionDeferredRegister extends WrappedDeferredRegister<
 
 	private static VillagerProfession registerProfession(String name, POITypeRegistryObject<PoiType> poi, SoundEvent workSound)
 	{
-		Predicate<Holder<PoiType>> heldJobSite = (poiType) -> poiType == poi.getRegistryObject().getHolder().get();
-		Predicate<Holder<PoiType>> acquirableJobSite = (poiType) -> poiType == poi.getRegistryObject().getHolder().get();
+		Predicate<Holder<PoiType>> heldJobSite = (poiType) -> poiType == poi.getHolder();
+		Predicate<Holder<PoiType>> acquirableJobSite = (poiType) -> poiType == poi.getHolder();
 
 		return new VillagerProfession(
 				name,

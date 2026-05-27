@@ -4,7 +4,7 @@
 
 package leaf.cosmere.common.registration.impl;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
@@ -19,7 +19,7 @@ public class HeightProviderTypeDeferredRegister extends WrappedDeferredRegister<
 		super(modid, Registries.HEIGHT_PROVIDER_TYPE);
 	}
 
-	public <PROVIDER extends HeightProvider> HeightProviderTypeRegistryObject<PROVIDER> register(String name, Codec<PROVIDER> codec)
+	public <PROVIDER extends HeightProvider> HeightProviderTypeRegistryObject<PROVIDER> register(String name, MapCodec<PROVIDER> codec)
 	{
 		return register(name, () -> () -> codec);
 	}

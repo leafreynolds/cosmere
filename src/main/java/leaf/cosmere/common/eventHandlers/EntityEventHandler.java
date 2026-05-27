@@ -16,6 +16,8 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.config.CosmereServerConfig;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -33,16 +35,14 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LootingLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Cosmere.MODID)
 public class EntityEventHandler
 {
 
@@ -116,7 +116,7 @@ public class EntityEventHandler
 			else if (eventEntity instanceof Warden warden)
 			{
 				//todo move this out
-				final Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation("allomancy:bronze"));
+				final Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse("allomancy:bronze")).get();
 				if (attribute == null)
 				{
 					return;
@@ -323,38 +323,21 @@ public class EntityEventHandler
 
 
 	@SubscribeEvent
-	public static void onLivingTick(LivingEvent.LivingTickEvent event)
+	public static void onLivingTick(EntityTickEvent.Pre event)
 	{
-		SpiritwebCapability.get(event.getEntity()).ifPresent(ISpiritweb::tick);
-	}
-
-
-	@SubscribeEvent
-	public static void onLootingLevelEvent(LootingLevelEvent event)
-	{
-		if (event.getDamageSource() == null)
-		{
-			return;
-		}
-		if (!event.getEntity().level().isClientSide && event.getDamageSource().getEntity() instanceof LivingEntity sourceLiving)
-		{
-			int total = (int) EntityHelper.getAttributeValue(sourceLiving, AttributesRegistry.COSMERE_FORTUNE.getAttribute());
-			if (total != 0)
-			{
-				event.setLootingLevel(event.getLootingLevel() + total);
-			}
-		}
+		if (event.getEntity() instanceof LivingEntity livingEntity)
+			SpiritwebCapability.get(livingEntity).ifPresent(ISpiritweb::tick);
 	}
 
 	@SubscribeEvent
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingIncomingDamageEvent event)
 	{
 		if (event.isCanceled())
 		{
 			return;
 		}
 
-		float total = (float) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.DETERMINATION.getAttribute());
+		float total = (float) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.DETERMINATION.getHolder());
 
 		//ignore if no determination changes, players default to 0
 		//should we todo config this?

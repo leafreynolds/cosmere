@@ -1,70 +1,64 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 2026-04-23 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.common.network.packets;
 
-import leaf.cosmere.api.CosmereAPI;
+import io.netty.buffer.ByteBuf;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.common.registry.ManifestationRegistry;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class ChangeManifestationModeMessage implements ICosmerePacket
+public record ChangeManifestationModeMessage(Manifestation manifestation, int modifier) implements ICosmerePacket
 {
-	Manifestation manifestation;
-	int modifier;
+	public static final CustomPacketPayload.Type<ChangeManifestationModeMessage> TYPE =
+			new CustomPacketPayload.Type<>(Cosmere.rl("change_manifestation_mode"));
 
-	public ChangeManifestationModeMessage(Manifestation manifestation, int dir)
+	public static final StreamCodec<ByteBuf, ChangeManifestationModeMessage> STREAM_CODEC =
+			StreamCodec.composite(
+					ByteBufCodecs.STRING_UTF8, msg -> msg.manifestation.getRegistryName().toString(),
+					ByteBufCodecs.VAR_INT, ChangeManifestationModeMessage::modifier,
+					(location, mod) -> new ChangeManifestationModeMessage(ManifestationRegistry.fromID(location), mod)
+			);
+
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
-		this.manifestation = manifestation;
-		this.modifier = dir;
+		return TYPE;
 	}
 
 	@Override
-	public void handle(NetworkEvent.Context context)
+	public void handle(IPayloadContext context)
 	{
-		ServerPlayer sender = context.getSender();
-		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((data) ->
+		if (!(context.player() instanceof ServerPlayer sender))
 		{
-			int finalModifier = manifestation.getModeModifier(data, manifestation, modifier);
-			if (finalModifier == 1)
-			{
-				data.nextMode(manifestation);
-			}
-			else if (finalModifier == -1)
-			{
-				data.previousMode(manifestation);
-			}
-			else if (finalModifier != 0)
-			{
-				int newMode = finalModifier + manifestation.getMode(data);
-				data.setMode(manifestation, newMode);
-			}
-
-			data.syncToClients(null);
-		}));
-		context.setPacketHandled(true);
+			return;
+		}
+		context.enqueueWork(() ->
+				SpiritwebCapability.get(sender).ifPresent((data) ->
+				{
+					int finalModifier = manifestation.getModeModifier(data, manifestation, modifier);
+					if (finalModifier == 1)
+					{
+						data.nextMode(manifestation);
+					}
+					else if (finalModifier == -1)
+					{
+						data.previousMode(manifestation);
+					}
+					else if (finalModifier != 0)
+					{
+						int newMode = finalModifier + manifestation.getMode(data);
+						data.setMode(manifestation, newMode);
+					}
+					data.syncToClients(null);
+				}));
 	}
-
-	@Override
-	public void encode(FriendlyByteBuf buf)
-	{
-		String namespace = manifestation.getRegistryName().toString();
-		buf.writeUtf(namespace);
-		buf.writeInt(modifier);
-	}
-
-	public static ChangeManifestationModeMessage decode(FriendlyByteBuf buf)
-	{
-		String location = buf.readUtf();
-		final int dir = buf.readInt();
-		return new ChangeManifestationModeMessage(ManifestationRegistry.fromID(location), dir);
-	}
-
 }

@@ -14,13 +14,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.item.*;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +53,7 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		Integer size = readMetalAlloySizeNbtData(stack);
 
@@ -88,7 +84,6 @@ public class GodMetalAlloyNuggetItem extends AlloyNuggetItem implements IHasSize
 		}
 	}
 
-	@Override
 	public Rarity getRarity(ItemStack itemStack)
 	{
 		Integer size = readMetalAlloySizeNbtData(itemStack);

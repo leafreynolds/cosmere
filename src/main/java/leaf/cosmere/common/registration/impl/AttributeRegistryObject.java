@@ -2,13 +2,14 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.common.registration.WrappedRegistryObject;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class AttributeRegistryObject<ATTRIBUTE extends Attribute> extends WrappedRegistryObject<ATTRIBUTE> implements IAttributeProvider
 {
-	public AttributeRegistryObject(RegistryObject<ATTRIBUTE> registryObject)
+	public AttributeRegistryObject(DeferredHolder<Attribute, ATTRIBUTE> registryObject)
 	{
 		super(registryObject);
 	}
@@ -18,6 +19,12 @@ public class AttributeRegistryObject<ATTRIBUTE extends Attribute> extends Wrappe
 	public ATTRIBUTE getAttribute()
 	{
 		return get();
+	}
+
+	@NotNull
+	public Holder<Attribute> getHolder()
+	{
+		return (DeferredHolder<Attribute, ATTRIBUTE>) registryObject;
 	}
 
 }

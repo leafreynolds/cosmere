@@ -38,7 +38,7 @@ public class TabButton extends Button
 	{
 		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
 		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 1.0f : alpha;
-		final ResourceLocation resourceLocation = new ResourceLocation(manifestation.getName(), "textures/gui/hud_background.png");
+		final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getName(), "textures/gui/hud_background.png");
 
 		if (Minecraft.getInstance().getResourceManager().getResource(resourceLocation).isPresent())
 		{
@@ -72,7 +72,7 @@ public class TabButton extends Button
 	{
 		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
 		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 1.0f : alpha;
-		final ResourceLocation resourceLocation = new ResourceLocation(manifestation.getName(), "textures/icon/" + manifestation.getName() + ".png");
+		final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getName(), "textures/icon/" + manifestation.getName() + ".png");
 		RenderSystem.setShaderTexture(0, resourceLocation);
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, alpha);
 

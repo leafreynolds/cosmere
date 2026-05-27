@@ -6,8 +6,7 @@ package leaf.cosmere.common.world.height;
 
 import leaf.cosmere.common.resource.ore.OreAnchor;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -18,22 +17,22 @@ import java.util.function.Supplier;
 public record ConfigurableVerticalAnchor(Supplier<AnchorType> anchorType, Supplier<Integer> value)
 {
 
-	public static ConfigurableVerticalAnchor create(ForgeConfigSpec.Builder builder,
+	public static ConfigurableVerticalAnchor create(ModConfigSpec.Builder builder,
 	                                                String path,
 	                                                String comment,
 	                                                OreAnchor defaultAnchor,
 	                                                @Nullable ConfigurableVerticalAnchor minAnchor)
 	{
 		builder.comment(comment).push(path);
-		ForgeConfigSpec.EnumValue<AnchorType> type = builder.comment(
+		ModConfigSpec.EnumValue<AnchorType> type = builder.comment(
 						"Type of anchor.",
 						"Absolute -> y = value",
 						"Above Bottom -> y = minY + value",
 						"Below Top -> y = depth - 1 + minY - value")
 				.defineEnum("type", defaultAnchor.type());
 
-		ForgeConfigSpec.Builder valueBuilder = builder.comment("Value used for calculating y for the anchor based on the type.");
-		ConfigValue<Integer> value;
+		ModConfigSpec.Builder valueBuilder = builder.comment("Value used for calculating y for the anchor based on the type.");
+		ModConfigSpec.ConfigValue<Integer> value;
 
 		if (minAnchor == null)
 		{

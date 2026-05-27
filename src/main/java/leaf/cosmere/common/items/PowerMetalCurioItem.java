@@ -13,16 +13,17 @@ import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
@@ -43,13 +44,6 @@ public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICur
 	public Metals.MetalType getMetalType()
 	{
 		return this.metalType;
-	}
-
-
-	@Override
-	public List<Component> getAttributesTooltip(List<Component> tooltips, ItemStack stack)
-	{
-		return ICurioItem.super.getAttributesTooltip(tooltips, stack);
 	}
 
 	@Override
@@ -79,8 +73,8 @@ public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICur
 	@Override
 	public boolean isFoil(ItemStack itemStack)
 	{
-		Attribute[] attributes = getAttributes(itemStack);
-		for (Attribute attribute : attributes)
+		List<Holder<Attribute>> attributes = getAttributes(itemStack);
+		for (Holder<Attribute> attribute : attributes)
 		{
 			if (attribute != null)
 			{
@@ -92,11 +86,11 @@ public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICur
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, context, tooltip, flagIn);
 
-		Attribute[] attributes = getAttributes(stack);
+		List<Holder<Attribute>> attributes = getAttributes(stack);
 		Integer[] attributeStrengths = getAttributeStrengths(stack);
 
 		String attunedPlayerName = getAttunedPlayerName(stack);
@@ -121,10 +115,10 @@ public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICur
 		}
 
 		boolean isFirst = true;
-		for (int i = 0; i < attributes.length; i++)
+		for (int i = 0; i < attributes.size(); i++)
 		{
 
-			if (attributes[i] != null && attributeStrengths[i] != null)
+			if (attributes.get(i) != null && attributeStrengths[i] != null)
 			{
 				if (isFirst)
 				{
@@ -133,7 +127,7 @@ public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICur
 				}
 
 				tooltip.add(Component.literal("+" + attributeStrengths[i] + " ").append(
-								Component.translatable(attributes[i].getDescriptionId()))
+								Component.translatable(attributes.get(i).getRegisteredName()))
 						.withStyle(ChatFormatting.BLUE));
 			}
 		}

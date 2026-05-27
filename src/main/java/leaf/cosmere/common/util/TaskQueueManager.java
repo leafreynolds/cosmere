@@ -7,11 +7,11 @@ package leaf.cosmere.common.util;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.common.Cosmere;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayDeque;
@@ -112,14 +112,14 @@ public class TaskQueueManager
 
 	}
 
-	@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+	@EventBusSubscriber(modid = Cosmere.MODID)
 	public static class Impl
 	{
 
 		private static final Queue<Pair<ResourceLocation, Task>> TASKS = new ArrayDeque<>();
 
 		@SubscribeEvent
-		public static void tick(TickEvent.ServerTickEvent e)
+		public static void tick(ServerTickEvent.Pre e)
 		{
 			Iterator<Pair<ResourceLocation, Task>> it = TASKS.iterator();
 			Pair<ResourceLocation, Task> current = null;

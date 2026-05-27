@@ -12,11 +12,11 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public final class ColorHandler
 {
@@ -47,7 +47,7 @@ public final class ColorHandler
 				                                       : -1;
 
 
-		for (Item item : ForgeRegistries.ITEMS)
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 

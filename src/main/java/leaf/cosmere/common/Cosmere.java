@@ -9,22 +9,22 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.common.config.CosmereConfigs;
-import leaf.cosmere.common.config.CosmereModConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import leaf.cosmere.common.eventHandlers.ColorHandler;
 import leaf.cosmere.common.network.NetworkPacketHandler;
 import leaf.cosmere.common.registry.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Mod(Cosmere.MODID)
@@ -46,10 +46,9 @@ public class Cosmere
 
 		CosmereConfigs.registerConfigs(ModLoadingContext.get());
 
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus modBus = ModLoadingContext.get().getActiveContainer().getEventBus();
 		modBus.addListener(this::onCommonSetup);
 		modBus.addListener(this::onClientSetup);
-		modBus.addListener(this::onAddCaps);
 		modBus.addListener(this::onConfigLoad);
 		modBus.addListener(this::onConfigReload);
 
@@ -79,11 +78,14 @@ public class Cosmere
 		IntProviderTypesRegistry.INT_PROVIDER_TYPES.register(modBus);
 		HeightProviderTypesRegistry.HEIGHT_PROVIDER_TYPES.register(modBus);
 
+		CosmereAttachmentsRegistry.ATTACHMENTS.register(modBus);
+
 		DimensionRegistry.register();
 
 		AdvancementTriggerRegistry.init();
 
 		packetHandler = new NetworkPacketHandler();
+		packetHandler.register(modBus);
 
 		// init cross mod compatibility stuff, if relevant
 		CuriosCompat.init();
@@ -107,7 +109,7 @@ public class Cosmere
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(Cosmere.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Cosmere.MODID, path);
 	}
 
 	public static Map<Manifestations.ManifestationTypes, ISpiritwebSubmodule> makeSpiritwebSubmodules()
@@ -156,31 +158,36 @@ public class Cosmere
 	{
 		//Initialization notification
 		CosmereAPI.logger.info("Cosmere Version {} initializing...", versionNumber);
-
-		packetHandler.initialize();
 	}
 
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(configEvent);
 	}
 
 	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(configEvent);
 	}
 
-	private void onAddCaps(RegisterCapabilitiesEvent capabilitiesEvent)
+	private void handleConfigEvent(ModConfigEvent event)
 	{
-		capabilitiesEvent.register(SpiritwebCapability.class);
+		ModConfig config = event.getConfig();
+		if (!config.getModId().equals(MODID))
+		{
+			return;
+		}
+		for (ICosmereConfig cosmereConfig : List.of(
+				CosmereConfigs.CLIENT_CONFIG,
+				CosmereConfigs.SERVER_CONFIG,
+				CosmereConfigs.WORLD_CONFIG))
+		{
+			if (cosmereConfig.getConfigSpec() == config.getSpec())
+			{
+				cosmereConfig.clearCache();
+				return;
+			}
+		}
 	}
 
 	private void onClientSetup(FMLClientSetupEvent event)

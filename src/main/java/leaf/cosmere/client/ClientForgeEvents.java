@@ -5,18 +5,14 @@
 
 package leaf.cosmere.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import leaf.cosmere.api.Activator;
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.client.gui.SpiritwebHud;
 import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.fog.FogManager;
 import leaf.cosmere.common.network.packets.*;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
@@ -25,23 +21,20 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.InputEvent.MouseScrollingEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Cosmere.MODID)
 public class ClientForgeEvents
 {
 
 	@SubscribeEvent
-	public static void handleScroll(MouseScrollingEvent event)
+	public static void handleScroll(InputEvent.MouseScrollingEvent event)
 	{
 		final LocalPlayer player = Minecraft.getInstance().player;
 		final ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
@@ -51,7 +44,7 @@ public class ClientForgeEvents
 
 			if (held.isEmpty() && player.isCrouching() && event.isRightDown())
 			{
-				final int delta = Mth.clamp((int) Math.round(event.getScrollDelta()), -1, 1);
+				final int delta = Mth.clamp((int) Math.round(event.getScrollDeltaY()), -1, 1);
 
 				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(spiritweb.getSelectedManifestation(), delta));
 
@@ -208,24 +201,20 @@ public class ClientForgeEvents
 	}
 
 	@SubscribeEvent
-	public static void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event)
+	public static void onRenderGuiOverlayPost(RenderGuiLayerEvent.Post event)
 	{
-		// make sure it only renders once per frame
-		if (event.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id()))
+		Minecraft mc = Minecraft.getInstance();
+		ProfilerFiller profiler = mc.getProfiler();
+		LocalPlayer playerEntity = mc.player;
+		profiler.push("cosmere-spiritweb-hud");
 		{
-			Minecraft mc = Minecraft.getInstance();
-			ProfilerFiller profiler = mc.getProfiler();
-			LocalPlayer playerEntity = mc.player;
-			profiler.push("cosmere-spiritweb-hud");
+			SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
 			{
-				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
-				{
-					// Shouldn't need mouse location, will only render as a HUD element
-					spiritweb.getSpiritwebHud().render(event.getGuiGraphics(), 0, 0, event.getPartialTick());
-				});
-			}
-			profiler.pop();
+				// Shouldn't need mouse location, will only render as a HUD element
+				spiritweb.getSpiritwebHud().render(event.getGuiGraphics(), 0, 0, event.getPartialTick().getGameTimeDeltaPartialTick(true));
+			});
 		}
+		profiler.pop();
 	}
 
 

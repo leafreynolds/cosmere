@@ -9,12 +9,12 @@ import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.loot.RandomiseMetalTypeLootFunction;
 import leaf.cosmere.common.registration.impl.LootFunctionDeferredRegister;
 import leaf.cosmere.common.registration.impl.LootItemFunctionTypeRegistryObject;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 public class LootFunctionRegistry
 {
 	public static final LootFunctionDeferredRegister LOOT_FUNCTIONS = new LootFunctionDeferredRegister(Cosmere.MODID);
 
-	public static final LootItemFunctionTypeRegistryObject<LootItemFunctionType> RANDOMISE_METALTYPE = LOOT_FUNCTIONS.registerType("randomise_metaltype", RandomiseMetalTypeLootFunction.Serializer::new);
+	public static final LootItemFunctionTypeRegistryObject<RandomiseMetalTypeLootFunction> RANDOMISE_METALTYPE =
+			LOOT_FUNCTIONS.register("randomise_metaltype", () -> RandomiseMetalTypeLootFunction.CODEC);
 
 }

@@ -21,17 +21,18 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.util.LazyOptional;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
+import java.util.Optional;
+
 @Mixin(LightTexture.class)
 public class LightTextureMixin
 {
 	@Unique
-	private static final ResourceLocation TIN_RL = new ResourceLocation("allomancy", Metals.MetalType.TIN.getName());
+	private static final ResourceLocation TIN_RL = ResourceLocation.fromNamespaceAndPath("allomancy", Metals.MetalType.TIN.getName());
 
 	@Unique
 	private final InterpolatedValue _cosmere$nightVision = new InterpolatedValue(0);
@@ -47,14 +48,14 @@ public class LightTextureMixin
 			return prev;
 		}
 
-		final LazyOptional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(clientPlayer);
+		final Optional<ISpiritweb> spiritwebOpt = SpiritwebCapability.get(clientPlayer);
 		float tinAlloVal = 0;
 
-		if (iSpiritwebLazyOptional.isPresent())
+		if (spiritwebOpt.isPresent())
 		{
-			var spiritweb = iSpiritwebLazyOptional.resolve();
-			final Manifestation tinAllomancy = CosmereAPI.manifestationRegistry().getValue(TIN_RL);
-			if (spiritweb.isPresent() && spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isActive(spiritweb.get()))
+			ISpiritweb spiritweb = spiritwebOpt.get();
+			final Manifestation tinAllomancy = CosmereAPI.manifestationRegistry().getHolder(TIN_RL).get().value();
+			if (spiritweb instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isActive(spiritweb))
 			{
 				//burning or flaring strength
 				float currentBurnStrength = (float) (tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy));
@@ -68,7 +69,7 @@ public class LightTextureMixin
 		}
 
 		final AttributeRegistryObject<Attribute> attributeRegistryObject = AttributesRegistry.NIGHT_VISION_ATTRIBUTE;
-		AttributeInstance attribute = clientPlayer.getAttribute(attributeRegistryObject.get());
+		AttributeInstance attribute = clientPlayer.getAttribute(attributeRegistryObject.getHolder());
 		//return modded val
 		final float v = attribute != null ? (float) attribute.getValue() : prev;
 		final float total = v + tinAlloVal;
@@ -77,6 +78,6 @@ public class LightTextureMixin
 		_cosmere$nightVision.setDefaultValue(MathHelper.clamp01(total));
 		_cosmere$nightVision.interpolate();
 
-		return _cosmere$nightVision.get(mc.getPartialTick());
+		return _cosmere$nightVision.get(mc.getTimer().getGameTimeDeltaPartialTick(true));
 	}
 }

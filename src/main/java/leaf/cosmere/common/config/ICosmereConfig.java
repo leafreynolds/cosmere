@@ -4,15 +4,15 @@
 
 package leaf.cosmere.common.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public interface ICosmereConfig
 {
 
 	String getFileName();
 
-	ForgeConfigSpec getConfigSpec();
+	ModConfigSpec getConfigSpec();
 
 	ModConfig.Type getConfigType();
 

@@ -12,13 +12,14 @@ import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -126,7 +127,7 @@ public interface IChargeable
 	default boolean getPlayerIsAttuned(ItemStack itemStack, Player entity)
 	{
 		//todo clean up
-		final MobEffect aluminumStoreEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+		final Holder<MobEffect> aluminumStoreEffect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName())).get();
 		assert aluminumStoreEffect != null;
 		MobEffectInstance storingIdentityEffect = entity.getEffect(aluminumStoreEffect);
 		boolean noIdentityPlayer = storingIdentityEffect != null && storingIdentityEffect.getDuration() > 0;

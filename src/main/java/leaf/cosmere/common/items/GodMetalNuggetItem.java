@@ -4,7 +4,6 @@ import leaf.cosmere.api.*;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.util.CosmereAttributeUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,11 +13,12 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +50,7 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 	@Override
 	public void onCraftedBy(ItemStack itemStack, Level level, Player player)
 	{
-		CompoundTag nbt = itemStack.getOrCreateTag();
-		if (!nbt.contains("nuggetSize"))
-		{
-			writeMetalAlloySizeNbtData(itemStack, getMaxSize());
-		}
+		readMetalAlloySizeNbtData(itemStack);
 	}
 
 	// God Metals shouldn't hurt
@@ -95,7 +91,7 @@ public class GodMetalNuggetItem extends MetalNuggetItem implements IHasSize, IGr
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		Integer size = readMetalAlloySizeNbtData(stack);
 

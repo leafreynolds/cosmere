@@ -34,7 +34,7 @@ public class MetalNuggetItem extends MetalItem
 
 
 	@Override
-	public int getUseDuration(ItemStack stack)
+	public int getUseDuration(ItemStack stack, LivingEntity entity)
 	{
 		//be annoying enough that people prefer metal vials
 		return 16;

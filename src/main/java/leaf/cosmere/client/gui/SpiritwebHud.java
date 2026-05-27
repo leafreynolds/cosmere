@@ -161,7 +161,7 @@ public class SpiritwebHud extends AbstractWidget
 				}
 
 				stringBuilder.append(".png");
-				final ResourceLocation resourceLocation = new ResourceLocation(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+				final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();

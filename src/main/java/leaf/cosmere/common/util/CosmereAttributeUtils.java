@@ -3,6 +3,8 @@ package leaf.cosmere.common.util;
 import leaf.cosmere.api.Manifestations.ManifestationTypes;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.Roshar;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -11,10 +13,10 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+
+import java.util.Optional;
 
 public class CosmereAttributeUtils
 {
@@ -24,21 +26,21 @@ public class CosmereAttributeUtils
 		{
 			case ALLOMANCY:
 			case FERUCHEMY:
-				return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(
+				return BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.fromNamespaceAndPath(
 						manifestationType.getName(),
 						Metals.MetalType.valueOf(powerId).get().getName()));
 			case SURGEBINDING:
-				return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(
+				return BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.fromNamespaceAndPath(
 						manifestationType.getName(),
 						Roshar.Surges.valueOf(powerId).get().getName()
 				));
 			case SANDMASTERY:
-				return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(
+				return BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.fromNamespaceAndPath(
 						manifestationType.getName(),
 						"ribbons"
 				));
 			case AVIAR:
-				return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(
+				return BuiltInRegistries.ATTRIBUTE.get(ResourceLocation.fromNamespaceAndPath(
 						manifestationType.getName(),
 						"hostile_life_sense"
 				));
@@ -63,13 +65,13 @@ public class CosmereAttributeUtils
         }
     }
 
-	public static Attribute getAttributeByDescriptionId(String id)
+	public static Holder<Attribute> getAttributeByDescriptionId(String id)
 	{
 		String[] attributeSections = id.split("\\.");
-		return ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(
+		return BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.fromNamespaceAndPath(
 				attributeSections[1],
 				attributeSections[2]
-		));
+		)).get();
 	}
 
 	public static ManifestationTypes getManifestationType(Attribute attribute)
@@ -90,7 +92,7 @@ public class CosmereAttributeUtils
 	public static void grantBaseAttribute(LivingEntity livingEntity, RangedAttribute attribute, int strength)
 	{
 		int currentStrength = 0;
-		AttributeInstance entityAttributeInstance = livingEntity.getAttribute(attribute);
+		AttributeInstance entityAttributeInstance = livingEntity.getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute));
 		if (entityAttributeInstance == null)
 		{
 			return;
@@ -113,7 +115,7 @@ public class CosmereAttributeUtils
 		entityAttributeInstance.setBaseValue(newStrength);
 	}
 
-	public static void removeBaseAttribute(LivingEntity livingEntity, Attribute attribute)
+	public static void removeBaseAttribute(LivingEntity livingEntity, Holder<Attribute> attribute)
 	{
 		AttributeInstance entityAttributeInstance = livingEntity.getAttribute(attribute);
 		if (entityAttributeInstance == null)
@@ -127,10 +129,10 @@ public class CosmereAttributeUtils
     {
         if(isCurio)
         {
-            LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(player);
-            if (curiosItemHandler.resolve().isPresent())
+            Optional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(player);
+            if (curiosItemHandler.isPresent())
             {
-                ICuriosItemHandler itemHandler = curiosItemHandler.resolve().get();
+                ICuriosItemHandler itemHandler = curiosItemHandler.get();
                 return itemHandler.getEquippedCurios().getStackInSlot(itemSlot);
             }
             else

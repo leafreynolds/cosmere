@@ -10,13 +10,13 @@ import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerXpEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Cosmere.MODID)
 public class PlayerEventHandler
 {
 	@SubscribeEvent
@@ -81,7 +81,7 @@ public class PlayerEventHandler
 		}
 
 		AttributeRegistryObject<Attribute> xpGainRateAttribute = AttributesRegistry.XP_RATE_ATTRIBUTE;
-		AttributeInstance attribute = event.getEntity().getAttribute(xpGainRateAttribute.get());
+		AttributeInstance attribute = event.getEntity().getAttribute(xpGainRateAttribute.getHolder());
 		if (attribute != null)
 		{
 			event.setAmount((int) (event.getAmount() * attribute.getValue()));

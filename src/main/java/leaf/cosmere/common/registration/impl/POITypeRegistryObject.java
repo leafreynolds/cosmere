@@ -1,13 +1,12 @@
 package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedRegistryObject;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
-public class POITypeRegistryObject<POIType> extends WrappedRegistryObject<PoiType>
+public class POITypeRegistryObject<POIType> extends WrappedRegistryObject<POIType>
 {
 
-	public POITypeRegistryObject(RegistryObject<PoiType> registryObject)
+	public POITypeRegistryObject(DeferredHolder<? super POIType, POIType> registryObject)
 	{
 		super(registryObject);
 	}

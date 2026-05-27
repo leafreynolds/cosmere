@@ -3,20 +3,18 @@ package leaf.cosmere.common.recipes;
 import leaf.cosmere.api.IHasSize;
 import leaf.cosmere.api.Metals.MetalType;
 import leaf.cosmere.api.providers.IItemProvider;
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.items.GodMetalAlloyNuggetItem;
 import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.items.MetalNuggetItem;
 import leaf.cosmere.common.registry.CosmereRecipesRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -28,17 +26,19 @@ import javax.annotation.Nonnull;
 public class GodMetalAlloyNuggetRecipe extends CustomRecipe
 {
 
-	public GodMetalAlloyNuggetRecipe(ResourceLocation loc, CraftingBookCategory pCategory)
+	public GodMetalAlloyNuggetRecipe(CraftingBookCategory pCategory)
 	{
-		super(loc, pCategory);
+		super(pCategory);
 	}
 
 	@Override
-	public boolean matches(CraftingContainer inv, @Nonnull Level world)
+	public boolean matches(CraftingInput inv, @Nonnull Level world)
 	{
+		if (inv.width() != 3 || inv.height() != 3) return false;
+
 		Ingredient INGREDIENT_GOD_METAL_NUG = Ingredient.of(
-				ItemsRegistry.GOD_METAL_NUGGETS.get(MetalType.LERASIUM),
-				ItemsRegistry.GOD_METAL_NUGGETS.get(MetalType.LERASATIUM)
+				ItemsRegistry.GOD_METAL_NUGGETS.get(MetalType.LERASIUM).getItemStack(),
+				ItemsRegistry.GOD_METAL_NUGGETS.get(MetalType.LERASATIUM).getItemStack()
 		);
 
 		Ingredient INGREDIENT_COSMERE_METAL_NUG = Ingredient.of(
@@ -54,7 +54,7 @@ public class GodMetalAlloyNuggetRecipe extends CustomRecipe
 		if(inv.getItem(4).getCount() != 1) return false;
 
 		MetalType metalType = null;
-		for(int i = 0; i < inv.getContainerSize(); i++)
+		for(int i = 0; i < inv.size(); i++)
 		{
 			if(i == 4) continue;
 			ItemStack itemStack = inv.getItem(i);
@@ -92,7 +92,7 @@ public class GodMetalAlloyNuggetRecipe extends CustomRecipe
 	}
 
 	@Override
-	public ItemStack assemble(CraftingContainer inv, RegistryAccess pRegistryAccess)
+	public ItemStack assemble(CraftingInput inv, HolderLookup.Provider pRegistries)
 	{
 		GodMetalNuggetItem godMetalNuggetItem = (GodMetalNuggetItem) inv.getItem(4).getItem();
 		MetalType godMetalType = godMetalNuggetItem.getMetalType();
@@ -129,23 +129,18 @@ public class GodMetalAlloyNuggetRecipe extends CustomRecipe
 	}
 
 	@Override
-	public @Nonnull ResourceLocation getId()
-	{
-		return new ResourceLocation(Cosmere.MODID, "crafting_god_metal_alloy_nugget_recipe");
-	}
-
-	@Override
 	public @Nonnull RecipeSerializer<?> getSerializer()
 	{
 		return CosmereRecipesRegistry.GOD_METAL_ALLOY_NUGGET_RECIPE.get();
 	}
 
 
-	public @NotNull NonNullList<ItemStack> getRemainingItems(CraftingContainer pContainer) {
-		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(pContainer.getContainerSize(), ItemStack.EMPTY);
+	@Override
+	public @NotNull NonNullList<ItemStack> getRemainingItems(CraftingInput pInput) {
+		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(pInput.size(), ItemStack.EMPTY);
 
 		for(int i = 0; i < nonnulllist.size(); ++i) {
-			ItemStack item = pContainer.getItem(i);
+			ItemStack item = pInput.getItem(i);
 			if (item.hasCraftingRemainingItem()) {
 				nonnulllist.set(i, getCraftingRemainingItem(item));
 			}
