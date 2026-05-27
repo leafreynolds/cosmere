@@ -6,6 +6,7 @@ package leaf.cosmere.api.helpers;
 
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 public class EffectsHelper
 {
-	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier)
+	public static MobEffectInstance getNewEffect(Holder<MobEffect> effect, int amplifier)
 	{
 		MobEffectInstance effectInstance = new MobEffectInstance(
 				effect,
@@ -28,7 +29,7 @@ public class EffectsHelper
 		return effectInstance;
 	}
 
-	public static MobEffectInstance getNewEffect(MobEffect effect, int amplifier, int duration)
+	public static MobEffectInstance getNewEffect(Holder<MobEffect> effect, int amplifier, int duration)
 	{
 		MobEffectInstance effectInstance = new MobEffectInstance(
 				effect,

@@ -6,9 +6,9 @@
 package leaf.cosmere.api;
 
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -171,6 +171,12 @@ public class Roshar
 		}
 
 		@Override
+		public TagKey<Block> getIncorrectBlocksForDrops()
+		{
+			// no seriously, what does this do?
+			return null;
+		}
+
 		public int getLevel()
 		{
 			return 0;

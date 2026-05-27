@@ -5,9 +5,9 @@
 package leaf.cosmere.api.providers;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.registries.ForgeRegistries;
 
 @MethodsReturnNonnullByDefault
 public interface IMobEffectProvider extends IBaseProvider
@@ -18,7 +18,7 @@ public interface IMobEffectProvider extends IBaseProvider
 	@Override
 	default ResourceLocation getRegistryName()
 	{
-		return ForgeRegistries.MOB_EFFECTS.getKey(getMobEffect());
+		return BuiltInRegistries.MOB_EFFECT.getKey(getMobEffect());
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -46,7 +47,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	 */
 	private int duration;
 
-	private final Map<Attribute, AttributeModifierInfo> dynamicAttributeModifiers = Maps.newHashMap();
+	private final Map<Holder<Attribute>, AttributeModifierInfo> dynamicAttributeModifiers = Maps.newHashMap();
 
 	public CosmereEffectInstance()
 	{
@@ -63,6 +64,11 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	public UUID getUUID()
 	{
 		return uuid;
+	}
+
+	public ResourceLocation getModifierId()
+	{
+		return ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "effect_" + this.uuid.toString());
 	}
 
 	public CosmereEffect getEffect()
@@ -105,13 +111,13 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	@Nullable
 	public static CosmereEffectInstance load(CompoundTag compoundtag)
 	{
-		final ResourceLocation effectID = new ResourceLocation(compoundtag.getString("effect_id"));
+		final ResourceLocation effectID = ResourceLocation.parse(compoundtag.getString("effect_id"));
 
 		if (CosmereAPI.cosmereEffectRegistry().containsKey(effectID))
 		{
 			final CosmereEffectInstance effectInstance = new CosmereEffectInstance();
 
-			effectInstance.effect = CosmereAPI.cosmereEffectRegistry().getValue(effectID);
+			effectInstance.effect = CosmereAPI.cosmereEffectRegistry().get(effectID);
 			effectInstance.uuid = compoundtag.getUUID("uuid");
 			effectInstance.strength = compoundtag.getDouble("strength");
 			effectInstance.duration = compoundtag.getInt("duration");
@@ -160,19 +166,19 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 
 	public void applyAttributeModifiers(LivingEntity livingEntity, AttributeMap pAttributeMap)
 	{
-		for (Map.Entry<Attribute, AttributeModifierInfo> entry : this.getEffect().getAttributeModifiers().entrySet())
+		ResourceLocation modifierId = getModifierId();
+
+		for (Map.Entry<Holder<Attribute>, AttributeModifierInfo> entry : this.getEffect().getAttributeModifiers().entrySet())
 		{
 			AttributeInstance attributeinstance = pAttributeMap.getInstance(entry.getKey());
 			if (attributeinstance != null)
 			{
 				AttributeModifierInfo attributeModifierInfo = entry.getValue();
 
-				final UUID effectInstanceUUID = getUUID();
-				attributeinstance.removeModifier(effectInstanceUUID);
+				attributeinstance.removeModifier(modifierId);
 				attributeinstance.addPermanentModifier(
 						new AttributeModifier(
-								effectInstanceUUID,
-								String.format("%s - %s: %s", this.getRegistryName(), getStrength(), effectInstanceUUID.toString()),
+								modifierId,
 								this.getAttributeModifierValue(getStrength(), attributeModifierInfo),
 								attributeModifierInfo.getOperation()
 						)
@@ -180,19 +186,17 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 			}
 		}
 
-		for (Map.Entry<Attribute, AttributeModifierInfo> entry : dynamicAttributeModifiers.entrySet())
+		for (Map.Entry<Holder<Attribute>, AttributeModifierInfo> entry : dynamicAttributeModifiers.entrySet())
 		{
 			AttributeInstance attributeinstance = pAttributeMap.getInstance(entry.getKey());
 			if (attributeinstance != null)
 			{
 				AttributeModifierInfo attributeModifierInfo = entry.getValue();
 
-				final UUID effectInstanceUUID = getUUID();
-				attributeinstance.removeModifier(effectInstanceUUID);
+				attributeinstance.removeModifier(modifierId);
 				attributeinstance.addPermanentModifier(
 						new AttributeModifier(
-								effectInstanceUUID,
-								String.format("%s - %s: %s", this.getRegistryName(), getStrength(), effectInstanceUUID.toString()),
+								modifierId,
 								this.getAttributeModifierValue(getStrength(), attributeModifierInfo),
 								attributeModifierInfo.getOperation()
 						)
@@ -204,22 +208,22 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	public void removeAttributeModifiers(AttributeMap attributeMap)
 	{
 		//remove attribute modifiers from effect
-		for (Map.Entry<Attribute, AttributeModifierInfo> entry : this.getEffect().getAttributeModifiers().entrySet())
+		for (Map.Entry<Holder<Attribute>, AttributeModifierInfo> entry : this.getEffect().getAttributeModifiers().entrySet())
 		{
 			AttributeInstance attributeinstance = attributeMap.getInstance(entry.getKey());
 			if (attributeinstance != null)
 			{
-				attributeinstance.removeModifier(uuid);
+				attributeinstance.removeModifier(getModifierId());
 			}
 		}
 
 		//remove dynamic attribute changes specific to this instance;
-		for (Map.Entry<Attribute, AttributeModifierInfo> entry : dynamicAttributeModifiers.entrySet())
+		for (Map.Entry<Holder<Attribute>, AttributeModifierInfo> entry : dynamicAttributeModifiers.entrySet())
 		{
 			AttributeInstance attributeinstance = attributeMap.getInstance(entry.getKey());
 			if (attributeinstance != null)
 			{
-				attributeinstance.removeModifier(uuid);
+				attributeinstance.removeModifier(getModifierId());
 			}
 		}
 	}
@@ -230,7 +234,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 	}
 
 	//reuse memory where possible
-	public void setDynamicAttribute(Attribute attribute, double strength, AttributeModifier.Operation operation)
+	public void setDynamicAttribute(Holder<Attribute> attribute, double strength, AttributeModifier.Operation operation)
 	{
 		AttributeModifierInfo ami;
 		if (dynamicAttributeModifiers.containsKey(attribute))
@@ -288,7 +292,7 @@ public class CosmereEffectInstance implements ICosmereEffectProvider
 		return effectInstance;
 	}
 
-	public Map<Attribute, AttributeModifierInfo> getDynamicModifiers()
+	public Map<Holder<Attribute>, AttributeModifierInfo> getDynamicModifiers()
 	{
 		return dynamicAttributeModifiers;
 	}

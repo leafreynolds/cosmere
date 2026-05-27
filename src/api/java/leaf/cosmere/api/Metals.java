@@ -5,8 +5,10 @@
 package leaf.cosmere.api;
 
 import leaf.cosmere.api.helpers.TimeHelper;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -26,14 +28,12 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /*
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 public class Metals
 {
 
-	public enum MetalType implements Tier, ArmorMaterial
+	public enum MetalType implements Tier//, ArmorMaterial
 	{
 		//Physical/Physical
 		IRON(0, 0, 0, 0, 0, 0),//ignore tier data
@@ -706,12 +706,12 @@ public class Metals
 				case COPPER:
 					//Steals mental fortitude, memory, and intelligence
 					//increase base xp gain rate
-					final float potentialRewardRate = killedEntity.getExperienceReward() / 150f;
+					final float potentialRewardRate = killedEntity.getExperienceReward((ServerLevel) killedEntity.level(), playerEntity) / 150f; // I'm not sure if casting to ServerLevel works here... If it doesn't, blame Gerbagel, I did this
 
 					if (killedEntity instanceof Player)
 					{
 						//todo do better
-						final Attribute xpAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(CosmereAPI.COSMERE_MODID, Metals.MetalType.COPPER.getName()));
+						final Holder<Attribute> xpAttribute = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, Metals.MetalType.COPPER.getName())).get();
 						if (xpAttribute != null)
 						{
 							final AttributeInstance attribute = killedEntity.getAttribute(xpAttribute);
@@ -774,7 +774,7 @@ public class Metals
 					}
 					else if (killedEntity instanceof Cat cat)
 					{
-						final CatVariant catType = cat.getVariant();
+						final CatVariant catType = cat.getVariant().value();
 						if (catType.texture().getPath().contains("black"))//all black
 						{
 							strengthToAdd = -5;
@@ -908,6 +908,12 @@ public class Metals
 		}
 
 		@Override
+		public TagKey<Block> getIncorrectBlocksForDrops()
+		{
+			// what does this even do?
+			return null;
+		}
+
 		public int getLevel()
 		{
 			return this.level;
@@ -925,40 +931,16 @@ public class Metals
 			return Ingredient.of(getMetalIngotTag());
 		}
 
-		@Override
-		public SoundEvent getEquipSound()
-		{
-			return SoundEvents.ARMOR_EQUIP_IRON;
-		}
-
-		@Override
 		public float getToughness()
 		{
 			return 0;
 		}
 
-		@Override
 		public float getKnockbackResistance()
 		{
 			return 0;
 		}
 
-		@Override
-		public int getDurabilityForType(ArmorItem.Type pType)
-		{
-			float multiplier = switch (pType)
-			{
-				default -> 0.0F;
-				case HELMET -> 0.3F;
-				case CHESTPLATE -> 0.5F;
-				case LEGGINGS -> 0.4F;
-				case BOOTS -> 0.25F;
-			};
-
-			return Mth.floor(getUses() * multiplier);
-		}
-
-		@Override
 		public int getDefenseForType(ArmorItem.Type pType)
 		{
 			return getLevel() + switch (pType)
@@ -984,8 +966,27 @@ public class Metals
 				}
 			}
 
-			var resourceLoc = new ResourceLocation(CosmereAPI.COSMERE_MODID, getName() + Constants.RegNameStubs.NUGGET);
-			return ForgeRegistries.ITEMS.getValue(resourceLoc);
+			var resourceLoc = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, getName() + Constants.RegNameStubs.NUGGET);
+			return BuiltInRegistries.ITEM.get(resourceLoc);
+		}
+
+		public ArmorMaterial buildArmorMaterial()
+		{
+			EnumMap<ArmorItem.Type, Integer> defenseMap = new EnumMap<>(ArmorItem.Type.class);
+			for (ArmorItem.Type type : ArmorItem.Type.values())
+			{
+				defenseMap.put(type, getDefenseForType(type));
+			}
+
+			return new ArmorMaterial(
+					defenseMap,
+					getEnchantmentValue(),
+					SoundEvents.ARMOR_EQUIP_IRON,
+					this::getRepairIngredient,
+					List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, getName()))),
+					getToughness(),
+					getKnockbackResistance()
+			);
 		}
 
 		public String getTranslationKey()

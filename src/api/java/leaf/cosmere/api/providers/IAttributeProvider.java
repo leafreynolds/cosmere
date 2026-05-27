@@ -5,9 +5,9 @@
 package leaf.cosmere.api.providers;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraftforge.registries.ForgeRegistries;
 
 @MethodsReturnNonnullByDefault
 public interface IAttributeProvider extends IBaseProvider
@@ -18,7 +18,7 @@ public interface IAttributeProvider extends IBaseProvider
 	@Override
 	default ResourceLocation getRegistryName()
 	{
-		return ForgeRegistries.ATTRIBUTES.getKey(getAttribute());
+		return BuiltInRegistries.ATTRIBUTE.getKey(getAttribute());
 	}
 
 	@Override

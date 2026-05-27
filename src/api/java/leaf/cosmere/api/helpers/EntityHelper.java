@@ -4,6 +4,7 @@
 
 package leaf.cosmere.api.helpers;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -26,12 +27,12 @@ public class EntityHelper
 		return entity.level().getEntitiesOfClass(Entity.class, areaOfEffect, e -> includeSelf || e != entity);
 	}
 
-	public static double getAttributeValue(LivingEntity entity, Attribute attribute)
+	public static double getAttributeValue(LivingEntity entity, Holder<Attribute> attribute)
 	{
 		return getAttributeValue(entity, attribute, 0);
 	}
 
-	public static double getAttributeValue(LivingEntity entity, Attribute attribute, double defaultStrength)
+	public static double getAttributeValue(LivingEntity entity, Holder<Attribute> attribute, double defaultStrength)
 	{
 		final AttributeMap attributes = entity.getAttributes();
 		if (attributes.hasAttribute(attribute))

@@ -15,11 +15,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -70,7 +69,7 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	String changeManifestation(int dir);
 
-	void renderWorldEffects(RenderLevelStageEvent event);
+	void renderWorldEffects(net.neoforged.neoforge.client.event.RenderLevelStageEvent event);
 
 	void setSelectedManifestation(Manifestation manifestation);
 

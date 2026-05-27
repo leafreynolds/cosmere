@@ -17,8 +17,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -33,37 +31,37 @@ public class RegistryHelper
 
 	public static ResourceLocation get(Item item)
 	{
-		return ForgeRegistries.ITEMS.getKey(item);
+		return BuiltInRegistries.ITEM.getKey(item);
 	}
 
 	public static ResourceLocation get(Entity entity)
 	{
-		return ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
+		return BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 	}
 
 	public static ResourceLocation get(Block block)
 	{
-		return ForgeRegistries.BLOCKS.getKey(block);
+		return BuiltInRegistries.BLOCK.getKey(block);
 	}
 
 	public static ResourceLocation get(EntityType<?> test)
 	{
-		return ForgeRegistries.ENTITY_TYPES.getKey(test);
+		return BuiltInRegistries.ENTITY_TYPE.getKey(test);
 	}
 
 	public static ResourceLocation getName(MenuType<?> element)
 	{
-		return getName(ForgeRegistries.MENU_TYPES, element);
+		return getName(BuiltInRegistries.MENU, element);
 	}
 
 	public static ResourceLocation getName(ParticleType<?> element)
 	{
-		return getName(ForgeRegistries.PARTICLE_TYPES, element);
+		return getName(BuiltInRegistries.PARTICLE_TYPE, element);
 	}
 
 	public static ResourceLocation getName(Item element)
 	{
-		return getName(ForgeRegistries.ITEMS, element);
+		return getName(BuiltInRegistries.ITEM, element);
 	}
 
 	public static String getPath(Item element)
@@ -73,7 +71,7 @@ public class RegistryHelper
 
 	public static ResourceLocation getName(Block element)
 	{
-		return getName(ForgeRegistries.BLOCKS, element);
+		return getName(BuiltInRegistries.BLOCK, element);
 	}
 
 	public static String getNamespace(Block element)
@@ -88,25 +86,25 @@ public class RegistryHelper
 
 	public static ResourceLocation getName(Fluid element)
 	{
-		return getName(ForgeRegistries.FLUIDS, element);
+		return getName(BuiltInRegistries.FLUID, element);
 	}
 
 	public static ResourceLocation getName(BlockEntityType<?> element)
 	{
-		return getName(ForgeRegistries.BLOCK_ENTITY_TYPES, element);
+		return getName(BuiltInRegistries.BLOCK_ENTITY_TYPE, element);
 	}
 
 	public static ResourceLocation getName(EntityType<?> element)
 	{
-		return getName(ForgeRegistries.ENTITY_TYPES, element);
+		return getName(BuiltInRegistries.ENTITY_TYPE, element);
 	}
 
 	public static ResourceLocation getName(RecipeSerializer<?> element)
 	{
-		return getName(ForgeRegistries.RECIPE_SERIALIZERS, element);
+		return getName(BuiltInRegistries.RECIPE_SERIALIZER, element);
 	}
 
-	private static <T> ResourceLocation getName(IForgeRegistry<T> registry, T element)
+	private static <T> ResourceLocation getName(Registry<T> registry, T element)
 	{
 		return registry.getKey(element);
 	}

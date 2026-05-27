@@ -12,7 +12,7 @@ public class CuriosHelper
 {
 	public static Optional<ICuriosItemHandler> getCuriosHandler(LivingEntity entity)
 	{
-		return CuriosApi.getCuriosInventory(entity).resolve();
+		return CuriosApi.getCuriosInventory(entity);
 	}
 
 	public static Optional<SlotResult> getSlot(LivingEntity entity, String slotID, int index) {

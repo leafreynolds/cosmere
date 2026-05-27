@@ -1,6 +1,6 @@
 package leaf.cosmere.api;
 
-import net.minecraft.nbt.CompoundTag;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import net.minecraft.world.item.ItemStack;
 
 public interface IHasSize
@@ -11,17 +11,18 @@ public interface IHasSize
 
 	default Integer readMetalAlloySizeNbtData(ItemStack itemStack)
 	{
-		CompoundTag nbt = itemStack.getOrCreateTag();
-		if(nbt.contains("nuggetSize")) return nbt.getInt("nuggetSize");
+		if (StackNBTHelper.verifyExistance(itemStack, "nuggetSize"))
+		{
+			return StackNBTHelper.getInt(itemStack, "nuggetSize", getMaxSize());
+		}
 		writeMetalAlloySizeNbtData(itemStack, getMaxSize());
 		return getMaxSize();
 	}
 
 	default boolean writeMetalAlloySizeNbtData(ItemStack itemStack, int size)
 	{
-		CompoundTag nbt = itemStack.getOrCreateTag();
 		if (size > getMaxSize() || size < getMinSize()) return false;
-		nbt.putInt("nuggetSize", size);
+		StackNBTHelper.setInt(itemStack, "nuggetSize", size);
 		return true;
 	}
 }
