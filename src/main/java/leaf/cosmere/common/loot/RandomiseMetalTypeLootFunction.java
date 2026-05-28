@@ -36,7 +36,7 @@ public class RandomiseMetalTypeLootFunction extends LootItemConditionalFunction
 	@Override
 	public LootItemFunctionType<RandomiseMetalTypeLootFunction> getType()
 	{
-		return LootFunctionRegistry.RANDOMISE_METALTYPE.get().getType();
+		return LootFunctionRegistry.RANDOMISE_METALTYPE.get();
 	}
 
 	@Override

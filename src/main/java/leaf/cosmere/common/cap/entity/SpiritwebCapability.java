@@ -38,6 +38,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -442,7 +443,7 @@ public class SpiritwebCapability implements ISpiritweb
 				//todo move this to a config so people can define how strong the concealment needs to be
 				if (concealmentStrength < 2)
 				{
-					spiritWebEntity.gameEvent(GameEventRegistry.KINETIC_INVESTITURE.getHolder());
+					spiritWebEntity.gameEvent((Holder<GameEvent>) GameEventRegistry.KINETIC_INVESTITURE.getHolder());
 				}
 			}
 

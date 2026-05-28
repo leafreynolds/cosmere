@@ -25,7 +25,7 @@ public class ManifestationRegistry
 
 	public static Manifestation fromID(ResourceLocation location)
 	{
-		Manifestation value = CosmereAPI.manifestationRegistry().getValue(location);
+		Manifestation value = CosmereAPI.manifestationRegistry().get(location);
 		if (value != null)
 		{
 			return value;

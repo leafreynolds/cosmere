@@ -213,7 +213,7 @@ public interface IHoldsPowers
 				if (spiritwebOpt.isPresent())
 				{
 					ISpiritweb spiritweb = spiritwebOpt.get();
-					CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+					CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName())).value();
 					if (spiritweb.hasEffect(aluminumEffect))
 					{
 						// Then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
@@ -264,7 +264,7 @@ public interface IHoldsPowers
 		if (SpiritwebCapability.get(entity).isPresent())
 		{
 			ISpiritweb spiritweb = SpiritwebCapability.get(entity).get();
-			CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+			CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName())).value();
 			boolean noIdentityPlayer = spiritweb.hasEffect(aluminumEffect);
 
 			UUID itemAttunedPlayerUUID = getAttunedPlayer(itemStack);
