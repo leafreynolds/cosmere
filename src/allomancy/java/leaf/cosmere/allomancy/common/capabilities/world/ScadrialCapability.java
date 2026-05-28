@@ -7,34 +7,28 @@ package leaf.cosmere.allomancy.common.capabilities.world;
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
+import leaf.cosmere.allomancy.common.registries.AllomancyAttachments;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.math.Easing;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.fog.FogManager;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.ViewportEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class ScadrialCapability implements IScadrial
 {
-	//Injection
-	public static final Capability<IScadrial> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
-
 	Level level;
 
 	CompoundTag nbt = null;
@@ -45,15 +39,17 @@ public class ScadrialCapability implements IScadrial
 	}
 
 	@Nonnull
-	public static LazyOptional<IScadrial> get(Level level)
+	public static Optional<IScadrial> get(Level level)
 	{
-		return level != null ? level.getCapability(ScadrialCapability.CAPABILITY, null)
-		                     : LazyOptional.empty();
+		if (level == null)
+		{
+			return Optional.empty();
+		}
+		return Optional.of(level.getData(AllomancyAttachments.SCADRIAL.get()));
 	}
 
-
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (nbt == null)
 		{
@@ -64,7 +60,7 @@ public class ScadrialCapability implements IScadrial
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 	{
 		this.nbt = nbt;
 	}
@@ -209,14 +205,14 @@ public class ScadrialCapability implements IScadrial
 			//check burning tin, if it even exists
 			float tinAlloVal = 0;
 			{
-				final LazyOptional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(player);
+				final Optional<ISpiritweb> iSpiritwebLazyOptional = SpiritwebCapability.get(player);
 
 				if (iSpiritwebLazyOptional.isPresent())
 				{
-					var spiritweb = iSpiritwebLazyOptional.resolve();
+					var spiritweb = iSpiritwebLazyOptional.get();
 					final AllomancyManifestation tinAllomancy = AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.TIN).get();
 					//if tin allomancy exists in this mod pack and it's currently active
-					if (spiritweb.isPresent() && spiritweb.get() instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isMetalBurning(data))
+					if (spiritweb instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isMetalBurning(data))
 					{
 						//burning or flaring strength
 						double currentBurnStrength = tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy);

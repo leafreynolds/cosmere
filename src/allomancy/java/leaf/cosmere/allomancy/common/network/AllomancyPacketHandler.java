@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common.network;
@@ -7,28 +7,33 @@ package leaf.cosmere.allomancy.common.network;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.network.packets.EntityAllomancyActivateMessage;
 import leaf.cosmere.allomancy.common.network.packets.PlayerShootProjectileMessage;
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.BasePacketHandler;
+import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class AllomancyPacketHandler extends BasePacketHandler
 {
-	private final SimpleChannel NETWORK_CHANNEL = createChannel(Cosmere.rl(Allomancy.MODID), Allomancy.instance.versionNumber);
-
 	@Override
-	protected SimpleChannel getChannel()
+	protected String getProtocolVersion()
 	{
-		return NETWORK_CHANNEL;
+		return Allomancy.instance.versionNumber.toString();
 	}
 
 	@Override
-	public void initialize()
+	public void initialize(PayloadRegistrar registrar)
 	{
-		registerClientToServer(PlayerShootProjectileMessage.class, PlayerShootProjectileMessage::decode);
-		registerClientToServer(SyncPushPullMessage.class, SyncPushPullMessage::decode);
-		registerClientToServer(EntityAllomancyActivateMessage.class, EntityAllomancyActivateMessage::decode);
+		registrar.playToServer(
+				PlayerShootProjectileMessage.TYPE,
+				PlayerShootProjectileMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				SyncPushPullMessage.TYPE,
+				SyncPushPullMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				EntityAllomancyActivateMessage.TYPE,
+				EntityAllomancyActivateMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
 	}
-
-
 }

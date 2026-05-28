@@ -14,7 +14,7 @@ import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 //Increases Physical Abilities
 public class AllomancyPewter extends AllomancyManifestation
@@ -67,7 +67,7 @@ public class AllomancyPewter extends AllomancyManifestation
 
 	}
 
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingIncomingDamageEvent event)
 	{
 		if (event.isCanceled())
 		{

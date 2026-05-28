@@ -7,7 +7,6 @@ package leaf.cosmere.allomancy.common.items;
 import leaf.cosmere.allomancy.client.AllomancyKeybindings;
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.coinpouch.CoinPouchContainerMenu;
-import leaf.cosmere.allomancy.common.coinpouch.CoinPouchInventory;
 import leaf.cosmere.allomancy.common.entities.CoinProjectile;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel;
 import leaf.cosmere.allomancy.common.network.packets.PlayerShootProjectileMessage;
@@ -18,7 +17,8 @@ import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.ItemsRegistry;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -28,20 +28,21 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import java.util.function.Predicate;
 
@@ -74,11 +75,16 @@ public class CoinPouchItem extends ProjectileWeaponItem
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemStack)
+	public void shootProjectile(LivingEntity shooter, Projectile projectile, int index, float velocity, float inaccuracy, float angle, @javax.annotation.Nullable LivingEntity target)
+	{
+		// we have our own, do not use this one (it doesn't have the source item stack D:)
+	}
+
+	@Override
+	public int getUseDuration(ItemStack stack, LivingEntity entity)
 	{
 		return 600;
 	}
-
 
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand)
 	{
@@ -91,7 +97,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 			if (!player.level().isClientSide && player instanceof ServerPlayer)
 			{
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyr) -> new CoinPouchContainerMenu(windowID, playerInv, coinPouchStack), Component.translatable("item.allomancy.coin_pouch"));
-				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
+				((ServerPlayer) player).openMenu(container, buf -> buf.writeBoolean(true));
 			}
 		}
 		else if (player.level().isClientSide && AllomancyKeybindings.ALLOMANCY_STEEL_PUSH.isDown())
@@ -112,7 +118,8 @@ public class CoinPouchItem extends ProjectileWeaponItem
 			if (steelManifestation.isActive(data) && steelManifestation.getMode(data) > 0)
 			{
 				final boolean playerCreativeMode = player.getAbilities().instabuild;
-				final boolean infiniteAmmo = playerCreativeMode || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, coinPouchStack) > 0;
+				final Holder<Enchantment> infinityEnch = player.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.INFINITY);
+				final boolean infiniteAmmo = playerCreativeMode || EnchantmentHelper.getItemEnchantmentLevel(infinityEnch, coinPouchStack) > 0;
 
 				ItemStack ammo = getProjectile(player, coinPouchStack);
 
@@ -127,7 +134,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 
 					if (!player.level().isClientSide)
 					{
-						AbstractArrow coinProjectile = new CoinProjectile(player.level(), player, stackToShoot);
+						AbstractArrow coinProjectile = new CoinProjectile(player.level(), player, stackToShoot, coinPouchStack);
 						coinProjectile.setCritArrow(true);
 						coinProjectile.shootFromRotation(
 								player,
@@ -161,20 +168,6 @@ public class CoinPouchItem extends ProjectileWeaponItem
 		});
 	}
 
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt)
-	{
-		final CoinPouchInventory coinPouchInventory = new CoinPouchInventory();
-
-		if (oldCapNbt != null)
-		{
-			coinPouchInventory.deserializeNBT(oldCapNbt); // todo check if this breaks things?
-		}
-
-		return coinPouchInventory;
-	}
-
-
 	public ItemStack getProjectile(Player player, ItemStack coinPouchStack)
 	{
 		if (!(coinPouchStack.getItem() instanceof ProjectileWeaponItem))
@@ -191,22 +184,19 @@ public class CoinPouchItem extends ProjectileWeaponItem
 				ItemStack stackInSlot = bagInv.getStackInSlot(i);
 				if (predicate.test(stackInSlot))
 				{
-					return net.minecraftforge.common.ForgeHooks.getProjectile(player, coinPouchStack, stackInSlot);
+					return stackInSlot;
 				}
 			}
 
-			return net.minecraftforge.common.ForgeHooks.getProjectile(
-					player,
-					coinPouchStack,
-					player.getAbilities().instabuild
-					? new ItemStack(ItemsRegistry.METAL_NUGGETS.get(Metals.MetalType.COPPER))
-					: ItemStack.EMPTY);
+			return player.getAbilities().instabuild
+			       ? new ItemStack(ItemsRegistry.METAL_NUGGETS.get(Metals.MetalType.COPPER))
+			       : ItemStack.EMPTY;
 		}
 	}
 
 	private static IItemHandlerModifiable getBagInv(ItemStack coinPouchStack)
 	{
-		return (IItemHandlerModifiable) coinPouchStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		return (IItemHandlerModifiable) coinPouchStack.getCapability(Capabilities.ItemHandler.ITEM);
 	}
 
 	public static boolean onPickupItem(Entity entity, Player player)

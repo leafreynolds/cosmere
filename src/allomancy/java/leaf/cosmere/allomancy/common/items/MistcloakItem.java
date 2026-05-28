@@ -7,16 +7,15 @@ package leaf.cosmere.allomancy.common.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeMod;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
-
-import java.util.UUID;
 
 public class MistcloakItem extends Item implements ICurioItem
 {
@@ -34,14 +33,14 @@ public class MistcloakItem extends Item implements ICurioItem
 		return true;
 	}
 
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
+	public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation location, ItemStack stack)
 	{
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+		ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = ImmutableMultimap.builder();
 
-		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, uuid, stack));
-		builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Mistcloak modifier", 2, AttributeModifier.Operation.ADDITION));
-		builder.put(ForgeMod.ENTITY_GRAVITY.get(), new AttributeModifier(uuid, "Mistcloak glide", -0.02, AttributeModifier.Operation.ADDITION));
-		builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Mistcloak fly", 0.02, AttributeModifier.Operation.MULTIPLY_BASE));
+		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, location, stack));
+		builder.put(Attributes.ARMOR, new AttributeModifier(location, 2, AttributeModifier.Operation.ADD_VALUE));
+		builder.put(Attributes.GRAVITY, new AttributeModifier(location, -0.02, AttributeModifier.Operation.ADD_VALUE));
+		builder.put(Attributes.FLYING_SPEED, new AttributeModifier(location, 0.02, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 		return builder.build();
 	}
 

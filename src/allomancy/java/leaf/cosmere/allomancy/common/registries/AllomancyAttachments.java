@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.function.Supplier;
 
-public class AllomancyAttachmentsRegistry
+public class AllomancyAttachments
 {
 	public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, Allomancy.MODID);
 

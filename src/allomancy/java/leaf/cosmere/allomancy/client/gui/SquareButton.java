@@ -1,26 +1,18 @@
 package leaf.cosmere.allomancy.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
 import leaf.cosmere.api.IHasMetalType;
-import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -60,11 +52,11 @@ public class SquareButton extends Button
 		}
 
 		stringBuilder.append(".png");
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 	}
 
 	@Override
-	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
+	public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		boolean isHovered = isMouseOver(pMouseX, pMouseY);
 
@@ -77,37 +69,29 @@ public class SquareButton extends Button
 
 	private void renderBackground(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r = GuiUtils.BACKGROUND_COLOR.getRed()/255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen()/255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue()/255.f;
-		float a = 1f;
+		Color color = GuiUtils.BACKGROUND_COLOR;
 
 		if (!hasManifestation)
 		{
-			r *= 0.6f;
-			g *= 0.6f;
-			b *= 0.6f;
+			color = color.darker();
 		}
 
 		if (isHovered && hasManifestation)
 		{
-			r *= 1.1f;
-			g *= 1.1f;
-			b *= 1.1f;
+			color = color.brighter();
 		}
 
 		if (manifestation instanceof AllomancyManifestation allomancyManifestation) {
 			int mode = allomancyManifestation.getMode(spiritweb);
-			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f); // Cap intensity
+			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f);
 
-			if (mode > 0) {
-				// Blend toward pure red
-				r = lerp(r, 1.0f, intensity);
-				g = lerp(g, 0.0f, intensity);
-				b = lerp(b, 0.0f, intensity);
-			} else if (mode < 0) {
-				// Blend toward pure blue
-				r = lerp(r, 0.0f, intensity);
-				g = lerp(g, 0.0f, intensity);
-				b = lerp(b, 1.0f, intensity);
+			if (mode > 0)
+			{
+				color = GuiUtils.shiftColor(color, intensity, GuiUtils.POSITIVE_USE_COLOR);
+			}
+			else if (mode < 0)
+			{
+				color = GuiUtils.shiftColor(color, intensity, GuiUtils.NEGATIVE_USE_COLOR);
 			}
 		}
 
@@ -117,17 +101,14 @@ public class SquareButton extends Button
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
-		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
+		BufferBuilder buf = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		buf.addVertex(pose, getX(), getY(), 0).setColor(color.getRGB());
+		buf.addVertex(pose, getX()+getWidth(), getY(), 0).setColor(color.getRGB());
+		buf.addVertex(pose, getX()+getWidth(), getY()+getHeight(), 0).setColor(color.getRGB());
+		buf.addVertex(pose, getX(), getY()+getHeight(), 0).setColor(color.getRGB());
 
-		buf.vertex(pose, getX(), getY(), 0).color(r, g, b, a).endVertex();
-		buf.vertex(pose, getX()+getWidth(), getY(), 0).color(r, g, b, a).endVertex();
-		buf.vertex(pose, getX()+getWidth(), getY()+getHeight(), 0).color(r, g, b, a).endVertex();
-		buf.vertex(pose, getX(), getY()+getHeight(), 0).color(r, g, b, a).endVertex();
-
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 
@@ -141,10 +122,7 @@ public class SquareButton extends Button
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
-		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		int x = getX();
 		int y = getY();
@@ -152,30 +130,30 @@ public class SquareButton extends Button
 		int h = getHeight();
 
 		// Top edge
-		buf.vertex(pose, x, y, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x, y + thickness, 0).color(color).endVertex();
+		buf.addVertex(pose, x, y, 0).setColor(color);
+		buf.addVertex(pose, x + w, y, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x, y + thickness, 0).setColor(color);
 
 		// Bottom edge
-		buf.vertex(pose, x, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + h, 0).color(color).endVertex();
-		buf.vertex(pose, x, y + h, 0).color(color).endVertex();
+		buf.addVertex(pose, x, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + h, 0).setColor(color);
+		buf.addVertex(pose, x, y + h, 0).setColor(color);
 
 		// Left edge
-		buf.vertex(pose, x, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + thickness, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + thickness, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x, y + h - thickness, 0).color(color).endVertex();
+		buf.addVertex(pose, x, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + thickness, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + thickness, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x, y + h - thickness, 0).setColor(color);
 
 		// Right edge
-		buf.vertex(pose, x + w - thickness, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w - thickness, y + h - thickness, 0).color(color).endVertex();
+		buf.addVertex(pose, x + w - thickness, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w - thickness, y + h - thickness, 0).setColor(color);
 
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 

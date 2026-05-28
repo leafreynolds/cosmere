@@ -5,6 +5,7 @@
 package leaf.cosmere.allomancy.common.eventHandlers;
 
 import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.effects.BrassStunEffect;
 import leaf.cosmere.allomancy.common.items.CoinPouchItem;
 import leaf.cosmere.allomancy.common.items.MistcloakItem;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyAtium;
@@ -22,34 +23,33 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import top.theillusivec4.curios.api.CuriosApi;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import top.theillusivec4.curios.api.SlotResult;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Allomancy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Allomancy.MODID)
 public class AllomancyEntityEventHandler
 {
 
 
 	@SubscribeEvent
-	public static void onEntityItemPickUp(EntityItemPickupEvent event)
+	public static void onEntityItemPickUp(ItemEntityPickupEvent.Pre event)
 	{
-		if (CoinPouchItem.onPickupItem(event.getItem(), event.getEntity()))
+		if (CoinPouchItem.onPickupItem(event.getItemEntity(), event.getPlayer()))
 		{
-			event.setCanceled(true);
+			event.setCanPickup(TriState.FALSE);
 		}
 	}
 
@@ -92,10 +92,6 @@ public class AllomancyEntityEventHandler
 	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
 		final LivingEntity livingEntity = event.getEntity();
 
 		if (event.getItem().getItem() instanceof MetalNuggetItem metalNuggetItem)
@@ -112,14 +108,14 @@ public class AllomancyEntityEventHandler
 
 	//Attack event happens first
 	@SubscribeEvent
-	public static void onLivingAttackEvent(LivingAttackEvent event)
+	public static void onLivingAttackEvent(AttackEntityEvent event)
 	{
 		AllomancyAtium.onLivingAttackEvent(event);
 	}
 
 	//then living hurt event
 	@SubscribeEvent
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingIncomingDamageEvent event)
 	{
 		AllomancyNicrosil.onLivingHurtEvent(event);
 		AllomancyPewter.onLivingHurtEvent(event);
@@ -180,4 +176,24 @@ public class AllomancyEntityEventHandler
 					DamageTypes.FLY_INTO_WALL
 					//DamageTypes.FREEZE
 			);
+
+	@SubscribeEvent
+	public static void onMobEffectRemoved(MobEffectEvent.Remove event)
+	{
+		MobEffectInstance instance = event.getEffectInstance();
+		if (instance != null && instance.getEffect().value() instanceof BrassStunEffect)
+		{
+			BrassStunEffect.clearStun(event.getEntity());
+		}
+	}
+
+	@SubscribeEvent
+	public static void onMobEffectExpired(MobEffectEvent.Expired event)
+	{
+		MobEffectInstance instance = event.getEffectInstance();
+		if (instance != null && instance.getEffect().value() instanceof BrassStunEffect)
+		{
+			BrassStunEffect.clearStun(event.getEntity());
+		}
+	}
 }

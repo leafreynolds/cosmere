@@ -14,7 +14,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 public class AllomancyNicrosil extends AllomancyManifestation
 {
@@ -43,7 +43,7 @@ public class AllomancyNicrosil extends AllomancyManifestation
 	}
 
 	//Enhances Allomantic Burn of Target
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingIncomingDamageEvent event)
 	{
 		if (event.isCanceled())
 		{

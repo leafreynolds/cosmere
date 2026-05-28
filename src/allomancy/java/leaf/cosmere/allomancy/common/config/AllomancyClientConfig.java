@@ -5,20 +5,20 @@
 package leaf.cosmere.allomancy.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class AllomancyClientConfig implements ICosmereConfig
 {
-	private final ForgeConfigSpec configSpec;
-	public final ForgeConfigSpec.BooleanValue drawMetalLines;
-	public final ForgeConfigSpec.BooleanValue drawMetalBoxes;
-	public final ForgeConfigSpec.BooleanValue canHearRain;
-	public final ForgeConfigSpec.IntValue pixelationAmount;
+	private final ModConfigSpec configSpec;
+	public final ModConfigSpec.BooleanValue drawMetalLines;
+	public final ModConfigSpec.BooleanValue drawMetalBoxes;
+	public final ModConfigSpec.BooleanValue canHearRain;
+	public final ModConfigSpec.IntValue pixelationAmount;
 
 	AllomancyClientConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Client Config. This config only exists on the client").push("Allomancy");
 
 		drawMetalLines = builder.comment("Iron/Steel vision draws metal lines between the user and the source of metal").define("drawMetalLines", true);
@@ -37,7 +37,7 @@ public class AllomancyClientConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

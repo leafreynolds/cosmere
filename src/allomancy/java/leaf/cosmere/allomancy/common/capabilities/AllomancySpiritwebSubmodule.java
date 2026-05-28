@@ -24,18 +24,19 @@ import leaf.cosmere.api.helpers.DrawHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registration.impl.AttributeRegistryObject;
-import leaf.cosmere.client.gui.SpiritwebRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -272,7 +273,7 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				ScanResult scanResult = IronSteelLinesThread.getInstance().requestScanResult();
 				Vec3 closestMetalObject = IronSteelLinesThread.getInstance().getClosestMetalObject();
 
-				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getFrameTime()).add(0, -1, 0);
+				Vec3 originPoint = spiritweb.getLiving().getLightProbePosition(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true)).add(0, -1, 0);
 
 				final Boolean drawMetalLines = AllomancyConfigs.CLIENT.drawMetalLines.get();
 				if (drawMetalLines && !scanResult.foundEntities.isEmpty())
@@ -334,10 +335,10 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
-	public List<Attribute> getPowers()
+	public List<Holder<Attribute>> getPowers()
 	{
 		return AllomancyAttributes.ALLOMANCY_ATTRIBUTES.values().stream()
-				.map((AttributeRegistryObject::getAttribute)).collect(Collectors.toList());
+				.map((AttributeRegistryObject::getHolder)).collect(Collectors.toList());
 	}
 
 	@Override

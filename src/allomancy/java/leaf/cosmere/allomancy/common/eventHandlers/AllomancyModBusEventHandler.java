@@ -10,13 +10,12 @@ import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.eventHandlers.ModBusEventHandler;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
-
-@Mod.EventBusSubscriber(modid = Allomancy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Allomancy.MODID)
 public class AllomancyModBusEventHandler
 {
 	@SubscribeEvent(priority = EventPriority.HIGH)
@@ -28,11 +27,11 @@ public class AllomancyModBusEventHandler
 			{
 				if (metalType.hasAssociatedManifestation() && AllomancyAttributes.ALLOMANCY_ATTRIBUTES.containsKey(metalType))
 				{
-					event.add(entityType, AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get());
+					event.add(entityType, AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).getHolder());
 				}
 			}
 		}
 
-		event.add(EntityType.WARDEN, AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(Metals.MetalType.BRONZE).get());
+		event.add(EntityType.WARDEN, AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(Metals.MetalType.BRONZE).getHolder());
 	}
 }

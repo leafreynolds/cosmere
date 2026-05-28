@@ -18,9 +18,9 @@ public class CoinProjectile extends AbstractArrow implements ItemSupplier
 {
 	private ItemStack projectileStack = ItemsRegistry.METAL_NUGGETS.get(Metals.MetalType.COPPER).get().getDefaultInstance();
 
-	public CoinProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack)
+	public CoinProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack, ItemStack weapon)
 	{
-		super(AllomancyEntityTypes.COIN_PROJECTILE.get(), livingEntity, level);
+		super(AllomancyEntityTypes.COIN_PROJECTILE.get(), livingEntity, level, itemStack.copy(), weapon);
 		this.projectileStack = itemStack.copy();
 	}
 
@@ -31,6 +31,12 @@ public class CoinProjectile extends AbstractArrow implements ItemSupplier
 
 	@Override
 	protected ItemStack getPickupItem()
+	{
+		return projectileStack;
+	}
+
+	@Override
+	protected ItemStack getDefaultPickupItem()
 	{
 		return projectileStack;
 	}

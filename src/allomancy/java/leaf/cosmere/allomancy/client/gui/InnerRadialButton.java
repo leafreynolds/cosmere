@@ -1,10 +1,7 @@
 package leaf.cosmere.allomancy.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
 import leaf.cosmere.api.IHasMetalType;
@@ -13,15 +10,12 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +74,7 @@ public class InnerRadialButton extends Button
 		}
 
 		stringBuilder.append(".png");
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		manifestationConsumer = maniConsumer;
 
@@ -203,9 +197,7 @@ public class InnerRadialButton extends Button
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
 		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
@@ -213,13 +205,13 @@ public class InnerRadialButton extends Button
 			float py = quad.py();
 			float size = quad.size();
 
-			buf.vertex(pose, px, py, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py, 0).color(color.getRGB()).endVertex();
+			buf.addVertex(pose, px, py, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py, 0).setColor(color.getRGB());
 		}
 
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 
