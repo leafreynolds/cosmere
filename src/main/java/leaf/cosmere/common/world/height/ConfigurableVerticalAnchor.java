@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-
+// todo: this will require significant changes, and probably other worldgen stuff too
+// new mekanism example: https://github.com/mekanism/Mekanism/blob/1.21.x/src/main/java/mekanism/common/world/height/ConfigurableVerticalAnchor.java
 //based on ConfigurableVerticalAnchor from Mekanism
 // https://github.com/mekanism/Mekanism/blob/7de496745c721fb15d00d590ddcacf00570f3f1b/src/main/java/mekanism/common/world/height/ConfigurableVerticalAnchor.java#L14
 public record ConfigurableVerticalAnchor(Supplier<AnchorType> anchorType, Supplier<Integer> value)

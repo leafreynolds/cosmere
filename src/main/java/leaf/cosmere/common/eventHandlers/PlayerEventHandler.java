@@ -45,7 +45,7 @@ public class PlayerEventHandler
 	}
 
 	@SubscribeEvent
-	public void onItemTossEvent(ItemTossEvent event)
+	public static void onItemTossEvent(ItemTossEvent event)
 	{
 		if (!event.getPlayer().level().isClientSide)
 		{
@@ -72,7 +72,7 @@ public class PlayerEventHandler
 	}
 
 	@SubscribeEvent
-	public void onXPChange(PlayerXpEvent.XpChange event)
+	public static void onXPChange(PlayerXpEvent.XpChange event)
 	{
 		boolean isRemote = event.getEntity().level().isClientSide;
 		if (isRemote)

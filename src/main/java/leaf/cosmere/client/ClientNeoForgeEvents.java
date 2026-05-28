@@ -30,7 +30,7 @@ import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 @EventBusSubscriber(modid = Cosmere.MODID)
-public class ClientForgeEvents
+public class ClientNeoForgeEvents
 {
 
 	@SubscribeEvent
@@ -55,7 +55,7 @@ public class ClientForgeEvents
 	}
 
 	@SubscribeEvent
-	public static void onInput(InputEvent event)
+	public static void onInput(InputEvent.Key event)
 	{
 		final LocalPlayer player = Minecraft.getInstance().player;
 

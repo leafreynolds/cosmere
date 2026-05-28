@@ -5,7 +5,6 @@
 package leaf.cosmere.common;
 
 import leaf.cosmere.api.*;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.compat.patchouli.PatchouliCompat;
 import leaf.cosmere.common.config.CosmereConfigs;
@@ -21,7 +20,6 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +60,7 @@ public class Cosmere
 		EntityTypeRegistry.ENTITY_TYPES.register(modBus);
 		AttributesRegistry.ATTRIBUTES.register(modBus);
 		ManifestationRegistry.MANIFESTATIONS.createAndRegisterManifestation(modBus);
+		ManifestationRegistry.MANIFESTATIONS.register(modBus);
 		CosmereEffectsRegistry.EFFECTS.createAndRegister(modBus);
 		PoiTypesRegistry.POINT_OF_INTERESTS.register(modBus);
 		VillagerProfessionRegistry.VILLAGE_PROFESSIONS.register(modBus);
