@@ -20,11 +20,11 @@ public class ChromiumStoreEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				Attributes.LUCK,
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 
 		addAttributeModifier(
-				AttributesRegistry.COSMERE_FORTUNE.getAttribute(),
+				AttributesRegistry.COSMERE_FORTUNE.getHolder(),
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }

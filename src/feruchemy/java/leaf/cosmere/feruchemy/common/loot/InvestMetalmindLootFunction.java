@@ -4,8 +4,8 @@
 
 package leaf.cosmere.feruchemy.common.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.StackNBTHelper;
@@ -19,16 +19,20 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.List;
+
 public class InvestMetalmindLootFunction extends LootItemConditionalFunction
 {
+	public static final MapCodec<InvestMetalmindLootFunction> CODEC = RecordCodecBuilder.mapCodec(
+			inst -> commonFields(inst).apply(inst, InvestMetalmindLootFunction::new));
 
-	protected InvestMetalmindLootFunction(LootItemCondition[] conditionsIn)
+	protected InvestMetalmindLootFunction(List<LootItemCondition> conditionsIn)
 	{
 		super(conditionsIn);
 	}
 
 	@Override
-	public LootItemFunctionType getType()
+	public LootItemFunctionType<InvestMetalmindLootFunction> getType()
 	{
 		return FeruchemyLootFunctions.INVEST_METALMIND.get();
 	}
@@ -61,14 +65,5 @@ public class InvestMetalmindLootFunction extends LootItemConditionalFunction
 		StackNBTHelper.setString(stack, Constants.NBT.ATTUNED_PLAYER_NAME, "Unkeyed"); // todo translation
 
 		return stack;
-	}
-
-	public static class Serializer extends LootItemConditionalFunction.Serializer<InvestMetalmindLootFunction>
-	{
-		@Override
-		public InvestMetalmindLootFunction deserialize(JsonObject jsonObject, JsonDeserializationContext deserializationContext, LootItemCondition[] lootConditions)
-		{
-			return new InvestMetalmindLootFunction(lootConditions);
-		}
 	}
 }

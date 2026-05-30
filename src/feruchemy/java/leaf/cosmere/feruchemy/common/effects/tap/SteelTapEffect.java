@@ -9,8 +9,8 @@ import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.client.event.ComputeFovModifierEvent;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 
 public class SteelTapEffect extends FeruchemyEffectBase
@@ -22,20 +22,20 @@ public class SteelTapEffect extends FeruchemyEffectBase
 		this.addAttributeModifier(
 				Attributes.ATTACK_SPEED,
 				0.1F,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
 		this.addAttributeModifier(
 				Attributes.MOVEMENT_SPEED,
 				0.2F,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
-		MinecraftForge.EVENT_BUS.addListener(this::onFOVUpdate);
+		NeoForge.EVENT_BUS.addListener(this::onFOVUpdate);
 
 	}
 
-	public void onFOVUpdate(ComputeFovModifierEvent event)
+	public void onFOVUpdate(ViewportEvent.ComputeFov event)
 	{
 		//todo remember to make this better? clamp isn't necessarily the best way to stop it going over the top
-		event.setNewFovModifier(Mth.clamp(event.getNewFovModifier(), 0.8f, 1.2f));
+		event.setFOV(Mth.clamp(event.getFOV(), 0.8, 1.2));
 	}
 }

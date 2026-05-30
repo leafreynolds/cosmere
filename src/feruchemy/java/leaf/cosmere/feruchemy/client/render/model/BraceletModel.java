@@ -188,18 +188,7 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 				false,
 				stack.getItem() == FeruchemyItems.BANDS_OF_MOURNING.get());
 
-
-		modelPartToRender.render(
-				matrixStack,
-				vertexBuilder,
-				light,
-				OverlayTexture.NO_OVERLAY,
-				color.getRed() / 255f,
-				color.getGreen() / 255f,
-				color.getBlue() / 255f,
-				1);
-
-
+		modelPartToRender.render(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, color.getRGB());
 		/*
 		//debug only, so a spike will render in all locations
 		renderToBuffer(
@@ -211,7 +200,5 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 				color.getGreen(),
 				color.getBlue(),
 				1);*/
-
-
 	}
 }

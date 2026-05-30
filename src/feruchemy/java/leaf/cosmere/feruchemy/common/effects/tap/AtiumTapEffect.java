@@ -21,31 +21,31 @@ public class AtiumTapEffect extends FeruchemyEffectBase
 
 		//atium attribute, size
 		addAttributeModifier(
-				AttributesRegistry.SIZE_ATTRIBUTE.get(),
+				AttributesRegistry.SIZE_ATTRIBUTE.getHolder(),
 				0.15D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 
 		//reduce related attributes appropriately
 		addAttributeModifier(
 				Attributes.MOVEMENT_SPEED,
 				0.1D,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 		addAttributeModifier(
 				Attributes.MAX_HEALTH,
 				0.1D,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 		addAttributeModifier(
 				Attributes.KNOCKBACK_RESISTANCE,
 				0.1D,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 		addAttributeModifier(
 				Attributes.ATTACK_DAMAGE,
 				0.1D,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 		addAttributeModifier(
 				Attributes.ATTACK_KNOCKBACK,
 				0.1D,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 	}
 
 

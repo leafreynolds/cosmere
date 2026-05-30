@@ -8,7 +8,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.common.ForgeMod;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 
 public class IronTapEffect extends FeruchemyEffectBase
@@ -19,10 +19,10 @@ public class IronTapEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				Attributes.KNOCKBACK_RESISTANCE,
 				0.1D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 		addAttributeModifier(
-				ForgeMod.ENTITY_GRAVITY.get(),
+				Attributes.GRAVITY,
 				0.01D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }
