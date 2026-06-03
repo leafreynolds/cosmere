@@ -63,9 +63,9 @@ public interface ISpiritweb extends INBTSerializable<CompoundTag>
 
 	List<Manifestation> getAvailableManifestations(boolean ignoreTemporaryPower);
 
-	HashMap<Manifestation, Integer> getManifestations();
+	HashMap<Manifestation, Integer> getManifestationsAndModes();
 
-	HashMap<Manifestation, Integer> getManifestations(boolean ignoreTemporaryPower, boolean ignoreInactivePower);
+	HashMap<Manifestation, Integer> getManifestationsAndModes(boolean ignoreTemporaryPower, boolean ignoreInactivePower);
 
 	String changeManifestation(int dir);
 
