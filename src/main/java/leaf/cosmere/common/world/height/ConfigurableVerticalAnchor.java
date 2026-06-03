@@ -41,14 +41,7 @@ public record ConfigurableVerticalAnchor(Supplier<AnchorType> anchorType, Suppli
 		}
 		else
 		{
-			value = valueBuilder.define("value", defaultAnchor.value(), o ->
-			{
-				if (o instanceof Integer v)
-				{
-					return minAnchor.anchorType.get() != type.get() || v >= minAnchor.value.get();
-				}
-				return false;
-			});
+			value = valueBuilder.define("value", defaultAnchor.value(), o -> o instanceof Integer);
 		}
 		builder.pop();
 		return new ConfigurableVerticalAnchor(type, value);
