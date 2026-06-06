@@ -43,7 +43,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import org.jetbrains.annotations.UnknownNullability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -106,8 +105,8 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 
-	// todo: not certain if these functions are necessary anymore, find out when it builds
-	public CompoundTag serializeNBT()
+	@Override
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (this.nbt == null)
 		{
@@ -118,11 +117,12 @@ public class SpiritwebCapability implements ISpiritweb
 		nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
 
 		final CompoundTag modeNBT = new CompoundTag();
-		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+		for (Manifestation manifestation : getManifestations())
 		{
-			if (MANIFESTATIONS_MODE.containsKey(manifestation))
+			modeNBT.putInt(manifestation.getRegistryName().toString(), MANIFESTATIONS_MODE.getOrDefault(manifestation, 0));
+			if (!MANIFESTATIONS_MODE.containsKey(manifestation))
 			{
-				modeNBT.putInt(manifestation.getRegistryName().toString(), MANIFESTATIONS_MODE.get(manifestation));
+				MANIFESTATIONS_MODE.put(manifestation, 0);
 			}
 		}
 		nbt.put("manifestation_modes", modeNBT);
@@ -164,7 +164,8 @@ public class SpiritwebCapability implements ISpiritweb
 		return nbt;
 	}
 
-	public void deserializeNBT(CompoundTag compoundTag)
+	@Override
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
 		this.nbt = compoundTag;
 
@@ -498,9 +499,10 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 		}
 
-		//forcibly serialize the old web, then deserialize it into the new one
-		//before, it was just a copy of whatever was saved the last time it was synced.
-		deserializeNBT(oldWeb.serializeNBT().copy());
+//		//forcibly serialize the old web, then deserialize it into the new one
+//		//before, it was just a copy of whatever was saved the last time it was synced.
+//		HolderLookup.Provider provider = event.getOriginal().registryAccess();
+//		deserializeNBT(provider, oldWeb.serializeNBT(provider).copy());
 
 		if (event.isWasDeath())
 		{
@@ -730,13 +732,28 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public HashMap<Manifestation, Integer> getManifestations()
+	public HashMap<Manifestation, Integer> getManifestationsAndModes()
 	{
-		return getManifestations(false, false);
+		return getManifestationsAndModes(false, false);
+	}
+
+	private List<Manifestation> getManifestations()
+	{
+		List<Manifestation> list = new ArrayList<>();
+		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+		{
+			if (manifestation == ManifestationRegistry.NONE.getManifestation())
+				continue;
+			if (hasManifestation(manifestation))
+			{
+				list.add(manifestation);
+			}
+		}
+		return list;
 	}
 
 	@Override
-	public HashMap<Manifestation, Integer> getManifestations(boolean ignoreTemporaryPower, boolean ignoreInactivePower)
+	public HashMap<Manifestation, Integer> getManifestationsAndModes(boolean ignoreTemporaryPower, boolean ignoreInactivePower)
 	{
 		HashMap<Manifestation, Integer> list = new HashMap<>();
 		for (Manifestation manifestation: CosmereAPI.manifestationRegistry())
@@ -850,7 +867,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void syncToClients(@Nullable ServerPlayer serverPlayerEntity)
 	{
-		if (livingEntity != null && livingEntity.level().isClientSide)
+		if (livingEntity == null || livingEntity.level().isClientSide)
 		{
 			throw new IllegalStateException("Don't sync client -> server");
 		}
@@ -862,7 +879,7 @@ public class SpiritwebCapability implements ISpiritweb
 			first.ifPresent(this::setSelectedManifestation);
 		}
 
-		CompoundTag nbt = serializeNBT();
+		CompoundTag nbt = serializeNBT(livingEntity.registryAccess());
 
 		if (serverPlayerEntity == null)
 		{
@@ -901,18 +918,6 @@ public class SpiritwebCapability implements ISpiritweb
 		}
 		powerSaveStorage[num].activate(this);
 		syncToClients(null);
-	}
-
-	@Override
-	public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider)
-	{
-		return null;
-	}
-
-	@Override
-	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
-	{
-
 	}
 
 	public class PowerSaveState
@@ -975,7 +980,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		public void addManifestations(ISpiritweb spiritweb)
 		{
-			manifestations = spiritweb.getManifestations(false, true);
+			manifestations = spiritweb.getManifestationsAndModes(false, true);
 
 		}
 

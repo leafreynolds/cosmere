@@ -35,11 +35,7 @@ public record ConfigurableHeightRange(Supplier<HeightShape> shape,
 				{
 					if (o instanceof Integer value)
 					{
-						if (value == 0)
-						{
-							return true;
-						}
-						return value > 0 && shape.get() == HeightShape.TRAPEZOID;
+						return value >= 0;
 					}
 					return false;
 				});

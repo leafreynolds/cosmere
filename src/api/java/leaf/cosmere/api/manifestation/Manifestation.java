@@ -146,7 +146,7 @@ public class Manifestation implements IManifestationProvider
 
 	public Holder<Attribute> getAttribute()
 	{
-		return BuiltInRegistries.ATTRIBUTE.getHolder(getRegistryName()).get();
+		return BuiltInRegistries.ATTRIBUTE.getHolder(getRegistryName()).orElse(null);
 	}
 
 	public int getInvestitureRemaining(ISpiritweb spiritweb)
