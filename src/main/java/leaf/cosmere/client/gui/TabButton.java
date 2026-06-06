@@ -28,6 +28,14 @@ public class TabButton extends Button
 	}
 
 	@Override
+	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers)
+	{
+		// no >:(
+		// this causes keybinds like space and enter to spam clicks when you click the button
+		return false;
+	}
+
+	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		renderBackground(pGuiGraphics, pMouseX, pMouseY);
