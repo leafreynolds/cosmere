@@ -1,5 +1,5 @@
 /*
- * File updated ~ 9 - 8 - 2024 ~ Leaf
+ * File updated ~ 30 - 5 - 2026 ~ EdgarVerdi
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
@@ -144,7 +144,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 
 	private boolean canSleep(Player player)
 	{
-		Player.BedSleepingProblem ret = ForgeEventFactory.onPlayerSleepInBed(player, Optional.empty());
+		Player.BedSleepingProblem ret = ForgeEventFactory.onPlayerSleepInBed(player, Optional.of(player.blockPosition()));
 		if (ret != null)
 		{
 			return false;
