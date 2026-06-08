@@ -101,7 +101,10 @@ public final class StackNBTHelper
 
 	public static boolean verifyExistance(ItemStack stack, String tag)
 	{
-		return !stack.isEmpty() && stack.getOrCreateTag().contains(tag);
+		if (stack.isEmpty()) return false;
+
+		CompoundTag compoundTag = stack.getTag();
+		return compoundTag != null && compoundTag.contains(tag);
 	}
 
 	@Nullable

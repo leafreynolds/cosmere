@@ -217,6 +217,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 		data.addEffect(currentEffect);
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public AbstractWidget getInfoBlock()
 	{
