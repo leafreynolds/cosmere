@@ -27,5 +27,6 @@ public class LivingEntityMixin
 		LivingEntity livingEntity = (LivingEntity) (Object) this;
 		cir.setReturnValue(cir.getReturnValue() * FeruchemyAtium.getScale(livingEntity));
 	}
+
 }
 

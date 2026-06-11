@@ -21,11 +21,11 @@ public final class StackNBTHelper
 
 	// INTERNAL COMPONENT HELPERS ////////////////////////////////////////////////
 
-	private static void mutateData(ItemStack stack, Consumer<CompoundTag> mutator)
+	private static CustomData mutateData(ItemStack stack, Consumer<CompoundTag> mutator)
 	{
 		CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 		mutator.accept(tag);
-		stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+		return stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 	}
 
 	private static CompoundTag readData(ItemStack stack)
@@ -188,6 +188,11 @@ public final class StackNBTHelper
 	{
 		JsonElement element = ItemStack.CODEC.encodeStart(registries.createSerializationContext(JsonOps.INSTANCE), stack).getOrThrow();
 		return element.getAsJsonObject();
+	}
+
+	public static CompoundTag getOrCreateCompoundTag(ItemStack stack, String tag)
+	{
+		return verifyExistance(stack, tag) ? readData(stack).getCompound(tag) : mutateData(stack, t -> t.put(tag, new CompoundTag())).getUnsafe();
 	}
 
 	// MATCHING UTILS ////////////////////////////////////////////////////////////

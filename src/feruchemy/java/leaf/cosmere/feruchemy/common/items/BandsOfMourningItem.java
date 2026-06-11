@@ -10,8 +10,11 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.CreativeModeTab;
@@ -33,7 +36,7 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 		ItemStack fullPower = new ItemStack(this);
 		setCharge(fullPower, getMaxCharge(fullPower));
 
-		CompoundTag nbt = fullPower.getOrCreateTagElement("StoredInvestiture");
+		CompoundTag nbt = StackNBTHelper.getOrCreateCompoundTag(fullPower, "StoredInvestiture");
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
@@ -62,14 +65,14 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
+	public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
 	{
-		Multimap<Attribute, AttributeModifier> attributeModifiers = super.getAttributeModifiers(slotContext, uuid, stack);
-		CompoundTag nbt = stack.getOrCreateTagElement("StoredInvestiture");
+		Multimap<Holder<Attribute>, AttributeModifier> attributeModifiers = super.getAttributeModifiers(slotContext, uuid, stack);
+		CompoundTag nbt = StackNBTHelper.getOrCreateCompoundTag(stack, "StoredInvestiture");
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
-			Attribute attribute = manifestation.getAttribute();
+			Holder<Attribute> attribute = manifestation.getAttribute();
 			final String attributeRegistryName = manifestation.getRegistryName().toString();
 			if (!CompoundNBTHelper.verifyExistance(nbt, attributeRegistryName) || attribute == null)
 			{
@@ -79,13 +82,12 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 			attributeModifiers.put(
 					attribute,
 					new AttributeModifier(
-							Constants.NBT.UNKEYED_UUID,
-							attributeRegistryName,
+							ResourceLocation.parse(attributeRegistryName),
 							CompoundNBTHelper.getDouble(
 									nbt,
 									attributeRegistryName,
 									0),
-							AttributeModifier.Operation.ADDITION));
+							AttributeModifier.Operation.ADD_VALUE));
 
 		}
 

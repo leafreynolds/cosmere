@@ -16,21 +16,18 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.CanPlayerSleepEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 public class FeruchemyBronze extends FeruchemyManifestation
 {
 	public FeruchemyBronze(Metals.MetalType metalType)
 	{
 		super(metalType);
-		MinecraftForge.EVENT_BUS.addListener(this::sleepCheck);
+		NeoForge.EVENT_BUS.addListener(this::sleepCheck);
 	}
 
 	@Override
@@ -117,19 +114,10 @@ public class FeruchemyBronze extends FeruchemyManifestation
 
 		try
 		{
-			//sleepCounter
-			ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "f_36110_");
+			ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "sleepCounter");
 		}
 		catch (ObfuscationReflectionHelper.UnableToFindFieldException e)
 		{
-			try
-			{
-				//sleepCounter
-				ObfuscationReflectionHelper.setPrivateValue(Player.class, player, 0, "sleepCounter");
-			}
-			catch (ObfuscationReflectionHelper.UnableToFindFieldException unableToFindFieldException)
-			{
-			}
 		}
 
 		if (player.level() instanceof ServerLevel serverLevel)
@@ -144,10 +132,13 @@ public class FeruchemyBronze extends FeruchemyManifestation
 
 	private boolean canSleep(Player player)
 	{
-		Player.BedSleepingProblem ret = ForgeEventFactory.onPlayerSleepInBed(player, Optional.empty());
-		if (ret != null)
+		if (player instanceof ServerPlayer serverPlayer)
 		{
-			return false;
+			CanPlayerSleepEvent sleepEvent = NeoForge.EVENT_BUS.post(new CanPlayerSleepEvent(serverPlayer, serverPlayer.blockPosition(), null));
+			if (sleepEvent.getProblem() != null)
+			{
+				return false;
+			}
 		}
 
 		if (player.isSleeping() || !player.isAlive())
@@ -160,11 +151,6 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_HERE);
 		}
 		if (player.level().isDay())
-		{
-			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
-		}
-
-		if (!ForgeEventFactory.fireSleepingTimeCheck(player, Optional.empty()))
 		{
 			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
 		}
@@ -189,22 +175,20 @@ public class FeruchemyBronze extends FeruchemyManifestation
 		return true;
 	}
 
-	public void sleepCheck(SleepingLocationCheckEvent event)
+	public void sleepCheck(CanPlayerSleepEvent event)
 	{
-		if (event.getEntity() instanceof Player player)
+		ServerPlayer player = event.getEntity();
+		if (!player.level().dimensionType().natural())
 		{
-			if (!player.level().dimensionType().natural())
-			{
-				return;
-			}
-
-			SpiritwebCapability.get(event.getEntity()).ifPresent(iSpiritweb ->
-			{
-				if (isActive(iSpiritweb))
-				{
-					event.setResult(Event.Result.ALLOW);
-				}
-			});
+			return;
 		}
+
+		SpiritwebCapability.get(player).ifPresent(iSpiritweb ->
+		{
+			if (isActive(iSpiritweb))
+			{
+				event.setProblem(null);
+			}
+		});
 	}
 }

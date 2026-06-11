@@ -9,8 +9,8 @@ import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 
 //connection aka ability for people to notice you
 public class DuraluminStoreEffect extends FeruchemyEffectBase
@@ -20,30 +20,32 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 		super(type);
 
 		addAttributeModifier(
-				AttributesRegistry.CONNECTION.getAttribute(),
+				AttributesRegistry.CONNECTION.getHolder(),
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingVisibilityEvent);
+		NeoForge.EVENT_BUS.addListener(this::onLivingChangeTargetEvent);
 	}
 
-	public void onLivingVisibilityEvent(LivingEvent.LivingVisibilityEvent event)
+	public void onLivingChangeTargetEvent(LivingChangeTargetEvent event)
 	{
-		if (event.isCanceled())
+		if (event.isCanceled() || event.getNewAboutToBeSetTarget() == null)
 		{
 			return;
 		}
 
-		int attributeValue = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.CONNECTION.getAttribute());
+		int attributeValue = (int) EntityHelper.getAttributeValue(event.getNewAboutToBeSetTarget(), AttributesRegistry.CONNECTION.getHolder());
 		if (attributeValue < 0)
 		{
 			int abs = Math.abs(attributeValue);
 
 			//at max strength and wearing no armor, you could stand a block or two away from a creeper and it won't see you.
 			//walk right into it though, and it will blow up.
-			event.modifyVisibility(1f / (abs + 2));
+			if (abs >= 2)
+			{
+				event.setCanceled(true);
+			}
 		}
-
 	}
 
 }

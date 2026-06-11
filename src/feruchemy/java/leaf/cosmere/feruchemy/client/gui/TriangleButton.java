@@ -11,16 +11,13 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
@@ -64,7 +61,7 @@ public class TriangleButton extends Button
 		}
 
 		stringBuilder.append(".png");
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		manifestationConsumer = maniConsumer;
 
@@ -174,9 +171,7 @@ public class TriangleButton extends Button
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
 		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
@@ -184,13 +179,13 @@ public class TriangleButton extends Button
 			float py = quad.py();
 			float size = quad.size();
 
-			buf.vertex(pose, px, py, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py, 0).color(color.getRGB()).endVertex();
+			buf.addVertex(pose, px, py, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py, 0).setColor(color.getRGB());
 		}
 
-		tess.end();
+		//buf.build();
 		RenderSystem.disableBlend();
 	}
 
