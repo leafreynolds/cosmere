@@ -18,35 +18,35 @@ description = '''Cosmere is a library mod, meant to be used with it's modules th
 
 [[dependencies.cosmere]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "${mc_version}"
 side = "BOTH"
 [[dependencies.cosmere]]
-modId = "forge"
-mandatory = true
-versionRange = "${forge_version}"
+modId = "neoforge"
+type = "required"
+versionRange = "${neoforge_version}"
 side = "BOTH"
 [[dependencies.cosmere]]
 modId = "curios"
-mandatory = true
+type = "required"
 versionRange = "${curios_version}"
 ordering = "AFTER"
 side = "BOTH"
 [[dependencies.cosmere]]
 modId = "patchouli"
-mandatory = false
+type = "optional"
 versionRange = "${patchouli_version}"
 ordering = "AFTER"
 side = "BOTH"
 [[dependencies.cosmere]]
 modId = "jei"
-mandatory = false
+type = "optional"
 versionRange = "${jei_version}"
 ordering = "AFTER"
 side = "BOTH"
 [[dependencies.cosmere]]
 modId = "jade"
-mandatory = false
+type = "optional"
 versionRange = "${jade_version}"
 ordering = "AFTER"
 side = "BOTH"
