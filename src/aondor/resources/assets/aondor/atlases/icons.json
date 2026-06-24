@@ -1,9 +1,0 @@
-{
-  "sources": [
-    {
-      "type": "directory",
-      "source": "icon/aondor",
-      "prefix": ""
-    }
-  ]
-}

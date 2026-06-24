@@ -1,7 +1,0 @@
-{
-  "description": "Example description that says some stuff.",
-  "icon": "minecraft:paper",
-  "name": "Example",
-  "secret": true,
-  "sortnum": 99
-}

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 27 - 5 - 2026 ~ Leaf
+ * File updated ~ 24 - 6 - 2026 ~ Leaf
  */
 
 //  This file was adapted from the Mekanism project, obtained 19/8/22
@@ -60,11 +60,7 @@ ext {
 			'hemalurgy',
 			'surgebinding',
 			'sandmastery',
-			'awakening',
-			'aondor',
 			'aviar',
-			'soulforgery',
-			'example',
 			'cosmeretools']
 
 	extraTypes = ['datagen', 'gameTest']
@@ -440,9 +436,6 @@ tasks.named('sourcesJar', Jar).configure {
 			surgebindingClasses,
 			sandmasteryClasses,
 			aviarClasses,
-			awakeningClasses,
-			aondorClasses,
-			soulforgeryClasses,
 			cosmeretoolsClasses,
 	)
 	duplicatesStrategy(DuplicatesStrategy.FAIL)
@@ -455,9 +448,6 @@ tasks.named('sourcesJar', Jar).configure {
 			sourceSets.surgebinding.allJava,
 			sourceSets.sandmastery.allJava,
 			sourceSets.aviar.allJava,
-			sourceSets.awakening.allJava,
-			sourceSets.aondor.allJava,
-			sourceSets.soulforgery.allJava,
 			sourceSets.cosmeretools.allJava,
 	)
 	manifest.attributes(getManifestAttributes("Cosmere"))
@@ -485,11 +475,7 @@ def feruchemyJar = secondaryJar(sourceSets.feruchemy, 'Feruchemy')
 def hemalurgyJar = secondaryJar(sourceSets.hemalurgy, 'Hemalurgy')
 def surgebindingJar = secondaryJar(sourceSets.surgebinding, 'Surgebinding')
 def sandmasteryJar = secondaryJar(sourceSets.sandmastery, 'Sandmastery')
-def awakeningJar = secondaryJar(sourceSets.awakening, 'Awakening')
-def aondorJar = secondaryJar(sourceSets.aondor, 'AonDor')
 def aviarJar = secondaryJar(sourceSets.aviar, 'Aviar')
-def soulforgeryJar = secondaryJar(sourceSets.soulforgery, 'SoulForgery')
-def exampleJar = secondaryJar(sourceSets.example, 'Example')
 def cosmeretoolsJar = secondaryJar(sourceSets.cosmeretools, 'CosmereTools')
 
 tasks.withType(JavaCompile).configureEach({
@@ -506,11 +492,7 @@ artifacts {
 	archives surgebindingJar
 	archives sandmasteryJar
 	archives sourcesJar
-	archives awakeningJar
-	archives aondorJar
 	archives aviarJar
-	archives soulforgeryJar
-	archives exampleJar
 	archives cosmeretoolsJar
 }
 
