@@ -1,94 +1,64 @@
 /*
- * File updated ~ 4 - 1 - 2025 ~ Leaf
+ * File updated ~ 24 - 6 - 2026 ~ Leaf
  */
 
 package leaf.cosmere;
 
-import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.helpers.RegistryHelper;
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
-import leaf.cosmere.common.registry.ItemsRegistry;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.DifferenceIngredient;
-import net.minecraftforge.common.crafting.PartialNBTIngredient;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
+import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class BaseRecipeProvider extends RecipeProvider
 {
 
-	private final ExistingFileHelper existingFileHelper;
 	private final String modid;
 
-	protected BaseRecipeProvider(PackOutput output, ExistingFileHelper existingFileHelper, String modid)
+	protected BaseRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, String modid)
 	{
-		super(output);
-		this.existingFileHelper = existingFileHelper;
+		super(output, registries);
 		this.modid = modid;
 	}
 
 	@Override
-	protected final void buildRecipes(Consumer<FinishedRecipe> consumer)
+	protected final void buildRecipes(RecipeOutput output)
 	{
-		Consumer<FinishedRecipe> trackingConsumer = consumer.andThen(recipe ->
-				existingFileHelper.trackGenerated(recipe.getId(), PackType.SERVER_DATA, ".json", "recipes"));
-		addRecipes(trackingConsumer);
+		addRecipes(output);
 	}
 
 	protected abstract ResourceLocation makeRL(String path);
 
-	protected abstract void addRecipes(Consumer<FinishedRecipe> consumer);
-
-	public static Ingredient createIngredient(TagKey<Item> itemTag, ItemLike... items)
-	{
-		return createIngredient(Collections.singleton(itemTag), items);
-	}
-
-	public static Ingredient createIngredient(Collection<TagKey<Item>> itemTags, ItemLike... items)
-	{
-		return Ingredient.fromValues(Stream.concat(
-				itemTags.stream().map(Ingredient.TagValue::new),
-				Arrays.stream(items).map(item -> new Ingredient.ItemValue(new ItemStack(item)))
-		));
-	}
-
-	@SafeVarargs
-	public static Ingredient createIngredient(TagKey<Item>... tags)
-	{
-		return Ingredient.fromValues(Arrays.stream(tags).map(Ingredient.TagValue::new));
-	}
+	protected abstract void addRecipes(RecipeOutput output);
 
 	public static Ingredient difference(TagKey<Item> base, ItemLike subtracted)
 	{
 		return DifferenceIngredient.of(Ingredient.of(base), Ingredient.of(subtracted));
 	}
 
-	protected void addOreSmeltingRecipes(Consumer<FinishedRecipe> consumer, ItemLike ore, Item result, float experience, int time)
+	protected void addOreSmeltingRecipes(RecipeOutput output, ItemLike ore, Item result, float experience, int time)
 	{
 		String name = RegistryHelper.get(result).getPath();
 		String path = RegistryHelper.get(ore.asItem()).getPath();
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), RecipeCategory.MISC, result, experience, time).unlockedBy("has_ore", has(ore)).save(consumer, makeRL(name + "_from_smelting_" + path));
-		SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), RecipeCategory.MISC, result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(consumer, makeRL(name + "_from_blasting_" + path));
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), RecipeCategory.MISC, result, experience, time).unlockedBy("has_ore", has(ore)).save(output, makeRL(name + "_from_smelting_" + path));
+		SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), RecipeCategory.MISC, result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(output, makeRL(name + "_from_blasting_" + path));
 	}
 
-	protected void addCookingRecipes(Consumer<FinishedRecipe> consumer, ItemLike inputItem, Item result, float experience, int time)
+	protected void addCookingRecipes(RecipeOutput output, ItemLike inputItem, Item result, float experience, int time)
 	{
 		String name = RegistryHelper.get(result).getPath();
 
@@ -99,7 +69,7 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 						experience,
 						time)
 				.unlockedBy("has_item", has(inputItem))
-				.save(consumer, new ResourceLocation(modid, name + "_from_smelting"));
+				.save(output, ResourceLocation.fromNamespaceAndPath(modid, name + "_from_smelting"));
 
 		SimpleCookingRecipeBuilder.smoking(
 						Ingredient.of(inputItem),
@@ -108,7 +78,7 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 						experience,
 						time / 2)
 				.unlockedBy("has_item", has(inputItem))
-				.save(consumer, new ResourceLocation(modid, name + "_from_smoking"));
+				.save(output, ResourceLocation.fromNamespaceAndPath(modid, name + "_from_smoking"));
 
 		SimpleCookingRecipeBuilder.campfireCooking(
 						Ingredient.of(inputItem),
@@ -117,10 +87,10 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 						experience,
 						time)
 				.unlockedBy("has_item", has(inputItem))
-				.save(consumer, new ResourceLocation(modid, name + "_from_campfire"));
+				.save(output, ResourceLocation.fromNamespaceAndPath(modid, name + "_from_campfire"));
 	}
 
-	protected void addPickaxeRecipe(Consumer<FinishedRecipe> consumer, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
+	protected void addPickaxeRecipe(RecipeOutput output, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
 	{
 		ShapedRecipeBuilder
 				.shaped(RecipeCategory.TOOLS, outputItem)
@@ -131,10 +101,10 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 				.pattern(" Y ")
 				.group("pickaxe")
 				.unlockedBy("has_material", has(inputMaterial))
-				.save(consumer);
+				.save(output);
 	}
 
-	protected void addShovelRecipe(Consumer<FinishedRecipe> consumer, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
+	protected void addShovelRecipe(RecipeOutput output, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
 	{
 		ShapedRecipeBuilder
 				.shaped(RecipeCategory.TOOLS, outputItem)
@@ -145,10 +115,10 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 				.pattern("Y")
 				.group("shovel")
 				.unlockedBy("has_material", has(inputMaterial))
-				.save(consumer);
+				.save(output);
 	}
 
-	protected void addAxeRecipe(Consumer<FinishedRecipe> consumer, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
+	protected void addAxeRecipe(RecipeOutput output, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
 	{
 		ShapedRecipeBuilder
 				.shaped(RecipeCategory.TOOLS, outputItem)
@@ -159,10 +129,10 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 				.pattern(" Y")
 				.group("axe")
 				.unlockedBy("has_material", has(inputMaterial))
-				.save(consumer);
+				.save(output);
 	}
 
-	protected void addSwordRecipe(Consumer<FinishedRecipe> consumer, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
+	protected void addSwordRecipe(RecipeOutput output, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
 	{
 		ShapedRecipeBuilder
 				.shaped(RecipeCategory.COMBAT, outputItem)
@@ -173,10 +143,10 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 				.pattern("Y")
 				.group("sword")
 				.unlockedBy("has_material", has(inputMaterial))
-				.save(consumer);
+				.save(output);
 	}
 
-	protected void addHoeRecipe(Consumer<FinishedRecipe> consumer, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
+	protected void addHoeRecipe(RecipeOutput output, ItemRegistryObject<Item> outputItem, TagKey<Item> inputMaterial)
 	{
 		ShapedRecipeBuilder
 				.shaped(RecipeCategory.TOOLS, outputItem)
@@ -187,11 +157,11 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 				.pattern(" Y")
 				.group("hoe")
 				.unlockedBy("has_material", has(inputMaterial))
-				.save(consumer);
+				.save(output);
 	}
 
 
-	protected void addArmorRecipes(Consumer<FinishedRecipe> consumer, TagKey<Item> inputMaterial, @Nullable ItemLike head, @Nullable ItemLike chest, @Nullable ItemLike legs, @Nullable ItemLike feet)
+	protected void addArmorRecipes(RecipeOutput output, TagKey<Item> inputMaterial, @Nullable ItemLike head, @Nullable ItemLike chest, @Nullable ItemLike legs, @Nullable ItemLike feet)
 	{
 		if (head != null)
 		{
@@ -202,7 +172,7 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 					.pattern("X X")
 					.group("helmet")
 					.unlockedBy("has_material", has(inputMaterial))
-					.save(consumer);
+					.save(output);
 		}
 		if (chest != null)
 		{
@@ -214,7 +184,7 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 					.pattern("XXX")
 					.group("chestplate")
 					.unlockedBy("has_material", has(inputMaterial))
-					.save(consumer);
+					.save(output);
 		}
 		if (legs != null)
 		{
@@ -226,7 +196,7 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 					.pattern("X X")
 					.group("leggings")
 					.unlockedBy("has_material", has(inputMaterial))
-					.save(consumer);
+					.save(output);
 		}
 		if (feet != null)
 		{
@@ -237,24 +207,24 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 					.pattern("X X")
 					.group("boots")
 					.unlockedBy("has_material", has(inputMaterial))
-					.save(consumer);
+					.save(output);
 		}
 	}
 
-	protected void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, ItemLike input, String name)
+	protected void decompressRecipe(RecipeOutput output, ItemLike outputItem, ItemLike input, String name)
 	{
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, 9)
-				.unlockedBy("has_item", has(output))
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, outputItem, 9)
+				.unlockedBy("has_item", has(outputItem))
 				.requires(input)
-				.save(consumer, new ResourceLocation(modid, "conversions/" + name));
+				.save(output, ResourceLocation.fromNamespaceAndPath(modid, "conversions/" + name));
 	}
 
-	protected void decompressRecipe(Consumer<FinishedRecipe> consumer, ItemLike output, TagKey<Item> input, String name)
+	protected void decompressRecipe(RecipeOutput output, ItemLike outputItem, TagKey<Item> input, String name)
 	{
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, 9)
-				.unlockedBy("has_item", has(output))
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, outputItem, 9)
+				.unlockedBy("has_item", has(outputItem))
 				.requires(input)
-				.save(consumer, new ResourceLocation(modid, "conversions/" + name));
+				.save(output, ResourceLocation.fromNamespaceAndPath(modid, "conversions/" + name));
 	}
 
 	protected ShapedRecipeBuilder compressRecipe(ItemLike output, TagKey<Item> input)
@@ -282,7 +252,7 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 	{
 		CompoundTag tag = new CompoundTag();
 		tag.putInt("nuggetSize", 16);
-		PartialNBTIngredient ingredient = PartialNBTIngredient.of(input, tag);
+		Ingredient ingredient = DataComponentIngredient.of(false, DataComponents.CUSTOM_DATA, CustomData.of(tag), input.asItem());
 
 		return ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, output)
 				.define('I', ingredient)
