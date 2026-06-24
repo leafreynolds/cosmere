@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2024 ~ Leaf
+ * File updated ~ 24 - 6 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools.common;
@@ -9,19 +9,19 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.config.CosmereModConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import leaf.cosmere.tools.common.capabilities.ToolsSpiritwebSubmodule;
 import leaf.cosmere.tools.common.config.ToolsConfigs;
 import leaf.cosmere.tools.common.registries.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+
+import java.util.List;
 
 @Mod(CosmereTools.MODID)
 public class CosmereTools implements IModModule
@@ -32,17 +32,15 @@ public class CosmereTools implements IModModule
 
 	public final Version versionNumber;
 
-	public CosmereTools()
+	public CosmereTools(IEventBus modBus, ModContainer modContainer)
 	{
 		Cosmere.addModule(instance = this);
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		ToolsConfigs.registerConfigs(ModLoadingContext.get());
+		ToolsConfigs.registerConfigs(modContainer);
 
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigLoad);
 		modBus.addListener(this::onConfigReload);
-		modBus.addListener(this::imcQueue);
 
 		ToolsAttributes.ATTRIBUTES.register(modBus);
 		ToolsBiomes.BIOMES.register(modBus);
@@ -59,12 +57,12 @@ public class CosmereTools implements IModModule
 		ToolsStats.STATS.register(modBus);
 		ToolsCreativeTabs.CREATIVE_TABS.register(modBus);
 
-		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+		versionNumber = new Version(modContainer);
 	}
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(CosmereTools.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(CosmereTools.MODID, path);
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event)
@@ -76,13 +74,6 @@ public class CosmereTools implements IModModule
 			//AllomancyEntityTypes.PrepareEntityAttributes();
 			ToolsStats.initStatEntries();
 		});
-
-
-		//packetHandler.initialize();
-	}
-
-	private void imcQueue(InterModEnqueueEvent event)
-	{
 	}
 
 	@Override
@@ -103,21 +94,26 @@ public class CosmereTools implements IModModule
 		return new ToolsSpiritwebSubmodule();
 	}
 
-	private void onConfigLoad(ModConfigEvent configEvent)
+	private void onConfigLoad(ModConfigEvent.Loading event)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(event);
 	}
 
-	private void onConfigReload(ModConfigEvent.Reloading configEvent)
+	private void onConfigReload(ModConfigEvent.Reloading event)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		handleConfigEvent(event);
+	}
+
+	private void handleConfigEvent(ModConfigEvent event)
+	{
+		ModConfig config = event.getConfig();
+		for (ICosmereConfig cosmereConfig : List.of(ToolsConfigs.SERVER))
 		{
-			cosmereModConfig.clearCache();
+			if (config.getModId().equals(MODID) && config.getSpec() == cosmereConfig.getConfigSpec())
+			{
+				cosmereConfig.clearCache();
+				break;
+			}
 		}
 	}
 }

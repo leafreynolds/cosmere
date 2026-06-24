@@ -15,7 +15,7 @@ public class THoeItem extends HoeItem implements IHasMetalType
 
 	public THoeItem(Metals.MetalType metalType, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties)
 	{
-		super(metalType, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+		super(metalType, pProperties.attributes(HoeItem.createAttributes(metalType, pAttackDamageModifier, pAttackSpeedModifier)));
 		this.metalType = metalType;
 	}
 

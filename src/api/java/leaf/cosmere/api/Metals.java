@@ -1,5 +1,5 @@
 /*
- * File updated ~ 20 - 11 - 2024 ~ Leaf
+ * File updated ~ 24 - 6 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.api;
@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -49,7 +50,7 @@ import java.util.stream.Collectors;
 public class Metals
 {
 
-	public enum MetalType implements Tier//, ArmorMaterial
+	public enum MetalType implements Tier
 	{
 		//Physical/Physical
 		IRON(0, 0, 0, 0, 0, 0),//ignore tier data
@@ -931,6 +932,11 @@ public class Metals
 			return Ingredient.of(getMetalIngotTag());
 		}
 
+		public Holder<SoundEvent> getEquipSound()
+		{
+			return SoundEvents.ARMOR_EQUIP_IRON;
+		}
+
 		public float getToughness()
 		{
 			return 0;
@@ -939,6 +945,20 @@ public class Metals
 		public float getKnockbackResistance()
 		{
 			return 0;
+		}
+
+		public int getDurabilityForType(ArmorItem.Type pType)
+		{
+			float multiplier = switch (pType)
+			{
+				default -> 0.0F;
+				case HELMET -> 0.3F;
+				case CHESTPLATE -> 0.5F;
+				case LEGGINGS -> 0.4F;
+				case BOOTS -> 0.25F;
+			};
+
+			return Mth.floor(getUses() * multiplier);
 		}
 
 		public int getDefenseForType(ArmorItem.Type pType)
