@@ -23,7 +23,6 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -148,19 +147,12 @@ public class ShardplateChargingRecipe extends CustomRecipe
 				continue;
 			}
 
-			if (stackInSlot.is(Tags.Items.GEMS))
+			if (stackInSlot.getItem() instanceof GemstoneItem gemstoneItem)
 			{
-				for (Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES)
-				{
-					if (stackInSlot.is(CosmereTags.Items.GEM_TAGS.get(gemstone)))
-					{
-						GemstoneItem gemstoneItem = (GemstoneItem) stackInSlot.getItem();
-						shardplateItem.adjustCharge(itemstack,
-								Math.min(gemstoneItem.getCharge(stackInSlot),
-										shardplateItem.getMaxCharge(itemstack) - shardplateItem.getCharge(itemstack)));
-						break;
-					}
-				}
+				shardplateItem.adjustCharge(itemstack,
+						Math.min(gemstoneItem.getCharge(stackInSlot),
+								shardplateItem.getMaxCharge(itemstack) - shardplateItem.getCharge(itemstack)));
+				break;
 			}
 			else if (stackInSlot.is(shardplateItem))
 			{
@@ -198,12 +190,11 @@ public class ShardplateChargingRecipe extends CustomRecipe
 				ShardplateCurioItem sp = (ShardplateCurioItem) stack.getItem();
 				missing = sp.getMaxCharge(stack) - sp.getCharge(stack);
 			}
-			else if (stack.is(Tags.Items.GEMS))
+			if (stack.getItem() instanceof GemstoneItem gemstoneItem)
 			{
 				gemstones.add(stack.copy());
 				gemstoneIndices.add(i);
-				GemstoneItem gi = (GemstoneItem) stack.getItem();
-				gemstoneCharges.add(gi.getCharge(stack));
+				gemstoneCharges.add(gemstoneItem.getCharge(stack));
 			}
 		}
 
