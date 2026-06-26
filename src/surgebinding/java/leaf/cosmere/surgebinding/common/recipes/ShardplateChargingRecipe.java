@@ -1,8 +1,6 @@
 package leaf.cosmere.surgebinding.common.recipes;
 
 import leaf.cosmere.api.CosmereTags;
-import leaf.cosmere.api.EnumUtils;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
 import leaf.cosmere.surgebinding.common.capabilities.IRadiantShardData;
@@ -14,9 +12,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
@@ -27,7 +23,6 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ShardplateChargingRecipe extends CustomRecipe
 {
@@ -69,15 +64,14 @@ public class ShardplateChargingRecipe extends CustomRecipe
 				//if is vial and not bottle, check it for contained metals.
 				plateCharge = shardplateCurioItem.getCharge(stack);
 			}
-			else if (testForGem(stack).isPresent())
+			else if (stack.getItem() instanceof GemstoneItem gemstoneItem)
 			{
 				if (stack.getCount() == 1)
 				{
 					//but multiple nuggets allowed
 					hasGem = true;
 					gems++;
-					GemstoneItem gemstone = (GemstoneItem) stack.getItem();
-					totalStormlight += gemstone.getCharge(stack);
+					totalStormlight += gemstoneItem.getCharge(stack);
 				}
 				else
 				{
@@ -104,28 +98,13 @@ public class ShardplateChargingRecipe extends CustomRecipe
 		return hasGem && shardplateCurioItem.getMaxCharge(shardplate) > plateCharge;
 	}
 
-	private Optional<TagKey<Item>> testForGem(ItemStack stack)
-	{
-		for (Roshar.Gemstone value : EnumUtils.GEMSTONE_TYPES)
-		{
-			TagKey<Item> gemstoneTag = CosmereTags.Items.GEM_TAGS.get(value);
-			if (stack.is(gemstoneTag))
-			{
-				return Optional.of(gemstoneTag);
-			}
-		}
-
-		return Optional.empty();
-	}
-
 
 	@Override
 	public ItemStack assemble(CraftingContainer inv, RegistryAccess pRegistryAccess)
 	{
 		//Determine what kind of plate it is
 		ShardplateCurioItem shardplateItem = null;
-		CompoundTag tag = new CompoundTag();
-		CompoundTag dataTag = new CompoundTag();
+		CompoundTag dataTag = null;
 		for (ItemStack item : inv.getItems())
 		{
 			if (item.is(CosmereTags.Items.CURIO_SHARDPLATE))
