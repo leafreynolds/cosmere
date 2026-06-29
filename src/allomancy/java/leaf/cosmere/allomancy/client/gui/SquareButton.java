@@ -13,6 +13,8 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
+import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -61,6 +63,22 @@ public class SquareButton extends Button
 
 		stringBuilder.append(".png");
 		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+	}
+
+	@Override
+	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
+	{
+		boolean isMouseOver = isMouseOver(pMouseX, pMouseY);
+		if (isMouseOver && hasManifestation)
+		{
+			if (pButton == 0)
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
+			else
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+
+			playDownSound(Minecraft.getInstance().getSoundManager());
+		}
+		return isMouseOver;
 	}
 
 	@Override
