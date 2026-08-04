@@ -23,21 +23,21 @@ description = '''Allomancy module for Cosmere.'''
 
 [[dependencies.allomancy]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.allomancy]]
 modId = "feruchemy"
-mandatory = false
+type = "optional"
 versionRange = "[${version}]"
 ordering = "BEFORE"
 side = "BOTH"
 
 [[dependencies.allomancy]]
 modId = "hemalurgy"
-mandatory = false
+type = "optional"
 versionRange = "[${version}]"
 ordering = "BEFORE"
 side = "BOTH"
