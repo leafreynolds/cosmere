@@ -59,7 +59,7 @@ public class LightTextureMixin
 			{
 				//burning or flaring strength
 				float currentBurnStrength = (float) (tinAllomancy.getStrength(data, false) * data.getMode(tinAllomancy));
-				final RangedAttribute attribute = (RangedAttribute) tinAllomancy.getAttribute();
+				final RangedAttribute attribute = (RangedAttribute) tinAllomancy.getAttribute().value();
 				float maxTinFlareStrengthPossible = (float) (attribute.getMaxValue() * 2);
 
 				//tin takes actual strength into account, as compared to total possible strength including flaring.
