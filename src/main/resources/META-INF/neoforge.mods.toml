@@ -50,3 +50,6 @@ type = "optional"
 versionRange = "${jade_version}"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "cosmere.mixins.json"

@@ -41,3 +41,6 @@ type = "optional"
 versionRange = "[${version}]"
 ordering = "BEFORE"
 side = "BOTH"
+
+[[mixins]]
+config = "allomancy.mixins.json"
