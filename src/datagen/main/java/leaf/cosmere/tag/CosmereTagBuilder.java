@@ -109,7 +109,7 @@ public class CosmereTagBuilder<TYPE, BUILDER extends CosmereTagBuilder<TYPE, BUI
 	@SafeVarargs
 	public final <T> BUILDER remove(Function<T, ResourceLocation> locationGetter, T... elements)
 	{
-		return apply(rl -> builder.removeElement(rl, modID), locationGetter, elements);
+		return apply(builder::removeElement, locationGetter, elements);
 	}
 
 	@SafeVarargs
@@ -117,7 +117,7 @@ public class CosmereTagBuilder<TYPE, BUILDER extends CosmereTagBuilder<TYPE, BUI
 	{
 		for (TagKey<TYPE> tag : tags)
 		{
-			builder.removeTag(tag.location(), modID);
+			builder.removeTag(tag.location());
 		}
 		return self();
 	}
