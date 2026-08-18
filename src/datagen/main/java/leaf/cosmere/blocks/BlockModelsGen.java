@@ -11,9 +11,9 @@ import leaf.cosmere.common.registry.BlocksRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
 
@@ -44,7 +44,7 @@ public class BlockModelsGen extends BlockStateProvider
 			else */
 			if (block instanceof MetalworkingTableBlock)
 			{
-				ModelFile blockModel = models().withExistingParent("metalworking_table", new ResourceLocation("block/cube"))
+				ModelFile blockModel = models().withExistingParent("metalworking_table", ResourceLocation.fromNamespaceAndPath(Cosmere.MODID, "block/cube"))
 						.texture("particle", Cosmere.rl("block/metalworking_table_front"))
 						.texture("north", Cosmere.rl("block/metalworking_table_front"))
 						.texture("south", Cosmere.rl("block/metalworking_table_front"))
