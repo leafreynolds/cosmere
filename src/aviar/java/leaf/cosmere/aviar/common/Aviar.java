@@ -12,16 +12,18 @@ import leaf.cosmere.aviar.common.capabilities.AviarSpiritwebSubmodule;
 import leaf.cosmere.aviar.common.config.AviarConfigs;
 import leaf.cosmere.aviar.common.registries.*;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.config.CosmereModConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+
+import java.util.List;
 
 @Mod(Aviar.MODID)
 public class Aviar implements IModModule
@@ -32,12 +34,11 @@ public class Aviar implements IModModule
 
 	public final Version versionNumber;
 
-	public Aviar()
+	public Aviar(IEventBus modBus, ModContainer modContainer)
 	{
 		Cosmere.addModule(instance = this);
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		AviarConfigs.registerConfigs(ModLoadingContext.get());
+		AviarConfigs.registerConfigs(modContainer);
 
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigLoad);
@@ -64,7 +65,7 @@ public class Aviar implements IModModule
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(Aviar.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Aviar.MODID, path);
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event)
@@ -104,19 +105,28 @@ public class Aviar implements IModModule
 
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
-		{
-			cosmereModConfig.clearCache();
-		}
+		handleConfigEvent(configEvent);
 	}
 
 	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
-		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		handleConfigEvent(configEvent);
+	}
+
+	private void handleConfigEvent(ModConfigEvent event)
+	{
+		ModConfig config = event.getConfig();
+		if (!config.getModId().equals(MODID))
 		{
-			cosmereModConfig.clearCache();
+			return;
+		}
+		for (ICosmereConfig cosmereConfig : List.of(AviarConfigs.SERVER))
+		{
+			if (cosmereConfig.getConfigSpec() == config.getSpec())
+			{
+				cosmereConfig.clearCache();
+				return;
+			}
 		}
 	}
 }

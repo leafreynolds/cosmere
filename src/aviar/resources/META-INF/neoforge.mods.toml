@@ -23,3 +23,6 @@ mandatory = true
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "aviar.mixins.json"
