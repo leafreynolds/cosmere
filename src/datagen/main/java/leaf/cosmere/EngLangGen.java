@@ -13,15 +13,13 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.items.GodMetalNuggetItem;
 import leaf.cosmere.common.registry.*;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static leaf.cosmere.api.Constants.Strings.*;
-import static leaf.cosmere.common.registry.ItemsRegistry.METAL_NUGGETS;
 
 public class EngLangGen extends LanguageProvider
 {
