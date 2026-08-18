@@ -8,10 +8,16 @@ import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.blocks.MetalOreBlock;
 import leaf.cosmere.common.registry.BlocksRegistry;
 import leaf.cosmere.common.registry.ItemsRegistry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 
 public class BlockLootTableGen extends BaseBlockLootTables
 {
+	public BlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{
