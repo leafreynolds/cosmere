@@ -19,7 +19,7 @@ description = '''Aviar module for Cosmere.'''
 
 [[dependencies.aviar]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
