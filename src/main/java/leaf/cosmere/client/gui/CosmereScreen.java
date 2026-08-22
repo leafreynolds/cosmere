@@ -1,6 +1,11 @@
+/*
+ * File updated ~ 22 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.client.gui;
 
 import leaf.cosmere.api.manifestation.Manifestation;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -11,9 +16,16 @@ import java.util.function.Consumer;
 public class CosmereScreen extends Screen
 {
 	protected final Consumer<Manifestation> manifestationConsumer;
+
 	protected CosmereScreen(Component pTitle, Consumer<Manifestation> manifestationConsumer)
 	{
 		super(pTitle);
 		this.manifestationConsumer = manifestationConsumer;
+	}
+
+	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+	{
+		//stop minecraft drawing the blurry background by default.
 	}
 }
