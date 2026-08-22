@@ -1,5 +1,5 @@
 /*
- * File updated ~ 24 - 6 - 2026 ~ Leaf
+ * File updated ~ 22 - 8 - 2026 ~ Leaf
  */
 
 //  This file was adapted from the Mekanism project, obtained 19/8/22
@@ -274,7 +274,6 @@ def setupTasks(SourceSet sourceSet)
 		setGroup("process resources")
 		duplicatesStrategy(DuplicatesStrategy.FAIL)
 		exclude('META-INF/neoforge.mods.toml', 'pack.mcmeta')
-		from("${projectDir}") { include 'logo.png' }
 		//Depend on the compile task so that we can map the computer methods as needed
 		dependsOn(compileTask)
 		finalizedBy(replaceResourceTask)
@@ -375,6 +374,9 @@ neoForge {
 			}
 			if (project.hasProperty('mc_accessToken')) {
 				programArguments.addAll '--accessToken', project.getProperty('mc_accessToken')
+			}
+			if (project.hasProperty('quickplay_world')) {
+				programArguments.addAll '--quickPlaySingleplayer', project.getProperty('quickplay_world')
 			}
 			if (project.hasProperty('forge_force_ansi')) {
 				jvmArguments.add "-Dterminal.ansi=${project.getProperty('forge_force_ansi')}"
