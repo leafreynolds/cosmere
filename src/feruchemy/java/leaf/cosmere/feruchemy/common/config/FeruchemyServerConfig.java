@@ -5,24 +5,24 @@
 package leaf.cosmere.feruchemy.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig.Type;
 
 public class FeruchemyServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
-	public final ForgeConfigSpec.IntValue BENDALLOY_SATURATION_MULTIPLIER;
-	public final ForgeConfigSpec.IntValue GOLD_TAP_COST_MULTIPLIER;
+	public final ModConfigSpec.IntValue BENDALLOY_SATURATION_MULTIPLIER;
+	public final ModConfigSpec.IntValue GOLD_TAP_COST_MULTIPLIER;
 
-	public final ForgeConfigSpec.IntValue GOD_METAL_EAT_STRENGTH_MINIMUM;
-	public final ForgeConfigSpec.IntValue FULL_FERUCHEMIST_STARTING_METALMIND_COUNT;
-	public final ForgeConfigSpec.DoubleValue STARTING_METALMIND_RANDOMISED_MAX_FILL_AMOUNT;
+	public final ModConfigSpec.IntValue GOD_METAL_EAT_STRENGTH_MINIMUM;
+	public final ModConfigSpec.IntValue FULL_FERUCHEMIST_STARTING_METALMIND_COUNT;
+	public final ModConfigSpec.DoubleValue STARTING_METALMIND_RANDOMISED_MAX_FILL_AMOUNT;
 
 	FeruchemyServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Feruchemy Config. This config is synced between server and client.").push("feruchemy");
 
 		BENDALLOY_SATURATION_MULTIPLIER = builder.comment("The cost multiplier for when player is full and needs to start doing saturation").defineInRange("bendalloySaturationMultiplier", 2, 1, Integer.MAX_VALUE);
@@ -45,7 +45,7 @@ public class FeruchemyServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}

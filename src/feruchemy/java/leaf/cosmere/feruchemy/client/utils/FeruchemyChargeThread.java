@@ -6,7 +6,8 @@ package leaf.cosmere.feruchemy.client.utils;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
-import leaf.cosmere.common.items.ChargeableMetalCurioItem;
+import leaf.cosmere.common.cap.item.CosmereItemCapabilities;
+import leaf.cosmere.common.charge.IChargeable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -130,29 +131,33 @@ public class FeruchemyChargeThread implements Runnable
 				// all inventory metalminds are counted
 				for (ItemStack stack : mc.player.getInventory().items)
 				{
-					if (stack.getItem() instanceof ChargeableMetalCurioItem item)
+					final IChargeable item = CosmereItemCapabilities.getChargeable(stack);
+					final Metals.MetalType metalType = item != null ? item.getChargeMetalType(stack) : null;
+
+					//chargeables that aren't made of a metal (gemstones, sand jars) hold no feruchemical charge
+					if (metalType != null)
 					{
 						// is either f-item or h-item
 						//if (item.getItemCategory() == FeruchemyItemGroups.METALMINDS)
 						{
 							Double chargeToAdd = (double) item.getCharge(stack);
-							if (metalmindCharges.containsKey(item.getMetalType()))
+							if (metalmindCharges.containsKey(metalType))
 							{
-								metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+								metalmindCharges.put(metalType, metalmindCharges.get(metalType) + chargeToAdd);
 							}
 							else
 							{
-								metalmindCharges.put(item.getMetalType(), chargeToAdd);
+								metalmindCharges.put(metalType, chargeToAdd);
 							}
 
 							Double maxToAdd = (double) item.getMaxCharge(stack);
-							if (metalmindMaxCharges.containsKey(item.getMetalType()))
+							if (metalmindMaxCharges.containsKey(metalType))
 							{
-								metalmindMaxCharges.put(item.getMetalType(), metalmindMaxCharges.get(item.getMetalType()) + maxToAdd);
+								metalmindMaxCharges.put(metalType, metalmindMaxCharges.get(metalType) + maxToAdd);
 							}
 							else
 							{
-								metalmindMaxCharges.put(item.getMetalType(), maxToAdd);
+								metalmindMaxCharges.put(metalType, maxToAdd);
 							}
 						}
 					}
@@ -169,26 +174,29 @@ public class FeruchemyChargeThread implements Runnable
 						for (int i = 0; i < stacks.getSlots(); i++)
 						{
 							final ItemStack stackInSlot = stacks.getStackInSlot(i);
-							if (stackInSlot.getItem() instanceof ChargeableMetalCurioItem item)
+							final IChargeable item = CosmereItemCapabilities.getChargeable(stackInSlot);
+							final Metals.MetalType metalType = item != null ? item.getChargeMetalType(stackInSlot) : null;
+
+							if (metalType != null)
 							{
 								Double chargeToAdd = (double) item.getCharge(stackInSlot);
-								if (metalmindCharges.containsKey(item.getMetalType()))
+								if (metalmindCharges.containsKey(metalType))
 								{
-									metalmindCharges.put(item.getMetalType(), metalmindCharges.get(item.getMetalType()) + chargeToAdd);
+									metalmindCharges.put(metalType, metalmindCharges.get(metalType) + chargeToAdd);
 								}
 								else
 								{
-									metalmindCharges.put(item.getMetalType(), chargeToAdd);
+									metalmindCharges.put(metalType, chargeToAdd);
 								}
 
 								Double maxToAdd = (double) item.getMaxCharge(stackInSlot);
-								if (metalmindMaxCharges.containsKey(item.getMetalType()))
+								if (metalmindMaxCharges.containsKey(metalType))
 								{
-									metalmindMaxCharges.put(item.getMetalType(), metalmindMaxCharges.get(item.getMetalType()) + maxToAdd);
+									metalmindMaxCharges.put(metalType, metalmindMaxCharges.get(metalType) + maxToAdd);
 								}
 								else
 								{
-									metalmindMaxCharges.put(item.getMetalType(), maxToAdd);
+									metalmindMaxCharges.put(metalType, maxToAdd);
 								}
 							}
 						}

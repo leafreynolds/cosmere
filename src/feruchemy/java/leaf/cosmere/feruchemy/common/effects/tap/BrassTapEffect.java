@@ -12,22 +12,22 @@ import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 //https://coppermind.net/wiki/Brass#Feruchemical_Use
 
-@Mod.EventBusSubscriber(modid = Feruchemy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Feruchemy.MODID)
 public class BrassTapEffect extends FeruchemyEffectBase
 {
 	public BrassTapEffect(Metals.MetalType type)
 	{
 		super(type);
 		addAttributeModifier(
-				AttributesRegistry.WARMTH.get(),
+				AttributesRegistry.WARMTH.getHolder(),
 				1,//warmer when tapping
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 
 		//reduce frost damage? theres no cold damage in base minecraft is there?
 
@@ -42,21 +42,21 @@ public class BrassTapEffect extends FeruchemyEffectBase
 		if (!living.level().isClientSide && strength >= 6 && !living.isInWater())
 		{
 			//set user on fire
-			living.setSecondsOnFire(3);
+			living.igniteForSeconds(3);
 		}
 
 	}
 
 	@SubscribeEvent
-	public static void onLivingDamageEvent(LivingDamageEvent event)
+	public static void onLivingDamageEvent(LivingDamageEvent.Pre event)
 	{
 		if (event.getSource().getEntity() instanceof LivingEntity livingEntity)
 		{
-			final int total = (int) EntityHelper.getAttributeValue(livingEntity, AttributesRegistry.WARMTH.getAttribute());
+			final int total = (int) EntityHelper.getAttributeValue(livingEntity, AttributesRegistry.WARMTH.getHolder());
 			if (total >= 5)//todo move to config
 			{
 				//set entity being hit on fire
-				event.getEntity().setSecondsOnFire(total);
+				event.getEntity().igniteForSeconds(total);
 			}
 		}
 	}

@@ -7,7 +7,9 @@ package leaf.cosmere.feruchemy.common.manifestation;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.util.Unit;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -16,21 +18,19 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.player.CanContinueSleepingEvent;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import java.util.List;
-import java.util.Optional;
 
 public class FeruchemyBronze extends FeruchemyManifestation
 {
 	public FeruchemyBronze(Metals.MetalType metalType)
 	{
 		super(metalType);
-		MinecraftForge.EVENT_BUS.addListener(this::sleepCheck);
+		NeoForge.EVENT_BUS.addListener(this::sleepCheck);
 	}
 
 	@Override
@@ -144,8 +144,8 @@ public class FeruchemyBronze extends FeruchemyManifestation
 
 	private boolean canSleep(Player player)
 	{
-		Player.BedSleepingProblem ret = ForgeEventFactory.onPlayerSleepInBed(player, Optional.empty());
-		if (ret != null)
+		if (player instanceof ServerPlayer serverPlayer
+				&& EventHooks.canPlayerStartSleeping(serverPlayer, serverPlayer.blockPosition(), Either.right(Unit.INSTANCE)).left().isPresent())
 		{
 			return false;
 		}
@@ -164,7 +164,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
 		}
 
-		if (!ForgeEventFactory.fireSleepingTimeCheck(player, Optional.empty()))
+		if (!EventHooks.canEntityContinueSleeping(player, Player.BedSleepingProblem.NOT_POSSIBLE_NOW))
 		{
 			return false;//(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
 		}
@@ -189,7 +189,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 		return true;
 	}
 
-	public void sleepCheck(SleepingLocationCheckEvent event)
+	public void sleepCheck(CanContinueSleepingEvent event)
 	{
 		if (event.getEntity() instanceof Player player)
 		{
@@ -202,7 +202,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 			{
 				if (isActive(iSpiritweb))
 				{
-					event.setResult(Event.Result.ALLOW);
+					event.setContinueSleeping(true);
 				}
 			});
 		}

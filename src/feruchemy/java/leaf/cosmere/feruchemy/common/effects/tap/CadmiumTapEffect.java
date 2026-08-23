@@ -22,12 +22,12 @@ public class CadmiumTapEffect extends FeruchemyEffectBase
 		this.addAttributeModifier(
 				Attributes.ATTACK_SPEED,
 				0.01F,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
 		this.addAttributeModifier(
 				Attributes.MOVEMENT_SPEED,
 				0.02F,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 	}
 
 	@Override

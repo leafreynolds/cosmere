@@ -16,15 +16,15 @@ import leaf.cosmere.feruchemy.client.render.model.BraceletModel;
 import leaf.cosmere.feruchemy.common.Feruchemy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = Feruchemy.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Feruchemy.MODID, value = Dist.CLIENT)
 public class FeruchemyClientSetup
 {
 
@@ -44,12 +44,12 @@ public class FeruchemyClientSetup
 	}
 
 	@SubscribeEvent
-	public static void registerGuiOverlays(RegisterGuiOverlaysEvent event)
+	public static void registerGuiLayers(RegisterGuiLayersEvent event)
 	{
 		event.registerBelow(
-				VanillaGuiOverlay.DEBUG_TEXT.id(),
-				"hud",
-				(gui, guiGraphics, partialTick, width, height) -> renderNicrosilHUD(guiGraphics)
+				VanillaGuiLayers.DEBUG_OVERLAY,
+				Feruchemy.rl("hud"),
+				(guiGraphics, deltaTracker) -> renderNicrosilHUD(guiGraphics)
 		);
 	}
 

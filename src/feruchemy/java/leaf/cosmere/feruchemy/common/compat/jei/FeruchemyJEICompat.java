@@ -1,5 +1,5 @@
 /*
- * File updated ~ 20 - 11 - 2024 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.compat.jei;
@@ -8,11 +8,13 @@ import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.text.TextHelper;
+import leaf.cosmere.common.compat.jei.CustomDataSubtypeInterpreter;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
@@ -23,6 +25,22 @@ public class FeruchemyJEICompat implements IModPlugin
 	public ResourceLocation getPluginUid()
 	{
 		return Constants.Resources.JEI_FERUCHEMY;
+	}
+
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistration registration)
+	{
+		//empty and charged metalminds differ only by CUSTOM_DATA, so we have to tell JEI
+		registration.registerSubtypeInterpreter(FeruchemyItems.BANDS_OF_MOURNING.asItem(), CustomDataSubtypeInterpreter.ALL);
+		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
+		{
+			if (metalType.hasFeruchemicalEffect())
+			{
+				registration.registerSubtypeInterpreter(FeruchemyItems.METAL_NECKLACES.get(metalType).asItem(), CustomDataSubtypeInterpreter.ALL);
+				registration.registerSubtypeInterpreter(FeruchemyItems.METAL_RINGS.get(metalType).asItem(), CustomDataSubtypeInterpreter.ALL);
+				registration.registerSubtypeInterpreter(FeruchemyItems.METAL_BRACELETS.get(metalType).asItem(), CustomDataSubtypeInterpreter.ALL);
+			}
+		}
 	}
 
 	@Override

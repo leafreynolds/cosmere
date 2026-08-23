@@ -10,8 +10,7 @@ import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 //warmth
 public class BrassStoreEffect extends FeruchemyEffectBase
@@ -20,12 +19,12 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 	{
 		super(type);
 		addAttributeModifier(
-				AttributesRegistry.WARMTH.get(),
+				AttributesRegistry.WARMTH.getHolder(),
 				-1, // colder when storing
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingIncomingDamageEvent event)
 	{
 		if (!event.getSource().is(DamageTypes.ON_FIRE) || event.isCanceled())
 		{
@@ -34,7 +33,7 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 
 		//a higher total means hotter
 		//a lower total means colder
-		final int total = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.WARMTH.getAttribute());
+		final int total = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.WARMTH.getHolder());
 		if (total < 0)
 		{
 			//absolute value, because we're using the mode as the strength for feruchemy
@@ -50,44 +49,14 @@ public class BrassStoreEffect extends FeruchemyEffectBase
 					break;
 				default:
 				case 3:
-					event.setCanceled(true);
-					return;
-			}
-			event.setAmount(amount);
-		}
-	}
-
-
-	public static void onLivingAttackEvent(LivingAttackEvent event)
-	{
-		//todo - check if on fire is what this is meant to be
-		//and whether we should actually be cancelling damage outright is correct
-		if (!event.getSource().is(DamageTypes.ON_FIRE) || event.isCanceled())
-		{
-			return;
-		}
-
-		//a higher total means hotter
-		//a lower total means colder
-		final int total = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.WARMTH.getAttribute());
-		if (total < 0)
-		{
-			//absolute value, because we're using the mode as the strength for feruchemy
-			int warmth = Math.abs(total);
-			switch (warmth)
-			{
-				case 0:
-				case 1:
-				case 2:
-					break;
-				default:
-				case 3:
 					if (event.getEntity().isOnFire())
 					{
 						event.getEntity().clearFire();
 					}
 					event.setCanceled(true);
+					return;
 			}
+			event.setAmount(amount);
 		}
 	}
 

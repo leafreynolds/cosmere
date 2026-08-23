@@ -17,8 +17,8 @@ public class ElectrumStoreEffect extends FeruchemyEffectBase
 		super(type);
 
 		addAttributeModifier(
-				AttributesRegistry.DETERMINATION.getAttribute(),
+				AttributesRegistry.DETERMINATION.getHolder(),
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }

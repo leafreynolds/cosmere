@@ -22,12 +22,13 @@ import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyAttributes;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,10 +62,10 @@ public class FeruchemySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@Override
-	public List<Attribute> getPowers()
+	public List<Holder<Attribute>> getPowers()
 	{
 		return FeruchemyAttributes.FERUCHEMY_ATTRIBUTES.values().stream()
-				.map((AttributeRegistryObject::getAttribute)).collect(Collectors.toList());
+				.map((AttributeRegistryObject::getHolder)).collect(Collectors.toList());
 	}
 
 	@Override

@@ -23,8 +23,8 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -218,6 +218,7 @@ public class FeruchemyManifestation extends Manifestation implements IHasMetalTy
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public AbstractWidget getInfoBlock()
 	{
 		AtomicReference<FeruchemyInfoBlock> retVal = new AtomicReference<>(null);
