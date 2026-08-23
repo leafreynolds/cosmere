@@ -1,8 +1,20 @@
-# Disable autocrlf on generated files, they always generate with LF
-# Add any extra files or paths here to make git stop saying they
-# are changed when only line endings change.
-src/generated/**/.cache/cache text eol=lf
-src/generated/**/*.json text eol=lf
+# Store everything as LF in the repository, whatever the checkout looks like.
+# Without this the line endings git records depend on each machine's core.autocrlf.
+* text=auto
+
+# Generated data always writes LF. Keeps git from reporting eol-only changes.
+src/datagen/generated/**/.cache/** text eol=lf
+src/datagen/generated/**/*.json text eol=lf
+
+# Shell scripts need LF even on windows, batch files need CRLF.
+*.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+
+# Binaries git must not touch.
+*.png binary
+*.jar binary
+*.blend binary
 
 # Disable bbmodel previews on GitHub
 *.bbmodel linguist-generated=true
