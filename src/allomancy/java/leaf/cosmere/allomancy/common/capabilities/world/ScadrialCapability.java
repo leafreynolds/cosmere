@@ -1,5 +1,5 @@
 /*
- * File updated ~ 8 - 11 - 2023 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.capabilities.world;
@@ -41,11 +41,17 @@ public class ScadrialCapability implements IScadrial
 	@Nonnull
 	public static Optional<IScadrial> get(Level level)
 	{
-		if (level == null)
+		if (level == null || !isScadrial(level))
 		{
 			return Optional.empty();
 		}
 		return Optional.of(level.getData(AllomancyAttachments.SCADRIAL.get()));
+	}
+
+	public static boolean isScadrial(Level level)
+	{
+		//Scadrial is the overworld for now
+		return level != null && level.dimension() == Level.OVERWORLD;
 	}
 
 	@Override

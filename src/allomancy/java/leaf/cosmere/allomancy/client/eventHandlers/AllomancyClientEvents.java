@@ -45,8 +45,7 @@ public class AllomancyClientEvents
 			return;
 		}
 
-		//check capability
-		// todo - check this only happens to whatever dimension scadrial is attached to. currently overworld.
+		//check capability - get() is dimension-checked, so this is empty off-Scadrial
 		final Optional<IScadrial> cap = ScadrialCapability.get(level);
 
 		if (cap.isEmpty())
