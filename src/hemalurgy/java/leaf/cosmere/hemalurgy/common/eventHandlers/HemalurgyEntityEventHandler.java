@@ -8,18 +8,20 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
-import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
+import leaf.cosmere.hemalurgy.common.capabilities.HemalurgyItemCapabilities;
+import leaf.cosmere.hemalurgy.common.items.IHemalurgicInfo;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = Hemalurgy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Hemalurgy.MODID)
 public class HemalurgyEntityEventHandler
 {
 	@SubscribeEvent
@@ -33,7 +35,8 @@ public class HemalurgyEntityEventHandler
 		ItemStack stack = event.getEntity().getMainHandItem();
 		if (!stack.isEmpty())
 		{
-			if (stack.getItem() instanceof HemalurgicSpikeItem spike)
+			IHemalurgicInfo spike = HemalurgyItemCapabilities.getSpike(stack);
+			if (spike != null)
 			{
 				//https://www.theoryland.com/intvmain.php?i=977#43
 				if (!(event.getTarget() instanceof Cat cat))
@@ -60,7 +63,7 @@ public class HemalurgyEntityEventHandler
 						final double hemalurgicStrength = spike.getHemalurgicStrength(stack, manifestation);
 						if (hemalurgicStrength > 0)
 						{
-							final Attribute regAttribute = manifestation.getAttribute();
+							final Holder<Attribute> regAttribute = manifestation.getAttribute();
 							if (regAttribute == null)
 							{
 								continue;

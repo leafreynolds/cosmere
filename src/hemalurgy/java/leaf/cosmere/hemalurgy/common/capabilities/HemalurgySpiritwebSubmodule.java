@@ -26,7 +26,7 @@ public class HemalurgySpiritwebSubmodule implements ISpiritwebSubmodule
 		final int tickToCheck = HemalurgyConfigs.SERVER.SPIRITWEB_INTEGRITY_TICK_CHECK.get();
 		if (spiritweb.getLiving().tickCount % tickToCheck == 0)
 		{
-			AttributeInstance attributeInstance = spiritweb.getLiving().getAttribute(HemalurgyAttributes.SPIRITWEB_INTEGRITY.get());
+			AttributeInstance attributeInstance = spiritweb.getLiving().getAttribute(HemalurgyAttributes.SPIRITWEB_INTEGRITY.getHolder());
 			if (attributeInstance != null)
 			{
 				int intensity = (int) attributeInstance.getValue();

@@ -166,7 +166,7 @@ public class KolossPatrolSpawner implements CustomSpawner
 				}
 
 				patrollingmonster.setPos((double) pPos.getX(), (double) pPos.getY(), (double) pPos.getZ());
-				patrollingmonster.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(pPos), MobSpawnType.PATROL, (SpawnGroupData) null, (CompoundTag) null);
+				patrollingmonster.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(pPos), MobSpawnType.PATROL, (SpawnGroupData) null);
 				pLevel.addFreshEntityWithPassengers(patrollingmonster);
 				return true;
 			}

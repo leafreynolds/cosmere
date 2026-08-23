@@ -702,10 +702,7 @@ public class SpikeModel extends HumanoidModel<LivingEntity>
 				vertexBuilder,
 				light,
 				OverlayTexture.NO_OVERLAY,
-				color.getRed() / 255f,
-				color.getGreen() / 255f,
-				color.getBlue() / 255f,
-				1);
+				color.getRGB());
 
 		/*
 		//debug only, so a spike will render in all locations

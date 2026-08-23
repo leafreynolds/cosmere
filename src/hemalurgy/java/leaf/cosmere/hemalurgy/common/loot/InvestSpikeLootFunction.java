@@ -4,12 +4,13 @@
 
 package leaf.cosmere.hemalurgy.common.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
+import leaf.cosmere.hemalurgy.common.capabilities.HemalurgyItemCapabilities;
+import leaf.cosmere.hemalurgy.common.items.IHemalurgicInfo;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyLootFunctions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -20,20 +21,23 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class InvestSpikeLootFunction extends LootItemConditionalFunction
 {
+	public static final MapCodec<InvestSpikeLootFunction> CODEC = RecordCodecBuilder.mapCodec(
+			inst -> commonFields(inst).apply(inst, InvestSpikeLootFunction::new));
 
-	protected InvestSpikeLootFunction(LootItemCondition[] conditionsIn)
+	protected InvestSpikeLootFunction(List<LootItemCondition> conditionsIn)
 	{
 		super(conditionsIn);
 	}
 
 
 	@Override
-	public LootItemFunctionType getType()
+	public LootItemFunctionType<InvestSpikeLootFunction> getType()
 	{
 		return HemalurgyLootFunctions.INVEST_SPIKE.get();
 	}
@@ -41,14 +45,15 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 	@Override
 	protected ItemStack run(ItemStack stack, LootContext lootContext)
 	{
-		if (!(stack.getItem() instanceof HemalurgicSpikeItem item))
+		final IHemalurgicInfo item = HemalurgyItemCapabilities.getSpike(stack);
+		if (item == null)
 		{
 			return stack;
 		}
 
-		final Metals.MetalType spikeMetalType = item.getMetalType();
+		final Metals.MetalType spikeMetalType = item.getSpikeMetalType(stack);
 
-		if (!spikeMetalType.hasHemalurgicEffect())
+		if (spikeMetalType == null || !spikeMetalType.hasHemalurgicEffect())
 		{
 			return stack;
 		}
@@ -72,8 +77,8 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 		}
 
 		final float strengthLevel = Mth.clamp(5 + lootContext.getLuck(), 1, 10);
-		Manifestation allomancyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", stealType.get().getName()));
-		Manifestation feruchemyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", stealType.get().getName()));
+		Manifestation allomancyMani = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("allomancy", stealType.get().getName()));
+		Manifestation feruchemyMani = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("feruchemy", stealType.get().getName()));
 
 		switch (spikeMetalType)
 		{
@@ -145,14 +150,5 @@ public class InvestSpikeLootFunction extends LootItemConditionalFunction
 		}
 
 		return stack;
-	}
-
-	public static class Serializer extends LootItemConditionalFunction.Serializer<InvestSpikeLootFunction>
-	{
-		@Override
-		public InvestSpikeLootFunction deserialize(JsonObject jsonObject, JsonDeserializationContext deserializationContext, LootItemCondition[] lootConditions)
-		{
-			return new InvestSpikeLootFunction(lootConditions);
-		}
 	}
 }
