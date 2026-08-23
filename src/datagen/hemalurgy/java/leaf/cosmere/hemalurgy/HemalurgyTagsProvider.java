@@ -13,9 +13,11 @@ import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import leaf.cosmere.tag.BaseTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class HemalurgyTagsProvider extends BaseTagProvider
@@ -60,6 +62,32 @@ public class HemalurgyTagsProvider extends BaseTagProvider
 
 		//we do know gold spikes can be used as a linchpin
 		getItemBuilder(CosmereTags.Items.CURIO_LINCHPIN).add(HemalurgyItems.METAL_SPIKE.get(Metals.MetalType.GOLD).get());
+
+		//tool-spikes from HemalurgyDataMapGen.VANILLA_SPIKES: same category rules, no eye slots
+		for (Map.Entry<Item, Metals.MetalType> entry : HemalurgyDataMapGen.VANILLA_SPIKES.entrySet())
+		{
+			final Item toolSpike = entry.getKey();
+			final Metals.MetalType metalType = entry.getValue();
+
+			if (metalType.isPhysicalSpike())
+			{
+				getItemBuilder(CosmereTags.Items.CURIO_PHYSICAL).add(toolSpike);
+				//any spike can be a linchpin?
+				getItemBuilder(CosmereTags.Items.CURIO_LINCHPIN).add(toolSpike);
+			}
+			if (metalType.isMentalSpike())
+			{
+				getItemBuilder(CosmereTags.Items.CURIO_MENTAL).add(toolSpike);
+			}
+			if (metalType.isSpiritualSpike())
+			{
+				getItemBuilder(CosmereTags.Items.CURIO_SPIRITUAL).add(toolSpike);
+			}
+			if (metalType.isTemporalSpike())
+			{
+				getItemBuilder(CosmereTags.Items.CURIO_TEMPORAL).add(toolSpike);
+			}
+		}
 	}
 
 

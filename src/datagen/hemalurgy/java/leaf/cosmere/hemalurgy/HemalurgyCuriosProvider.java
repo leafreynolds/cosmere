@@ -10,7 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import top.theillusivec4.curios.api.CuriosDataProvider;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class HemalurgyCuriosProvider extends CuriosDataProvider
 {
-	public static final ResourceLocation EMPTY_SPIKE_SLOT = new ResourceLocation("curios:slot/spike_icon");
+	public static final ResourceLocation EMPTY_SPIKE_SLOT = ResourceLocation.parse("curios:slot/spike_icon");
 
 	public HemalurgyCuriosProvider(PackOutput output,
 	                               ExistingFileHelper fileHelper,
