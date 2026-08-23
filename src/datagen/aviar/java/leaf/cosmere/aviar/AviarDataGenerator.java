@@ -8,15 +8,18 @@ import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.aviar.items.AviarItemModelsGen;
 import leaf.cosmere.aviar.loottables.AviarLootTableGen;
 import leaf.cosmere.aviar.patchouli.AviarPatchouliGen;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber(modid = Aviar.MODID, bus = Bus.MOD)
+import java.util.concurrent.CompletableFuture;
+
+
+@EventBusSubscriber(modid = Aviar.MODID)
 public class AviarDataGenerator
 {
 	@SubscribeEvent
@@ -25,12 +28,13 @@ public class AviarDataGenerator
 		DataGenerator generator = event.getGenerator();
 		PackOutput packOutput = generator.getPackOutput();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+		final CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
 		generator.addProvider(true, new AviarEngLangGen(packOutput));
-		generator.addProvider(true, new AviarTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
-		generator.addProvider(true, new AviarLootTableGen(packOutput));
+		generator.addProvider(true, new AviarTagProvider(packOutput, lookupProvider, existingFileHelper));
+		generator.addProvider(true, new AviarLootTableGen(packOutput, lookupProvider));
 		generator.addProvider(true, new AviarItemModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new AviarRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new AviarRecipeGen(packOutput, lookupProvider));
 		generator.addProvider(true, new AviarPatchouliGen(packOutput));
 	}
 

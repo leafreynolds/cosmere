@@ -12,8 +12,8 @@ import leaf.cosmere.aviar.common.registries.AviarEntityTypes;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import static leaf.cosmere.aviar.common.registries.AviarAttributes.HOSTILE_LIFE_SENSE;
 
@@ -49,7 +49,7 @@ public class AviarEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Aviar.MODID))
