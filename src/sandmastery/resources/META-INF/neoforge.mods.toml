@@ -20,7 +20,10 @@ description = '''Sand Mastery module for Cosmere.'''
 
 [[dependencies.sandmastery]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "sandmastery.mixins.json"
