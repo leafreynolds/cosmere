@@ -44,7 +44,7 @@ public class BlockModelsGen extends BlockStateProvider
 			else */
 			if (block instanceof MetalworkingTableBlock)
 			{
-				ModelFile blockModel = models().withExistingParent("metalworking_table", ResourceLocation.fromNamespaceAndPath(Cosmere.MODID, "block/cube"))
+				ModelFile blockModel = models().withExistingParent("metalworking_table", ResourceLocation.withDefaultNamespace("block/cube"))
 						.texture("particle", Cosmere.rl("block/metalworking_table_front"))
 						.texture("north", Cosmere.rl("block/metalworking_table_front"))
 						.texture("south", Cosmere.rl("block/metalworking_table_front"))
