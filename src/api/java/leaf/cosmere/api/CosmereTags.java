@@ -57,25 +57,25 @@ public class CosmereTags
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("raw_materials/" + type.getName())));
+								type -> commonItemTag("raw_materials/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_ORE_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("ores/" + type.getName())));
+								type -> commonItemTag("ores/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_DUST_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("dusts/" + type.getName())));
+								type -> commonItemTag("dusts/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_NUGGET_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("nuggets/" + type.getName())));
+								type -> commonItemTag("nuggets/" + type.getName())));
 
 		public static final Map<Metals.MetalType, Map<Metals.MetalType, TagKey<Item>>> GOD_METAL_ALLOY_NUGGET_TAGS =
 				Arrays.stream(new Metals.MetalType[]{Metals.MetalType.LERASIUM, Metals.MetalType.LERASATIUM})
@@ -85,7 +85,7 @@ public class CosmereTags
 										.filter(base -> !base.isGodMetal())
 										.collect(Collectors.toMap(
 												Function.identity(), // key: base metal
-												base -> forgeItemTag("nuggets/" + god.getName() + "_" + base.getName() + "_alloy")
+												base -> commonItemTag("nuggets/" + god.getName() + "_" + base.getName() + "_alloy")
 										))
 						));
 
@@ -93,26 +93,26 @@ public class CosmereTags
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("ingots/" + type.getName())));
+								type -> commonItemTag("ingots/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_BLOCK_ITEM_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("storage_blocks/" + type.getName())));
+								type -> commonItemTag("storage_blocks/" + type.getName())));
 
 		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_BLOCK_ITEM_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("storage_blocks/" + type.getName())));
+								type -> commonItemTag("storage_blocks/" + type.getName())));
 
 
 		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("gems/" + type.getName())));
+								type -> commonItemTag("gems/" + type.getName())));
 
 
 		public static TagKey<Item> makeItem(String domain, String path)
@@ -125,10 +125,10 @@ public class CosmereTags
 			return ItemTags.create(resourceLocation);
 		}
 
-		private static TagKey<Item> forgeItemTag(String name)
+		private static TagKey<Item> commonItemTag(String name)
 		{
-			final ResourceLocation forgeTagToMake = ResourceLocation.fromNamespaceAndPath("forge", name);
-			return makeItem(forgeTagToMake);
+			final ResourceLocation commonTagToMake = ResourceLocation.fromNamespaceAndPath("c", name);
+			return makeItem(commonTagToMake);
 		}
 	}
 
@@ -145,25 +145,25 @@ public class CosmereTags
 						//.filter(Metals.MetalType::hasOre)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("ores/" + type.getName())));
+								type -> commonTag("ores/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Block>> METAL_BLOCK_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("storage_blocks/" + type.getName())));
+								type -> commonTag("storage_blocks/" + type.getName())));
 
 		public static final Map<Roshar.Gemstone, TagKey<Block>> GEM_ORE_BLOCK_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("ores/" + type.getName())));
+								type -> commonTag("ores/" + type.getName())));
 
 		public static final Map<Roshar.Gemstone, TagKey<Block>> GEM_BLOCK_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("storage_blocks/" + type.getName())));
+								type -> commonTag("storage_blocks/" + type.getName())));
 
 		public static TagKey<Block> makeBlock(String domain, String path)
 		{
@@ -175,10 +175,10 @@ public class CosmereTags
 			return BlockTags.create(resourceLocation);
 		}
 
-		private static TagKey<Block> forgeTag(String name)
+		private static TagKey<Block> commonTag(String name)
 		{
-			final ResourceLocation forgeTagToMake = ResourceLocation.fromNamespaceAndPath("forge", name);
-			return makeBlock(forgeTagToMake);
+			final ResourceLocation commonTagToMake = ResourceLocation.fromNamespaceAndPath("c", name);
+			return makeBlock(commonTagToMake);
 		}
 
 	}

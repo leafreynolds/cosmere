@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -116,6 +117,22 @@ public class Metals
 					.filter(metalType -> metalType.id == value)
 					.findFirst();
 		}
+
+		//serializes by the lowercase name used everywhere else (registry paths, lang keys, datapack json)
+		public static final com.mojang.serialization.Codec<MetalType> CODEC =
+				com.mojang.serialization.Codec.STRING.comapFlatMap(
+						name ->
+						{
+							for (MetalType type : values())
+							{
+								if (type.getName().equals(name))
+								{
+									return com.mojang.serialization.DataResult.success(type);
+								}
+							}
+							return com.mojang.serialization.DataResult.error(() -> "Unknown cosmere metal type: " + name);
+						},
+						MetalType::getName);
 
 		public int getID()
 		{
@@ -911,8 +928,17 @@ public class Metals
 		@Override
 		public TagKey<Block> getIncorrectBlocksForDrops()
 		{
-			// what does this even do?
-			return null;
+			//1.21 replaced Tier#getLevel with a "blocks this tier can't harvest" tag.
+			//Returning null here is not benign: the TOOL component resolves it at item construction,
+			//which calls Registry#getOrCreateTag(null) and poisons the block registry's tag map.
+			return switch (this.level)
+			{
+				case 0 -> BlockTags.INCORRECT_FOR_WOODEN_TOOL;
+				case 1 -> BlockTags.INCORRECT_FOR_STONE_TOOL;
+				case 2 -> BlockTags.INCORRECT_FOR_IRON_TOOL;
+				case 3 -> BlockTags.INCORRECT_FOR_DIAMOND_TOOL;
+				default -> BlockTags.INCORRECT_FOR_IRON_TOOL;
+			};
 		}
 
 		public int getLevel()
