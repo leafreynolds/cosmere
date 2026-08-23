@@ -31,6 +31,7 @@ public class ToolsDataGenerator
 		generator.addProvider(true, new ToolsItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new ToolsRecipeGen(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new ToolsPatchouliGen(packOutput));
+		generator.addProvider(true, new ToolsDataMapGen(packOutput, event.getLookupProvider()));
 	}
 
 }

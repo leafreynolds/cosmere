@@ -1,9 +1,12 @@
 /*
- * File updated ~ 28 - 3 - 2026 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tools;
 
+import leaf.cosmere.api.CosmereTags;
+import leaf.cosmere.api.EnumUtils;
+import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.tag.BaseTagProvider;
 import leaf.cosmere.tools.common.CosmereTools;
@@ -12,6 +15,7 @@ import leaf.cosmere.tools.common.registries.ToolsItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -26,6 +30,47 @@ public class ToolsTagProvider extends BaseTagProvider
 	}
 
 
+	//make the tool-spikes wearable in their spike category slots. no eye slots
+	private void addSpikeToolCurioTags()
+	{
+		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
+		{
+			if (!metalType.hasMaterialItem() || !metalType.hasHemalurgicEffect())
+			{
+				continue;
+			}
+
+			List<Item> toolSpikes = List.of(
+					ToolsItems.METAL_SWORDS.get(metalType).get(),
+					ToolsItems.METAL_AXES.get(metalType).get(),
+					ToolsItems.METAL_PICKAXES.get(metalType).get(),
+					ToolsItems.METAL_SHOVEL.get(metalType).get(),
+					ToolsItems.METAL_HOE.get(metalType).get());
+
+			for (Item toolSpike : toolSpikes)
+			{
+				if (metalType.isPhysicalSpike())
+				{
+					getItemBuilder(CosmereTags.Items.CURIO_PHYSICAL).add(toolSpike);
+					//any spike can be a linchpin?
+					getItemBuilder(CosmereTags.Items.CURIO_LINCHPIN).add(toolSpike);
+				}
+				if (metalType.isMentalSpike())
+				{
+					getItemBuilder(CosmereTags.Items.CURIO_MENTAL).add(toolSpike);
+				}
+				if (metalType.isSpiritualSpike())
+				{
+					getItemBuilder(CosmereTags.Items.CURIO_SPIRITUAL).add(toolSpike);
+				}
+				if (metalType.isTemporalSpike())
+				{
+					getItemBuilder(CosmereTags.Items.CURIO_TEMPORAL).add(toolSpike);
+				}
+			}
+		}
+	}
+
 	@Override
 	protected List<IBlockProvider> getAllBlocks()
 	{
@@ -39,6 +84,8 @@ public class ToolsTagProvider extends BaseTagProvider
 		//getItemBuilder(CosmereTags.Items.CURIO_HEAD).add(Tools.Item.asItem());
 
 		addItems();
+		//todo - decide if tools should legit be allowed to be spikes lol
+		//addSpikeToolCurioTags();
 		addBlocks();
 		addStorageBlocks();
 		addEntityTypes();
