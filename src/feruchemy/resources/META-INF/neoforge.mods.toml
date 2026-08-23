@@ -21,21 +21,24 @@ description = '''Feruchemy module for Cosmere.'''
 
 [[dependencies.feruchemy]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.feruchemy]]
 modId = "allomancy"
-mandatory = false
+type = "optional"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.feruchemy]]
 modId = "hemalurgy"
-mandatory = false
+type = "optional"
 versionRange = "[${version}]"
 ordering = "BEFORE"
 side = "BOTH"
+
+[[mixins]]
+config = "feruchemy.mixins.json"
