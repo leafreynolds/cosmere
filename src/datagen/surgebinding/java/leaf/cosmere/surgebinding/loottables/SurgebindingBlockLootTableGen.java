@@ -17,6 +17,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.AmethystClusterBlock;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
@@ -28,6 +30,11 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public class SurgebindingBlockLootTableGen extends BaseBlockLootTables
 {
+	public SurgebindingBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{
@@ -41,7 +48,7 @@ public class SurgebindingBlockLootTableGen extends BaseBlockLootTables
 			}
 			if(block==SurgebindingBlocks.SAPPHIRE_CLUSTER.getBlock())
 			{
-				this.add(block,(cluster)-> createSilkTouchDispatchTable(cluster, LootItem.lootTableItem(SurgebindingItems.GEMSTONE.get(Roshar.Gemstone.SAPPHIRE)).apply(SetItemCountFunction.setCount(ConstantValue.exactly(4.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)).when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES))).otherwise(this.applyExplosionDecay(cluster, LootItem.lootTableItem(SurgebindingItems.GEMSTONE.get(Roshar.Gemstone.SAPPHIRE)).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))))));
+				this.add(block,(cluster)-> createSilkTouchDispatchTable(cluster, LootItem.lootTableItem(SurgebindingItems.GEMSTONE.get(Roshar.Gemstone.SAPPHIRE)).apply(SetItemCountFunction.setCount(ConstantValue.exactly(4.0F))).apply(ApplyBonusCount.addOreBonusCount(this.registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))).when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES))).otherwise(this.applyExplosionDecay(cluster, LootItem.lootTableItem(SurgebindingItems.GEMSTONE.get(Roshar.Gemstone.SAPPHIRE)).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))))));
 			}
 			if(block instanceof SapphireClusterBlock clusterBlock && block!=SurgebindingBlocks.SAPPHIRE_CLUSTER.getBlock()){
 				this.addToSkip(block);

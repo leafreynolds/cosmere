@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2024 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -11,14 +11,17 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingBannerPatterns;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.List;
 
@@ -60,21 +63,35 @@ public class SurgebindingEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		List<Item> customNames = List.of(SurgebindingItems.RADIANT_ORDER_BANNER_PATTER.get(),SurgebindingItems.SURGE_BANNER_PATTERN.get());
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		List<Item> customNames = List.of(SurgebindingItems.RADIANT_ORDER_BANNER_PATTER.get(), SurgebindingItems.SURGE_BANNER_PATTERN.get());
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Surgebinding.MODID))
 			{
 				String localisedString = StringHelper.fixCapitalisation(registryName.getPath());
-				if(!customNames.contains(item))
+				if (!customNames.contains(item))
+				{
 					add(item.getDescriptionId(), localisedString);
+				}
 			}
 		}
-		add("item.surgebinding.surge_banner_pattern","Banner Pattern");
-		add("item.surgebinding.radiant_order_banner_pattern","Banner Pattern");
-		add("item.surgebinding.surge_banner_pattern.desc","Surge");
-		add("item.surgebinding.radiant_order_banner_pattern.desc","Radiant Order");
+		add("item.surgebinding.surge_banner_pattern", "Banner Pattern");
+		add("item.surgebinding.radiant_order_banner_pattern", "Banner Pattern");
+		add("item.surgebinding.surge_banner_pattern.desc", "Surge");
+		add("item.surgebinding.radiant_order_banner_pattern.desc", "Radiant Order");
+
+		addBannerPatterns();
+	}
+
+	private void addBannerPatterns()
+	{
+		for (ResourceKey<BannerPattern> key : SurgebindingBannerPatterns.ALL)
+		{
+			final String name = key.location().getPath();
+			add("block.minecraft.banner." + name + "." + Surgebinding.MODID,
+					StringHelper.fixCapitalisation(name));
+		}
 	}
 
 	private void addEntities()

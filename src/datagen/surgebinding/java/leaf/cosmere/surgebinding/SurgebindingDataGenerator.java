@@ -1,6 +1,5 @@
 /*
- * File updated ~ 10 - 1 - 2025 ~ Leaf
- * File updated ~ 12 - 7 - 2025 ~ Soar
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding;
@@ -14,15 +13,14 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = Surgebinding.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = Surgebinding.MODID)
 public class SurgebindingDataGenerator
 {
 	private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
@@ -43,11 +41,11 @@ public class SurgebindingDataGenerator
 
 		generator.addProvider(true, new SurgebindingItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SurgebindingBlockModelsGen(packOutput, existingFileHelper));
-		generator.addProvider(true, new SurgebindingLootTableGen(packOutput));
-		generator.addProvider(true, new SurgebindingRecipeGen(packOutput, existingFileHelper));
+		generator.addProvider(true, new SurgebindingLootTableGen(packOutput, event.getLookupProvider()));
+		generator.addProvider(true, new SurgebindingRecipeGen(packOutput, event.getLookupProvider()));
 
 		generator.addProvider(true, new SurgebindingPatchouliGen(packOutput));
-		generator.addProvider(true, new SurgebindingWorldGenProvider(packOutput, event.getLookupProvider()));
+		generator.addProvider(true, new SurgebindingDatapackRegistryProvider(packOutput, event.getLookupProvider()));
 		generator.addProvider(true, new SurgebindingCuriosProvider(packOutput, existingFileHelper, lookupProvider));
 	}
 
