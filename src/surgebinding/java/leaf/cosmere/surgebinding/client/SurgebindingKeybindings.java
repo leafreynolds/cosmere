@@ -1,5 +1,5 @@
 /*
- * File updated ~ 4 - 2 - 2025 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -11,11 +11,10 @@ import leaf.cosmere.client.Keybindings;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.manifestation.SurgebindingManifestation;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
@@ -28,7 +27,7 @@ import static leaf.cosmere.surgebinding.common.registries.SurgebindingManifestat
 
 // Really only has its own file to more nicely reference keybindings.
 // Otherwise, could have lived in mod client events
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Surgebinding.MODID, bus = Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Surgebinding.MODID)
 public class SurgebindingKeybindings
 {
 	public static KeyMapping SHARDBLADE;

@@ -15,12 +15,12 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -37,20 +37,13 @@ public class ShardbladeDynamicItem extends ShardbladeItem
 	@Override
 	public DynamicShardbladeData getShardData(ItemStack stack)
 	{
-		return (DynamicShardbladeData) stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).resolve().get();
+		return RadiantShardData.load(stack, createShardData(stack));
 	}
 
 	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
+	public DynamicShardbladeData createShardData(ItemStack stack)
 	{
-		final DynamicShardbladeData dynamicShardbladeData = new DynamicShardbladeData(stack);
-
-		if (nbt != null)
-		{
-			dynamicShardbladeData.deserializeNBT(nbt); // todo check if this breaks things?
-		}
-
-		return dynamicShardbladeData;
+		return new DynamicShardbladeData(stack);
 	}
 
 	@Override
@@ -78,7 +71,7 @@ public class ShardbladeDynamicItem extends ShardbladeItem
 	}
 
 	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
 		final DynamicShardbladeData data = getShardData(pStack);
 		String attunedPlayerName = data.getBondedName();

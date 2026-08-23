@@ -4,18 +4,16 @@ import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.IRadiantShardData;
-import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDataComponents;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingRecipes;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -23,7 +21,7 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -34,13 +32,13 @@ public class ShardplateChargingRecipe extends CustomRecipe
 {
 	private static final Ingredient SHARDPLATE = Ingredient.of(CosmereTags.Items.CURIO_SHARDPLATE);
 
-	public ShardplateChargingRecipe(ResourceLocation loc, CraftingBookCategory pCategory)
+	public ShardplateChargingRecipe(CraftingBookCategory pCategory)
 	{
-		super(loc, pCategory);
+		super(pCategory);
 	}
 
 	@Override
-	public boolean matches(CraftingContainer inv, @Nonnull Level world)
+	public boolean matches(CraftingInput inv, @Nonnull Level world)
 	{
 		boolean hasGem = false;
 		ItemStack shardplate = null;
@@ -49,7 +47,7 @@ public class ShardplateChargingRecipe extends CustomRecipe
 		int gems = 0;
 		ShardplateCurioItem shardplateCurioItem = null;
 
-		for (int i = 0; i < inv.getContainerSize(); i++)
+		for (int i = 0; i < inv.size(); i++)
 		{
 			ItemStack stack = inv.getItem(i);
 			if (stack.isEmpty())
@@ -121,26 +119,28 @@ public class ShardplateChargingRecipe extends CustomRecipe
 
 
 	@Override
-	public ItemStack assemble(CraftingContainer inv, RegistryAccess pRegistryAccess)
+	public ItemStack assemble(CraftingInput inv, HolderLookup.Provider pRegistryAccess)
 	{
 		//Determine what kind of plate it is
 		ShardplateCurioItem shardplateItem = null;
-		CompoundTag tag = new CompoundTag();
-		CompoundTag dataTag = new CompoundTag();
-		for (ItemStack item : inv.getItems())
+		CompoundTag dataTag = null;
+		for (ItemStack item : inv.items())
 		{
 			if (item.is(CosmereTags.Items.CURIO_SHARDPLATE))
 			{
 				shardplateItem = (ShardplateCurioItem) item.getItem();
-				IRadiantShardData cap = item.getCapability(RadiantShardData.RADIANT_SHARD_DATA).orElseGet(() -> new DynamicShardplateData(item));
-				dataTag = cap.serializeNBT();
+				dataTag = item.get(SurgebindingDataComponents.SHARD_DATA.get());
 			}
 		}
 
 		ItemStack itemstack = new ItemStack(shardplateItem);
-		itemstack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).orElseGet(() -> new DynamicShardplateData(itemstack)).deserializeNBT(dataTag);
+		if (dataTag != null && !dataTag.isEmpty())
+		{
+			//copy so the result doesn't share the input's tag
+			itemstack.set(SurgebindingDataComponents.SHARD_DATA.get(), dataTag.copy());
+		}
 
-		for (int i = 0; i < inv.getContainerSize(); ++i)
+		for (int i = 0; i < inv.size(); ++i)
 		{
 			ItemStack stackInSlot = inv.getItem(i);
 			if (stackInSlot.isEmpty())
@@ -172,9 +172,9 @@ public class ShardplateChargingRecipe extends CustomRecipe
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv)
+	public NonNullList<ItemStack> getRemainingItems(CraftingInput inv)
 	{
-		NonNullList<ItemStack> remaining = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+		NonNullList<ItemStack> remaining = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
 
 		List<ItemStack> gemstones = new ArrayList<>();
 		List<Integer> gemstoneIndices = new ArrayList<>();
@@ -184,7 +184,7 @@ public class ShardplateChargingRecipe extends CustomRecipe
 		int missing = 0;
 
 		// Step 1: Identify armor and gemstones
-		for (int i = 0; i < inv.getContainerSize(); i++)
+		for (int i = 0; i < inv.size(); i++)
 		{
 			ItemStack stack = inv.getItem(i);
 			if (stack.isEmpty())
@@ -246,12 +246,6 @@ public class ShardplateChargingRecipe extends CustomRecipe
 	{
 		//if you can fit 2 items, the bottle and a metal, you can combine
 		return width * height > 1;
-	}
-
-	@Override
-	public @Nonnull ResourceLocation getId()
-	{
-		return Surgebinding.rl("plate_charging");
 	}
 
 	@Override

@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.surgebinding.common.items;
 
 import com.google.common.collect.ImmutableMultimap;
@@ -11,15 +15,20 @@ import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
+import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
 import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDataComponents;
 import leaf.cosmere.surgebinding.common.utils.ParticleHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -28,13 +37,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
@@ -45,9 +48,6 @@ import java.util.UUID;
 
 public class ShardplateCurioItem extends ChargeableItemBase implements ICurioItem, IRadiantShardItem
 {
-	public static final Capability<DynamicShardplateData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
 
 
 	public ShardplateCurioItem(Properties properties)
@@ -76,7 +76,33 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	@Override
 	public DynamicShardplateData getShardData(ItemStack stack)
 	{
-		return (DynamicShardplateData) stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).resolve().get();
+		return RadiantShardData.load(stack, createShardData(stack));
+	}
+
+	@Override
+	public DynamicShardplateData createShardData(ItemStack stack)
+	{
+		return new DynamicShardplateData(stack);
+	}
+
+	//components are per stack, so carry the appearance across on equip
+	private static void copyShardData(SlotContext slotContext, ItemStack from, ItemStack to)
+	{
+		if (from.isEmpty() || to.isEmpty())
+		{
+			return;
+		}
+
+		CompoundTag data = from.get(SurgebindingDataComponents.SHARD_DATA.get());
+		if (data == null)
+		{
+			to.remove(SurgebindingDataComponents.SHARD_DATA.get());
+		}
+		else
+		{
+			//copy so the two stacks don't share one tag
+			to.set(SurgebindingDataComponents.SHARD_DATA.get(), data.copy());
+		}
 	}
 
 	public boolean isFullCharged(ItemStack itemStack)
@@ -99,7 +125,7 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 
 		if (SpiritwebCapability.get(entity).isPresent())
 		{
-			cap = (SpiritwebCapability) SpiritwebCapability.get(entity).resolve().get();
+			cap = (SpiritwebCapability) SpiritwebCapability.get(entity).get();
 			SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(cap);
 			if (ssm.getStormlight() > 0 && !shardplateCurioItem.isFullCharged(stack))
 			{
@@ -109,6 +135,9 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		}
 		if (!entity.level().isClientSide)
 		{
+			//appearance is rolled server side
+			seedShardData(stack);
+
 			if (shardplateCurioItem.getCharge(stack) != 0)
 			{
 				entity.addEffect(EffectsHelper.getNewEffect(MobEffects.JUMP, 1));
@@ -123,6 +152,16 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 	}
 
 	@Override
+	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
+	{
+		if (!pLevel.isClientSide)
+		{
+			seedShardData(pStack);
+		}
+		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
+	}
+
+	@Override
 	public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
 	{
 		if (slotContext.entity().level().isClientSide)
@@ -131,14 +170,7 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		}
 
 		// Copy the capability data if present
-		prevStack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(fromCap ->
-		{
-			stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(toCap ->
-			{
-				CompoundTag nbt = fromCap.serializeNBT();
-				toCap.deserializeNBT(nbt);
-			});
-		});
+		copyShardData(slotContext, prevStack, stack);
 		ICurioItem.super.onEquip(slotContext, prevStack, stack);
 	}
 
@@ -151,35 +183,9 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		}
 
 		// Copy the capability data if present
-		stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(fromCap ->
-		{
-			newStack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).ifPresent(toCap ->
-			{
-				CompoundTag nbt = fromCap.serializeNBT();
-				toCap.deserializeNBT(nbt);
-			});
-		});
+		copyShardData(slotContext, stack, newStack);
 
 		ICurioItem.super.onUnequip(slotContext, newStack, stack);
-	}
-
-
-	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
-	{
-		final DynamicShardplateData dynamicShardplateData = new DynamicShardplateData(stack);
-
-		if (nbt != null && nbt.contains("shard_data"))
-		{
-			dynamicShardplateData.deserializeNBT(nbt.getCompound("shard_data"));
-			if (dynamicShardplateData.getOrder() == null)
-			{
-				int i = (int) (Math.random() * 10);
-				dynamicShardplateData.setOrder(Roshar.RadiantOrder.valueOf(i).get());
-			}
-		}
-
-		return dynamicShardplateData;
 	}
 
 
@@ -204,35 +210,38 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
+	public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack)
 	{
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+		//modifier ids are ResourceLocations now
+		ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = ImmutableMultimap.builder();
 
-		Multimap<Attribute, AttributeModifier> defaultModifiers;
-
-		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, uuid, stack));
+		builder.putAll(ICurioItem.super.getAttributeModifiers(slotContext, id, stack));
 		if (getCharge(stack) > 0)
 		{
-			builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", 22, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", 0.4f, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", 0.4D, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.FLYING_SPEED, new AttributeModifier(uuid, "Armor jump", 1.3, AttributeModifier.Operation.MULTIPLY_BASE));
-			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Armor run", 1.05, AttributeModifier.Operation.MULTIPLY_BASE));
-			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(uuid, "Armor damage", 0.4, AttributeModifier.Operation.MULTIPLY_TOTAL));
-			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Armor attack speed", 1.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
-			builder.put(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor stepper", 0.8, AttributeModifier.Operation.ADDITION));
+			builder.put(Attributes.ARMOR, new AttributeModifier(modifierId(id, "armor"), 22, AttributeModifier.Operation.ADD_VALUE));
+			builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(modifierId(id, "armor_toughness"), 0.4f, AttributeModifier.Operation.ADD_VALUE));
+			builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(modifierId(id, "armor_knockback_resistance"), 0.4D, AttributeModifier.Operation.ADD_VALUE));
+			builder.put(Attributes.FLYING_SPEED, new AttributeModifier(modifierId(id, "armor_jump"), 1.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(modifierId(id, "armor_run"), 1.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(modifierId(id, "armor_damage"), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(modifierId(id, "armor_attack_speed"), 1.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+			builder.put(Attributes.STEP_HEIGHT, new AttributeModifier(modifierId(id, "armor_stepper"), 0.8, AttributeModifier.Operation.ADD_VALUE));
 		}
 		else
 		{
-			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Armor run", -0.3, AttributeModifier.Operation.MULTIPLY_BASE));
-			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Armor attack speed", -0.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+			builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(modifierId(id, "armor_run"), -0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(modifierId(id, "armor_attack_speed"), -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 		}
-		defaultModifiers = builder.build();
-		return defaultModifiers;
+		return builder.build();
+	}
+
+	private static ResourceLocation modifierId(ResourceLocation slotId, String suffix)
+	{
+		return Surgebinding.rl(slotId.getPath() + "_" + suffix);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<net.minecraft.network.chat.Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<net.minecraft.network.chat.Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
 		String attunedPlayerName = getAttunedPlayerName(pStack);
 		UUID attunedPlayer = getAttunedPlayer(pStack);
@@ -272,35 +281,6 @@ public class ShardplateCurioItem extends ChargeableItemBase implements ICurioIte
 		pTooltipComponents.add(TextHelper.createText(String.format("Right Leg: %s", data.getRightLegID())));
 		pTooltipComponents.add(TextHelper.createText(String.format("Right Boot Outside: %s", data.getRightBootOutsideID())));
 		pTooltipComponents.add(TextHelper.createText(String.format("Right Boot Tip: %s", data.getRightBootTipID())));
-	}
-
-
-	@Override
-	public @Nullable CompoundTag getShareTag(@NotNull ItemStack stack)
-	{
-		final DynamicShardplateData data = getShardData(stack);
-		CompoundTag tag = stack.getOrCreateTag();
-
-		tag.put("shard_data", data.serializeNBT());
-
-		return tag;
-	}
-
-	@Override
-	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt)
-	{
-		super.readShareTag(stack, nbt);
-
-		if (nbt != null)
-		{
-			final DynamicShardplateData data = getShardData(stack);
-
-			if (nbt.contains("shard_data"))
-			{
-				data.deserializeNBT(nbt.getCompound("shard_data"));
-			}
-		}
-
 	}
 
 

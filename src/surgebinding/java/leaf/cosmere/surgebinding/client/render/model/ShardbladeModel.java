@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.IShardbladeDynamicData;
 import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
+import leaf.cosmere.surgebinding.common.items.IRadiantShardItem;
 import leaf.cosmere.surgebinding.common.items.ShardbladeDynamicItem;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
@@ -81,9 +82,9 @@ public class ShardbladeModel extends Model
 	}
 
 
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color)
 	{
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
 	}
 
 	public void setup(ItemStack pStack)
@@ -113,7 +114,7 @@ public class ShardbladeModel extends Model
 		//now we need to get the actual data from the itemstack
 		//and set the correct pieces to be visible
 
-		if (!pStack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).isPresent())
+		if (!(pStack.getItem() instanceof IRadiantShardItem))
 		{
 			return;
 		}

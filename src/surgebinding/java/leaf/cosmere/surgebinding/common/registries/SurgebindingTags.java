@@ -25,7 +25,7 @@ public class SurgebindingTags
 
 		private static TagKey<BannerPattern> tag(String name)
 		{
-			return TagKey.create(Registries.BANNER_PATTERN, new ResourceLocation(Surgebinding.MODID, name));
+			return TagKey.create(Registries.BANNER_PATTERN, ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, name));
 		}
 	}
 }

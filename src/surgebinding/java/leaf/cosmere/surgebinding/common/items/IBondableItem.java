@@ -13,7 +13,13 @@ public interface IBondableItem
 {
 	default IBondData getBondData(ItemStack stack)
 	{
-		return stack.getCapability(BondData.BOND_DATA).resolve().get();
+		//blades carry their bond in shard data. everything else gets a standalone one
+		if (stack.getItem() instanceof IRadiantShardItem shardItem
+				&& shardItem.getShardData(stack) instanceof IBondData bondData)
+		{
+			return bondData;
+		}
+		return BondData.load(stack);
 	}
 
 	default boolean isBondedTo(ItemStack stack, LivingEntity player)

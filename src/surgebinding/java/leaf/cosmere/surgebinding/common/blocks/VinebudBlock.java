@@ -47,7 +47,7 @@ public class VinebudBlock extends BaseBlock
 	}
 
 	@Override
-	public InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit)
+	public InteractionResult useWithoutItem(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull BlockHitResult pHit)
 	{
 		if (pLevel.isClientSide)
 		{

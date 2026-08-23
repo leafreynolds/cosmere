@@ -9,15 +9,15 @@ import leaf.cosmere.surgebinding.common.commands.arguments.RadiantOrderArgumentT
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class SurgebindingArgumentTypes
 {
-	public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPE_INFOS = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Surgebinding.MODID);
+	public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPE_INFOS = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Surgebinding.MODID);
 
-	public static final RegistryObject<ArgumentTypeInfo<?, ?>> RADIANT_ORDER_ARGUMENT_TYPE = ARGUMENT_TYPE_INFOS.register("radiant_order_argument_type",
+	public static final DeferredHolder<ArgumentTypeInfo<?, ?>, ArgumentTypeInfo<?, ?>> RADIANT_ORDER_ARGUMENT_TYPE = ARGUMENT_TYPE_INFOS.register("radiant_order_argument_type",
 			() -> ArgumentTypeInfos.registerByClass(
 					RadiantOrderArgumentType.class,
 					SingletonArgumentInfo.contextFree(RadiantOrderArgumentType::createArgument)));

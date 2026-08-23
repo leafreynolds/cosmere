@@ -52,7 +52,7 @@ public class Honorspren extends Allay
 	}
 
 	@Override
-	public boolean canBeLeashed(Player pPlayer)
+	public boolean canBeLeashed()
 	{
 		return false;
 	}

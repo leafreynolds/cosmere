@@ -4,32 +4,44 @@
 
 package leaf.cosmere.surgebinding.common.network.packets;
 
+import io.netty.buffer.ByteBuf;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
+import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class DispatchStormlight implements ICosmerePacket
 {
+	public static final CustomPacketPayload.Type<DispatchStormlight> TYPE =
+			new CustomPacketPayload.Type<>(Surgebinding.rl("dispatch_stormlight"));
+
+	public static final StreamCodec<ByteBuf, DispatchStormlight> STREAM_CODEC =
+			StreamCodec.unit(new DispatchStormlight());
+
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
+	{
+		return TYPE;
+	}
+
 
 	public DispatchStormlight()
 	{
 	}
 
-	public DispatchStormlight(FriendlyByteBuf buffer)
-	{
-	}
-
 	@Override
-	public void handle(NetworkEvent.Context context)
+	public void handle(IPayloadContext context)
 	{
-		ServerPlayer sender = context.getSender();
-		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+		if (!(context.player() instanceof ServerPlayer sender))
+		{
+			return;
+		}
+		context.enqueueWork(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
 		{
 			SurgebindingSpiritwebSubmodule ssm = SurgebindingSpiritwebSubmodule.getSubmodule(cap);
 
@@ -48,14 +60,7 @@ public class DispatchStormlight implements ICosmerePacket
 			}
 
 		}));
-		context.setPacketHandled(true);
 	}
 
-
-	@Override
-	public void encode(FriendlyByteBuf buf)
-	{
-
-	}
 
 }

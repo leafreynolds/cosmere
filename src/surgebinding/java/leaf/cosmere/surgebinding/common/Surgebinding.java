@@ -10,7 +10,7 @@ import leaf.cosmere.api.IModModule;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.config.CosmereModConfig;
+import leaf.cosmere.common.config.ICosmereConfig;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.capabilities.world.IRoshar;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
@@ -18,14 +18,15 @@ import leaf.cosmere.surgebinding.common.network.SurgebindingPacketHandler;
 import leaf.cosmere.surgebinding.common.registries.*;
 import leaf.cosmere.surgebinding.common.worldgen.SurgebindingConfiguredFeatures;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+
+import java.util.List;
+import net.neoforged.fml.ModLoadingContext;
 import top.theillusivec4.curios.api.CuriosApi;
 
 @Mod(Surgebinding.MODID)
@@ -44,13 +45,14 @@ public class Surgebinding implements IModModule
 
 		SurgebindingConfigs.registerConfigs(ModLoadingContext.get());
 
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus modBus = ModLoadingContext.get().getActiveContainer().getEventBus();
 		modBus.addListener(this::commonSetup);
 		modBus.addListener(this::onConfigReload);
 		modBus.addListener(this::onConfigLoad);
-		modBus.addListener(this::onAddCaps);
 
 		//Registries
+		SurgebindingAttachments.ATTACHMENTS.register(modBus);
+		SurgebindingDataComponents.DATA_COMPONENTS.register(modBus);
 		SurgebindingBlocks.BLOCKS.register(modBus);
 		SurgebindingItems.ITEMS.register(modBus);
 		SurgebindingEntityTypes.ENTITY_TYPES.register(modBus);
@@ -58,7 +60,6 @@ public class Surgebinding implements IModModule
 		SurgebindingManifestations.MANIFESTATIONS.register(modBus);
 		SurgebindingEffects.EFFECTS.register(modBus);
 		SurgebindingEffects.MOB_EFFECTS.register(modBus);
-		SurgebindingBannerPatterns.BANNER_PATTERNS.register(modBus);
 		SurgebindingRecipes.RECIPE_SERIALIZERS.register(modBus);
 		SurgebindingLootFunctions.LOOT_FUNCTIONS.register(modBus);
 
@@ -72,13 +73,14 @@ public class Surgebinding implements IModModule
 
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
 		packetHandler = new SurgebindingPacketHandler();
+		packetHandler.register(modBus);
 
 
 	}
 
 	public static ResourceLocation rl(String path)
 	{
-		return new ResourceLocation(Surgebinding.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, path);
 	}
 
 	@Override
@@ -112,31 +114,41 @@ public class Surgebinding implements IModModule
 		{
 
 		});
-
-		packetHandler.initialize();
 	}
 
 	private void onConfigLoad(ModConfigEvent configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		if (!config.getModId().equals(MODID))
 		{
-			cosmereModConfig.clearCache();
+			return;
+		}
+		for (ICosmereConfig cosmereConfig : List.of(SurgebindingConfigs.SERVER))
+		{
+			if (cosmereConfig.getConfigSpec() == config.getSpec())
+			{
+				cosmereConfig.clearCache();
+				return;
+			}
 		}
 	}
 
 	private void onConfigReload(ModConfigEvent.Reloading configEvent)
 	{
 		ModConfig config = configEvent.getConfig();
-		if (config.getModId().equals(MODID) && config instanceof CosmereModConfig cosmereModConfig)
+		if (!config.getModId().equals(MODID))
 		{
-			cosmereModConfig.clearCache();
+			return;
+		}
+		for (ICosmereConfig cosmereConfig : List.of(SurgebindingConfigs.SERVER))
+		{
+			if (cosmereConfig.getConfigSpec() == config.getSpec())
+			{
+				cosmereConfig.clearCache();
+				return;
+			}
 		}
 	}
 
 
-	private void onAddCaps(RegisterCapabilitiesEvent capabilitiesEvent)
-	{
-		capabilitiesEvent.register(IRoshar.class);
-	}
 }

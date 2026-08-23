@@ -1,12 +1,27 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.surgebinding.common.items;
 
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDataComponents;
 import net.minecraft.world.item.ItemStack;
 
 public interface IRadiantShardItem
 {
 	RadiantShardData getShardData(ItemStack stack);
+
+	RadiantShardData createShardData(ItemStack stack);
+
+	default void seedShardData(ItemStack stack)
+	{
+		if (!stack.isEmpty() && !stack.has(SurgebindingDataComponents.SHARD_DATA.get()))
+		{
+			createShardData(stack).seed();
+		}
+	}
 
 	default Roshar.RadiantOrder getOrder(ItemStack stack)
 	{

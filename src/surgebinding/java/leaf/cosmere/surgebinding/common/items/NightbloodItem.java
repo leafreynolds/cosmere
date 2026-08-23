@@ -4,8 +4,6 @@
 
 package leaf.cosmere.surgebinding.common.items;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.TimeHelper;
@@ -22,13 +20,17 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -39,24 +41,18 @@ public class NightbloodItem extends SwordItem implements IBondableItem
 	protected final float attackDamage;
 	protected final float attackSpeedIn;
 
-	private Multimap<Attribute, AttributeModifier> attributeModifiers = null;
+	private ItemAttributeModifiers attributeModifiers = null;
 	protected static final UUID NIGHTBLOOD_SURGE_UUID = UUID.fromString("CB3F55D3-4865-4180-A497-9C13A33DB5CC");
 
 	public NightbloodItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, builderIn);
+		super(tier, builderIn.attributes(SwordItem.createAttributes(tier, attackDamageIn, attackSpeedIn)));
 		this.attackDamage = attackDamageIn + tier.getAttackDamageBonus();
 		this.attackSpeedIn = attackSpeedIn;
 	}
 
 	@Override
-	public boolean isFireResistant()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
+	public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment)
 	{
 		return false;
 	}
@@ -77,17 +73,6 @@ public class NightbloodItem extends SwordItem implements IBondableItem
 	public boolean isFoil(ItemStack itemStack)
 	{
 		return false;
-	}
-
-	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
-	{
-		final BondData bondData = new BondData(stack);
-		if (nbt != null)
-		{
-			bondData.deserializeNBT(nbt);
-		}
-		return bondData;
 	}
 
 	@Override
@@ -120,21 +105,25 @@ public class NightbloodItem extends SwordItem implements IBondableItem
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
 	{
-		IBondData data = getBondData(pStack);
-		if (pEntity instanceof Player player)
+		//the bond is persisted on the server and reaches the client through the component
+		if (!pLevel.isClientSide)
 		{
-			if (data.bondTicks() >= bondTime())
+			IBondData data = getBondData(pStack);
+			if (pEntity instanceof Player player)
 			{
-				bond(pStack, player);
+				if (data.bondTicks() >= bondTime())
+				{
+					bond(pStack, player);
+				}
+				else
+				{
+					data.tickBondUp();
+				}
 			}
 			else
 			{
-				data.tickBondUp();
+				data.resetBondTicks();
 			}
-		}
-		else
-		{
-			data.resetBondTicks();
 		}
 		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
 	}
@@ -143,34 +132,25 @@ public class NightbloodItem extends SwordItem implements IBondableItem
 	 * Gets a map of item attribute modifiers, used by damage when used as melee weapon.
 	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack)
+	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
 		if (attributeModifiers == null)
 		{
-			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeedIn, AttributeModifier.Operation.ADDITION));
-
-			if (SurgebindingConfigs.SERVER.NIGHTBLOOD_SPOILERS.get())
-			{
-				for (Roshar.Surges surge : EnumUtils.SURGES)
-				{
-					builder.put(SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(surge).getAttribute(), new AttributeModifier(NIGHTBLOOD_SURGE_UUID, "Nightblood", 5, AttributeModifier.Operation.ADDITION));
-				}
-			}
-
-			this.attributeModifiers = builder.build();
+			attributeModifiers = ItemAttributeModifiers.builder()
+					.add(Attributes.ATTACK_DAMAGE,
+							new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, attackDamage, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.MAINHAND)
+					.add(Attributes.ATTACK_SPEED,
+							new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, attackSpeedIn, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.MAINHAND)
+					.build();
 		}
 
-		return switch (equipmentSlot)
-		{
-			case MAINHAND, OFFHAND -> this.attributeModifiers;
-			default -> super.getAttributeModifiers(equipmentSlot, stack);
-		};
+		return attributeModifiers;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
 		final IBondData data = getBondData(pStack);
 		String attunedPlayerName = data.getBondedName();

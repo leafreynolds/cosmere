@@ -1,5 +1,5 @@
 /*
- * File updated ~ 14 - 1 - 2025 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client;
@@ -10,30 +10,30 @@ import leaf.cosmere.surgebinding.client.render.SurgebindingLayerDefinitions;
 import leaf.cosmere.surgebinding.client.render.SurgebindingRenderers;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
+import leaf.cosmere.surgebinding.common.items.IRadiantShardItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 import java.awt.*;
 
-@Mod.EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Surgebinding.MODID, value = Dist.CLIENT)
 public class SurgebindingModClientEvents
 {
 
 	@SubscribeEvent
-	public static void registerGuiOverlays(RegisterGuiOverlaysEvent guiOverlaysEvent)
+	public static void registerGuiOverlays(RegisterGuiLayersEvent guiOverlaysEvent)
 	{
 		guiOverlaysEvent.registerAbove(
-				VanillaGuiOverlay.EXPERIENCE_BAR.id(),
-				"hud",
-				(forgeGui, gui, partialTick, width, height) -> HUDHandler.onDrawScreenPost(gui)
+				VanillaGuiLayers.EXPERIENCE_BAR,
+				Surgebinding.rl("hud"),
+				(guiGraphics, deltaTracker) -> HUDHandler.onDrawScreenPost(guiGraphics)
 		);
 	}
 
@@ -48,31 +48,25 @@ public class SurgebindingModClientEvents
 	{
 		event.register((stack, tintIndex) ->
 		{
-			// We only want to tint layer0 (the plate body); layer1 is the visor overlay
+			//only tint layer0, the plate body. layer1 is the visor overlay
 			if (tintIndex != 0)
 			{
 				return Color.WHITE.getRGB(); // white = no tint
 			}
 
-			return (stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA)
-					.map(cap ->
-					{
-						if (cap instanceof DynamicShardplateData cap2)
-						{
-							boolean living = cap2.isLiving();
-							boolean colored = cap2.isColored();
+			if (!(stack.getItem() instanceof IRadiantShardItem shardItem)
+					|| !(shardItem.getShardData(stack) instanceof DynamicShardplateData plateData))
+			{
+				return Roshar.getDeadplate().getRGB();
+			}
 
-							if (!living || !colored)
-							{
-								return Roshar.getDeadplate().getRGB(); // grey when either is false
-							}
+			//order is null on a plate that was never sworn/rolled
+			if (!plateData.isLiving() || !plateData.isColored() || plateData.getOrder() == null)
+			{
+				return Roshar.getDeadplate().getRGB();
+			}
 
-							return cap2.getOrder().getPlateColor().getRGB();
-						}
-
-						return Roshar.getDeadplate().getRGB();
-					})
-					.orElse(Roshar.getDeadplate().getRGB()));
+			return plateData.getOrder().getPlateColor().getRGB();
 			// fallback if no cap
 		}, SurgebindingItems.SHARDPLATE.get());
 	}

@@ -21,7 +21,7 @@ import java.awt.*;
 
 public class HUDHandler
 {
-	private static final ResourceLocation stormlightBar = new ResourceLocation(Surgebinding.MODID, "textures/gui/stormlight_hud.png");
+	private static final ResourceLocation stormlightBar = ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, "textures/gui/stormlight_hud.png");
 
 
 	public static void onDrawScreenPost(GuiGraphics guiGraphics)

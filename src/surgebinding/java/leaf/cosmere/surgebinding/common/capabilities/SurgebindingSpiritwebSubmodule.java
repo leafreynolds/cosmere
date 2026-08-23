@@ -33,10 +33,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.items.wrapper.PlayerInvWrapper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -137,7 +137,7 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 				//otherwise conditional effects
 				else
 				{
-					if (livingEntity.getCombatTracker().inCombat)
+					if (livingEntity.getLastHurtByMob() != null)
 					{
 						//todo combat effect cost
 						//todo replace with non-vanilla effects

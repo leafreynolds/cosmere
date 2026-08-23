@@ -15,18 +15,32 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 public class LavisPolypBlock extends HorizontalDirectionalBlock
 {
+	public static final MapCodec<LavisPolypBlock> CODEC = simpleCodec(LavisPolypBlock::new);
+
+	@Override
+	protected MapCodec<? extends HorizontalDirectionalBlock> codec()
+	{
+		return CODEC;
+	}
+
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final VoxelShape SHAPE;
 
 	public LavisPolypBlock()
 	{
-		super(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).noCollission());
+		this(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).noCollission());
+	}
+
+	public LavisPolypBlock(BlockBehaviour.Properties properties)
+	{
+		super(properties);
 	}
 
 	@Override

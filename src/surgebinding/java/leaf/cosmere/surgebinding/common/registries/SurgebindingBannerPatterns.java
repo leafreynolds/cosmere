@@ -1,40 +1,69 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.surgebinding.common.registries;
 
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
+//banner patterns are a datapack registry in 1.21, so these are just keys.
 public class SurgebindingBannerPatterns
 {
 	private SurgebindingBannerPatterns()
 	{
 	}
 
-	public static final DeferredRegister<BannerPattern> BANNER_PATTERNS = DeferredRegister.create(Registries.BANNER_PATTERN, Surgebinding.MODID);
+	private static ResourceKey<BannerPattern> key(String name)
+	{
+		return ResourceKey.create(Registries.BANNER_PATTERN, Surgebinding.rl(name));
+	}
 
-	public static final RegistryObject<BannerPattern> WINDRUNNER = BANNER_PATTERNS.register("windrunner", () -> new BannerPattern("rwr"));
-	public static final RegistryObject<BannerPattern> SKYBREAKER = BANNER_PATTERNS.register("skybreaker", () -> new BannerPattern("rsb"));
-	public static final RegistryObject<BannerPattern> DUSTBRINGER = BANNER_PATTERNS.register("dustbringer", () -> new BannerPattern("rdb"));
-	public static final RegistryObject<BannerPattern> EDGEDANCER = BANNER_PATTERNS.register("edgedancer", () -> new BannerPattern("red"));
-	public static final RegistryObject<BannerPattern> TRUTHWATCHER = BANNER_PATTERNS.register("truthwatcher", () -> new BannerPattern("rtw"));
-	public static final RegistryObject<BannerPattern> LIGHTWEAVER = BANNER_PATTERNS.register("lightweaver", () -> new BannerPattern("rlw"));
-	public static final RegistryObject<BannerPattern> ELSECALLER = BANNER_PATTERNS.register("elsecaller", () -> new BannerPattern("rec"));
-	public static final RegistryObject<BannerPattern> WILLSHAPER = BANNER_PATTERNS.register("willshaper", () -> new BannerPattern("rws"));
-	public static final RegistryObject<BannerPattern> STONEWARD = BANNER_PATTERNS.register("stoneward", () -> new BannerPattern("rsw"));
-	public static final RegistryObject<BannerPattern> BONDSMITH = BANNER_PATTERNS.register("bondsmith", () -> new BannerPattern("rbs"));
+	public static final ResourceKey<BannerPattern> WINDRUNNER = key("windrunner");
+	public static final ResourceKey<BannerPattern> SKYBREAKER = key("skybreaker");
+	public static final ResourceKey<BannerPattern> DUSTBRINGER = key("dustbringer");
+	public static final ResourceKey<BannerPattern> EDGEDANCER = key("edgedancer");
+	public static final ResourceKey<BannerPattern> TRUTHWATCHER = key("truthwatcher");
+	public static final ResourceKey<BannerPattern> LIGHTWEAVER = key("lightweaver");
+	public static final ResourceKey<BannerPattern> ELSECALLER = key("elsecaller");
+	public static final ResourceKey<BannerPattern> WILLSHAPER = key("willshaper");
+	public static final ResourceKey<BannerPattern> STONEWARD = key("stoneward");
+	public static final ResourceKey<BannerPattern> BONDSMITH = key("bondsmith");
 
-	public static final RegistryObject<BannerPattern> ABRASION = BANNER_PATTERNS.register("abrasion", () -> new BannerPattern("sab"));
-	public static final RegistryObject<BannerPattern> ADHESION = BANNER_PATTERNS.register("adhesion", () -> new BannerPattern("sad"));
-	public static final RegistryObject<BannerPattern> COHESION = BANNER_PATTERNS.register("cohesion", () -> new BannerPattern("sch"));
-	public static final RegistryObject<BannerPattern> DIVISION = BANNER_PATTERNS.register("division", () -> new BannerPattern("sdv"));
-	public static final RegistryObject<BannerPattern> GRAVITATION = BANNER_PATTERNS.register("gravitation", () -> new BannerPattern("sgt"));
-	public static final RegistryObject<BannerPattern> ILLUMINATION = BANNER_PATTERNS.register("illumination", () -> new BannerPattern("sil"));
-	public static final RegistryObject<BannerPattern> PROGRESSION = BANNER_PATTERNS.register("progression", () -> new BannerPattern("spg"));
-	public static final RegistryObject<BannerPattern> TENSION = BANNER_PATTERNS.register("tension", () -> new BannerPattern("sts"));
-	public static final RegistryObject<BannerPattern> TRANSFORMATION = BANNER_PATTERNS.register("transformation", () -> new BannerPattern("stf"));
-	public static final RegistryObject<BannerPattern> TRANSPORTATION = BANNER_PATTERNS.register("transportation", () -> new BannerPattern("stp"));
+	public static final ResourceKey<BannerPattern> ABRASION = key("abrasion");
+	public static final ResourceKey<BannerPattern> ADHESION = key("adhesion");
+	public static final ResourceKey<BannerPattern> COHESION = key("cohesion");
+	public static final ResourceKey<BannerPattern> DIVISION = key("division");
+	public static final ResourceKey<BannerPattern> GRAVITATION = key("gravitation");
+	public static final ResourceKey<BannerPattern> ILLUMINATION = key("illumination");
+	public static final ResourceKey<BannerPattern> PROGRESSION = key("progression");
+	public static final ResourceKey<BannerPattern> TENSION = key("tension");
+	public static final ResourceKey<BannerPattern> TRANSFORMATION = key("transformation");
+	public static final ResourceKey<BannerPattern> TRANSPORTATION = key("transportation");
 
-
+	public static final ResourceKey<BannerPattern>[] ALL = new ResourceKey[]
+			{
+					WINDRUNNER,
+					SKYBREAKER,
+					DUSTBRINGER,
+					EDGEDANCER,
+					TRUTHWATCHER,
+					LIGHTWEAVER,
+					ELSECALLER,
+					WILLSHAPER,
+					STONEWARD,
+					BONDSMITH,
+					ABRASION,
+					ADHESION,
+					COHESION,
+					DIVISION,
+					GRAVITATION,
+					ILLUMINATION,
+					PROGRESSION,
+					TENSION,
+					TRANSFORMATION,
+					TRANSPORTATION
+			};
 }

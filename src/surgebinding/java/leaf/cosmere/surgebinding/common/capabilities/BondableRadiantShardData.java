@@ -1,12 +1,10 @@
 package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.Constants;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +12,6 @@ import java.util.UUID;
 
 public class BondableRadiantShardData extends RadiantShardData implements IBondData
 {
-	private final LazyOptional<IBondData> bondOpt = LazyOptional.of(() -> this);
 
 	protected UUID bond;
 	protected String bondedName;
@@ -23,16 +20,6 @@ public class BondableRadiantShardData extends RadiantShardData implements IBondD
 	public BondableRadiantShardData(ItemStack stack)
 	{
 		super(stack);
-	}
-
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
-	{
-		if (cap == BondData.BOND_DATA)
-		{
-			return bondOpt.cast();
-		}
-		return super.getCapability(cap, side);
 	}
 
 	@Override
@@ -58,12 +45,14 @@ public class BondableRadiantShardData extends RadiantShardData implements IBondD
 	{
 		this.bond = entity.getUUID();
 		this.bondedName = entity.getName().getString();
+		save();
 	}
 
 	@Override
 	public void setEmptyBond()
 	{
 		this.bond = null;
+		save();
 	}
 
 	@Override
@@ -76,18 +65,20 @@ public class BondableRadiantShardData extends RadiantShardData implements IBondD
 	public void tickBondUp()
 	{
 		bondTicks++;
+		save();
 	}
 
 	@Override
 	public void resetBondTicks()
 	{
 		bondTicks = 0;
+		save();
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
-		super.serializeNBT();
+		super.serializeNBT(provider);
 
 		if (bond != null)
 		{
@@ -101,9 +92,9 @@ public class BondableRadiantShardData extends RadiantShardData implements IBondD
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag compoundTag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
-		super.deserializeNBT(compoundTag);
+		super.deserializeNBT(provider, compoundTag);
 
 		if (nbt.contains(Constants.NBT.ATTUNED_PLAYER))
 		{

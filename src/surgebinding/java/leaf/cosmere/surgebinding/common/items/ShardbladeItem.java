@@ -14,13 +14,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item.TooltipContext;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,24 +35,18 @@ public class ShardbladeItem extends SwordItem implements IRadiantShardItem, IBon
 
 	public ShardbladeItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn)
 	{
-		super(tier, attackDamageIn, attackSpeedIn, builderIn);
+		super(tier, builderIn.attributes(SwordItem.createAttributes(tier, attackDamageIn, attackSpeedIn)));
 		this.attackDamage = attackDamageIn + tier.getAttackDamageBonus();
 		this.attackSpeedIn = attackSpeedIn;
 	}
 
+	//Shards can't be enchanted
 	@Override
-	public boolean isFireResistant()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
+	public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment)
 	{
 		return false;
 	}
 
-	//Shards can't be enchanted
 	@Override
 	public int getEnchantmentValue(ItemStack itemStack)
 	{
@@ -74,38 +69,13 @@ public class ShardbladeItem extends SwordItem implements IRadiantShardItem, IBon
 	@Override
 	public BondableRadiantShardData getShardData(ItemStack stack)
 	{
-		return (BondableRadiantShardData) stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).resolve().get();
+		return RadiantShardData.load(stack, createShardData(stack));
 	}
 
 	@Override
-	public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
+	public BondableRadiantShardData createShardData(ItemStack stack)
 	{
-		final BondableRadiantShardData shardData = new BondableRadiantShardData(stack);
-		if (nbt != null)
-		{
-			shardData.deserializeNBT(nbt);
-		}
-		return shardData;
-	}
-
-	@Override
-	public @Nullable CompoundTag getShareTag(@NotNull ItemStack stack)
-	{
-		final BondableRadiantShardData data = getShardData(stack);
-		CompoundTag tag = stack.getOrCreateTag();
-		tag.put("shard_data", data.serializeNBT());
-		return tag;
-	}
-
-	@Override
-	public void readShareTag(@NotNull ItemStack stack, @Nullable CompoundTag nbt)
-	{
-		super.readShareTag(stack, nbt);
-		if (nbt != null && nbt.contains("shard_data"))
-		{
-			final BondableRadiantShardData data = getShardData(stack);
-			data.deserializeNBT(nbt.getCompound("shard_data"));
-		}
+		return new BondableRadiantShardData(stack);
 	}
 
 	@Override
@@ -146,31 +116,37 @@ public class ShardbladeItem extends SwordItem implements IRadiantShardItem, IBon
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
 	{
-		BondableRadiantShardData data = getShardData(pStack);
-		if (pEntity instanceof Player player)
+		//bonding and appearance are persisted on the server and reach the client through the component
+		if (!pLevel.isClientSide)
 		{
-			if (data.isLiving())
+			seedShardData(pStack);
+
+			BondableRadiantShardData data = getShardData(pStack);
+			if (pEntity instanceof Player player)
 			{
-				bond(pStack, player);
-			}
-			else if (data.bondTicks() >= bondTime())
-			{
-				bond(pStack, player);
+				if (data.isLiving())
+				{
+					bond(pStack, player);
+				}
+				else if (data.bondTicks() >= bondTime())
+				{
+					bond(pStack, player);
+				}
+				else
+				{
+					data.tickBondUp();
+				}
 			}
 			else
 			{
-				data.tickBondUp();
+				data.resetBondTicks();
 			}
-		}
-		else
-		{
-			data.resetBondTicks();
 		}
 		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
 		final BondableRadiantShardData data = getShardData(pStack);
 		String attunedPlayerName = data.getBondedName();

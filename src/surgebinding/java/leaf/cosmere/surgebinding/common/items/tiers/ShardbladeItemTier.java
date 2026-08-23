@@ -4,7 +4,10 @@
 
 package leaf.cosmere.surgebinding.common.items.tiers;
 
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class ShardbladeItemTier implements Tier
@@ -35,15 +38,15 @@ public class ShardbladeItemTier implements Tier
 	}
 
 	@Override
-	public int getLevel()
-	{
-		return 3;
-	}
-
-	@Override
 	public int getEnchantmentValue()
 	{
 		return 30;
+	}
+
+	@Override
+	public TagKey<Block> getIncorrectBlocksForDrops()
+	{
+		return BlockTags.INCORRECT_FOR_NETHERITE_TOOL;
 	}
 
 	@Override
