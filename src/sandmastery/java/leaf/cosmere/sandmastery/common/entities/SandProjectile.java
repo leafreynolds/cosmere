@@ -17,9 +17,9 @@ public class SandProjectile extends AbstractArrow implements ItemSupplier
 {
 	private ItemStack projectileStack = SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getItemStack();
 
-	public SandProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack)
+	public SandProjectile(Level level, LivingEntity livingEntity, ItemStack itemStack, ItemStack weapon)
 	{
-		super(SandmasteryEntityTypes.SAND_PROJECTILE.get(), livingEntity, level);
+		super(SandmasteryEntityTypes.SAND_PROJECTILE.get(), livingEntity, level, itemStack.copy(), weapon);
 		this.projectileStack = itemStack.copy();
 	}
 
@@ -30,6 +30,12 @@ public class SandProjectile extends AbstractArrow implements ItemSupplier
 
 	@Override
 	protected ItemStack getPickupItem()
+	{
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	protected ItemStack getDefaultPickupItem()
 	{
 		return ItemStack.EMPTY;
 	}

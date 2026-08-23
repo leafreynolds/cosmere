@@ -2,6 +2,7 @@ package leaf.cosmere.sandmastery.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -52,7 +53,7 @@ public class RadialButton extends Button
 				.append(manifestation.getManifestationType().getName())
 				.append("/.png");
 
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		manifestationConsumer = maniConsumer;
 
@@ -107,7 +108,7 @@ public class RadialButton extends Button
 	}
 
 	@Override
-	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
+	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		boolean isHovered = isMouseOver(pMouseX, pMouseY);
 		renderRadial(pGuiGraphics, isHovered);
@@ -135,9 +136,7 @@ public class RadialButton extends Button
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
 		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
@@ -145,13 +144,13 @@ public class RadialButton extends Button
 			float py = quad.py();
 			float size = quad.size();
 
-			buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px, py + size, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px + size, py + size, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px + size, py, 0).color(r, g, b, a).endVertex();
+			buf.addVertex(pose, px, py, 0).setColor(r, g, b, a);
+			buf.addVertex(pose, px, py + size, 0).setColor(r, g, b, a);
+			buf.addVertex(pose, px + size, py + size, 0).setColor(r, g, b, a);
+			buf.addVertex(pose, px + size, py, 0).setColor(r, g, b, a);
 		}
 
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 

@@ -33,21 +33,21 @@ public class ClearOvermasteryCommand extends ModCommand
 
 		for (ServerPlayer player : players)
 		{
-			AttributeInstance availableRibbons = player.getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
+			AttributeInstance availableRibbons = player.getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
 
 			if (availableRibbons == null)
 			{
 				continue;
 			}
 
-			if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_UUID) != null)
+			if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_ID) != null)
 			{
-				availableRibbons.removeModifier(SandmasteryAttributes.OVERMASTERY_UUID);
+				availableRibbons.removeModifier(SandmasteryAttributes.OVERMASTERY_ID);
 			}
 
-			if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID) != null)
+			if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_ID) != null)
 			{
-				availableRibbons.removeModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID);
+				availableRibbons.removeModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_ID);
 			}
 
 			context.getSource().sendSuccess(() -> Component.literal(String.format("Cleared overmastery for %s", player.getName().getString())), true);

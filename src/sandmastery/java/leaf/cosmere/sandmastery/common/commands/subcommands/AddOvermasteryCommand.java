@@ -37,30 +37,28 @@ public class AddOvermasteryCommand extends ModCommand
 
 		for (ServerPlayer player : players)
 		{
-			AttributeInstance availableRibbons = player.getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
+			AttributeInstance availableRibbons = player.getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
 
 			if (availableRibbons == null)
 			{
 				continue;
 			}
 
-			if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_UUID) == null)
+			if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_ID) == null)
 			{
 				availableRibbons.addPermanentModifier(new AttributeModifier(
-						SandmasteryAttributes.OVERMASTERY_UUID,
-						String.format("%s - gained %s ribbons: %s", "Overmastery", ribbons, SandmasteryAttributes.OVERMASTERY_UUID),
+						SandmasteryAttributes.OVERMASTERY_ID,
 						ribbons,
-						AttributeModifier.Operation.ADDITION
+						AttributeModifier.Operation.ADD_VALUE
 				));
 				context.getSource().sendSuccess(() -> Component.literal(String.format("Filled overmastery slot 1 with %d ribbons for %s", ribbons, player.getName().getString())), true);
 			}
-			else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID) == null)
+			else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_ID) == null)
 			{
 				availableRibbons.addPermanentModifier(new AttributeModifier(
-						SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID,
-						String.format("%s - gained %s ribbons: %s", "Overmastery", ribbons, SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID),
+						SandmasteryAttributes.OVERMASTERY_SECONDARY_ID,
 						ribbons,
-						AttributeModifier.Operation.ADDITION
+						AttributeModifier.Operation.ADD_VALUE
 				));
 				context.getSource().sendSuccess(() -> Component.literal(String.format("Filled overmastery slot 2 with %d ribbons for %s", ribbons, player.getName().getString())), true);
 			}

@@ -21,7 +21,7 @@ import java.awt.*;
 
 public class HUDHandler
 {
-	private static final ResourceLocation hydrationBar = new ResourceLocation(Sandmastery.MODID, "textures/gui/hydration_hud.png");
+	private static final ResourceLocation hydrationBar = ResourceLocation.fromNamespaceAndPath(Sandmastery.MODID, "textures/gui/hydration_hud.png");
 
 	public static void onDrawScreenPost(GuiGraphics guiGraphics)
 	{

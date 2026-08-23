@@ -7,24 +7,24 @@ package leaf.cosmere.sandmastery.client.eventHandlers;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.sandmastery.client.gui.HUDHandler;
 import leaf.cosmere.sandmastery.common.Sandmastery;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = Sandmastery.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Sandmastery.MODID, value = Dist.CLIENT)
 public class SandmasteryClientEvents
 {
 
 	@SubscribeEvent
-	public static void registerGuiOverlays(RegisterGuiOverlaysEvent guiOverlaysEvent)
+	public static void registerGuiLayers(RegisterGuiLayersEvent event)
 	{
-		guiOverlaysEvent.registerBelow(
-				VanillaGuiOverlay.FOOD_LEVEL.id(),
-				"hud",
-				(forgeGui, guiGraphics, partialTick, width, height) -> HUDHandler.onDrawScreenPost(guiGraphics)
+		event.registerBelow(
+				VanillaGuiLayers.FOOD_LEVEL,
+				Sandmastery.rl("hydration_hud"),
+				(guiGraphics, deltaTracker) -> HUDHandler.onDrawScreenPost(guiGraphics)
 		);
 	}
 

@@ -14,6 +14,6 @@ public class OvermasteredEffect extends CosmereEffect
 	{
 		super();
 
-		addAttributeModifier(SandmasteryAttributes.RIBBONS.get(), -1000d, AttributeModifier.Operation.ADDITION);
+		addAttributeModifier(SandmasteryAttributes.RIBBONS.getHolder(), -1000d, AttributeModifier.Operation.ADD_VALUE);
 	}
 }

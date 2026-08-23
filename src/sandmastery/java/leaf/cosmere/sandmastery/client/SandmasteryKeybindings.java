@@ -2,16 +2,16 @@ package leaf.cosmere.sandmastery.client;
 
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.lwjgl.glfw.GLFW;
 
 import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
 import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.*;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID)
 public class SandmasteryKeybindings
 {
 

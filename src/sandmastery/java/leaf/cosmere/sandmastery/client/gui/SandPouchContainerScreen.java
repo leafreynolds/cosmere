@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class SandPouchContainerScreen extends AbstractContainerScreen<SandPouchContainerMenu>
 {
-	final ResourceLocation resourceLocation = new ResourceLocation(Sandmastery.MODID, "textures/gui/sand_pouch.png");
+	final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(Sandmastery.MODID, "textures/gui/sand_pouch.png");
 
 	public SandPouchContainerScreen(SandPouchContainerMenu container, Inventory playerInv, Component title)
 	{
@@ -37,7 +37,7 @@ public class SandPouchContainerScreen extends AbstractContainerScreen<SandPouchC
 	@Override
 	public void render(GuiGraphics guiGraphics, int x, int y, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics, x, y, partialTicks);
 		super.render(guiGraphics, x, y, partialTicks);
 		this.renderTooltip(guiGraphics, x, y);
 	}
@@ -47,7 +47,7 @@ public class SandPouchContainerScreen extends AbstractContainerScreen<SandPouchC
 	{
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, new ResourceLocation(Sandmastery.MODID, "textures/gui/sand_pouch.png"));
+		RenderSystem.setShaderTexture(0, ResourceLocation.fromNamespaceAndPath(Sandmastery.MODID, "textures/gui/sand_pouch.png"));
 
 		int xPos = (width - imageWidth) / 2;
 		int yPos = (height / 2) - (imageHeight / 2);

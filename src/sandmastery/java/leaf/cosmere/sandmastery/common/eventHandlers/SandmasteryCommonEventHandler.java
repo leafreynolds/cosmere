@@ -13,12 +13,12 @@ import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.PotionItem;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Sandmastery.MODID)
 public class SandmasteryCommonEventHandler
 {
 	@SubscribeEvent
@@ -30,10 +30,6 @@ public class SandmasteryCommonEventHandler
 	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
 		Item item = event.getItem().getItem();
 		boolean potion = item instanceof PotionItem;
 		boolean metalVial = item.getDescriptionId().equals("item.allomancy.metal_vial"); // TODO: Replace the magic string with code

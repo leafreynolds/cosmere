@@ -18,6 +18,7 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
+import net.minecraft.core.Holder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -36,7 +37,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class MiscHelper
 			{
 				boolean concealed = false;
 				final AttributeMap targetAttributes = target.getAttributes();
-				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				final Holder<Attribute> cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.getHolder();
 				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 				{
 					concealed = targetAttributes.getValue(cognitiveConcealmentAttr) > 0;

@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.items.sandpouch;
 
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
@@ -10,7 +14,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class SandPouchContainerMenu extends AbstractContainerMenu
@@ -29,19 +34,20 @@ public class SandPouchContainerMenu extends AbstractContainerMenu
 		this.pouch = pouch;
 
 		IItemHandlerModifiable pouchInv = SandPouchItem.getPouchInv(pouch);
+		if (pouchInv == null)
+		{
+			//the held stack is not a pouch item?
+			// hand changed between opening the menu and syncing it
+			pouchInv = new ItemStackHandler(SandpouchItemHandler.SIZE);
+		}
 
 		int invStart = 0;
 
 		// Pouch Slots
-		for (int i = 0; i < 1; ++i)
+		for (int j = 0; j < SandpouchItemHandler.SIZE; ++j)
 		{
-			for (int j = 0; j < 3; ++j)
-			{
-				boolean input = i == 0 && j == 0;
-
-				int k = j + i * 9;
-				addSlot(new SandPouchSlot(pouchInv, k, 8 + j * 18, 18 + i * 18, input));
-			}
+			boolean input = j == SandpouchItemHandler.SLOT_INPUT;
+			addSlot(new SandPouchSlot(pouchInv, j, 8 + j * 18, 18, input));
 		}
 
 		// Player Inventory
@@ -66,7 +72,7 @@ public class SandPouchContainerMenu extends AbstractContainerMenu
 		ItemStack itemStack = ItemStack.EMPTY;
 
 		// TODO: make shift clicking actually work.. right now it duplicates the crap out of the sand. Commented out in repo until fixed
-//        int maxSlots = SandPouchInventory.size;
+//        int maxSlots = SandpouchItemHandler.SIZE;
 //
 //        Slot slot = this.slots.get(pIndex);
 //        if(slot.hasItem()) {

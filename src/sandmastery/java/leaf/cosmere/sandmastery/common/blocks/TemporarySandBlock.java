@@ -1,5 +1,6 @@
 package leaf.cosmere.sandmastery.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.entities.TemporarySandBE;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
@@ -19,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class TemporarySandBlock extends BaseEntityBlock
 {
+	public static final MapCodec<TemporarySandBlock> CODEC = MapCodec.unit(TemporarySandBlock::new);
+
 	public TemporarySandBlock()
 	{
 		super(PropTypes.Blocks.SAND.get().noOcclusion());
@@ -54,5 +57,11 @@ public class TemporarySandBlock extends BaseEntityBlock
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
 	{
 		return createTickerHelper(type, SandmasteryBlockEntitiesRegistry.TEMPORARY_SAND_BE.get(), TemporarySandBE::tick);
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec()
+	{
+		return CODEC;
 	}
 }

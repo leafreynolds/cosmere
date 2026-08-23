@@ -1,12 +1,12 @@
 package leaf.cosmere.sandmastery.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandJarBE;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreaderBE;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,11 +18,12 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public class SandSpreadingTubBlock extends BaseEntityBlock
 {
+	public static final MapCodec<SandSpreadingTubBlock> CODEC = MapCodec.unit(SandSpreadingTubBlock::new);
+
 	public SandSpreadingTubBlock()
 	{
 		super(PropTypes.Blocks.METAL.get().noOcclusion());
@@ -49,15 +50,15 @@ public class SandSpreadingTubBlock extends BaseEntityBlock
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos,
-	                             Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+	                                           Player player, BlockHitResult hit)
 	{
 		if (!level.isClientSide())
 		{
 			BlockEntity entity = level.getBlockEntity(pos);
 			if (entity instanceof SandSpreaderBE)
 			{
-				NetworkHooks.openScreen(((ServerPlayer) player), (SandSpreaderBE) entity, pos);
+				((ServerPlayer) player).openMenu((SandSpreaderBE) entity, pos);
 			}
 			else
 			{
@@ -80,5 +81,11 @@ public class SandSpreadingTubBlock extends BaseEntityBlock
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
 	{
 		return createTickerHelper(type, SandmasteryBlockEntitiesRegistry.SAND_SPREADER_BE.get(), SandSpreaderBE::tick);
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec()
+	{
+		return CODEC;
 	}
 }

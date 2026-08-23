@@ -19,6 +19,7 @@ import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -194,9 +195,9 @@ public class SandmasteryManifestation extends Manifestation
 	}
 
 	@Override
-	public Attribute getAttribute()
+	public Holder<Attribute> getAttribute()
 	{
-		return SandmasteryAttributes.RIBBONS.getAttribute();
+		return SandmasteryAttributes.RIBBONS.getHolder();
 	}
 
 }
