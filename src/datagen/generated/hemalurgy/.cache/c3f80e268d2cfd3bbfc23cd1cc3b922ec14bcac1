@@ -1,8 +1,8 @@
-// 1.20.1	2024-10-09T13:22:13.4527411	Tags: hemalurgy
-1347b9ed44283073c6bfce1e1580938f6bd21ff6 data/cosmere/tags/items/spike.json
-af2e2857d9a96d22c837ecd93c7a138ef4da6d42 data/curios/tags/items/eyes.json
-75fcd4a6d5c9bf2b6c54b32af01fca4ef8635b14 data/curios/tags/items/linchpin.json
-b592a071e673cd5c1b97c94d4240d962d094cb19 data/curios/tags/items/mental.json
-af2e2857d9a96d22c837ecd93c7a138ef4da6d42 data/curios/tags/items/physical.json
-6d30e5ead4929b1fdf5e82a171ef37942672d8bd data/curios/tags/items/spiritual.json
-79c189eed2f60e0f2eba8de14b32a1e89f7a85c0 data/curios/tags/items/temporal.json
+// 1.21.1	2026-08-22T11:56:12.5988267	Tags: hemalurgy
+1347b9ed44283073c6bfce1e1580938f6bd21ff6 data/cosmere/tags/item/spike.json
+af2e2857d9a96d22c837ecd93c7a138ef4da6d42 data/curios/tags/item/eyes.json
+0a4aff5b04da41f7f32612e6825cf58da05ac01b data/curios/tags/item/linchpin.json
+b592a071e673cd5c1b97c94d4240d962d094cb19 data/curios/tags/item/mental.json
+ea21d74b10c880ddf6ab40fd0322c2d6221e1325 data/curios/tags/item/physical.json
+6d30e5ead4929b1fdf5e82a171ef37942672d8bd data/curios/tags/item/spiritual.json
+a26d8d4936b8cbe26e0c2a942409cc48679aa42f data/curios/tags/item/temporal.json

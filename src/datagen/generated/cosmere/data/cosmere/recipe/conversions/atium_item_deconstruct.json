@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:ingots/atium"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "cosmere:atium_nugget"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "values": [
+    "#c:storage_blocks/sapphire",
+    "#c:storage_blocks/smokestone",
+    "#c:storage_blocks/ruby",
+    "#c:storage_blocks/diamond",
+    "#c:storage_blocks/garnet",
+    "#c:storage_blocks/zircon",
+    "#c:storage_blocks/amethyst",
+    "#c:storage_blocks/topaz",
+    "#c:storage_blocks/heliodor"
+  ]
+}

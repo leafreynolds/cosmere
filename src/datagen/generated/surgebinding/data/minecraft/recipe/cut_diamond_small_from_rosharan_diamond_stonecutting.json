@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "surgebinding:rosharan_diamond"
+  },
+  "result": {
+    "count": 16,
+    "id": "surgebinding:cut_diamond_small"
+  }
+}

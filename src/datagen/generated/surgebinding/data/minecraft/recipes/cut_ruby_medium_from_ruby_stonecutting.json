@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 4,
-  "ingredient": {
-    "item": "surgebinding:ruby"
-  },
-  "result": "surgebinding:cut_ruby_medium"
-}

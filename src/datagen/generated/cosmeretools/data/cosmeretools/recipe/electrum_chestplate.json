@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "chestplate",
+  "key": {
+    "X": {
+      "tag": "c:ingots/electrum"
+    }
+  },
+  "pattern": [
+    "X X",
+    "XXX",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmeretools:electrum_chestplate"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "bracelet",
+  "key": {
+    "X": {
+      "tag": "c:ingots/brass"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    "X X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "feruchemy:brass_bracelet_metalmind"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:nuggets/cadmium"
+    },
+    "J": {
+      "item": "cosmere:cadmium_nugget"
+    }
+  },
+  "pattern": [
+    "III",
+    "IJI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmere:cadmium_ingot"
+  }
+}

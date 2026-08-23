@@ -1,0 +1,91 @@
+{
+  "values": {
+    "hemalurgy:aluminum_spike": {
+      "metal": "aluminum"
+    },
+    "hemalurgy:atium_spike": {
+      "metal": "atium"
+    },
+    "hemalurgy:bendalloy_spike": {
+      "metal": "bendalloy"
+    },
+    "hemalurgy:brass_spike": {
+      "metal": "brass"
+    },
+    "hemalurgy:bronze_spike": {
+      "metal": "bronze"
+    },
+    "hemalurgy:cadmium_spike": {
+      "metal": "cadmium"
+    },
+    "hemalurgy:chromium_spike": {
+      "metal": "chromium"
+    },
+    "hemalurgy:copper_spike": {
+      "metal": "copper"
+    },
+    "hemalurgy:duralumin_spike": {
+      "metal": "duralumin"
+    },
+    "hemalurgy:electrum_spike": {
+      "metal": "electrum"
+    },
+    "hemalurgy:gold_spike": {
+      "metal": "gold"
+    },
+    "hemalurgy:iron_spike": {
+      "metal": "iron"
+    },
+    "hemalurgy:lerasatium_spike": {
+      "metal": "lerasatium"
+    },
+    "hemalurgy:lerasium_spike": {
+      "metal": "lerasium"
+    },
+    "hemalurgy:nicrosil_spike": {
+      "metal": "nicrosil"
+    },
+    "hemalurgy:pewter_spike": {
+      "metal": "pewter"
+    },
+    "hemalurgy:steel_spike": {
+      "metal": "steel"
+    },
+    "hemalurgy:tin_spike": {
+      "metal": "tin"
+    },
+    "hemalurgy:zinc_spike": {
+      "metal": "zinc"
+    },
+    "minecraft:golden_axe": {
+      "metal": "gold"
+    },
+    "minecraft:golden_hoe": {
+      "metal": "gold"
+    },
+    "minecraft:golden_pickaxe": {
+      "metal": "gold"
+    },
+    "minecraft:golden_shovel": {
+      "metal": "gold"
+    },
+    "minecraft:golden_sword": {
+      "metal": "gold"
+    },
+    "minecraft:iron_axe": {
+      "metal": "iron"
+    },
+    "minecraft:iron_hoe": {
+      "metal": "iron"
+    },
+    "minecraft:iron_pickaxe": {
+      "metal": "iron"
+    },
+    "minecraft:iron_shovel": {
+      "metal": "iron"
+    },
+    "minecraft:iron_sword": {
+      "metal": "iron"
+    }
+  }
+}

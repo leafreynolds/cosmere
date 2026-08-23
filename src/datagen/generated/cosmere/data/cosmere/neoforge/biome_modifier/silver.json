@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmere:spawn_ores",
+  "features": [
+    "cosmere:ore_silver_normal",
+    "cosmere:ore_silver_abundant",
+    "cosmere:ore_silver_rich"
+  ],
+  "step": "underground_ores"
+}

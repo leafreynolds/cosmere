@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:ingots/lead"
+    },
+    "J": {
+      "item": "cosmere:lead_ingot"
+    }
+  },
+  "pattern": [
+    "III",
+    "IJI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmere:lead_block"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:dusts/zinc"
+    },
+    {
+      "tag": "c:dusts/copper"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "id": "cosmere:brass_blend"
+  }
+}

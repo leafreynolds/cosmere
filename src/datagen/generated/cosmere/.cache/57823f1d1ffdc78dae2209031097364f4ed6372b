@@ -1,14 +1,14 @@
-// 1.20.1	2024-11-20T09:55:55.4356553	Datapack registries: cosmere
+// 1.21.1	2026-08-21T17:21:11.0587364	Datapack registries: cosmere
 3c550de803d2cef31d694c8d3dc76fb777ed718b data/cosmere/damage_type/eat_metal.json
 a1998d540bb2a50c1e837ec4fb303c9b5b693e58 data/cosmere/damage_type/spiked.json
-e88b81d0129261da7edf162f2c11a166cd427840 data/cosmere/forge/biome_modifier/aluminum.json
-a5cb11e338001aab9267a284f6ff549c7eda79e8 data/cosmere/forge/biome_modifier/cadmium.json
-09a466d03edcf818be6b4615f45d4b180d932650 data/cosmere/forge/biome_modifier/chromium.json
-f62820de383655b9bdbab753d187e8cccca56d7a data/cosmere/forge/biome_modifier/lead.json
-39e9a9d7cd77fab7f3eac8c1647f24d5a3f9989e data/cosmere/forge/biome_modifier/nickel.json
-179a29a35d601bd5dc346d3b7281ae3d631d1cd4 data/cosmere/forge/biome_modifier/silver.json
-1b3640012887e6aa2f5ead2217fb386b16c52216 data/cosmere/forge/biome_modifier/tin.json
-09894776324aa9d5a8bd79578444c3401a4c5ae0 data/cosmere/forge/biome_modifier/zinc.json
+c328e8174d2a12fa313a104542b2708a979dd0b9 data/cosmere/neoforge/biome_modifier/aluminum.json
+63d01bba4f8368d376ff98bf010948fa1795a66a data/cosmere/neoforge/biome_modifier/cadmium.json
+002ca587eecef8e1dcecf320afe6d6a343ac5888 data/cosmere/neoforge/biome_modifier/chromium.json
+b74d722d62795296ad3cc8f13d3e8493f4da1bc1 data/cosmere/neoforge/biome_modifier/lead.json
+6f43e05aad760d66556ed2db0c3e671cd76f39f5 data/cosmere/neoforge/biome_modifier/nickel.json
+63732d2d72f1547ea4fca4aeb7f873f77a614e96 data/cosmere/neoforge/biome_modifier/silver.json
+75e9a3a34b8ec377b0a42e24d86e050e0ab73853 data/cosmere/neoforge/biome_modifier/tin.json
+e9339cbf3c015d01bf3608e5bb69790d19d0b38d data/cosmere/neoforge/biome_modifier/zinc.json
 1341f2a847ae3f27c9114f151554e5e41072429a data/cosmere/worldgen/configured_feature/ore_aluminum_buried.json
 f0628f328352ed7c7bf38f1b2d62daeb444ea1c6 data/cosmere/worldgen/configured_feature/ore_aluminum_medium.json
 62f700b0ce8279c222b459770e0a3c9727bf9c41 data/cosmere/worldgen/configured_feature/ore_aluminum_small.json

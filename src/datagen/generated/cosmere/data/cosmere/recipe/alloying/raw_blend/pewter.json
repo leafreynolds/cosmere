@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/tin"
+    },
+    {
+      "tag": "c:raw_materials/tin"
+    },
+    {
+      "tag": "c:raw_materials/tin"
+    },
+    {
+      "tag": "c:raw_materials/tin"
+    },
+    {
+      "tag": "c:raw_materials/lead"
+    }
+  ],
+  "result": {
+    "count": 5,
+    "id": "cosmere:pewter_blend"
+  }
+}

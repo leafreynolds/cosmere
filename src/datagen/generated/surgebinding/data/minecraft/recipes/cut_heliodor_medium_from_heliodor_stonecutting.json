@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 4,
-  "ingredient": {
-    "item": "surgebinding:heliodor"
-  },
-  "result": "surgebinding:cut_heliodor_medium"
-}

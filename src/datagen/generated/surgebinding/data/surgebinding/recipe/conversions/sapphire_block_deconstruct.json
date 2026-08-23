@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "surgebinding:sapphire_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "surgebinding:sapphire"
+  }
+}

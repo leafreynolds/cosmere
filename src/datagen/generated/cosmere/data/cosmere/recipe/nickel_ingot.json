@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:nuggets/nickel"
+    },
+    "J": {
+      "item": "cosmere:nickel_nugget"
+    }
+  },
+  "pattern": [
+    "III",
+    "IJI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmere:nickel_ingot"
+  }
+}

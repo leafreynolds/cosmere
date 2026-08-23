@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:ingots/atium"
+    },
+    "J": {
+      "item": "cosmere:atium_ingot"
+    }
+  },
+  "pattern": [
+    "III",
+    "IJI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmere:atium_block"
+  }
+}

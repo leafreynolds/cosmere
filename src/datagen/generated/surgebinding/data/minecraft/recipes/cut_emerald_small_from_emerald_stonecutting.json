@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 16,
-  "ingredient": {
-    "item": "minecraft:emerald"
-  },
-  "result": "surgebinding:cut_emerald_small"
-}

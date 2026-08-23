@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:ingots/zinc"
+    },
+    "J": {
+      "item": "cosmere:zinc_ingot"
+    }
+  },
+  "pattern": [
+    "III",
+    "IJI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmere:zinc_block"
+  }
+}

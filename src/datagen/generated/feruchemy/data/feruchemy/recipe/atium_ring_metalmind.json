@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "ring",
+  "key": {
+    "X": {
+      "tag": "c:ingots/atium"
+    }
+  },
+  "pattern": [
+    " X ",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "feruchemy:atium_ring_metalmind"
+  }
+}

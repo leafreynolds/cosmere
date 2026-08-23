@@ -1,0 +1,229 @@
+{
+  "values": {
+    "cosmeretools:aluminum_boots": {
+      "metal": "aluminum"
+    },
+    "cosmeretools:aluminum_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "aluminum"
+    },
+    "cosmeretools:aluminum_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "aluminum"
+    },
+    "cosmeretools:aluminum_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "aluminum"
+    },
+    "cosmeretools:atium_boots": {
+      "metal": "atium"
+    },
+    "cosmeretools:atium_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "atium"
+    },
+    "cosmeretools:atium_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "atium"
+    },
+    "cosmeretools:atium_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "atium"
+    },
+    "cosmeretools:bendalloy_boots": {
+      "metal": "bendalloy"
+    },
+    "cosmeretools:bendalloy_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "bendalloy"
+    },
+    "cosmeretools:bendalloy_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "bendalloy"
+    },
+    "cosmeretools:bendalloy_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "bendalloy"
+    },
+    "cosmeretools:brass_boots": {
+      "metal": "brass"
+    },
+    "cosmeretools:brass_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "brass"
+    },
+    "cosmeretools:brass_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "brass"
+    },
+    "cosmeretools:brass_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "brass"
+    },
+    "cosmeretools:bronze_boots": {
+      "metal": "bronze"
+    },
+    "cosmeretools:bronze_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "bronze"
+    },
+    "cosmeretools:bronze_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "bronze"
+    },
+    "cosmeretools:bronze_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "bronze"
+    },
+    "cosmeretools:cadmium_boots": {
+      "metal": "cadmium"
+    },
+    "cosmeretools:cadmium_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "cadmium"
+    },
+    "cosmeretools:cadmium_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "cadmium"
+    },
+    "cosmeretools:cadmium_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "cadmium"
+    },
+    "cosmeretools:chromium_boots": {
+      "metal": "chromium"
+    },
+    "cosmeretools:chromium_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "chromium"
+    },
+    "cosmeretools:chromium_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "chromium"
+    },
+    "cosmeretools:chromium_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "chromium"
+    },
+    "cosmeretools:copper_boots": {
+      "metal": "copper"
+    },
+    "cosmeretools:copper_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "copper"
+    },
+    "cosmeretools:copper_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "copper"
+    },
+    "cosmeretools:copper_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "copper"
+    },
+    "cosmeretools:duralumin_boots": {
+      "metal": "duralumin"
+    },
+    "cosmeretools:duralumin_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "duralumin"
+    },
+    "cosmeretools:duralumin_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "duralumin"
+    },
+    "cosmeretools:duralumin_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "duralumin"
+    },
+    "cosmeretools:electrum_boots": {
+      "metal": "electrum"
+    },
+    "cosmeretools:electrum_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "electrum"
+    },
+    "cosmeretools:electrum_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "electrum"
+    },
+    "cosmeretools:electrum_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "electrum"
+    },
+    "cosmeretools:nicrosil_boots": {
+      "metal": "nicrosil"
+    },
+    "cosmeretools:nicrosil_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "nicrosil"
+    },
+    "cosmeretools:nicrosil_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "nicrosil"
+    },
+    "cosmeretools:nicrosil_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "nicrosil"
+    },
+    "cosmeretools:pewter_boots": {
+      "metal": "pewter"
+    },
+    "cosmeretools:pewter_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "pewter"
+    },
+    "cosmeretools:pewter_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "pewter"
+    },
+    "cosmeretools:pewter_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "pewter"
+    },
+    "cosmeretools:steel_boots": {
+      "metal": "steel"
+    },
+    "cosmeretools:steel_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "steel"
+    },
+    "cosmeretools:steel_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "steel"
+    },
+    "cosmeretools:steel_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "steel"
+    },
+    "cosmeretools:tin_boots": {
+      "metal": "tin"
+    },
+    "cosmeretools:tin_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "tin"
+    },
+    "cosmeretools:tin_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "tin"
+    },
+    "cosmeretools:tin_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "tin"
+    },
+    "cosmeretools:zinc_boots": {
+      "metal": "zinc"
+    },
+    "cosmeretools:zinc_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "zinc"
+    },
+    "cosmeretools:zinc_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "zinc"
+    },
+    "cosmeretools:zinc_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "zinc"
+    }
+  }
+}

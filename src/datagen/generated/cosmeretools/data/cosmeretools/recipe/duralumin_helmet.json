@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "helmet",
+  "key": {
+    "X": {
+      "tag": "c:ingots/duralumin"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "X X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmeretools:duralumin_helmet"
+  }
+}

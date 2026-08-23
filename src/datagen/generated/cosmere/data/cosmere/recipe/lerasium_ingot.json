@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "type": "neoforge:components",
+      "components": {
+        "minecraft:custom_data": {
+          "nuggetSize": 16
+        }
+      },
+      "items": "cosmere:lerasium_nugget"
+    }
+  },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmere:lerasium_ingot"
+  }
+}

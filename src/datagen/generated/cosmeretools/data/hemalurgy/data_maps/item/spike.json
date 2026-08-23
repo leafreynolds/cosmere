@@ -1,0 +1,259 @@
+{
+  "values": {
+    "cosmeretools:aluminum_axe": {
+      "metal": "aluminum"
+    },
+    "cosmeretools:aluminum_hoe": {
+      "metal": "aluminum"
+    },
+    "cosmeretools:aluminum_pickaxe": {
+      "metal": "aluminum"
+    },
+    "cosmeretools:aluminum_shovel": {
+      "metal": "aluminum"
+    },
+    "cosmeretools:aluminum_sword": {
+      "metal": "aluminum"
+    },
+    "cosmeretools:atium_axe": {
+      "metal": "atium"
+    },
+    "cosmeretools:atium_hoe": {
+      "metal": "atium"
+    },
+    "cosmeretools:atium_pickaxe": {
+      "metal": "atium"
+    },
+    "cosmeretools:atium_shovel": {
+      "metal": "atium"
+    },
+    "cosmeretools:atium_sword": {
+      "metal": "atium"
+    },
+    "cosmeretools:bendalloy_axe": {
+      "metal": "bendalloy"
+    },
+    "cosmeretools:bendalloy_hoe": {
+      "metal": "bendalloy"
+    },
+    "cosmeretools:bendalloy_pickaxe": {
+      "metal": "bendalloy"
+    },
+    "cosmeretools:bendalloy_shovel": {
+      "metal": "bendalloy"
+    },
+    "cosmeretools:bendalloy_sword": {
+      "metal": "bendalloy"
+    },
+    "cosmeretools:brass_axe": {
+      "metal": "brass"
+    },
+    "cosmeretools:brass_hoe": {
+      "metal": "brass"
+    },
+    "cosmeretools:brass_pickaxe": {
+      "metal": "brass"
+    },
+    "cosmeretools:brass_shovel": {
+      "metal": "brass"
+    },
+    "cosmeretools:brass_sword": {
+      "metal": "brass"
+    },
+    "cosmeretools:bronze_axe": {
+      "metal": "bronze"
+    },
+    "cosmeretools:bronze_hoe": {
+      "metal": "bronze"
+    },
+    "cosmeretools:bronze_pickaxe": {
+      "metal": "bronze"
+    },
+    "cosmeretools:bronze_shovel": {
+      "metal": "bronze"
+    },
+    "cosmeretools:bronze_sword": {
+      "metal": "bronze"
+    },
+    "cosmeretools:cadmium_axe": {
+      "metal": "cadmium"
+    },
+    "cosmeretools:cadmium_hoe": {
+      "metal": "cadmium"
+    },
+    "cosmeretools:cadmium_pickaxe": {
+      "metal": "cadmium"
+    },
+    "cosmeretools:cadmium_shovel": {
+      "metal": "cadmium"
+    },
+    "cosmeretools:cadmium_sword": {
+      "metal": "cadmium"
+    },
+    "cosmeretools:chromium_axe": {
+      "metal": "chromium"
+    },
+    "cosmeretools:chromium_hoe": {
+      "metal": "chromium"
+    },
+    "cosmeretools:chromium_pickaxe": {
+      "metal": "chromium"
+    },
+    "cosmeretools:chromium_shovel": {
+      "metal": "chromium"
+    },
+    "cosmeretools:chromium_sword": {
+      "metal": "chromium"
+    },
+    "cosmeretools:copper_axe": {
+      "metal": "copper"
+    },
+    "cosmeretools:copper_hoe": {
+      "metal": "copper"
+    },
+    "cosmeretools:copper_pickaxe": {
+      "metal": "copper"
+    },
+    "cosmeretools:copper_shovel": {
+      "metal": "copper"
+    },
+    "cosmeretools:copper_sword": {
+      "metal": "copper"
+    },
+    "cosmeretools:duralumin_axe": {
+      "metal": "duralumin"
+    },
+    "cosmeretools:duralumin_hoe": {
+      "metal": "duralumin"
+    },
+    "cosmeretools:duralumin_pickaxe": {
+      "metal": "duralumin"
+    },
+    "cosmeretools:duralumin_shovel": {
+      "metal": "duralumin"
+    },
+    "cosmeretools:duralumin_sword": {
+      "metal": "duralumin"
+    },
+    "cosmeretools:electrum_axe": {
+      "metal": "electrum"
+    },
+    "cosmeretools:electrum_hoe": {
+      "metal": "electrum"
+    },
+    "cosmeretools:electrum_pickaxe": {
+      "metal": "electrum"
+    },
+    "cosmeretools:electrum_shovel": {
+      "metal": "electrum"
+    },
+    "cosmeretools:electrum_sword": {
+      "metal": "electrum"
+    },
+    "cosmeretools:lerasatium_axe": {
+      "metal": "lerasatium"
+    },
+    "cosmeretools:lerasatium_hoe": {
+      "metal": "lerasatium"
+    },
+    "cosmeretools:lerasatium_pickaxe": {
+      "metal": "lerasatium"
+    },
+    "cosmeretools:lerasatium_shovel": {
+      "metal": "lerasatium"
+    },
+    "cosmeretools:lerasatium_sword": {
+      "metal": "lerasatium"
+    },
+    "cosmeretools:lerasium_axe": {
+      "metal": "lerasium"
+    },
+    "cosmeretools:lerasium_hoe": {
+      "metal": "lerasium"
+    },
+    "cosmeretools:lerasium_pickaxe": {
+      "metal": "lerasium"
+    },
+    "cosmeretools:lerasium_shovel": {
+      "metal": "lerasium"
+    },
+    "cosmeretools:lerasium_sword": {
+      "metal": "lerasium"
+    },
+    "cosmeretools:nicrosil_axe": {
+      "metal": "nicrosil"
+    },
+    "cosmeretools:nicrosil_hoe": {
+      "metal": "nicrosil"
+    },
+    "cosmeretools:nicrosil_pickaxe": {
+      "metal": "nicrosil"
+    },
+    "cosmeretools:nicrosil_shovel": {
+      "metal": "nicrosil"
+    },
+    "cosmeretools:nicrosil_sword": {
+      "metal": "nicrosil"
+    },
+    "cosmeretools:pewter_axe": {
+      "metal": "pewter"
+    },
+    "cosmeretools:pewter_hoe": {
+      "metal": "pewter"
+    },
+    "cosmeretools:pewter_pickaxe": {
+      "metal": "pewter"
+    },
+    "cosmeretools:pewter_shovel": {
+      "metal": "pewter"
+    },
+    "cosmeretools:pewter_sword": {
+      "metal": "pewter"
+    },
+    "cosmeretools:steel_axe": {
+      "metal": "steel"
+    },
+    "cosmeretools:steel_hoe": {
+      "metal": "steel"
+    },
+    "cosmeretools:steel_pickaxe": {
+      "metal": "steel"
+    },
+    "cosmeretools:steel_shovel": {
+      "metal": "steel"
+    },
+    "cosmeretools:steel_sword": {
+      "metal": "steel"
+    },
+    "cosmeretools:tin_axe": {
+      "metal": "tin"
+    },
+    "cosmeretools:tin_hoe": {
+      "metal": "tin"
+    },
+    "cosmeretools:tin_pickaxe": {
+      "metal": "tin"
+    },
+    "cosmeretools:tin_shovel": {
+      "metal": "tin"
+    },
+    "cosmeretools:tin_sword": {
+      "metal": "tin"
+    },
+    "cosmeretools:zinc_axe": {
+      "metal": "zinc"
+    },
+    "cosmeretools:zinc_hoe": {
+      "metal": "zinc"
+    },
+    "cosmeretools:zinc_pickaxe": {
+      "metal": "zinc"
+    },
+    "cosmeretools:zinc_shovel": {
+      "metal": "zinc"
+    },
+    "cosmeretools:zinc_sword": {
+      "metal": "zinc"
+    }
+  }
+}
