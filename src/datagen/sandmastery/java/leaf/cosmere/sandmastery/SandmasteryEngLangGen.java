@@ -14,11 +14,11 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.Locale;
 
@@ -61,7 +61,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Sandmastery.MODID))
