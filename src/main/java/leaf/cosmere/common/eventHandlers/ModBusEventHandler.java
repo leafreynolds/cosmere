@@ -1,15 +1,20 @@
 /*
- * File updated ~ 26 - 10 - 2023 ~ Leaf
+ * File updated ~ 22 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
 
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.cap.item.CosmereItemCapabilities;
+import leaf.cosmere.common.charge.IChargeable;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
 
@@ -38,6 +43,21 @@ public class ModBusEventHandler
 			EntityType.TRADER_LLAMA,
 	};
 
+
+	@SubscribeEvent
+	public static void registerCapabilities(RegisterCapabilitiesEvent event)
+	{
+		for (Item item : BuiltInRegistries.ITEM)
+		{
+			if (item instanceof IChargeable)
+			{
+				event.registerItem(
+						CosmereItemCapabilities.CHARGEABLE,
+						(stack, context) -> (IChargeable) stack.getItem(),
+						item);
+			}
+		}
+	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)

@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.common.charge;
 
 import leaf.cosmere.api.Constants;
@@ -19,10 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public interface IHoldsPowers
 {
@@ -88,27 +89,23 @@ public interface IHoldsPowers
 		StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME);
 	}
 
+	//slot indexed, always getMaxCapacity() entries, null for an empty slot
 	default List<Holder<Attribute>> getAttributes(ItemStack itemStack)
 	{
+		final int capacity = getMaxCapacity();
+		List<Holder<Attribute>> attributes = new ArrayList<>(Collections.nCopies(capacity, null));
+
 		CompoundTag nbt = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-		List<Holder<Attribute>> attributes;
 		if (!nbt.contains("attributeIds"))
 		{
-			return new ArrayList<>();
+			return attributes;
 		}
 
-
 		ListTag attributeListTag = (ListTag) nbt.get("attributeIds");
-
-		attributes = new ArrayList<>();
-		for (int i = 0; i < attributeListTag.size(); i++)
+		for (int i = 0; i < attributeListTag.size() && i < capacity; i++)
 		{
 			CompoundTag tag = (CompoundTag) attributeListTag.get(i);
-			if (tag.getString("attribute").equals("null"))
-			{
-				attributes.set(i, null);
-			}
-			else
+			if (!tag.getString("attribute").equals("null"))
 			{
 				attributes.set(i, CosmereAttributeUtils.getAttributeByDescriptionId(tag.getString("attribute")));
 			}
@@ -141,6 +138,8 @@ public interface IHoldsPowers
 		}
 
 		nbt.put("attributeIds", attributesListTag);
+		//copyTag() means not changing original, overwrite it or the change is lost
+		itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
 		return true;
 	}
 
@@ -182,7 +181,7 @@ public interface IHoldsPowers
 
 		CompoundTag nbt = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 		int[] newStrengths = new int[getMaxCapacity()];
-		for (int i = 0; i < strengths.length; i++)
+		for (int i = 0; i < strengths.length && i < newStrengths.length; i++)
 		{
 			if (strengths[i] == null)
 			{
@@ -195,6 +194,8 @@ public interface IHoldsPowers
 		}
 
 		nbt.putIntArray("attributeStrengths", newStrengths);
+		//copyTag() means not changing original, overwrite it or the change is lost
+		itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
 		return true;
 	}
 
