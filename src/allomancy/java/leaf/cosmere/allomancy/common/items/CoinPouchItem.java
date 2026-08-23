@@ -1,5 +1,5 @@
 /*
- * File updated ~ 17 - 3 - 2024 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.items;
@@ -121,14 +121,22 @@ public class CoinPouchItem extends ProjectileWeaponItem
 				final Holder<Enchantment> infinityEnch = player.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.INFINITY);
 				final boolean infiniteAmmo = playerCreativeMode || EnchantmentHelper.getItemEnchantmentLevel(infinityEnch, coinPouchStack) > 0;
 
-				ItemStack ammo = getProjectile(player, coinPouchStack);
+				final IItemHandlerModifiable bagInv = getBagInv(coinPouchStack);
+				final int ammoSlot = findProjectileSlot(bagInv, coinPouchStack);
+				ItemStack ammo = ammoSlot >= 0
+				                 ? bagInv.getStackInSlot(ammoSlot)
+				                 : (player.getAbilities().instabuild
+				                    ? new ItemStack(ItemsRegistry.METAL_NUGGETS.get(Metals.MetalType.COPPER))
+				                    : ItemStack.EMPTY);
 
 				if (!ammo.isEmpty() || infiniteAmmo)
 				{
 					final ItemStack stackToShoot = ammo.copy().split(1);
-					if (!infiniteAmmo)
+					if (!infiniteAmmo && ammoSlot >= 0)
 					{
-						ammo.shrink(1);
+						//stacks from a component handler are copies,
+						//so take the coin out through the handler
+						bagInv.extractItem(ammoSlot, 1, false);
 					}
 					//shoot?
 
@@ -177,21 +185,36 @@ public class CoinPouchItem extends ProjectileWeaponItem
 		else
 		{
 			IItemHandlerModifiable bagInv = getBagInv(coinPouchStack);
-			Predicate<ItemStack> predicate = ((ProjectileWeaponItem) coinPouchStack.getItem()).getSupportedHeldProjectiles();
-
-			for (int i = 0; i < bagInv.getSlots(); ++i)
+			int slot = findProjectileSlot(bagInv, coinPouchStack);
+			if (slot >= 0)
 			{
-				ItemStack stackInSlot = bagInv.getStackInSlot(i);
-				if (predicate.test(stackInSlot))
-				{
-					return stackInSlot;
-				}
+				return bagInv.getStackInSlot(slot);
 			}
 
 			return player.getAbilities().instabuild
 			       ? new ItemStack(ItemsRegistry.METAL_NUGGETS.get(Metals.MetalType.COPPER))
 			       : ItemStack.EMPTY;
 		}
+	}
+
+	/**
+	 * @return the first slot holding a usable projectile, or -1 if there is none.
+	 */
+	private static int findProjectileSlot(@javax.annotation.Nullable IItemHandlerModifiable bagInv, ItemStack coinPouchStack)
+	{
+		if (bagInv == null || !(coinPouchStack.getItem() instanceof ProjectileWeaponItem weapon))
+		{
+			return -1;
+		}
+		Predicate<ItemStack> predicate = weapon.getSupportedHeldProjectiles();
+		for (int i = 0; i < bagInv.getSlots(); ++i)
+		{
+			if (predicate.test(bagInv.getStackInSlot(i)))
+			{
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private static IItemHandlerModifiable getBagInv(ItemStack coinPouchStack)
@@ -234,6 +257,10 @@ public class CoinPouchItem extends ProjectileWeaponItem
 				if (!bag.isEmpty() && bag.is(AllomancyItems.COIN_POUCH.get()))
 				{
 					IItemHandlerModifiable bagInv = getBagInv(bag);
+					if (bagInv == null)
+					{
+						continue;
+					}
 
 					for (int j = 0; j < bagInv.getSlots(); j++)
 					{

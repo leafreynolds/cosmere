@@ -53,6 +53,7 @@ public class Allomancy implements IModModule
 		AllomancyStats.STATS.register(modBus);
 		AllomancyCreativeTabs.CREATIVE_TABS.register(modBus);
 		AllomancyAttachments.ATTACHMENTS.register(modBus);
+		AllomancyDataComponents.DATA_COMPONENTS.register(modBus);
 
 		//Set our version number to match the neoforge.mods.toml file, which matches the one in our build.gradle
 		versionNumber = new Version(ModLoadingContext.get().getActiveContainer());

@@ -5,7 +5,9 @@
 package leaf.cosmere.allomancy.common.eventHandlers;
 
 import leaf.cosmere.allomancy.common.Allomancy;
+import leaf.cosmere.allomancy.common.coinpouch.CoinPouchItemHandler;
 import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
+import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.eventHandlers.ModBusEventHandler;
@@ -13,6 +15,8 @@ import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
 @EventBusSubscriber(modid = Allomancy.MODID)
@@ -33,5 +37,14 @@ public class AllomancyModBusEventHandler
 		}
 
 		event.add(EntityType.WARDEN, AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(Metals.MetalType.BRONZE).getHolder());
+	}
+
+	@SubscribeEvent
+	public static void registerCapabilities(RegisterCapabilitiesEvent event)
+	{
+		event.registerItem(
+				Capabilities.ItemHandler.ITEM,
+				(stack, context) -> new CoinPouchItemHandler(stack),
+				AllomancyItems.COIN_POUCH.get());
 	}
 }
