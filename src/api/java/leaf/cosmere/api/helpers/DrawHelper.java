@@ -70,14 +70,17 @@ public class DrawHelper
 			Matrix4f matrix = poseStack.last().pose();
 			final PoseStack.Pose normal = poseStack.last();
 
+			Vec3 norm = endPos.subtract(originPoint);
+			norm = norm.normalize();
 
+			// apparently, the shader for RENDERTYPE_LINES_SHADER uses the normal as the normal vector for the line now rather than the normal in a lighting sense...
 			bufferIn.addVertex(matrix, (float) originPoint.x(), (float) originPoint.y(), (float) originPoint.z())
 					.setColor(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), alpha)
-					.setNormal(normal, 0, 1, 0);
+					.setNormal(normal, (float) norm.x, (float) norm.y, (float) norm.z);
 
 			bufferIn.addVertex(matrix, (float) endPos.x(), (float) endPos.y(), (float) endPos.z())
 					.setColor(finalColor.getRed(), finalColor.getGreen(), finalColor.getBlue(), alpha)
-					.setNormal(normal, 0, 1, 0);
+					.setNormal(normal, (float) norm.x, (float) norm.y, (float) norm.z);
 		}
 
 		bufferSource.endBatch(CosmereAPIRenderTypes.LINE_OVERLAY.get());
