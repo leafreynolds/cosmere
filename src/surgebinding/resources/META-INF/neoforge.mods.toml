@@ -24,14 +24,17 @@ description = '''Surgebinding module for Cosmere.'''
 
 [[dependencies.surgebinding]]
 modId = "cosmere"
-mandatory = true
+type = "required"
 versionRange = "[${version}]"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.surgebinding]]
 modId = "hemalurgy"
-mandatory = false
+type = "optional"
 versionRange = "[${version}]"
 ordering = "BEFORE"
 side = "BOTH"
+
+[[mixins]]
+config = "surgebinding.mixins.json"

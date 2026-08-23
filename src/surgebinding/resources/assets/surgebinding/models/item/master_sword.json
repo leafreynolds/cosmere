@@ -1,6 +1,6 @@
 {
   "credit": "Made with Blockbench",
-  "parent": "forge:item/default",
+  "parent": "neoforge:item/default",
   "textures": {
     "1": "surgebinding:item/models/shardblade_model/master_sword",
     "particle": "surgebinding:item/models/shardblade_model/master_sword"
