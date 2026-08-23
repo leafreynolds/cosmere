@@ -5,7 +5,6 @@
 package leaf.cosmere.hemalurgy.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import net.minecraft.data.PackOutput;
 

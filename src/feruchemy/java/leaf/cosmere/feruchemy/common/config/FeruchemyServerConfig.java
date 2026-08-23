@@ -5,8 +5,8 @@
 package leaf.cosmere.feruchemy.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class FeruchemyServerConfig implements ICosmereConfig
 {

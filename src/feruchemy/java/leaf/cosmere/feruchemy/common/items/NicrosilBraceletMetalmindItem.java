@@ -6,14 +6,6 @@ package leaf.cosmere.feruchemy.common.items;
 
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.items.PowerMetalCurioItem;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import java.util.List;
 
 public class NicrosilBraceletMetalmindItem extends PowerMetalCurioItem
 {

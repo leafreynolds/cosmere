@@ -4,12 +4,12 @@
 
 package leaf.cosmere.hemalurgy.common.registries;
 
+import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
-import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

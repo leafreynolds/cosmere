@@ -10,9 +10,9 @@ import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class DispatchStormlight implements ICosmerePacket
@@ -50,8 +50,8 @@ public class DispatchStormlight implements ICosmerePacket
 				if (ssm.getStormlight() != 0)
 				{
 					if (ssm.isOathed()
-						|| ssm.isHerald()
-						|| SurgebindingManifestations.SURGEBINDING_POWERS.values().stream()
+							|| ssm.isHerald()
+							|| SurgebindingManifestations.SURGEBINDING_POWERS.values().stream()
 							.anyMatch((manifestation -> cap.hasManifestation(manifestation.getManifestation()))))
 					{
 						ssm.dispatchStormlight();

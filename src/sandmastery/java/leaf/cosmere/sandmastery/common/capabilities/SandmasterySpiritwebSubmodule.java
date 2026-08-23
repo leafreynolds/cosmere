@@ -27,8 +27,8 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -215,9 +215,12 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
-		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(spiritweb -> {
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(spiritweb ->
+		{
 			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.SANDMASTERY))
+			{
 				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SANDMASTERY, SandmasterySpiritwebMenu::new);
+			}
 		});
 	}
 

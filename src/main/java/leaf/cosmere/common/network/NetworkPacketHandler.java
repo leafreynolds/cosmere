@@ -9,14 +9,7 @@
 package leaf.cosmere.common.network;
 
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
-import leaf.cosmere.common.network.packets.ChangeSelectedManifestationMessage;
-import leaf.cosmere.common.network.packets.DeactivateManifestationsMessage;
-import leaf.cosmere.common.network.packets.SavePowerStateMessage;
-import leaf.cosmere.common.network.packets.SetSelectedManifestationMessage;
-import leaf.cosmere.common.network.packets.StoreTapPowerMessage;
-import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
-import leaf.cosmere.common.network.packets.TogglePowerStateMessage;
+import leaf.cosmere.common.network.packets.*;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class NetworkPacketHandler extends BasePacketHandler

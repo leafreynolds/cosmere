@@ -4,7 +4,6 @@
 
 package leaf.cosmere.allomancy.patchouli;
 
-import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import net.minecraft.data.PackOutput;

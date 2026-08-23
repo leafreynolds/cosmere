@@ -5,9 +5,9 @@
 package leaf.cosmere.common.items;
 
 import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.text.TextHelper;
 import leaf.cosmere.common.charge.IHoldsPowers;
 import leaf.cosmere.common.properties.PropTypes;
 import net.minecraft.ChatFormatting;
@@ -103,11 +103,11 @@ public class PowerMetalCurioItem extends BaseItem implements IHasMetalType, ICur
 			Minecraft mc = Minecraft.getInstance();
 			Player player = mc.player;
 
-			if(attunedPlayer.equals(Constants.NBT.UNKEYED_UUID))
+			if (attunedPlayer.equals(Constants.NBT.UNKEYED_UUID))
 			{
 				identityName = Component.literal("Unkeyed");
 			}
-			else if(player != null && !player.getUUID().equals(attunedPlayer))
+			else if (player != null && !player.getUUID().equals(attunedPlayer))
 			{
 				identityName = Component.literal(EnchantmentNames.getInstance().getRandomName(mc.font, 16).getString());
 			}

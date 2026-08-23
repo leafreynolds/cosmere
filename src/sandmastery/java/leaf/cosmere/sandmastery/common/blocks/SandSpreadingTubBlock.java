@@ -2,7 +2,6 @@ package leaf.cosmere.sandmastery.common.blocks;
 
 import com.mojang.serialization.MapCodec;
 import leaf.cosmere.common.properties.PropTypes;
-import leaf.cosmere.sandmastery.common.blocks.entities.SandJarBE;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreaderBE;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
 import net.minecraft.core.BlockPos;
@@ -11,7 +10,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;

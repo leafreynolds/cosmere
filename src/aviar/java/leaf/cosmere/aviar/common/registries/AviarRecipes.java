@@ -4,8 +4,8 @@
 
 package leaf.cosmere.aviar.common.registries;
 
-import leaf.cosmere.common.registration.impl.RecipeSerializerDeferredRegister;
 import leaf.cosmere.aviar.common.Aviar;
+import leaf.cosmere.common.registration.impl.RecipeSerializerDeferredRegister;
 
 // for the non-json based recipes
 public class AviarRecipes

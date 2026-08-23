@@ -8,7 +8,8 @@ import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.surgebinding.common.Surgebinding;
-import leaf.cosmere.surgebinding.common.blocks.*;
+import leaf.cosmere.surgebinding.common.blocks.GemBlock;
+import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
@@ -29,8 +30,8 @@ public class SurgebindingBlockModelsGen extends BlockStateProvider
 	@Override
 	protected void registerStatesAndModels()
 	{
-		List<Block> irregularBlocks = List.of(SurgebindingBlocks.LAVIS_POLYP_BLOCK.getBlock(),SurgebindingBlocks.PRICKLETAC_BLOCK.getBlock(),SurgebindingBlocks.ROCKBUD_VARIANT_BLOCK.getBlock(),
-				SurgebindingBlocks.VINEBUD_BLOCK.getBlock(),SurgebindingBlocks.SMALL_SAPPHIRE_BUD.getBlock(),SurgebindingBlocks.MEDIUM_SAPPHIRE_BUD.getBlock(),SurgebindingBlocks.LARGE_SAPPHIRE_BUD.getBlock(),
+		List<Block> irregularBlocks = List.of(SurgebindingBlocks.LAVIS_POLYP_BLOCK.getBlock(), SurgebindingBlocks.PRICKLETAC_BLOCK.getBlock(), SurgebindingBlocks.ROCKBUD_VARIANT_BLOCK.getBlock(),
+				SurgebindingBlocks.VINEBUD_BLOCK.getBlock(), SurgebindingBlocks.SMALL_SAPPHIRE_BUD.getBlock(), SurgebindingBlocks.MEDIUM_SAPPHIRE_BUD.getBlock(), SurgebindingBlocks.LARGE_SAPPHIRE_BUD.getBlock(),
 				SurgebindingBlocks.SAPPHIRE_CLUSTER.getBlock());
 		for (IBlockProvider itemRegistryObject : SurgebindingBlocks.BLOCKS.getAllBlocks())
 		{

@@ -21,8 +21,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -70,9 +70,10 @@ public class ClientNeoForgeEvents
 			if (Keybindings.MANIFESTATION_MENU.consumeClick())
 			{
 				SpiritwebRegistry.getInstance().clear();
-				SpiritwebCapability.get(player).ifPresent( (iSpiritweb ->
+				SpiritwebCapability.get(player).ifPresent((iSpiritweb ->
 				{
-					iSpiritweb.getSubmodules().forEach( ((manifestationTypes, iSpiritwebSubmodule) -> {
+					iSpiritweb.getSubmodules().forEach(((manifestationTypes, iSpiritwebSubmodule) ->
+					{
 						iSpiritwebSubmodule.registerMenu();
 					}));
 				}));
@@ -116,7 +117,8 @@ public class ClientNeoForgeEvents
 				{
 					modifier = 1;
 				}
-				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(selected, modeIncreasePressed ? modifier : -modifier));
+				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(selected,
+						modeIncreasePressed ? modifier : -modifier));
 			}
 
 			for (Activator activator : Keybindings.activators)
@@ -138,19 +140,19 @@ public class ClientNeoForgeEvents
 					{
 						//if inactive and feruchemic ability tap 5
 						//else level one
-						modifier += activator.getCategory().equals("feruchemy")? -5: 1;
-						Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(selected,modifier));
+						modifier += activator.getCategory().equals("feruchemy") ? -5 : 1;
+						Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(selected, modifier));
 						spiritweb.getLiving().sendSystemMessage(Component.literal("Activated " +
 								Component.translatable(selected.getTranslationKey())));
 
 					}
 					else
 					{
-                        Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(selected,modifier));
+						Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(selected, modifier));
 						spiritweb.getLiving().sendSystemMessage(Component.literal("Deactivated " +
 								Component.translatable(selected.getTranslationKey())));
-                    }
-                }
+					}
+				}
 			}
 
 			//PowerSaveActivator/Saver

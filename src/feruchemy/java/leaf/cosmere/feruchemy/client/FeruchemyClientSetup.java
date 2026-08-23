@@ -5,9 +5,6 @@
 package leaf.cosmere.feruchemy.client;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.api.Manifestations;
-import leaf.cosmere.client.gui.SpiritwebRegistry;
-import leaf.cosmere.feruchemy.client.gui.FeruchemySpiritwebMenu;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.feruchemy.client.gui.NicrosilMenu;
 import leaf.cosmere.feruchemy.client.render.FeruchemyLayerDefinitions;
@@ -17,12 +14,12 @@ import leaf.cosmere.feruchemy.common.Feruchemy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 @EventBusSubscriber(modid = Feruchemy.MODID, value = Dist.CLIENT)
 public class FeruchemyClientSetup

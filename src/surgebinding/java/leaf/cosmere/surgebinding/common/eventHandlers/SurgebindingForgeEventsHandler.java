@@ -8,7 +8,6 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.CuriosHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.commands.SurgebindingCommands;
@@ -18,29 +17,23 @@ import leaf.cosmere.surgebinding.common.manifestation.*;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.utils.ParticleHelper;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @EventBusSubscriber(modid = Surgebinding.MODID)
 public class SurgebindingForgeEventsHandler
@@ -123,7 +116,8 @@ public class SurgebindingForgeEventsHandler
 	}
 
 	@SubscribeEvent
-	public static void onLivingHurt(LivingIncomingDamageEvent event) {
+	public static void onLivingHurt(LivingIncomingDamageEvent event)
+	{
 		DamageSource source = event.getSource();
 
 		LivingEntity entity = event.getEntity();
@@ -134,9 +128,9 @@ public class SurgebindingForgeEventsHandler
 			return;
 		}
 		// Skip if a damage type that bypasses Shardplate
-		for(ResourceKey<DamageType> type: unprotectedDamageTypes)
+		for (ResourceKey<DamageType> type : unprotectedDamageTypes)
 		{
-			if(source.is(type))
+			if (source.is(type))
 			{
 				return;
 			}

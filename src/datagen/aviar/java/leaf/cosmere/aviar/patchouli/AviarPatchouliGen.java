@@ -5,7 +5,6 @@
 package leaf.cosmere.aviar.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import net.minecraft.data.PackOutput;
 

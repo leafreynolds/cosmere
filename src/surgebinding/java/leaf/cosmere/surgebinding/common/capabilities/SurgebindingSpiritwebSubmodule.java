@@ -4,7 +4,6 @@
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
-import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.EffectsHelper;
@@ -13,16 +12,11 @@ import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.CapWrapper;
 import leaf.cosmere.surgebinding.client.gui.SurgebindingSpiritwebMenu;
-import leaf.cosmere.api.helpers.CuriosHelper;
-import leaf.cosmere.common.items.CapWrapper;
-import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.capabilities.ideals.RadiantStateManager;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
-import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.manifestation.SurgeProgression;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingDimensions;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -31,14 +25,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -190,9 +181,12 @@ public class SurgebindingSpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
-		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent((spiritweb -> {
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent((spiritweb ->
+		{
 			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.SURGEBINDING))
+			{
 				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SURGEBINDING, SurgebindingSpiritwebMenu::new);
+			}
 		}));
 	}
 

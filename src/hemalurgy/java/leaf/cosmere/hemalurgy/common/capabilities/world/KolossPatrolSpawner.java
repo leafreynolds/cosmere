@@ -9,7 +9,6 @@ import leaf.cosmere.hemalurgy.common.entity.Koloss;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;

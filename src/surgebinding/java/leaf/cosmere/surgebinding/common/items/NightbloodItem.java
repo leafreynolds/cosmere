@@ -4,34 +4,20 @@
 
 package leaf.cosmere.surgebinding.common.items;
 
-import leaf.cosmere.api.EnumUtils;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.api.helpers.TimeHelper;
 import leaf.cosmere.api.text.TextHelper;
-import leaf.cosmere.surgebinding.common.capabilities.BondData;
 import leaf.cosmere.surgebinding.common.capabilities.IBondData;
-import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
-import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Item.TooltipContext;
-import net.minecraft.core.Holder;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;

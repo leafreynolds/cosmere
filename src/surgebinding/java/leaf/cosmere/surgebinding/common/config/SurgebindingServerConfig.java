@@ -5,8 +5,8 @@
 package leaf.cosmere.surgebinding.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 import java.util.Locale;

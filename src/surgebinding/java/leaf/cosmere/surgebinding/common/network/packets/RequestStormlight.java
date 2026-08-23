@@ -11,9 +11,9 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class RequestStormlight implements ICosmerePacket
@@ -29,7 +29,6 @@ public class RequestStormlight implements ICosmerePacket
 	{
 		return TYPE;
 	}
-
 
 
 	public RequestStormlight()
@@ -58,7 +57,7 @@ public class RequestStormlight implements ICosmerePacket
 				{
 					ssm.requestStormlight();
 				}
-				else if(SurgebindingManifestations.SURGEBINDING_POWERS.values().stream()
+				else if (SurgebindingManifestations.SURGEBINDING_POWERS.values().stream()
 						.anyMatch((manifestation -> cap.hasManifestation(manifestation.getManifestation()))))
 				{
 					ssm.requestStormlight();

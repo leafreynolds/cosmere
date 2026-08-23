@@ -4,7 +4,6 @@ import leaf.cosmere.common.registration.impl.RecipeSerializerDeferredRegister;
 import leaf.cosmere.common.registration.impl.RecipeSerializerRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.recipes.ShardplateChargingRecipe;
-import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 
 public class SurgebindingRecipes

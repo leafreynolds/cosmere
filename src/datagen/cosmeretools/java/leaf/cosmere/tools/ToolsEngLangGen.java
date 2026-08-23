@@ -9,10 +9,10 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.registries.ToolsEntityTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
 public class ToolsEngLangGen extends LanguageProvider

@@ -6,7 +6,6 @@ package leaf.cosmere.surgebinding.common.entity.spren;
 
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;

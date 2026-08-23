@@ -3,9 +3,9 @@ package leaf.cosmere.sandmastery.client;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
 import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;

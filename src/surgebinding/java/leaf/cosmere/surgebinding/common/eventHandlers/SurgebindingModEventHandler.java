@@ -13,11 +13,11 @@ import leaf.cosmere.surgebinding.common.entity.spren.Honorspren;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import net.minecraft.world.entity.EntityType;
-import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
 @EventBusSubscriber(modid = Surgebinding.MODID)
 public class SurgebindingModEventHandler

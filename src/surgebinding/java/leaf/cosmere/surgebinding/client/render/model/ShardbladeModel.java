@@ -8,7 +8,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.IShardbladeDynamicData;
-import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.items.IRadiantShardItem;
 import leaf.cosmere.surgebinding.common.items.ShardbladeDynamicItem;
 import net.minecraft.client.model.Model;

@@ -5,7 +5,6 @@
 package leaf.cosmere.feruchemy.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.feruchemy.common.Feruchemy;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
 import net.minecraft.data.PackOutput;
 

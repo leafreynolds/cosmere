@@ -12,11 +12,9 @@ import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.ICosmereConfig;
 import leaf.cosmere.surgebinding.common.capabilities.SurgebindingSpiritwebSubmodule;
-import leaf.cosmere.surgebinding.common.capabilities.world.IRoshar;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.network.SurgebindingPacketHandler;
 import leaf.cosmere.surgebinding.common.registries.*;
-import leaf.cosmere.surgebinding.common.worldgen.SurgebindingConfiguredFeatures;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
@@ -26,8 +24,6 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.List;
-import net.neoforged.fml.ModLoadingContext;
-import top.theillusivec4.curios.api.CuriosApi;
 
 @Mod(Surgebinding.MODID)
 public class Surgebinding implements IModModule

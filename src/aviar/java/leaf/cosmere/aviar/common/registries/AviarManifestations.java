@@ -5,9 +5,9 @@
 package leaf.cosmere.aviar.common.registries;
 
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.common.registration.impl.ManifestationDeferredRegister;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
-import leaf.cosmere.aviar.common.Aviar;
 
 public class AviarManifestations
 {

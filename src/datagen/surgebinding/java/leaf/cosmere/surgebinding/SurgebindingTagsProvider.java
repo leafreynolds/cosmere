@@ -15,7 +15,6 @@ import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.blocks.GemBlock;
 import leaf.cosmere.surgebinding.common.blocks.GemOreBlock;
-import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBiomes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingBlocks;
@@ -30,13 +29,11 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class SurgebindingTagsProvider extends BaseTagProvider
@@ -78,26 +75,27 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 		}
 		addToTag(Tags.Items.GEMS, Items.AMETHYST_SHARD);
 		addToTag(Tags.Items.GEMS, Items.EMERALD);
-		for(Roshar.Gemstone gemstone : gemstoneList){
+		for (Roshar.Gemstone gemstone : gemstoneList)
+		{
 			addToTag(Tags.Items.GEMS, SurgebindingItems.GEMSTONE.get(gemstone));
 			addToTag(CosmereTags.Items.GEM_TAGS.get(gemstone), SurgebindingItems.GEMSTONE.get(gemstone));
 		}
 
-			final ItemRegistryObject<ShardplateCurioItem> shardplateItem = SurgebindingItems.SHARDPLATE;
+		final ItemRegistryObject<ShardplateCurioItem> shardplateItem = SurgebindingItems.SHARDPLATE;
 
-			addToTag(Tags.Items.ARMORS, shardplateItem);
-			addToTag(CosmereTags.Items.CURIO_SHARDPLATE, shardplateItem);
+		addToTag(Tags.Items.ARMORS, shardplateItem);
+		addToTag(CosmereTags.Items.CURIO_SHARDPLATE, shardplateItem);
 
 	}
 
 	private void addBlocks()
 	{
 		Roshar.Gemstone[] gemstoneList = {Roshar.Gemstone.SMOKESTONE, Roshar.Gemstone.RUBY, Roshar.Gemstone.DIAMOND, Roshar.Gemstone.GARNET, Roshar.Gemstone.ZIRCON, Roshar.Gemstone.TOPAZ, Roshar.Gemstone.HELIODOR};
-		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.SAPPHIRE));
-		addToTag(BlockTags.NEEDS_STONE_TOOL,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.SAPPHIRE));
-		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.BLOCK_OF_SAPPHIRE);
-		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
-		addToTag(BlockTags.NEEDS_STONE_TOOL,SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.SAPPHIRE));
+		addToTag(BlockTags.NEEDS_STONE_TOOL, SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.SAPPHIRE));
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.BLOCK_OF_SAPPHIRE);
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
+		addToTag(BlockTags.NEEDS_STONE_TOOL, SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.AMETHYST));
 		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.LARGE_SAPPHIRE_BUD);
 		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.MEDIUM_SAPPHIRE_BUD);
 		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, SurgebindingBlocks.SMALL_SAPPHIRE_BUD);
@@ -109,21 +107,27 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 			BlockRegistryObject<GemBlock, BlockItem> gemBlock = SurgebindingBlocks.GEM_BLOCKS.get(gemstone);
 			BlockRegistryObject<GemOreBlock, BlockItem> gemOre = SurgebindingBlocks.GEM_ORE.get(gemstone);
 			BlockRegistryObject<GemOreBlock, BlockItem> gemOreDeepslate = SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(gemstone);
-			if(gemBlock==null)
-				gemBlock=SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.TOPAZ);
-			if(gemOre==null)
-				gemOre=SurgebindingBlocks.GEM_ORE.get(Roshar.Gemstone.TOPAZ);
-			if(gemOreDeepslate==null)
-				gemOreDeepslate=SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(Roshar.Gemstone.TOPAZ);
+			if (gemBlock == null)
+			{
+				gemBlock = SurgebindingBlocks.GEM_BLOCKS.get(Roshar.Gemstone.TOPAZ);
+			}
+			if (gemOre == null)
+			{
+				gemOre = SurgebindingBlocks.GEM_ORE.get(Roshar.Gemstone.TOPAZ);
+			}
+			if (gemOreDeepslate == null)
+			{
+				gemOreDeepslate = SurgebindingBlocks.GEM_ORE_DEEPSLATE.get(Roshar.Gemstone.TOPAZ);
+			}
 
 			var list = ImmutableList.of(gemBlock, gemOre, gemOreDeepslate);
 
-			addToTag(BlockTags.NEEDS_STONE_TOOL,gemBlock);
-			addToTag(BlockTags.NEEDS_IRON_TOOL,gemOre,gemOreDeepslate);
+			addToTag(BlockTags.NEEDS_STONE_TOOL, gemBlock);
+			addToTag(BlockTags.NEEDS_IRON_TOOL, gemOre, gemOreDeepslate);
 
 			for (var block : list)
 			{
-				addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,block);
+				addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, block);
 				addToTag(CosmereTags.Blocks.DRAGON_PROOF, block);
 			}
 

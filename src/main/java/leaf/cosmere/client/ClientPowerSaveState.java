@@ -4,19 +4,11 @@
 
 package leaf.cosmere.client;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.manifestation.Manifestation;
-import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.config.CosmereConfigs;
-import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
-import leaf.cosmere.common.registry.ManifestationRegistry;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class ClientPowerSaveState
 {
@@ -50,14 +42,12 @@ public class ClientPowerSaveState
 		}
 
 
-
 		public int getNum()
 		{
 			return num;
 		}
 
 	}
-
 
 
 }

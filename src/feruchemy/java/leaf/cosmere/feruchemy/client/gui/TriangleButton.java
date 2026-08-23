@@ -1,27 +1,20 @@
 package leaf.cosmere.feruchemy.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
@@ -45,7 +38,9 @@ public class TriangleButton extends Button
 
 	public TriangleButton(int pX, int pY, int distance, float rotation, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
-		super(pX, pY, distance, distance, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
+		super(pX, pY, distance, distance, CommonComponents.EMPTY, (button) ->
+		{
+		}, DEFAULT_NARRATION);
 		this.rotation = rotation;
 		this.spiritweb = spiritweb;
 		this.metal = metal;
@@ -124,9 +119,13 @@ public class TriangleButton extends Button
 			else
 			{
 				if (pButton == 0)
+				{
 					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
+				}
 				else
+				{
 					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+				}
 			}
 
 			playDownSound(Minecraft.getInstance().getSoundManager());
@@ -153,9 +152,13 @@ public class TriangleButton extends Button
 			int mode = feruchemyManifestation.getMode(spiritweb);
 			float intensity = 0;
 			if (mode < 0)
-				intensity = Math.min(Math.abs(mode) * (1f/16f), 1.0f);
+			{
+				intensity = Math.min(Math.abs(mode) * (1f / 16f), 1.0f);
+			}
 			if (mode > 0)
-				intensity = Math.min(Math.abs(mode) * (1f/5f), 1.0f);
+			{
+				intensity = Math.min(Math.abs(mode) * (1f / 5f), 1.0f);
+			}
 
 			if (mode > 0)
 			{
@@ -196,7 +199,7 @@ public class TriangleButton extends Button
 	private void renderIcon(GuiGraphics pGuiGraphics)
 	{
 		Color metalColor = metal.getColor();
-		float r = metalColor.getRed()/255.f, g = metalColor.getGreen()/255.f, b = metalColor.getBlue()/255.f;
+		float r = metalColor.getRed() / 255.f, g = metalColor.getGreen() / 255.f, b = metalColor.getBlue() / 255.f;
 
 		if (!hasManifestation)
 		{

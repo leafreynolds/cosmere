@@ -7,7 +7,6 @@ package leaf.cosmere.feruchemy.mixin;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import leaf.cosmere.feruchemy.common.manifestation.FeruchemyAtium;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;

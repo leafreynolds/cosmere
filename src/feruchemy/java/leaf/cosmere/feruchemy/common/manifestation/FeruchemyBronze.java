@@ -4,24 +4,24 @@
 
 package leaf.cosmere.feruchemy.common.manifestation;
 
+import com.mojang.datafixers.util.Either;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import com.mojang.datafixers.util.Either;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.util.Unit;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.player.CanContinueSleepingEvent;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import java.util.List;
 
