@@ -1,5 +1,5 @@
 /*
- * File updated ~ 7 - 11 - 2023 ~ Leaf
+ * File updated ~ 2 - 9 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.manifestation;
@@ -11,10 +11,12 @@ import leaf.cosmere.api.cosmereEffect.CosmereEffectInstance;
 import leaf.cosmere.api.helpers.EffectsHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class AllomancyNicrosil extends AllomancyManifestation
 {
@@ -53,32 +55,58 @@ public class AllomancyNicrosil extends AllomancyManifestation
 		Entity trueSource = event.getSource().getEntity();
 		if (trueSource instanceof Player trueSourcePlayer)
 		{
-			SpiritwebCapability.get(trueSourcePlayer).ifPresent(iSpiritweb ->
-			{
-				ItemStack itemInHand = iSpiritweb.getLiving().getMainHandItem();
-
-				if (itemInHand.isEmpty())
-				{
-					AllomancyNicrosil alloNicrosil = (AllomancyNicrosil) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.NICROSIL).get();
-
-					//if manifestation is active and has nicrosil metal to burn
-					if (alloNicrosil.isActive(iSpiritweb))
-					{
-						//valid set up found.
-						CosmereEffectInstance newEffect = EffectsHelper.getNewEffect(
-								AllomancyEffects.ALLOMANCY_BOOST.get(),
-								iSpiritweb.getLiving(),
-								(alloNicrosil.getStrength(iSpiritweb, false))
-						);
-
-						//apply to the hit entity
-						SpiritwebCapability.get(event.getEntity()).ifPresent(target ->
-						{
-							target.addEffect(newEffect, trueSourcePlayer);
-						});
-					}
-				}
-			});
+			boostTarget(trueSourcePlayer, event.getEntity());
 		}
+	}
+
+	//touching someone works just as well as punching them
+	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
+	{
+		if (event.isCanceled() || event.getLevel().isClientSide)
+		{
+			return;
+		}
+
+		if (event.getTarget() instanceof LivingEntity target && boostTarget(event.getEntity(), target))
+		{
+			//consume the interaction so we don't also mount/trade with them
+			event.setCancellationResult(InteractionResult.SUCCESS);
+			event.setCanceled(true);
+		}
+	}
+
+	//returns true if the boost was applied
+	private static boolean boostTarget(Player sourcePlayer, LivingEntity target)
+	{
+		//nicrosil is passed on by touch, so the hand has to be free
+		if (!sourcePlayer.getMainHandItem().isEmpty())
+		{
+			return false;
+		}
+
+		return SpiritwebCapability.get(sourcePlayer).map(iSpiritweb ->
+		{
+			AllomancyNicrosil alloNicrosil = (AllomancyNicrosil) AllomancyManifestations.ALLOMANCY_POWERS.get(Metals.MetalType.NICROSIL).get();
+
+			//if manifestation is active and has nicrosil metal to burn
+			if (!alloNicrosil.isActive(iSpiritweb))
+			{
+				return false;
+			}
+
+			//valid set up found.
+			CosmereEffectInstance newEffect = EffectsHelper.getNewEffect(
+					AllomancyEffects.ALLOMANCY_BOOST.get(),
+					iSpiritweb.getLiving(),
+					(alloNicrosil.getStrength(iSpiritweb, false))
+			);
+
+			//apply to the touched entity
+			return SpiritwebCapability.get(target).map(targetSpiritweb ->
+			{
+				targetSpiritweb.addEffect(newEffect, sourcePlayer);
+				return true;
+			}).orElse(false);
+		}).orElse(false);
 	}
 }

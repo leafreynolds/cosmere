@@ -84,7 +84,7 @@ public class AllomancyEntityEventHandler
 		}
 		else
 		{
-
+			AllomancyNicrosil.onEntityInteract(event);
 		}
 	}
 
