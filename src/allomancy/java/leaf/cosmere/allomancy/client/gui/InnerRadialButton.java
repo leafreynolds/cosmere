@@ -36,7 +36,6 @@ public class InnerRadialButton extends Button
 	private final float innerRadius;
 	private final double startAngle;
 	private final double endAngle;
-	private final int segmentNr;
 	private final int centerX;
 	private final int centerY;
 	private final boolean hasManifestation;
@@ -52,7 +51,6 @@ public class InnerRadialButton extends Button
 		manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID());
 		hasManifestation = spiritweb.hasManifestation(manifestation);
 		double eighthCircle = Math.toRadians(45.d); // a circle is 360 degrees, / by 8 for 45 degrees, converted to radians
-		this.segmentNr = segmentNr;
 		startAngle = segmentNr * eighthCircle;   // todo: decided by power ID
 		endAngle = startAngle + eighthCircle;
 		this.centerX = centerX;

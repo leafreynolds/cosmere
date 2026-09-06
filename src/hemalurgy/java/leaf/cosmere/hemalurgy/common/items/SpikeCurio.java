@@ -79,7 +79,6 @@ public class SpikeCurio implements ICurio
 				}
 			});
 		}
-
 		SpikeCurioLogic.onUnequip(slotContext, newStack, stack);
 	}
 

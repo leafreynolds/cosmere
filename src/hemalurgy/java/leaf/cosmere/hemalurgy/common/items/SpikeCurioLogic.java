@@ -15,15 +15,21 @@ import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotAttribute;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.event.CurioChangeEvent;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -32,8 +38,14 @@ import java.util.function.Predicate;
 import static leaf.cosmere.common.registry.CosmereDamageTypesRegistry.SPIKED;
 
 //curio behaviour shared by spike items (ICurioItem) and data-map spikes (SpikeCurio)
+@EventBusSubscriber(modid = Hemalurgy.MODID)
 public final class SpikeCurioLogic
 {
+	private final static int MAX_PHYSICAL_SLOTS = 8;
+	private final static int MAX_MENTAL_SLOTS = 10;
+	private final static int MAX_SPIRITUAL_SLOTS = 4;
+	private final static int MAX_TEMPORAL_SLOTS = 16;
+
 	private SpikeCurioLogic()
 	{
 	}
@@ -42,6 +54,33 @@ public final class SpikeCurioLogic
 	{
 		boolean hasBindingCurse = EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE);
 		return (!hasBindingCurse || (context.entity() instanceof Player player && player.isCreative()));
+	}
+
+	@SubscribeEvent
+	public static void onCurioChange(CurioChangeEvent event)
+	{
+		String identifier = event.getIdentifier();
+		if (!identifier.equals("physical")
+			&& !identifier.equals("mental")
+			&& !identifier.equals("spiritual")
+			&& !identifier.equals("temporal"))
+			return;
+
+		LivingEntity entity = event.getEntity();
+		CuriosApi.getCuriosInventory(entity).flatMap(handler -> handler.getStacksHandler(identifier)).ifPresent(stacksHandler ->
+		{
+			IDynamicStackHandler stacks = stacksHandler.getStacks();
+			if (stacks.getStackInSlot(event.getSlotIndex()).isEmpty())
+			{
+				int removedIndex = event.getSlotIndex();
+				int size = stacks.getSlots();
+				for (int i = removedIndex; i < size - 1; i++)
+				{
+					stacks.setStackInSlot(i, stacks.getStackInSlot(i + 1));
+				}
+				stacks.setStackInSlot(size - 1, ItemStack.EMPTY);
+			}
+		});
 	}
 
 	/**
@@ -55,6 +94,37 @@ public final class SpikeCurioLogic
 		if (metalType == null)
 		{
 			return attributeModifiers;
+		}
+
+		switch (slotContext.identifier())
+		{
+			case "physical":
+				if (slotContext.index() < MAX_PHYSICAL_SLOTS-1)
+					attributeModifiers.put(SlotAttribute.getOrCreate(slotContext.identifier()),
+											new AttributeModifier(ResourceLocation.fromNamespaceAndPath("cosmere", slotContext.identifier() + "_" + slotContext.index()),
+											1.0, AttributeModifier.Operation.ADD_VALUE));
+				break;
+			case "mental":
+				if (slotContext.index() < MAX_MENTAL_SLOTS-1)
+					attributeModifiers.put(SlotAttribute.getOrCreate(slotContext.identifier()),
+							new AttributeModifier(ResourceLocation.fromNamespaceAndPath("cosmere", slotContext.identifier() + "_" + slotContext.index()),
+									1.0, AttributeModifier.Operation.ADD_VALUE));
+				break;
+			case "spiritual":
+				if (slotContext.index() < MAX_SPIRITUAL_SLOTS-1)
+					attributeModifiers.put(SlotAttribute.getOrCreate(slotContext.identifier()),
+							new AttributeModifier(ResourceLocation.fromNamespaceAndPath("cosmere", slotContext.identifier() + "_" + slotContext.index()),
+									1.0, AttributeModifier.Operation.ADD_VALUE));
+				break;
+			case "temporal":
+				if (slotContext.index() < MAX_TEMPORAL_SLOTS-1)
+					attributeModifiers.put(SlotAttribute.getOrCreate(slotContext.identifier()),
+							new AttributeModifier(ResourceLocation.fromNamespaceAndPath("cosmere", slotContext.identifier() + "_" + slotContext.index()),
+									1.0, AttributeModifier.Operation.ADD_VALUE));
+				break;
+			default:
+				// do nothing
+				break;
 		}
 
 		//add hemalurgic attributes, if any.
