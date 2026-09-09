@@ -672,12 +672,7 @@ public class SpiritwebCapability implements ISpiritweb
 			return false;
 		}
 
-		if (MANIFESTATIONS_MODE.containsKey(manifestation))
-		{
-			return MANIFESTATIONS_MODE.get(manifestation) != 0;
-		}
-
-		return false;
+		return MANIFESTATIONS_MODE.getOrDefault(manifestation, 0) != 0;
 	}
 
 	@Override
@@ -689,7 +684,11 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void deactivateManifestations()
 	{
-		MANIFESTATIONS_MODE.clear();
+		for (Manifestation mani : MANIFESTATIONS_MODE.keySet())
+		{
+			int last = MANIFESTATIONS_MODE.put(mani, 0);    // will not be null, despite what IntelliJ says. it has to exist to get here in the first place...
+			mani.onModeChange(this, last);
+		}
 	}
 
 	@Override
