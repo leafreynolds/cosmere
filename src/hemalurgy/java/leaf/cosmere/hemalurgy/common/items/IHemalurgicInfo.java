@@ -212,7 +212,11 @@ public interface IHemalurgicInfo
 				//How much is already stored? (like koloss spikes could keep storing strength on the same spike)
 				final double strengthCurrent = getHemalurgicStrength(stack, spikeMetalType);
 				//how much should we add.
-				final double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled, playerEntity);
+				double entityAbilityStrength = spikeMetalType.getEntityAbilityStrength(entityKilled, playerEntity);
+				if (spikeMetalType == Metals.MetalType.IRON)
+				{
+					entityAbilityStrength *= HemalurgyConfigs.SERVER.IRON_SPIKE_STRENGTH_MULTIPLIER.get();
+				}
 				final double strengthToAdd = strengthCurrent + entityAbilityStrength;
 				if (strengthToAdd > 0.01 || strengthToAdd < -0.01)
 				{

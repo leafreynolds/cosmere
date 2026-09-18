@@ -21,6 +21,7 @@ public class HemalurgyServerConfig implements ICosmereConfig
     public final ForgeConfigSpec.IntValue LINCHPIN_SPIKE_SPIRITWEB_BONUS;
     public final ForgeConfigSpec.IntValue ALLOMANTIC_PEWTER_SPIRITWEB_BONUS;
     public final ForgeConfigSpec.IntValue FERUCHEMICAL_GOLD_SPIRITWEB_BONUS;
+	public final ForgeConfigSpec.DoubleValue IRON_SPIKE_STRENGTH_MULTIPLIER;
 
 
 	HemalurgyServerConfig()
@@ -36,6 +37,7 @@ public class HemalurgyServerConfig implements ICosmereConfig
         LINCHPIN_SPIKE_SPIRITWEB_BONUS = builder.comment("What bonus does a linchpin spike grant spiritweb integrity.").defineInRange("linchpinSpikeSpiritwebBonus", 3, 0, 100);
         ALLOMANTIC_PEWTER_SPIRITWEB_BONUS = builder.comment("What bonus does Allomantic pewter grant spiritweb integrity.").defineInRange("allomanticPewterSpiritwebBonus", 3, 0, 100);
         FERUCHEMICAL_GOLD_SPIRITWEB_BONUS = builder.comment("What bonus does Feruchemical gold grant spiritweb integrity.").defineInRange("feruchemicalGoldSpiritwebBonus", 6, 0, 100);
+		IRON_SPIKE_STRENGTH_MULTIPLIER = builder.comment("What percentage of a killed entity's base attack damage should an iron spike steal?").defineInRange("ironSpikeStrengthMultiplier", 0.7D, 0D, 100D);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -66,5 +68,6 @@ public class HemalurgyServerConfig implements ICosmereConfig
 		LERASATIUM_MAX_SPIKE_STRENGTH.clearCache();
 		CHROMIUM_MAX_SPIKE_STRENGTH.clearCache();
 		DEFAULT_POWER_MAX_SPIKE_STRENGTH.clearCache();
+		IRON_SPIKE_STRENGTH_MULTIPLIER.clearCache();
 	}
 }

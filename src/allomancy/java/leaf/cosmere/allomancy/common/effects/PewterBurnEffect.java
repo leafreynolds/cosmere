@@ -4,13 +4,20 @@
 
 package leaf.cosmere.allomancy.common.effects;
 
+import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
+import leaf.cosmere.api.cosmereEffect.AttributeModifierInfo;
 import leaf.cosmere.api.cosmereEffect.CosmereEffect;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
+import java.util.Map;
+
 public class PewterBurnEffect extends CosmereEffect
 {
+	private boolean checkedConfig = false;
+
 	public PewterBurnEffect()
 	{
 		super();
@@ -39,13 +46,26 @@ public class PewterBurnEffect extends CosmereEffect
 				0.03125D,
 				AttributeModifier.Operation.ADDITION);
 
-		//damage resistance
-		//0.125 * 9 = 1.125
-		addAttributeModifier(
-				AttributesRegistry.DETERMINATION.get(),//please forgive me for my sins anime god
-				0.125D,
-				AttributeModifier.Operation.ADDITION);
+	}
 
+	//Configs aren't loaded yet when this effect is constructed during registration,
+	//so defer the config check until the modifiers are first applied at runtime.
+	@Override
+	public Map<Attribute, AttributeModifierInfo> getAttributeModifiers()
+	{
+		Attribute determination = AttributesRegistry.DETERMINATION.get();
+		if (!super.getAttributeModifiers().containsKey(determination))
+		{
+			if (AllomancyConfigs.SERVER.getConfigSpec().isLoaded()
+					&& AllomancyConfigs.SERVER.PEWTER_EXTRA_DAMAGE_REDUCTION.get())
+			{
+				addAttributeModifier(
+						determination,
+						0.125D,
+						AttributeModifier.Operation.ADDITION);
+			}
+		}
+		return super.getAttributeModifiers();
 	}
 
 }
