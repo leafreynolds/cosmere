@@ -297,8 +297,6 @@ public class AllomancySpiritwebSubmodule implements ISpiritwebSubmodule
 				}
 
 				Minecraft.getInstance().getProfiler().pop();
-
-				IronSteelLinesThread.getInstance().releaseScanResult();
 			}
 		}
 

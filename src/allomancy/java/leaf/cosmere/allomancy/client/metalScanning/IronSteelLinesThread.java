@@ -30,19 +30,17 @@ import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel.containsMetal;
 import static leaf.cosmere.allomancy.common.manifestation.AllomancyIronSteel.entityContainsMetal;
 
 public class IronSteelLinesThread implements Runnable
 {
-	private static IronSteelLinesThread INSTANCE;
+	private static volatile IronSteelLinesThread INSTANCE;
 	private static Thread t;
-	private static final Lock lock = new ReentrantLock();
-	private static ScanResult scanResult = new ScanResult();
-	private static Vec3 closestMetalObjectInLookVector;
+
+	private static final AtomicReference<ScanResult> scanResultRef = new AtomicReference<>(new ScanResult());
+	private static volatile Vec3 closestMetalObjectInLookVector;
 	private final double tolerance = 1.8D;
 	private static int scanRange = 0;
 	private static boolean isStopping = false;
@@ -54,6 +52,15 @@ public class IronSteelLinesThread implements Runnable
 	TagKey<Block> aluminumSheet;
 	TagKey<Block> aluminumWire;
 
+	private IronSteelLinesThread()
+	{
+		aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+		aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
+// these two below may or may not work, better to keep them than remove
+		aluminumSheet = BlockTags.create(ResourceLocation.withDefaultNamespace("sheetmetals/aluminum"));
+		aluminumWire = BlockTags.create(ResourceLocation.withDefaultNamespace("wires/aluminum"));
+	}
+
 	public static IronSteelLinesThread getInstance()
 	{
 		if (INSTANCE == null)
@@ -64,63 +71,58 @@ public class IronSteelLinesThread implements Runnable
 		return INSTANCE;
 	}
 
-	private IronSteelLinesThread()
-	{
-		aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-		aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-// these two below may or may not work, better to keep them than remove
-		aluminumSheet = BlockTags.create(ResourceLocation.withDefaultNamespace("sheetmetals/aluminum"));
-		aluminumWire = BlockTags.create(ResourceLocation.withDefaultNamespace("wires/aluminum"));
-	}
-
-
 	//creates new thread if needed
 	public static void startThread()
 	{
-		getInstance().start();
+		if (INSTANCE == null)
+		{
+			INSTANCE = new IronSteelLinesThread();
+		}
+
+		INSTANCE.start();
 	}
 
 	//stops and kills thread
-	public static void stopThread(boolean restart)
+	public static synchronized void stopThread(boolean restart)
 	{
 		if (INSTANCE != null)
 		{
-			INSTANCE.stop();
-			INSTANCE = null;
-			if (restart)
+			Thread runningThread = t;
+			isStopping = true;
+
+			if (runningThread != null)
 			{
-				startThread();
+				try
+				{
+					runningThread.join(1000);
+					if (runningThread.isAlive())
+					{
+						CosmereAPI.logger.warn("Lines thread did not stop in time");
+					}
+				}
+				catch (InterruptedException e)
+				{
+					Thread.currentThread().interrupt();
+				}
 			}
+
+			INSTANCE = null;
+			if (restart) startThread();
 		}
 	}
 
 	public ScanResult requestScanResult()
 	{
-		lock.lock();
-		try
-		{
-			return scanResult;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			lock.unlock();
-			return new ScanResult();    // empty ScanResult so it doesn't crash
-		}
+		return scanResultRef.get();
 	}
 
 	public int getWeight()
 	{
-		if (scanResult.hasTargetedCluster)
+		if (scanResultRef.get().hasTargetedCluster)
 		{
-			return scanResult.targetedCluster.getBlocks().size();
+			return scanResultRef.get().targetedCluster.getBlocks().size();
 		}
 		return 1;
-	}
-
-	public void releaseScanResult()
-	{
-		lock.unlock();
 	}
 
 	public void setScanRange(int range)
@@ -160,7 +162,7 @@ public class IronSteelLinesThread implements Runnable
 
 	private void setScanResult(ScanResult result)
 	{
-		scanResult = result;
+		scanResultRef.set(result);
 	}
 
 	private void setClosestMetalObject(Vec3 vector)
@@ -185,6 +187,7 @@ public class IronSteelLinesThread implements Runnable
 	{
 		final Minecraft mc = Minecraft.getInstance();
 		boolean restartThread = false;
+
 		while (!isStopping)
 		{
 			try
@@ -268,12 +271,8 @@ public class IronSteelLinesThread implements Runnable
 					});
 				}
 
-				if (lock.tryLock())
-				{
-					setScanResult(nextScan);
-					setClosestMetalObject(closestMetalThingLookedAt.get());
-					lock.unlock();
-				}
+				setScanResult(nextScan);
+				setClosestMetalObject(closestMetalThingLookedAt.get());
 			}
 			catch (Exception e)
 			{
@@ -283,7 +282,7 @@ public class IronSteelLinesThread implements Runnable
 				break;
 			}
 		}
-		stopThread(restartThread);
+		if (restartThread) stopThread(restartThread);
 	}
 
 	private boolean isBlockObscured(BlockPos blockPos, Player player, Level level)
