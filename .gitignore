@@ -26,3 +26,5 @@ docs/changelog*.txt
 libs/
 
 **/.DS_Store
+
+**/.cache/

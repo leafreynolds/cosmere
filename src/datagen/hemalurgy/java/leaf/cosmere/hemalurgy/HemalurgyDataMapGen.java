@@ -17,7 +17,6 @@ import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 
 import java.util.LinkedHashMap;
@@ -31,19 +30,20 @@ public class HemalurgyDataMapGen extends DataMapProvider
 {
 	public static final Map<Item, Metals.MetalType> VANILLA_SPIKES = vanillaSpikes();
 
+	// TODO: find a way to make vanilla spikes cool
 	private static Map<Item, Metals.MetalType> vanillaSpikes()
 	{
 		Map<Item, Metals.MetalType> map = new LinkedHashMap<>();
-		map.put(Items.IRON_SWORD, Metals.MetalType.IRON);
-		map.put(Items.IRON_AXE, Metals.MetalType.IRON);
-		map.put(Items.IRON_PICKAXE, Metals.MetalType.IRON);
-		map.put(Items.IRON_SHOVEL, Metals.MetalType.IRON);
-		map.put(Items.IRON_HOE, Metals.MetalType.IRON);
-		map.put(Items.GOLDEN_SWORD, Metals.MetalType.GOLD);
-		map.put(Items.GOLDEN_AXE, Metals.MetalType.GOLD);
-		map.put(Items.GOLDEN_PICKAXE, Metals.MetalType.GOLD);
-		map.put(Items.GOLDEN_SHOVEL, Metals.MetalType.GOLD);
-		map.put(Items.GOLDEN_HOE, Metals.MetalType.GOLD);
+//		map.put(Items.IRON_SWORD, Metals.MetalType.IRON);
+//		map.put(Items.IRON_AXE, Metals.MetalType.IRON);
+//		map.put(Items.IRON_PICKAXE, Metals.MetalType.IRON);
+//		map.put(Items.IRON_SHOVEL, Metals.MetalType.IRON);
+//		map.put(Items.IRON_HOE, Metals.MetalType.IRON);
+//		map.put(Items.GOLDEN_SWORD, Metals.MetalType.GOLD);
+//		map.put(Items.GOLDEN_AXE, Metals.MetalType.GOLD);
+//		map.put(Items.GOLDEN_PICKAXE, Metals.MetalType.GOLD);
+//		map.put(Items.GOLDEN_SHOVEL, Metals.MetalType.GOLD);
+//		map.put(Items.GOLDEN_HOE, Metals.MetalType.GOLD);
 		return map;
 	}
 

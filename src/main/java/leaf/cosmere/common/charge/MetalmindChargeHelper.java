@@ -4,6 +4,7 @@
 
 package leaf.cosmere.common.charge;
 
+import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
@@ -38,7 +39,11 @@ public class MetalmindChargeHelper
 				final Metals.MetalType itemMetalType = item.getMetalType();
 				return itemMetalType != metalType && itemMetalType != Metals.MetalType.HARMONIUM;
 			}
-			return false;
+			if (obj.getDescriptionId().equals("item.minecraft.iron_axe"))
+			{
+				CosmereAPI.logger.error("fuck");
+			}
+			return true;
 		};
 	}
 

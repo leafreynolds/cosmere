@@ -56,36 +56,6 @@
     },
     "hemalurgy:zinc_spike": {
       "metal": "zinc"
-    },
-    "minecraft:golden_axe": {
-      "metal": "gold"
-    },
-    "minecraft:golden_hoe": {
-      "metal": "gold"
-    },
-    "minecraft:golden_pickaxe": {
-      "metal": "gold"
-    },
-    "minecraft:golden_shovel": {
-      "metal": "gold"
-    },
-    "minecraft:golden_sword": {
-      "metal": "gold"
-    },
-    "minecraft:iron_axe": {
-      "metal": "iron"
-    },
-    "minecraft:iron_hoe": {
-      "metal": "iron"
-    },
-    "minecraft:iron_pickaxe": {
-      "metal": "iron"
-    },
-    "minecraft:iron_shovel": {
-      "metal": "iron"
-    },
-    "minecraft:iron_sword": {
-      "metal": "iron"
     }
   }
 }

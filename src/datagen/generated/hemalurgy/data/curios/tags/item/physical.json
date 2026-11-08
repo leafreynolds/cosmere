@@ -6,11 +6,6 @@
     "hemalurgy:pewter_spike",
     "hemalurgy:atium_spike",
     "hemalurgy:lerasium_spike",
-    "hemalurgy:lerasatium_spike",
-    "minecraft:iron_sword",
-    "minecraft:iron_axe",
-    "minecraft:iron_pickaxe",
-    "minecraft:iron_shovel",
-    "minecraft:iron_hoe"
+    "hemalurgy:lerasatium_spike"
   ]
 }
