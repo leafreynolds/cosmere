@@ -18,6 +18,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -298,7 +299,7 @@ public class OuterRadialButton extends Button
 		{
 
 			Font font = Minecraft.getInstance().font;
-			String text = metalType.getName().toUpperCase();
+			String text = I18n.get("metal.cosmere." + metalType.getName()).toUpperCase();
 
 			int textWidth = (int)(font.width(text)*0.8);
 			int textHeight = (int)(font.lineHeight*0.8);
