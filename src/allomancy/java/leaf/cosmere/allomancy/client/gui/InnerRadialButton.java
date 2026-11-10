@@ -3,6 +3,7 @@ package leaf.cosmere.allomancy.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
 import leaf.cosmere.api.IHasMetalType;
@@ -33,6 +34,7 @@ import java.util.function.Consumer;
 
 public class InnerRadialButton extends Button
 {
+	private static final ResourceLocation WITHERED_FULL_HEART = ResourceLocation.withDefaultNamespace("hud/heart/withered_full");
 	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	private final Consumer<Manifestation> manifestationConsumer;
@@ -103,6 +105,15 @@ public class InnerRadialButton extends Button
 		renderIcon(pGuiGraphics, isHover, pPartialTick);
 		renderText(pGuiGraphics, isHover);
 		renderInfoText(pGuiGraphics, isHover);
+
+		if (metalType.equals(Metals.MetalType.PEWTER))
+		{
+			float pewterDelayedDamage = AllomancySpiritwebSubmodule.getSubmodule(spiritweb).getPewterDelayedDamage();
+			if (pewterDelayedDamage >= 0)
+			{
+				renderPewterDelayedDamage(pGuiGraphics, isHover, pewterDelayedDamage);
+			}
+		}
 	}
 
 	@Override
@@ -394,6 +405,66 @@ public class InnerRadialButton extends Button
 			int textColor = (alpha << 24) | rgb;
 
 			pGuiGraphics.drawString(font, text, -textWidth / 2, -textHeight / 2, textColor, false);
+
+			pose.popPose();
+		}
+	}
+
+	private void renderPewterDelayedDamage(GuiGraphics pGuiGraphics, boolean isHovered, float delayedDamage)
+	{
+		if (isHovered && hasManifestation)
+		{
+			// get already calculated progress
+			float progress = (float) ((currentRadius - midRadius) / (hoverRadius - midRadius));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			Font font = Minecraft.getInstance().font;
+			String text = "x" + delayedDamage;
+
+			int textWidth = font.width(text);
+			int textHeight = font.lineHeight;
+
+			float textRadius = (float) (hoverRadius*1.15);
+
+			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
+			float textY = centerY + (float) Math.sin(midAngle) * textRadius;
+
+			float textAngle = (float) midAngle + (float) (Math.PI / 2);
+
+			textAngle = textAngle % (float) (Math.PI * 2);
+			if (textAngle < 0)
+			{
+				textAngle += (float) (Math.PI * 2);
+			}
+
+			// flip if on bottom half of circle
+			if (textAngle > Math.PI / 2 && textAngle < 3 * Math.PI / 2)
+			{
+				textAngle -= (float) Math.PI;
+			}
+
+			PoseStack pose = pGuiGraphics.pose();
+			pose.pushPose();
+			pose.translate(textX, textY, 0);
+			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			int alpha = (int) (progress * 255.0f);
+
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			int iconSize = 12;
+			int spacing = 2;
+			int totalWidth = iconSize + spacing + textWidth;
+			int startX = -totalWidth / 2;
+
+			RenderSystem.enableBlend();
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, progress);
+			pGuiGraphics.blitSprite(WITHERED_FULL_HEART, startX, -iconSize / 2, iconSize, iconSize);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.disableBlend();
+
+			pGuiGraphics.drawString(font, text, startX + iconSize + spacing, -textHeight / 2 + 1, textColor, false);
 
 			pose.popPose();
 		}
