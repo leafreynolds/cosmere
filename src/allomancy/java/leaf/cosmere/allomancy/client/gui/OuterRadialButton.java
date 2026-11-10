@@ -297,7 +297,6 @@ public class OuterRadialButton extends Button
 	{
 		if (isHovered && hasManifestation)
 		{
-
 			Font font = Minecraft.getInstance().font;
 			String text = I18n.get("metal.cosmere." + metalType.getName()).toUpperCase();
 

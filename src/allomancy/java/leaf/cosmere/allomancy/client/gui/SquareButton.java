@@ -9,11 +9,15 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
@@ -28,6 +32,11 @@ public class SquareButton extends Button
 	private final Metals.MetalType metalType;
 	private final Manifestation manifestation;
 	private final boolean hasManifestation;
+	private final double hoveredX;
+
+	// Animation
+	private final double animationSpeed = 0.8d;
+	private double currentX;
 
 	protected SquareButton(int pX, int pY, int pSize, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
@@ -38,6 +47,8 @@ public class SquareButton extends Button
 		hasManifestation = spiritweb.hasManifestation(manifestation);
 		this.spiritweb = spiritweb;
 		manifestationConsumer = maniConsumer;
+		hoveredX = getX()*1.125d;
+		currentX = getX();
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.setLength(0);
@@ -61,8 +72,10 @@ public class SquareButton extends Button
 		boolean isHovered = isMouseOver(pMouseX, pMouseY);
 
 		renderBackground(pGuiGraphics, isHovered);
-		renderIcon(pGuiGraphics);
+		renderIcon(pGuiGraphics, isHovered, pPartialTick);
 		renderBorder(pGuiGraphics);
+		renderText(pGuiGraphics, isHovered);
+		renderInfoText(pGuiGraphics, isHovered);
 		if (isHovered)
 			manifestationConsumer.accept(manifestation);
 	}
@@ -157,7 +170,7 @@ public class SquareButton extends Button
 		RenderSystem.disableBlend();
 	}
 
-	private void renderIcon(GuiGraphics pGuiGraphics)
+	private void renderIcon(GuiGraphics pGuiGraphics, boolean isHovered, float partialTick)
 	{
 		Color metalColor = metalType.getColor();
 		float r = metalColor.getRed()/255.f, g = metalColor.getGreen()/255.f, b = metalColor.getBlue()/255.f;
@@ -175,8 +188,13 @@ public class SquareButton extends Button
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
 		int iconSize = width-10;
-		int posX = getX() + 5;
-		int posY = getY() + 5;
+		if (isHovered)
+			currentX = Mth.lerp(animationSpeed * partialTick, currentX, hoveredX);
+		else
+			currentX = Mth.lerp(animationSpeed * partialTick, currentX, getX());
+
+		int posX = (int)currentX+5;
+		int posY = getY()+5;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
 		pGuiGraphics.blit(iconLocation,
@@ -207,7 +225,71 @@ public class SquareButton extends Button
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	public float lerp(float start, float end, float pct) {
-		return start + pct * (end - start);
+	private void renderText(GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (isHovered && hasManifestation)
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = I18n.get("metal.cosmere." + metalType.getName()).toUpperCase();
+
+			int textWidth = (int)(font.width(text)*0.8);
+			int textHeight = (int)(font.lineHeight*0.8);
+
+			int textX = getX() + getWidth()/2 - textWidth/2;
+			int textY = getY() + getHeight()/2 - textHeight/2;
+
+			// get already calculated progress
+			float progress = (float) ((currentX - getX()) / (hoveredX - getX()));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			int alpha = (int) (progress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, 0.8f, textColor);
+		}
+	}
+
+	private void renderInfoText(GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (isHovered && hasManifestation)
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = "Empty";
+
+			int seconds = manifestation.getInvestitureRemaining(spiritweb);
+			int hours = seconds / 3600;
+			int minutes = (seconds % 3600) / 60;
+			seconds = seconds % 60;
+
+			if (hours > 0)
+			{
+				text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+			}
+			else if (minutes > 0)
+			{
+				text = String.format("%d:%02d", minutes, seconds);
+			}
+			else if (seconds > 0)
+			{
+				text = String.format("%02d", seconds);
+			}
+
+			int textWidth = (int)(font.width(text)*0.8);
+			int textHeight = (int)(font.lineHeight*0.8);
+
+			int textX = (int) hoveredX + getWidth()/2 - textWidth/2;
+			int textY = getY() + getHeight() - textHeight/2;
+
+			// get already calculated progress
+			float progress = (float) ((currentX - getX()) / (hoveredX - getX()));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			int alpha = (int) (progress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, 0.8f, textColor);
+		}
 	}
 }
