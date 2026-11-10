@@ -192,7 +192,7 @@ public class SpiritwebHud extends AbstractWidget
 			float targetX = getX() + getHeight() + 2;
 			float targetY = getY() + (getHeight() / 2f) - ((font.lineHeight * scale) / 2f);
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text, targetX, targetY, scale, 0xFFDDDDDD);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, targetX, targetY, scale, 0xFFDDDDDD, false);
 		});
 	}
 

@@ -23,12 +23,12 @@ public class GuiUtils
 		return minecraft.getWindow().getGuiScaledHeight() / 8;
 	}
 
-	public static void drawScaledString(Font font, GuiGraphics pGuiGraphics, String text, float x, float y, float scale, int color)
+	public static void drawScaledString(Font font, GuiGraphics pGuiGraphics, String text, float x, float y, float scale, int color, boolean dropShadow)
 	{
 		pGuiGraphics.pose().pushPose();
 		pGuiGraphics.pose().translate(x, y, 0);
 		pGuiGraphics.pose().scale(scale, scale, 1.0f);
-		pGuiGraphics.drawString(font, text, 0, 0, color, false);
+		pGuiGraphics.drawString(font, text, 0, 0, color, dropShadow);
 		pGuiGraphics.pose().popPose();
 	}
 

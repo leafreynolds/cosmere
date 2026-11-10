@@ -3,6 +3,7 @@ package leaf.cosmere.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import leaf.cosmere.api.Manifestations;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
@@ -13,9 +14,11 @@ import java.util.function.Supplier;
 
 public class TabButton extends Button
 {
-	private static final int WIDTH = 32;
-	private static final int HEIGHT = 32;
-	private static final int START_Y = 10;
+	private static final int ICON_SIZE = 16;
+	private static final int ICON_PADDING = 2;
+	private static final int WIDTH = 64;
+	private static final int HEIGHT = 16;
+	private static final int START_Y = 0;
 	private final Supplier<Manifestations.ManifestationTypes> selectedTypeSupplier;
 	public Manifestations.ManifestationTypes manifestation;
 
@@ -32,6 +35,7 @@ public class TabButton extends Button
 	{
 		renderBackground(pGuiGraphics, pMouseX, pMouseY);
 		renderIcon(pGuiGraphics, pMouseX, pMouseY);
+		renderText(pGuiGraphics);
 	}
 
 	private void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY)
@@ -53,11 +57,11 @@ public class TabButton extends Button
 					getX(),
 					getY(),
 					0,
-					0,
+					64-16,
 					width,
 					height,
-					width,
-					height
+					64,
+					64
 			);
 		}
 		else
@@ -80,16 +84,35 @@ public class TabButton extends Button
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		pGuiGraphics.blit(
 				resourceLocation,
-				getX()+1,
-				getY()+1,
+				getX(),
+				getY(),
 				0,
 				0,
-				width-2,
-				height-2,
-				width-2,
-				height-2
+				ICON_SIZE,
+				ICON_SIZE,
+				ICON_SIZE,
+				ICON_SIZE
 		);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderText(GuiGraphics pGuiGraphics)
+	{
+		Font font = Minecraft.getInstance().font;
+		String text = manifestation.getName().toUpperCase();
+
+		int textWidth = font.width(text);
+		int textHeight = font.lineHeight;
+		float textScale = (float)(getWidth() - ICON_SIZE - ICON_PADDING)/textWidth;
+		if (textScale > 1.f)
+		{
+			textScale = 1.f;
+		}
+
+		int x = getX() + ICON_SIZE + ICON_PADDING;
+		int y = (int) (getY() + getHeight()/2 - (textHeight*textScale)/2)+1;
+
+		GuiUtils.drawScaledString(font, pGuiGraphics, text, x, y, textScale, 0xFFFFFFFF, true);
 	}
 }

@@ -338,7 +338,7 @@ public class InnerRadialButton extends Button
 			int rgb = 0xFFFFFF;
 			int textColor = (alpha << 24) | rgb;
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text,-textWidth / 2, -textHeight / 2, 0.8f, textColor);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text,-textWidth / 2, -textHeight / 2, 0.8f, textColor, false);
 
 			pose.popPose();
 		}

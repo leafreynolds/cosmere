@@ -263,7 +263,7 @@ public class SquareButton extends Button
 			int rgb = 0xFFFFFF;
 			int textColor = (alpha << 24) | rgb;
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, 0.8f, textColor);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, 0.8f, textColor, false);
 		}
 	}
 
@@ -306,7 +306,7 @@ public class SquareButton extends Button
 			int rgb = 0xFFFFFF;
 			int textColor = (alpha << 24) | rgb;
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, 0.8f, textColor);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, 0.8f, textColor, false);
 		}
 	}
 }

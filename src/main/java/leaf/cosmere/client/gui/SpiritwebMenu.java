@@ -69,8 +69,8 @@ public class SpiritwebMenu extends Screen
 		}
 		AtomicInteger added = new AtomicInteger(0);
 		int count = registry.getManifestationScreenMap().size();
-		int buttonWidth = 32;
-		int offset = 5;
+		int buttonWidth = 64;
+		int offset = 1;
 		int totalBlockWidth = (count - 1) * (buttonWidth + offset) + buttonWidth;
 		int startX = (this.width / 2) - (totalBlockWidth / 2);
 		for (int i = 0; i < Manifestations.ManifestationTypes.AVIAR.getID(); i++)

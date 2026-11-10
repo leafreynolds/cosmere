@@ -343,7 +343,7 @@ public class TriangleButton extends Button
 			int rgb = 0xFFFFFF;
 			int textColor = (alpha << 24) | rgb;
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text, -textWidth / 2, -textHeight / 2, scale, textColor);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, -textWidth / 2, -textHeight / 2, scale, textColor, false);
 
 			pose.popPose();
 		}
