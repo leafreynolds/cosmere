@@ -375,20 +375,21 @@ public class TriangleButton extends Button
 			int textWidth = font.width(text);
 			int textHeight = font.lineHeight;
 
-			float radius = width / 2.0f;
+			float radius = width / 2.f;
 			float cX = getX() + radius;
 			float cY = getY() + radius;
 
-			float localCx = radius / 3.0f;
-			float localCy = radius / 3.0f;
+			float localCx = radius / 3.f;
+			float localCy = radius / 3.f;
+
 			float cos = (float) Math.cos(rotation);
 			float sin = (float) Math.sin(rotation);
 
 			float baseCx = cX + localCx * cos - localCy * sin;
 			float baseCy = cY + localCx * sin + localCy * cos;
 
-			float screenCx = Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2.0f;
-			float screenCy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2.0f;
+			float screenCx = Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2.f;
+			float screenCy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2.f;
 			float dx = baseCx - screenCx;
 			float dy = baseCy - screenCy;
 
@@ -398,22 +399,11 @@ public class TriangleButton extends Button
 				dy = -dy;
 			}
 
-			float textShift = getHoverShift(HOVER_SHIFT_FACTOR - 0.7f, width, dx, dy) * animationProgress;
-			float textX = baseCx + (float) Math.copySign(textShift, dx);
-			float textY = baseCy + (float) Math.copySign(textShift, dy);
+			float textShift = getHoverShift(HOVER_SHIFT_FACTOR - 0.45f, width, dx, dy) * animationProgress;
+			float textX = baseCx + Math.copySign(textShift, dx);
+			float textY = baseCy + Math.copySign(textShift, dy);
 
-			float textAngle = rotation - (float) (Math.PI / 4);
-
-			textAngle = textAngle % (float) (Math.PI * 2);
-			if (textAngle < 0)
-			{
-				textAngle += (float) (Math.PI * 2);
-			}
-
-			if (textAngle > Math.PI / 2 && textAngle < 3 * Math.PI / 2)
-			{
-				textAngle -= (float) Math.PI;
-			}
+			float textAngle = (Math.signum(dx) == Math.signum(dy)) ? (float) -Math.PI / 4 : (float) Math.PI / 4;
 
 			PoseStack pose = pGuiGraphics.pose();
 			pose.pushPose();
@@ -421,13 +411,9 @@ public class TriangleButton extends Button
 			pose.mulPose(Axis.ZP.rotation(textAngle));
 
 			int alpha = (int) (animationProgress * 255.0f);
-
-			if (alpha > 4) // Prevents vanilla font renderer from flashing at 100% opacity when alpha is 0-3
-			{
-				int rgb = 0xFFFFFF;
-				int textColor = (alpha << 24) | rgb;
-				pGuiGraphics.drawString(font, text, -textWidth / 2, -textHeight / 2, textColor, false);
-			}
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+			pGuiGraphics.drawString(font, text, -textWidth / 2, -textHeight / 2, textColor, false);
 
 			pose.popPose();
 		}
