@@ -249,7 +249,8 @@ public class TriangleButton extends Button
 			float dx = cx - screenCx;
 			float dy = cy - screenCy;
 
-			if (metal == Metals.MetalType.ATIUM)
+			boolean isAtium = metal == Metals.MetalType.ATIUM;
+			if (isAtium)
 			{
 				dx = -dx;
 				dy = -dy;
@@ -258,7 +259,7 @@ public class TriangleButton extends Button
 			float targetProgress = isHovered ? 1.f : 0.f;
 			animationProgress = Mth.lerp(ANIMATION_SPEED * partialTick, animationProgress, targetProgress);
 
-			float shift = getHoverShift(HOVER_SHIFT_FACTOR, width, dx, dy) * animationProgress;
+			float shift = getHoverShift(HOVER_SHIFT_FACTOR - (isAtium ? 0.45f : 0.f), width, dx, dy) * animationProgress;
 			cx += (int) Math.copySign(shift, dx);
 			cy += (int) Math.copySign(shift, dy);
 		}
@@ -393,13 +394,14 @@ public class TriangleButton extends Button
 			float dx = baseCx - screenCx;
 			float dy = baseCy - screenCy;
 
-			if (metal == Metals.MetalType.ATIUM)
+			boolean isAtium = metal == Metals.MetalType.ATIUM;
+			if (isAtium)
 			{
 				dx = -dx;
 				dy = -dy;
 			}
 
-			float textShift = getHoverShift(HOVER_SHIFT_FACTOR - 0.45f, width, dx, dy) * animationProgress;
+			float textShift = getHoverShift(HOVER_SHIFT_FACTOR - (isAtium ? 0.f : 0.45f), width, dx, dy) * animationProgress;
 			float textX = baseCx + Math.copySign(textShift, dx);
 			float textY = baseCy + Math.copySign(textShift, dy);
 
