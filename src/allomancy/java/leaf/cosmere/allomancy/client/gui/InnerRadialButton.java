@@ -109,7 +109,7 @@ public class InnerRadialButton extends Button
 		if (metalType.equals(Metals.MetalType.PEWTER))
 		{
 			float pewterDelayedDamage = AllomancySpiritwebSubmodule.getSubmodule(spiritweb).getPewterDelayedDamage();
-			if (pewterDelayedDamage >= 0)
+			if (pewterDelayedDamage > 0)
 			{
 				renderPewterDelayedDamage(pGuiGraphics, isHover, pewterDelayedDamage);
 			}
