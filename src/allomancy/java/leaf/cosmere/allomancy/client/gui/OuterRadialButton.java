@@ -300,10 +300,16 @@ public class OuterRadialButton extends Button
 			Font font = Minecraft.getInstance().font;
 			String text = I18n.get("metal.cosmere." + metalType.getName()).toUpperCase();
 
-			int textWidth = (int)(font.width(text)*0.8);
-			int textHeight = (int)(font.lineHeight*0.8);
+			int textWidth = font.width(text);
+			int textHeight = font.lineHeight;
 
 			float textRadius = (float) midRadius;
+
+			float scale = 1.f;
+			float maxWidth = (float) (2.f * textRadius * (Math.sin(Math.abs(endAngle - startAngle)/2)) * 0.8f);
+			scale = Math.min(scale, maxWidth / textWidth);
+			textWidth = (int) (textWidth * scale);
+			textHeight = (int) (textHeight*scale);
 
 			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
 			float textY = centerY + (float) Math.sin(midAngle) * textRadius;
@@ -335,7 +341,7 @@ public class OuterRadialButton extends Button
 			int rgb = 0xFFFFFF;
 			int textColor = (alpha << 24) | rgb;
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text,-textWidth / 2, -textHeight / 2, 0.8f, textColor, false);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text,-textWidth / 2, -textHeight / 2, scale, textColor, false);
 
 			pose.popPose();
 		}
