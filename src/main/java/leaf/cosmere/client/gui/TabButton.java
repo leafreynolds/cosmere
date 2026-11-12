@@ -33,14 +33,15 @@ public class TabButton extends Button
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
-		renderBackground(pGuiGraphics, pMouseX, pMouseY);
-		renderIcon(pGuiGraphics, pMouseX, pMouseY);
-		renderText(pGuiGraphics);
+		boolean isHover = isMouseOver(pMouseX, pMouseY);
+		renderBackground(pGuiGraphics, isHover);
+		renderIcon(pGuiGraphics, isHover);
+		renderText(pGuiGraphics, isHover);
 	}
 
-	private void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY)
+	private void renderBackground(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
+		float alpha = isHovered ? 1.0f : 0.3f;
 		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getName(), "textures/gui/hud_background.png");
 
@@ -72,9 +73,9 @@ public class TabButton extends Button
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	private void renderIcon(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY)
+	private void renderIcon(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float alpha = isMouseOver(pMouseX, pMouseY) ? 1.0f : 0.3f;
+		float alpha = isHovered ? 1.0f : 0.3f;
 		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getName(), "textures/icon/" + manifestation.getName() + ".png");
 		RenderSystem.setShaderTexture(0, resourceLocation);
@@ -97,8 +98,10 @@ public class TabButton extends Button
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	private void renderText(GuiGraphics pGuiGraphics)
+	private void renderText(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
+		int alpha = isHovered ? 255 : (int)(255.f*0.3f);
+		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 255 : alpha;
 		Font font = Minecraft.getInstance().font;
 		String text = manifestation.getName().toUpperCase();
 
@@ -113,6 +116,9 @@ public class TabButton extends Button
 		int x = getX() + ICON_SIZE + ICON_PADDING;
 		int y = (int) (getY() + getHeight()/2 - (textHeight*textScale)/2)+1;
 
-		GuiUtils.drawScaledString(font, pGuiGraphics, text, x, y, textScale, 0xFFFFFFFF, true);
+		int rgb = 0xFFFFFF;
+		int textColor = (alpha << 24) | rgb;
+
+		GuiUtils.drawScaledString(font, pGuiGraphics, text, x, y, textScale, textColor, true);
 	}
 }
