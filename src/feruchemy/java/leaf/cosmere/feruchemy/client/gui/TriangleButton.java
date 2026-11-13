@@ -44,7 +44,6 @@ public class TriangleButton extends Button
 
 	// Animation
 	private static final float ANIMATION_SPEED = 0.8f;
-	private static final float TEXT_SCALE = 0.8f;
 	private static final float HOVER_SHIFT_FACTOR = 2.75f;
 	private float animationProgress = 0.f;
 
@@ -303,8 +302,9 @@ public class TriangleButton extends Button
 			Font font = Minecraft.getInstance().font;
 			String text = I18n.get("metal.cosmere." + metal.getName()).toUpperCase();
 
-			float maxAllowedWidth = width * MAX_TEXT_WIDTH_RATIO * TEXT_SCALE;
-			float scale = Math.min(TEXT_SCALE, maxAllowedWidth / font.width(text));
+			float baseScale = (width*0.125f) / font.lineHeight; // 0.125f from font.lineHeight/width
+			float maxAllowedWidth = width * MAX_TEXT_WIDTH_RATIO * baseScale;
+			float scale = Math.min(baseScale, maxAllowedWidth / font.width(text));
 			int textWidth = (int)(font.width(text) * scale);
 			int textHeight = (int)(font.lineHeight * scale);
 
@@ -376,6 +376,8 @@ public class TriangleButton extends Button
 			int textWidth = font.width(text);
 			int textHeight = font.lineHeight;
 
+			float scale = (width*0.125f) / font.lineHeight; // 0.125f from font.lineHeight/width
+
 			float radius = width / 2.f;
 			float cX = getX() + radius;
 			float cY = getY() + radius;
@@ -411,6 +413,8 @@ public class TriangleButton extends Button
 			pose.pushPose();
 			pose.translate(textX, textY, 0);
 			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			pose.scale(scale, scale, 1f);
 
 			int alpha = (int) (animationProgress * 255.0f);
 			int rgb = 0xFFFFFF;
