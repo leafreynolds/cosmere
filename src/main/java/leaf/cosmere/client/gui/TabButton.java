@@ -14,17 +14,19 @@ import java.util.function.Supplier;
 
 public class TabButton extends Button
 {
-	private static final int ICON_SIZE = 16;
-	private static final int ICON_PADDING = 2;
-	private static final int WIDTH = 64;
-	private static final int HEIGHT = 16;
 	private static final int START_Y = 0;
 	private final Supplier<Manifestations.ManifestationTypes> selectedTypeSupplier;
 	public Manifestations.ManifestationTypes manifestation;
 
 	public TabButton(int x, Button.OnPress onPress, Manifestations.ManifestationTypes manifestation, Supplier<Manifestations.ManifestationTypes> selectedTypeSupplier)
 	{
-		super(x, START_Y, WIDTH, HEIGHT, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION);
+		super(  x,
+				START_Y,
+				getScaledWidth(),
+				getScaledHeight(),
+				CommonComponents.EMPTY,
+				onPress,
+				DEFAULT_NARRATION);
 		this.manifestation = manifestation;
 
 		this.selectedTypeSupplier = selectedTypeSupplier;
@@ -41,6 +43,9 @@ public class TabButton extends Button
 
 	private void renderBackground(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
+		int width = getScaledWidth();
+		int height = getScaledHeight();
+
 		float alpha = isHovered ? 1.0f : 0.3f;
 		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 1.0f : alpha;
 		final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getName(), "textures/gui/hud_background.png");
@@ -58,11 +63,11 @@ public class TabButton extends Button
 					getX(),
 					getY(),
 					0,
-					64-16,
+					width-height,
 					width,
 					height,
-					64,
-					64
+					width,
+					width
 			);
 		}
 		else
@@ -83,16 +88,17 @@ public class TabButton extends Button
 
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+		int size = getScaledHeight();
 		pGuiGraphics.blit(
 				resourceLocation,
 				getX(),
 				getY(),
 				0,
 				0,
-				ICON_SIZE,
-				ICON_SIZE,
-				ICON_SIZE,
-				ICON_SIZE
+				size,
+				size,
+				size,
+				size
 		);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -100,6 +106,8 @@ public class TabButton extends Button
 
 	private void renderText(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
+		int iconSize = getScaledHeight();
+		int iconPadding = (int) (getScaledHeight() * 0.125f);
 		int alpha = isHovered ? 255 : (int)(255.f*0.3f);
 		alpha = (selectedTypeSupplier.get() == this.manifestation) ? 255 : alpha;
 		Font font = Minecraft.getInstance().font;
@@ -107,18 +115,26 @@ public class TabButton extends Button
 
 		int textWidth = font.width(text);
 		int textHeight = font.lineHeight;
-		float textScale = (float)(getWidth() - ICON_SIZE - ICON_PADDING)/textWidth;
-		if (textScale > 1.f)
-		{
-			textScale = 1.f;
-		}
+		float baseScale = getScaledHeight() / textHeight;
+		float maxWidth = getScaledWidth() - iconSize - iconPadding;
+		float textScale = Math.min(baseScale, maxWidth/textWidth);
 
-		int x = getX() + ICON_SIZE + ICON_PADDING;
-		int y = (int) (getY() + getHeight()/2 - (textHeight*textScale)/2)+1;
+		int x = getX() + iconSize + iconPadding;
+		int y = (int) (getY() + getScaledHeight()/2 - (textHeight*textScale)/2)+1;
 
 		int rgb = 0xFFFFFF;
 		int textColor = (alpha << 24) | rgb;
 
 		GuiUtils.drawScaledString(font, pGuiGraphics, text, x, y, textScale, textColor, true);
+	}
+
+	public static int getScaledWidth()
+	{
+		return Minecraft.getInstance().getWindow().getGuiScaledWidth() / 8;     // based on scale 5.0, scaledWidth/64
+	}
+
+	public static int getScaledHeight()
+	{
+		return Minecraft.getInstance().getWindow().getGuiScaledHeight() / 18;   // based on scale 5.0, scaledHeight/16
 	}
 }

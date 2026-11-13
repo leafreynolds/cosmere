@@ -69,7 +69,7 @@ public class SpiritwebMenu extends Screen
 		}
 		AtomicInteger added = new AtomicInteger(0);
 		int count = registry.getManifestationScreenMap().size();
-		int buttonWidth = 64;
+		int buttonWidth = TabButton.getScaledWidth();
 		int offset = 1;
 		int totalBlockWidth = (count - 1) * (buttonWidth + offset) + buttonWidth;
 		int startX = (this.width / 2) - (totalBlockWidth / 2);
