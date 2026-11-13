@@ -260,7 +260,8 @@ public class OuterRadialButton extends Button
 			}
 		}
 
-		int iconSize = width - 2;
+		int iconSize = (int) (outerRadius * 0.2f)-2;    // based on a GUI scale of 5 which I (Gerbagel) think the icons' size is best at
+														// this.width / outerRadius gives the scale factor, -2 for margin
 		int posX = centerX + (int)(Math.cos(midAngle) * currentRadius) - iconSize/2;
 		int posY = centerY + (int)(Math.sin(midAngle) * currentRadius) - iconSize/2;
 

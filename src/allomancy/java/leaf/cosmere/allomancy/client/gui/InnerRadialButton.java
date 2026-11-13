@@ -1,5 +1,6 @@
 package leaf.cosmere.allomancy.client.gui;
 
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -59,6 +60,8 @@ public class InnerRadialButton extends Button
 	protected InnerRadialButton(int centerX, int centerY, int segmentNr, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
 		super(centerX, centerY, 16, 16, CommonComponents.EMPTY, (button) -> {}, DEFAULT_NARRATION);
+		Window window = Minecraft.getInstance().getWindow();
+
 		this.spiritweb = spiritweb;
 		metalType = metal;
 		manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID());
@@ -69,7 +72,7 @@ public class InnerRadialButton extends Button
 		this.centerX = centerX;
 		this.centerY = centerY;
 
-		outerRadius = (float) Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3f * 0.7f;
+		outerRadius = (float) window.getGuiScaledHeight() / 3f * 0.7f;
 		innerRadius = 0;
 
 		midAngle = (startAngle + endAngle) / 2;
@@ -271,7 +274,8 @@ public class InnerRadialButton extends Button
 			}
 		}
 
-		int iconSize = width-2;
+		int iconSize = (int) (outerRadius * 0.285f)-2;  // based on a GUI scale of 5 which I (Gerbagel) think the icons' size is best at
+														// this.width / outerRadius gives the scale factor, -2 for margin
 		int posX = centerX + (int)(Math.cos(midAngle) * currentRadius) - iconSize/2;
 		int posY = centerY + (int)(Math.sin(midAngle) * currentRadius) - iconSize/2;
 
