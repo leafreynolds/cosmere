@@ -294,8 +294,10 @@ public class SquareButton extends Button
 				text = String.format("%02d", seconds);
 			}
 
-			int textWidth = (int)(font.width(text)*0.8);
-			int textHeight = (int)(font.lineHeight*0.8);
+			float scale = (getWidth()*0.25f)/font.lineHeight;
+
+			int textWidth = (int)(font.width(text)*scale);
+			int textHeight = (int)(font.lineHeight*scale);
 
 			int textX = (int) hoveredX + getWidth()/2 - textWidth/2;
 			int textY = getY() + getHeight() - textHeight/2;
@@ -308,7 +310,7 @@ public class SquareButton extends Button
 			int rgb = 0xFFFFFF;
 			int textColor = (alpha << 24) | rgb;
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, 0.8f, textColor, false);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, scale, textColor, false);
 		}
 	}
 }
