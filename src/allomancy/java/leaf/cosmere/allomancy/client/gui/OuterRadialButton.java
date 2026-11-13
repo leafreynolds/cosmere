@@ -306,7 +306,10 @@ public class OuterRadialButton extends Button
 
 			float textRadius = (float) midRadius;
 
-			float scale = 1.f;
+			// scale for resolution
+			float scale = (outerRadius*0.11f) / textHeight; // 0.11f from vibes
+
+			// scale for text width
 			float maxWidth = (float) (2.f * textRadius * (Math.sin(Math.abs(endAngle - startAngle)/2)) * 0.8f);
 			scale = Math.min(scale, maxWidth / textWidth);
 			textWidth = (int) (textWidth * scale);
@@ -380,6 +383,8 @@ public class OuterRadialButton extends Button
 			int textWidth = font.width(text);
 			int textHeight = font.lineHeight;
 
+			float scale = (outerRadius*0.11f) / textHeight;
+
 			float textRadius = (float) (hoverRadius*0.85);
 
 			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
@@ -403,6 +408,8 @@ public class OuterRadialButton extends Button
 			pose.pushPose();
 			pose.translate(textX, textY, 0);
 			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			pose.scale(scale, scale, 1f);
 
 			int alpha = (int) (progress * 255.0f);
 			int rgb = 0xFFFFFF;

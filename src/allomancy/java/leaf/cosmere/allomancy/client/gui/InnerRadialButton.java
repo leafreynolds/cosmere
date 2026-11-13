@@ -318,7 +318,10 @@ public class InnerRadialButton extends Button
 			int textWidth = font.width(text);
 			int textHeight = font.lineHeight;
 
-			float scale = 1.f;
+			// scale for resolution
+			float scale = (outerRadius*0.16f) / textHeight; // 0.16f from textHeight/outerRadius
+
+			// scale for text width
 			float maxWidth = (float) (outerRadius - midRadius) * 2.f * 0.8f;
 			scale = Math.min(scale, maxWidth / textWidth);
 			textWidth = (int) (textWidth*scale);
@@ -386,6 +389,8 @@ public class InnerRadialButton extends Button
 			int textWidth = font.width(text);
 			int textHeight = font.lineHeight;
 
+			float scale = (outerRadius*0.16f) / textHeight; // 0.16f from textHeight/outerRadius
+
 			float textRadius = (float) (hoverRadius*0.85);
 
 			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
@@ -409,6 +414,8 @@ public class InnerRadialButton extends Button
 			pose.pushPose();
 			pose.translate(textX, textY, 0);
 			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			pose.scale(scale, scale, 1f);
 
 			int alpha = (int) (progress * 255.0f);
 			int rgb = 0xFFFFFF;
@@ -434,6 +441,8 @@ public class InnerRadialButton extends Button
 			int textWidth = font.width(text);
 			int textHeight = font.lineHeight;
 
+			float scale = (outerRadius*0.16f) / textHeight; // 0.16f from textHeight/outerRadius
+
 			float textRadius = (float) (hoverRadius*1.15);
 
 			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
@@ -457,6 +466,8 @@ public class InnerRadialButton extends Button
 			pose.pushPose();
 			pose.translate(textX, textY, 0);
 			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			pose.scale(scale, scale, 1f);
 
 			int alpha = (int) (progress * 255.0f);
 
