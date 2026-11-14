@@ -207,17 +207,20 @@ public class ClientNeoForgeEvents
 	public static void onRenderGuiOverlayPost(RenderGuiLayerEvent.Post event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		ProfilerFiller profiler = mc.getProfiler();
-		LocalPlayer playerEntity = mc.player;
-		profiler.push("cosmere-spiritweb-hud");
+		if (!mc.options.hideGui)
 		{
-			SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
+			ProfilerFiller profiler = mc.getProfiler();
+			LocalPlayer playerEntity = mc.player;
+			profiler.push("cosmere-spiritweb-hud");
 			{
-				// Shouldn't need mouse location, will only render as a HUD element
-				spiritweb.getSpiritwebHud().render(event.getGuiGraphics(), 0, 0, event.getPartialTick().getGameTimeDeltaPartialTick(true));
-			});
+				SpiritwebCapability.get(playerEntity).ifPresent(spiritweb ->
+				{
+					// Shouldn't need mouse location, will only render as a HUD element
+					spiritweb.getSpiritwebHud().render(event.getGuiGraphics(), 0, 0, event.getPartialTick().getGameTimeDeltaPartialTick(true));
+				});
+			}
+			profiler.pop();
 		}
-		profiler.pop();
 	}
 
 
