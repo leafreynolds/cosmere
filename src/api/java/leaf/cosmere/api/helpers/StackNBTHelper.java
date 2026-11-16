@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 8 - 10 - 2022 ~ Leaf
+ */
+
 package leaf.cosmere.api.helpers;
 
 import com.google.gson.JsonElement;
@@ -112,7 +116,10 @@ public final class StackNBTHelper
 
 	public static boolean verifyExistance(ItemStack stack, String tag)
 	{
-		return !stack.isEmpty() && readData(stack).contains(tag);
+		if (stack.isEmpty()) return false;
+
+		CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+		return customData != null && customData.contains(tag);
 	}
 
 	@Nullable

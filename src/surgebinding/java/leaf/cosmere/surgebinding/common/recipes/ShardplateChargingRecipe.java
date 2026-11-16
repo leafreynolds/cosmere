@@ -1,8 +1,6 @@
 package leaf.cosmere.surgebinding.common.recipes;
 
 import leaf.cosmere.api.CosmereTags;
-import leaf.cosmere.api.EnumUtils;
-import leaf.cosmere.api.Roshar;
 import leaf.cosmere.surgebinding.common.items.GemstoneItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingDataComponents;
@@ -10,17 +8,13 @@ import leaf.cosmere.surgebinding.common.registries.SurgebindingRecipes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ShardplateChargingRecipe extends CustomRecipe
 {
@@ -62,15 +56,14 @@ public class ShardplateChargingRecipe extends CustomRecipe
 				//if is vial and not bottle, check it for contained metals.
 				plateCharge = shardplateCurioItem.getCharge(stack);
 			}
-			else if (testForGem(stack).isPresent())
+			else if (stack.getItem() instanceof GemstoneItem gemstoneItem)
 			{
 				if (stack.getCount() == 1)
 				{
 					//but multiple nuggets allowed
 					hasGem = true;
 					gems++;
-					GemstoneItem gemstone = (GemstoneItem) stack.getItem();
-					totalStormlight += gemstone.getCharge(stack);
+					totalStormlight += gemstoneItem.getCharge(stack);
 				}
 				else
 				{
@@ -95,20 +88,6 @@ public class ShardplateChargingRecipe extends CustomRecipe
 		}
 		//Returns true if there is a gem AND if there is space to charge
 		return hasGem && shardplateCurioItem.getMaxCharge(shardplate) > plateCharge;
-	}
-
-	private Optional<TagKey<Item>> testForGem(ItemStack stack)
-	{
-		for (Roshar.Gemstone value : EnumUtils.GEMSTONE_TYPES)
-		{
-			TagKey<Item> gemstoneTag = CosmereTags.Items.GEM_TAGS.get(value);
-			if (stack.is(gemstoneTag))
-			{
-				return Optional.of(gemstoneTag);
-			}
-		}
-
-		return Optional.empty();
 	}
 
 
@@ -142,19 +121,12 @@ public class ShardplateChargingRecipe extends CustomRecipe
 				continue;
 			}
 
-			if (stackInSlot.is(Tags.Items.GEMS))
+			if (stackInSlot.getItem() instanceof GemstoneItem gemstoneItem)
 			{
-				for (Roshar.Gemstone gemstone : EnumUtils.GEMSTONE_TYPES)
-				{
-					if (stackInSlot.is(CosmereTags.Items.GEM_TAGS.get(gemstone)))
-					{
-						GemstoneItem gemstoneItem = (GemstoneItem) stackInSlot.getItem();
-						shardplateItem.adjustCharge(itemstack,
-								Math.min(gemstoneItem.getCharge(stackInSlot),
-										shardplateItem.getMaxCharge(itemstack) - shardplateItem.getCharge(itemstack)));
-						break;
-					}
-				}
+				shardplateItem.adjustCharge(itemstack,
+						Math.min(gemstoneItem.getCharge(stackInSlot),
+								shardplateItem.getMaxCharge(itemstack) - shardplateItem.getCharge(itemstack)));
+				break;
 			}
 			else if (stackInSlot.is(shardplateItem))
 			{
@@ -192,12 +164,11 @@ public class ShardplateChargingRecipe extends CustomRecipe
 				ShardplateCurioItem sp = (ShardplateCurioItem) stack.getItem();
 				missing = sp.getMaxCharge(stack) - sp.getCharge(stack);
 			}
-			else if (stack.is(Tags.Items.GEMS))
+			if (stack.getItem() instanceof GemstoneItem gemstoneItem)
 			{
 				gemstones.add(stack.copy());
 				gemstoneIndices.add(i);
-				GemstoneItem gi = (GemstoneItem) stack.getItem();
-				gemstoneCharges.add(gi.getCharge(stack));
+				gemstoneCharges.add(gemstoneItem.getCharge(stack));
 			}
 		}
 

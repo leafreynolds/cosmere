@@ -1,10 +1,11 @@
 /*
- * File updated ~ 9 - 8 - 2024 ~ Leaf
+ * File updated ~ 30 - 5 - 2026 ~ EdgarVerdi
  */
 
 package leaf.cosmere.feruchemy.common.manifestation;
 
 import com.mojang.datafixers.util.Either;
+import jdk.jfr.EventFactory;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -20,6 +21,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeEventHandler;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.player.CanContinueSleepingEvent;
 
@@ -144,6 +146,7 @@ public class FeruchemyBronze extends FeruchemyManifestation
 
 	private boolean canSleep(Player player)
 	{
+		// TODO: check if this works as intended
 		if (player instanceof ServerPlayer serverPlayer
 				&& EventHooks.canPlayerStartSleeping(serverPlayer, serverPlayer.blockPosition(), Either.right(Unit.INSTANCE)).left().isPresent())
 		{

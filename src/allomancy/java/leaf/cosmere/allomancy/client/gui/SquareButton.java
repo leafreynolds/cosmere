@@ -71,7 +71,8 @@ public class SquareButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
-		if (hasManifestation)
+		boolean isMouseOver = isMouseOver(pMouseX, pMouseY);
+		if (isMouseOver && hasManifestation)
 		{
 			if (pButton == 0)
 				Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
@@ -80,7 +81,7 @@ public class SquareButton extends Button
 
 			playDownSound(Minecraft.getInstance().getSoundManager());
 		}
-		return true;
+		return isMouseOver;
 	}
 
 	@Override
