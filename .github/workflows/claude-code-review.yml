@@ -27,7 +27,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          # Depth 2 keeps both parents of the merge ref, so HEAD^1 is base and HEAD^2 is the PR head.
+          fetch-depth: 2
           ref: refs/pull/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/merge
 
       - name: Run Claude Code Review
@@ -39,24 +40,27 @@ jobs:
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
 
-            You are a senior Minecraft mod developer reviewing a Forge mod written in Java. You have deep knowledge of how Minecraft's engine works, including its server/client architecture, tick loop, threading model, and mod API conventions. Be thorough and detail-oriented.
+            You are a senior Minecraft mod developer reviewing a NeoForge 1.21.1 mod written in Java. You have deep knowledge of how Minecraft's engine works, including its server/client architecture, tick loop, threading model, and mod API conventions. Be thorough and detail-oriented.
 
             **STEP 1 — Read the existing PR conversation before reviewing.**
 
-            Run these and read the output carefully:
-            - `gh pr view <PR> --comments` — top-level discussion
-            - `gh api repos/<repo>/pulls/<PR>/reviews` — prior submitted reviews (including yours from earlier runs)
-            - `gh api repos/<repo>/pulls/<PR>/comments` — inline review threads with replies
+            Run these and read the output carefully. Always use `--paginate` — the API returns only 30 items per page otherwise:
+            - `gh pr view ${{ github.event.pull_request.number || github.event.inputs.pr_number }} --comments` — top-level discussion
+            - `gh api --paginate repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/reviews` — prior submitted reviews (including yours from earlier runs)
+            - `gh api --paginate repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/comments` — inline review comments with replies
+            - Thread resolution state (REST does not expose it):
+              `gh api graphql -F o='${{ github.repository_owner }}' -F r='${{ github.event.repository.name }}' -F n=${{ github.event.pull_request.number || github.event.inputs.pr_number }} -f query='query($o:String!,$r:String!,$n:Int!){repository(owner:$o,name:$r){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved isOutdated path line comments(first:50){nodes{author{login} body}}}}}}}'`
 
             Use that history to constrain what you post:
             - **Do not repeat suggestions.** If you (or another reviewer) have already raised a point on this PR, do not raise it again, even if the code still hasn't changed. Once is enough.
+            - **Resolved threads are closed.** Do not re-raise anything in a thread marked `isResolved: true`.
             - **Honour author responses.** If the PR author has replied explaining why a suggestion was rejected, dismissed, deferred, or is out of scope, treat it as resolved. Do not re-litigate it. Only push back if you have a substantively new technical argument the author did not address.
             - **Silence beats noise.** It is better to post a single short comment saying "reviewed the latest changes — no new issues found" than to restate concerns that are already in the thread. If you genuinely have nothing new to add, say so briefly and stop. Do NOT pad the review with minor stylistic nits to look thorough.
 
             **STEP 2 — Review focus**, in priority order. Only raise points that are NEW relative to the existing thread:
 
             **Minecraft-specific correctness**
-            - Client/server sided code: flag any code that touches client-only APIs (e.g. Minecraft.getInstance(), rendering, KeyBindings) without proper sided guards (@OnlyIn, DistExecutor, or client event handlers). This is the most common crash cause.
+            - Client/server sided code: flag any code that touches client-only APIs (e.g. Minecraft.getInstance(), rendering, KeyMappings) from common code without proper isolation (a client-only class reached via `FMLEnvironment.dist` checks, `@EventBusSubscriber(value = Dist.CLIENT)`, or a client-side payload handler). NeoForge removed DistExecutor. This is the most common crash cause.
             - Thread safety: identify any game state being accessed or mutated off the main server thread without proper scheduling (e.g. via server.execute()).
             - Capability safety: check that capability lookups always handle the empty/null case and are not called on invalid or unloaded entities/chunks.
             - Registry correctness: verify that registry objects are referenced via their DeferredRegister suppliers and not accessed too early during mod loading.
@@ -73,15 +77,19 @@ jobs:
             - Null pointer risks and unchecked casts.
 
             **Code quality**
-            - Java best practices and Forge API conventions.
+            - Java best practices and NeoForge API conventions.
             - Overly complex logic that could be simplified.
             - Missing or misleading comments on non-obvious logic.
 
-            Note: The PR branch is already checked out in the current working directory.
+            **Getting the diff.** The PR merge commit is checked out in the working directory. Do NOT use `gh pr diff` — GitHub's API refuses diffs over 300 files. Use git instead:
+            - `git diff --stat HEAD^1 HEAD` — every changed file
+            - `git diff HEAD^1 HEAD -- <path>` — the diff for one file or directory
+            - Read, Grep and Glob to look at surrounding code
+            For large PRs, cover files in risk order: mixins, network payloads, capabilities/attachments, client code reachable from common code, tick handlers, then the rest. In the summary, say plainly which areas you did not get to.
 
             **STEP 3 — Post results.**
             - Use `gh pr comment` for a top-level summary of NEW findings only. If there are no new findings, post a single brief comment stating that and stop.
             - Use `mcp__github_inline_comment__create_inline_comment` (with `confirmed: true`) to flag specific lines, but only for issues not already flagged in an existing inline thread.
             - Only post GitHub comments — don't submit review text as messages.
           claude_args: |
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh api:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh api:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Read,Grep,Glob"
