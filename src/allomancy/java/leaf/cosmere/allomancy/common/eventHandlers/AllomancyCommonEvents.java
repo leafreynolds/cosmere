@@ -13,6 +13,8 @@ import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.common.registry.VillagerProfessionRegistry;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.BasicItemListing;
@@ -54,9 +56,18 @@ public class AllomancyCommonEvents
 	}
 
 	@SubscribeEvent
+	@OnlyIn(Dist.DEDICATED_SERVER)
 	public static void onServerStoppingEvent(ServerStoppingEvent event)
 	{
 		// tell threads it's time to stop
+		AllomancyEntityThread.serverShutdown = true;
+	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public static void onServerStoppingEventClient(ServerStoppingEvent event)
+	{
+		// client needs its own stopper 
 		AllomancyEntityThread.serverShutdown = true;
 		IronSteelLinesThread.stopThread(false);
 	}

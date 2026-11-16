@@ -83,6 +83,7 @@ public class IronSteelLinesThread implements Runnable
 	}
 
 	//stops and kills thread
+	@OnlyIn(Dist.CLIENT)
 	public static synchronized void stopThread(boolean restart)
 	{
 		if (INSTANCE != null)
