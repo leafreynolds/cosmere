@@ -1,0 +1,194 @@
+name: Publish
+
+# Manually triggered release. Builds every module, writes the changelog from git history,
+# uploads to CurseForge and Modrinth, then tags the release and advances build_number.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Release channel on CurseForge and Modrinth
+        type: choice
+        options:
+          - alpha
+          - beta
+          - release
+        default: alpha
+      dry_run:
+        description: Build and generate the changelog, but upload nothing and leave build_number alone
+        type: boolean
+        default: false
+      changelog_since:
+        description: 'Start the changelog after this git ref (default: the previous release tag)'
+        type: string
+        required: false
+
+# One release at a time, and never cancel one midway through uploading
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the build_number bump and the release tag
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # generateChangelog walks back to the previous release tag, so it needs tags and history
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # publishToModSites attaches no upload tasks when the tokens are absent, so it would
+      # "succeed" having uploaded nothing. Fail loudly instead.
+      - name: Check publishing credentials
+        if: ${{ !inputs.dry_run }}
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+          MODRINTH_API_TOKEN: ${{ secrets.MODRINTH_API_TOKEN }}
+        run: |
+          missing=""
+          if [ -z "$CURSEFORGE_API_TOKEN" ]; then missing="$missing CURSEFORGE_API_TOKEN"; fi
+          if [ -z "$MODRINTH_API_TOKEN" ]; then missing="$missing MODRINTH_API_TOKEN"; fi
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secret(s):$missing"
+            echo "Add them under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+      - name: Resolve version
+        id: version
+        run: |
+          set -o pipefail
+          ./gradlew printVersion -q --console=plain \
+            | grep -E '^(version|mod_version|build_number)=' \
+            | tee -a "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: ./gradlew build --stacktrace
+
+      # Separate invocation on purpose: changeLogResolver reads the file at configuration time,
+      # so a task dependency inside the publish run would be too late.
+      - name: Generate changelog
+        env:
+          SINCE: ${{ inputs.changelog_since }}
+        run: |
+          if [ -n "$SINCE" ]; then
+            ./gradlew generateChangelog "-Pchangelog_since=$SINCE"
+          else
+            ./gradlew generateChangelog
+          fi
+
+      # Written once, then reused for both the run summary and the GitHub release body
+      - name: Compose release notes
+        id: notes
+        env:
+          MOD_VERSION: ${{ steps.version.outputs.mod_version }}
+          BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
+        run: |
+          set -euo pipefail
+          notes="$RUNNER_TEMP/release-notes.md"
+          {
+            echo "Cosmere \`${MOD_VERSION}\` — released as **${RELEASE_TYPE}** from \`$(git rev-parse --short HEAD)\`."
+            echo
+            if [ -f "docs/release_${BUILD_NUMBER}.txt" ]; then
+              cat "docs/release_${BUILD_NUMBER}.txt"
+              echo
+            fi
+            echo "### Changes"
+            echo
+            if [ -f "docs/changelog_${BUILD_NUMBER}.txt" ]; then
+              cat "docs/changelog_${BUILD_NUMBER}.txt"
+            else
+              echo "_No changelog generated._"
+            fi
+          } > "$notes"
+          echo "path=$notes" >> "$GITHUB_OUTPUT"
+          cat "$notes" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmere-${{ steps.version.outputs.mod_version }}
+          path: build/libs/*-${{ steps.version.outputs.version }}*.jar
+          if-no-files-found: error
+
+      - name: Publish to CurseForge and Modrinth
+        if: ${{ !inputs.dry_run }}
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+          MODRINTH_API_TOKEN: ${{ secrets.MODRINTH_API_TOKEN }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
+        run: ./gradlew publishToModSites --stacktrace
+
+      # Only after a successful upload, so a failed publish leaves the number free to retry
+      - name: Tag build commit and bump build number
+        if: ${{ !inputs.dry_run }}
+        id: tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          MOD_VERSION: ${{ steps.version.outputs.mod_version }}
+          BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
+        run: |
+          set -euo pipefail
+          next=$((BUILD_NUMBER + 1))
+
+          # Capture the commit that was actually built, before the bump adds one on top
+          build_sha="$(git rev-parse HEAD)"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          sed -i "s/^build_number=.*/build_number=$next/" gradle.properties
+
+          # Only the build number is committed. docs/changelog*.txt is gitignored by design;
+          # the generated notes live in the GitHub release body and the run summary instead.
+          git add gradle.properties
+          git commit -m "[Cosmere] Released ${MOD_VERSION}, build number now ${next}"
+
+          # Tag the built tree, not the bump commit
+          git tag -a "Cosmere-${VERSION}" -m "Cosmere ${MOD_VERSION}" "$build_sha"
+
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          git push origin "Cosmere-${VERSION}"
+
+          echo "tag=Cosmere-${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "build_sha=$build_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          MOD_VERSION: ${{ steps.version.outputs.mod_version }}
+          VERSION: ${{ steps.version.outputs.version }}
+          NOTES: ${{ steps.notes.outputs.path }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
+        run: |
+          set -euo pipefail
+          # alpha and beta are not full releases, so keep them marked prerelease on GitHub too
+          prerelease=""
+          if [ "$RELEASE_TYPE" != "release" ]; then prerelease="--prerelease"; fi
+
+          gh release create "$TAG" \
+            --title "Cosmere ${MOD_VERSION}" \
+            --notes-file "$NOTES" \
+            $prerelease \
+            build/libs/*-"${VERSION}"*.jar
+
+      - name: Dry run notice
+        if: ${{ inputs.dry_run }}
+        run: |
+          echo "::notice::Dry run: built ${{ steps.version.outputs.mod_version }} but uploaded nothing. build_number is still ${{ steps.version.outputs.build_number }}."
