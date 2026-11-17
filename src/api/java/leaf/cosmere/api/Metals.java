@@ -656,12 +656,11 @@ public class Metals
 				case IRON:
 					//steals physical strength
 					//don't steal modified values, only base value
-					//todo decide how much strength is reasonable to steal and how much goes to waste
-					//currently will try 70%
+					//the percentage stolen is configurable via HemalurgyServerConfig.ironSpikeStrengthMultiplier
 					final AttributeMap attributes = killedEntity.getAttributes();
 					if (attributes.hasAttribute(Attributes.ATTACK_DAMAGE))
 					{
-						strengthToAdd = attributes.getBaseValue(Attributes.ATTACK_DAMAGE) * 0.7D;
+						strengthToAdd = attributes.getBaseValue(Attributes.ATTACK_DAMAGE);
 					}
 					break;
 				case TIN:

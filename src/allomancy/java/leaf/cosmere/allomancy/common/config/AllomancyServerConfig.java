@@ -17,6 +17,8 @@ public class AllomancyServerConfig implements ICosmereConfig
 	public final ForgeConfigSpec.DoubleValue PUSH_PULL_WEIGHT;
 	public final ForgeConfigSpec.DoubleValue MAX_PUSH_PULL_WEIGHT;
 	public final ForgeConfigSpec.IntValue MAX_INGESTIBLE_METAL;
+	public final ForgeConfigSpec.DoubleValue PEWTER_DAMAGE_REDUCTION_LEVEL;
+	public final ForgeConfigSpec.BooleanValue PEWTER_EXTRA_DAMAGE_REDUCTION;
 
 	// Boost amount for Duralumin and Nicrosil
 	//public final ForgeConfigSpec.DoubleValue boostAmount;
@@ -37,6 +39,9 @@ public class AllomancyServerConfig implements ICosmereConfig
 		MAX_PUSH_PULL_WEIGHT = builder.comment("Maximum pull/push weight adjustment. At 1.0 (default), push/pull power maxes out at 2 times (20 blocks)").defineInRange("maxPushPullWeight", 1.0D, 0D, 999999.0D);
 
 		MAX_INGESTIBLE_METAL = builder.comment("Maximum amount of metal possible to ingest in nuggets").defineInRange("maxIngestibleMetal", 27, 1, 999999);
+
+		PEWTER_DAMAGE_REDUCTION_LEVEL = builder.comment("The level of damage reduction pewter applies.").defineInRange("pewterDamageReductionLevel", 0.5, 0, 1);
+		PEWTER_EXTRA_DAMAGE_REDUCTION = builder.comment("Should pewter apply extra damage reduction from the determination attribute.").define("pewterExtraDamageReduction", true);
 
 		builder.pop();
 		configSpec = builder.build();
