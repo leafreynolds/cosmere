@@ -135,20 +135,33 @@ public class FortuneBonusModifier extends LootModifier
 
 					Holder<Enchantment> looting = enchantmentRegistry.getHolderOrThrow(Enchantments.LOOTING);
 					int existingLevel = fakeWeapon.getEnchantmentLevel(looting);
-					fakeWeapon.enchant(looting, existingLevel + totalLootingBonus); // todo: might wanna check this in case it's too much
+					fakeWeapon.enchant(looting, existingLevel + totalLootingBonus);
 
-					LootParams lootParams = (new LootParams.Builder(context.getLevel()))
+					LootParams.Builder paramsBuilder = (new LootParams.Builder(context.getLevel()))
 							.withParameter(LootContextParams.THIS_ENTITY, entity)
 							.withParameter(LootContextParams.ORIGIN, origin != null ? origin : entity.position())
 							.withParameter(LootContextParams.DAMAGE_SOURCE, damageSource)
 							.withOptionalParameter(LootContextParams.ATTACKING_ENTITY, sourceLiving)
-							.withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, damageSource.getDirectEntity())
-							.withOptionalParameter(LootContextParams.TOOL, fakeWeapon)
-							.create(LootContextParamSets.ENTITY);
+							.withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, damageSource.getDirectEntity());
 
-					target.getLootTable();
+					if (context.hasParam(LootContextParams.LAST_DAMAGE_PLAYER))
+					{
+						paramsBuilder.withOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER, context.getParamOrNull(LootContextParams.LAST_DAMAGE_PLAYER));
+					}
+
+					LootParams lootParams = paramsBuilder.create(LootContextParamSets.ENTITY);
 					LootTable lootTable = server.reloadableRegistries().getLootTable(target.getLootTable());
-					return lootTable.getRandomItems(lootParams);
+
+					ItemStack originalMainHand = sourceLiving.getMainHandItem();
+					sourceLiving.setItemInHand( net.minecraft.world.InteractionHand.MAIN_HAND, fakeWeapon );
+					try
+					{
+						return lootTable.getRandomItems(lootParams);
+					}
+					finally
+					{
+						sourceLiving.setItemInHand( net.minecraft.world.InteractionHand.MAIN_HAND, originalMainHand );
+					}
 				}
 			}
 		}
