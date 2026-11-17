@@ -54,7 +54,7 @@ public class LightTextureMixin
 		if (spiritwebOpt.isPresent())
 		{
 			ISpiritweb spiritweb = spiritwebOpt.get();
-			final Manifestation tinAllomancy = CosmereAPI.manifestationRegistry().getHolder(TIN_RL).get().value();
+			final Manifestation tinAllomancy = CosmereAPI.manifestationRegistry().getOptional(TIN_RL).orElse(null);
 			if (spiritweb instanceof SpiritwebCapability data && tinAllomancy != null && tinAllomancy.isActive(spiritweb))
 			{
 				//burning or flaring strength
