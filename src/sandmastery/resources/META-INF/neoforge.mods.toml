@@ -14,6 +14,7 @@ credits = '''
 Leaf - A small amount of code and the initial cosmere framework that Sandmastery hooks into
 Hawktrav - Various models and textures
 Luke13234 - Who wrote much of the Ars Arcanum guide book entries.
+StarFox - Updated textures
 '''
 logoFile = "logo.png"
 description = '''Sand Mastery module for Cosmere.'''
