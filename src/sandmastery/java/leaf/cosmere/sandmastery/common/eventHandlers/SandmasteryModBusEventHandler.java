@@ -2,6 +2,7 @@ package leaf.cosmere.sandmastery.common.eventHandlers;
 
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreaderBE;
+import leaf.cosmere.sandmastery.common.datamaps.SandmasteryDataMaps;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandpouchItemHandler;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
@@ -14,6 +15,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 
 @EventBusSubscriber(modid = Sandmastery.MODID)
 public class SandmasteryModBusEventHandler
@@ -22,6 +24,12 @@ public class SandmasteryModBusEventHandler
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
 		event.add(EntityType.PLAYER, SandmasteryAttributes.RIBBONS.getHolder());
+	}
+
+	@SubscribeEvent
+	public static void registerDataMaps(RegisterDataMapTypesEvent event)
+	{
+		event.register(SandmasteryDataMaps.HYDRATION);
 	}
 
 	@SubscribeEvent

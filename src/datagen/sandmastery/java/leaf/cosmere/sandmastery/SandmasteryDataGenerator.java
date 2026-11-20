@@ -34,6 +34,7 @@ public class SandmasteryDataGenerator
 		generator.addProvider(true, new SandmasteryEngLangGen(packOutput));
 		generator.addProvider(true, new SandmasteryItemModelsGen(packOutput, existingFileHelper));
 		generator.addProvider(true, new SandmasteryTagsProvider(packOutput, lookupProvider, existingFileHelper));
+		generator.addProvider(true, new SandmasteryDataMapGen(packOutput, lookupProvider));
 		generator.addProvider(true, new SandmasteryRecipeGen(packOutput, lookupProvider));
 		generator.addProvider(true, new SandmasteryLootTableGen(packOutput, lookupProvider));
 		generator.addProvider(true, new SandmasteryPatchouliGen(packOutput));

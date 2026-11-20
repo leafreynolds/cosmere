@@ -33,7 +33,10 @@ public class SandSpreaderMenu extends AbstractContainerMenu
 	{
 		super(SandmasteryMenuTypes.SAND_SPREADER.get(), id);
 		checkContainerSize(inv, 3);
-		this.blockEntity = (SandSpreaderBE) entity;
+		if (!(entity instanceof SandSpreaderBE be))
+			throw new IllegalStateException("SandSpreader menu opened without its block entity");
+		this.blockEntity = be;
+
 		this.level = inv.player.level();
 		this.data = data;
 		IItemHandlerModifiable blockInv = (IItemHandlerModifiable) this.blockEntity.getItemHandler();

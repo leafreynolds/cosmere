@@ -102,7 +102,7 @@ public class SandJarItem extends ChargeableItemBase
 		boolean wasCharged = StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0) > 0;
 		if (pPlayer.isCrouching())
 		{
-			inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected : -106, ItemStack.EMPTY);
+			pPlayer.setItemInHand(pUsedHand, new ItemStack(SandmasteryItems.JAR_ITEM));
 			BlockPos pos2 = pos.offset(dir.getNormal());
 			pLevel.setBlockAndUpdate(pos2,
 					SandmasteryBlocks.SAND_JAR_BLOCK.getBlock()
@@ -112,8 +112,8 @@ public class SandJarItem extends ChargeableItemBase
 		}
 		else
 		{
-			inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected
-			                                                   : -106, new ItemStack(SandmasteryItems.JAR_ITEM));
+			
+			pPlayer.setItemInHand(pUsedHand, new ItemStack(SandmasteryItems.JAR_ITEM));
 			if (state.is(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock()) && state.getValue(TaldainBlackSandLayerBlock.LAYERS) < 8)
 			{
 				int layers = state.getValue(TaldainBlackSandLayerBlock.LAYERS);

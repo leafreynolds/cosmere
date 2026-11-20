@@ -4,15 +4,20 @@
 
 package leaf.cosmere.sandmastery.client.eventHandlers;
 
+import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.sandmastery.client.gui.SandPouchContainerScreen;
 import leaf.cosmere.sandmastery.client.gui.SandSpreaderScreen;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreader.SandSpreaderMenu;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEntityTypes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -31,7 +36,10 @@ public class SandmasteryModClientEvents
 	{
 		event.enqueueWork(() ->
 		{
-
+			ItemProperties.register(
+				SandmasteryItems.SAND_JAR_ITEM.asItem(),
+				ResourceLocation.fromNamespaceAndPath("cosmere", "charge_level"),
+				(stack, level, entity, seed) -> StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0));
 		});
 
 

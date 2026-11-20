@@ -14,7 +14,6 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -39,7 +38,6 @@ public class JarItem extends BaseItem
 		}
 		BlockPos pos = getPlayerPOVHitResult(pLevel, pPlayer, ClipContext.Fluid.NONE).getBlockPos();
 		BlockState state = pLevel.getBlockState(pos);
-		Inventory inv = pPlayer.getInventory();
 		boolean fill = false;
 		boolean charged = false;
 		if (state.is(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock()))
@@ -105,7 +103,8 @@ public class JarItem extends BaseItem
 
 		if (fill)
 		{
-			inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected : -106, item);
+			pPlayer.setItemInHand(pUsedHand, item);
+			// inv.setItem(pUsedHand == InteractionHand.MAIN_HAND ? inv.selected : Inventory.SLOT_OFFHAND, item);
 		}
 
 		return InteractionResultHolder.consume(usedItem);

@@ -44,7 +44,7 @@ public class SandSpreadingTubBlock extends BaseEntityBlock
 				((SandSpreaderBE) blockEntity).drops();
 			}
 		}
-		super.onRemove(state, level, pos, state, isMoving);
+		super.onRemove(state, level, pos, newState, isMoving);
 	}
 
 	@Override

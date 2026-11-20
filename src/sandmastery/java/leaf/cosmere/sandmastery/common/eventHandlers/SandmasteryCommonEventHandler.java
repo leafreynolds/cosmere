@@ -10,9 +10,8 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.commands.SandmasteryCommands;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.PotionItem;
+import leaf.cosmere.sandmastery.common.datamaps.HydrationProperties;
+import leaf.cosmere.sandmastery.common.datamaps.SandmasteryDataMaps;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -30,27 +29,20 @@ public class SandmasteryCommonEventHandler
 	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
-		Item item = event.getItem().getItem();
-		boolean potion = item instanceof PotionItem;
-		boolean metalVial = item.getDescriptionId().equals("item.allomancy.metal_vial"); // TODO: Replace the magic string with code
-		final LivingEntity livingEntity = event.getEntity();
-		if (potion || metalVial)
+		final HydrationProperties hydration = SandmasteryDataMaps.getHydration(event.getItem());
+		if (hydration == null)
 		{
-			SpiritwebCapability.get(livingEntity).ifPresent(spiritweb ->
-			{
-				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
-				SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-				int playerHydration = sb.getHydrationLevel();
-				int maxPlayerHydration = SandmasteryConfigs.SERVER.MAX_HYDRATION.get();
-				if (playerHydration < maxPlayerHydration)
-				{
-					if (potion)
-					{
-						sb.adjustHydration(maxPlayerHydration / 8);
-					}
-					// if(metalVial) sb.adjustHydration(Math.min(1000, maxPlayerHydration - playerHydration), true); // TODO: bottling machine should determine liquit used, and as such hydration value
-				}
-			});
+			return;
 		}
+
+		SpiritwebCapability.get(event.getEntity()).ifPresent(spiritweb ->
+		{
+			SpiritwebCapability data = (SpiritwebCapability) spiritweb;
+			SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+			if (sb.getHydrationLevel() < SandmasteryConfigs.SERVER.MAX_HYDRATION.get())
+			{
+				sb.adjustHydration(hydration.amount());
+			}
+		});
 	}
 }
