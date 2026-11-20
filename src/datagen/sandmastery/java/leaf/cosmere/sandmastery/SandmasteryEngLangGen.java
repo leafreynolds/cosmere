@@ -45,6 +45,7 @@ public class SandmasteryEngLangGen extends LanguageProvider
 		addPatchouli();
 		addTooltips();
 		addItemGroups();
+		addGuiText();
 		addDamageSources();
 		addMobEffects();
 		addCurioIdentifiers();
@@ -131,6 +132,12 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	private void addItemGroups()
 	{
 		add("tabs.sandmastery.items", "Sandmastery");
+	}
+
+	private void addGuiText()
+	{
+		add("gui.sandmastery.sand_pouch.taking_black", "Black");
+		add("gui.sandmastery.sand_pouch.taking_white", "White");
 	}
 
 	private void addDamageSources()

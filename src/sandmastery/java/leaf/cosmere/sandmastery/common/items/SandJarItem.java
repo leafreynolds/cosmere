@@ -20,7 +20,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -97,7 +96,6 @@ public class SandJarItem extends ChargeableItemBase
 		BlockPos pos = res.getBlockPos();
 		Direction dir = res.getDirection();
 		BlockState state = pLevel.getBlockState(pos);
-		Inventory inv = pPlayer.getInventory();
 
 		boolean wasCharged = StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0) > 0;
 		if (pPlayer.isCrouching())
@@ -107,7 +105,7 @@ public class SandJarItem extends ChargeableItemBase
 			pLevel.setBlockAndUpdate(pos2,
 					SandmasteryBlocks.SAND_JAR_BLOCK.getBlock()
 							.defaultBlockState()
-							.setValue(SandJarBlock.INVESTITURE, StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0))
+							.setValue(SandJarBlock.INVESTITURE, Math.round(100f * StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0) / SandmasteryConstants.CHARGE_PER_SAND_LAYER))
 			);
 		}
 		else

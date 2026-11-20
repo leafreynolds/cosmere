@@ -15,6 +15,7 @@ import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEntityTypes;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
+import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +40,7 @@ public class SandmasteryModClientEvents
 			ItemProperties.register(
 				SandmasteryItems.SAND_JAR_ITEM.asItem(),
 				ResourceLocation.fromNamespaceAndPath("cosmere", "charge_level"),
-				(stack, level, entity, seed) -> StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0));
+				(stack, level, entity, seed) -> 100f * StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0) / SandmasteryConstants.CHARGE_PER_SAND_LAYER);
 		});
 
 

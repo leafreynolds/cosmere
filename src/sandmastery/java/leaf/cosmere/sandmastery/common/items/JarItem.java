@@ -11,6 +11,7 @@ import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandLayerBlock;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
+import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -94,7 +95,7 @@ public class JarItem extends BaseItem
 		ItemStack item = new ItemStack(SandmasteryItems.SAND_JAR_ITEM);
 		if (charged)
 		{
-			StackNBTHelper.setInt(item, Constants.NBT.CHARGE_LEVEL, 100);
+			StackNBTHelper.setInt(item, Constants.NBT.CHARGE_LEVEL, SandmasteryConstants.CHARGE_PER_SAND_LAYER);
 		}
 		else
 		{

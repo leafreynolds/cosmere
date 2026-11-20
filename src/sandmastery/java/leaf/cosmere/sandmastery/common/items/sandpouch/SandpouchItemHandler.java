@@ -7,16 +7,24 @@ package leaf.cosmere.sandmastery.common.items.sandpouch;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDataComponents;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+import static leaf.cosmere.sandmastery.common.utils.MiscHelper.isSandBlock;
+import static leaf.cosmere.sandmastery.common.utils.MiscHelper.isSandLayer;
+import static leaf.cosmere.sandmastery.common.utils.MiscHelper.isSandCharged;
+
 //sand pouch inventory. the stack holds a layer count, the slots are views onto it.
 //slot 0 banks sand in, slots 1 and 2 hand it back as blocks and layers
-public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiable
+public class SandpouchItemHandler implements IItemHandlerModifiable
 {
 	public static final int SIZE = 3;
+
+	// black sand shows first on a pouch that has never been toggled; anything reading the flag must use this fallback
+	public static final boolean DEFAULT_DISPLAYING_BLACK_SAND = true;
 
 	public static final int SLOT_INPUT = 0;
 	public static final int SLOT_BLOCKS = 1;
@@ -24,21 +32,52 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
 	private static final int LAYERS_PER_BLOCK = 8;
 
-	private final ItemStack pouch;
+	// a supplier, so a client-side menu always reads the current held stack: the server replaces that
+	// stack object whenever it syncs, and a reference captured at open time would never update
+	private final Supplier<ItemStack> pouch;
 
 	public SandpouchItemHandler(ItemStack pouch)
+	{
+		this(() -> pouch);
+	}
+
+	public SandpouchItemHandler(Supplier<ItemStack> pouch)
 	{
 		this.pouch = pouch;
 	}
 
-	public int getLayers()
-	{
-		return pouch.getOrDefault(SandmasteryDataComponents.SAND_LAYERS.get(), 0);
+	public boolean getDisplayingBlackSand() {
+		return pouch.get().getOrDefault(SandmasteryDataComponents.DISPLAYING_BLACK_SAND, DEFAULT_DISPLAYING_BLACK_SAND);
 	}
 
-	private void setLayers(int layers)
+	public int getTotalLayers()
 	{
-		pouch.set(SandmasteryDataComponents.SAND_LAYERS.get(), Math.max(0, layers));
+		return pouch.get().getOrDefault(SandmasteryDataComponents.SAND_LAYERS.get(), 0);
+	}
+
+	private void setTotalLayers(int layers)
+	{
+		if (pouch.get().isEmpty())
+		{
+			return;
+		}
+		pouch.get().set(SandmasteryDataComponents.SAND_LAYERS.get(), Math.max(0, layers));
+		if (getChargedLayers() > layers)
+			setChargedLayers(layers);
+	}
+
+	public int getChargedLayers()
+	{
+		return pouch.get().getOrDefault(SandmasteryDataComponents.CHARGED_SAND_LAYERS.get(), 0);
+	}
+
+	private void setChargedLayers(int layers)
+	{
+		if (pouch.get().isEmpty())
+		{
+			return;
+		}
+		pouch.get().set(SandmasteryDataComponents.CHARGED_SAND_LAYERS.get(), Math.max(0, layers));
 	}
 
 	//layers per sand item. blocks pack eight each
@@ -53,18 +92,6 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 			return 1;
 		}
 		return 0;
-	}
-
-	private static boolean isSandBlock(ItemStack stack)
-	{
-		return stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem()
-				|| stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND.asItem();
-	}
-
-	private static boolean isSandLayer(ItemStack stack)
-	{
-		return stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem()
-				|| stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.asItem();
 	}
 
 	@Override
@@ -90,11 +117,14 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 	public ItemStack getStackInSlot(int slot)
 	{
 		validateSlotIndex(slot);
-		int layers = getLayers();
+		boolean unchargedIsPriority = getDisplayingBlackSand();
+		BlockItem blockItem = unchargedIsPriority ? SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem() : SandmasteryBlocks.TALDAIN_WHITE_SAND.asItem();
+		BlockItem layerItem = unchargedIsPriority ? SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem() : SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.asItem();
+		int layers = unchargedIsPriority ? getTotalLayers() - getChargedLayers() : getChargedLayers();
 		return switch (slot)
 		{
-			case SLOT_BLOCKS -> makeStack(SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem(), layers / LAYERS_PER_BLOCK);
-			case SLOT_LAYERS -> makeStack(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem(), layers);
+			case SLOT_BLOCKS -> makeStack(blockItem, layers / LAYERS_PER_BLOCK);
+			case SLOT_LAYERS -> makeStack(layerItem, layers);
 			//the input slot never holds anything
 			// converted to layers straight away
 			default -> ItemStack.EMPTY;
@@ -115,10 +145,7 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 		{
 			case SLOT_INPUT ->
 			{
-				if (isItemValid(SLOT_INPUT, stack))
-				{
-					setLayers(getLayers() + layerValue(stack) * stack.getCount());
-				}
+				insertItem(SLOT_INPUT, stack, false);
 			}
 			//the output slots only shrink
 			//putting a smaller stack back means the player took some
@@ -132,11 +159,14 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
 	private void takeFromOutput(int slot, ItemStack remaining)
 	{
-		int before = getStackInSlot(slot).getCount();
-		int taken = before - remaining.getCount();
+		ItemStack beforeStack = getStackInSlot(slot);
+		int beforeCount = beforeStack.getCount();
+		int taken = beforeCount - remaining.getCount();
 		if (taken > 0)
 		{
-			setLayers(getLayers() - taken * (slot == SLOT_BLOCKS ? LAYERS_PER_BLOCK : 1));
+			setTotalLayers(getTotalLayers() - taken * (slot == SLOT_BLOCKS ? LAYERS_PER_BLOCK : 1));
+			if (isSandCharged(beforeStack))
+				setChargedLayers(getChargedLayers() - taken * (slot == SLOT_BLOCKS ? LAYERS_PER_BLOCK : 1));
 		}
 	}
 
@@ -153,7 +183,9 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
 		if (!simulate)
 		{
-			setLayers(getLayers() + layerValue(stack) * stack.getCount());
+			setTotalLayers(getTotalLayers() + layerValue(stack) * stack.getCount());
+			if (isSandCharged(stack))
+				setChargedLayers(getChargedLayers() + layerValue(stack) * stack.getCount());
 		}
 
 		//the pouch swallows sand whole
@@ -182,7 +214,9 @@ public class SandpouchItemHandler implements IItemHandler, IItemHandlerModifiabl
 
 		if (!simulate)
 		{
-			setLayers(getLayers() - toExtract * (slot == SLOT_BLOCKS ? LAYERS_PER_BLOCK : 1));
+			setTotalLayers(getTotalLayers() - toExtract * (slot == SLOT_BLOCKS ? LAYERS_PER_BLOCK : 1));
+			if (isSandCharged(existing))
+				setChargedLayers(getChargedLayers() - toExtract * (slot == SLOT_BLOCKS ? LAYERS_PER_BLOCK : 1));
 		}
 
 		return existing.copyWithCount(toExtract);

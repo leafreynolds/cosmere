@@ -4,11 +4,9 @@
 
 package leaf.cosmere.sandmastery.common.manifestation;
 
-import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -18,6 +16,7 @@ import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
+import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
@@ -108,18 +107,19 @@ public class SandmasteryManifestation extends Manifestation
 		if (data.getLiving() instanceof Player player)
 		{
 			List<ItemStack> allPouches = getSandPouches(player);
-			int required = getSandCost(data);
-
 			if (allPouches.isEmpty())
 			{
 				return true;
 			}
 
-			int count = 0;
+			// only whole layers are paid for, the remainder carries over as debt
+			long required = chargeOwedNow(data);
+
+			long count = 0;
 			for (ItemStack stack : allPouches)
 			{
-				count += StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-				if (count > required)
+				count += ((SandPouchItem) stack.getItem()).getCharge(stack);
+				if (count >= required)
 				{
 					return false;
 				}
@@ -132,28 +132,30 @@ public class SandmasteryManifestation extends Manifestation
 	{
 		if (data.getLiving() instanceof Player player)
 		{
-			List<ItemStack> allPouches = getSandPouches(player);
+			SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(data);
+			long debt = submodule.getChargeDebt() + (long) getSandCost(data);
+			long changeLeft = debt - debt % SandmasteryConstants.CHARGE_PER_SAND_LAYER;
+			submodule.setChargeDebt((int) (debt - changeLeft));
 
-			int changeLeft = getSandCost(data);
-			for (ItemStack stack : allPouches)
+			for (ItemStack stack : getSandPouches(player))
 			{
-				int startingCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-				int amountLeft = (startingCharge - changeLeft);
-				if (amountLeft >= 0)
-				{
-					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, amountLeft);
-				}
-				else
-				{
-					StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
-					changeLeft += amountLeft;
-				}
 				if (changeLeft <= 0)
 				{
 					break;
 				}
+				SandPouchItem pouch = (SandPouchItem) stack.getItem();
+				int taken = (int) Math.min(pouch.getCharge(stack), changeLeft);
+				pouch.setCharge(stack, pouch.getCharge(stack) - taken);
+				changeLeft -= taken;
 			}
 		}
+	}
+
+	// charge to take from the pouches this tick: the cost plus any debt, rounded down to whole layers
+	private long chargeOwedNow(ISpiritweb data)
+	{
+		long debt = SandmasterySpiritwebSubmodule.get(data).getChargeDebt() + (long) getSandCost(data);
+		return debt - debt % SandmasteryConstants.CHARGE_PER_SAND_LAYER;
 	}
 
 	protected List<ItemStack> getSandPouches(Player player)
@@ -181,7 +183,8 @@ public class SandmasteryManifestation extends Manifestation
 		{
 			preModifiedCost = 1000000000; // If the cost is less than 0, I am over the void. Cost should be high enough cost that you can't reasonably use the power
 		}
-		return preModifiedCost * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get();
+		// the void cost times the multiplier would overflow an int, so cap it
+		return (int) Math.min((long) preModifiedCost * SandmasteryConfigs.SERVER.CHARGE_COST_MULTIPLIER.get(), Integer.MAX_VALUE);
 	}
 
 	public int getHydrationCost(ISpiritweb data)

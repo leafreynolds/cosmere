@@ -51,6 +51,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private int launchCooldown = 0;
 	private int launchesSinceLeftGround = 0;
 	private int numRibbonsInUse = 0;
+	// charge spent but not yet a whole layer, not saved so a relog forgives under one layer
+	private int chargeDebt = 0;
 
 	private int hotkeyFlags = 0;
 
@@ -228,6 +230,16 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	public List<Holder<Attribute>> getPowers()
 	{
 		return List.of(SandmasteryAttributes.RIBBONS.getHolder());
+	}
+
+	public int getChargeDebt()
+	{
+		return chargeDebt;
+	}
+
+	public void setChargeDebt(int chargeDebt)
+	{
+		this.chargeDebt = chargeDebt;
 	}
 
 	public int getHydrationLevel()
