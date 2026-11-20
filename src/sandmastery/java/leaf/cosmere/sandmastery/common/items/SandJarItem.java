@@ -100,7 +100,7 @@ public class SandJarItem extends ChargeableItemBase
 		boolean wasCharged = StackNBTHelper.getInt(usedItem, Constants.NBT.CHARGE_LEVEL, 0) > 0;
 		if (pPlayer.isCrouching())
 		{
-			pPlayer.setItemInHand(pUsedHand, new ItemStack(SandmasteryItems.JAR_ITEM));
+			pPlayer.setItemInHand(pUsedHand, ItemStack.EMPTY);
 			BlockPos pos2 = pos.offset(dir.getNormal());
 			pLevel.setBlockAndUpdate(pos2,
 					SandmasteryBlocks.SAND_JAR_BLOCK.getBlock()
