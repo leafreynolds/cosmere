@@ -1,7 +1,6 @@
 package leaf.cosmere.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import leaf.cosmere.common.compat.dynamickeybinds.DynamicKeybindsCompat;
 import leaf.cosmere.common.compat.dynamickeybinds.PowerKeybinds;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -40,7 +39,7 @@ public final class PowerKeyMappings
 	public static @Nullable KeyMapping get(KeyMapping keyMapping)
 	{
 		String id = DYNAMIC.get(keyMapping);
-		return id == null ? keyMapping : DynamicKeybindsCompat.clientGet(id);
+		return id == null ? keyMapping : DynamicKeybindsClientCompat.get(id);
 	}
 
 	public static boolean isDown(KeyMapping keyMapping)

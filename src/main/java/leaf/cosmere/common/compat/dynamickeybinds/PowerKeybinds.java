@@ -17,6 +17,15 @@ public final class PowerKeybinds
 
 	public record Def(String name, int defaultKey, String category, Predicate<ISpiritweb> unlocked)
 	{
+		public Def
+		{
+			// id() relies on this; fail at registration rather than producing a mangled id later
+			if (!name.startsWith("key."))
+			{
+				throw new IllegalArgumentException("Power keybind name must start with \"key.\": " + name);
+			}
+		}
+
 		/** DynamicKeybinds names its mappings "key." + id, so this keeps our existing lang keys. */
 		public String id()
 		{
@@ -26,7 +35,7 @@ public final class PowerKeybinds
 
 	public static final List<Def> DEFS = new ArrayList<>();
 
-	// keyed by player object, which is recreated on login/respawn, so each key is re-checked once per session
+	// keyed by player object, which is recreated on login/respawn, so each key is re-checked once per session.
 	private static final Map<ServerPlayer, Set<String>> GRANTED = new WeakHashMap<>();
 
 	private PowerKeybinds()
@@ -40,7 +49,6 @@ public final class PowerKeybinds
 		return def;
 	}
 
-	/** Gives this player the key now. No-op if DynamicKeybinds is absent or the key was already granted. */
 	public static void grant(ServerPlayer player, Def def)
 	{
 		if (!ENABLED || !GRANTED.computeIfAbsent(player, p -> new HashSet<>()).add(def.id()))
