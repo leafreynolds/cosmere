@@ -14,6 +14,7 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -40,7 +41,7 @@ public class AllomancyZinc extends AllomancyManifestation
 		{
 			if (isActiveTick(data))
 			{
-				boolean isSingleTarget = AllomancyKeybindings.ALLOMANCY_RIOT.isDown() || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation().equals(getManifestation()));
+				boolean isSingleTarget = PowerKeyMappings.isDown(AllomancyKeybindings.ALLOMANCY_RIOT) || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown() && data.getSelectedManifestation().equals(getManifestation()));
 				int singleTargetEntityId = 0;
 
 				if (isSingleTarget)

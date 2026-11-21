@@ -80,8 +80,8 @@ public class Constants
 
 	public static class Strings
 	{
-		public static final String KEYS_CATEGORY = "keys.cosmere.main";
-		public static final String KEYS_ACTIVATE_CATEGORY = "keys.cosmere.activators";
+		public static final String KEYS_CATEGORY = "category.keys.cosmere.main";
+		public static final String KEYS_ACTIVATE_CATEGORY = "category.keys.cosmere.activators";
 
 		//keybind builder
 		public static final String KEY_ALLOMANCY = "key.cosmere.allomancy.";
@@ -107,6 +107,7 @@ public class Constants
 		public static final String KEY_ALLOMANCY_SOOTHE = "key.cosmere.allomancy.soothe";
 		public static final String KEY_ALLOMANCY_RIOT = "key.cosmere.allomancy.riot";
 
+		public static final String KEYS_SURGEBINDING_CATEGORY = "category.keys.surgebinding.main";
 		public static final String KEY_SHARDBLADE = "key.cosmere.stormlight.shardblade";
 		public static final String KEY_REQUEST_STORMLIGHT = "key.cosmere.stormlight.request_stormlight";
 		public static final String KEY_DISPATCH_STORMLIGHT = "key.cosmere.stormlight.dispatch_stormlight";

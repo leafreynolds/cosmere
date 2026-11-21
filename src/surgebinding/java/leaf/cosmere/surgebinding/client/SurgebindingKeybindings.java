@@ -5,11 +5,12 @@
 package leaf.cosmere.surgebinding.client;
 
 import leaf.cosmere.api.Activator;
-import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.manifestation.SurgebindingManifestation;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,12 +18,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static leaf.cosmere.api.Constants.Strings.*;
+import static leaf.cosmere.api.Constants.Strings.KEY_SHARDBLADE;
+import static leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations.KEYS_SURGEBINDING_CATEGORY;
 import static leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations.SURGEBINDING_POWERS;
 
 // Really only has its own file to more nicely reference keybindings.
@@ -34,31 +34,25 @@ public class SurgebindingKeybindings
 	public static KeyMapping REQUEST_STORMLIGHT;
 	public static KeyMapping DISPATCH_STORMLIGHT;
 
-	public static final Map<Roshar.Surges, KeyMapping> SURGEBINDING_POWER =
-			Arrays.stream(EnumUtils.SURGES)
-					.collect(Collectors.toMap(
-							Function.identity(),
-							surge ->
-									new KeyMapping(KEY_STORMLIGHT + surge.getName(), GLFW.GLFW_KEY_UNKNOWN, KEYS_ACTIVATE_CATEGORY)
-					));
+	public static final Map<Roshar.Surges, KeyMapping> SURGEBINDING_POWER = new HashMap<>();
 
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
-		for (Roshar.Surges surge : SURGEBINDING_POWER.keySet())
+		SurgebindingManifestations.KEY_ACTIVATORS.forEach((surge, def) ->
 		{
-			KeyMapping key = SURGEBINDING_POWER.get(surge);
+			KeyMapping key = PowerKeyMappings.register(event, def);
+			SURGEBINDING_POWER.put(surge, key);
 			SurgebindingManifestation manifest = (SurgebindingManifestation) SURGEBINDING_POWERS.get(surge).getManifestation();
-			event.register(key);
 			Activator entry = new Activator(key, manifest);
-			entry.setCategory("keys.surgebinding.main");
+			entry.setCategory(KEYS_SURGEBINDING_CATEGORY);
 			Keybindings.activators.add(entry);
-		}
+		});
 
-		event.register(SHARDBLADE = new KeyMapping(KEY_SHARDBLADE, GLFW.GLFW_KEY_X, "keys.surgebinding.main"));
-		event.register(REQUEST_STORMLIGHT = new KeyMapping(KEY_REQUEST_STORMLIGHT, GLFW.GLFW_KEY_Z, "keys.surgebinding.main"));
-		event.register(DISPATCH_STORMLIGHT = new KeyMapping(KEY_DISPATCH_STORMLIGHT, GLFW.GLFW_KEY_Y, "keys.surgebinding.main"));
-
+		// shardblade summoning isn't tied to a manifestation, so it stays a normal keybind
+		event.register(SHARDBLADE = new KeyMapping(KEY_SHARDBLADE, GLFW.GLFW_KEY_X, KEYS_SURGEBINDING_CATEGORY));
+		REQUEST_STORMLIGHT = PowerKeyMappings.register(event, SurgebindingManifestations.KEY_REQUEST_STORMLIGHT_DEF);
+		DISPATCH_STORMLIGHT = PowerKeyMappings.register(event, SurgebindingManifestations.KEY_DISPATCH_STORMLIGHT_DEF);
 	}
 
 }

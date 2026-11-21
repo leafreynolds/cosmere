@@ -4,6 +4,7 @@
 
 package leaf.cosmere.surgebinding.client;
 
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.network.packets.DispatchStormlight;
@@ -51,7 +52,12 @@ public class SurgebindingForgeClientEvents
 
 	private static boolean isKeyPressed(InputEvent.Key event, KeyMapping keyBinding)
 	{
-		return event.getKey() == keyBinding.getKey().getValue() && keyBinding.consumeClick();
+		KeyMapping key = PowerKeyMappings.get(keyBinding);
+		if (key == null)
+		{
+			return false;
+		}
+		return event.getKey() == key.getKey().getValue() && key.consumeClick();
 	}
 
 }

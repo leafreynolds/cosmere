@@ -6,24 +6,21 @@ package leaf.cosmere.allomancy.client;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
+import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.Activator;
-import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.PowerKeyMappings;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import org.lwjgl.glfw.GLFW;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static leaf.cosmere.allomancy.common.registries.AllomancyManifestations.ALLOMANCY_POWERS;
-import static leaf.cosmere.api.Constants.Strings.*;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = Allomancy.MODID)
 public class AllomancyKeybindings
@@ -33,35 +30,25 @@ public class AllomancyKeybindings
 	public static KeyMapping ALLOMANCY_SOOTHE;
 	public static KeyMapping ALLOMANCY_RIOT;
 
-	
-	public static final Map<Metals.MetalType,KeyMapping> ALLOMANCY_POWER =
-			Arrays.stream(EnumUtils.METAL_TYPES)
-				.filter(Metals.MetalType::hasAssociatedManifestation)
-					.collect(Collectors.toMap(
-						Function.identity(),
-						metalType ->
-							new KeyMapping(KEY_ALLOMANCY + metalType.getName(),GLFW.GLFW_KEY_UNKNOWN,KEYS_ACTIVATE_CATEGORY)
-					));
+	public static final Map<Metals.MetalType, KeyMapping> ALLOMANCY_POWER = new HashMap<>();
 
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
-		event.register(ALLOMANCY_STEEL_PUSH = new KeyMapping(KEY_ALLOMANCY_STEEL_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY));
-		event.register(ALLOMANCY_IRON_PULL = new KeyMapping(KEY_ALLOMANCY_IRON_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY));
-		event.register(ALLOMANCY_SOOTHE = new KeyMapping(KEY_ALLOMANCY_SOOTHE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-		event.register(ALLOMANCY_RIOT = new KeyMapping(KEY_ALLOMANCY_RIOT, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+		ALLOMANCY_STEEL_PUSH = PowerKeyMappings.register(event, AllomancyManifestations.KEY_STEEL_PUSH);
+		ALLOMANCY_IRON_PULL = PowerKeyMappings.register(event, AllomancyManifestations.KEY_IRON_PULL);
+		ALLOMANCY_SOOTHE = PowerKeyMappings.register(event, AllomancyManifestations.KEY_SOOTHE);
+		ALLOMANCY_RIOT = PowerKeyMappings.register(event, AllomancyManifestations.KEY_RIOT);
 
-	
-
-		for (Metals.MetalType metalType: ALLOMANCY_POWER.keySet())
+		AllomancyManifestations.KEY_ACTIVATORS.forEach((metalType, def) ->
 		{
-			KeyMapping key = ALLOMANCY_POWER.get(metalType);
+			KeyMapping key = PowerKeyMappings.register(event, def);
+			ALLOMANCY_POWER.put(metalType, key);
 			AllomancyManifestation manifest = ALLOMANCY_POWERS.get(metalType).getManifestation();
-			event.register(key);
 			Activator entry = new Activator(key, manifest);
 			entry.setCategory("allomancy");
 			Keybindings.activators.add(entry);
-		}
+		});
 	}
 
 }
