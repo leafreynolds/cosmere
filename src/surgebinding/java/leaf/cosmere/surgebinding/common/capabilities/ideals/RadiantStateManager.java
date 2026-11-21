@@ -1,5 +1,5 @@
 /*
- * File updated ~ 19 - 1 - 2026 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.capabilities.ideals;
@@ -8,6 +8,7 @@ import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Roshar;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
@@ -16,6 +17,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.ideals.order.*;
 import leaf.cosmere.surgebinding.common.config.SurgebindingConfigs;
 import leaf.cosmere.surgebinding.common.config.SurgebindingServerConfig;
+import leaf.cosmere.surgebinding.common.items.IRadiantShardItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.nbt.CompoundTag;
@@ -26,12 +28,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.ServerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class RadiantStateManager
 {
-	private static ResourceLocation SWEAR_IDEAL = new ResourceLocation(Surgebinding.MODID, "swear_ideal");
+	private static ResourceLocation SWEAR_IDEAL = ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, "swear_ideal");
 
 	private SpiritwebCapability spiritweb;
 	private Roshar.RadiantOrder order = null;
@@ -260,19 +262,21 @@ public class RadiantStateManager
 				if (ideal == 3)
 				{
 					blade = new ItemStack(SurgebindingItems.SHARDBLADE.asItem());
-					CompoundTag tag = blade.getOrCreateTag();
-					tag.putUUID(Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
-					tag.putBoolean("isLiving", true);
-					tag.putInt("order", order.getID());
+					StackNBTHelper.setUuid(blade, Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
+					if (blade.getItem() instanceof IRadiantShardItem shardItem)
+					{
+						shardItem.buildData(blade, order, true);
+					}
 					bladeInventory = spiritweb.getLiving();
 				}
 				if (ideal == 4)
 				{
 					plate = new ItemStack(SurgebindingItems.SHARDPLATE.asItem());
-					CompoundTag tag = plate.getOrCreateTag();
-					tag.putUUID(Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
-					tag.putBoolean("isLiving", true);
-					tag.putInt("order", order.getID());
+					StackNBTHelper.setUuid(plate, Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
+					if (plate.getItem() instanceof IRadiantShardItem shardItem)
+					{
+						shardItem.buildData(plate, order, true);
+					}
 					plateInventory = spiritweb.getLiving();
 				}
 				//player.playSound(SoundEvents.LIGHTNING_BOLT_THUNDER, 1000, 0.8F + player.getRandom().nextFloat() * 0.2F);
@@ -322,19 +326,21 @@ public class RadiantStateManager
 		if (ideal >= 3 && blade == null)
 		{
 			blade = new ItemStack(SurgebindingItems.SHARDBLADE.asItem());
-			CompoundTag tag = blade.getOrCreateTag();
-			tag.putUUID(Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
-			tag.putBoolean("isLiving", true);
-			tag.putInt("order", order.getID());
+			StackNBTHelper.setUuid(blade, Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
+			if (blade.getItem() instanceof IRadiantShardItem shardItem)
+			{
+				shardItem.buildData(blade, order, true);
+			}
 			bladeInventory = spiritweb.getLiving();
 		}
 		if (ideal >= 4 && plate == null)
 		{
 			plate = new ItemStack(SurgebindingItems.SHARDPLATE.asItem());
-			CompoundTag tag = plate.getOrCreateTag();
-			tag.putUUID(Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
-			tag.putBoolean("isLiving", true);
-			tag.putInt("order", order.getID());
+			StackNBTHelper.setUuid(plate, Constants.NBT.ATTUNED_PLAYER, spiritweb.getLiving().getUUID());
+			if (plate.getItem() instanceof IRadiantShardItem shardItem)
+			{
+				shardItem.buildData(plate, order, true);
+			}
 			plateInventory = spiritweb.getLiving();
 		}
 	}

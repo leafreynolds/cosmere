@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventory GUI Maker</title>
+<style>
+	:root {
+		--bg: #f4f4f2; --panel: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --line: #dcdcd6;
+		--accent: #3b6fd8; --accent-text: #fff; --accent-soft: #e4ecfb; --error-bg: #fdecea; --error: #a3261b; --warn-bg: #fff4dc; --warn: #7a5300;
+		--code-bg: #f0f0ec; --check-a: #e6e6e6; --check-b: #f8f8f8;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--bg: #17181a; --panel: #212226; --text: #e8e8e4; --muted: #9a9a94; --line: #34353a;
+			--accent: #6a96ee; --accent-text: #0d1420; --accent-soft: #24304a; --error-bg: #3a1c1a; --error: #f2a49b; --warn-bg: #3a2e14; --warn: #f0cf86;
+			--code-bg: #18191c; --check-a: #2a2b2f; --check-b: #323338;
+		}
+	}
+	* { box-sizing: border-box; }
+	body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+	header { padding: 18px 24px 4px; display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+	h1 { font-size: 18px; margin: 0; }
+	header p { margin: 4px 0 0; color: var(--muted); }
+	main { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 20px; padding: 16px 24px 24px; align-items: start; }
+	@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 16px; } header { padding: 16px 16px 0; } }
+	.col { display: grid; gap: 16px; min-width: 0; }
+	.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; }
+	.card h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; }
+	.field { display: grid; grid-template-columns: 1fr 130px; align-items: center; gap: 8px; margin-bottom: 10px; }
+	.field label { font-weight: 500; }
+	.field small { grid-column: 1 / -1; color: var(--muted); margin-top: -6px; }
+	input[type=number], input[type=text], select {
+		width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px;
+		background: var(--bg); color: var(--text); font: inherit;
+	}
+	input[type=file] { font: inherit; font-size: 12px; max-width: 100%; }
+	.check { display: flex; gap: 8px; align-items: center; margin: 4px 0 10px; }
+	button, .btn {
+		font: inherit; font-weight: 600; padding: 6px 12px; border-radius: 6px; cursor: pointer;
+		border: 1px solid var(--line); background: var(--bg); color: var(--text); display: inline-block;
+	}
+	button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+	button:disabled { opacity: .5; cursor: not-allowed; }
+	.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+	.error { background: var(--error-bg); color: var(--error); border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; display: none; }
+	.error.show { display: block; }
+	.warn { background: var(--warn-bg); color: var(--warn); }
+	.muted { color: var(--muted); }
+	.hint { color: var(--muted); margin: 0; font-size: 13px; }
+	.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+	.seg button { border: 0; border-radius: 0; background: transparent; font-weight: 500; }
+	.seg button + button { border-left: 1px solid var(--line); }
+	.seg button.on { background: var(--accent); color: var(--accent-text); }
+	.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px 16px; flex-wrap: wrap; margin-bottom: 12px; }
+	.toolbar select { width: auto; }
+	.toolbar .check { margin: 0; }
+	.stage {
+		overflow: auto; border-radius: 6px; padding: 16px; max-height: 75vh;
+		background: repeating-conic-gradient(var(--check-a) 0 25%, var(--check-b) 0 50%) 0 0 / 16px 16px;
+	}
+	.stage-inner { position: relative; display: inline-block; }
+	canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+	canvas.add { cursor: crosshair; }
+	#tip {
+		position: absolute; pointer-events: none; background: #111; color: #fff; font: 12px/1.3 ui-monospace, Consolas, monospace;
+		padding: 5px 7px; border-radius: 4px; white-space: nowrap; display: none; z-index: 2;
+	}
+	.list { display: grid; gap: 4px; margin: 10px 0; max-height: 260px; overflow: auto; }
+	.item {
+		display: grid; gap: 4px; align-items: center; padding: 3px; border-radius: 6px; border: 1px solid transparent;
+	}
+	.item.slot { grid-template-columns: 32px 50px 50px 1fr 1fr auto; }
+	.item.widget { grid-template-columns: 1fr 46px 46px 78px auto; }
+	.item.sel { background: var(--accent-soft); border-color: var(--accent); }
+	.item input, .item select { padding: 3px 4px; font-size: 13px; }
+	.item .idx { font: 12px ui-monospace, Consolas, monospace; color: var(--muted); text-align: right; padding-right: 2px; cursor: pointer; }
+	.item button { padding: 2px 7px; font-weight: 500; }
+	.sprite-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+	.sprite-row canvas { background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; }
+	.sprite-row span { flex: 1; font: 13px ui-monospace, Consolas, monospace; }
+	.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin-bottom: 10px; flex-wrap: wrap; }
+	.tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; font-weight: 500; color: var(--muted); }
+	.tabs button.on { color: var(--text); border-bottom-color: var(--accent); }
+	.file-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 6px; }
+	.file-head code { font-size: 12px; color: var(--muted); word-break: break-all; }
+	pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin: 0; overflow: auto; max-height: 520px; font: 12.5px/1.5 ui-monospace, Consolas, monospace; tab-size: 4; }
+	kbd { font: 11px ui-monospace, Consolas, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; }
+	.range { display: flex; align-items: center; gap: 6px; }
+	.range input { width: 110px; }
+</style>
+</head>
+<body>
+<header>
+	<div>
+		<h1>Inventory GUI Maker</h1>
+		<p>Vanilla-style container textures with slot grids, machine slots, progress widgets, player inventory and hotbar.</p>
+	</div>
+	<div class="row">
+		<button id="saveLayout" title="Layout JSON, also usable with cli.mjs --config">Save layout</button>
+		<label class="btn" title="Load a layout JSON saved here or by cli.mjs --save-config">Load layout<input id="loadLayout" type="file" accept=".json,application/json" hidden></label>
+	</div>
+</header>
+<main>
+	<div class="col">
+		<section class="card">
+			<h2>Grid</h2>
+			<div class="field"><label for="slots">Slots</label><input id="slots" type="number" min="0" max="200" value="27"></div>
+			<div class="field"><label for="cols">Columns</label><input id="cols" type="number" min="1" max="14" placeholder="auto"></div>
+			<div class="field"><label for="gridAlign">Grid position</label>
+				<select id="gridAlign"><option value="center">Centered</option><option value="left">Left</option></select></div>
+			<div class="field"><label for="align">Last row</label>
+				<select id="align"><option value="left">Left</option><option value="center">Centered</option></select></div>
+			<label class="check"><input id="playerInv" type="checkbox" checked> Player inventory &amp; hotbar</label>
+		</section>
+
+		<section class="card">
+			<h2>Size</h2>
+			<div class="field"><label for="width">Width</label><input id="width" type="number" min="1" placeholder="auto"></div>
+			<div class="field"><label for="height">Height</label><input id="height" type="number" min="1" placeholder="auto">
+				<small>Extra height goes above the player inventory, giving placed items room.</small></div>
+			<div class="field"><label for="canvas">Canvas</label>
+				<select id="canvas"><option>256</option><option>512</option><option>1024</option></select>
+				<small>256 is what <code>blit</code> assumes; larger sizes export the matching blit call. Filled widget sprites are packed into the free space.</small></div>
+		</section>
+
+		<section class="card">
+			<h2>Placed slots</h2>
+			<p class="hint">Choose a tool above the preview and click to place. Drag to move;
+				<kbd>←↑→↓</kbd> nudge (<kbd>Shift</kbd> = snap step), <kbd>Del</kbd> removes, <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes.
+				Indexes continue after the grid.</p>
+			<div id="placed" class="list"></div>
+			<div class="row">
+				<button id="convertGrid" title="Turn the grid into individually placed slots and set grid slots to 0">Grid → placed</button>
+				<button id="clearPlaced">Clear</button>
+			</div>
+		</section>
+
+		<section class="card">
+			<h2>Progress widgets</h2>
+			<p class="hint">Arrows, flames or your own sprites. The empty version is drawn on the panel; the filled one goes to free canvas space, and the exported Screen reveals it by progress.</p>
+			<div id="widgets" class="list"></div>
+		</section>
+
+		<section class="card">
+			<h2>Custom sprites</h2>
+			<p class="hint">Filled PNG required; the empty version defaults to a grey silhouette. Removing a sprite removes its widgets.</p>
+			<div id="sprites"></div>
+			<div class="field" style="margin-top:10px"><label for="spriteName">Name</label><input id="spriteName" type="text" placeholder="e.g. bubbles"></div>
+			<div class="field"><label for="spriteFilled">Filled</label><input id="spriteFilled" type="file" accept="image/png"></div>
+			<div class="field"><label for="spriteEmpty">Empty <span class="muted">(optional)</span></label><input id="spriteEmpty" type="file" accept="image/png"></div>
+			<div id="spriteError" class="error"></div>
+			<button id="addSprite">Add sprite</button>
+		</section>
+
+		<section class="card">
+			<h2>Export</h2>
+			<div class="field"><label for="name">Name</label><input id="name" type="text" value="Crusher"></div>
+			<div class="field"><label for="module">Module</label><input id="module" type="text" value="sandmastery"></div>
+			<div class="field"><label for="modClass">Mod class</label><input id="modClass" type="text" placeholder="auto"></div>
+			<p class="hint" style="margin-bottom:10px">Texture goes to <code id="texPath"></code></p>
+			<button id="download" class="primary" style="width:100%">Download PNG</button>
+		</section>
+	</div>
+
+	<div class="col">
+		<section class="card">
+			<div id="error" class="error"></div>
+			<div id="warn" class="error warn"></div>
+			<div class="toolbar">
+				<div class="row">
+					<div class="seg" id="tools"></div>
+					<label class="row muted">Snap <select id="snap"><option value="1">1px</option><option value="2">2px</option><option value="9">9px</option><option value="18">18px</option></select></label>
+				</div>
+				<div class="row">
+					<label class="range muted" title="Preview only">Fill <input id="fill" type="range" min="0" max="100" value="60"></label>
+					<label class="check"><input id="labels" type="checkbox" checked> Labels</label>
+					<label class="check"><input id="indexes" type="checkbox"> Indexes</label>
+					<label class="check"><input id="fullCanvas" type="checkbox"> Full canvas</label>
+					<select id="zoom" aria-label="Zoom"><option value="1">1×</option><option value="2">2×</option><option value="3" selected>3×</option><option value="4">4×</option><option value="5">5×</option></select>
+				</div>
+			</div>
+			<div class="stage"><div class="stage-inner"><canvas id="view" tabindex="0"></canvas><div id="tip"></div></div></div>
+			<p id="stats" class="muted" style="margin:10px 0 0"></p>
+		</section>
+
+		<section class="card">
+			<div class="tabs" id="tabs"></div>
+			<div id="files"></div>
+		</section>
+	</div>
+</main>
+
+<script src="core.js"></script>
+<script src="exporters.js"></script>
+<script>
+(() =>
+{
+	const { layout, render, SIZES, DIRECTIONS, BUILTIN_SPRITES, placementBounds, resolveSprite } = window.InventoryGui;
+	const { EXPORTERS, context } = window.InventoryGuiExporters;
+	const $ = id => document.getElementById(id);
+	const STORE = 'inventory-gui-maker';
+	const LAYOUT_FIELDS = ['slots', 'cols', 'width', 'height', 'gridAlign', 'align', 'playerInv', 'canvas'];
+	const NAME_FIELDS = ['name', 'module', 'modClass'];
+	const VIEW_FIELDS = ['labels', 'indexes', 'fullCanvas', 'zoom', 'snap', 'fill'];
+	const view = $('view'), ctx = view.getContext('2d'), tip = $('tip');
+
+	const state = {
+		custom: [],       // placed slots { x, y, size, role }
+		widgets: [],      // { sprite, x, y, dir?, name? }
+		sprites: {},      // custom sprite sources { name: { filled: dataURL, empty?: dataURL } }
+		decoded: {},      // custom sprites as core expects { name: { w, h, filled, empty? } }
+		sel: null,        // { type: 'slot' | 'widget', i }
+		tool: 'move',     // 'move' | 'slot:normal' | 'slot:large' | 'widget:<sprite>'
+		sprite: 'arrow',  // sprite the Add sprite tool places
+		tab: 'screen',
+		history: [],
+	};
+	let current = null;   // { opts, lay, pixels }
+	let drag = null;
+
+	// ---------- persistence ----------
+	const fieldValue = id => $(id).type === 'checkbox' ? $(id).checked : $(id).value;
+	const setField = (id, v) => { if ($(id).type === 'checkbox') $(id).checked = !!v; else $(id).value = v ?? ''; };
+
+	function save()
+	{
+		try
+		{
+			const s = { custom: state.custom, widgets: state.widgets, sprites: state.sprites, tab: state.tab };
+			for (const id of [...LAYOUT_FIELDS, ...NAME_FIELDS, ...VIEW_FIELDS]) s[id] = fieldValue(id);
+			localStorage.setItem(STORE, JSON.stringify(s));
+		}
+		catch (e) { /* storage unavailable or full */ }
+	}
+
+	async function load()
+	{
+		let s = {};
+		try { s = JSON.parse(localStorage.getItem(STORE) || '{}'); }
+		catch (e) { /* storage unavailable */ }
+		for (const id of [...LAYOUT_FIELDS, ...NAME_FIELDS, ...VIEW_FIELDS]) if (id in s) setField(id, s[id]);
+		if (Array.isArray(s.custom)) state.custom = s.custom;
+		if (Array.isArray(s.widgets)) state.widgets = s.widgets;
+		if (s.tab) state.tab = s.tab;
+		await setSprites(s.sprites || {});
+	}
+
+	// Same schema as cli.mjs --save-config / --config.
+	function layoutConfig()
+	{
+		const n = id => $(id).value.trim() === '' ? null : parseInt($(id).value, 10);
+		return {
+			version: 1,
+			slots: n('slots') ?? 0, cols: n('cols'), width: n('width'), height: n('height'),
+			align: $('align').value, gridAlign: $('gridAlign').value, playerInv: $('playerInv').checked,
+			canvas: parseInt($('canvas').value, 10),
+			custom: state.custom, widgets: state.widgets, sprites: state.sprites,
+			names: { name: $('name').value, module: $('module').value, modClass: $('modClass').value.trim() || null },
+		};
+	}
+
+	async function applyConfig(cfg)
+	{
+		snapshot();
+		for (const id of LAYOUT_FIELDS) setField(id, cfg[id] ?? (id === 'slots' ? 0 : id === 'canvas' ? 256 : id === 'playerInv' ? true : id === 'align' ? 'left' : id === 'gridAlign' ? 'center' : ''));
+		const names = cfg.names || {};
+		for (const id of NAME_FIELDS) if (names[id] != null) setField(id, names[id]);
+		state.custom = cfg.custom || [];
+		state.widgets = cfg.widgets || [];
+		state.sel = null;
+		await setSprites(cfg.sprites || {});
+		update();
+	}
+
+	function snapshot()
+	{
+		state.history.push(JSON.stringify({ custom: state.custom, widgets: state.widgets, slots: $('slots').value }));
+		if (state.history.length > 100) state.history.shift();
+	}
+
+	function undo()
+	{
+		const prev = state.history.pop();
+		if (!prev) return;
+		const s = JSON.parse(prev);
+		state.custom = s.custom;
+		state.widgets = s.widgets;
+		$('slots').value = s.slots;
+		state.sel = null;
+		update();
+	}
+
+	// ---------- sprites ----------
+	function decodeImage(url)
+	{
+		return new Promise((resolve, reject) =>
+		{
+			const img = new Image();
+			img.onload = () =>
+			{
+				const c = document.createElement('canvas');
+				c.width = img.width; c.height = img.height;
+				const g = c.getContext('2d');
+				g.drawImage(img, 0, 0);
+				resolve({ w: img.width, h: img.height, data: g.getImageData(0, 0, img.width, img.height).data });
+			};
+			img.onerror = () => reject(new Error('not a readable image'));
+			img.src = url;
+		});
+	}
+
+	async function setSprites(sources)
+	{
+		state.sprites = {};
+		state.decoded = {};
+		for (const [name, src] of Object.entries(sources))
+		{
+			try
+			{
+				const filled = await decodeImage(src.filled);
+				const sprite = { w: filled.w, h: filled.h, filled: new Uint8ClampedArray(filled.data) };
+				if (src.empty)
+				{
+					const empty = await decodeImage(src.empty);
+					if (empty.w === filled.w && empty.h === filled.h) sprite.empty = new Uint8ClampedArray(empty.data);
+				}
+				state.sprites[name] = src;
+				state.decoded[name] = sprite;
+			}
+			catch (e) { /* drop unreadable sprite */ }
+		}
+		renderTools();
+		renderSprites();
+	}
+
+	const readFile = file => new Promise((resolve, reject) =>
+	{
+		const r = new FileReader();
+		r.onload = () => resolve(r.result);
+		r.onerror = () => reject(r.error);
+		r.readAsDataURL(file);
+	});
+
+	$('addSprite').addEventListener('click', async () =>
+	{
+		const err = $('spriteError');
+		err.classList.remove('show');
+		const name = $('spriteName').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+		const show = msg => { err.textContent = msg; err.classList.add('show'); };
+		if (!name) return show('Give the sprite a name.');
+		if (BUILTIN_SPRITES[name]) return show(`"${name}" is a built-in sprite name.`);
+		const f = $('spriteFilled').files[0];
+		if (!f) return show('Choose a filled PNG.');
+		try
+		{
+			const filled = await readFile(f);
+			const emptyFile = $('spriteEmpty').files[0];
+			const empty = emptyFile ? await readFile(emptyFile) : undefined;
+			const a = await decodeImage(filled);
+			if (empty)
+			{
+				const b = await decodeImage(empty);
+				if (a.w !== b.w || a.h !== b.h) return show(`Empty image must match the filled size ${a.w}×${a.h}.`);
+			}
+			await setSprites({ ...state.sprites, [name]: empty ? { filled, empty } : { filled } });
+			$('spriteName').value = '';
+			$('spriteFilled').value = '';
+			$('spriteEmpty').value = '';
+			update();
+		}
+		catch (e) { show(`Couldn't read the image: ${e.message}`); }
+	});
+
+	function renderSprites()
+	{
+		const host = $('sprites');
+		host.innerHTML = '';
+		const names = Object.keys(state.decoded);
+		if (!names.length) { host.innerHTML = '<p class="hint">None yet.</p>'; return; }
+		for (const name of names)
+		{
+			const s = state.decoded[name];
+			const row = document.createElement('div');
+			row.className = 'sprite-row';
+			const thumb = document.createElement('canvas');
+			const scale = Math.max(1, Math.floor(32 / Math.max(s.w, s.h)));
+			thumb.width = s.w * scale; thumb.height = s.h * scale;
+			const src = document.createElement('canvas');
+			src.width = s.w; src.height = s.h;
+			src.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(s.filled), s.w, s.h), 0, 0);
+			const g = thumb.getContext('2d');
+			g.imageSmoothingEnabled = false;
+			g.drawImage(src, 0, 0, thumb.width, thumb.height);
+			const label = document.createElement('span');
+			label.textContent = `${name}  ${s.w}×${s.h}${s.empty ? '' : ' · auto empty'}`;
+			const del = document.createElement('button');
+			del.textContent = '✕';
+			del.title = 'Remove sprite and its widgets';
+			del.addEventListener('click', async () =>
+			{
+				snapshot();
+				state.widgets = state.widgets.filter(w => w.sprite !== name);
+				const rest = { ...state.sprites };
+				delete rest[name];
+				if (state.tool === 'widget:' + name) state.tool = 'move';
+				state.sel = null;
+				await setSprites(rest);
+				update();
+			});
+			row.append(thumb, label, del);
+			host.appendChild(row);
+		}
+	}
+
+	// ---------- model ----------
+	const num = id => $(id).value.trim() === '' ? undefined : Math.max(0, parseInt($(id).value, 10) || 0);
+
+	function readOpts()
+	{
+		return {
+			slots: num('slots') ?? 0,
+			cols: num('cols'),
+			width: num('width'),
+			height: num('height'),
+			gridAlign: $('gridAlign').value,
+			align: $('align').value,
+			playerInv: $('playerInv').checked,
+			canvas: parseInt($('canvas').value, 10),
+			custom: state.custom,
+			widgets: state.widgets,
+			sprites: state.decoded,
+		};
+	}
+
+	const names = () => ({ name: $('name').value, module: $('module').value, modClass: $('modClass').value.trim() || undefined });
+
+	function update()
+	{
+		save();
+		const opts = readOpts();
+		let lay;
+		try { lay = layout(opts); }
+		catch (e)
+		{
+			$('error').textContent = e.message;
+			$('error').classList.add('show');
+			$('warn').classList.remove('show');
+			$('download').disabled = true;
+			renderLists();
+			return;
+		}
+		$('error').classList.remove('show');
+		const label = s => s.kind === 'widget' ? (s.constant || s.sprite) : `${s.kind === 'player' || s.kind === 'hotbar' ? 'inventory ' : ''}#${s.index}`;
+		$('warn').textContent = lay.overlaps.length
+			? 'Overlapping: ' + lay.overlaps.map(([a, b]) => `${label(a)} and ${label(b)}`).join(', ')
+			: '';
+		$('warn').classList.toggle('show', lay.overlaps.length > 0);
+		$('download').disabled = false;
+		$('width').placeholder = `auto (${lay.minW})`;
+		$('height').placeholder = `auto (${lay.minH})`;
+		$('cols').placeholder = `auto (${lay.cols})`;
+		current = { opts, lay, pixels: render(lay, opts.canvas, state.decoded) };
+		const extras = [state.custom.length && `${state.custom.length} placed`, lay.widgets.length && `${lay.widgets.length} widgets`].filter(Boolean).join(' + ');
+		$('stats').textContent = `Panel ${lay.width}×${lay.height} · ${opts.slots} grid slots (${lay.rows}×${lay.cols})${extras ? ' + ' + extras : ''} · ${opts.canvas}px canvas`;
+		renderLists();
+		renderExport();
+		draw();
+	}
+
+	// ---------- preview ----------
+	function draw()
+	{
+		if (!current) return;
+		const { opts, lay, pixels } = current;
+		const z = parseInt($('zoom').value, 10);
+		const full = $('fullCanvas').checked;
+		const w = full ? opts.canvas : lay.width, h = full ? opts.canvas : lay.height;
+		view.width = w * z;
+		view.height = h * z;
+		const src = document.createElement('canvas');
+		src.width = src.height = opts.canvas;
+		src.getContext('2d').putImageData(new ImageData(pixels, opts.canvas, opts.canvas), 0, 0);
+		ctx.imageSmoothingEnabled = false;
+		ctx.drawImage(src, 0, 0, w, h, 0, 0, w * z, h * z);
+
+		// Everything below is preview-only and never reaches the PNG.
+		const fill = parseInt($('fill').value, 10) / 100;
+		for (const wd of lay.progress)
+		{
+			const n = Math.round((wd.dir === 'right' || wd.dir === 'left' ? wd.w : wd.h) * fill);
+			if (!n) continue;
+			let sx = wd.u, sy = wd.v, sw = wd.w, sh = wd.h, dx = wd.x, dy = wd.y;
+			if (wd.dir === 'right') sw = n;
+			else if (wd.dir === 'left') { sx += wd.w - n; dx += wd.w - n; sw = n; }
+			else if (wd.dir === 'up') { sy += wd.h - n; dy += wd.h - n; sh = n; }
+			else sh = n;
+			ctx.drawImage(src, sx, sy, sw, sh, dx * z, dy * z, sw * z, sh * z);
+		}
+		if ($('labels').checked)
+		{
+			ctx.fillStyle = '#404040';
+			ctx.font = `${8 * z}px ui-monospace, Consolas, monospace`;
+			ctx.textBaseline = 'top';
+			ctx.fillText('Container', 8 * z, 6 * z);
+			if (lay.player) ctx.fillText('Inventory', (lay.player.left + 1) * z, (lay.player.invY - 11) * z);
+		}
+		if ($('indexes').checked)
+		{
+			ctx.font = `bold ${Math.max(9, 5 * z)}px ui-monospace, Consolas, monospace`;
+			ctx.textBaseline = 'middle';
+			ctx.textAlign = 'center';
+			for (const s of lay.slots)
+			{
+				const box = SIZES[s.size].box;
+				ctx.fillStyle = s.kind === 'container' || s.kind === 'custom' ? '#ffe680' : '#cfe3ff';
+				ctx.fillText(String(s.index), (s.x + box / 2) * z, (s.y + box / 2) * z);
+			}
+			ctx.textAlign = 'start';
+		}
+		for (const s of lay.slots)
+			if (s.role === 'output')
+			{
+				const box = SIZES[s.size].box;
+				ctx.fillStyle = 'rgba(255,170,0,.85)';
+				ctx.beginPath();
+				ctx.moveTo((s.x + box - 1) * z, (s.y + 1) * z);
+				ctx.lineTo((s.x + box - 1) * z, (s.y + 6) * z);
+				ctx.lineTo((s.x + box - 6) * z, (s.y + 1) * z);
+				ctx.fill();
+			}
+		ctx.strokeStyle = '#e0352b';
+		ctx.lineWidth = 2;
+		for (const pair of lay.overlaps)
+			for (const s of pair)
+			{
+				const d = rectOf(s);
+				ctx.strokeRect(s.x * z + 1, s.y * z + 1, d.w * z - 2, d.h * z - 2);
+			}
+		const sel = selectedItem(lay);
+		if (sel)
+		{
+			const d = rectOf(sel);
+			ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3b6fd8';
+			ctx.lineWidth = 2;
+			ctx.strokeRect(sel.x * z - 2, sel.y * z - 2, d.w * z + 4, d.h * z + 4);
+		}
+	}
+
+	const rectOf = s => s.kind === 'widget' ? { w: s.w, h: s.h } : { w: SIZES[s.size].box, h: SIZES[s.size].box };
+
+	function selectedItem(lay)
+	{
+		if (!state.sel) return null;
+		if (state.sel.type === 'widget') return lay.widgets[state.sel.i] || null;
+		return lay.slots.find(s => s.kind === 'custom' && s.customIndex === state.sel.i) || null;
+	}
+
+	function toPixel(e)
+	{
+		const z = parseInt($('zoom').value, 10);
+		const r = view.getBoundingClientRect();
+		return { x: (e.clientX - r.left) / z, y: (e.clientY - r.top) / z, rx: e.clientX - r.left, ry: e.clientY - r.top };
+	}
+
+	function hitTest(px, py)
+	{
+		if (!current) return null;
+		const inside = s => { const d = rectOf(s); return px >= s.x && px < s.x + d.w && py >= s.y && py < s.y + d.h; };
+		// Widgets and placed slots are editable and drawn last, so they win.
+		return current.lay.widgets.slice().reverse().find(inside)
+			|| current.lay.slots.slice().reverse().find(inside) || null;
+	}
+
+	function itemDims(item)
+	{
+		if (item.sprite) { const s = resolveSprite(item.sprite, state.decoded); return { w: s.w, h: s.h }; }
+		return { w: SIZES[item.size || 'normal'].box, h: SIZES[item.size || 'normal'].box };
+	}
+
+	function place(x, y, d)
+	{
+		const b = placementBounds(current.lay, d);
+		const step = parseInt($('snap').value, 10);
+		// Snap relative to the vanilla grid origin so 18px snapping lines up with grid columns.
+		const sx = step > 1 ? 7 + Math.round((x - 7) / step) * step : Math.round(x);
+		const sy = step > 1 ? 17 + Math.round((y - 17) / step) * step : Math.round(y);
+		return { x: Math.max(b.minX, Math.min(b.maxX, sx)), y: Math.max(b.minY, Math.min(b.maxY, sy)) };
+	}
+
+	const listFor = type => type === 'widget' ? state.widgets : state.custom;
+
+	view.addEventListener('mousedown', e =>
+	{
+		if (!current || e.button !== 0) return;
+		view.focus();
+		const p = toPixel(e);
+		const hit = hitTest(p.x, p.y);
+		const editable = hit && (hit.kind === 'widget' || hit.kind === 'custom');
+		if (editable)
+		{
+			snapshot();
+			state.sel = hit.kind === 'widget' ? { type: 'widget', i: hit.index } : { type: 'slot', i: hit.customIndex };
+			drag = { dx: p.x - hit.x, dy: p.y - hit.y, moved: false };
+			update();
+			return;
+		}
+		if (state.tool !== 'move' && !hit)
+		{
+			const [kind, arg] = state.tool.split(':');
+			const item = kind === 'slot'
+				? { size: arg, role: arg === 'large' ? 'output' : 'input' }
+				: { sprite: arg };
+			const d = itemDims(item);
+			snapshot();
+			Object.assign(item, place(p.x - d.w / 2, p.y - d.h / 2, d));
+			const list = listFor(kind === 'slot' ? 'slot' : 'widget');
+			list.push(item);
+			state.sel = { type: kind === 'slot' ? 'slot' : 'widget', i: list.length - 1 };
+			update();
+			return;
+		}
+		state.sel = null;
+		draw();
+		renderLists();
+	});
+
+	window.addEventListener('mousemove', e =>
+	{
+		if (!drag || !state.sel || !current) return;
+		const p = toPixel(e);
+		const item = listFor(state.sel.type)[state.sel.i];
+		const pos = place(p.x - drag.dx, p.y - drag.dy, itemDims(item));
+		if (pos.x !== item.x || pos.y !== item.y) { item.x = pos.x; item.y = pos.y; drag.moved = true; update(); }
+	});
+
+	window.addEventListener('mouseup', () =>
+	{
+		if (drag && !drag.moved) state.history.pop(); // a click without movement isn't an undo step
+		drag = null;
+	});
+
+	view.addEventListener('mousemove', e =>
+	{
+		const p = toPixel(e);
+		const s = hitTest(p.x, p.y);
+		const kind = { container: 'container', custom: 'placed', player: 'playerInv', hotbar: 'playerInv (hotbar)' };
+		if (s && s.kind === 'widget')
+			tip.textContent = s.mode === 'static'
+				? `${s.sprite} ${s.w}×${s.h} · static ${s.variant === 'filled' ? 'colour' : 'grey'} · at ${s.x},${s.y}`
+				: `widget ${s.constant} · ${s.sprite} ${s.w}×${s.h} fills ${s.dir} · at ${s.x},${s.y} · uv ${s.u},${s.v}`;
+		else if (s)
+		{
+			const inset = SIZES[s.size].inset;
+			tip.textContent = `${kind[s.kind]} #${s.index}${s.role === 'output' ? ' (output)' : ''} · box ${s.x},${s.y} · Slot(${s.x + inset}, ${s.y + inset})`;
+		}
+		else tip.textContent = `pixel ${Math.floor(p.x)}, ${Math.floor(p.y)}`;
+		tip.style.display = 'block';
+		tip.style.left = (p.rx + 14) + 'px';
+		tip.style.top = (p.ry + 14) + 'px';
+	});
+	view.addEventListener('mouseleave', () => tip.style.display = 'none');
+
+	document.addEventListener('keydown', e =>
+	{
+		const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement?.tagName);
+		if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !typing) { e.preventDefault(); undo(); return; }
+		if (typing || !state.sel || !current) return;
+		const item = listFor(state.sel.type)[state.sel.i];
+		if (!item) return;
+		const step = e.shiftKey ? parseInt($('snap').value, 10) : 1;
+		const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+		if (moves[e.key])
+		{
+			e.preventDefault();
+			snapshot();
+			const b = placementBounds(current.lay, itemDims(item));
+			item.x = Math.max(b.minX, Math.min(b.maxX, item.x + moves[e.key][0]));
+			item.y = Math.max(b.minY, Math.min(b.maxY, item.y + moves[e.key][1]));
+			update();
+		}
+		else if (e.key === 'Delete' || e.key === 'Backspace')
+		{
+			e.preventDefault();
+			removeItem(state.sel.type, state.sel.i);
+		}
+		else if (e.key === 'Escape')
+		{
+			state.sel = null;
+			update();
+		}
+	});
+
+	// ---------- side lists ----------
+	function removeItem(type, i)
+	{
+		snapshot();
+		listFor(type).splice(i, 1);
+		state.sel = null;
+		update();
+	}
+
+	function swap(type, a, b)
+	{
+		const list = listFor(type);
+		if (b < 0 || b >= list.length) return;
+		snapshot();
+		[list[a], list[b]] = [list[b], list[a]];
+		state.sel = { type, i: b };
+		update();
+	}
+
+	function bindRow(row, type, i, item)
+	{
+		row.querySelectorAll('[data-k]').forEach(el => el.addEventListener('change', () =>
+		{
+			snapshot();
+			const k = el.dataset.k;
+			if (k === 'x' || k === 'y') item[k] = Math.max(0, parseInt(el.value, 10) || 0);
+			else if (el.value === '') delete item[k];
+			else item[k] = el.value;
+			state.sel = { type, i };
+			update();
+		}));
+		row.querySelector('.idx')?.addEventListener('click', () => { state.sel = { type, i }; update(); });
+		row.querySelector('[data-a=del]').addEventListener('click', () => removeItem(type, i));
+		row.querySelector('[data-a=up]')?.addEventListener('click', () => swap(type, i, i - 1));
+		row.querySelector('[data-a=down]')?.addEventListener('click', () => swap(type, i, i + 1));
+	}
+
+	const isSel = (type, i) => state.sel && state.sel.type === type && state.sel.i === i;
+
+	function renderLists()
+	{
+		const base = num('slots') ?? 0;
+		const placed = $('placed');
+		placed.innerHTML = state.custom.length ? '' : '<p class="hint">None yet.</p>';
+		state.custom.forEach((c, i) =>
+		{
+			const row = document.createElement('div');
+			row.className = 'item slot' + (isSel('slot', i) ? ' sel' : '');
+			row.innerHTML = `
+				<span class="idx" title="Select">#${base + i}</span>
+				<input type="number" data-k="x" value="${c.x}" aria-label="Box x">
+				<input type="number" data-k="y" value="${c.y}" aria-label="Box y">
+				<select data-k="size" aria-label="Size"><option value="normal">18px</option><option value="large">26px</option></select>
+				<select data-k="role" aria-label="Role"><option value="input">Input</option><option value="output">Output</option></select>
+				<span class="row" style="gap:2px;flex-wrap:nowrap">
+					<button data-a="up" title="Move earlier (lower index)">▲</button>
+					<button data-a="down" title="Move later (higher index)">▼</button>
+					<button data-a="del" title="Remove">✕</button>
+				</span>`;
+			row.querySelector('[data-k=size]').value = c.size || 'normal';
+			row.querySelector('[data-k=role]').value = c.role || 'input';
+			bindRow(row, 'slot', i, c);
+			placed.appendChild(row);
+		});
+
+		const host = $('widgets');
+		host.innerHTML = state.widgets.length ? '' : '<p class="hint">None yet. Pick a sprite next to <b>Add sprite</b> above the preview.</p>';
+		const arrows = { right: '→', left: '←', up: '↑', down: '↓' };
+		state.widgets.forEach((w, i) =>
+		{
+			const row = document.createElement('div');
+			row.className = 'item widget' + (isSel('widget', i) ? ' sel' : '');
+			const computed = current && current.lay.widgets[i];
+			const isStatic = computed ? computed.mode === 'static' : w.mode === 'static';
+			row.innerHTML = `
+				<input type="text" data-k="name" aria-label="Constant name">
+				<input type="number" data-k="x" value="${w.x}" aria-label="x">
+				<input type="number" data-k="y" value="${w.y}" aria-label="y">
+				<select data-b aria-label="Behaviour" title="Progress widgets sync a value and crop by it; static ones are decoration only">
+					<optgroup label="Progress">${DIRECTIONS.map(d => `<option value="p:${d}">fill ${arrows[d]}</option>`).join('')}</optgroup>
+					<optgroup label="Static"><option value="s:empty">grey</option><option value="s:filled">colour</option></optgroup>
+				</select>
+				<span class="row" style="gap:2px;flex-wrap:nowrap">
+					<button data-a="up" title="Move earlier (lower data index)">▲</button>
+					<button data-a="down" title="Move later">▼</button>
+					<button data-a="del" title="Remove">✕</button>
+				</span>`;
+			const nameInput = row.querySelector('[data-k=name]');
+			nameInput.value = w.name || '';
+			nameInput.disabled = isStatic;
+			nameInput.placeholder = isStatic ? `${w.sprite} (static)` : (computed && computed.constant) || w.sprite.toUpperCase();
+			nameInput.title = isStatic ? 'Static decoration: no constant or code' : `WIDGET_ constant in the Menu (${w.sprite})`;
+			const behaviour = row.querySelector('[data-b]');
+			behaviour.value = isStatic ? `s:${computed ? computed.variant : w.variant || 'empty'}` : `p:${computed ? computed.dir : w.dir || 'right'}`;
+			behaviour.addEventListener('change', () =>
+			{
+				snapshot();
+				const [m, v] = behaviour.value.split(':');
+				if (m === 'p') { w.mode = 'progress'; w.dir = v; delete w.variant; }
+				else { w.mode = 'static'; w.variant = v; }
+				state.sel = { type: 'widget', i };
+				update();
+			});
+			bindRow(row, 'widget', i, w);
+			host.appendChild(row);
+		});
+	}
+
+	$('convertGrid').addEventListener('click', () =>
+	{
+		if (!current) return;
+		snapshot();
+		const grid = current.lay.slots.filter(s => s.kind === 'container').map(s => ({ x: s.x, y: s.y, size: 'normal', role: 'input' }));
+		state.custom = grid.concat(state.custom);
+		$('slots').value = 0;
+		update();
+	});
+
+	$('clearPlaced').addEventListener('click', () =>
+	{
+		if (!state.custom.length) return;
+		snapshot();
+		state.custom = [];
+		state.sel = null;
+		update();
+	});
+
+	// ---------- tools ----------
+	function renderTools()
+	{
+		const sprites = [];
+		const progress = Object.entries(BUILTIN_SPRITES).filter(([, s]) => s.kind === 'progress');
+		const icons = Object.entries(BUILTIN_SPRITES).filter(([, s]) => s.kind === 'icon');
+		const opt = (name, label, s) => `<option value="${name}">${label} (${s.w}×${s.h})</option>`;
+		sprites.push(`<optgroup label="Progress">${progress.map(([n, s]) => opt(n, s.label, s)).join('')}</optgroup>`);
+		sprites.push(`<optgroup label="Icons">${icons.map(([n, s]) => opt(n, s.label, s)).join('')}</optgroup>`);
+		const custom = Object.entries(state.decoded);
+		if (custom.length) sprites.push(`<optgroup label="Custom">${custom.map(([n, s]) => opt(n, n, s)).join('')}</optgroup>`);
+		if (!BUILTIN_SPRITES[state.sprite] && !state.decoded[state.sprite]) state.sprite = 'arrow';
+		if (state.tool.startsWith('widget:')) state.tool = 'widget:' + state.sprite;
+
+		const host = $('tools');
+		host.innerHTML = '';
+		for (const [id, label] of [['move', 'Move'], ['slot:normal', 'Add slot'], ['slot:large', 'Add large slot'], ['widget:' + state.sprite, 'Add sprite']])
+		{
+			const b = document.createElement('button');
+			b.textContent = label;
+			b.className = id === state.tool ? 'on' : '';
+			b.addEventListener('click', () => { state.tool = id; renderTools(); });
+			host.appendChild(b);
+		}
+		const pick = document.createElement('select');
+		pick.setAttribute('aria-label', 'Sprite to add');
+		pick.style.cssText = 'border:0;border-left:1px solid var(--line);border-radius:0;width:auto';
+		pick.innerHTML = sprites.join('');
+		pick.value = state.sprite;
+		pick.addEventListener('change', () => { state.sprite = pick.value; state.tool = 'widget:' + pick.value; renderTools(); });
+		host.appendChild(pick);
+		view.classList.toggle('add', state.tool !== 'move');
+	}
+
+	// ---------- export ----------
+	function renderTabs()
+	{
+		const host = $('tabs');
+		host.innerHTML = '';
+		for (const ex of EXPORTERS)
+		{
+			const b = document.createElement('button');
+			b.textContent = ex.label;
+			b.className = ex.id === state.tab ? 'on' : '';
+			b.addEventListener('click', () => { state.tab = ex.id; renderTabs(); renderExport(); save(); });
+			host.appendChild(b);
+		}
+	}
+
+	function renderExport()
+	{
+		if (!current) return;
+		const c = context(current.opts, current.lay, names());
+		$('texPath').textContent = c.texturePath;
+		const ex = EXPORTERS.find(x => x.id === state.tab) || EXPORTERS[0];
+		const host = $('files');
+		host.innerHTML = '';
+		for (const f of ex.files(c))
+		{
+			const head = document.createElement('div');
+			head.className = 'file-head';
+			head.innerHTML = `<div><b></b><br><code></code></div><div class="row"><button data-a="copy">Copy</button>${f.path ? '<button data-a="save">Download</button>' : ''}</div>`;
+			head.querySelector('b').textContent = f.title;
+			head.querySelector('code').textContent = f.path || 'Paste into existing files (see comments)';
+			const pre = document.createElement('pre');
+			pre.textContent = f.content;
+			head.querySelector('[data-a=copy]').addEventListener('click', async ev =>
+			{
+				const btn = ev.currentTarget;
+				try { await navigator.clipboard.writeText(f.content); btn.textContent = 'Copied'; }
+				catch (e) { getSelection().selectAllChildren(pre); btn.textContent = 'Press Ctrl+C'; }
+				setTimeout(() => btn.textContent = 'Copy', 1500);
+			});
+			const saveBtn = head.querySelector('[data-a=save]');
+			if (saveBtn) saveBtn.addEventListener('click', () => downloadBlob(new Blob([f.content], { type: 'text/plain' }), f.path.split('/').pop()));
+			host.append(head, pre);
+		}
+	}
+
+	function downloadBlob(blob, name)
+	{
+		const a = document.createElement('a');
+		a.href = URL.createObjectURL(blob);
+		a.download = name;
+		a.click();
+		setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+	}
+
+	$('download').addEventListener('click', () =>
+	{
+		if (!current) return;
+		const cv = document.createElement('canvas');
+		cv.width = cv.height = current.opts.canvas;
+		cv.getContext('2d').putImageData(new ImageData(current.pixels, cv.width, cv.height), 0, 0);
+		const c = context(current.opts, current.lay, names());
+		cv.toBlob(blob => downloadBlob(blob, `${c.snake}.png`), 'image/png');
+	});
+
+	$('saveLayout').addEventListener('click', () =>
+	{
+		const c = current ? context(current.opts, current.lay, names()) : { snake: 'layout' };
+		downloadBlob(new Blob([JSON.stringify(layoutConfig(), null, '\t') + '\n'], { type: 'application/json' }), `${c.snake}.layout.json`);
+	});
+
+	$('loadLayout').addEventListener('change', async e =>
+	{
+		const f = e.target.files[0];
+		e.target.value = '';
+		if (!f) return;
+		try { await applyConfig(JSON.parse(await f.text())); }
+		catch (err)
+		{
+			$('error').textContent = `Couldn't load ${f.name}: ${err.message}`;
+			$('error').classList.add('show');
+		}
+	});
+
+	// ---------- wiring ----------
+	(async () =>
+	{
+		await load();
+		for (const id of [...LAYOUT_FIELDS, ...NAME_FIELDS]) $(id).addEventListener('input', update);
+		for (const id of VIEW_FIELDS) $(id).addEventListener('input', () => { save(); draw(); });
+		renderTools();
+		renderTabs();
+		update();
+	})();
+})();
+</script>
+</body>
+</html>

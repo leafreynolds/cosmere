@@ -6,11 +6,9 @@ package leaf.cosmere.common.registry;
 
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registration.impl.BiomeDeferredRegister;
-import leaf.cosmere.common.registration.impl.BiomeRegistryObject;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.biome.OverworldBiomes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -28,7 +26,7 @@ public class BiomeRegistry
 	public static final ResourceKey<Biome> SHADESMAR_BIOME_KEY = ResourceKey.create(Registries.BIOME, Cosmere.rl("shadesmar_biome"));
 	public static final ResourceKey<NoiseGeneratorSettings> SHADESMAR_NOISE_SETTINGS = ResourceKey.create(Registries.NOISE_SETTINGS, Cosmere.rl("shadesmar_biome"));
 
-	public static void bootstrapBiomes(BootstapContext<Biome> context)
+	public static void bootstrapBiomes(BootstrapContext<Biome> context)
 	{
 		HolderGetter<ConfiguredWorldCarver<?>> carverGetter = context.lookup(Registries.CONFIGURED_CARVER);
 		HolderGetter<PlacedFeature> placedFeatureGetter = context.lookup(Registries.PLACED_FEATURE);
@@ -36,7 +34,7 @@ public class BiomeRegistry
 		register(context, SHADESMAR_BIOME_KEY, OverworldBiomes.stonyPeaks(placedFeatureGetter, carverGetter));
 	}
 
-	private static void register(BootstapContext<Biome> context, ResourceKey<Biome> key, Biome biome)
+	private static void register(BootstrapContext<Biome> context, ResourceKey<Biome> key, Biome biome)
 	{
 		context.register(key, biome);
 	}

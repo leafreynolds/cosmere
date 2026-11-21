@@ -15,9 +15,8 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class SandSpreaderMenu extends AbstractContainerMenu
 {
@@ -34,10 +33,13 @@ public class SandSpreaderMenu extends AbstractContainerMenu
 	{
 		super(SandmasteryMenuTypes.SAND_SPREADER.get(), id);
 		checkContainerSize(inv, 3);
-		this.blockEntity = (SandSpreaderBE) entity;
+		if (!(entity instanceof SandSpreaderBE be))
+			throw new IllegalStateException("SandSpreader menu opened without its block entity");
+		this.blockEntity = be;
+
 		this.level = inv.player.level();
 		this.data = data;
-		IItemHandlerModifiable blockInv = (IItemHandlerModifiable) this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		IItemHandlerModifiable blockInv = (IItemHandlerModifiable) this.blockEntity.getItemHandler();
 		int invStart = 0;
 		int i;
 		int j;

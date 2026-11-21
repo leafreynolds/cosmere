@@ -9,15 +9,11 @@ package leaf.cosmere.surgebinding.client.render.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.surgebinding.client.render.SurgebindingLayerDefinitions;
 import leaf.cosmere.surgebinding.client.render.model.DynamicShardplateModel;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ArmorStandModel;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;

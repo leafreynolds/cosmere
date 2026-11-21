@@ -50,6 +50,11 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # The repo is developed on Windows with core.fileMode=false, so the exec bit on
+      # gradlew can silently regress. Cheap guard against a Permission denied here.
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       # publishToModSites attaches no upload tasks when the tokens are absent, so it would
       # "succeed" having uploaded nothing. Fail loudly instead.
       - name: Check publishing credentials

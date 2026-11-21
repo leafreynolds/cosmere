@@ -16,7 +16,7 @@ public class MetalOreBlock extends DropExperienceBlock implements IHasMetalType
 
 	public MetalOreBlock(Metals.MetalType metalType)
 	{
-		super(PropTypes.Blocks.ORE.get().strength(3f, 3f).requiresCorrectToolForDrops(), UniformInt.of(0, 2));
+		super(UniformInt.of(0, 2), PropTypes.Blocks.ORE.get().strength(3f, 3f).requiresCorrectToolForDrops());
 		this.metalType = metalType;
 	}
 

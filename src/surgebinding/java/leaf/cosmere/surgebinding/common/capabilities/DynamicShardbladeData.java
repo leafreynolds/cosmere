@@ -6,12 +6,12 @@ package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.surgebinding.client.render.model.ShardbladeModel;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
-public class DynamicShardbladeData extends BondableRadiantShardData implements ICapabilityProvider, INBTSerializable<CompoundTag>, IShardbladeDynamicData
+public class DynamicShardbladeData extends BondableRadiantShardData implements INBTSerializable<CompoundTag>, IShardbladeDynamicData
 {
 	private String bladeID;
 	private String handleID;
@@ -22,21 +22,37 @@ public class DynamicShardbladeData extends BondableRadiantShardData implements I
 	{
 		super(stack);
 
-		this.bladeID = "blade_" + MathHelper.randomInt(1, ShardbladeModel.TOTAL_BLADE_IDS);
-		this.handleID = "handle_" + MathHelper.randomInt(1, ShardbladeModel.TOTAL_HANDLE_IDS);
-		this.pommelID = "pommel_" + MathHelper.randomInt(1, ShardbladeModel.TOTAL_POMMEL_IDS);
-		this.crossGuardID = "crossguard_" + MathHelper.randomInt(1, ShardbladeModel.TOTAL_CROSS_GUARD_IDS);
+		//deterministic until the server rolls an appearance, so both sides read the same unseeded blade
+		setAppearance(1, 1, 1, 1);
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	protected void randomiseAppearance()
+	{
+		setAppearance(
+				MathHelper.randomInt(1, ShardbladeModel.TOTAL_BLADE_IDS),
+				MathHelper.randomInt(1, ShardbladeModel.TOTAL_HANDLE_IDS),
+				MathHelper.randomInt(1, ShardbladeModel.TOTAL_POMMEL_IDS),
+				MathHelper.randomInt(1, ShardbladeModel.TOTAL_CROSS_GUARD_IDS));
+	}
+
+	private void setAppearance(int blade, int handle, int pommel, int crossGuard)
+	{
+		this.bladeID = "blade_" + blade;
+		this.handleID = "handle_" + handle;
+		this.pommelID = "pommel_" + pommel;
+		this.crossGuardID = "crossguard_" + crossGuard;
+	}
+
+	@Override
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (super.nbt == null)
 		{
 			super.nbt = new CompoundTag();
 		}
 
-		super.serializeNBT();
+		super.serializeNBT(provider);
 
 		super.nbt.putString("bladeID", this.bladeID);
 		super.nbt.putString("handleID", this.handleID);
@@ -47,9 +63,9 @@ public class DynamicShardbladeData extends BondableRadiantShardData implements I
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 	{
-		super.deserializeNBT(nbt);
+		super.deserializeNBT(provider, nbt);
 
 		this.bladeID = super.nbt.getString("bladeID");
 		this.handleID = super.nbt.getString("handleID");

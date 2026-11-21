@@ -5,7 +5,7 @@
 package leaf.cosmere.surgebinding.common.capabilities.world;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public interface IRoshar extends INBTSerializable<CompoundTag>
 {

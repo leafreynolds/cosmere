@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:lead"
+    },
+    "J": {
+      "item": "sandmastery:sand_jar"
+    },
+    "L": {
+      "tag": "c:leathers"
+    }
+  },
+  "pattern": [
+    "BLL",
+    "LJL",
+    "LLL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sandmastery:sand_pouch"
+  }
+}

@@ -67,9 +67,9 @@ public class Chull extends AbstractChestedHorse
 	}
 
 	@Override
-	protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit)
+	protected void dropCustomDeathLoot(ServerLevel pLevel, DamageSource pSource, boolean pRecentlyHit)
 	{
-		super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
+		super.dropCustomDeathLoot(pLevel, pSource, pRecentlyHit);
 
 		//chull chests??
 
@@ -86,15 +86,4 @@ public class Chull extends AbstractChestedHorse
 		return new Vec3(0.0D, (double) this.getEyeHeight(Pose.STANDING), (double) (this.getBbWidth() * 0.25F));
 	}
 
-	@Override
-	public float getEyeHeight(Pose pPose)
-	{
-		return getEyeHeight() * 0.1f;
-	}
-
-	@Override
-	public double getPassengersRidingOffset()
-	{
-		return ((this.getBbHeight() / 2f) - 0.75d);
-	}
 }

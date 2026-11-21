@@ -1,52 +1,50 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 2026-04-23 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.common.network.packets;
 
+import io.netty.buffer.ByteBuf;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.common.registry.ManifestationRegistry;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class SetSelectedManifestationMessage implements ICosmerePacket
+public record SetSelectedManifestationMessage(Manifestation manifestation) implements ICosmerePacket
 {
-	Manifestation manifestation;
+	public static final CustomPacketPayload.Type<SetSelectedManifestationMessage> TYPE =
+			new CustomPacketPayload.Type<>(Cosmere.rl("set_selected_manifestation"));
 
-	public SetSelectedManifestationMessage(Manifestation manifestation)
+	public static final StreamCodec<ByteBuf, SetSelectedManifestationMessage> STREAM_CODEC =
+			ByteBufCodecs.STRING_UTF8.map(
+					location -> new SetSelectedManifestationMessage(ManifestationRegistry.fromID(location)),
+					msg -> msg.manifestation.getRegistryName().toString()
+			);
+
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
-		this.manifestation = manifestation;
+		return TYPE;
 	}
 
 	@Override
-	public void handle(NetworkEvent.Context context)
+	public void handle(IPayloadContext context)
 	{
-		ServerPlayer sender = context.getSender();
-		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+		if (!(context.player() instanceof ServerPlayer sender))
 		{
-			cap.setSelectedManifestation(manifestation);
-			cap.syncToClients(null);
-		}));
-		context.setPacketHandled(true);
+			return;
+		}
+		context.enqueueWork(() ->
+				SpiritwebCapability.get(sender).ifPresent((cap) ->
+				{
+					cap.setSelectedManifestation(manifestation);
+					cap.syncToClients(null);
+				}));
 	}
-
-
-	@Override
-	public void encode(FriendlyByteBuf buf)
-	{
-		String namespace = manifestation.getRegistryName().toString();
-		buf.writeUtf(namespace);
-	}
-
-	public static SetSelectedManifestationMessage decode(FriendlyByteBuf buf)
-	{
-		String location = buf.readUtf();
-		return new SetSelectedManifestationMessage(ManifestationRegistry.fromID(location));
-	}
-
 }

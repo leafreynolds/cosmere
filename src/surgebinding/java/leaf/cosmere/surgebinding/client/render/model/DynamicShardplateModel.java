@@ -1,4 +1,8 @@
 /*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
+/*
  * File created ~ 12 - 7 - 2025 ~ Soar
  */
 package leaf.cosmere.surgebinding.client.render.model;
@@ -7,7 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.DynamicShardplateData;
-import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
+import leaf.cosmere.surgebinding.common.items.IRadiantShardItem;
 import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -18,6 +22,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
@@ -292,14 +297,14 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 
 
 	@Override
-	public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color)
 	{
-		this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.left_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.right_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.right_leg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.left_leg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.left_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.right_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.right_leg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.left_leg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
 	}
 
 	public void render(ItemStack pStack, SlotContext slot, PoseStack matrixStack, MultiBufferSource buffer, int light)
@@ -329,7 +334,7 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		//now we need to get the actual data from the itemstack
 		//and set the correct pieces to be visible
 
-		if (!pStack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).isPresent())
+		if (!(pStack.getItem() instanceof IRadiantShardItem))
 		{
 			return;
 		}
@@ -400,20 +405,15 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 		Color color = item.getColour(pStack);
 		// First texture layer
 		VertexConsumer baseLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(TEXTURE));
-		renderToBuffer(matrixStack,
-				baseLayer,
-				light,
-				OverlayTexture.NO_OVERLAY,
-				color.getRed() / 255f,
-				color.getGreen() / 255f,
-				color.getBlue() / 255f,
-				1f);
+		renderToBuffer(matrixStack, baseLayer, light, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, color.getRed(), color.getGreen(), color.getBlue()));
 
 		// Second overlay texture (e.g., glowing runes, color tint)
 
 
 		// Third layer
-		if (data.isLiving())
+		// order is null on a plate that was never sworn
+		// isLiving alone is not enough of a guard
+		if (data.isLiving() && data.getOrder() != null)
 		{
 			String location = "textures/models/armor/glyphs/" + data.getOrder().getName().toLowerCase() + "_glyph.png";
 			ResourceLocation glyphRL = Surgebinding.rl(location);
@@ -422,63 +422,28 @@ public class DynamicShardplateModel extends HumanoidModel<LivingEntity>
 /*
 		Trims, if and when we have them.
 			VertexConsumer lightLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(TRIM));
-			renderToBuffer(matrixStack,
-					lightLayer,
-					LightTexture.FULL_BRIGHT,
-					OverlayTexture.NO_OVERLAY,
-					glyphColor.getRed()/255F,
-					glyphColor.getGreen()/255F,
-					glyphColor.getBlue()/255F,
-					1F);
+			renderToBuffer(matrixStack, lightLayer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, glyphColor.getRed(), glyphColor.getGreen(), glyphColor.getBlue()));
 */
 
 			VertexConsumer glyphLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(glyphRL));
-			renderToBuffer(matrixStack,
-					glyphLayer,
-					LightTexture.FULL_BRIGHT,
-					OverlayTexture.NO_OVERLAY,
-					glyphColor.getRed() / 255f,
-					glyphColor.getGreen() / 255f,
-					glyphColor.getBlue() / 255f,
-					1f);
+			renderToBuffer(matrixStack, glyphLayer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, glyphColor.getRed(), glyphColor.getGreen(), glyphColor.getBlue()));
 
 			VertexConsumer overlayLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(VISOR));
-			renderToBuffer(matrixStack,
-					overlayLayer,
-					LightTexture.FULL_BRIGHT,
-					OverlayTexture.NO_OVERLAY,
-					glyphColor.getRed() / 255f,
-					glyphColor.getGreen() / 255f,
-					glyphColor.getBlue() / 255f,
-					1f);
+			renderToBuffer(matrixStack, overlayLayer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, glyphColor.getRed(), glyphColor.getGreen(), glyphColor.getBlue()));
 
 
 		}
 		else
 		{
 			VertexConsumer overlayLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(VISOR));
-			renderToBuffer(matrixStack,
-					overlayLayer,
-					LightTexture.FULL_BRIGHT,
-					OverlayTexture.NO_OVERLAY,
-					0.6F,
-					0.8F,
-					1,
-					1f);
+			renderToBuffer(matrixStack, overlayLayer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, 153, 204, 255));
 		}
 
 		//Cracked Layer
 		if (item.getMaxCharge(pStack) - item.getCharge(pStack) > item.getMaxCharge(pStack) / 4)
 		{
 			VertexConsumer cracksLayer = buffer.getBuffer(RenderType.armorCutoutNoCull(CRACKS1));
-			renderToBuffer(matrixStack,
-					cracksLayer,
-					15728700,
-					OverlayTexture.NO_OVERLAY,
-					1f,
-					1f,
-					1f,
-					1f);
+			renderToBuffer(matrixStack, cracksLayer, 15728700, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, 255, 255, 255));
 		}
 
 

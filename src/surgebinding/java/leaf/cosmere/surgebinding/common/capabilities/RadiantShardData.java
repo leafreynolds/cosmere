@@ -1,25 +1,19 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.Roshar;
-import net.minecraft.core.Direction;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDataComponents;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class RadiantShardData implements ICapabilityProvider, IRadiantShardData
+public class RadiantShardData implements IRadiantShardData
 {
-	public static final Capability<IRadiantShardData> RADIANT_SHARD_DATA = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
 
 
-	private final LazyOptional<IRadiantShardData> opt = LazyOptional.of(() -> this);
 	protected Roshar.RadiantOrder order;
 	protected boolean living;
 
@@ -27,22 +21,56 @@ public class RadiantShardData implements ICapabilityProvider, IRadiantShardData
 
 	protected final ItemStack stack;
 
+	protected boolean unseeded = true;
+
 	public RadiantShardData(ItemStack stack)
 	{
 		this.stack = stack;
 		this.nbt = new CompoundTag();
 	}
 
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
+	//stacks can't hold attachments in 1.21, so shard data lives on the shard_data component
+	public static <T extends RadiantShardData> T load(ItemStack stack, T data)
 	{
-		return RADIANT_SHARD_DATA.orEmpty(cap, opt);
+		if (stack == null || stack.isEmpty())
+		{
+			return data;
+		}
+
+		CompoundTag stored = stack.get(SurgebindingDataComponents.SHARD_DATA.get());
+		if (stored != null && !stored.isEmpty())
+		{
+			//the component's tag is shared, so deserialize into a copy
+			data.deserializeNBT(null, stored.copy());
+			data.unseeded = false;
+		}
+		return data;
 	}
 
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap)
+	protected void randomiseAppearance()
 	{
-		return ICapabilityProvider.super.getCapability(cap);
+	}
+
+	//server only
+	public void seed()
+	{
+		save();
+	}
+
+	protected void save()
+	{
+		if (stack == null || stack.isEmpty())
+		{
+			return;
+		}
+
+		if (unseeded)
+		{
+			randomiseAppearance();
+			unseeded = false;
+		}
+
+		stack.set(SurgebindingDataComponents.SHARD_DATA.get(), serializeNBT(null).copy());
 	}
 
 	@Override
@@ -61,16 +89,18 @@ public class RadiantShardData implements ICapabilityProvider, IRadiantShardData
 	public void setOrder(Roshar.RadiantOrder order)
 	{
 		this.order = order;
+		save();
 	}
 
 	@Override
 	public void setLiving(boolean living)
 	{
 		this.living = living;
+		save();
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (order != null)
 		{
@@ -83,7 +113,7 @@ public class RadiantShardData implements ICapabilityProvider, IRadiantShardData
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag compoundTag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
 		this.nbt = compoundTag;
 		if (nbt.contains("radiantOrder"))

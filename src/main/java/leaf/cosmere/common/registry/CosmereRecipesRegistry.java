@@ -1,9 +1,9 @@
 package leaf.cosmere.common.registry;
 
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.recipes.GodMetalAlloyNuggetRecipe;
 import leaf.cosmere.common.recipes.GodMetalNuggetsCompress;
 import leaf.cosmere.common.recipes.GodMetalNuggetsDecompress;
-import leaf.cosmere.common.recipes.GodMetalAlloyNuggetRecipe;
 import leaf.cosmere.common.registration.impl.RecipeSerializerDeferredRegister;
 import leaf.cosmere.common.registration.impl.RecipeSerializerRegistryObject;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;

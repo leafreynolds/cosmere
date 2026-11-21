@@ -4,12 +4,13 @@
 
 package leaf.cosmere.common.blocks;
 
-import net.minecraft.world.level.block.Block;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.SoundType;
 
 public class BaseFallingBlock extends FallingBlock
 {
+	public static final MapCodec<BaseFallingBlock> CODEC = simpleCodec(BaseFallingBlock::new);
 
 	public BaseFallingBlock(Properties properties, SoundType sound, float hardness, float resistance)
 	{
@@ -19,6 +20,11 @@ public class BaseFallingBlock extends FallingBlock
 	public BaseFallingBlock(Properties properties)
 	{
 		super(properties);
+	}
 
+	@Override
+	public MapCodec<? extends FallingBlock> codec()
+	{
+		return CODEC;
 	}
 }

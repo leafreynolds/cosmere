@@ -5,6 +5,7 @@
 
 package leaf.cosmere.api;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -13,11 +14,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -56,25 +57,25 @@ public class CosmereTags
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("raw_materials/" + type.getName())));
+								type -> commonItemTag("raw_materials/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_ORE_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("ores/" + type.getName())));
+								type -> commonItemTag("ores/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_DUST_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("dusts/" + type.getName())));
+								type -> commonItemTag("dusts/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_NUGGET_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("nuggets/" + type.getName())));
+								type -> commonItemTag("nuggets/" + type.getName())));
 
 		public static final Map<Metals.MetalType, Map<Metals.MetalType, TagKey<Item>>> GOD_METAL_ALLOY_NUGGET_TAGS =
 				Arrays.stream(new Metals.MetalType[]{Metals.MetalType.LERASIUM, Metals.MetalType.LERASATIUM})
@@ -84,7 +85,7 @@ public class CosmereTags
 										.filter(base -> !base.isGodMetal())
 										.collect(Collectors.toMap(
 												Function.identity(), // key: base metal
-												base -> forgeItemTag("nuggets/" + god.getName() + "_" + base.getName() + "_alloy")
+												base -> commonItemTag("nuggets/" + god.getName() + "_" + base.getName() + "_alloy")
 										))
 						));
 
@@ -92,31 +93,31 @@ public class CosmereTags
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("ingots/" + type.getName())));
+								type -> commonItemTag("ingots/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Item>> METAL_BLOCK_ITEM_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("storage_blocks/" + type.getName())));
+								type -> commonItemTag("storage_blocks/" + type.getName())));
 
 		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_BLOCK_ITEM_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("storage_blocks/" + type.getName())));
+								type -> commonItemTag("storage_blocks/" + type.getName())));
 
 
 		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeItemTag("gems/" + type.getName())));
+								type -> commonItemTag("gems/" + type.getName())));
 
 
 		public static TagKey<Item> makeItem(String domain, String path)
 		{
-			return ItemTags.create(new ResourceLocation(domain, path));
+			return ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(domain, path)));
 		}
 
 		public static TagKey<Item> makeItem(ResourceLocation resourceLocation)
@@ -124,10 +125,10 @@ public class CosmereTags
 			return ItemTags.create(resourceLocation);
 		}
 
-		private static TagKey<Item> forgeItemTag(String name)
+		private static TagKey<Item> commonItemTag(String name)
 		{
-			final ResourceLocation forgeTagToMake = new ResourceLocation("forge", name);
-			return makeItem(forgeTagToMake);
+			final ResourceLocation commonTagToMake = ResourceLocation.fromNamespaceAndPath("c", name);
+			return makeItem(commonTagToMake);
 		}
 	}
 
@@ -144,29 +145,29 @@ public class CosmereTags
 						//.filter(Metals.MetalType::hasOre)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("ores/" + type.getName())));
+								type -> commonTag("ores/" + type.getName())));
 
 		public static final Map<Metals.MetalType, TagKey<Block>> METAL_BLOCK_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("storage_blocks/" + type.getName())));
+								type -> commonTag("storage_blocks/" + type.getName())));
 
 		public static final Map<Roshar.Gemstone, TagKey<Block>> GEM_ORE_BLOCK_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("ores/" + type.getName())));
+								type -> commonTag("ores/" + type.getName())));
 
 		public static final Map<Roshar.Gemstone, TagKey<Block>> GEM_BLOCK_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
 						.collect(Collectors.toMap(
 								Function.identity(),
-								type -> forgeTag("storage_blocks/" + type.getName())));
+								type -> commonTag("storage_blocks/" + type.getName())));
 
 		public static TagKey<Block> makeBlock(String domain, String path)
 		{
-			return BlockTags.create(new ResourceLocation(domain, path));
+			return BlockTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(domain, path)));
 		}
 
 		public static TagKey<Block> makeBlock(ResourceLocation resourceLocation)
@@ -174,10 +175,10 @@ public class CosmereTags
 			return BlockTags.create(resourceLocation);
 		}
 
-		private static TagKey<Block> forgeTag(String name)
+		private static TagKey<Block> commonTag(String name)
 		{
-			final ResourceLocation forgeTagToMake = new ResourceLocation("forge", name);
-			return makeBlock(forgeTagToMake);
+			final ResourceLocation commonTagToMake = ResourceLocation.fromNamespaceAndPath("c", name);
+			return makeBlock(commonTagToMake);
 		}
 
 	}
@@ -186,14 +187,14 @@ public class CosmereTags
 	public static class Biomes
 	{
 		//todo move to surgebinding module
-		public static final TagKey<Biome> IS_ROSHAR = create(new ResourceLocation("surgebinding", "is_roshar"));
-		public static final TagKey<Biome> IS_SHADESMAR = create(new ResourceLocation(CosmereAPI.COSMERE_MODID, "is_shadesmar"));
+		public static final TagKey<Biome> IS_ROSHAR = create(ResourceLocation.fromNamespaceAndPath("surgebinding", "is_roshar"));
+		public static final TagKey<Biome> IS_SHADESMAR = create(ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "is_shadesmar"));
 
-		public static final TagKey<Biome> SPAWN_ORES = create(new ResourceLocation(CosmereAPI.COSMERE_MODID, "spawn_ores"));
+		public static final TagKey<Biome> SPAWN_ORES = create(ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "spawn_ores"));
 
 		private static TagKey<Biome> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), resourceLocation);
+			return TagKey.create(Registries.BIOME, resourceLocation);
 		}
 	}
 
@@ -203,12 +204,12 @@ public class CosmereTags
 
 		private static TagKey<EntityType<?>> create(String namespace, String path)
 		{
-			return create(new ResourceLocation(namespace, path));
+			return create(ResourceLocation.fromNamespaceAndPath(namespace, path));
 		}
 
 		private static TagKey<EntityType<?>> create(ResourceLocation resourceLocation)
 		{
-			return TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), resourceLocation);
+			return TagKey.create(Registries.ENTITY_TYPE, resourceLocation);
 		}
 	}
 }

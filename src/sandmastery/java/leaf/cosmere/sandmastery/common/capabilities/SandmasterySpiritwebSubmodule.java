@@ -26,7 +26,9 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -34,13 +36,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
@@ -50,6 +51,8 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private int launchCooldown = 0;
 	private int launchesSinceLeftGround = 0;
 	private int numRibbonsInUse = 0;
+	// charge spent but not yet a whole layer, not saved so a relog forgives under one layer
+	private int chargeDebt = 0;
 
 	private int hotkeyFlags = 0;
 
@@ -214,16 +217,29 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
-		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(spiritweb -> {
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(spiritweb ->
+		{
 			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.SANDMASTERY))
+			{
 				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SANDMASTERY, SandmasterySpiritwebMenu::new);
+			}
 		});
 	}
 
 	@Override
-	public List<Attribute> getPowers()
+	public List<Holder<Attribute>> getPowers()
 	{
-		return List.of(SandmasteryAttributes.RIBBONS.get());
+		return List.of(SandmasteryAttributes.RIBBONS.getHolder());
+	}
+
+	public int getChargeDebt()
+	{
+		return chargeDebt;
+	}
+
+	public void setChargeDebt(int chargeDebt)
+	{
+		this.chargeDebt = chargeDebt;
 	}
 
 	public int getHydrationLevel()
@@ -252,7 +268,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private static void overmaster(ISpiritweb data)
 	{
 		final LivingEntity living = data.getLiving();
-		AttributeInstance availableRibbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
+		AttributeInstance availableRibbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
 
 		if (availableRibbons == null)
 		{
@@ -262,7 +278,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		int ribbons = (int) availableRibbons.getBaseValue();
 		int gainedRibbons;
 
-		if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_UUID) == null)
+		if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_ID) == null)
 		{
 			if (ribbons < 5)
 			{
@@ -281,11 +297,11 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 				gainedRibbons = 6;
 			}
 
-			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_UUID);
+			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_ID);
 
 			availableRibbons.addPermanentModifier(overmasteryAttributeModifier);
 		}
-		else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID) == null)
+		else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_ID) == null)
 		{
 			if (ribbons < 5)
 			{
@@ -304,7 +320,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 				gainedRibbons = 4;
 			}
 
-			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID);
+			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_SECONDARY_ID);
 			availableRibbons.addPermanentModifier(overmasteryAttributeModifier);
 		}
 
@@ -315,15 +331,13 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@NotNull
-	private static AttributeModifier getOvermasteryAttributeModifier(int gainedRibbons, UUID uuid)
+	private static AttributeModifier getOvermasteryAttributeModifier(int gainedRibbons, ResourceLocation id)
 	{
-		final AttributeModifier overmasteryAttributeModifier = new AttributeModifier(
-				uuid,
-				String.format("%s - gained %s ribbons: %s", "Overmastery", gainedRibbons, uuid),
+		return new AttributeModifier(
+				id,
 				gainedRibbons,
-				AttributeModifier.Operation.ADDITION
+				AttributeModifier.Operation.ADD_VALUE
 		);
-		return overmasteryAttributeModifier;
 	}
 
 	public void tickProjectileCooldown()

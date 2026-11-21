@@ -1,27 +1,30 @@
 /*
- * File updated ~ 11 - 8 - 2024 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.common.items;
 
 import com.google.common.collect.Multimap;
-import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
+import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
+import leaf.cosmere.feruchemy.common.Feruchemy;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
-import java.util.UUID;
-
 public class BandsOfMourningItem extends BraceletMetalmindItem
 {
+	private static final String STORED_INVESTITURE = "StoredInvestiture";
+
 	public BandsOfMourningItem()
 	{
 		super(Metals.MetalType.HARMONIUM);
@@ -33,7 +36,7 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 		ItemStack fullPower = new ItemStack(this);
 		setCharge(fullPower, getMaxCharge(fullPower));
 
-		CompoundTag nbt = fullPower.getOrCreateTagElement("StoredInvestiture");
+		CompoundTag nbt = StackNBTHelper.getCompound(fullPower, STORED_INVESTITURE, false);
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
@@ -44,6 +47,8 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 				nbt.putDouble(attributeRegistryName, 20);
 			}
 		}
+
+		StackNBTHelper.setCompound(fullPower, STORED_INVESTITURE, nbt);
 
 		output.accept(fullPower);
 	}
@@ -62,15 +67,16 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
+	public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation location, ItemStack stack)
 	{
-		Multimap<Attribute, AttributeModifier> attributeModifiers = super.getAttributeModifiers(slotContext, uuid, stack);
-		CompoundTag nbt = stack.getOrCreateTagElement("StoredInvestiture");
+		Multimap<Holder<Attribute>, AttributeModifier> attributeModifiers = super.getAttributeModifiers(slotContext, location, stack);
+		CompoundTag nbt = StackNBTHelper.getCompound(stack, STORED_INVESTITURE, false);
 
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
-			Attribute attribute = manifestation.getAttribute();
-			final String attributeRegistryName = manifestation.getRegistryName().toString();
+			Holder<Attribute> attribute = manifestation.getAttribute();
+			final ResourceLocation manifestationName = manifestation.getRegistryName();
+			final String attributeRegistryName = manifestationName.toString();
 			if (!CompoundNBTHelper.verifyExistance(nbt, attributeRegistryName) || attribute == null)
 			{
 				continue;
@@ -79,13 +85,14 @@ public class BandsOfMourningItem extends BraceletMetalmindItem
 			attributeModifiers.put(
 					attribute,
 					new AttributeModifier(
-							Constants.NBT.UNKEYED_UUID,
-							attributeRegistryName,
+							//modifier ids are resource locations now
+							// so a manifestation name isn't a legal path on its own
+							Feruchemy.rl("bands_of_mourning/" + manifestationName.getNamespace() + "/" + manifestationName.getPath()),
 							CompoundNBTHelper.getDouble(
 									nbt,
 									attributeRegistryName,
 									0),
-							AttributeModifier.Operation.ADDITION));
+							AttributeModifier.Operation.ADD_VALUE));
 
 		}
 

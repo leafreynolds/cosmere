@@ -13,7 +13,7 @@ import leaf.cosmere.surgebinding.common.registries.SurgebindingManifestations;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 // Honors truest surge
 public class SurgeAdhesion extends SurgebindingManifestation
@@ -25,7 +25,7 @@ public class SurgeAdhesion extends SurgebindingManifestation
 
 	//bind things together
 
-	public static void onLivingAttackEvent(LivingAttackEvent event)
+	public static void onLivingAttackEvent(LivingIncomingDamageEvent event)
 	{
 		if (!(event.getSource().getEntity() instanceof LivingEntity attacker))
 		{

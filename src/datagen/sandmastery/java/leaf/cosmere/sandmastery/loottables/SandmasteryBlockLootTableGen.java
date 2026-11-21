@@ -13,6 +13,7 @@ import leaf.cosmere.sandmastery.common.blocks.TemporarySandBlock;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -27,6 +28,11 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 {
+	public SandmasteryBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{

@@ -11,15 +11,14 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.properties.PropTypes;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
-
-import java.util.List;
 
 public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHasMetalType, ICurioItem
 {
@@ -45,12 +44,6 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 	//}
 
 	@Override
-	public List<Component> getAttributesTooltip(List<Component> tooltips, ItemStack stack)
-	{
-		return ICurioItem.super.getAttributesTooltip(tooltips, stack);
-	}
-
-	@Override
 	public boolean makesPiglinsNeutral(SlotContext slotContext, ItemStack stack)
 	{
 		return makesPiglinsNeutral(stack, slotContext.entity());
@@ -74,7 +67,7 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 			{
 				for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 				{
-					Attribute attribute = manifestation.getAttribute();
+					Holder<Attribute> attribute = manifestation.getAttribute();
 					if (attribute == null)
 					{
 						continue;
@@ -83,7 +76,9 @@ public class ChargeableMetalCurioItem extends ChargeableItemBase implements IHas
 					final AttributeInstance attributeInstance = data.getLiving().getAttribute(attribute);
 					if (attributeInstance != null)
 					{
-						attributeInstance.removeModifier(Constants.NBT.FERU_NICROSIL_UUID);
+						// 1.21.1: AttributeModifier id is a ResourceLocation, not a UUID. Map the legacy
+						// constant UUID to a stable id under the cosmere namespace.
+						attributeInstance.removeModifier(ResourceLocation.fromNamespaceAndPath("cosmere", "feru_nicrosil_" + Constants.NBT.FERU_NICROSIL_UUID));
 					}
 				}
 			});

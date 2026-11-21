@@ -1,12 +1,12 @@
 package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedRegistryObject;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class VillagerProfessionRegistryObject<VillagerProfession> extends WrappedRegistryObject<VillagerProfession>
 {
 
-	public VillagerProfessionRegistryObject(RegistryObject<VillagerProfession> registryObject)
+	public VillagerProfessionRegistryObject(DeferredHolder<? super VillagerProfession, VillagerProfession> registryObject)
 	{
 		super(registryObject);
 	}

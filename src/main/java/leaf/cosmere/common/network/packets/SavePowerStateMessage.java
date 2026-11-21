@@ -1,42 +1,45 @@
+/*
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
+ */
+
 package leaf.cosmere.common.network.packets;
 
+import io.netty.buffer.ByteBuf;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class SavePowerStateMessage implements ICosmerePacket
+public record SavePowerStateMessage(int powerState) implements ICosmerePacket
 {
-	private final int powerState;
+	public static final CustomPacketPayload.Type<SavePowerStateMessage> TYPE =
+			new CustomPacketPayload.Type<>(Cosmere.rl("save_power_state"));
 
-	public SavePowerStateMessage(int powerState)
+	public static final StreamCodec<ByteBuf, SavePowerStateMessage> STREAM_CODEC =
+			StreamCodec.composite(
+					ByteBufCodecs.VAR_INT, SavePowerStateMessage::powerState,
+					SavePowerStateMessage::new
+			);
+
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
-		this.powerState = powerState;
+		return TYPE;
 	}
 
 	@Override
-	public void handle(NetworkEvent.Context context)
+	public void handle(IPayloadContext context)
 	{
-		ServerPlayer sender = context.getSender();
-		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((data) ->
+		if (!(context.player() instanceof ServerPlayer sender))
 		{
-			data.saveNewState(powerState);
-		}));
-		context.setPacketHandled(true);
-	}
-
-	@Override
-	public void encode(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(powerState);
-	}
-
-	public static SavePowerStateMessage decode(FriendlyByteBuf buf)
-	{
-		int powerState = buf.readInt();
-		return new SavePowerStateMessage(powerState);
+			return;
+		}
+		context.enqueueWork(() ->
+				SpiritwebCapability.get(sender).ifPresent((data) ->
+						data.saveNewState(powerState)));
 	}
 }

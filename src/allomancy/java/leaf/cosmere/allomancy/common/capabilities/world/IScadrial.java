@@ -6,8 +6,8 @@ package leaf.cosmere.allomancy.common.capabilities.world;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public interface IScadrial extends INBTSerializable<CompoundTag>
 {

@@ -1,10 +1,10 @@
 package leaf.cosmere.allomancy.client.gui;
 
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
+import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
 import leaf.cosmere.api.IHasMetalType;
@@ -13,7 +13,6 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
@@ -24,6 +23,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -35,6 +35,7 @@ import java.util.function.Consumer;
 
 public class InnerRadialButton extends Button
 {
+	private static final ResourceLocation WITHERED_FULL_HEART = ResourceLocation.withDefaultNamespace("hud/heart/withered_full");
 	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	private final Consumer<Manifestation> manifestationConsumer;
@@ -42,7 +43,9 @@ public class InnerRadialButton extends Button
 	private final float innerRadius;
 	private final double startAngle;
 	private final double endAngle;
-	private final int segmentNr;
+	private final double midAngle;
+	private final double midRadius;
+	private final double hoverRadius;
 	private final int centerX;
 	private final int centerY;
 	private final boolean hasManifestation;
@@ -50,22 +53,32 @@ public class InnerRadialButton extends Button
 	private final ISpiritweb spiritweb;
 	private final Metals.MetalType metalType;
 
+	// Animation
+	private final double animationSpeed = 0.8d;
+	private double currentRadius;
+
 	protected InnerRadialButton(int centerX, int centerY, int segmentNr, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
 		super(centerX, centerY, 16, 16, CommonComponents.EMPTY, (button) -> {}, DEFAULT_NARRATION);
+		Window window = Minecraft.getInstance().getWindow();
+
 		this.spiritweb = spiritweb;
 		metalType = metal;
 		manifestation = Manifestations.ManifestationTypes.ALLOMANCY.getManifestation(metalType.getID());
 		hasManifestation = spiritweb.hasManifestation(manifestation);
 		double eighthCircle = Math.toRadians(45.d); // a circle is 360 degrees, / by 8 for 45 degrees, converted to radians
-		this.segmentNr = segmentNr;
 		startAngle = segmentNr * eighthCircle;   // todo: decided by power ID
 		endAngle = startAngle + eighthCircle;
 		this.centerX = centerX;
 		this.centerY = centerY;
 
-		outerRadius = (float) Minecraft.getInstance().getWindow().getGuiScaledHeight() / 3f * 0.7f;
+		outerRadius = (float) window.getGuiScaledHeight() / 3f * 0.7f;
 		innerRadius = 0;
+
+		midAngle = (startAngle + endAngle) / 2;
+		midRadius = (innerRadius + outerRadius) / 1.5;
+		hoverRadius = midRadius * 2.73d; // took the hoverRadius of a segment in the OuterRadialButton and divided it by the midRadius result here to get a ratio of ~2.73
+		currentRadius = midRadius;
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.setLength(0);
@@ -80,7 +93,7 @@ public class InnerRadialButton extends Button
 		}
 
 		stringBuilder.append(".png");
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		manifestationConsumer = maniConsumer;
 
@@ -92,7 +105,18 @@ public class InnerRadialButton extends Button
 	{
 		boolean isHover = isMouseOver(pMouseX, pMouseY);
 		renderSegment(pGuiGraphics, isHover);
-		renderIcon(pGuiGraphics);
+		renderIcon(pGuiGraphics, isHover, pPartialTick);
+		renderText(pGuiGraphics, isHover);
+		renderInfoText(pGuiGraphics, isHover);
+
+		if (metalType.equals(Metals.MetalType.PEWTER))
+		{
+			float pewterDelayedDamage = AllomancySpiritwebSubmodule.getSubmodule(spiritweb).getPewterDelayedDamage();
+			if (pewterDelayedDamage > 0)
+			{
+				renderPewterDelayedDamage(pGuiGraphics, isHover, pewterDelayedDamage);
+			}
+		}
 	}
 
 	@Override
@@ -203,9 +227,7 @@ public class InnerRadialButton extends Button
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
 		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
@@ -213,17 +235,17 @@ public class InnerRadialButton extends Button
 			float py = quad.py();
 			float size = quad.size();
 
-			buf.vertex(pose, px, py, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py, 0).color(color.getRGB()).endVertex();
+			buf.addVertex(pose, px, py, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py, 0).setColor(color.getRGB());
 		}
 
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 
-	private void renderIcon(@NotNull GuiGraphics pGuiGraphics)
+	private void renderIcon(@NotNull GuiGraphics pGuiGraphics, boolean isHovered, float partialTick)
 	{
 		Color metalColor = metalType.getColor();
 		float r = metalColor.getRed()/255.f, g = metalColor.getGreen()/255.f, b = metalColor.getBlue()/255.f;
@@ -240,11 +262,22 @@ public class InnerRadialButton extends Button
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
-		double midAngle = (startAngle + endAngle) / 2;
-		double midRadius = (innerRadius + outerRadius) / 1.5;
-		int iconSize = width-2;
-		int posX = centerX + (int)(Math.cos(midAngle) * midRadius) - iconSize/2;
-		int posY = centerY + (int)(Math.sin(midAngle) * midRadius) - iconSize/2;
+		if (hasManifestation)
+		{
+			if (isHovered)
+			{
+				currentRadius = Mth.lerp(animationSpeed * partialTick, currentRadius, hoverRadius);
+			}
+			else
+			{
+				currentRadius = Mth.lerp(animationSpeed * partialTick, currentRadius, midRadius);
+			}
+		}
+
+		int iconSize = (int) (outerRadius * 0.285f)-2;  // based on a GUI scale of 5 which I (Gerbagel) think the icons' size is best at
+														// this.width / outerRadius gives the scale factor, -2 for margin
+		int posX = centerX + (int)(Math.cos(midAngle) * currentRadius) - iconSize/2;
+		int posY = centerY + (int)(Math.sin(midAngle) * currentRadius) - iconSize/2;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
 		pGuiGraphics.blit(iconLocation,
@@ -273,6 +306,189 @@ public class InnerRadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderText(@NotNull GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (isHovered && hasManifestation)
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = I18n.get("metal.cosmere." + metalType.getName()).toUpperCase();
+
+			int textWidth = font.width(text);
+			int textHeight = font.lineHeight;
+
+			// scale for resolution
+			float scale = (outerRadius*0.16f) / textHeight; // 0.16f from textHeight/outerRadius
+
+			// scale for text width
+			float maxWidth = (float) (outerRadius - midRadius) * 2.f * 0.8f;
+			scale = Math.min(scale, maxWidth / textWidth);
+			textWidth = (int) (textWidth*scale);
+			textHeight = (int) (textHeight*scale);
+
+			float textAngle = (float) midAngle;
+			float textRadius = (float) midRadius;
+
+			// flip if on bottom half of circle
+			if (textAngle > Math.PI / 2 && textAngle < 3 * Math.PI / 2)
+			{
+				textAngle -= (float) Math.PI;
+			}
+
+			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
+			float textY = centerY + (float) Math.sin(midAngle) * textRadius;
+			PoseStack pose = pGuiGraphics.pose();
+			pose.pushPose();
+			pose.translate(textX, textY, 0);
+			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			// get already calculated progress
+			float progress = (float) ((currentRadius - midRadius) / (hoverRadius - midRadius));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			int alpha = (int) (progress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			GuiUtils.drawScaledString(font, pGuiGraphics, text,-textWidth / 2, -textHeight / 2, scale, textColor, false);
+
+			pose.popPose();
+		}
+	}
+
+	private void renderInfoText(@NotNull GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (isHovered && hasManifestation)
+		{
+			// get already calculated progress
+			float progress = (float) ((currentRadius - midRadius) / (hoverRadius - midRadius));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			Font font = Minecraft.getInstance().font;
+			String text = "Empty";
+
+			int seconds = manifestation.getInvestitureRemaining(spiritweb);
+			int hours = seconds / 3600;
+			int minutes = (seconds % 3600) / 60;
+			seconds = seconds % 60;
+
+			if (hours > 0)
+			{
+				text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+			}
+			else if (minutes > 0)
+			{
+				text = String.format("%d:%02d", minutes, seconds);
+			}
+			else if (seconds > 0)
+			{
+				text = String.format("%02d", seconds);
+			}
+
+			int textWidth = font.width(text);
+			int textHeight = font.lineHeight;
+
+			float scale = (outerRadius*0.16f) / textHeight; // 0.16f from textHeight/outerRadius
+
+			float textRadius = (float) (hoverRadius*0.85);
+
+			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
+			float textY = centerY + (float) Math.sin(midAngle) * textRadius;
+
+			float textAngle = (float) midAngle + (float) (Math.PI / 2);
+
+			textAngle = textAngle % (float) (Math.PI * 2);
+			if (textAngle < 0)
+			{
+				textAngle += (float) (Math.PI * 2);
+			}
+
+			// flip if on bottom half of circle
+			if (textAngle > Math.PI / 2 && textAngle < 3 * Math.PI / 2)
+			{
+				textAngle -= (float) Math.PI;
+			}
+
+			PoseStack pose = pGuiGraphics.pose();
+			pose.pushPose();
+			pose.translate(textX, textY, 0);
+			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			pose.scale(scale, scale, 1f);
+
+			int alpha = (int) (progress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			pGuiGraphics.drawString(font, text, -textWidth / 2, -textHeight / 2, textColor, false);
+
+			pose.popPose();
+		}
+	}
+
+	private void renderPewterDelayedDamage(GuiGraphics pGuiGraphics, boolean isHovered, float delayedDamage)
+	{
+		if (isHovered && hasManifestation)
+		{
+			// get already calculated progress
+			float progress = (float) ((currentRadius - midRadius) / (hoverRadius - midRadius));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			Font font = Minecraft.getInstance().font;
+			String text = "x" + delayedDamage;
+
+			int textWidth = font.width(text);
+			int textHeight = font.lineHeight;
+
+			float scale = (outerRadius*0.16f) / textHeight; // 0.16f from textHeight/outerRadius
+
+			float textRadius = (float) (hoverRadius*1.15);
+
+			float textX = centerX + (float) Math.cos(midAngle) * textRadius;
+			float textY = centerY + (float) Math.sin(midAngle) * textRadius;
+
+			float textAngle = (float) midAngle + (float) (Math.PI / 2);
+
+			textAngle = textAngle % (float) (Math.PI * 2);
+			if (textAngle < 0)
+			{
+				textAngle += (float) (Math.PI * 2);
+			}
+
+			// flip if on bottom half of circle
+			if (textAngle > Math.PI / 2 && textAngle < 3 * Math.PI / 2)
+			{
+				textAngle -= (float) Math.PI;
+			}
+
+			PoseStack pose = pGuiGraphics.pose();
+			pose.pushPose();
+			pose.translate(textX, textY, 0);
+			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			pose.scale(scale, scale, 1f);
+
+			int alpha = (int) (progress * 255.0f);
+
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			int iconSize = 12;
+			int spacing = 2;
+			int totalWidth = iconSize + spacing + textWidth;
+			int startX = -totalWidth / 2;
+
+			RenderSystem.enableBlend();
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, progress);
+			pGuiGraphics.blitSprite(WITHERED_FULL_HEART, startX, -iconSize / 2, iconSize, iconSize);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.disableBlend();
+
+			pGuiGraphics.drawString(font, text, startX + iconSize + spacing, -textHeight / 2 + 1, textColor, false);
+
+			pose.popPose();
+		}
 	}
 
 	private void calculateVertexes(float centerX, float centerY, float outerRadius, int segmentNr)

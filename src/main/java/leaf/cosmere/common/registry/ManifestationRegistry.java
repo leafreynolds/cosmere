@@ -19,13 +19,13 @@ public class ManifestationRegistry
 
 	public static Manifestation fromID(String location)
 	{
-		ResourceLocation resourceLocation = new ResourceLocation(location);
+		ResourceLocation resourceLocation = ResourceLocation.parse(location);
 		return fromID(resourceLocation);
 	}
 
 	public static Manifestation fromID(ResourceLocation location)
 	{
-		Manifestation value = CosmereAPI.manifestationRegistry().getValue(location);
+		Manifestation value = CosmereAPI.manifestationRegistry().get(location);
 		if (value != null)
 		{
 			return value;

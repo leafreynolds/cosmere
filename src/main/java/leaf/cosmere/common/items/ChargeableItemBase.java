@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 8 - 2024 ~ Leaf
+ * File updated ~ 22 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.common.items;
@@ -14,11 +14,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 
 	public void addFilled(CreativeModeTab.Output output)
 	{
-		output.accept(new ItemStack(this));
+		//only filled version, others are added via addToDisplay(ITEMS, output)
 		ItemStack fullPower = new ItemStack(this);
 		setCharge(fullPower, getMaxCharge(fullPower));
 		output.accept(fullPower);
@@ -47,7 +48,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		String attunedPlayerName = getAttunedPlayerName(stack);
 		UUID attunedPlayer = getAttunedPlayer(stack);
@@ -58,7 +59,7 @@ public abstract class ChargeableItemBase extends BaseItem implements IChargeable
 
 			Minecraft mc = Minecraft.getInstance();
 			Player player = mc.player;
-			if(player != null && !player.getUUID().equals(attunedPlayer) && !attunedPlayer.equals(Constants.NBT.UNKEYED_UUID))
+			if (player != null && !player.getUUID().equals(attunedPlayer) && !attunedPlayer.equals(Constants.NBT.UNKEYED_UUID))
 			{
 				identityName = Component.literal(EnchantmentNames.getInstance().getRandomName(mc.font, 16).getString());
 			}

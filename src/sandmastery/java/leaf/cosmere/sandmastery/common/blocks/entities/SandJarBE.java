@@ -3,6 +3,7 @@ package leaf.cosmere.sandmastery.common.blocks.entities;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -21,15 +22,15 @@ public class SandJarBE extends BlockEntity
 	private int ticksSinceUpdate = 0;
 
 	@Override
-	protected void saveAdditional(CompoundTag nbt)
+	protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registries)
 	{
-		super.saveAdditional(nbt);
+		super.saveAdditional(nbt, registries);
 	}
 
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, registries);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SandJarBE entity)

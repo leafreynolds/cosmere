@@ -12,6 +12,7 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.eventHandlers.ModBusEventHandler;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -124,7 +125,7 @@ public class AllomancyBronze extends AllomancyManifestation
 		//if target has copper and it's active, early exit
 		final AttributeMap targetAttributes = potentialConcealed.getAttributes();
 		double concealmentStrength = 0;
-		final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+		final Holder<Attribute> cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.getHolder();
 		if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 		{
 			concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);

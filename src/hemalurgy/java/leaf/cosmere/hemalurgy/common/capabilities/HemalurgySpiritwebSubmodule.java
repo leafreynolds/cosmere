@@ -4,12 +4,9 @@
 
 package leaf.cosmere.hemalurgy.common.capabilities;
 
-import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
-import leaf.cosmere.hemalurgy.common.config.HemalurgyServerConfig;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -26,7 +23,7 @@ public class HemalurgySpiritwebSubmodule implements ISpiritwebSubmodule
 		final int tickToCheck = HemalurgyConfigs.SERVER.SPIRITWEB_INTEGRITY_TICK_CHECK.get();
 		if (spiritweb.getLiving().tickCount % tickToCheck == 0)
 		{
-			AttributeInstance attributeInstance = spiritweb.getLiving().getAttribute(HemalurgyAttributes.SPIRITWEB_INTEGRITY.get());
+			AttributeInstance attributeInstance = spiritweb.getLiving().getAttribute(HemalurgyAttributes.SPIRITWEB_INTEGRITY.getHolder());
 			if (attributeInstance != null)
 			{
 				int intensity = (int) attributeInstance.getValue();
@@ -46,13 +43,13 @@ public class HemalurgySpiritwebSubmodule implements ISpiritwebSubmodule
 						//random messages
 						switch (intensity)
 						{
-							default:	// illegal? perhaps
+							default:    // illegal? perhaps
 							case -3:
-								player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, tickToCheck*2, (intensity*-1)-3, false, false, false)); // confusion = nausea
+								player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, tickToCheck * 2, (intensity * -1) - 3, false, false, false)); // confusion = nausea
 							case -2:
-								player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, tickToCheck*2, (intensity*-1)-2, false, false, false));
+								player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, tickToCheck * 2, (intensity * -1) - 2, false, false, false));
 							case -1:
-								player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, tickToCheck*2, (intensity*-1)-1, false, false, false));
+								player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, tickToCheck * 2, (intensity * -1) - 1, false, false, false));
 								break;
 						}
 					}

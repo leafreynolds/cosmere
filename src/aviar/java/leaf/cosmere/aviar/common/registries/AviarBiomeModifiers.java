@@ -4,8 +4,8 @@
 
 package leaf.cosmere.aviar.common.registries;
 
-import leaf.cosmere.common.registration.impl.BiomeModifierSerializerDeferredRegister;
 import leaf.cosmere.aviar.common.Aviar;
+import leaf.cosmere.common.registration.impl.BiomeModifierSerializerDeferredRegister;
 
 public class AviarBiomeModifiers
 {

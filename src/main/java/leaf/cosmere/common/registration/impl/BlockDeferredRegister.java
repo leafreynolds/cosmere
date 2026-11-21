@@ -6,11 +6,11 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.common.registration.DoubleDeferredRegister;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class BlockDeferredRegister extends DoubleDeferredRegister<Block, Item>
 
 	public BlockDeferredRegister(String modid)
 	{
-		super(modid, ForgeRegistries.BLOCKS, ForgeRegistries.ITEMS);
+		super(modid, Registries.BLOCK, Registries.ITEM);
 	}
 
 	//Normal block registration

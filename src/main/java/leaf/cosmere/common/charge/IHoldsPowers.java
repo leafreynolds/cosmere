@@ -1,3 +1,7 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.common.charge;
 
 import leaf.cosmere.api.Constants;
@@ -9,43 +13,44 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.CosmereEffectsRegistry;
 import leaf.cosmere.common.util.CosmereAttributeUtils;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.item.component.CustomData;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public interface IHoldsPowers
 {
 	int getMaxCapacity();
 
-	default void addPower(ItemStack itemStack, Attribute attribute, int strength, int attributeSlot)
+	default void addPower(ItemStack itemStack, Holder<Attribute> attribute, int strength, int attributeSlot)
 	{
 		if (attribute == null)
 		{
 			return;
 		}
-		Attribute[] attributes = getAttributes(itemStack);
+		List<Holder<Attribute>> attributes = getAttributes(itemStack);
 		Integer[] attributeStrengths = getAttributeStrengths(itemStack);
 
-		if (attributes == null || attributes.length == 0)
+		if (attributes == null || attributes.size() == 0)
 		{
-			attributes = new Attribute[getMaxCapacity()];
+			attributes = new ArrayList<>(getMaxCapacity());
 			attributeStrengths = new Integer[getMaxCapacity()];
 		}
 
 		int newStrength = strength;
-		if (attributes[attributeSlot] != null && attributeStrengths[attributeSlot] != null)
+		if (attributes.get(attributeSlot) != null && attributeStrengths[attributeSlot] != null)
 		{
 			newStrength += attributeStrengths[attributeSlot];
 		}
 
-		attributes[attributeSlot] = attribute;
+		attributes.set(attributeSlot, attribute);
 		attributeStrengths[attributeSlot] = newStrength;
 		setAttributes(itemStack, attributes);
 		setAttributeStrengths(itemStack, attributeStrengths);
@@ -57,14 +62,14 @@ public interface IHoldsPowers
 		{
 			return;
 		}
-		Attribute[] attributes = getAttributes(itemStack);
+		List<Holder<Attribute>> attributes = getAttributes(itemStack);
 		Integer[] attributeStrengths = getAttributeStrengths(itemStack);
 
-		for (int i = 0; i < attributes.length; i++)
+		for (int i = 0; i < attributes.size(); i++)
 		{
-			if (attributes[i] == attribute)
+			if (attributes.get(i) == attribute)
 			{
-				attributes[i] = null;
+				attributes.set(i, null);
 				attributeStrengths[i] = null;
 				setAttributes(itemStack, attributes);
 				setAttributeStrengths(itemStack, attributeStrengths);
@@ -72,7 +77,7 @@ public interface IHoldsPowers
 			}
 		}
 
-		for (Attribute att : attributes)
+		for (Holder<Attribute> att : attributes)
 		{
 			if (att != null)
 			{
@@ -84,47 +89,42 @@ public interface IHoldsPowers
 		StackNBTHelper.removeEntry(itemStack, Constants.NBT.ATTUNED_PLAYER_NAME);
 	}
 
-	default Attribute[] getAttributes(ItemStack itemStack)
+	//slot indexed, always getMaxCapacity() entries, null for an empty slot
+	default List<Holder<Attribute>> getAttributes(ItemStack itemStack)
 	{
-		CompoundTag nbt = itemStack.getOrCreateTag();
-		Attribute[] attributes;
+		final int capacity = getMaxCapacity();
+		List<Holder<Attribute>> attributes = new ArrayList<>(Collections.nCopies(capacity, null));
+
+		CompoundTag nbt = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 		if (!nbt.contains("attributeIds"))
 		{
-			return new Attribute[getMaxCapacity()];
+			return attributes;
 		}
 
-
 		ListTag attributeListTag = (ListTag) nbt.get("attributeIds");
-
-		attributes = new Attribute[attributeListTag.size()];
-		for (int i = 0; i < attributeListTag.size(); i++)
+		for (int i = 0; i < attributeListTag.size() && i < capacity; i++)
 		{
 			CompoundTag tag = (CompoundTag) attributeListTag.get(i);
-			if (tag.getString("attribute").equals("null"))
+			if (!tag.getString("attribute").equals("null"))
 			{
-				attributes[i] = null;
-			}
-			else
-			{
-				attributes[i] = CosmereAttributeUtils.getAttributeByDescriptionId(tag.getString("attribute"));
+				attributes.set(i, CosmereAttributeUtils.getAttributeByDescriptionId(tag.getString("attribute")));
 			}
 		}
 
 		return attributes;
 	}
 
-	default boolean setAttributes(ItemStack itemStack, Attribute[] attributes)
+	default boolean setAttributes(ItemStack itemStack, List<Holder<Attribute>> attributes)
 	{
-		if (attributes.length == 0)
+		if (attributes.size() == 0)
 		{
 			return false;
 		}
 
-		CompoundTag nbt = itemStack.getOrCreateTag();
+		CompoundTag nbt = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 		ListTag attributesListTag = new ListTag();
-		for (Attribute attribute : attributes)
+		for (Holder<Attribute> attribute : attributes)
 		{
-
 			CompoundTag tag = new CompoundTag();
 			if (attribute == null)
 			{
@@ -132,18 +132,20 @@ public interface IHoldsPowers
 			}
 			else
 			{
-				tag.putString("attribute", attribute.getDescriptionId());
+				tag.putString("attribute", attribute.getRegisteredName());
 			}
 			attributesListTag.add(tag);
 		}
 
 		nbt.put("attributeIds", attributesListTag);
+		//copyTag() means not changing original, overwrite it or the change is lost
+		itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
 		return true;
 	}
 
 	default Integer[] getAttributeStrengths(ItemStack itemStack)
 	{
-		CompoundTag nbt = itemStack.getOrCreateTag();
+		CompoundTag nbt = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 
 		if (!nbt.contains("attributeStrengths"))
 		{
@@ -177,9 +179,9 @@ public interface IHoldsPowers
 			return false;
 		}
 
-		CompoundTag nbt = itemStack.getOrCreateTag();
+		CompoundTag nbt = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 		int[] newStrengths = new int[getMaxCapacity()];
-		for (int i = 0; i < strengths.length; i++)
+		for (int i = 0; i < strengths.length && i < newStrengths.length; i++)
 		{
 			if (strengths[i] == null)
 			{
@@ -192,6 +194,8 @@ public interface IHoldsPowers
 		}
 
 		nbt.putIntArray("attributeStrengths", newStrengths);
+		//copyTag() means not changing original, overwrite it or the change is lost
+		itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
 		return true;
 	}
 
@@ -205,13 +209,12 @@ public interface IHoldsPowers
 
 			if (noAttunedPlayer)
 			{
-				LazyOptional<ISpiritweb> spiritwebOpt = SpiritwebCapability.get(entity);
+				final Optional<ISpiritweb> spiritwebOpt = SpiritwebCapability.get(entity);
 
-				final Optional<ISpiritweb> optResolved = spiritwebOpt.resolve();
-				if (optResolved.isPresent())
+				if (spiritwebOpt.isPresent())
 				{
-					ISpiritweb spiritweb = optResolved.get();
-					CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+					ISpiritweb spiritweb = spiritwebOpt.get();
+					CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName())).value();
 					if (spiritweb.hasEffect(aluminumEffect))
 					{
 						// Then set the metalmind to "unsealed". Any feruchemist with access to that power can use the metalmind
@@ -224,7 +227,7 @@ public interface IHoldsPowers
 
 			if (noAttunedPlayer || attunedPlayerID.equals(playerID) || attunedPlayerID.equals(Constants.NBT.UNKEYED_UUID))
 			{
-				if (noAttunedPlayer && getAttributes(itemStack).length > 0)
+				if (noAttunedPlayer && getAttributes(itemStack).size() > 0)
 				{
 					setAttunedPlayer(itemStack, entity);
 					setAttunedPlayerName(itemStack, entity);
@@ -259,10 +262,10 @@ public interface IHoldsPowers
 
 	default boolean getPlayerIsAttuned(ItemStack itemStack, Player entity)
 	{
-		if (SpiritwebCapability.get(entity).resolve().isPresent())
+		if (SpiritwebCapability.get(entity).isPresent())
 		{
-			ISpiritweb spiritweb = SpiritwebCapability.get(entity).resolve().get();
-			CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+			ISpiritweb spiritweb = SpiritwebCapability.get(entity).get();
+			CosmereEffect aluminumEffect = CosmereEffectsRegistry.fromID(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName())).value();
 			boolean noIdentityPlayer = spiritweb.hasEffect(aluminumEffect);
 
 			UUID itemAttunedPlayerUUID = getAttunedPlayer(itemStack);

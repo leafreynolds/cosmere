@@ -6,7 +6,7 @@ import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -32,7 +32,7 @@ public class SurgebindingPlacedFeatures
 					));
 	public static final ResourceKey<PlacedFeature> SAPPHIRE_GEODE_PLACED_KEY = registerKey("sapphire_geode_placed_key");
 
-	public static void bootstrap(BootstapContext<PlacedFeature> context)
+	public static void bootstrap(BootstrapContext<PlacedFeature> context)
 	{
 		HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
@@ -49,10 +49,10 @@ public class SurgebindingPlacedFeatures
 
 	private static ResourceKey<PlacedFeature> registerKey(String name)
 	{
-		return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(Surgebinding.MODID, name));
+		return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(Surgebinding.MODID, name));
 	}
 
-	private static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
+	private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
 	                             List<PlacementModifier> modifiers)
 	{
 		context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));

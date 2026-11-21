@@ -1,14 +1,14 @@
 package leaf.cosmere.common.registration;
 
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class DoubleWrappedRegistryObject<PRIMARY, SECONDARY> implements INamedEntry
 {
 
-	protected final RegistryObject<PRIMARY> primaryRO;
-	protected final RegistryObject<SECONDARY> secondaryRO;
+	protected final DeferredHolder<? super PRIMARY, PRIMARY> primaryRO;
+	protected final DeferredHolder<? super SECONDARY, SECONDARY> secondaryRO;
 
-	public DoubleWrappedRegistryObject(RegistryObject<PRIMARY> primaryRO, RegistryObject<SECONDARY> secondaryRO)
+	public DoubleWrappedRegistryObject(DeferredHolder<? super PRIMARY, PRIMARY> primaryRO, DeferredHolder<? super SECONDARY, SECONDARY> secondaryRO)
 	{
 		this.primaryRO = primaryRO;
 		this.secondaryRO = secondaryRO;

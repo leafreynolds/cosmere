@@ -4,22 +4,21 @@
 
 package leaf.cosmere.sandmastery.common.items;
 
-import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.Taldain;
-import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.entities.SandProjectile;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
-import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchInventory;
+import leaf.cosmere.sandmastery.common.items.sandpouch.SandpouchItemHandler;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryDataComponents;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
-import net.minecraft.nbt.CompoundTag;
+import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
@@ -29,11 +28,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
@@ -44,8 +40,6 @@ public class SandPouchItem extends ChargeableItemBase
 	{
 		super(PropTypes.Items.ONE.get());
 	}
-
-	private SandPouchInventory sandPouchInventory;
 
 	public static final Predicate<ItemStack> SUPPORTED_ITEMS = (itemStack) ->
 	{
@@ -58,31 +52,42 @@ public class SandPouchItem extends ChargeableItemBase
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected)
 	{
-		MiscHelper.chargeItemFromInvestiture(pStack, pLevel, pEntity, getMaxCharge(pStack));
+		if (pLevel.isClientSide() || !MiscHelper.checkIfNearbyInvestiture((ServerLevel) pLevel, pEntity.blockPosition(), false))
+		{
+			return;
+		}
+
+		int charged = pStack.getOrDefault(SandmasteryDataComponents.CHARGED_SAND_LAYERS, 0);
+		if (charged < totalLayers(pStack))
+		{
+			pStack.set(SandmasteryDataComponents.CHARGED_SAND_LAYERS, charged + 1);
+		}
+	}
+
+	private static final int CHARGE_PER_LAYER = SandmasteryConstants.CHARGE_PER_SAND_LAYER;
+
+	private static int totalLayers(ItemStack itemStack)
+	{
+		return itemStack.getOrDefault(SandmasteryDataComponents.SAND_LAYERS, 0);
 	}
 
 	@Override
 	public int getCharge(ItemStack itemStack)
 	{
-		int itemCharge = StackNBTHelper.getInt(itemStack, Constants.NBT.CHARGE_LEVEL, 0);
-		return itemCharge * itemStack.getCount();
+		return Math.min(itemStack.getOrDefault(SandmasteryDataComponents.CHARGED_SAND_LAYERS, 0), totalLayers(itemStack)) * CHARGE_PER_LAYER;
+	}
+
+	@Override 
+	public void setCharge(ItemStack itemStack, int chargeLevel)
+	{
+		int layers = Mth.clamp(chargeLevel / CHARGE_PER_LAYER, 0, totalLayers(itemStack));
+		itemStack.set(SandmasteryDataComponents.CHARGED_SAND_LAYERS, layers);
 	}
 
 	@Override
 	public int getMaxCharge(ItemStack itemStack)
 	{
-		int res = 0;
-		IItemHandler inv = getPouchInv(itemStack);
-		if (inv == null)
-		{
-			return res;
-		}
-		for (int i = 0; i < SandPouchInventory.size; i++)
-		{
-			ItemStack stack = inv.getStackInSlot(i);
-			res += MiscHelper.getChargeFromItemStack(stack);
-		}
-		return res;
+		return totalLayers(itemStack) * CHARGE_PER_LAYER;
 	}
 
 	/*@Override
@@ -110,44 +115,34 @@ public class SandPouchItem extends ChargeableItemBase
 			{
 				MenuProvider container = new SimpleMenuProvider((windowID, playerInv, plyer) ->
 						new SandPouchContainerMenu(windowID, playerInv, pouchStack), pouchStack.getHoverName());
-				NetworkHooks.openScreen((ServerPlayer) player, container, buf -> buf.writeBoolean(true));
+				((ServerPlayer) player).openMenu(container, buf -> buf.writeBoolean(true));
 			}
 		}
 		return InteractionResultHolder.consume(pouchStack);
 	}
 
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag oldCapNbt)
-	{
-		this.sandPouchInventory = new SandPouchInventory();
-		if (oldCapNbt != null)
-		{
-			sandPouchInventory.deserializeNBT(oldCapNbt); // todo check if this breaks things?
-		}
-		return this.sandPouchInventory;
-	}
-
 	public static IItemHandlerModifiable getPouchInv(ItemStack pouchStack)
 	{
-		return (IItemHandlerModifiable) pouchStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		return (IItemHandlerModifiable) pouchStack.getCapability(Capabilities.ItemHandler.ITEM);
 	}
 
 	public void shoot(ItemStack pouch, Player player)
 	{
 		SpiritwebCapability.get(player).ifPresent((data) ->
 		{
-			int mode = data.getMode(SandmasteryManifestations.SANDMASTERY_POWERS.get(Taldain.Mastery.PROJECTILE).get());
 			IItemHandlerModifiable inv = getPouchInv(pouch);
-			ItemStack ammo = inv.getStackInSlot(2);
-			if (ammo.getCount() > 0)
+			if (inv == null)
 			{
-				final ItemStack stackToShoot = ammo.copy().split(1);
-				ammo.shrink(1);
+				return;
+			}
+			final ItemStack stackToShoot = inv.extractItem(SandpouchItemHandler.SLOT_LAYERS, 1, false);
+			if (!stackToShoot.isEmpty())
+			{
 				//shoot?
 
 				if (!player.level().isClientSide)
 				{
-					AbstractArrow sandProjectile = new SandProjectile(player.level(), player, stackToShoot);
+					AbstractArrow sandProjectile = new SandProjectile(player.level(), player, stackToShoot, pouch);
 					sandProjectile.setCritArrow(true);
 					sandProjectile.shootFromRotation(
 							player,

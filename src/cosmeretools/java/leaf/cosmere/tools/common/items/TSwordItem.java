@@ -15,7 +15,7 @@ public class TSwordItem extends SwordItem implements IHasMetalType
 
 	public TSwordItem(Metals.MetalType metalType, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties)
 	{
-		super(metalType, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+		super(metalType, pProperties.attributes(SwordItem.createAttributes(metalType, pAttackDamageModifier, pAttackSpeedModifier)));
 		this.metalType = metalType;
 	}
 

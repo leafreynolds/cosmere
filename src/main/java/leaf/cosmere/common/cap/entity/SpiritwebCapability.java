@@ -16,17 +16,18 @@ import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.SpiritwebHud;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.CosmereConfigs;
-import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import leaf.cosmere.common.registry.CosmereAttachmentsRegistry;
 import leaf.cosmere.common.registry.GameEventRegistry;
 import leaf.cosmere.common.registry.ManifestationRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -37,14 +38,11 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,9 +56,6 @@ import java.util.*;
 
 public class SpiritwebCapability implements ISpiritweb
 {
-	public static final Capability<ISpiritweb> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
 
 	private boolean didSetup = false;
 	private boolean hasBeenInitialized = false;
@@ -104,14 +99,14 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Nonnull
-	public static LazyOptional<ISpiritweb> get(LivingEntity entity)
+	public static Optional<ISpiritweb> get(LivingEntity entity)
 	{
-		return entity != null ? entity.getCapability(SpiritwebCapability.CAPABILITY, null)
-		                      : LazyOptional.empty();
+		return Optional.of(entity.getData(CosmereAttachmentsRegistry.SPIRITWEB));
 	}
 
+
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (this.nbt == null)
 		{
@@ -122,11 +117,12 @@ public class SpiritwebCapability implements ISpiritweb
 		nbt.putString("selected_power", selectedManifestation.getRegistryName().toString());
 
 		final CompoundTag modeNBT = new CompoundTag();
-		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+		for (Manifestation manifestation : getManifestations())
 		{
-			if (MANIFESTATIONS_MODE.containsKey(manifestation))
+			modeNBT.putInt(manifestation.getRegistryName().toString(), MANIFESTATIONS_MODE.getOrDefault(manifestation, 0));
+			if (!MANIFESTATIONS_MODE.containsKey(manifestation))
 			{
-				modeNBT.putInt(manifestation.getRegistryName().toString(), MANIFESTATIONS_MODE.get(manifestation));
+				MANIFESTATIONS_MODE.put(manifestation, 0);
 			}
 		}
 		nbt.put("manifestation_modes", modeNBT);
@@ -169,7 +165,7 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag compoundTag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
 		this.nbt = compoundTag;
 
@@ -439,7 +435,7 @@ public class SpiritwebCapability implements ISpiritweb
 				// if the target is properly concealed, we don't trigger investiture game events
 				final AttributeMap targetAttributes = spiritWebEntity.getAttributes();
 				double concealmentStrength = 0;
-				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				final Holder<Attribute> cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.getHolder();
 				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 				{
 					concealmentStrength = targetAttributes.getValue(cognitiveConcealmentAttr);
@@ -448,7 +444,7 @@ public class SpiritwebCapability implements ISpiritweb
 				//todo move this to a config so people can define how strong the concealment needs to be
 				if (concealmentStrength < 2)
 				{
-					spiritWebEntity.gameEvent(GameEventRegistry.KINETIC_INVESTITURE.get());
+					spiritWebEntity.gameEvent((Holder<GameEvent>) GameEventRegistry.KINETIC_INVESTITURE.getHolder());
 				}
 			}
 
@@ -488,7 +484,7 @@ public class SpiritwebCapability implements ISpiritweb
 		{
 			//attribute registry name is now the same as the manifestation registry name, so this function
 			//doesn't need to be able to access the attribute registries of sub mods :)
-			Attribute attribute = manifestation.getAttribute();
+			Holder<Attribute> attribute = manifestation.getAttribute();
 			if (attribute != null)
 			{
 				AttributeInstance oldAttr = oldAttMap.getInstance(attribute);
@@ -503,9 +499,10 @@ public class SpiritwebCapability implements ISpiritweb
 			}
 		}
 
-		//forcibly serialize the old web, then deserialize it into the new one
-		//before, it was just a copy of whatever was saved the last time it was synced.
-		deserializeNBT(oldWeb.serializeNBT().copy());
+//		//forcibly serialize the old web, then deserialize it into the new one
+//		//before, it was just a copy of whatever was saved the last time it was synced.
+//		HolderLookup.Provider provider = event.getOriginal().registryAccess();
+//		deserializeNBT(provider, oldWeb.serializeNBT(provider).copy());
 
 		if (event.isWasDeath())
 		{
@@ -572,7 +569,7 @@ public class SpiritwebCapability implements ISpiritweb
 	{
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
-			final Attribute attribute = manifestation.getAttribute();
+			final Holder<Attribute> attribute = manifestation.getAttribute();
 			if (attribute == null)
 			{
 				continue;
@@ -603,7 +600,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public boolean hasManifestation(Manifestation manifestation, boolean ignoreTemporaryPower)
 	{
-		final Attribute attribute = manifestation.getAttribute();
+		final Holder<Attribute> attribute = manifestation.getAttribute();
 		if (attribute == null)
 		{
 			return false;
@@ -636,7 +633,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void giveManifestation(Manifestation manifestation, int baseValue)
 	{
-		final Attribute attribute = manifestation.getAttribute();
+		final Holder<Attribute> attribute = manifestation.getAttribute();
 		if (attribute == null)
 		{
 			return;
@@ -654,7 +651,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void removeManifestation(Manifestation manifestation)
 	{
-		final Attribute attribute = manifestation.getAttribute();
+		final Holder<Attribute> attribute = manifestation.getAttribute();
 		if (attribute == null)
 		{
 			return;
@@ -675,12 +672,7 @@ public class SpiritwebCapability implements ISpiritweb
 			return false;
 		}
 
-		if (MANIFESTATIONS_MODE.containsKey(manifestation))
-		{
-			return MANIFESTATIONS_MODE.get(manifestation) != 0;
-		}
-
-		return false;
+		return MANIFESTATIONS_MODE.getOrDefault(manifestation, 0) != 0;
 	}
 
 	@Override
@@ -692,7 +684,11 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void deactivateManifestations()
 	{
-		MANIFESTATIONS_MODE.clear();
+		for (Manifestation mani : MANIFESTATIONS_MODE.keySet())
+		{
+			int last = MANIFESTATIONS_MODE.put(mani, 0);    // will not be null, despite what IntelliJ says. it has to exist to get here in the first place...
+			mani.onModeChange(this, last);
+		}
 	}
 
 	@Override
@@ -735,13 +731,28 @@ public class SpiritwebCapability implements ISpiritweb
 	}
 
 	@Override
-	public HashMap<Manifestation, Integer> getManifestations()
+	public HashMap<Manifestation, Integer> getManifestationsAndModes()
 	{
-		return getManifestations(false, false);
+		return getManifestationsAndModes(false, false);
+	}
+
+	private List<Manifestation> getManifestations()
+	{
+		List<Manifestation> list = new ArrayList<>();
+		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
+		{
+			if (manifestation == ManifestationRegistry.NONE.getManifestation())
+				continue;
+			if (hasManifestation(manifestation))
+			{
+				list.add(manifestation);
+			}
+		}
+		return list;
 	}
 
 	@Override
-	public HashMap<Manifestation, Integer> getManifestations(boolean ignoreTemporaryPower, boolean ignoreInactivePower)
+	public HashMap<Manifestation, Integer> getManifestationsAndModes(boolean ignoreTemporaryPower, boolean ignoreInactivePower)
 	{
 		HashMap<Manifestation, Integer> list = new HashMap<>();
 		for (Manifestation manifestation: CosmereAPI.manifestationRegistry())
@@ -855,7 +866,7 @@ public class SpiritwebCapability implements ISpiritweb
 	@Override
 	public void syncToClients(@Nullable ServerPlayer serverPlayerEntity)
 	{
-		if (livingEntity != null && livingEntity.level().isClientSide)
+		if (livingEntity == null || livingEntity.level().isClientSide)
 		{
 			throw new IllegalStateException("Don't sync client -> server");
 		}
@@ -867,7 +878,7 @@ public class SpiritwebCapability implements ISpiritweb
 			first.ifPresent(this::setSelectedManifestation);
 		}
 
-		CompoundTag nbt = serializeNBT();
+		CompoundTag nbt = serializeNBT(livingEntity.registryAccess());
 
 		if (serverPlayerEntity == null)
 		{
@@ -968,7 +979,7 @@ public class SpiritwebCapability implements ISpiritweb
 
 		public void addManifestations(ISpiritweb spiritweb)
 		{
-			manifestations = spiritweb.getManifestations(false, true);
+			manifestations = spiritweb.getManifestationsAndModes(false, true);
 
 		}
 

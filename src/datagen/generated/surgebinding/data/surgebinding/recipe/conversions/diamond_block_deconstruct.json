@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "surgebinding:rosharan_diamond_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "surgebinding:rosharan_diamond"
+  }
+}

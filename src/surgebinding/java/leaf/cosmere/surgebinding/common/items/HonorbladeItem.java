@@ -1,32 +1,28 @@
 /*
- * File updated ~ 4 - 2 - 2025 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.common.items;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import leaf.cosmere.api.Roshar;
-import leaf.cosmere.api.helpers.TimeHelper;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.api.text.TextHelper;
+import leaf.cosmere.surgebinding.common.Surgebinding;
 import leaf.cosmere.surgebinding.common.capabilities.BondableRadiantShardData;
 import leaf.cosmere.surgebinding.common.capabilities.IRadiantShardData;
-import leaf.cosmere.surgebinding.common.capabilities.RadiantShardData;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingAttributes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +34,7 @@ public class HonorbladeItem extends ShardbladeItem
 	/**
 	 * Modifiers applied when the item is in the mainhand of a user. copied from sword item
 	 */
-	private Multimap<Attribute, AttributeModifier> attributeModifiers = null;
+	private ItemAttributeModifiers attributeModifiers = null;
 
 	// having primary and secondary means that theoretically a player could
 	// hold two shards that share a surge and be twice as strong in that surge // todo more strength shouldn't really matter much in surgebinding
@@ -56,31 +52,35 @@ public class HonorbladeItem extends ShardbladeItem
 	 * Gets a map of item attribute modifiers, used by damage when used as melee weapon.
 	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack)
+	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
 		if (attributeModifiers == null)
 		{
-			ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-			builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION));
-			builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeedIn, AttributeModifier.Operation.ADDITION));
-			builder.put(SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(radiantOrder.getFirstSurge()).getAttribute(), new AttributeModifier(PRIMARY_HONORBLADE_SURGE_UUID, "SurgeAttribute", 5, AttributeModifier.Operation.ADDITION));
-			builder.put(SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(radiantOrder.getSecondSurge()).getAttribute(), new AttributeModifier(SECONDARY_HONORBLADE_SURGE_UUID, "SurgeAttribute", 5, AttributeModifier.Operation.ADDITION));
-			this.attributeModifiers = builder.build();
+			//modifier ids are ResourceLocations in 1.21, and the attack attributes are mainhand only
+			attributeModifiers = ItemAttributeModifiers.builder()
+					.add(Attributes.ATTACK_DAMAGE,
+							new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, attackDamage, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.MAINHAND)
+					.add(Attributes.ATTACK_SPEED,
+							new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, attackSpeedIn, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.MAINHAND)
+					.add(SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(radiantOrder.getFirstSurge()).getHolder(),
+							new AttributeModifier(Surgebinding.rl(radiantOrder.getName() + "_primary_surge"), 5, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.HAND)
+					.add(SurgebindingAttributes.SURGEBINDING_ATTRIBUTES.get(radiantOrder.getSecondSurge()).getHolder(),
+							new AttributeModifier(Surgebinding.rl(radiantOrder.getName() + "_secondary_surge"), 5, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.HAND)
+					.build();
 		}
 
-		return switch (equipmentSlot)
-		{
-			case MAINHAND, OFFHAND -> this.attributeModifiers;
-			default -> super.getAttributeModifiers(equipmentSlot, stack);
-		};
-
+		return attributeModifiers;
 	}
 
 	@Override
 	public ItemStack getDefaultInstance()
 	{
 		ItemStack stack = super.getDefaultInstance();
-		IRadiantShardData data = stack.getCapability(RadiantShardData.RADIANT_SHARD_DATA).orElseGet(() -> {return new BondableRadiantShardData(stack);});
+		IRadiantShardData data = getShardData(stack);
 		data.setOrder(radiantOrder);
 		return stack;
 	}
@@ -89,7 +89,16 @@ public class HonorbladeItem extends ShardbladeItem
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pItemSlot, boolean pIsSelected)
 	{
 		super.inventoryTick(pStack, pLevel, pEntity, pItemSlot, pIsSelected);
-		getShardData(pStack).setOrder(getOrder(pStack));
+		//order is fixed by the item
+		//write server side, and only when missing so the stack isn't rewritten every tick
+		if (!pLevel.isClientSide)
+		{
+			BondableRadiantShardData data = getShardData(pStack);
+			if (data.getOrder() != radiantOrder)
+			{
+				data.setOrder(radiantOrder);
+			}
+		}
 	}
 
 	@Override
@@ -105,7 +114,7 @@ public class HonorbladeItem extends ShardbladeItem
 	}
 
 	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
 		final BondableRadiantShardData data = getShardData(pStack);
 		String attunedPlayerName = data.getBondedName();
@@ -115,7 +124,7 @@ public class HonorbladeItem extends ShardbladeItem
 			pTooltipComponents.add(TextHelper.createText(attunedPlayerName));
 		}
 
-		if(data.getOrder() != null)
+		if (data.getOrder() != null)
 		{
 			pTooltipComponents.add(TextHelper.createText(StringHelper.fixCapitalisation(data.getOrder().getName())));
 		}

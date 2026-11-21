@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:raw_materials/cadmium"
+    },
+    {
+      "tag": "c:raw_materials/lead"
+    },
+    {
+      "tag": "c:raw_materials/lead"
+    },
+    {
+      "tag": "c:raw_materials/lead"
+    },
+    {
+      "tag": "c:raw_materials/lead"
+    },
+    {
+      "tag": "c:raw_materials/lead"
+    },
+    {
+      "tag": "c:raw_materials/lead"
+    },
+    {
+      "tag": "c:raw_materials/tin"
+    },
+    {
+      "tag": "c:raw_materials/tin"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "cosmere:bendalloy_blend"
+  }
+}

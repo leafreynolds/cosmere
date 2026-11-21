@@ -15,7 +15,7 @@ public class TAxeItem extends AxeItem implements IHasMetalType
 
 	public TAxeItem(Metals.MetalType metalType, float pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties)
 	{
-		super(metalType, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+		super(metalType, pProperties.attributes(AxeItem.createAttributes(metalType, pAttackDamageModifier, pAttackSpeedModifier)));
 		this.metalType = metalType;
 	}
 

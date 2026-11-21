@@ -11,8 +11,6 @@ import leaf.cosmere.allomancy.common.items.MistcloakItem;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.common.registration.impl.ItemDeferredRegister;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 
 public class AllomancyItems
 {

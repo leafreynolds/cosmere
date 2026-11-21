@@ -1,5 +1,5 @@
 /*
- * File updated ~ 31 - 7 - 2023 ~ Leaf
+ * File updated ~ 22 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.hemalurgy.common.entity;
@@ -8,7 +8,7 @@ import leaf.cosmere.api.Metals;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyItems;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -37,7 +37,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
 
 public class Koloss extends AbstractIllager
@@ -70,7 +69,7 @@ public class Koloss extends AbstractIllager
 	}
 
 	@Override
-	public void applyRaidBuffs(int pWave, boolean pUnusedFalse)
+	public void applyRaidBuffs(ServerLevel pLevel, int pWave, boolean pUnusedFalse)
 	{
 
 	}
@@ -95,7 +94,7 @@ public class Koloss extends AbstractIllager
 				.add(Attributes.LUCK, -1.0d)
 				.add(Attributes.ATTACK_DAMAGE, 4.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.1D)
-				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+				.add(Attributes.STEP_HEIGHT, 1.7D);//1.20 was +1.1 on top of the 0.6 base
 	}
 
 	public static AttributeSupplier.Builder mediumAttributes()
@@ -111,7 +110,7 @@ public class Koloss extends AbstractIllager
 				.add(Attributes.LUCK, -1.0d)
 				.add(Attributes.ATTACK_DAMAGE, 8.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.3D)
-				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
+				.add(Attributes.STEP_HEIGHT, 1.7D);//1.20 was +1.1 on top of the 0.6 base
 
 	}
 
@@ -128,18 +127,18 @@ public class Koloss extends AbstractIllager
 				.add(Attributes.LUCK, -1.0d)
 				.add(Attributes.ATTACK_DAMAGE, 12.0D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.5D)
-				.add(ForgeMod.STEP_HEIGHT_ADDITION.get(), 1.1D);
-		}
+				.add(Attributes.STEP_HEIGHT, 1.7D);//1.20 was +1.1 on top of the 0.6 base
+	}
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData)
 	{
-		SpawnGroupData spawngroupdata = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+		SpawnGroupData spawngroupdata = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData);
 		((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
 		RandomSource randomsource = pLevel.getRandom();
 		this.populateDefaultEquipmentSlots(randomsource, pDifficulty);
-		this.populateDefaultEquipmentEnchantments(randomsource, pDifficulty);
+		this.populateDefaultEquipmentEnchantments(pLevel, randomsource, pDifficulty);
 		return spawngroupdata;
 	}
 
@@ -157,9 +156,9 @@ public class Koloss extends AbstractIllager
 
 
 	@Override
-	protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit)
+	protected void dropCustomDeathLoot(ServerLevel pLevel, DamageSource pSource, boolean pRecentlyHit)
 	{
-		super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
+		super.dropCustomDeathLoot(pLevel, pSource, pRecentlyHit);
 
 		if (this.random.nextInt(100) < 25)
 		{

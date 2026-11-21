@@ -5,7 +5,6 @@
 package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 
@@ -27,7 +26,7 @@ public class StatDeferredRegister extends WrappedDeferredRegister<ResourceLocati
 
 	public StatRegistryObject register(String name)
 	{
-		return register(name, () -> new ResourceLocation(name));
+		return register(name, () -> ResourceLocation.parse(name));
 	}
 
 	public StatRegistryObject register(String name, Supplier<ResourceLocation> supplier)

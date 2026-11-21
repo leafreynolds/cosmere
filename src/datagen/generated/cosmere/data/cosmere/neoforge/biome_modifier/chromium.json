@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmere:spawn_ores",
+  "features": [
+    "cosmere:ore_chromium_rare",
+    "cosmere:ore_chromium_normal",
+    "cosmere:ore_chromium_deep"
+  ],
+  "step": "underground_ores"
+}

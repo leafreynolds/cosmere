@@ -1,0 +1,161 @@
+{
+  "values": {
+    "feruchemy:aluminum_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "aluminum"
+    },
+    "feruchemy:aluminum_ring_metalmind": {
+      "metal": "aluminum"
+    },
+    "feruchemy:atium_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "atium"
+    },
+    "feruchemy:atium_ring_metalmind": {
+      "metal": "atium"
+    },
+    "feruchemy:bendalloy_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "bendalloy"
+    },
+    "feruchemy:bendalloy_ring_metalmind": {
+      "metal": "bendalloy"
+    },
+    "feruchemy:brass_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "brass"
+    },
+    "feruchemy:brass_ring_metalmind": {
+      "metal": "brass"
+    },
+    "feruchemy:bronze_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "bronze"
+    },
+    "feruchemy:bronze_ring_metalmind": {
+      "metal": "bronze"
+    },
+    "feruchemy:cadmium_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "cadmium"
+    },
+    "feruchemy:cadmium_ring_metalmind": {
+      "metal": "cadmium"
+    },
+    "feruchemy:chromium_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "chromium"
+    },
+    "feruchemy:chromium_ring_metalmind": {
+      "metal": "chromium"
+    },
+    "feruchemy:copper_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "copper"
+    },
+    "feruchemy:copper_ring_metalmind": {
+      "metal": "copper"
+    },
+    "feruchemy:duralumin_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "duralumin"
+    },
+    "feruchemy:duralumin_ring_metalmind": {
+      "metal": "duralumin"
+    },
+    "feruchemy:electrum_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "electrum"
+    },
+    "feruchemy:electrum_ring_metalmind": {
+      "metal": "electrum"
+    },
+    "feruchemy:gold_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "gold"
+    },
+    "feruchemy:gold_ring_metalmind": {
+      "metal": "gold"
+    },
+    "feruchemy:iron_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "iron"
+    },
+    "feruchemy:iron_ring_metalmind": {
+      "metal": "iron"
+    },
+    "feruchemy:pewter_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "pewter"
+    },
+    "feruchemy:pewter_ring_metalmind": {
+      "metal": "pewter"
+    },
+    "feruchemy:steel_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "steel"
+    },
+    "feruchemy:steel_ring_metalmind": {
+      "metal": "steel"
+    },
+    "feruchemy:tin_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "tin"
+    },
+    "feruchemy:tin_ring_metalmind": {
+      "metal": "tin"
+    },
+    "feruchemy:zinc_bracelet_metalmind": {
+      "charge_modifier": 0.5555556,
+      "metal": "zinc"
+    },
+    "feruchemy:zinc_ring_metalmind": {
+      "metal": "zinc"
+    },
+    "minecraft:chainmail_boots": {
+      "charge_modifier": 0.22222222,
+      "metal": "iron"
+    },
+    "minecraft:chainmail_chestplate": {
+      "metal": "iron"
+    },
+    "minecraft:chainmail_helmet": {
+      "charge_modifier": 0.2777778,
+      "metal": "iron"
+    },
+    "minecraft:chainmail_leggings": {
+      "charge_modifier": 0.3888889,
+      "metal": "iron"
+    },
+    "minecraft:golden_boots": {
+      "metal": "gold"
+    },
+    "minecraft:golden_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "gold"
+    },
+    "minecraft:golden_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "gold"
+    },
+    "minecraft:golden_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "gold"
+    },
+    "minecraft:iron_boots": {
+      "metal": "iron"
+    },
+    "minecraft:iron_chestplate": {
+      "charge_modifier": 0.8888889,
+      "metal": "iron"
+    },
+    "minecraft:iron_helmet": {
+      "charge_modifier": 0.5555556,
+      "metal": "iron"
+    },
+    "minecraft:iron_leggings": {
+      "charge_modifier": 0.7777778,
+      "metal": "iron"
+    }
+  }
+}

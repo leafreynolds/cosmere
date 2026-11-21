@@ -1,13 +1,9 @@
 package leaf.cosmere.allomancy.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
 import leaf.cosmere.api.IHasMetalType;
-import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
@@ -22,8 +18,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
@@ -38,6 +34,11 @@ public class SquareButton extends Button
 	private final Metals.MetalType metalType;
 	private final Manifestation manifestation;
 	private final boolean hasManifestation;
+	private final double hoveredX;
+
+	// Animation
+	private final double animationSpeed = 0.8d;
+	private double currentX;
 
 	protected SquareButton(int pX, int pY, int pSize, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
@@ -48,6 +49,8 @@ public class SquareButton extends Button
 		hasManifestation = spiritweb.hasManifestation(manifestation);
 		this.spiritweb = spiritweb;
 		manifestationConsumer = maniConsumer;
+		hoveredX = getX()*1.125d;
+		currentX = getX();
 
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.setLength(0);
@@ -62,7 +65,7 @@ public class SquareButton extends Button
 		}
 
 		stringBuilder.append(".png");
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 	}
 
 	@Override
@@ -82,50 +85,44 @@ public class SquareButton extends Button
 	}
 
 	@Override
-	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
+	public void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		boolean isHovered = isMouseOver(pMouseX, pMouseY);
 
 		renderBackground(pGuiGraphics, isHovered);
-		renderIcon(pGuiGraphics);
+		renderIcon(pGuiGraphics, isHovered, pPartialTick);
 		renderBorder(pGuiGraphics);
+		renderText(pGuiGraphics, isHovered);
+		renderInfoText(pGuiGraphics, isHovered);
 		if (isHovered)
 			manifestationConsumer.accept(manifestation);
 	}
 
 	private void renderBackground(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r = GuiUtils.BACKGROUND_COLOR.getRed()/255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen()/255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue()/255.f;
-		float a = 1f;
+		Color color = GuiUtils.BACKGROUND_COLOR;
 
 		if (!hasManifestation)
 		{
-			r *= 0.6f;
-			g *= 0.6f;
-			b *= 0.6f;
+			color = color.darker();
 		}
 
 		if (isHovered && hasManifestation)
 		{
-			r *= 1.1f;
-			g *= 1.1f;
-			b *= 1.1f;
+			color = color.brighter();
 		}
 
 		if (manifestation instanceof AllomancyManifestation allomancyManifestation) {
 			int mode = allomancyManifestation.getMode(spiritweb);
-			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f); // Cap intensity
+			float intensity = Math.min(Math.abs(mode) * 0.2f, 1.0f);
 
-			if (mode > 0) {
-				// Blend toward pure red
-				r = lerp(r, 1.0f, intensity);
-				g = lerp(g, 0.0f, intensity);
-				b = lerp(b, 0.0f, intensity);
-			} else if (mode < 0) {
-				// Blend toward pure blue
-				r = lerp(r, 0.0f, intensity);
-				g = lerp(g, 0.0f, intensity);
-				b = lerp(b, 1.0f, intensity);
+			if (mode > 0)
+			{
+				color = GuiUtils.shiftColor(color, intensity, GuiUtils.POSITIVE_USE_COLOR);
+			}
+			else if (mode < 0)
+			{
+				color = GuiUtils.shiftColor(color, intensity, GuiUtils.NEGATIVE_USE_COLOR);
 			}
 		}
 
@@ -135,17 +132,14 @@ public class SquareButton extends Button
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
-		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
+		BufferBuilder buf = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		buf.addVertex(pose, getX(), getY(), 0).setColor(color.getRGB());
+		buf.addVertex(pose, getX()+getWidth(), getY(), 0).setColor(color.getRGB());
+		buf.addVertex(pose, getX()+getWidth(), getY()+getHeight(), 0).setColor(color.getRGB());
+		buf.addVertex(pose, getX(), getY()+getHeight(), 0).setColor(color.getRGB());
 
-		buf.vertex(pose, getX(), getY(), 0).color(r, g, b, a).endVertex();
-		buf.vertex(pose, getX()+getWidth(), getY(), 0).color(r, g, b, a).endVertex();
-		buf.vertex(pose, getX()+getWidth(), getY()+getHeight(), 0).color(r, g, b, a).endVertex();
-		buf.vertex(pose, getX(), getY()+getHeight(), 0).color(r, g, b, a).endVertex();
-
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 
@@ -159,10 +153,7 @@ public class SquareButton extends Button
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
-		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		int x = getX();
 		int y = getY();
@@ -170,34 +161,34 @@ public class SquareButton extends Button
 		int h = getHeight();
 
 		// Top edge
-		buf.vertex(pose, x, y, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x, y + thickness, 0).color(color).endVertex();
+		buf.addVertex(pose, x, y, 0).setColor(color);
+		buf.addVertex(pose, x + w, y, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x, y + thickness, 0).setColor(color);
 
 		// Bottom edge
-		buf.vertex(pose, x, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + h, 0).color(color).endVertex();
-		buf.vertex(pose, x, y + h, 0).color(color).endVertex();
+		buf.addVertex(pose, x, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + h, 0).setColor(color);
+		buf.addVertex(pose, x, y + h, 0).setColor(color);
 
 		// Left edge
-		buf.vertex(pose, x, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + thickness, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + thickness, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x, y + h - thickness, 0).color(color).endVertex();
+		buf.addVertex(pose, x, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + thickness, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + thickness, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x, y + h - thickness, 0).setColor(color);
 
 		// Right edge
-		buf.vertex(pose, x + w - thickness, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w, y + h - thickness, 0).color(color).endVertex();
-		buf.vertex(pose, x + w - thickness, y + h - thickness, 0).color(color).endVertex();
+		buf.addVertex(pose, x + w - thickness, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w, y + h - thickness, 0).setColor(color);
+		buf.addVertex(pose, x + w - thickness, y + h - thickness, 0).setColor(color);
 
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 
-	private void renderIcon(GuiGraphics pGuiGraphics)
+	private void renderIcon(GuiGraphics pGuiGraphics, boolean isHovered, float partialTick)
 	{
 		Color metalColor = metalType.getColor();
 		float r = metalColor.getRed()/255.f, g = metalColor.getGreen()/255.f, b = metalColor.getBlue()/255.f;
@@ -215,8 +206,13 @@ public class SquareButton extends Button
 		RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
 		int iconSize = width-10;
-		int posX = getX() + 5;
-		int posY = getY() + 5;
+		if (isHovered)
+			currentX = Mth.lerp(animationSpeed * partialTick, currentX, hoveredX);
+		else
+			currentX = Mth.lerp(animationSpeed * partialTick, currentX, getX());
+
+		int posX = (int)currentX+5;
+		int posY = getY()+5;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
 		pGuiGraphics.blit(iconLocation,
@@ -247,7 +243,75 @@ public class SquareButton extends Button
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	public float lerp(float start, float end, float pct) {
-		return start + pct * (end - start);
+	private void renderText(GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (isHovered && hasManifestation)
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = I18n.get("metal.cosmere." + metalType.getName()).toUpperCase();
+
+			float scale = (getWidth()*0.25f)/font.lineHeight;
+
+			int textWidth = (int) (font.width(text)*scale);
+			int textHeight = (int) (font.lineHeight*scale);
+
+			int textX = getX() + getWidth()/2 - textWidth/2;
+			int textY = getY() + getHeight()/2 - textHeight/2;
+
+			// get already calculated progress
+			float progress = (float) ((currentX - getX()) / (hoveredX - getX()));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			int alpha = (int) (progress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, scale, textColor, false);
+		}
+	}
+
+	private void renderInfoText(GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (isHovered && hasManifestation)
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = "Empty";
+
+			int seconds = manifestation.getInvestitureRemaining(spiritweb);
+			int hours = seconds / 3600;
+			int minutes = (seconds % 3600) / 60;
+			seconds = seconds % 60;
+
+			if (hours > 0)
+			{
+				text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+			}
+			else if (minutes > 0)
+			{
+				text = String.format("%d:%02d", minutes, seconds);
+			}
+			else if (seconds > 0)
+			{
+				text = String.format("%02d", seconds);
+			}
+
+			float scale = (getWidth()*0.25f)/font.lineHeight;
+
+			int textWidth = (int)(font.width(text)*scale);
+			int textHeight = (int)(font.lineHeight*scale);
+
+			int textX = (int) hoveredX + getWidth()/2 - textWidth/2;
+			int textY = getY() + getHeight() - textHeight/2;
+
+			// get already calculated progress
+			float progress = (float) ((currentX - getX()) / (hoveredX - getX()));
+			progress = Mth.clamp(progress, 0.0f, 1.0f);
+
+			int alpha = (int) (progress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, textX, textY, scale, textColor, false);
+		}
 	}
 }

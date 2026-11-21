@@ -23,8 +23,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import javax.annotation.Nonnull;
@@ -46,15 +46,7 @@ public class GuideItem extends Item
 
 	public static Component getTitle(ItemStack stack)
 	{
-		Component title = stack.getHoverName();
-
-		String akashicTomeNBT = "akashictome:displayName";
-		if (stack.hasTag() && stack.getTag().contains(akashicTomeNBT))
-		{
-			title = Component.Serializer.fromJson(stack.getTag().getString(akashicTomeNBT));
-		}
-
-		return title;
+		return stack.getHoverName();
 	}
 
 	// Random item to expose this as public
@@ -74,7 +66,7 @@ public class GuideItem extends Item
 	*/
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		tooltip.add(getEdition().copy().withStyle(ChatFormatting.GRAY));
 	}

@@ -6,18 +6,13 @@
 
 package leaf.cosmere.surgebinding.client.render;
 
-import leaf.cosmere.client.render.CosmereRenderers;
-import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.surgebinding.client.render.renderer.ArmorRenderer;
 import leaf.cosmere.surgebinding.client.render.renderer.ChullRenderer;
 import leaf.cosmere.surgebinding.client.render.renderer.CrypticRenderer;
 import leaf.cosmere.surgebinding.client.render.renderer.HonorsprenRenderer;
-import leaf.cosmere.surgebinding.common.items.ShardplateCurioItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingEntityTypes;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 public class SurgebindingRenderers

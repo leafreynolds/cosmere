@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "spike",
+  "key": {
+    "X": {
+      "tag": "c:ingots/atium"
+    }
+  },
+  "pattern": [
+    "X",
+    "X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "hemalurgy:atium_spike"
+  }
+}

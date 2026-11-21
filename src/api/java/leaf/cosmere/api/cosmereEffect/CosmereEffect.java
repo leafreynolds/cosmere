@@ -7,6 +7,7 @@ package leaf.cosmere.api.cosmereEffect;
 import com.google.common.collect.Maps;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -31,18 +32,18 @@ public abstract class CosmereEffect implements ICosmereEffectProvider
 {
 
 	//each effect cannot have multiple modifications to the same attribute, but could theoretically modify all attributes
-	private final Map<Attribute, AttributeModifierInfo> attributeModifiers = Maps.newHashMap();
+	private final Map<Holder<Attribute>, AttributeModifierInfo> attributeModifiers = Maps.newHashMap();
 
 	protected CosmereEffect()
 	{
 	}
 
-	public Map<Attribute, AttributeModifierInfo> getAttributeModifiers()
+	public Map<Holder<Attribute>, AttributeModifierInfo> getAttributeModifiers()
 	{
 		return this.attributeModifiers;
 	}
 
-	public CosmereEffect addAttributeModifier(Attribute attribute, double amount, AttributeModifier.Operation operation)
+	public CosmereEffect addAttributeModifier(Holder<Attribute> attribute, double amount, AttributeModifier.Operation operation)
 	{
 		AttributeModifierInfo attributeModifier = new AttributeModifierInfo(attribute, amount, operation);
 		this.attributeModifiers.put(attribute, attributeModifier);

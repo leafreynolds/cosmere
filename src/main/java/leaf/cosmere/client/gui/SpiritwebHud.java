@@ -161,7 +161,7 @@ public class SpiritwebHud extends AbstractWidget
 				}
 
 				stringBuilder.append(".png");
-				final ResourceLocation resourceLocation = new ResourceLocation(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+				final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(selectedManifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();
@@ -192,7 +192,7 @@ public class SpiritwebHud extends AbstractWidget
 			float targetX = getX() + getHeight() + 2;
 			float targetY = getY() + (getHeight() / 2f) - ((font.lineHeight * scale) / 2f);
 
-			GuiUtils.drawScaledString(font, pGuiGraphics, text, targetX, targetY, scale, 0xFFDDDDDD);
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, targetX, targetY, scale, 0xFFDDDDDD, false);
 		});
 	}
 

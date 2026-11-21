@@ -1,0 +1,25 @@
+{
+  "values": [
+    "#c:storage_blocks/steel",
+    "#c:storage_blocks/tin",
+    "#c:storage_blocks/pewter",
+    "#c:storage_blocks/zinc",
+    "#c:storage_blocks/brass",
+    "#c:storage_blocks/bronze",
+    "#c:storage_blocks/aluminum",
+    "#c:storage_blocks/duralumin",
+    "#c:storage_blocks/chromium",
+    "#c:storage_blocks/nicrosil",
+    "#c:storage_blocks/cadmium",
+    "#c:storage_blocks/bendalloy",
+    "#c:storage_blocks/electrum",
+    "#c:storage_blocks/atium",
+    "#c:storage_blocks/lerasium",
+    "#c:storage_blocks/harmonium",
+    "#c:storage_blocks/malatium",
+    "#c:storage_blocks/lerasatium",
+    "#c:storage_blocks/nickel",
+    "#c:storage_blocks/lead",
+    "#c:storage_blocks/silver"
+  ]
+}

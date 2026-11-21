@@ -1,6 +1,10 @@
 {
   "pack": {
     "description": "Resources used for Cosmere Sand Mastery",
-    "pack_format": 15
+    "pack_format": 34,
+    "supported_formats": [
+      34,
+      48
+    ]
   }
 }

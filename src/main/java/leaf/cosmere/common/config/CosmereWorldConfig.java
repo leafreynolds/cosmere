@@ -10,8 +10,8 @@ import leaf.cosmere.common.resource.ore.BaseOreConfig;
 import leaf.cosmere.common.resource.ore.OreType;
 import leaf.cosmere.common.util.CosmereEnumUtils;
 import leaf.cosmere.common.world.height.ConfigurableHeightRange;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -21,14 +21,14 @@ import java.util.function.BooleanSupplier;
 public class CosmereWorldConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
 	private final Map<OreType, OreConfig> ores = new EnumMap<>(OreType.class);
 
 
 	CosmereWorldConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("World generation settings for Cosmere. This config is synced from server to client")
 				.push("world_generation");
 
@@ -48,7 +48,7 @@ public class CosmereWorldConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}
@@ -71,9 +71,9 @@ public class CosmereWorldConfig implements ICosmereConfig
 	}
 
 	public record OreVeinConfig(BooleanSupplier shouldGenerate,
-	                            ForgeConfigSpec.ConfigValue<Integer> perChunk,
-	                            ForgeConfigSpec.ConfigValue<Integer> maxVeinSize,
-	                            ForgeConfigSpec.ConfigValue<Double> discardChanceOnAirExposure,
+	                            ModConfigSpec.ConfigValue<Integer> perChunk,
+	                            ModConfigSpec.ConfigValue<Integer> maxVeinSize,
+	                            ModConfigSpec.ConfigValue<Double> discardChanceOnAirExposure,
 	                            ConfigurableHeightRange range)
 	{
 	}
@@ -81,10 +81,10 @@ public class CosmereWorldConfig implements ICosmereConfig
 	private static class OreConfig
 	{
 
-		private final ForgeConfigSpec.BooleanValue shouldGenerate;
+		private final ModConfigSpec.BooleanValue shouldGenerate;
 		private final List<OreVeinConfig> veinConfigs;
 
-		private OreConfig(ForgeConfigSpec.Builder builder, OreType oreType)
+		private OreConfig(ModConfigSpec.Builder builder, OreType oreType)
 		{
 			String ore = oreType.getMetalType().getName();
 
@@ -104,7 +104,7 @@ public class CosmereWorldConfig implements ICosmereConfig
 				builder.comment(veinType + " Generation Settings.")
 						.push(baseConfig.name());
 
-				ForgeConfigSpec.BooleanValue shouldVeinTypeGenerate = builder
+				ModConfigSpec.BooleanValue shouldVeinTypeGenerate = builder
 						.comment("Determines if " + veinType + "s should be added to world generation. Note: Requires generating " + ore + " ore to be enabled.")
 						.define("shouldGenerate", true);
 

@@ -6,27 +6,26 @@ package leaf.cosmere.allomancy.client;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
+import leaf.cosmere.api.Activator;
+import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.client.Keybindings;
-import leaf.cosmere.api.Activator;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
-import leaf.cosmere.api.EnumUtils;
-import java.util.function.Function;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static leaf.cosmere.allomancy.common.registries.AllomancyManifestations.ALLOMANCY_POWERS;
 import static leaf.cosmere.api.Constants.Strings.*;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Allomancy.MODID, bus = Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Allomancy.MODID)
 public class AllomancyKeybindings
 {
 	public static KeyMapping ALLOMANCY_STEEL_PUSH;

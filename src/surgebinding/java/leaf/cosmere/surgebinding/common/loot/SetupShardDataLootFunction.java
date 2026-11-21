@@ -1,7 +1,7 @@
 package leaf.cosmere.surgebinding.common.loot;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import leaf.cosmere.surgebinding.common.items.IRadiantShardItem;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingItems;
 import leaf.cosmere.surgebinding.common.registries.SurgebindingLootFunctions;
@@ -11,9 +11,14 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.List;
+
 public class SetupShardDataLootFunction extends LootItemConditionalFunction
 {
-	protected SetupShardDataLootFunction(LootItemCondition[] pPredicates)
+	public static final MapCodec<SetupShardDataLootFunction> CODEC = RecordCodecBuilder.mapCodec(
+			inst -> commonFields(inst).apply(inst, SetupShardDataLootFunction::new));
+
+	protected SetupShardDataLootFunction(List<LootItemCondition> pPredicates)
 	{
 		super(pPredicates);
 	}
@@ -57,18 +62,8 @@ public class SetupShardDataLootFunction extends LootItemConditionalFunction
 	}
 
 	@Override
-	public LootItemFunctionType getType()
+	public LootItemFunctionType<SetupShardDataLootFunction> getType()
 	{
 		return SurgebindingLootFunctions.SETUP_DATA.get();
-	}
-
-	public static class Serializer extends LootItemConditionalFunction.Serializer<SetupShardDataLootFunction>
-	{
-		@Override
-		public SetupShardDataLootFunction deserialize(JsonObject jsonObject, JsonDeserializationContext
-				deserializationContext, LootItemCondition[] lootConditions)
-		{
-			return new SetupShardDataLootFunction(lootConditions);
-		}
 	}
 }

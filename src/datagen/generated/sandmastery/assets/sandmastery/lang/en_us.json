@@ -10,6 +10,8 @@
   "block.sandmastery.taldain_sand_layer": "Taldain Sand Layer",
   "block.sandmastery.temporary_sand_block": "Temporary Sand Block",
   "death.attack.dehydrated": "%1$s died of dehydration",
+  "gui.sandmastery.sand_pouch.taking_black": "Black",
+  "gui.sandmastery.sand_pouch.taking_white": "White",
   "item.sandmastery.jar": "Jar",
   "item.sandmastery.qido": "Qido",
   "item.sandmastery.sand_jar": "Sand Jar",

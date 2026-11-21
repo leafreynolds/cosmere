@@ -1,5 +1,5 @@
 /*
- * File updated ~ 11 - 11 - 2023 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.feruchemy.client.render.model;
@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
@@ -188,16 +189,12 @@ public class BraceletModel extends HumanoidModel<LivingEntity>
 				false,
 				stack.getItem() == FeruchemyItems.BANDS_OF_MOURNING.get());
 
-
 		modelPartToRender.render(
 				matrixStack,
 				vertexBuilder,
 				light,
 				OverlayTexture.NO_OVERLAY,
-				color.getRed() / 255f,
-				color.getGreen() / 255f,
-				color.getBlue() / 255f,
-				1);
+				FastColor.ARGB32.color(255, color.getRed(), color.getGreen(), color.getBlue()));
 
 
 		/*

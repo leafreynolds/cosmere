@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "minecraft:amethyst_shard"
-  },
-  "result": "surgebinding:cut_amethyst_large"
-}

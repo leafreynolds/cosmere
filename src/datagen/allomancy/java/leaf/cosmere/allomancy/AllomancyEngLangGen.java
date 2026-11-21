@@ -6,7 +6,6 @@ package leaf.cosmere.allomancy;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.manifestation.AllomancyManifestation;
-import leaf.cosmere.allomancy.common.registries.AllomancyAttributes;
 import leaf.cosmere.allomancy.common.registries.AllomancyEffects;
 import leaf.cosmere.allomancy.common.registries.AllomancyEntityTypes;
 import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
@@ -14,17 +13,16 @@ import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.RegistryHelper;
-import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.api.providers.ICosmereEffectProvider;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -67,7 +65,7 @@ public class AllomancyEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Allomancy.MODID))

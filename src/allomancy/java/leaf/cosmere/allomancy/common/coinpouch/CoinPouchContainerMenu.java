@@ -1,5 +1,5 @@
 /*
- * File updated ~ 10 - 10 - 2022 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.coinpouch;
@@ -13,8 +13,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class CoinPouchContainerMenu extends AbstractContainerMenu
@@ -35,7 +36,13 @@ public class CoinPouchContainerMenu extends AbstractContainerMenu
 		int i;
 		int j;
 
-		IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		IItemHandlerModifiable pouchInv = (IItemHandlerModifiable) pouch.getCapability(Capabilities.ItemHandler.ITEM);
+		if (pouchInv == null)
+		{
+			//the held stack is not a pouch
+			//the hand changed between opening the menu and syncing it
+			pouchInv = new ItemStackHandler(CoinPouchItemHandler.SIZE);
+		}
 
 		int invStart = 0;
 

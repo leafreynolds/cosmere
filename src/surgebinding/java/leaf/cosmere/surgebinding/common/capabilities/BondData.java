@@ -1,27 +1,17 @@
 package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.Constants;
-import net.minecraft.core.Direction;
+import leaf.cosmere.surgebinding.common.registries.SurgebindingDataComponents;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class BondData implements ICapabilityProvider, IBondData
+public class BondData implements IBondData
 {
-	public static final Capability<IBondData> BOND_DATA = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
 
-	private final LazyOptional<IBondData> opt = LazyOptional.of(() -> this);
 
 	protected UUID bond;
 	protected String bondedName;
@@ -37,16 +27,31 @@ public class BondData implements ICapabilityProvider, IBondData
 		this.nbt = new CompoundTag();
 	}
 
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
+	//stacks can't hold attachments in 1.21, so the bond lives on the bond_data component
+	public static BondData load(ItemStack stack)
 	{
-		return BOND_DATA.orEmpty(cap, opt);
+		BondData data = new BondData(stack);
+		if (stack == null || stack.isEmpty())
+		{
+			return data;
+		}
+
+		CompoundTag stored = stack.get(SurgebindingDataComponents.BOND_DATA.get());
+		if (stored != null && !stored.isEmpty())
+		{
+			//the component's tag is shared, so deserialize into a copy
+			data.deserializeNBT(null, stored.copy());
+		}
+		return data;
 	}
 
-	@Override
-	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap)
+	protected void save()
 	{
-		return ICapabilityProvider.super.getCapability(cap);
+		if (stack != null && !stack.isEmpty())
+		{
+			//hand the component a copy, never this instance's working tag
+			stack.set(SurgebindingDataComponents.BOND_DATA.get(), serializeNBT(null).copy());
+		}
 	}
 
 	@Override
@@ -72,12 +77,14 @@ public class BondData implements ICapabilityProvider, IBondData
 	{
 		this.bond = entity.getUUID();
 		this.bondedName = entity.getName().getString();
+		save();
 	}
 
 	@Override
 	public void setEmptyBond()
 	{
 		this.bond = null;
+		save();
 	}
 
 	@Override
@@ -90,16 +97,18 @@ public class BondData implements ICapabilityProvider, IBondData
 	public void tickBondUp()
 	{
 		bondTicks++;
+		save();
 	}
 
 	@Override
 	public void resetBondTicks()
 	{
 		bondTicks = 0;
+		save();
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (bond != null)
 		{
@@ -113,7 +122,7 @@ public class BondData implements ICapabilityProvider, IBondData
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag compoundTag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
 		this.nbt = compoundTag;
 

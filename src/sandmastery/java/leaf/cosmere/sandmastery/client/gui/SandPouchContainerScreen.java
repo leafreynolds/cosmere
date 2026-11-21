@@ -1,64 +1,71 @@
-/*
- * File updated ~ 10 - 8 - 2024 ~ Leaf
- */
-
+// /*
+//  * File updated ~ 10 - 8 - 2024 ~ Leaf
+//  */
 package leaf.cosmere.sandmastery.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
-import net.minecraft.client.Minecraft;
+import leaf.cosmere.sandmastery.common.Sandmastery;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class SandPouchContainerScreen extends AbstractContainerScreen<SandPouchContainerMenu>
 {
-	final ResourceLocation resourceLocation = new ResourceLocation(Sandmastery.MODID, "textures/gui/sand_pouch.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Sandmastery.MODID, "textures/gui/sand_pouch.png");
 
-	public SandPouchContainerScreen(SandPouchContainerMenu container, Inventory playerInv, Component title)
+	private static final int TOGGLE_X = 118;
+	private static final int TOGGLE_Y = 17;
+	private static final int TOGGLE_WIDTH = 36;
+	private static final int TOGGLE_HEIGHT = 18;
+
+	public SandPouchContainerScreen(SandPouchContainerMenu menu, Inventory playerInv, Component title)
 	{
-		super(container, playerInv, title);
-		minecraft = Minecraft.getInstance();
+		super(menu, playerInv, title);
+		this.imageWidth = 176;
+		this.imageHeight = 131;
+		this.inventoryLabelX = 8;
+		this.inventoryLabelY = 37;
 	}
 
+	// two slots wide and one tall, directly right of the output slots (which end at x 116)
 	@Override
 	protected void init()
 	{
-		this.imageHeight = 140;
-		this.imageWidth = 193;
-
 		super.init();
+		addRenderableWidget(Button.builder(Component.empty(), button ->
+				      minecraft.gameMode.handleInventoryButtonClick(menu.containerId, SandPouchContainerMenu.BUTTON_TOGGLE_COLOUR))
+		                          .bounds(leftPos + TOGGLE_X, topPos + TOGGLE_Y, TOGGLE_WIDTH, TOGGLE_HEIGHT)
+		                          .build());
+	}
+
+	// Screen.render already draws the blurred background; calling renderBackground again doubles it.
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+	{
+		// the label is read from the synced menu data, so it follows the server
+		for (var widget : renderables)
+		{
+			if (widget instanceof Button button)
+			{
+				button.setMessage(Component.translatable(menu.isShowingBlack()
+				                                         ? "gui.sandmastery.sand_pouch.taking_black"
+				                                         : "gui.sandmastery.sand_pouch.taking_white"));
+			}
+		}
+		super.render(guiGraphics, mouseX, mouseY, partialTick);
+		if (menu.shouldHighlightToggle())
+		{
+			guiGraphics.renderOutline(leftPos + TOGGLE_X - 1, topPos + TOGGLE_Y - 1, TOGGLE_WIDTH + 2, TOGGLE_HEIGHT + 2, 0xFFCE0A4A);
+		}
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int x, int y, float partialTicks)
+	protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY)
 	{
-		this.renderBackground(guiGraphics);
-		super.render(guiGraphics, x, y, partialTicks);
-		this.renderTooltip(guiGraphics, x, y);
-	}
-
-	@Override
-	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY)
-	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, new ResourceLocation(Sandmastery.MODID, "textures/gui/sand_pouch.png"));
-
-		int xPos = (width - imageWidth) / 2;
-		int yPos = (height / 2) - (imageHeight / 2);
-		guiGraphics.blit(resourceLocation, xPos, yPos, 0, 0, imageWidth, imageHeight);
-	}
-
-	@Override
-	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
-	{
-		//write the name of the itemstack
-		guiGraphics.drawString(this.font, this.title.toString(), this.titleLabelX, this.titleLabelY, 4210752);
-//        this.font.draw(guiGraphics, "Number of layers available: " + MiscHelper.intToAbbreviatedStr(this.menu.slots.get(2).getItem().getCount()), this.titleLabelX, this.titleLabelY + 32, 4210752);
+		guiGraphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 	}
 }

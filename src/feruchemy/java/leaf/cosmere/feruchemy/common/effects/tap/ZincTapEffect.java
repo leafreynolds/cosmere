@@ -16,8 +16,8 @@ public class ZincTapEffect extends FeruchemyEffectBase
 	{
 		super(type);
 		addAttributeModifier(
-				AttributesRegistry.XP_RATE_ATTRIBUTE.get(),
+				AttributesRegistry.XP_RATE_ATTRIBUTE.getHolder(),
 				0.15D,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 	}
 }

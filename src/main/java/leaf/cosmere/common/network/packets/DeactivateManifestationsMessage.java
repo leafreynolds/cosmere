@@ -1,51 +1,49 @@
 /*
- * File updated ~ 24 - 4 - 2021 ~ Leaf
+ * File updated ~ 2026-04-23 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.common.network.packets;
 
+import io.netty.buffer.ByteBuf;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import static leaf.cosmere.api.Constants.Translations.POWER_INACTIVE;
 
-public class DeactivateManifestationsMessage implements ICosmerePacket
+public record DeactivateManifestationsMessage() implements ICosmerePacket
 {
+	public static final CustomPacketPayload.Type<DeactivateManifestationsMessage> TYPE =
+			new CustomPacketPayload.Type<>(Cosmere.rl("deactivate_manifestations"));
 
-	public DeactivateManifestationsMessage()
-	{
-	}
+	public static final StreamCodec<ByteBuf, DeactivateManifestationsMessage> STREAM_CODEC =
+			StreamCodec.unit(new DeactivateManifestationsMessage());
 
-	public DeactivateManifestationsMessage(FriendlyByteBuf buffer)
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
+		return TYPE;
 	}
 
 	@Override
-	public void handle(NetworkEvent.Context context)
+	public void handle(IPayloadContext context)
 	{
-		ServerPlayer sender = context.getSender();
-		MinecraftServer server = sender.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(sender).ifPresent((cap) ->
+		if (!(context.player() instanceof ServerPlayer sender))
 		{
-			MutableComponent manifestationText = POWER_INACTIVE;
-
-			cap.deactivateManifestations();
-
-			sender.sendSystemMessage(manifestationText);
-			cap.syncToClients(null);
-		}));
-		context.setPacketHandled(true);
+			return;
+		}
+		context.enqueueWork(() ->
+				SpiritwebCapability.get(sender).ifPresent((cap) ->
+				{
+					MutableComponent manifestationText = POWER_INACTIVE;
+					cap.deactivateManifestations();
+					sender.sendSystemMessage(manifestationText);
+					cap.syncToClients(null);
+				}));
 	}
-
-	@Override
-	public void encode(FriendlyByteBuf buf)
-	{
-
-	}
-
 }

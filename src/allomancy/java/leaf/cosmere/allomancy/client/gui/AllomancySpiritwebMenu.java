@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 public class AllomancySpiritwebMenu extends CosmereScreen
 {
-	private static final ResourceLocation BORDER_LOCATION = new ResourceLocation(Allomancy.MODID, "textures/gui/allo_border.png");
+	private static final ResourceLocation BORDER_LOCATION = ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "textures/gui/allo_border.png");
 	LocalPlayer player;
 	public AllomancySpiritwebMenu()
 	{

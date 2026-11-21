@@ -13,13 +13,14 @@ public class DividedEffect extends MobEffect
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier)
+	public boolean applyEffectTick(LivingEntity pLivingEntity, int pAmplifier)
 	{
 		pLivingEntity.hurt(pLivingEntity.damageSources().magic(), 1.0F);
+		return true;
 	}
 
 	@Override
-	public boolean isDurationEffectTick(int pDuration, int pAmplifier)
+	public boolean shouldApplyEffectTickThisTick(int pDuration, int pAmplifier)
 	{
 		int interval = 100 >> pAmplifier;
 		return interval <= 0 || pDuration % interval == 0;

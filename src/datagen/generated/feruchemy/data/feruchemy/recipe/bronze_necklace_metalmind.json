@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "necklace",
+  "key": {
+    "X": {
+      "tag": "c:ingots/bronze"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "X X",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "feruchemy:bronze_necklace_metalmind"
+  }
+}

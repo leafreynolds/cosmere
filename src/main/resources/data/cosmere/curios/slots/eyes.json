@@ -1,6 +1,6 @@
 {
   "order": 0,
   "size": 2,
-  "icon": "curios:slot/empty_head_slot",
+  "icon": "minecraft:item/empty_armor_slot_helmet",
   "add_cosmetic": true
 }

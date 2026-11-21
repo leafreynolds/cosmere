@@ -4,8 +4,8 @@
 
 package leaf.cosmere.common.compat.curios;
 
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 
 public class CuriosCompat
 {

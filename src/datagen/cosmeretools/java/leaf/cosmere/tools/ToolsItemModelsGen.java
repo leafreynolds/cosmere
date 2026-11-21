@@ -11,11 +11,11 @@ import leaf.cosmere.tools.common.registries.ToolsItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
 
@@ -35,7 +35,7 @@ public class ToolsItemModelsGen extends ItemModelProvider
 			String path = itemRegistryObject.getRegistryName().getPath();
 			Item item = itemRegistryObject.asItem();
 
-			if (item instanceof ForgeSpawnEggItem)
+			if (item instanceof DeferredSpawnEggItem)
 			{
 				getBuilder(item.toString()).parent(new ModelFile.UncheckedModelFile("item/template_spawn_egg"));
 				continue;
@@ -110,7 +110,7 @@ public class ToolsItemModelsGen extends ItemModelProvider
 	{
 		return this.getBuilder(path)
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
-				.texture("layer0", new ResourceLocation("item/" + texturePath));
+				.texture("layer0", ResourceLocation.withDefaultNamespace("item/" + texturePath));
 	}
 
 	public ItemModelBuilder toolItem(String path, String toolTypePath)

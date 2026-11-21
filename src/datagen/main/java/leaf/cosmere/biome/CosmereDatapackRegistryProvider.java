@@ -35,8 +35,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguratio
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
-import net.minecraftforge.common.world.ForgeBiomeModifiers;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.world.BiomeModifiers;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -114,7 +114,7 @@ public class CosmereDatapackRegistryProvider extends BaseDatapackRegistryProvide
 					}
 				}
 			})
-			.add(ForgeRegistries.Keys.BIOME_MODIFIERS, context ->
+			.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, context ->
 			{
 				HolderSet.Named<Biome> isTaggedCanSpawnOres = context.lookup(Registries.BIOME).getOrThrow(CosmereTags.Biomes.SPAWN_ORES);
 				HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -130,7 +130,7 @@ public class CosmereDatapackRegistryProvider extends BaseDatapackRegistryProvide
 					}
 					context.register(
 							biomeModifier(Cosmere.rl(type.getSerializedName())),
-							new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+							new BiomeModifiers.AddFeaturesBiomeModifier(
 									isTaggedCanSpawnOres,
 									HolderSet.direct(placedVeins),
 									GenerationStep.Decoration.UNDERGROUND_ORES)

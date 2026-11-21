@@ -5,8 +5,8 @@
 package leaf.cosmere.aviar.common.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.aviar.common.commands.subcommands.AviarCommand;
+import leaf.cosmere.common.Cosmere;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 

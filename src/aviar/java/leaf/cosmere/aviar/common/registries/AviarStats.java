@@ -4,9 +4,9 @@
 
 package leaf.cosmere.aviar.common.registries;
 
+import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.common.registration.impl.StatDeferredRegister;
 import leaf.cosmere.common.registration.impl.StatRegistryObject;
-import leaf.cosmere.aviar.common.Aviar;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 

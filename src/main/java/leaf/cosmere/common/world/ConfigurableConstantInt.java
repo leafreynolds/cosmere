@@ -4,7 +4,7 @@
 
 package leaf.cosmere.common.world;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.registry.IntProviderTypesRegistry;
@@ -12,7 +12,7 @@ import leaf.cosmere.common.resource.ore.OreType.OreVeinType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.IntProviderType;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class ConfigurableConstantInt extends IntProvider
 {
 
-	public static final Codec<ConfigurableConstantInt> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+	public static final MapCodec<ConfigurableConstantInt> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
 			OreVeinType.CODEC.optionalFieldOf("oreVeinType").forGetter(config -> Optional.ofNullable(config.oreVeinType))
 	).apply(builder, oreType ->
 	{
@@ -37,9 +37,9 @@ public class ConfigurableConstantInt extends IntProvider
 
 	@Nullable
 	private final OreVeinType oreVeinType;
-	private final ForgeConfigSpec.ConfigValue<Integer> value;
+	private final ModConfigSpec.ConfigValue<Integer> value;
 
-	public ConfigurableConstantInt(@Nullable OreVeinType oreVeinType, ForgeConfigSpec.ConfigValue<Integer> value)
+	public ConfigurableConstantInt(@Nullable OreVeinType oreVeinType, ModConfigSpec.ConfigValue<Integer> value)
 	{
 		this.oreVeinType = oreVeinType;
 		this.value = value;

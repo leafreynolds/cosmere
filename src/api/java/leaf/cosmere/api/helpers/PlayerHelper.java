@@ -41,7 +41,7 @@ public class PlayerHelper
 		final Minecraft minecraft = Minecraft.getInstance();
 		minecraft.getProfiler().push("cosmere-pick");
 
-		float partialTicks = minecraft.getFrameTime();
+		float partialTicks = minecraft.getTimer().getGameTimeDeltaPartialTick(true);
 
 		HitResult hitResult = player.pick(range, partialTicks, false);
 		Vec3 eyePosition = player.getEyePosition(partialTicks);

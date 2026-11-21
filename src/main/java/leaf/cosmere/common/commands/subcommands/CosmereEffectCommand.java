@@ -16,6 +16,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -80,11 +81,11 @@ public class CosmereEffectCommand extends ModCommand
 				stringBuilder.append("Ticks Remaining: ").append(entry.getValue().getDuration()).append("\n");
 				stringBuilder.append("Attribute Multiplier: x").append(entry.getValue().getStrength()).append("\n");
 
-				for (Map.Entry<Attribute, AttributeModifierInfo> attributeEntry : entry.getValue().getEffect().getAttributeModifiers().entrySet())
+				for (Map.Entry<Holder<Attribute>, AttributeModifierInfo> attributeEntry : entry.getValue().getEffect().getAttributeModifiers().entrySet())
 				{
 					final AttributeModifierInfo attributeModifierInfo = attributeEntry.getValue();
 
-					final String attributeName = attributeModifierInfo.getAttribute().getDescriptionId();
+					final String attributeName = attributeModifierInfo.getAttribute().getRegisteredName();
 					final double amount = attributeModifierInfo.getAmount();
 					final AttributeModifier.Operation operation = attributeModifierInfo.getOperation();
 
@@ -92,11 +93,11 @@ public class CosmereEffectCommand extends ModCommand
 							.append("\n");
 				}
 
-				for (Map.Entry<Attribute, AttributeModifierInfo> attributeEntry : entry.getValue().getDynamicModifiers().entrySet())
+				for (Map.Entry<Holder<Attribute>, AttributeModifierInfo> attributeEntry : entry.getValue().getDynamicModifiers().entrySet())
 				{
 					final AttributeModifierInfo attributeModifierInfo = attributeEntry.getValue();
 
-					final String attributeName = attributeModifierInfo.getAttribute().getDescriptionId();
+					final String attributeName = attributeModifierInfo.getAttribute().getRegisteredName();
 					final double amount = attributeModifierInfo.getAmount();
 					final AttributeModifier.Operation operation = attributeModifierInfo.getOperation();
 

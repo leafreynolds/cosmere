@@ -17,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 
 public class GoldTapEffect extends FeruchemyEffectBase
@@ -27,9 +27,9 @@ public class GoldTapEffect extends FeruchemyEffectBase
 	{
 		super(type);
 		addAttributeModifier(
-				AttributesRegistry.HEALING_STRENGTH.getAttribute(),
+				AttributesRegistry.HEALING_STRENGTH.getHolder(),
 				1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
 			//remove harmful effects over time
 			for (MobEffectInstance activeEffect : living.getActiveEffects())
 			{
-				if (!activeEffect.getEffect().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
+				if (!activeEffect.getEffect().value().isBeneficial() && activeEffect.getDuration() > ticksNeededLeftToReduce)
 				{
 					//never reduce down below 5 ticks
 					final double clamped = Math.max(ticksNeededLeftToReduce, activeEffect.getDuration() - timeToReduceByInTicks);
@@ -87,7 +87,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
 
 
 
-	public static void onLivingHurtEvent(LivingHurtEvent event)
+	public static void onLivingHurtEvent(LivingIncomingDamageEvent event)
 	{
 		if (event.isCanceled())
 		{
@@ -96,7 +96,7 @@ public class GoldTapEffect extends FeruchemyEffectBase
 
 		if (event.getAmount() > event.getEntity().getHealth())
 		{
-			int strength = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.HEALING_STRENGTH.getAttribute(), 0);
+			int strength = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.HEALING_STRENGTH.getHolder(), 0);
 
 			//take less damage when tapping
 			if (strength > 6 && event.getEntity() instanceof Player player)
