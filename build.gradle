@@ -75,7 +75,8 @@ ext {
 			"patchouli_version": patchouli_version_range,
 			"jade_version"     : jade_version_range,
 			"jei_version"      : jei_version_range,
-			"curios_version"   : curios_version_range
+			"curios_version"   : curios_version_range,
+			"dynamickeybinds_version": dynamickeybinds_version_range
 	]
 }
 

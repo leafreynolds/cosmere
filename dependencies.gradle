@@ -20,6 +20,14 @@ dependencies {
 	compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}-NEOFORGE:api"
 	runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}-NEOFORGE"
 
+	// DynamicKeybinds (optional)
+	compileOnly "maven.modrinth:dynamickeybinds:${dynamickeybinds_version}"
+	runtimeOnly "maven.modrinth:dynamickeybinds:${dynamickeybinds_version}"
+
+	// Controlling (dev convenience: searchable keybind menu)
+	runtimeOnly "maven.modrinth:controlling:${controlling_version}"
+	runtimeOnly "maven.modrinth:searchables:${searchables_version}"
+
 	// Create + transitive deps (planned addon will integrate with Create APIs)
 	implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
 	runtimeOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")

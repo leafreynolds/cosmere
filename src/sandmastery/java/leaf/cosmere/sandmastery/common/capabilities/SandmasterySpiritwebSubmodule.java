@@ -13,6 +13,7 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
@@ -72,22 +73,22 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 					: 0;
 
 			final int elevateFlag =
-					SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_ELEVATE)
 					? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
 					: 0;
 
 			final int launchFlag =
-					SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_LAUNCH)
 					? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
 					: 0;
 
 			final int projectileFlag =
-					SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_PROJECTILE)
 					? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
 					: 0;
 
 			final int platformFlag =
-					SandmasteryKeybindings.SANDMASTERY_PLATFORM.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_PLATFORM)
 					? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
 					: 0;
 

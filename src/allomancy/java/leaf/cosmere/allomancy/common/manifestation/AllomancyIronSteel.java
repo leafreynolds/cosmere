@@ -16,6 +16,7 @@ import leaf.cosmere.api.helpers.CodecHelper;
 import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
@@ -148,7 +149,7 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		}
 
 		//Pushes/Pulls on Nearby Metals
-		if (getKeyBinding().isDown())
+		if (PowerKeyMappings.isDown(getKeyBinding()))
 		{
 			final Minecraft mc = Minecraft.getInstance();
 			Player player = mc.player;
