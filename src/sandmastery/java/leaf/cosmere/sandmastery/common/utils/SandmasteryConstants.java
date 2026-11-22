@@ -16,6 +16,9 @@ public class SandmasteryConstants
 	public static final String LAUNCHES_SINCE_FLOOR_TAG = "launches_since_floor";
 	public static final String HOTKEY_TAG = "hotkeys";
 	public static final String RIBBONS_IN_USE_TAG = "ribbons_in_use";
+	public static final String DIEM_RANK_TAG = "diem_rank";
+	public static final String MASTERY_XP_TAG = "mastery_xp";
+	public static final String TRIAL_COOLDOWN_TAG = "trial_cooldown_until";
 	public static final int CHARGE_PER_SAND_LAYER = 10;
 	public static final int ELEVATE_HOTKEY_FLAG = 2;
 	public static final int LAUNCH_HOTKEY_FLAG = 4;

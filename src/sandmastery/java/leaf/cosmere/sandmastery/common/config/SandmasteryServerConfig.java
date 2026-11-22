@@ -22,6 +22,8 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public final ModConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
 	public final ModConfigSpec.BooleanValue GIVE_QIDO_ON_FIRST_LOGIN;
 	public final ModConfigSpec.IntValue QIDO_MAX_FILL;
+	public final ModConfigSpec.DoubleValue DETECTION_TWO_RIBBON_CHANCE;
+	public final ModConfigSpec.IntValue RIBBON_XP_PER_RIBBON;
 
 	SandmasteryServerConfig()
 	{
@@ -44,6 +46,10 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		GIVE_QIDO_ON_FIRST_LOGIN = builder.comment("Should the player be given a qido on first login?").define("qidoOnFirstLogin", false);
 
 		QIDO_MAX_FILL = builder.comment("How much hydration should a qido restore in a single fill?").defineInRange("qidoMaxFill", 10000, 1, 1000000);
+
+		DETECTION_TWO_RIBBON_CHANCE = builder.comment("Chance (0-1) that Diem talent detection grants 2 ribbons instead of 1").defineInRange("detectionTwoRibbonChance", 0.5, 0.0, 1.0);
+
+		RIBBON_XP_PER_RIBBON = builder.comment("Mastery xp (charge spent) needed per ribbon already held to grow the next ribbon through practice. A layer of sand is 10 charge.").defineInRange("ribbonXpPerRibbon", 2000, 1, 1000000);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -77,5 +83,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		MAX_HYDRATION.clearCache();
 		OVERMASTERY_DURATION.clearCache();
 		DEHYDRATION_THRESHOLD.clearCache();
+		DETECTION_TWO_RIBBON_CHANCE.clearCache();
+		RIBBON_XP_PER_RIBBON.clearCache();
 	}
 }

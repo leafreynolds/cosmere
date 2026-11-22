@@ -10,6 +10,7 @@ import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.diem.DiemRank;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -138,6 +139,27 @@ public class SandmasteryEngLangGen extends LanguageProvider
 	{
 		add("gui.sandmastery.sand_pouch.taking_black", "Black");
 		add("gui.sandmastery.sand_pouch.taking_white", "White");
+		add("gui.sandmastery.ribbons_free", "Ribbons free: %s");
+
+		add(DiemRank.ACOLENT.getTranslationKey(), "Acolent");
+		add(DiemRank.UNDERFEN.getTranslationKey(), "Underfen");
+		add(DiemRank.FEN.getTranslationKey(), "Fen");
+		add(DiemRank.DIEMFEN.getTranslationKey(), "Diemfen");
+		add(DiemRank.UNDERLESTRELL.getTranslationKey(), "Underlestrell");
+		add(DiemRank.LESTRELL.getTranslationKey(), "Lestrell");
+		add(DiemRank.UNDERMASTRELL.getTranslationKey(), "Undermastrell");
+		add(DiemRank.MASTRELL.getTranslationKey(), "Mastrell");
+		add(DiemRank.LORD_MASTRELL.getTranslationKey(), "Lord Mastrell");
+
+		add("diem.sandmastery.detection", "You reach toward the sand on the stone, and it stirs. The Diem has found talent in you.");
+		add("diem.sandmastery.detection_result", "You are now an %s, able to control %s ribbon(s).");
+		add("diem.sandmastery.promoted", "You have been raised to %s.");
+		add("diem.sandmastery.status", "You are %s, controlling %s ribbon(s).");
+		add("diem.sandmastery.trial_ready", "You may attempt the trial for %s.");
+		add("diem.sandmastery.trial_locked", "Reach %s ribbons to attempt the trial for %s.");
+		add("diem.sandmastery.highest_rank", "You hold the highest rank of the Diem.");
+		add("diem.sandmastery.ribbon_gained", "Your practice pays off: you can now control %s ribbons.");
+		add("diem.sandmastery.practice_capped", "Practice alone will take you no further. Seek the trial for %s at the Diem.");
 	}
 
 	private void addDamageSources()

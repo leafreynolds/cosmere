@@ -23,5 +23,6 @@ public class SandmasteryBlocks
 	public static final BlockRegistryObject<SandJarBlock, BlockItem> SAND_JAR_BLOCK = BLOCKS.register("sand_jar_block", SandJarBlock::new);
 	public static final BlockRegistryObject<TemporarySandBlock, BlockItem> TEMPORARY_SAND_BLOCK = BLOCKS.register("temporary_sand_block", TemporarySandBlock::new);
 	public static final BlockRegistryObject<SandSpreadingTubBlock, BlockItem> SAND_SPREADING_TUB_BLOCK = BLOCKS.register("sand_spreading_tub", SandSpreadingTubBlock::new);
+	public static final BlockRegistryObject<DiemStoneBlock, BlockItem> DIEM_STONE = BLOCKS.register("diem_stone", DiemStoneBlock::new);
 
 }

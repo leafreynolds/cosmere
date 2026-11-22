@@ -13,6 +13,7 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.ItemChargeHelper;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.diem.DiemProgression;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
@@ -137,6 +138,7 @@ public class SandmasteryManifestation extends Manifestation
 			long changeLeft = debt - debt % SandmasteryConstants.CHARGE_PER_SAND_LAYER;
 			submodule.setChargeDebt((int) (debt - changeLeft));
 
+			int spent = 0;
 			for (ItemStack stack : getSandPouches(player))
 			{
 				if (changeLeft <= 0)
@@ -147,7 +149,9 @@ public class SandmasteryManifestation extends Manifestation
 				int taken = (int) Math.min(pouch.getCharge(stack), changeLeft);
 				pouch.setCharge(stack, pouch.getCharge(stack) - taken);
 				changeLeft -= taken;
+				spent += taken;
 			}
+			DiemProgression.addPracticeXp(data, spent);
 		}
 	}
 

@@ -16,6 +16,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 @EventBusSubscriber(modid = Sandmastery.MODID)
 public class SandmasteryCommonEventHandler
@@ -24,6 +25,20 @@ public class SandmasteryCommonEventHandler
 	public static void registerCommands(RegisterCommandsEvent event)
 	{
 		SandmasteryCommands.register(event.getDispatcher());
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		SpiritwebCapability.get(event.getEntity()).ifPresent(spiritweb ->
+		{
+			SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(spiritweb);
+			if (submodule.isPreDiemSave())
+			{
+				submodule.resetForDiem(spiritweb);
+				spiritweb.syncToClients(null);
+			}
+		});
 	}
 
 	@SubscribeEvent

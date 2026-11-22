@@ -308,6 +308,12 @@ public class EntityEventHandler
 
 	public static void addOtherPowers(SpiritwebCapability spiritwebCapability)
 	{
+		// players earn ribbons through the Diem of Sand instead of a random roll
+		if (spiritwebCapability.getLiving() instanceof Player)
+		{
+			return;
+		}
+
 		for (Manifestation manifestation : CosmereAPI.manifestationRegistry())
 		{
 			if (manifestation.getManifestationType() == Manifestations.ManifestationTypes.SANDMASTERY)

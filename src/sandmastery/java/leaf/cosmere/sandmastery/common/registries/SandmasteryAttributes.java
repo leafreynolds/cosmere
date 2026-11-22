@@ -20,7 +20,7 @@ public class SandmasteryAttributes
 					Sandmastery.MODID,
 					0,
 					0,
-					24
+					25
 			);
 	//RLs for permanent modifiers to the player's ribbon attribute
 	public static final ResourceLocation OVERMASTERY_ID = Sandmastery.rl("overmastery");

@@ -4,6 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.GuiUtils;
+import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -102,7 +105,13 @@ public class RadialButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
-		return false;
+		boolean isMouseOver = isMouseOver(pMouseX, pMouseY);
+		if (isMouseOver)
+		{
+			Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, pButton == 0 ? 1 : -1));
+			playDownSound(Minecraft.getInstance().getSoundManager());
+		}
+		return isMouseOver;
 	}
 
 	@Override
@@ -111,6 +120,7 @@ public class RadialButton extends Button
 		boolean isHovered = isMouseOver(pMouseX, pMouseY);
 		renderRadial(pGuiGraphics, isHovered);
 		renderIcon(pGuiGraphics);
+		renderRibbonsInUse(pGuiGraphics);
 		if (isHovered)
 		{
 			renderInfoBlock(pGuiGraphics);
@@ -194,6 +204,16 @@ public class RadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderRibbonsInUse(GuiGraphics pGuiGraphics)
+	{
+		int ribbons = SpiritwebCapability.get(Minecraft.getInstance().player).map(spiritweb -> spiritweb.getMode(manifestation)).orElse(0);
+		double midAngle = (startAngle + endAngle) / 2;
+		double midRadius = radius / 1.5;
+		int textX = centerX + (int) (Math.cos(midAngle) * midRadius);
+		int textY = centerY + (int) (Math.sin(midAngle) * midRadius) + width / 2 + 2;
+		pGuiGraphics.drawCenteredString(Minecraft.getInstance().font, String.valueOf(ribbons), textX, textY, 0xFFFFFF);
 	}
 
 	private void renderInfoBlock(GuiGraphics pGuiGraphics)

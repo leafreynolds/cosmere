@@ -20,9 +20,11 @@ import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.client.gui.SandmasterySpiritwebMenu;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.diem.DiemRank;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
@@ -41,6 +43,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -56,6 +59,11 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private int chargeDebt = 0;
 
 	private int hotkeyFlags = 0;
+
+	private int diemRank = DiemRank.UNTESTED;
+	private int masteryXp = 0;
+	private long trialCooldownUntil = 0;
+	private boolean preDiemSave = false;
 
 	public static SandmasterySpiritwebSubmodule get(ISpiritweb data)
 	{
@@ -152,6 +160,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		launchesSinceLeftGround = sandmasteryTag.getInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG);
 		hotkeyFlags = sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
 		numRibbonsInUse = sandmasteryTag.getInt(SandmasteryConstants.RIBBONS_IN_USE_TAG);
+		preDiemSave = !sandmasteryTag.contains(SandmasteryConstants.DIEM_RANK_TAG);
+		diemRank = preDiemSave ? DiemRank.UNTESTED : sandmasteryTag.getInt(SandmasteryConstants.DIEM_RANK_TAG);
+		masteryXp = sandmasteryTag.getInt(SandmasteryConstants.MASTERY_XP_TAG);
+		trialCooldownUntil = sandmasteryTag.getLong(SandmasteryConstants.TRIAL_COOLDOWN_TAG);
 	}
 
 	@Override
@@ -170,6 +182,9 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		sandmasteryTag.putInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG, launchesSinceLeftGround);
 		sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
 		sandmasteryTag.putInt(SandmasteryConstants.RIBBONS_IN_USE_TAG, numRibbonsInUse);
+		sandmasteryTag.putInt(SandmasteryConstants.DIEM_RANK_TAG, diemRank);
+		sandmasteryTag.putInt(SandmasteryConstants.MASTERY_XP_TAG, masteryXp);
+		sandmasteryTag.putLong(SandmasteryConstants.TRIAL_COOLDOWN_TAG, trialCooldownUntil);
 
 		//this shouldn't be necessary, as the spiritweb tag should already have the reference
 		//but we are hunting a null ref, so maybe something gets unassigned somewhere
@@ -231,6 +246,82 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	public List<Holder<Attribute>> getPowers()
 	{
 		return List.of(SandmasteryAttributes.RIBBONS.getHolder());
+	}
+
+	@Nullable
+	public DiemRank getDiemRank()
+	{
+		return DiemRank.byId(diemRank);
+	}
+
+	public void setDiemRank(@Nullable DiemRank rank)
+	{
+		diemRank = rank == null ? DiemRank.UNTESTED : rank.ordinal();
+	}
+
+	public boolean isPreDiemSave()
+	{
+		return preDiemSave;
+	}
+
+	// pre-Diem saves had random ribbons: back to untested with no ribbons, overmastery or ribbons in use
+	public void resetForDiem(ISpiritweb spiritweb)
+	{
+		AttributeInstance ribbons = spiritweb.getLiving().getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
+		if (ribbons != null)
+		{
+			ribbons.setBaseValue(0);
+			ribbons.removeModifier(SandmasteryAttributes.OVERMASTERY_ID);
+			ribbons.removeModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_ID);
+		}
+		for (var power : SandmasteryManifestations.SANDMASTERY_POWERS.values())
+		{
+			spiritweb.setMode(power.get(), 0);
+		}
+		numRibbonsInUse = 0;
+		diemRank = DiemRank.UNTESTED;
+		masteryXp = 0;
+		preDiemSave = false;
+	}
+
+	public int getMasteryXp()
+	{
+		return masteryXp;
+	}
+
+	public void setMasteryXp(int masteryXp)
+	{
+		this.masteryXp = Math.max(0, masteryXp);
+	}
+
+	public long getTrialCooldownUntil()
+	{
+		return trialCooldownUntil;
+	}
+
+	public void setTrialCooldownUntil(long gameTime)
+	{
+		trialCooldownUntil = gameTime;
+	}
+
+	// ribbons that count for Diem ranks: the base plus permanent overmastery gains, but not the temporary overmastered lockout
+	public static int getRankRibbons(LivingEntity living)
+	{
+		AttributeInstance ribbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
+		if (ribbons == null)
+		{
+			return 0;
+		}
+		double total = ribbons.getBaseValue();
+		for (ResourceLocation id : List.of(SandmasteryAttributes.OVERMASTERY_ID, SandmasteryAttributes.OVERMASTERY_SECONDARY_ID))
+		{
+			AttributeModifier modifier = ribbons.getModifier(id);
+			if (modifier != null)
+			{
+				total += modifier.amount();
+			}
+		}
+		return (int) total;
 	}
 
 	public int getChargeDebt()
