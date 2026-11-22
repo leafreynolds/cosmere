@@ -6,6 +6,7 @@ package leaf.cosmere.sandmastery.common.utils;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.StackNBTHelper;
@@ -19,6 +20,7 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -33,6 +35,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -304,5 +307,26 @@ public class MiscHelper
 		}
 
 		return array;
+	}
+
+	public static boolean touchesLiquid(BlockGetter pLevel, BlockPos pPos, BlockState state)
+	{
+		boolean touching = false;
+		BlockPos.MutableBlockPos blockpos$mutableblockpos = pPos.mutable();
+		for (Direction direction : EnumUtils.DIRECTIONS)
+		{
+			BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+			if (direction != Direction.DOWN || state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos))
+			{
+				blockpos$mutableblockpos.setWithOffset(pPos, direction);
+				blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+				if (state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos) && !blockstate.isFaceSturdy(pLevel, pPos, direction.getOpposite()))
+				{
+					touching = true;
+					break;
+				}
+			}
+		}
+		return touching;
 	}
 }

@@ -1,5 +1,13 @@
 {
   "values": [
-    "sandmastery:sand_jar_block"
+    "sandmastery:sand_jar_block",
+    "sandmastery:taldain_sandstone",
+    "sandmastery:cut_taldain_sandstone",
+    "sandmastery:smooth_taldain_sandstone",
+    "sandmastery:chiseled_taldain_sandstone",
+    "sandmastery:charged_taldain_sandstone",
+    "sandmastery:charged_cut_taldain_sandstone",
+    "sandmastery:charged_smooth_taldain_sandstone",
+    "sandmastery:charged_chiseled_taldain_sandstone"
   ]
 }

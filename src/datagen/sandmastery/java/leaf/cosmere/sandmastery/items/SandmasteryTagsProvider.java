@@ -31,7 +31,10 @@ public class SandmasteryTagsProvider extends BaseTagProvider
 
 		getBlockBuilder(BlockTags.MINEABLE_WITH_SHOVEL).add(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock());
 		getBlockBuilder(BlockTags.SAND).add(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock());
-		getBlockBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(SandmasteryBlocks.SAND_JAR_BLOCK.getBlock());
+		getBlockBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
+			.add(SandmasteryBlocks.SAND_JAR_BLOCK.getBlock(),
+				SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CUT_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CHISELED_SANDSTONE.getBlock(),
+				SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CUT_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CHISELED_SANDSTONE.getBlock());
 		getBlockBuilder(BlockTags.MINEABLE_WITH_AXE).add(SandmasteryBlocks.SAND_SPREADING_TUB_BLOCK.getBlock());
 	}
 
