@@ -15,6 +15,7 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.SpiritwebHud;
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.compat.dynamickeybinds.PowerKeybinds;
 import leaf.cosmere.common.config.CosmereConfigs;
 import leaf.cosmere.common.network.packets.SyncPlayerSpiritwebMessage;
 import leaf.cosmere.common.registry.AttributesRegistry;
@@ -403,6 +404,11 @@ public class SpiritwebCapability implements ISpiritweb
 			{
 				syncToClients(null);
 				didSetup = true;
+			}
+
+			if (PowerKeybinds.ENABLED && livingEntity instanceof ServerPlayer player && livingEntity.tickCount % 20 == 0)
+			{
+				PowerKeybinds.tick(player, this);
 			}
 
 			final LivingEntity spiritWebEntity = getLiving();

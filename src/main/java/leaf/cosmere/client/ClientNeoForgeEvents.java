@@ -123,7 +123,7 @@ public class ClientNeoForgeEvents
 
 			for (Activator activator : Keybindings.activators)
 			{
-				if (activator.getKeyMapping().consumeClick())
+				if (PowerKeyMappings.consumeClick(activator.getKeyMapping()))
 				{
 					Manifestation manifestation = activator.getManifestation();
 					Cosmere.packetHandler().sendToServer(new SetSelectedManifestationMessage(manifestation));

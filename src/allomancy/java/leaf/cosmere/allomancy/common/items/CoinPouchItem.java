@@ -15,6 +15,7 @@ import leaf.cosmere.allomancy.common.registries.AllomancyManifestations;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.ItemsRegistry;
 import net.minecraft.core.Holder;
@@ -100,7 +101,7 @@ public class CoinPouchItem extends ProjectileWeaponItem
 				((ServerPlayer) player).openMenu(container, buf -> buf.writeBoolean(true));
 			}
 		}
-		else if (player.level().isClientSide && AllomancyKeybindings.ALLOMANCY_STEEL_PUSH.isDown())
+		else if (player.level().isClientSide && PowerKeyMappings.isDown(AllomancyKeybindings.ALLOMANCY_STEEL_PUSH))
 		{
 			//assume they wanna shoot a projectile
 			//so let them tell the server

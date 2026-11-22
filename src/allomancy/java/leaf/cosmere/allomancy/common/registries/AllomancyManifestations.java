@@ -8,13 +8,19 @@ import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.manifestation.*;
 import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
+import leaf.cosmere.api.spiritweb.ISpiritweb;
+import leaf.cosmere.common.compat.dynamickeybinds.PowerKeybinds;
 import leaf.cosmere.common.registration.impl.ManifestationDeferredRegister;
 import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static leaf.cosmere.api.Constants.Strings.*;
 
 public class AllomancyManifestations
 {
@@ -32,6 +38,24 @@ public class AllomancyManifestations
 											metalType.getName(),
 											() -> makeAllomancyManifestation(metalType))//get the specific instance of the manifestation for allomancy
 					));
+
+	// Keybinds, gated behind the matching power when DynamicKeybinds is installed
+	public static final Map<Metals.MetalType, PowerKeybinds.Def> KEY_ACTIVATORS =
+			ALLOMANCY_POWERS.keySet().stream()
+					.collect(Collectors.toMap(
+							Function.identity(),
+							metalType -> PowerKeybinds.add(KEY_ALLOMANCY + metalType.getName(), GLFW.GLFW_KEY_UNKNOWN, KEYS_ACTIVATE_CATEGORY, requires(metalType))
+					));
+
+	public static final PowerKeybinds.Def KEY_STEEL_PUSH = PowerKeybinds.add(KEY_ALLOMANCY_STEEL_PUSH, GLFW.GLFW_KEY_TAB, KEYS_CATEGORY, requires(Metals.MetalType.STEEL));
+	public static final PowerKeybinds.Def KEY_IRON_PULL = PowerKeybinds.add(KEY_ALLOMANCY_IRON_PULL, GLFW.GLFW_KEY_R, KEYS_CATEGORY, requires(Metals.MetalType.IRON));
+	public static final PowerKeybinds.Def KEY_SOOTHE = PowerKeybinds.add(KEY_ALLOMANCY_SOOTHE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY, requires(Metals.MetalType.BRASS));
+	public static final PowerKeybinds.Def KEY_RIOT = PowerKeybinds.add(KEY_ALLOMANCY_RIOT, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY, requires(Metals.MetalType.ZINC));
+
+	private static Predicate<ISpiritweb> requires(Metals.MetalType metalType)
+	{
+		return spiritweb -> spiritweb.hasManifestation(ALLOMANCY_POWERS.get(metalType).getManifestation());
+	}
 
 
 	private static AllomancyManifestation makeAllomancyManifestation(Metals.MetalType metalType)

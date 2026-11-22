@@ -15,6 +15,7 @@ import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.common.config.CosmereConfigs;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +42,7 @@ public class AllomancyBrass extends AllomancyManifestation
 		{
 			if (isActiveTick(data))
 			{
-				boolean isSingleTarget = (AllomancyKeybindings.ALLOMANCY_SOOTHE.isDown() || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) && data.getSelectedManifestation().equals(getManifestation()));
+				boolean isSingleTarget = (PowerKeyMappings.isDown(AllomancyKeybindings.ALLOMANCY_SOOTHE) || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) && data.getSelectedManifestation().equals(getManifestation()));
 				int singleTargetEntityId = 0;
 
 				if (isSingleTarget)

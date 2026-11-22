@@ -200,7 +200,7 @@ public class SurgebindingEngLangGen extends LanguageProvider
 		add(KEY_SHARDBLADE, "Summon/Dismiss Shardblade");
 		add(KEY_REQUEST_STORMLIGHT, "Request Stormlight");
 		add(KEY_DISPATCH_STORMLIGHT, "Dispatch Stormlight");
-		add("keys.surgebinding.main", "Surgebinding");
+		add(KEYS_SURGEBINDING_CATEGORY, "Surgebinding");
 	}
 
 	private void addStats()
