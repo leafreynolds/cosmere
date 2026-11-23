@@ -20,6 +20,7 @@ public class SandmasteryConstants
 	public static final String MASTERY_XP_TAG = "mastery_xp";
 	public static final String TRIAL_COOLDOWN_TAG = "trial_cooldown_until";
 	public static final int CHARGE_PER_SAND_LAYER = 10;
+	public static final int GLOWING_SAND_LIGHT_LEVEL = 15;
 	public static final int ELEVATE_HOTKEY_FLAG = 2;
 	public static final int LAUNCH_HOTKEY_FLAG = 4;
 	public static final int PROJECTILE_HOTKEY_FLAG = 8;

@@ -1,0 +1,221 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#all",
+    "all": "sandmastery:block/water_dripper"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        9,
+        5
+      ],
+      "to": [
+        11,
+        16,
+        11
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            9,
+            6,
+            15
+          ],
+          "texture": "#all",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            0,
+            9,
+            6,
+            15
+          ],
+          "texture": "#all"
+        },
+        "south": {
+          "uv": [
+            6,
+            9,
+            0,
+            2
+          ],
+          "texture": "#all"
+        },
+        "north": {
+          "uv": [
+            6,
+            9,
+            0,
+            2
+          ],
+          "texture": "#all"
+        },
+        "west": {
+          "uv": [
+            6,
+            9,
+            0,
+            2
+          ],
+          "texture": "#all"
+        },
+        "east": {
+          "uv": [
+            6,
+            9,
+            0,
+            2
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        7,
+        6
+      ],
+      "to": [
+        10,
+        9,
+        10
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            1,
+            10,
+            5,
+            14
+          ],
+          "texture": "#all"
+        },
+        "south": {
+          "uv": [
+            5,
+            2,
+            1,
+            0
+          ],
+          "texture": "#all"
+        },
+        "north": {
+          "uv": [
+            5,
+            2,
+            1,
+            0
+          ],
+          "texture": "#all"
+        },
+        "west": {
+          "uv": [
+            5,
+            2,
+            1,
+            0
+          ],
+          "texture": "#all"
+        },
+        "east": {
+          "uv": [
+            5,
+            2,
+            1,
+            0
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        5,
+        8
+      ],
+      "to": [
+        9.5,
+        7,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "shade": false,
+      "faces": {
+        "south": {
+          "uv": [
+            11,
+            3,
+            14,
+            1
+          ],
+          "texture": "#all"
+        },
+        "north": {
+          "uv": [
+            14,
+            3,
+            11,
+            1
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        5,
+        6.5
+      ],
+      "to": [
+        8,
+        7,
+        9.5
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "shade": false,
+      "faces": {
+        "west": {
+          "uv": [
+            11,
+            12,
+            14,
+            10
+          ],
+          "texture": "#all"
+        },
+        "east": {
+          "uv": [
+            14,
+            12,
+            11,
+            10
+          ],
+          "texture": "#all"
+        }
+      }
+    }
+  ]
+}

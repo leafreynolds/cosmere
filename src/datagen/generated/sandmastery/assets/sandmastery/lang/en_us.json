@@ -35,6 +35,7 @@
   "block.sandmastery.taldain_sandstone_stairs": "Taldain Sandstone Stairs",
   "block.sandmastery.taldain_sandstone_wall": "Taldain Sandstone Wall",
   "block.sandmastery.temporary_sand_block": "Temporary Sand Block",
+  "block.sandmastery.water_dripper": "Water Dripper",
   "death.attack.dehydrated": "%1$s died of dehydration",
   "diem.sandmastery.detection": "You reach toward the sand on the stone, and it stirs. The Diem has found talent in you.",
   "diem.sandmastery.detection_result": "You are now an %s, able to control %s ribbon(s).",

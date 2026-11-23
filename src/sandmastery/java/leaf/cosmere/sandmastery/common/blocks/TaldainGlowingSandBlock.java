@@ -4,6 +4,7 @@ import leaf.cosmere.common.blocks.BaseFallingBlock;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.sandmastery.common.blocks.entities.GlowingSandBE;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
+import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
@@ -16,11 +17,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class TaldainGlowingSandBlock extends BaseFallingBlock implements EntityBlock
 {
-	public static final int LIGHT_LEVEL = 10;
-
 	public TaldainGlowingSandBlock()
 	{
-		super(PropTypes.Blocks.SAND.get().lightLevel(state -> LIGHT_LEVEL), SoundType.SAND, 1F, 2F);
+		super(PropTypes.Blocks.SAND.get().lightLevel(state -> SandmasteryConstants.GLOWING_SAND_LIGHT_LEVEL), SoundType.SAND, 1F, 2F);
 	}
 
 	@Nullable
