@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "sandmastery:charged_smooth_taldain_sandstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "sandmastery:charged_smooth_taldain_sandstone_stairs"
+  }
+}

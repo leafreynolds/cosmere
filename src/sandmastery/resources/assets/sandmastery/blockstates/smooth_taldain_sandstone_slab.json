@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "sandmastery:block/black_smooth_sandstone_slab"
+    },
+    "type=double": {
+      "model": "sandmastery:block/black_smooth_sandstone"
+    },
+    "type=top": {
+      "model": "sandmastery:block/black_smooth_sandstone_slab_top"
+    }
+  }
+}

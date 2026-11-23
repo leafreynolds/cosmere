@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": [
+      {
+        "item": "sandmastery:taldain_sandstone"
+      },
+      {
+        "item": "sandmastery:chiseled_taldain_sandstone"
+      },
+      {
+        "item": "sandmastery:cut_taldain_sandstone"
+      }
+    ]
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "sandmastery:taldain_sandstone_stairs"
+  }
+}
