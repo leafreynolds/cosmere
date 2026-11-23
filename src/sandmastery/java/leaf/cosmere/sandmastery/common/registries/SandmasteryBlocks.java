@@ -20,6 +20,7 @@ public class SandmasteryBlocks
 	public static final BlockRegistryObject<TaldainWhiteSandLayerBlock, BlockItem> TALDAIN_WHITE_SAND_LAYER = BLOCKS.register("charged_taldain_sand_layer", TaldainWhiteSandLayerBlock::new);
 	public static final BlockRegistryObject<TaldainBlackSandBlock, BlockItem> TALDAIN_BLACK_SAND = BLOCKS.register("taldain_sand", TaldainBlackSandBlock::new);
 	public static final BlockRegistryObject<TaldainWhiteSandBlock, BlockItem> TALDAIN_WHITE_SAND = BLOCKS.register("charged_taldain_sand", TaldainWhiteSandBlock::new);
+	public static final BlockRegistryObject<TaldainGlowingSandBlock, BlockItem> TALDAIN_GLOWING_SAND = BLOCKS.register("glowing_taldain_sand", TaldainGlowingSandBlock::new);
 	public static final BlockRegistryObject<TaldainBlackSandstoneBlock, BlockItem> TALDAIN_BLACK_SANDSTONE = BLOCKS.register("taldain_sandstone", () -> new TaldainBlackSandstoneBlock(() -> SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE.getBlock()));
 	public static final BlockRegistryObject<TaldainWhiteSandstoneBlock, BlockItem> TALDAIN_WHITE_SANDSTONE = BLOCKS.register("charged_taldain_sandstone", () -> new TaldainWhiteSandstoneBlock(() -> SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE.getBlock()));
 	public static final BlockRegistryObject<TaldainBlackSandstoneBlock, BlockItem> TALDAIN_BLACK_CUT_SANDSTONE = BLOCKS.register("cut_taldain_sandstone", () -> new TaldainBlackSandstoneBlock(() -> SandmasteryBlocks.TALDAIN_WHITE_CUT_SANDSTONE.getBlock()));
