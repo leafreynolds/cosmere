@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sandmastery:block/black_gilded_chiseled_sandstone"
+    },
+    "facing=east": {
+      "model": "sandmastery:block/black_gilded_chiseled_sandstone",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "sandmastery:block/black_gilded_chiseled_sandstone",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sandmastery:block/black_gilded_chiseled_sandstone",
+      "y": 270
+    }
+  }
+}

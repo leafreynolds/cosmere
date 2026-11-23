@@ -25,6 +25,18 @@
     "sandmastery:smooth_taldain_sandstone_slab",
     "sandmastery:charged_smooth_taldain_sandstone_slab",
     "sandmastery:smooth_taldain_sandstone_stairs",
-    "sandmastery:charged_smooth_taldain_sandstone_stairs"
+    "sandmastery:charged_smooth_taldain_sandstone_stairs",
+    "sandmastery:gilded_taldain_sandstone",
+    "sandmastery:charged_gilded_taldain_sandstone",
+    "sandmastery:gilded_cut_taldain_sandstone",
+    "sandmastery:charged_gilded_cut_taldain_sandstone",
+    "sandmastery:gilded_smooth_taldain_sandstone",
+    "sandmastery:charged_gilded_smooth_taldain_sandstone",
+    "sandmastery:gilded_chiseled_taldain_sandstone",
+    "sandmastery:charged_gilded_chiseled_taldain_sandstone",
+    "sandmastery:gilded_cobbled_taldain_sandstone",
+    "sandmastery:charged_gilded_cobbled_taldain_sandstone",
+    "sandmastery:gilded_bricked_taldain_sandstone",
+    "sandmastery:charged_gilded_bricked_taldain_sandstone"
   ]
 }
