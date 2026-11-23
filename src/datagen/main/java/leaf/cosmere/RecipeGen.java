@@ -60,6 +60,11 @@ public class RecipeGen extends BaseRecipeProvider implements IConditionBuilder
 				.save(output);
 
 
+		stonecutterRecipe(output, Items.SANDSTONE, BlocksRegistry.COBBLED_SANDSTONE.asItem());
+		stonecutterRecipe(output, Items.SANDSTONE, BlocksRegistry.BRICKED_SANDSTONE.asItem());
+		stonecutterRecipe(output, Items.RED_SANDSTONE, BlocksRegistry.COBBLED_RED_SANDSTONE.asItem());
+		stonecutterRecipe(output, Items.RED_SANDSTONE, BlocksRegistry.BRICKED_RED_SANDSTONE.asItem());
+
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
 			//theres no reason for uss to add ways to recipe blocks/ingots that minecraft already has

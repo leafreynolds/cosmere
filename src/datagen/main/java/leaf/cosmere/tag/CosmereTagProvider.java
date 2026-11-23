@@ -150,6 +150,7 @@ public class CosmereTagProvider extends BaseTagProvider
 	{
 		addToTag(BlockTags.NEEDS_STONE_TOOL, BlocksRegistry.METALWORKING_TABLE);
 		addToHarvestTag(BlockTags.MINEABLE_WITH_AXE, BlocksRegistry.METALWORKING_TABLE);
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE, BlocksRegistry.COBBLED_SANDSTONE, BlocksRegistry.BRICKED_SANDSTONE, BlocksRegistry.COBBLED_RED_SANDSTONE, BlocksRegistry.BRICKED_RED_SANDSTONE);
 
 
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)

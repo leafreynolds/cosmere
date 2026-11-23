@@ -58,6 +58,20 @@ public abstract class BaseRecipeProvider extends RecipeProvider
 		SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), RecipeCategory.MISC, result, experience, time / 2).unlockedBy("has_ore", has(ore)).save(output, makeRL(name + "_from_blasting_" + path));
 	}
 
+	protected void stonecutterRecipe(RecipeOutput output, ItemLike input, ItemLike result)
+	{
+		stonecutterRecipe(output, input, result, 1);
+	}
+
+	protected void stonecutterRecipe(RecipeOutput output, ItemLike input, ItemLike result, int count)
+	{
+		String inputName = RegistryHelper.get(input.asItem()).getPath();
+		String resultName = RegistryHelper.get(result.asItem()).getPath();
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(input), RecipeCategory.BUILDING_BLOCKS, result, count)
+				.unlockedBy("has_item", has(input))
+				.save(output, makeRL(resultName + "_from_" + inputName + "_stonecutting"));
+	}
+
 	protected void addCookingRecipes(RecipeOutput output, ItemLike inputItem, Item result, float experience, int time)
 	{
 		String name = RegistryHelper.get(result).getPath();

@@ -16,6 +16,7 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -50,6 +51,10 @@ public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 				Block whiteLayer = SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock();
 				this.add(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), (layer) -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(TaldainBlackSandLayerBlock.LAYERS.getPossibleValues(), (layers) -> LootItem.lootTableItem(blackLayer.asItem()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(layer).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TaldainBlackSandLayerBlock.LAYERS, layers))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(layers.intValue())))))));
 				this.add(SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), (layer) -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(TaldainWhiteSandLayerBlock.LAYERS.getPossibleValues(), (layers) -> LootItem.lootTableItem(whiteLayer.asItem()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(layer).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TaldainWhiteSandLayerBlock.LAYERS, layers))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(layers.intValue())))))));
+			}
+			else if (block instanceof SlabBlock)
+			{
+				this.add(block, createSlabItemTable(block));
 			}
 			else if (block instanceof TemporarySandBlock)
 			{

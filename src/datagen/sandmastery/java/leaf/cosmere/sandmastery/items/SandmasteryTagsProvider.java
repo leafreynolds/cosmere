@@ -12,6 +12,7 @@ import leaf.cosmere.tag.BaseTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -33,8 +34,16 @@ public class SandmasteryTagsProvider extends BaseTagProvider
 		getBlockBuilder(BlockTags.SAND).add(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock());
 		getBlockBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
 			.add(SandmasteryBlocks.SAND_JAR_BLOCK.getBlock(),
-				SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CUT_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CHISELED_SANDSTONE.getBlock(),
-				SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CUT_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CHISELED_SANDSTONE.getBlock());
+				SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CUT_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CHISELED_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_COBBLED_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_BRICKED_SANDSTONE.getBlock(),
+				SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CUT_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CHISELED_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_COBBLED_SANDSTONE.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_BRICKED_SANDSTONE.getBlock());
+		getBlockBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(
+				SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_STAIRS.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_STAIRS.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_WALL.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_WALL.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CUT_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CUT_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE_STAIRS.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE_STAIRS.getBlock());
+		getBlockBuilder(BlockTags.SLABS).add(SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_CUT_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_CUT_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE_SLAB.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE_SLAB.getBlock());
+		getBlockBuilder(BlockTags.STAIRS).add(SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_STAIRS.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_STAIRS.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE_STAIRS.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE_STAIRS.getBlock());
+		getBlockBuilder(BlockTags.WALLS).add(SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_WALL.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_WALL.getBlock());
+		getItemBuilder(ItemTags.SLABS).add(SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_SLAB.asItem(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_SLAB.asItem(), SandmasteryBlocks.TALDAIN_BLACK_CUT_SANDSTONE_SLAB.asItem(), SandmasteryBlocks.TALDAIN_WHITE_CUT_SANDSTONE_SLAB.asItem(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE_SLAB.asItem(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE_SLAB.asItem());
+		getItemBuilder(ItemTags.STAIRS).add(SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_STAIRS.asItem(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_STAIRS.asItem(), SandmasteryBlocks.TALDAIN_BLACK_SMOOTH_SANDSTONE_STAIRS.asItem(), SandmasteryBlocks.TALDAIN_WHITE_SMOOTH_SANDSTONE_STAIRS.asItem());
+		getItemBuilder(ItemTags.WALLS).add(SandmasteryBlocks.TALDAIN_BLACK_SANDSTONE_WALL.asItem(), SandmasteryBlocks.TALDAIN_WHITE_SANDSTONE_WALL.asItem());
 		getBlockBuilder(BlockTags.MINEABLE_WITH_AXE).add(SandmasteryBlocks.SAND_SPREADING_TUB_BLOCK.getBlock());
 	}
 

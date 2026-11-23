@@ -18,6 +18,9 @@ import leaf.cosmere.common.resource.ore.OreType;
 import leaf.cosmere.common.util.CosmereEnumUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -33,6 +36,17 @@ public class BlocksRegistry
 	public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(Cosmere.MODID);
 
 	public static final BlockRegistryObject<Block, BlockItem> METALWORKING_TABLE = BLOCKS.register("metalworking_table", MetalworkingTableBlock::new);
+
+	// Cobbled and bricked variants of vanilla sandstone; same properties as vanilla sandstone.
+	public static final BlockRegistryObject<Block, BlockItem> COBBLED_SANDSTONE = BLOCKS.register("cobbled_sandstone", () -> sandstoneLike(MapColor.SAND));
+	public static final BlockRegistryObject<Block, BlockItem> BRICKED_SANDSTONE = BLOCKS.register("bricked_sandstone", () -> sandstoneLike(MapColor.SAND));
+	public static final BlockRegistryObject<Block, BlockItem> COBBLED_RED_SANDSTONE = BLOCKS.register("cobbled_red_sandstone", () -> sandstoneLike(MapColor.COLOR_ORANGE));
+	public static final BlockRegistryObject<Block, BlockItem> BRICKED_RED_SANDSTONE = BLOCKS.register("bricked_red_sandstone", () -> sandstoneLike(MapColor.COLOR_ORANGE));
+
+	private static Block sandstoneLike(MapColor color)
+	{
+		return new Block(BlockBehaviour.Properties.of().mapColor(color).strength(0.8F).sound(SoundType.STONE).requiresCorrectToolForDrops());
+	}
 
 	public static final Map<Metals.MetalType, BlockRegistryObject<MetalBlock, BlockItem>> METAL_BLOCKS =
 			Arrays.stream(EnumUtils.METAL_TYPES)
