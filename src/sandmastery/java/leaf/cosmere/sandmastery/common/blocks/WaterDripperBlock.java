@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -67,12 +68,15 @@ public class WaterDripperBlock extends Block
 	{
 		for (int i = 1; i <= MAX_AIR_GAP + 1; i++)
 		{
-			BlockState state = level.getBlockState(targetPos.above(i));
+			BlockPos pos = targetPos.above(i);
+			BlockState state = level.getBlockState(pos);
 			if (state.is(SandmasteryBlocks.WATER_DRIPPER.getBlock()))
 			{
 				return true;
 			}
-			if (!state.isAir())
+			Vec3 top = new Vec3(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+			Vec3 bottom = new Vec3(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			if (state.getShape(level, pos).clip(top, bottom, pos) != null)
 			{
 				return false;
 			}
