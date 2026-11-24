@@ -7,6 +7,9 @@ package leaf.cosmere.sandmastery.common.network;
 import leaf.cosmere.common.network.BasePacketHandler;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.network.packets.DiemCheckpointsMessage;
+import leaf.cosmere.sandmastery.common.network.packets.OpenDiemTrialScreenMessage;
+import leaf.cosmere.sandmastery.common.network.packets.StartDiemTrialMessage;
 import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -24,6 +27,18 @@ public class SandmasteryPacketHandler extends BasePacketHandler
 		registrar.playToServer(
 				SyncMasteryBindsMessage.TYPE,
 				SyncMasteryBindsMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToServer(
+				StartDiemTrialMessage.TYPE,
+				StartDiemTrialMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToClient(
+				OpenDiemTrialScreenMessage.TYPE,
+				OpenDiemTrialScreenMessage.STREAM_CODEC,
+				ICosmerePacket::handle);
+		registrar.playToClient(
+				DiemCheckpointsMessage.TYPE,
+				DiemCheckpointsMessage.STREAM_CODEC,
 				ICosmerePacket::handle);
 	}
 }

@@ -9,6 +9,9 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.sandmastery.client.gui.SandPouchContainerScreen;
 import leaf.cosmere.sandmastery.client.gui.SandSpreaderScreen;
+import leaf.cosmere.sandmastery.client.render.DiemCheckpointRenderer;
+import leaf.cosmere.sandmastery.client.render.DiemTargetRenderer;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlockEntitiesRegistry;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.blocks.entities.SandSpreader.SandSpreaderMenu;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
@@ -59,6 +62,8 @@ public class SandmasteryModClientEvents
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
 		event.registerEntityRenderer(SandmasteryEntityTypes.SAND_PROJECTILE.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(SandmasteryEntityTypes.DIEM_TARGET.get(), DiemTargetRenderer::new);
+		event.registerBlockEntityRenderer(SandmasteryBlockEntitiesRegistry.DIEM_CHECKPOINT_BE.get(), DiemCheckpointRenderer::new);
 	}
 
 /*	//special thank you to the chisels and bits team who have an example of how to register other sprites

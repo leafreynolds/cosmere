@@ -10,6 +10,7 @@ import leaf.cosmere.api.ISpiritwebSubmodule;
 import leaf.cosmere.api.Version;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.config.ICosmereConfig;
+import leaf.cosmere.sandmastery.api.trial.SandmasteryTrialAPI;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.network.SandmasteryPacketHandler;
@@ -55,6 +56,10 @@ public class Sandmastery implements IModModule
 		SandmasteryMenuTypes.MENU_TYPES.register(modBus);
 		SandmasteryCreativeTabs.CREATIVE_TABS.register(modBus);
 		SandmasteryDataComponents.DATA_COMPONENTS.register(modBus);
+		SandmasteryPoiTypes.POI_TYPES.register(modBus);
+
+		SandmasteryTrialAPI.setRegistry(SandmasteryTrials.TRIALS.makeRegistry(builder -> builder.sync(true)));
+		SandmasteryTrials.TRIALS.register(modBus);
 
 		SandmasteryDimensions.register();
 

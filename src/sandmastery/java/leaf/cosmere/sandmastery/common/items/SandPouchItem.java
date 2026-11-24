@@ -7,6 +7,7 @@ package leaf.cosmere.sandmastery.common.items;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableItemBase;
 import leaf.cosmere.common.properties.PropTypes;
+import leaf.cosmere.sandmastery.common.diem.trial.DiemTrials;
 import leaf.cosmere.sandmastery.common.entities.SandProjectile;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandPouchContainerMenu;
 import leaf.cosmere.sandmastery.common.items.sandpouch.SandpouchItemHandler;
@@ -155,6 +156,11 @@ public class SandPouchItem extends ChargeableItemBase
 					sandProjectile.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 
 					player.level().addFreshEntity(sandProjectile);
+
+					if (player instanceof ServerPlayer serverPlayer)
+					{
+						DiemTrials.onShot(serverPlayer);
+					}
 				}
 
 				player.level().playSound(

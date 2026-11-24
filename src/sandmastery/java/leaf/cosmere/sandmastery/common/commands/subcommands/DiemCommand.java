@@ -45,6 +45,7 @@ public class DiemCommand extends ModCommand
 						.executes(DiemCommand::promote)
 						.then(Commands.argument("target", EntityArgument.players())
 								.executes(DiemCommand::promote)))
+				.then(DiemTrialCommand.register())
 				.then(Commands.literal("xp")
 						.then(Commands.argument("amount", IntegerArgumentType.integer(0))
 								.executes(DiemCommand::setXp)

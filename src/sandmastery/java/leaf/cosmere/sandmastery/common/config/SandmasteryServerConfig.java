@@ -24,6 +24,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	public final ModConfigSpec.IntValue QIDO_MAX_FILL;
 	public final ModConfigSpec.DoubleValue DETECTION_TWO_RIBBON_CHANCE;
 	public final ModConfigSpec.IntValue RIBBON_XP_PER_RIBBON;
+	public final ModConfigSpec.IntValue TRIAL_FAIL_COOLDOWN;
 
 	SandmasteryServerConfig()
 	{
@@ -50,6 +51,8 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		DETECTION_TWO_RIBBON_CHANCE = builder.comment("Chance (0-1) that Diem talent detection grants 2 ribbons instead of 1").defineInRange("detectionTwoRibbonChance", 0.5, 0.0, 1.0);
 
 		RIBBON_XP_PER_RIBBON = builder.comment("Mastery xp (charge spent) needed per ribbon already held to grow the next ribbon through practice. A layer of sand is 10 charge.").defineInRange("ribbonXpPerRibbon", 2000, 1, 1000000);
+
+		TRIAL_FAIL_COOLDOWN = builder.comment("Ticks a player must wait before attempting another Diem trial after failing one. 24000 is one Minecraft day.").defineInRange("trialFailCooldown", 24000, 0, 1000000);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -85,5 +88,6 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		DEHYDRATION_THRESHOLD.clearCache();
 		DETECTION_TWO_RIBBON_CHANCE.clearCache();
 		RIBBON_XP_PER_RIBBON.clearCache();
+		TRIAL_FAIL_COOLDOWN.clearCache();
 	}
 }

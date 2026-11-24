@@ -67,9 +67,8 @@ public class MasteryElevate extends SandmasteryManifestation
 
 		double speed = (maxLift - distFromGround) > 3 ? scaleSpeedToMode(getMode(data)) : 0.15;
 
-		Vec3 direction = new Vec3(0, speed, 0);
-
-		living.setDeltaMovement(direction);
+		Vec3 movement = living.getDeltaMovement();
+		living.setDeltaMovement(movement.x, speed, movement.z);
 		living.hurtMarked = true; // Allow the game to move the player
 		living.resetFallDistance();
 

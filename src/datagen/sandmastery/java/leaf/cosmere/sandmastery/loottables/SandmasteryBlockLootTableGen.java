@@ -6,6 +6,7 @@ package leaf.cosmere.sandmastery.loottables;
 
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.loottables.BaseBlockLootTables;
+import leaf.cosmere.sandmastery.common.blocks.DiemCheckpointBlock;
 import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandLayerBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainGlowingSandBlock;
@@ -61,7 +62,7 @@ public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 			{
 				this.dropOther(block, SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem());
 			}
-			else if (block instanceof TemporarySandBlock)
+			else if (block instanceof TemporarySandBlock || block instanceof DiemCheckpointBlock)
 			{
 				this.dropOther(block, Items.AIR);
 			}

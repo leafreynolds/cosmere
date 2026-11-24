@@ -6,6 +6,7 @@ package leaf.cosmere.sandmastery.items;
 
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.diem.trial.OutsideHelp;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.tag.BaseTagProvider;
@@ -29,6 +30,7 @@ public class SandmasteryTagsProvider extends BaseTagProvider
 	protected void registerTags(HolderLookup.Provider registries)
 	{
 		getItemBuilder(CosmereTags.Items.CURIO_BELT).add(SandmasteryItems.SAND_POUCH_ITEM.asItem());
+		getItemBuilder(OutsideHelp.ALLOWED_ITEMS).add(SandmasteryItems.SAND_POUCH_ITEM.asItem(), SandmasteryItems.QIDO_ITEM.asItem());
 
 		getBlockBuilder(BlockTags.MINEABLE_WITH_SHOVEL).add(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock(), SandmasteryBlocks.TALDAIN_GLOWING_SAND.getBlock());
 		getBlockBuilder(BlockTags.SAND).add(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_BLACK_SAND.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), SandmasteryBlocks.TALDAIN_WHITE_SAND.getBlock(), SandmasteryBlocks.TALDAIN_GLOWING_SAND.getBlock());

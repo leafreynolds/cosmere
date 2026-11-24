@@ -14,11 +14,13 @@ import leaf.cosmere.common.charge.ItemChargeHelper;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.diem.DiemProgression;
+import leaf.cosmere.sandmastery.common.diem.trial.DiemTrials;
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -152,6 +154,10 @@ public class SandmasteryManifestation extends Manifestation
 				spent += taken;
 			}
 			DiemProgression.addPracticeXp(data, spent);
+			if (player instanceof ServerPlayer serverPlayer)
+			{
+				DiemTrials.onSandSpent(serverPlayer, spent);
+			}
 		}
 	}
 
