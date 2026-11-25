@@ -112,6 +112,18 @@ public class ToolsTagProvider extends BaseTagProvider
 		for (var item : ToolsItems.METAL_HOE.values())
 			getItemBuilder(ItemTags.HOES).add(item);
 
+		for (var item : ToolsItems.METAL_HELMETS.values())
+			getItemBuilder(ItemTags.HEAD_ARMOR).add(item);
+
+		for (var item : ToolsItems.METAL_CHESTPLATES.values())
+			getItemBuilder(ItemTags.CHEST_ARMOR).add(item);
+
+		for (var item : ToolsItems.METAL_LEGGINGS.values())
+			getItemBuilder(ItemTags.LEG_ARMOR).add(item);
+
+		for (var item : ToolsItems.METAL_BOOTS.values())
+			getItemBuilder(ItemTags.FOOT_ARMOR).add(item);
+
 	}
 
 	private void addBlocks()
