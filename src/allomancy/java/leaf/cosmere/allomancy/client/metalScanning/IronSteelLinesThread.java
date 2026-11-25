@@ -14,9 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -48,12 +45,6 @@ public class IronSteelLinesThread implements Runnable
 	private static boolean isStopping = false;
 
 
-	TagKey<Block> aluminumOre;
-	TagKey<Block> aluminumStorage;
-	// these two below may or may not work, better to keep them than remove
-	TagKey<Block> aluminumSheet;
-	TagKey<Block> aluminumWire;
-
 	public static IronSteelLinesThread getInstance()
 	{
 		if (INSTANCE == null)
@@ -66,11 +57,6 @@ public class IronSteelLinesThread implements Runnable
 
 	private IronSteelLinesThread()
 	{
-		aluminumOre = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-		aluminumStorage = CosmereTags.Blocks.METAL_BLOCK_TAGS.get(Metals.MetalType.ALUMINUM);
-// these two below may or may not work, better to keep them than remove
-		aluminumSheet = BlockTags.create(new ResourceLocation("sheetmetals/aluminum"));
-		aluminumWire = BlockTags.create(new ResourceLocation("wires/aluminum"));
 	}
 
 
@@ -308,13 +294,7 @@ public class IronSteelLinesThread implements Runnable
 				break;
 			}
 
-			Block currBlock = bState.getBlock();
-
-			if (bState.is(aluminumOre)
-					|| bState.is(aluminumStorage)
-					|| bState.is(aluminumSheet)
-					|| bState.is(aluminumWire)
-					|| (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+			if (bState.is(CosmereTags.Blocks.CONTAINS_ALUMINUM))
 			{
 				// aluminum completely blocks steelsight
 				resistance += 1.0F;
@@ -355,9 +335,7 @@ public class IronSteelLinesThread implements Runnable
 					break;
 				}
 
-				Block currBlock = level.getBlockState(new BlockPos(toVec3i(currVec))).getBlock();
-
-				if (bState.is(aluminumOre) || bState.is(aluminumStorage) || bState.is(aluminumSheet) || bState.is(aluminumWire) || (currBlock instanceof IHasMetalType iHasMetalType && iHasMetalType.getMetalType() == Metals.MetalType.DURALUMIN))
+				if (bState.is(CosmereTags.Blocks.CONTAINS_ALUMINUM))
 				{
 					// aluminum completely blocks steelsight
 					resistance += 1.0F;
