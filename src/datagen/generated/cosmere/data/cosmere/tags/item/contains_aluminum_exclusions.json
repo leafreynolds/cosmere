@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#cosmere:contains_metal_exclusions",
+    "#c:dusts/duralumin",
+    "#c:nuggets/duralumin",
+    "#c:ingots/duralumin",
+    "#c:storage_blocks/duralumin"
+  ]
+}

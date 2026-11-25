@@ -1,0 +1,20 @@
+{
+  "values": [
+    "minecraft:grass_block",
+    "minecraft:farmland",
+    "minecraft:glass",
+    "minecraft:glass_pane",
+    "minecraft:torch",
+    "minecraft:shulker_box",
+    "minecraft:ice",
+    "minecraft:blue_ice",
+    "minecraft:packed_ice",
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "#minecraft:beds",
+    {
+      "id": "projecte:philosophers_stone",
+      "required": false
+    }
+  ]
+}

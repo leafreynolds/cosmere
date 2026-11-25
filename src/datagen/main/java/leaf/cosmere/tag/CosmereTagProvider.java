@@ -26,13 +26,14 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.GameEventTags;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -232,20 +233,20 @@ public class CosmereTagProvider extends BaseTagProvider
 
 	private void addContainsMetal()
 	{
-		final IntrinsicCosmereTagBuilder<Item> itemTagBuilder = getItemBuilder(CosmereTags.Items.CONTAINS_METAL);
-		final IntrinsicCosmereTagBuilder<Block> blockTagBuilder = getBlockBuilder(CosmereTags.Blocks.CONTAINS_METAL);
+		final IntrinsicCosmereTagBuilder<Item> metalItemTagBuilder = getItemBuilder(CosmereTags.Items.CONTAINS_METAL);
+		final IntrinsicCosmereTagBuilder<Block> metalBlockTagBuilder = getBlockBuilder(CosmereTags.Blocks.CONTAINS_METAL);
 		final IntrinsicCosmereTagBuilder<EntityType<?>> entityTagBuilder = getEntityTypeBuilder(CosmereTags.EntityTypes.CONTAINS_METAL);
+		final IntrinsicCosmereTagBuilder<Item> aluminumItemTagBuilder = getItemBuilder(CosmereTags.Items.CONTAINS_ALUMINUM);
+		final IntrinsicCosmereTagBuilder<Block> aluminumBlockTagBuilder = getBlockBuilder(CosmereTags.Blocks.CONTAINS_ALUMINUM);
 
-		itemTagBuilder.addOptionalTag(CosmereTags.Items.METAL_SPIKE);
+		metalItemTagBuilder.addOptionalTag(CosmereTags.Items.METAL_SPIKE);
 
 		//Our metals
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
-			if (metalType == Metals.MetalType.ALUMINUM)
-			{
-				//skip aluminum
-				continue;
-			}
+			final boolean isAluminum = metalType == Metals.MetalType.ALUMINUM;
+			final IntrinsicCosmereTagBuilder<Item> itemTagBuilder = isAluminum ? aluminumItemTagBuilder : metalItemTagBuilder;
+			final IntrinsicCosmereTagBuilder<Block> blockTagBuilder = isAluminum ? aluminumBlockTagBuilder : metalBlockTagBuilder;
 
 			//Items
 			final TagKey<Item> metalRawTag = CosmereTags.Items.METAL_RAW_TAGS.get(metalType);
@@ -278,7 +279,22 @@ public class CosmereTagProvider extends BaseTagProvider
 			blockTagBuilder.add(storageBlockTag);
 		}
 
-		addCopperBlockVariations(itemTagBuilder, blockTagBuilder);
+		// copper oxidation/waxing variants are derived at runtime from NeoForge data maps, see DerivedItemTags
+
+		//never derived from recipes, even when crafted from metal
+		getItemBuilder(CosmereTags.Items.CONTAINS_METAL_EXCLUSIONS)
+				.add(Items.GRASS_BLOCK, Items.FARMLAND, Items.GLASS, Items.GLASS_PANE, Items.TORCH, Items.SHULKER_BOX,
+						Items.ICE, Items.BLUE_ICE, Items.PACKED_ICE, Items.DIAMOND, Items.EMERALD)
+				.add(ItemTags.BEDS)
+				.addOptional(ResourceLocation.fromNamespaceAndPath("projecte", "philosophers_stone"));//problem child
+
+		// TODO: Decide if duralumin can be pushed/pulled on or not. For now, I assume the answer is that it contains aluminum so it acts like aluminum outside of burning/storing/tapping
+		// getItemBuilder(CosmereTags.Items.CONTAINS_ALUMINUM_EXCLUSIONS)
+		// 		.add(CosmereTags.Items.CONTAINS_METAL_EXCLUSIONS)
+		// 		.add(CosmereTags.Items.METAL_DUST_TAGS.get(Metals.MetalType.DURALUMIN),
+		// 				CosmereTags.Items.METAL_NUGGET_TAGS.get(Metals.MetalType.DURALUMIN),
+		// 				CosmereTags.Items.METAL_INGOT_TAGS.get(Metals.MetalType.DURALUMIN),
+		// 				CosmereTags.Items.METAL_BLOCK_ITEM_TAGS.get(Metals.MetalType.DURALUMIN));
 
 		//entities
 		entityTagBuilder.add(EntityType.IRON_GOLEM);
@@ -287,72 +303,5 @@ public class CosmereTagProvider extends BaseTagProvider
 		entityTagBuilder.add(EntityType.FURNACE_MINECART);
 		entityTagBuilder.add(EntityType.HOPPER_MINECART);
 		entityTagBuilder.add(EntityType.TNT_MINECART);
-	}
-
-	private void addCopperBlockVariations(IntrinsicCosmereTagBuilder<Item> itemTagBuilder, IntrinsicCosmereTagBuilder<Block> blockTagBuilder)
-	{
-		itemTagBuilder.add(Items.EXPOSED_COPPER);
-		itemTagBuilder.add(Items.EXPOSED_CUT_COPPER);
-		itemTagBuilder.add(Items.EXPOSED_CUT_COPPER_SLAB);
-		itemTagBuilder.add(Items.EXPOSED_CUT_COPPER_STAIRS);
-		itemTagBuilder.add(Items.WAXED_EXPOSED_COPPER);
-		itemTagBuilder.add(Items.WAXED_EXPOSED_CUT_COPPER);
-		itemTagBuilder.add(Items.WAXED_EXPOSED_CUT_COPPER_SLAB);
-		itemTagBuilder.add(Items.WAXED_EXPOSED_CUT_COPPER_STAIRS);
-
-		itemTagBuilder.add(Items.WEATHERED_COPPER);
-		itemTagBuilder.add(Items.WEATHERED_CUT_COPPER);
-		itemTagBuilder.add(Items.WEATHERED_CUT_COPPER_SLAB);
-		itemTagBuilder.add(Items.WEATHERED_CUT_COPPER_STAIRS);
-		itemTagBuilder.add(Items.WAXED_WEATHERED_COPPER);
-		itemTagBuilder.add(Items.WAXED_WEATHERED_CUT_COPPER);
-		itemTagBuilder.add(Items.WAXED_WEATHERED_CUT_COPPER_SLAB);
-		itemTagBuilder.add(Items.WAXED_WEATHERED_CUT_COPPER_STAIRS);
-
-		itemTagBuilder.add(Items.OXIDIZED_COPPER);
-		itemTagBuilder.add(Items.OXIDIZED_CUT_COPPER);
-		itemTagBuilder.add(Items.OXIDIZED_CUT_COPPER_SLAB);
-		itemTagBuilder.add(Items.OXIDIZED_CUT_COPPER_STAIRS);
-		itemTagBuilder.add(Items.WAXED_OXIDIZED_COPPER);
-		itemTagBuilder.add(Items.WAXED_OXIDIZED_CUT_COPPER);
-		itemTagBuilder.add(Items.WAXED_OXIDIZED_CUT_COPPER_SLAB);
-		itemTagBuilder.add(Items.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
-
-		itemTagBuilder.add(Items.WAXED_COPPER_BLOCK);
-		itemTagBuilder.add(Items.WAXED_CUT_COPPER);
-		itemTagBuilder.add(Items.WAXED_CUT_COPPER_SLAB);
-		itemTagBuilder.add(Items.WAXED_CUT_COPPER_STAIRS);
-
-		blockTagBuilder.add(Blocks.EXPOSED_COPPER);
-		blockTagBuilder.add(Blocks.EXPOSED_CUT_COPPER);
-		blockTagBuilder.add(Blocks.EXPOSED_CUT_COPPER_SLAB);
-		blockTagBuilder.add(Blocks.EXPOSED_CUT_COPPER_STAIRS);
-		blockTagBuilder.add(Blocks.WAXED_EXPOSED_COPPER);
-		blockTagBuilder.add(Blocks.WAXED_EXPOSED_CUT_COPPER);
-		blockTagBuilder.add(Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB);
-		blockTagBuilder.add(Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS);
-
-		blockTagBuilder.add(Blocks.WEATHERED_COPPER);
-		blockTagBuilder.add(Blocks.WEATHERED_CUT_COPPER);
-		blockTagBuilder.add(Blocks.WEATHERED_CUT_COPPER_SLAB);
-		blockTagBuilder.add(Blocks.WEATHERED_CUT_COPPER_STAIRS);
-		blockTagBuilder.add(Blocks.WAXED_WEATHERED_COPPER);
-		blockTagBuilder.add(Blocks.WAXED_WEATHERED_CUT_COPPER);
-		blockTagBuilder.add(Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB);
-		blockTagBuilder.add(Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS);
-
-		blockTagBuilder.add(Blocks.OXIDIZED_COPPER);
-		blockTagBuilder.add(Blocks.OXIDIZED_CUT_COPPER);
-		blockTagBuilder.add(Blocks.OXIDIZED_CUT_COPPER_SLAB);
-		blockTagBuilder.add(Blocks.OXIDIZED_CUT_COPPER_STAIRS);
-		blockTagBuilder.add(Blocks.WAXED_OXIDIZED_COPPER);
-		blockTagBuilder.add(Blocks.WAXED_OXIDIZED_CUT_COPPER);
-		blockTagBuilder.add(Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB);
-		blockTagBuilder.add(Blocks.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
-
-		blockTagBuilder.add(Blocks.WAXED_COPPER_BLOCK);
-		blockTagBuilder.add(Blocks.WAXED_CUT_COPPER);
-		blockTagBuilder.add(Blocks.WAXED_CUT_COPPER_SLAB);
-		blockTagBuilder.add(Blocks.WAXED_CUT_COPPER_STAIRS);
 	}
 }

@@ -5,6 +5,7 @@
 package leaf.cosmere.common.eventHandlers;
 
 
+import leaf.cosmere.api.helpers.DerivedItemTags;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.commands.CosmereCommand;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
@@ -15,12 +16,14 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.BasicItemListing;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
 import java.util.List;
@@ -223,9 +226,22 @@ public class CommonEvents
 	}
 
 
+	// recipes are fully loaded by the time TagsUpdatedEvent fires for this reload
+	private static RecipeManager s_reloadingRecipes = null;
+
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		//event.addListener(new RecipeReloadListener(event.getServerResources()));
+		s_reloadingRecipes = event.getServerResources().getRecipeManager();
+	}
+
+	// LOW: NeoForge applies data maps (oxidation, waxing) in its own NORMAL priority handler for this event
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onTagsUpdated(TagsUpdatedEvent event)
+	{
+		if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD && s_reloadingRecipes != null)
+		{
+			DerivedItemTags.inject(s_reloadingRecipes, event.getRegistryAccess());
+		}
 	}
 }

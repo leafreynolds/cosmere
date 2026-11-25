@@ -13,7 +13,6 @@ import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.CosmereTags;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.helpers.CodecHelper;
-import leaf.cosmere.api.helpers.RegistryHelper;
 import leaf.cosmere.api.math.VectorHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.PowerKeyMappings;
@@ -21,9 +20,9 @@ import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.packets.SyncPushPullMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -34,14 +33,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -55,8 +48,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 	public static final HashMap<TagKey<Block>, Double> materialResistanceMap = initHashMap();
 
 	private final boolean isPush;
-	private static Set<String> s_whiteList = null;
-	private static Set<String> s_blackList = null;
 
 	public AllomancyIronSteel(Metals.MetalType metalType)
 	{
@@ -142,11 +133,6 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		SpiritwebCapability data = (SpiritwebCapability) cap;
 		List<BlockPos> blocks = isPush ? data.pushBlocks : data.pullBlocks;
 		List<Integer> entities = isPush ? data.pushEntities : data.pullEntities;
-
-		if (s_whiteList == null)
-		{
-			createWhitelist(cap.getLiving());
-		}
 
 		//Pushes/Pulls on Nearby Metals
 		if (PowerKeyMappings.isDown(getKeyBinding()))
@@ -479,29 +465,12 @@ public class AllomancyIronSteel extends AllomancyManifestation
 
 	public static boolean containsMetal(Item item)
 	{
-		if (item.builtInRegistryHolder().is(CosmereTags.Items.CONTAINS_METAL))
-		{
-			return true;
-		}
-		if (s_whiteList == null)
-		{
-			return false;
-		}
-		return s_whiteList.contains(RegistryHelper.get(item).getPath());
+		return BuiltInRegistries.ITEM.wrapAsHolder(item).is(CosmereTags.Items.CONTAINS_METAL);
 	}
-
 
 	public static boolean containsMetal(Block block)
 	{
-		if (block.builtInRegistryHolder().is(CosmereTags.Blocks.CONTAINS_METAL))
-		{
-			return true;
-		}
-		if (s_whiteList == null)
-		{
-			return false;
-		}
-		return s_whiteList.contains(RegistryHelper.get(block).getPath());
+		return block.defaultBlockState().is(CosmereTags.Blocks.CONTAINS_METAL);
 	}
 
 	public static boolean containsMetal(Entity entity)
@@ -510,131 +479,9 @@ public class AllomancyIronSteel extends AllomancyManifestation
 		{
 			return true;
 		}
-		if (s_whiteList == null)
-		{
-			return false;
-		}
-		return s_whiteList.contains(RegistryHelper.get(entity).getPath());
-	}
-
-	public static void invalidateWhitelist()
-	{
-		s_whiteList = null;
-	}
-
-	//client side is the only time this gets initialized.
-	private static void createWhitelist(Entity entity)
-	{
-		if (s_whiteList != null)
-		{
-			return;
-		}
-
-		//generate blacklist
-		//reset each time, because it's not working properly for some reason
-		{
-			// would have used Items here, but it's ridiculously hard to get item IDs for blocks for no reason
-			s_blackList = new HashSet<>();
-			s_blackList.add(RegistryHelper.get(Blocks.AIR).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.WATER).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.LAVA).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.GRASS_BLOCK).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.FARMLAND).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.GLASS).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.GLASS_PANE).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.BLACK_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.BROWN_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.BLUE_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.RED_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.CYAN_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.GRAY_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.GREEN_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.LIGHT_BLUE_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.LIGHT_GRAY_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.LIME_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.MAGENTA_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.ORANGE_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.PINK_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.PURPLE_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.WHITE_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.YELLOW_BED).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.TORCH).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.SHULKER_BOX).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.ICE).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.BLUE_ICE).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.FROSTED_ICE).getPath());
-			s_blackList.add(RegistryHelper.get(Blocks.PACKED_ICE).getPath());
-			s_blackList.add(RegistryHelper.get(Items.DIAMOND).getPath());
-			s_blackList.add(RegistryHelper.get(Items.EMERALD).getPath());
-			s_blackList.add(RegistryHelper.get(Items.AIR).getPath());
-			s_blackList.add("philosophers_stone");//problem child
-		}
-		for (var itemInList : s_blackList)
-		{
-			CosmereAPI.logger.info("[MetalWhitelist] %s has been blacklisted from containing metal".formatted(itemInList));
-		}
-
-		s_whiteList = new HashSet<>();
-
-		final TagKey<Item> containsMetal = CosmereTags.Items.CONTAINS_METAL;
-		final RecipeManager recipeManager = entity.level().getRecipeManager();
-		final Collection<RecipeHolder<?>> recipes = recipeManager.getRecipes();
-
-		for (var recipeHolder : recipes)
-		{
-			Recipe<?> recipe = recipeHolder.value();
-			final ItemStack resultItem = recipe.getResultItem(entity.level().registryAccess());
-
-			// check if is blacklisted, and if is, skip
-			//if it says result item is never null, ignore it,
-			//we have one confirmed bug report that it _can_ be null
-			// https://github.com/leafreynolds/cosmere/issues/58
-			if (resultItem == null || resultItem.isEmpty() || s_blackList.contains(RegistryHelper.get(resultItem.getItem()).getPath()))
-			{
-				continue;
-			}
-
-			if (resultItem.is(containsMetal))
-			{
-				continue;
-			}
-
-			CheckRecipeForMetal(containsMetal, recipe, resultItem);
-		}
-	}
-
-
-	public static void CheckRecipeForMetal(TagKey<Item> containsMetal, Recipe<?> recipe, ItemStack resultItemStack)
-	{
-		for (Ingredient ingredient : recipe.getIngredients())
-		{
-			for (ItemStack ingredientStack : ingredient.getItems())
-			{
-				final Item ingredientItem = ingredientStack.getItem();
-				final ResourceLocation ingredientItemRL = RegistryHelper.get(ingredientItem);
-				if (s_blackList.contains(ingredientItemRL.getPath()))
-				{
-					continue;
-				}
-
-				if (ingredientStack.is(containsMetal))
-				{
-					//found one
-					final Item resultItem = resultItemStack.getItem();
-					final ResourceLocation resultItemRL = RegistryHelper.get(resultItem);
-					// final Holder.Reference<Item> itemReference = resultItem.builtInRegistryHolder();
-					// List<TagKey<Item>> allTags = itemReference.tags().collect(Collectors.toList());
-					// allTags.add(CosmereTags.Items.CONTAINS_METAL);
-					// itemReference.bindTags(allTags);
-
-					CosmereAPI.logger.info("[MetalWhitelist] %s has been identified as containing metal, thanks to %s in recipe"
-							.formatted(resultItemRL, ingredientItemRL));
-
-					s_whiteList.add(resultItemRL.getPath());
-					return;
-				}
-			}
-		}
+		// minecarts, boats etc. resolve to their item
+		final ItemStack pickResult = entity.getPickResult();
+		return pickResult != null && containsMetal(pickResult);
 	}
 
 	@Override
