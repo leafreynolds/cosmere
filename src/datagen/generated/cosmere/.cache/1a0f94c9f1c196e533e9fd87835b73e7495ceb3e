@@ -1,7 +1,10 @@
-// 1.20.1	2025-11-12T21:49:11.1720275	Tags: cosmere
-7e6f8b5d96792bb9046c5c1d332e4ba04dcade48 data/cosmere/tags/blocks/contains_metal.json
+// 1.20.1	2026-11-25T14:25:13.610516499	Tags: cosmere
+e7480aaa4efd934f627f79fa54fe108ce11f92bc data/cosmere/tags/blocks/contains_aluminum.json
+22892348b7c9b1ae120b0d154815212882db2906 data/cosmere/tags/blocks/contains_metal.json
 af8261c6c6c4f45348129424d153185fe0b65a81 data/cosmere/tags/entity_types/contains_metal.json
-d0c886fa06555d83e6eb011a2ee98463827788e1 data/cosmere/tags/items/contains_metal.json
+1cb6c6af180f0e280b349bf301b3485b394c0343 data/cosmere/tags/items/contains_aluminum.json
+09dea08ab07afd676fd127be1ad67dd3fcb25f55 data/cosmere/tags/items/contains_metal.json
+53bb2ffb07cccd12125f0dfcd286668caf947ed4 data/cosmere/tags/items/contains_metal_exclusions.json
 b020f6cdcd2d955793278b2f89a178a1d31e599a data/cosmere/tags/worldgen/biome/spawn_ores.json
 2535fa6b2630ad09c3a98c8df7a89b6de3276819 data/forge/tags/blocks/ores/aluminum.json
 8a55b8e8e7325d8a829173ccfc5afe9c8962ffcc data/forge/tags/blocks/ores/cadmium.json

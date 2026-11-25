@@ -49,6 +49,10 @@ public class CosmereTags
 		public static final TagKey<Item> CURIO_SPIRITUAL = makeItem(CuriosApi.MODID, "spiritual");
 
 		public static final TagKey<Item> CONTAINS_METAL = makeItem("cosmere", "contains_metal");
+		public static final TagKey<Item> CONTAINS_ALUMINUM = makeItem("cosmere", "contains_aluminum");
+		// items never derived into the matching tag from recipes, see DerivedItemTags
+		public static final TagKey<Item> CONTAINS_METAL_EXCLUSIONS = makeItem("cosmere", "contains_metal_exclusions");
+		public static final TagKey<Item> CONTAINS_ALUMINUM_EXCLUSIONS = makeItem("cosmere", "contains_aluminum_exclusions");
 
 		public static final TagKey<Item> METAL_SPIKE = makeItem("cosmere", "spike");
 
@@ -138,6 +142,7 @@ public class CosmereTags
 		public static final TagKey<Block> WITHER_PROOF = makeBlock("minecraft", "wither_immune");
 
 		public static final TagKey<Block> CONTAINS_METAL = makeBlock("cosmere", "contains_metal");
+		public static final TagKey<Block> CONTAINS_ALUMINUM = makeBlock("cosmere", "contains_aluminum");
 
 		public static final Map<Metals.MetalType, TagKey<Block>> METAL_ORE_BLOCK_TAGS =
 				Arrays.stream(EnumUtils.METAL_TYPES)

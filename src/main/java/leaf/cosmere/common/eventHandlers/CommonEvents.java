@@ -5,6 +5,7 @@
 package leaf.cosmere.common.eventHandlers;
 
 
+import leaf.cosmere.api.helpers.DerivedItemTags;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.commands.CosmereCommand;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
@@ -15,9 +16,11 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -223,9 +226,21 @@ public class CommonEvents
 	}
 
 
+	// recipes are fully loaded by the time TagsUpdatedEvent fires for this reload
+	private static RecipeManager s_reloadingRecipes = null;
+
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		//event.addListener(new RecipeReloadListener(event.getServerResources()));
+		s_reloadingRecipes = event.getServerResources().getRecipeManager();
+	}
+
+	@SubscribeEvent
+	public static void onTagsUpdated(TagsUpdatedEvent event)
+	{
+		if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD && s_reloadingRecipes != null)
+		{
+			DerivedItemTags.inject(s_reloadingRecipes, event.getRegistryAccess());
+		}
 	}
 }
