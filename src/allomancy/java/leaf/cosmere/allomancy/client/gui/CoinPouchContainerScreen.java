@@ -38,7 +38,6 @@ public class CoinPouchContainerScreen extends AbstractContainerScreen<CoinPouchC
 	@Override
 	public void render(GuiGraphics guiGraphics, int x, int y, float partialTicks)
 	{
-		this.renderBackground(guiGraphics, x, y, partialTicks);
 		super.render(guiGraphics, x, y, partialTicks);
 		this.renderTooltip(guiGraphics, x, y);
 	}
