@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -60,7 +61,8 @@ public class SurgebindingForgeEventsHandler
 	@SubscribeEvent
 	public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event)
 	{
-		if (event.isCanceled())
+		//right clicks fire once per hand, so only act on the main hand
+		if (event.isCanceled() || event.getHand() != InteractionHand.MAIN_HAND)
 		{
 			return;
 		}
@@ -80,7 +82,7 @@ public class SurgebindingForgeEventsHandler
 	@SubscribeEvent
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event)
 	{
-		if (!(event.getTarget() instanceof LivingEntity target) || event.isCanceled())
+		if (!(event.getTarget() instanceof LivingEntity target) || event.isCanceled() || event.getHand() != InteractionHand.MAIN_HAND)
 		{
 			return;
 		}
