@@ -217,6 +217,13 @@ Provider<SourceSet> getExtraSourceSet(SourceSet base, String name)
 	return project.sourceSets.named(base.getTaskName(name, null))
 }
 
+// true when src/gameTest/<module> has any files
+boolean hasGameTests(String module)
+{
+	def dir = file("src/gameTest/${module}")
+	return dir.isDirectory() && !fileTree(dir).isEmpty()
+}
+
 //Update book build number
 processResources {
 	// Exclude datagenerator .cache directory
@@ -334,12 +341,12 @@ neoForge {
 
 	// Mod registration. The runtime mod (loaded by client/server runs) only contains api+main —
 	// datagen sources go into a parallel ${name}Data mod that only the data run loads.
-	// gameTest source sets are intentionally NOT registered with any mod for now since they
-	// are all empty — registering empty source sets makes runClient crash on missing output dirs.
+	// only register gameTest source sets that have files, empty ones crash the runs
 	mods {
 		cosmere {
 			sourceSet((SourceSet) sourceSets.api)
 			sourceSet((SourceSet) sourceSets.main)
+			if (hasGameTests('main')) sourceSet((SourceSet) sourceSets.gameTestMain)
 		}
 		// cosmereData: cosmere's source sets PLUS datagenMain, used only by the data run.
 		cosmereData {
@@ -350,6 +357,7 @@ neoForge {
 	for (String name : secondaryModules) {
 		final sourceSet = sourceSets.named(name)
 		mods.maybeCreate(name).modSourceSets.add(sourceSet)
+		if (hasGameTests(name)) mods.maybeCreate(name).modSourceSets.add(sourceSet.flatMap(s -> getExtraSourceSet(s, 'gameTest')))
 		final datagenMod = mods.maybeCreate(name + 'Data')
 		datagenMod.modSourceSets.add(sourceSet)
 		datagenMod.modSourceSets.add(sourceSet.flatMap(s -> getExtraSourceSet(s, 'datagen')))
@@ -386,6 +394,12 @@ neoForge {
 		}
 		server {
 			server()
+			systemProperty 'neoforge.enabledGameTestNamespaces', gameTestNamespaces
+		}
+		// headless game test run, the exit code is how many tests failed
+		gameTestServer {
+			type = "gameTestServer"
+			gameDirectory = file('runGameTests')
 			systemProperty 'neoforge.enabledGameTestNamespaces', gameTestNamespaces
 		}
 		data {
