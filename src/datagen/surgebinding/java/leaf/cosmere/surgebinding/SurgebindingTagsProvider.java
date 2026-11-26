@@ -132,7 +132,18 @@ public class SurgebindingTagsProvider extends BaseTagProvider
 			}
 
 			addToTag(BlockTags.BEACON_BASE_BLOCKS, gemBlock);
-			addToTag(CosmereTags.Blocks.GEM_ORE_BLOCK_TAGS.get(gemstone), gemOre, gemOreDeepslate);
+			final TagKey<Block> oreBlockTag = CosmereTags.Blocks.GEM_ORE_BLOCK_TAGS.get(gemstone);
+			final TagKey<Item> oreItemTag = CosmereTags.Items.GEM_ORE_ITEM_TAGS.get(gemstone);
+			addToTags(oreItemTag, oreBlockTag, gemOre, gemOreDeepslate);
+
+			//parent c:ores lists each c:ores/<type> child tag, as NeoForge does
+			getBlockBuilder(Tags.Blocks.ORES).add(oreBlockTag);
+			getItemBuilder(Tags.Items.ORES).add(oreItemTag);
+
+			//createOreDrop yields exactly one gem without fortune
+			addToTags(Tags.Items.ORE_RATES_SINGULAR, Tags.Blocks.ORE_RATES_SINGULAR, gemOre, gemOreDeepslate);
+			addToTags(Tags.Items.ORES_IN_GROUND_STONE, Tags.Blocks.ORES_IN_GROUND_STONE, gemOre);
+			addToTags(Tags.Items.ORES_IN_GROUND_DEEPSLATE, Tags.Blocks.ORES_IN_GROUND_DEEPSLATE, gemOreDeepslate);
 		}
 
 		for (BlockRegistryObject<?, BlockItem> plantBlock : SurgebindingBlocks.PLANT_BLOCKS)

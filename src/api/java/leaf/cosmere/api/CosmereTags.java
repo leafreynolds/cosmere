@@ -111,6 +111,12 @@ public class CosmereTags
 								Function.identity(),
 								type -> commonItemTag("storage_blocks/" + type.getName())));
 
+		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_ORE_ITEM_TAGS =
+				Arrays.stream(EnumUtils.GEMSTONE_TYPES)
+						.collect(Collectors.toMap(
+								Function.identity(),
+								type -> commonItemTag("ores/" + type.getName())));
+
 
 		public static final Map<Roshar.Gemstone, TagKey<Item>> GEM_TAGS =
 				Arrays.stream(EnumUtils.GEMSTONE_TYPES)

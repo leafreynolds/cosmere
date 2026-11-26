@@ -178,9 +178,19 @@ public class CosmereTagProvider extends BaseTagProvider
 			final OreBlockType oreBlockType = BlocksRegistry.METAL_ORE.get(oreType);
 
 			final TagKey<Block> oreBlockTag = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType);
+			final TagKey<Item> oreItemTag = CosmereTags.Items.METAL_ORE_TAGS.get(metalType);
 			final BlockRegistryObject<MetalOreBlock, BlockItem> stone = oreBlockType.stone();
 			final BlockRegistryObject<MetalOreBlock, BlockItem> deepslate = oreBlockType.deepslate();
-			addToTag(oreBlockTag, stone, deepslate);
+			addToTags(oreItemTag, oreBlockTag, stone, deepslate);
+
+			//parent c:ores lists each c:ores/<type> child tag, as NeoForge does
+			getBlockBuilder(Tags.Blocks.ORES).add(oreBlockTag);
+			getItemBuilder(Tags.Items.ORES).add(oreItemTag);
+
+			//createOreDrop yields exactly one raw ore without fortune
+			addToTags(Tags.Items.ORE_RATES_SINGULAR, Tags.Blocks.ORE_RATES_SINGULAR, stone, deepslate);
+			addToTags(Tags.Items.ORES_IN_GROUND_STONE, Tags.Blocks.ORES_IN_GROUND_STONE, stone);
+			addToTags(Tags.Items.ORES_IN_GROUND_DEEPSLATE, Tags.Blocks.ORES_IN_GROUND_DEEPSLATE, deepslate);
 
 			hasHarvestData(stone.getBlock());
 			hasHarvestData(deepslate.getBlock());
