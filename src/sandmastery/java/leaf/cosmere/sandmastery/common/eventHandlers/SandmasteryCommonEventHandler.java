@@ -12,6 +12,7 @@ import leaf.cosmere.sandmastery.common.commands.SandmasteryCommands;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
 import leaf.cosmere.sandmastery.common.datamaps.HydrationProperties;
 import leaf.cosmere.sandmastery.common.datamaps.SandmasteryDataMaps;
+import leaf.cosmere.sandmastery.common.diem.DiemIntroduction;
 import leaf.cosmere.sandmastery.common.diem.trial.DiemTrials;
 import leaf.cosmere.sandmastery.common.diem.trial.OutsideHelp;
 import leaf.cosmere.sandmastery.common.diem.trial.TrialScouting;
@@ -59,6 +60,7 @@ public class SandmasteryCommonEventHandler
 		{
 			DiemTrials.tick(player);
 			TrialScouting.tick(player);
+			DiemIntroduction.tick(player);
 		}
 	}
 
@@ -78,6 +80,7 @@ public class SandmasteryCommonEventHandler
 		{
 			DiemTrials.fail(player, Component.translatable("diem.sandmastery.trial.fail.left_area"));
 			TrialScouting.stop(player);
+			DiemIntroduction.stop(player);
 		}
 	}
 

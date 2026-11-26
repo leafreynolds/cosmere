@@ -1,5 +1,9 @@
 {
   "variants": {
-    "": { "model": "sandmastery:block/water_dripper" }
+    "facing=down": { "model": "sandmastery:block/water_dripper" },
+    "facing=east": { "model": "sandmastery:block/water_dripper_wall" },
+    "facing=south": { "model": "sandmastery:block/water_dripper_wall", "y": 90 },
+    "facing=west": { "model": "sandmastery:block/water_dripper_wall", "y": 180 },
+    "facing=north": { "model": "sandmastery:block/water_dripper_wall", "y": 270 }
   }
 }

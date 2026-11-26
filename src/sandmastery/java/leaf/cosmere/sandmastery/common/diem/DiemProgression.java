@@ -18,17 +18,15 @@ public final class DiemProgression
 	{
 	}
 
-	// talent detection never denies anyone: untested players become Acolents with 1 or 2 ribbons
-	public static void detect(ServerPlayer player, ISpiritweb spiritweb)
+	// talent detection never denies anyone: untested players become Acolents with 1 or 2 ribbons. Returns the ribbons given.
+	public static int detect(ServerPlayer player, ISpiritweb spiritweb)
 	{
 		int ribbons = player.getRandom().nextDouble() < SandmasteryConfigs.SERVER.DETECTION_TWO_RIBBON_CHANCE.get() ? 2 : 1;
 		// every Sandmastery power shares the ribbons attribute, so any of them sets it
 		spiritweb.giveManifestation(SandmasteryManifestations.SANDMASTERY_POWERS.get(Taldain.Mastery.PROJECTILE).get(), ribbons);
 		SandmasterySpiritwebSubmodule.get(spiritweb).setDiemRank(DiemRank.ACOLENT);
 		spiritweb.syncToClients(null);
-
-		player.sendSystemMessage(Component.translatable("diem.sandmastery.detection"));
-		player.sendSystemMessage(Component.translatable("diem.sandmastery.detection_result", DiemRank.ACOLENT.getDisplayName(), ribbons));
+		return ribbons;
 	}
 
 	// returns the new rank, or null when there is nothing to promote to (untested, or already the top rank)

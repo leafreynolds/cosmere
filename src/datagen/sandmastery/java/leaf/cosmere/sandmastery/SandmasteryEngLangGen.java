@@ -153,8 +153,13 @@ public class SandmasteryEngLangGen extends LanguageProvider
 		add(DiemRank.MASTRELL.getTranslationKey(), "Mastrell");
 		add(DiemRank.LORD_MASTRELL.getTranslationKey(), "Lord Mastrell");
 
-		add("diem.sandmastery.detection", "You reach toward the sand on the stone, and it stirs. The Diem has found talent in you.");
-		add("diem.sandmastery.detection_result", "You are now an %s, able to control %s ribbon(s).");
+		// the Mastrell who tests newcomers. Speaks in chat until the NPC exists.
+		add("diem.sandmastery.mastrell.name", "Mastrell");
+		add("diem.sandmastery.mastrell.says", "<%s> %s");
+		add("diem.sandmastery.intro.test", "None may enter the Diem untested. Whether the sand will answer you is something only a sand master can find out. I have poured charged sand into the stone.");
+		add("diem.sandmastery.intro.reach", "Take the sand in your hands. Feel the grains, and reach out to them.");
+		add("diem.sandmastery.intro.welcome", "The sand answered you, and spent its charge doing it. Welcome to the Diem, %s. You command %s ribbon(s).");
+		add("diem.sandmastery.intro.trials", "You rise through the Diem by passing trials at the Diem stone. When charged sand waits in the stone, a trial is ready for you.");
 		add("diem.sandmastery.promoted", "You have been raised to %s.");
 		add("diem.sandmastery.status", "You are %s, controlling %s ribbon(s).");
 		add("diem.sandmastery.trial_ready", "You may attempt the trial for %s.");

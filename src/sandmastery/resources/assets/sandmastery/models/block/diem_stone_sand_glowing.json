@@ -1,0 +1,7 @@
+{
+	"parent": "sandmastery:block/diem_stone_sand_white",
+	"textures": {
+		"sand": "sandmastery:block/glowing_sand",
+		"particle": "sandmastery:block/glowing_sand"
+	}
+}

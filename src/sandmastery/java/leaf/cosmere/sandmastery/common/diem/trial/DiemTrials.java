@@ -10,6 +10,7 @@ import leaf.cosmere.sandmastery.api.trial.pieces.Targets;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.blocks.entities.DiemStoneBE;
 import leaf.cosmere.sandmastery.common.diem.DiemProgression;
 import leaf.cosmere.sandmastery.common.diem.DiemRank;
 import leaf.cosmere.sandmastery.common.entities.DiemTargetEntity;
@@ -163,6 +164,7 @@ public final class DiemTrials
 		TrialScouting.stop(player);
 		ActiveTrial active = new ActiveTrial(player, stone, trial, name, practice);
 		ACTIVE.put(player.getUUID(), active);
+		DiemStoneBE.setShared(active.level, stone, DiemStoneBE.Look.GLOWING, 0);
 		active.updateBossBar();
 		player.sendSystemMessage(Component.translatable("diem.sandmastery.trial.started", name, active.totalTicks / 20));
 		return null;
@@ -308,6 +310,11 @@ public final class DiemTrials
 	private static void cleanUp(ActiveTrial trial)
 	{
 		ACTIVE.remove(trial.player.getUUID());
+		boolean stoneStillInUse = ACTIVE.values().stream().anyMatch(other -> other.level == trial.level && other.stone.equals(trial.stone));
+		if (!stoneStillInUse)
+		{
+			DiemStoneBE.setShared(trial.level, trial.stone, null, 0);
+		}
 		for (TrialPiece.Instance piece : trial.pieces)
 		{
 			piece.cleanup();

@@ -1,0 +1,16 @@
+{
+	"render_type": "cutout",
+	"textures": {
+		"sand": "sandmastery:block/white_sand",
+		"particle": "sandmastery:block/white_sand"
+	},
+	"elements": [
+		{
+			"from": [2, 15.01, 2],
+			"to": [14, 15.01, 14],
+			"faces": {
+				"up": {"uv": [0, 0, 16, 16], "texture": "#sand"}
+			}
+		}
+	]
+}
