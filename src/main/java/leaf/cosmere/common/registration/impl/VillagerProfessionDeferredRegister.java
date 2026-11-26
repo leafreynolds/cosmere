@@ -20,8 +20,8 @@ public class VillagerProfessionDeferredRegister extends WrappedDeferredRegister<
 
 	private static VillagerProfession registerProfession(String name, POITypeRegistryObject<PoiType> poi, SoundEvent workSound)
 	{
-		Predicate<Holder<PoiType>> heldJobSite = (poiType) -> poiType == poi.getHolder();
-		Predicate<Holder<PoiType>> acquirableJobSite = (poiType) -> poiType == poi.getHolder();
+		Predicate<Holder<PoiType>> heldJobSite = (poiType) -> poiType.is(poi.getRegistryObject().getId());
+		Predicate<Holder<PoiType>> acquirableJobSite = (poiType) -> poiType.is(poi.getRegistryObject().getId());
 
 		return new VillagerProfession(
 				name,
