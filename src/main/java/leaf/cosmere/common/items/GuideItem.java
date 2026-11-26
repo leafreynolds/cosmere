@@ -98,7 +98,9 @@ public class GuideItem extends Item
 
 		if (!PatchouliCompat.PatchouliIsPresent())
 		{
-			playerIn.sendSystemMessage(TextHelper.createTranslatedText(Constants.Strings.PATCHOULI_NOT_INSTALLED));
+			//use() runs on both sides, only message from the server
+			if (!worldIn.isClientSide)
+				playerIn.sendSystemMessage(TextHelper.createTranslatedText(Constants.Strings.PATCHOULI_NOT_INSTALLED));
 		}
 		else if (playerIn instanceof ServerPlayer player)
 		{
