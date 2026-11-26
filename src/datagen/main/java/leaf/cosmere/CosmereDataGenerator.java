@@ -49,6 +49,7 @@ public class CosmereDataGenerator
 		generator.addProvider(true, new BiomeTagsProvider(packOutput, event.getLookupProvider(), existingFileHelper));
 
 		generator.addProvider(true, new CosmereTagProvider(packOutput, event.getLookupProvider(), existingFileHelper));
+		generator.addProvider(true, new CosmereDataMapGen(packOutput, event.getLookupProvider()));
 
 	}
 
