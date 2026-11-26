@@ -1,5 +1,5 @@
 /*
- * File updated ~ 23 - 8 - 2026 ~ Leaf
+ * File updated ~ 26 - 11 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.allomancy.common.coinpouch;
@@ -22,6 +22,7 @@ public class CoinPouchItemHandler extends ComponentItemHandler
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack)
 	{
-		return !stack.isEmpty() && CoinPouchItem.SUPPORTED_PROJECTILES.test(stack);
+		//empty must be valid, setStackInSlot now rejects anything that isn't
+		return stack.isEmpty() || CoinPouchItem.SUPPORTED_PROJECTILES.test(stack);
 	}
 }
