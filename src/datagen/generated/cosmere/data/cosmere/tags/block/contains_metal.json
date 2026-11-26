@@ -32,6 +32,13 @@
     "#c:ores/lead",
     "#c:storage_blocks/lead",
     "#c:ores/silver",
-    "#c:storage_blocks/silver"
+    "#c:storage_blocks/silver",
+    "minecraft:bell",
+    "minecraft:chipped_anvil",
+    "minecraft:damaged_anvil",
+    "minecraft:gilded_blackstone",
+    "minecraft:water_cauldron",
+    "minecraft:lava_cauldron",
+    "minecraft:powder_snow_cauldron"
   ]
 }
