@@ -561,44 +561,6 @@ tasks.register('generateChangelog') {
 	}
 }
 
-//Commits since the previous release tag, replacing the powershell script from teamcity
-def gitChangelog = { ->
-	def git = { List args ->
-		def out = new StringBuilder(), err = new StringBuilder()
-		def proc = (["git"] + args).execute(null, projectDir)
-		proc.consumeProcessOutput(out, err)
-		proc.waitFor()
-		return proc.exitValue() == 0 ? out.toString().trim() : null
-	}
-	try {
-		//changelog since previous tag?
-		def since = project.findProperty('changelog_since') ?: git(["describe", "--tags", "--abbrev=0"])
-		def range = since ? "${since}..HEAD" : "HEAD"
-		return git(["log", range, "--no-merges", "--pretty=format:- %s"]) ?: ""
-	} catch (Exception e) {
-		logger.warn("Changelog: could not read git history (${e.message})")
-		return ""
-	}
-}
-
-//Writes the changelog file.
-// "Must run as its own gradle invocation before publishing, because changeLogResolver is called at configuration time."
-tasks.register('generateChangelog') {
-	setGroup("publishing")
-	setDescription("Write docs/changelog_${build_number}.txt from git history")
-	doLast {
-		def target = project.file("docs/changelog_${build_number}.txt")
-		def body = gitChangelog.call()
-		if (body.isEmpty()) {
-			logger.warn("Changelog: no commits found, leaving ${target.name} alone")
-			return
-		}
-		target.parentFile.mkdirs()
-		target.text = body + "\n"
-		logger.lifecycle("Changelog: wrote ${target.name}, ${body.readLines().size()} entries")
-	}
-}
-
 //closure to generate the changelog once, and only when needed by CurseGradle
 def changeLogResolver = { ->
 	String generatedChangelog;
