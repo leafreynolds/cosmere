@@ -12,10 +12,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// this mixin seems kinda unnecessary? --Gerbagel
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin
 {
-	@Inject(method = "<init>(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;Lnet/minecraft/client/renderer/RenderBuffers;)V", at = @At("TAIL"))
+	@Inject(method = "<init>", at = @At("RETURN"))
 	private void init(CallbackInfo info)
 	{
 		FogManager.densityManager = new FogManager();
@@ -23,7 +24,7 @@ public class LevelRendererMixin
 		CosmereAPI.logger.info("Allomancy Initialized Fog Density Manager");
 	}
 
-	@Inject(method = "close()V", at = @At("TAIL"))
+	@Inject(method = "close", at = @At("RETURN"))
 	private void close(CallbackInfo info)
 	{
 		FogManager.getDensityManager().close();

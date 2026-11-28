@@ -12,6 +12,7 @@ import leaf.cosmere.aviar.common.registries.AviarAttributes;
 import leaf.cosmere.aviar.common.registries.AviarEffects;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -83,15 +84,15 @@ public class AviarBird extends Parrot
 		//if owner exists and has spiritweb
 		SpiritwebCapability.get(livingEntity).ifPresent(data ->
 		{
-			final Attribute attribute = switch (variant)
+			final Holder<Attribute> attribute = switch (variant)
 			{
 				//todo decide on finalized attributes changed
 				// note: I'm unsure if these are the same as the IDs in the previous version // Gerbagel
-				default -> AttributesRegistry.COGNITIVE_CONCEALMENT.get();
-				case BLUE -> AttributesRegistry.COSMERE_FORTUNE.get();
-				case GREEN -> AttributesRegistry.XP_RATE_ATTRIBUTE.get();
-				case YELLOW_BLUE -> AttributesRegistry.DETERMINATION.get();
-				case GRAY -> AviarAttributes.HOSTILE_LIFE_SENSE.get();
+				default -> AttributesRegistry.COGNITIVE_CONCEALMENT.getHolder();
+				case BLUE -> AttributesRegistry.COSMERE_FORTUNE.getHolder();
+				case GREEN -> AttributesRegistry.XP_RATE_ATTRIBUTE.getHolder();
+				case YELLOW_BLUE -> AttributesRegistry.DETERMINATION.getHolder();
+				case GRAY -> AviarAttributes.HOSTILE_LIFE_SENSE.getHolder();
 			};
 
 			//todo config
@@ -105,7 +106,7 @@ public class AviarBird extends Parrot
 			};
 
 			final CosmereEffectInstance effectInstance = CosmereEffectInstance.getOrCreateEffect(AviarEffects.AVIAR_BOND_EFFECT.get(), data, aviarUUID, 1);
-			effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADDITION);
+			effectInstance.setDynamicAttribute(attribute, strength, AttributeModifier.Operation.ADD_VALUE);
 
 			data.addEffect(effectInstance);
 		});

@@ -2,9 +2,9 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.api.providers.IAttributeProvider;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,14 +17,12 @@ public class AttributeDeferredRegister extends WrappedDeferredRegister<Attribute
 
 	public AttributeDeferredRegister(String modid)
 	{
-		super(modid, ForgeRegistries.ATTRIBUTES);
+		super(modid, Registries.ATTRIBUTE);
 	}
 
 	public <ATTRIBUTE extends Attribute> AttributeRegistryObject<ATTRIBUTE> register(String name, Supplier<? extends ATTRIBUTE> sup)
 	{
-		AttributeRegistryObject<ATTRIBUTE> registeredItem = register(name, sup, AttributeRegistryObject::new);
-		allAttributes.add(registeredItem);
-		return registeredItem;
+		return register(name, sup, AttributeRegistryObject::new);
 	}
 
 	public AttributeRegistryObject<Attribute> register(String registryName, String modid, float defaultVal, float min, float max)

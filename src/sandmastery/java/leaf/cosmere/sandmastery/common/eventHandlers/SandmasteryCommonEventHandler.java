@@ -10,15 +10,27 @@ import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.capabilities.SandmasterySpiritwebSubmodule;
 import leaf.cosmere.sandmastery.common.commands.SandmasteryCommands;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.PotionItem;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import leaf.cosmere.sandmastery.common.datamaps.HydrationProperties;
+import leaf.cosmere.sandmastery.common.datamaps.SandmasteryDataMaps;
+import leaf.cosmere.sandmastery.common.diem.DiemIntroduction;
+import leaf.cosmere.sandmastery.common.diem.trial.DiemTrials;
+import leaf.cosmere.sandmastery.common.diem.trial.OutsideHelp;
+import leaf.cosmere.sandmastery.common.diem.trial.TrialScouting;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@Mod.EventBusSubscriber(modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Sandmastery.MODID)
 public class SandmasteryCommonEventHandler
 {
 	@SubscribeEvent
@@ -28,33 +40,96 @@ public class SandmasteryCommonEventHandler
 	}
 
 	@SubscribeEvent
+	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		SpiritwebCapability.get(event.getEntity()).ifPresent(spiritweb ->
+		{
+			SandmasterySpiritwebSubmodule submodule = SandmasterySpiritwebSubmodule.get(spiritweb);
+			if (submodule.isPreDiemSave())
+			{
+				submodule.resetForDiem(spiritweb);
+				spiritweb.syncToClients(null);
+			}
+		});
+	}
+
+	@SubscribeEvent
+	public static void onPlayerTick(PlayerTickEvent.Post event)
+	{
+		if (event.getEntity() instanceof ServerPlayer player)
+		{
+			DiemTrials.tick(player);
+			TrialScouting.tick(player);
+			DiemIntroduction.tick(player);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerDeath(LivingDeathEvent event)
+	{
+		if (event.getEntity() instanceof ServerPlayer player)
+		{
+			DiemTrials.fail(player, Component.translatable("diem.sandmastery.trial.fail.died"));
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event)
+	{
+		if (event.getEntity() instanceof ServerPlayer player)
+		{
+			DiemTrials.fail(player, Component.translatable("diem.sandmastery.trial.fail.left_area"));
+			TrialScouting.stop(player);
+			DiemIntroduction.stop(player);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onTeleport(EntityTeleportEvent event)
+	{
+		if (event.getEntity() instanceof ServerPlayer player)
+		{
+			DiemTrials.onOutsideHelp(player, "teleport");
+		}
+	}
+
+	@SubscribeEvent
+	public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
+	{
+		boolean masteredSand = event.getPlacedBlock().is(SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock());
+		if (event.getEntity() instanceof ServerPlayer player && !masteredSand)
+		{
+			DiemTrials.onOutsideHelp(player, "placed_block");
+		}
+	}
+
+	@SubscribeEvent
+	public static void onEffectAdded(MobEffectEvent.Added event)
+	{
+		if (event.getEntity() instanceof ServerPlayer player && OutsideHelp.isBeneficial(event.getEffectInstance()))
+		{
+			DiemTrials.onOutsideHelp(player, "effects");
+		}
+	}
+
+
+	@SubscribeEvent
 	public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event)
 	{
-		if (event.isCanceled())
+		final HydrationProperties hydration = SandmasteryDataMaps.getHydration(event.getItem());
+		if (hydration == null)
 		{
 			return;
 		}
-		Item item = event.getItem().getItem();
-		boolean potion = item instanceof PotionItem;
-		boolean metalVial = item.getDescriptionId().equals("item.allomancy.metal_vial"); // TODO: Replace the magic string with code
-		final LivingEntity livingEntity = event.getEntity();
-		if (potion || metalVial)
+
+		SpiritwebCapability.get(event.getEntity()).ifPresent(spiritweb ->
 		{
-			SpiritwebCapability.get(livingEntity).ifPresent(spiritweb ->
+			SpiritwebCapability data = (SpiritwebCapability) spiritweb;
+			SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
+			if (sb.getHydrationLevel() < SandmasteryConfigs.SERVER.MAX_HYDRATION.get())
 			{
-				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
-				SandmasterySpiritwebSubmodule sb = (SandmasterySpiritwebSubmodule) data.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
-				int playerHydration = sb.getHydrationLevel();
-				int maxPlayerHydration = SandmasteryConfigs.SERVER.MAX_HYDRATION.get();
-				if (playerHydration < maxPlayerHydration)
-				{
-					if (potion)
-					{
-						sb.adjustHydration(maxPlayerHydration / 8);
-					}
-					// if(metalVial) sb.adjustHydration(Math.min(1000, maxPlayerHydration - playerHydration), true); // TODO: bottling machine should determine liquit used, and as such hydration value
-				}
-			});
-		}
+				sb.adjustHydration(hydration.amount());
+			}
+		});
 	}
 }

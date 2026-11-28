@@ -1,0 +1,25 @@
+{
+  "values": [
+    "#c:ingots/steel",
+    "#c:ingots/tin",
+    "#c:ingots/pewter",
+    "#c:ingots/zinc",
+    "#c:ingots/brass",
+    "#c:ingots/bronze",
+    "#c:ingots/aluminum",
+    "#c:ingots/duralumin",
+    "#c:ingots/chromium",
+    "#c:ingots/nicrosil",
+    "#c:ingots/cadmium",
+    "#c:ingots/bendalloy",
+    "#c:ingots/electrum",
+    "#c:ingots/atium",
+    "#c:ingots/lerasium",
+    "#c:ingots/harmonium",
+    "#c:ingots/malatium",
+    "#c:ingots/lerasatium",
+    "#c:ingots/nickel",
+    "#c:ingots/lead",
+    "#c:ingots/silver"
+  ]
+}

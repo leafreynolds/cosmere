@@ -4,7 +4,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 
 public class BrassStunEffect extends MobEffect
 {
@@ -14,22 +13,21 @@ public class BrassStunEffect extends MobEffect
 	}
 
 	@Override
-	public void addAttributeModifiers(LivingEntity pLivingEntity, AttributeMap pAttributeMap, int pAmplifier)
+	public void onEffectAdded(LivingEntity pLivingEntity, int pAmplifier)
 	{
 		if (pLivingEntity instanceof Mob mob)
 		{
 			mob.setNoAi(true);
 		}
-		super.addAttributeModifiers(pLivingEntity, pAttributeMap, pAmplifier);
+		super.onEffectAdded(pLivingEntity, pAmplifier);
 	}
 
-	@Override
-	public void removeAttributeModifiers(LivingEntity pLivingEntity, AttributeMap pAttributeMap, int pAmplifier)
+	// apparently Mojang made this super scuffed by adding an onEffectAdded method, but no remover, so you have to listen to events. I feel naught but hatred.
+	public static void clearStun(LivingEntity living)
 	{
-		if (pLivingEntity instanceof Mob mob)
+		if (living instanceof Mob mob)
 		{
 			mob.setNoAi(false);
 		}
-		super.removeAttributeModifiers(pLivingEntity, pAttributeMap, pAmplifier);
 	}
 }

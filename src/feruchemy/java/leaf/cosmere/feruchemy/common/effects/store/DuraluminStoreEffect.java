@@ -9,8 +9,8 @@ import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import leaf.cosmere.feruchemy.common.effects.FeruchemyEffectBase;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 //connection aka ability for people to notice you
 public class DuraluminStoreEffect extends FeruchemyEffectBase
@@ -20,21 +20,16 @@ public class DuraluminStoreEffect extends FeruchemyEffectBase
 		super(type);
 
 		addAttributeModifier(
-				AttributesRegistry.CONNECTION.getAttribute(),
+				AttributesRegistry.CONNECTION.getHolder(),
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingVisibilityEvent);
+		NeoForge.EVENT_BUS.addListener(this::onLivingVisibilityEvent);
 	}
 
 	public void onLivingVisibilityEvent(LivingEvent.LivingVisibilityEvent event)
 	{
-		if (event.isCanceled())
-		{
-			return;
-		}
-
-		int attributeValue = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.CONNECTION.getAttribute());
+		int attributeValue = (int) EntityHelper.getAttributeValue(event.getEntity(), AttributesRegistry.CONNECTION.getHolder());
 		if (attributeValue < 0)
 		{
 			int abs = Math.abs(attributeValue);

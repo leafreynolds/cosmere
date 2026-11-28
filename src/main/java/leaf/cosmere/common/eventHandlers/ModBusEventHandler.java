@@ -1,19 +1,24 @@
 /*
- * File updated ~ 26 - 10 - 2023 ~ Leaf
+ * File updated ~ 22 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.common.eventHandlers;
 
 import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.cap.item.CosmereItemCapabilities;
+import leaf.cosmere.common.charge.IChargeable;
 import leaf.cosmere.common.registry.AttributesRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.item.Item;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Cosmere.MODID)
 public class ModBusEventHandler
 {
 	//one place that multiple sub mods can reference?
@@ -39,22 +44,37 @@ public class ModBusEventHandler
 	};
 
 
+	@SubscribeEvent
+	public static void registerCapabilities(RegisterCapabilitiesEvent event)
+	{
+		for (Item item : BuiltInRegistries.ITEM)
+		{
+			if (item instanceof IChargeable)
+			{
+				event.registerItem(
+						CosmereItemCapabilities.CHARGEABLE,
+						(stack, context) -> (IChargeable) stack.getItem(),
+						item);
+			}
+		}
+	}
+
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
-		event.add(EntityType.PLAYER, AttributesRegistry.XP_RATE_ATTRIBUTE.getAttribute());
-		event.add(EntityType.PLAYER, AttributesRegistry.NIGHT_VISION_ATTRIBUTE.getAttribute());
-		event.add(EntityType.PLAYER, AttributesRegistry.SIZE_ATTRIBUTE.get());
+		event.add(EntityType.PLAYER, AttributesRegistry.XP_RATE_ATTRIBUTE.getHolder());
+		event.add(EntityType.PLAYER, AttributesRegistry.NIGHT_VISION_ATTRIBUTE.getHolder());
+		event.add(EntityType.PLAYER, AttributesRegistry.SIZE_ATTRIBUTE.getHolder());
 
 		for (EntityType entityType : ModBusEventHandler.ENTITIES_THAT_CAN_HAVE_POWERS)
 		{
-			event.add(entityType, AttributesRegistry.COGNITIVE_CONCEALMENT.get());
-			event.add(entityType, AttributesRegistry.CONNECTION.get());
-			event.add(entityType, AttributesRegistry.COSMERE_FORTUNE.get());
-			event.add(entityType, AttributesRegistry.IDENTITY.get());
-			event.add(entityType, AttributesRegistry.DETERMINATION.get());
-			event.add(entityType, AttributesRegistry.WARMTH.get());
-			event.add(entityType, AttributesRegistry.HEALING_STRENGTH.get());
+			event.add(entityType, AttributesRegistry.COGNITIVE_CONCEALMENT.getHolder());
+			event.add(entityType, AttributesRegistry.CONNECTION.getHolder());
+			event.add(entityType, AttributesRegistry.COSMERE_FORTUNE.getHolder());
+			event.add(entityType, AttributesRegistry.IDENTITY.getHolder());
+			event.add(entityType, AttributesRegistry.DETERMINATION.getHolder());
+			event.add(entityType, AttributesRegistry.WARMTH.getHolder());
+			event.add(entityType, AttributesRegistry.HEALING_STRENGTH.getHolder());
 		}
 	}
 }

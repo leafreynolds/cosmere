@@ -91,12 +91,12 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 	}
 
 	@Override
-	public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color)
 	{
-		this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.left_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		this.right_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		this.head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.left_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		this.right_arm.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
 	}
 
 	public void render(PoseStack matrixStack, MultiBufferSource buffer, int light)
@@ -118,10 +118,7 @@ public class MistcloakModel extends HumanoidModel<LivingEntity>
 				vertexBuilder,
 				light,
 				OverlayTexture.NO_OVERLAY,
-				1,
-				1,
-				1,
-				1
+				0xFFFFFFFF
 		);
 	}
 }

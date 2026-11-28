@@ -3,13 +3,13 @@ package leaf.cosmere.common.registration.impl;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier.Builder;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -23,7 +23,7 @@ public class EntityTypeDeferredRegister extends WrappedDeferredRegister<EntityTy
 
 	public EntityTypeDeferredRegister(String modid)
 	{
-		super(modid, ForgeRegistries.ENTITY_TYPES);
+		super(modid, Registries.ENTITY_TYPE);
 	}
 
 	public <ENTITY extends LivingEntity> EntityTypeRegistryObject<ENTITY> register(String name, EntityType.Builder<ENTITY> builder, Supplier<Builder> attributes)

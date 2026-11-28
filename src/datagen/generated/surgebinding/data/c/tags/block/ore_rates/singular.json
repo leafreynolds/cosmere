@@ -1,0 +1,18 @@
+{
+  "values": [
+    "surgebinding:smokestone_ore",
+    "surgebinding:deepslate_smokestone_ore",
+    "surgebinding:ruby_ore",
+    "surgebinding:deepslate_ruby_ore",
+    "surgebinding:rosharan_diamond_ore",
+    "surgebinding:deepslate_rosharan_diamond_ore",
+    "surgebinding:garnet_ore",
+    "surgebinding:deepslate_garnet_ore",
+    "surgebinding:zircon_ore",
+    "surgebinding:deepslate_zircon_ore",
+    "surgebinding:topaz_ore",
+    "surgebinding:deepslate_topaz_ore",
+    "surgebinding:heliodor_ore",
+    "surgebinding:deepslate_heliodor_ore"
+  ]
+}

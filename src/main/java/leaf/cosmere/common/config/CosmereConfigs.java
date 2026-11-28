@@ -4,8 +4,8 @@
 
 package leaf.cosmere.common.config;
 
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
 
 public class CosmereConfigs
 {

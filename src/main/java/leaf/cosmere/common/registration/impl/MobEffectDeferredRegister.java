@@ -2,8 +2,8 @@ package leaf.cosmere.common.registration.impl;
 
 import leaf.cosmere.api.providers.IMobEffectProvider;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +16,7 @@ public class MobEffectDeferredRegister extends WrappedDeferredRegister<MobEffect
 
 	public MobEffectDeferredRegister(String modid)
 	{
-		super(modid, ForgeRegistries.MOB_EFFECTS);
+		super(modid, Registries.MOB_EFFECT);
 	}
 
 	public <MOB_EFFECTS extends MobEffect> MobEffectRegistryObject<MOB_EFFECTS> register(String name, Supplier<? extends MOB_EFFECTS> sup)

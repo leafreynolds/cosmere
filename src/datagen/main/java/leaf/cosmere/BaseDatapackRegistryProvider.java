@@ -11,16 +11,16 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.StructureModifier;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.common.world.StructureModifier;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public abstract class BaseDatapackRegistryProvider extends DatapackBuiltinEntrie
 		return "Datapack registries: " + modid;
 	}
 
-	protected static PlacedFeaturesHolder registerPlacedFeature(BootstapContext<PlacedFeature> context, ResourceLocation name,
+	protected static PlacedFeaturesHolder registerPlacedFeature(BootstrapContext<PlacedFeature> context, ResourceLocation name,
 	                                                            Boolean2ObjectFunction<List<PlacementModifier>> placementModifiers)
 	{
 		HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
@@ -67,12 +67,12 @@ public abstract class BaseDatapackRegistryProvider extends DatapackBuiltinEntrie
 
 	protected static ResourceKey<BiomeModifier> biomeModifier(ResourceLocation name)
 	{
-		return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, name);
+		return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, name);
 	}
 
 	protected static ResourceKey<StructureModifier> structureModifier(ResourceLocation name)
 	{
-		return ResourceKey.create(ForgeRegistries.Keys.STRUCTURE_MODIFIERS, name);
+		return ResourceKey.create(NeoForgeRegistries.Keys.STRUCTURE_MODIFIERS, name);
 	}
 
 	protected record PlacedFeaturesHolder(Reference<PlacedFeature> feature)

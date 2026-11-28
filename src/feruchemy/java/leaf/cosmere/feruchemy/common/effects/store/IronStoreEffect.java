@@ -22,12 +22,12 @@ public class IronStoreEffect extends FeruchemyEffectBase
 		addAttributeModifier(
 				Attributes.KNOCKBACK_RESISTANCE,
 				-0.3D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 /*		addAttributeModifier(
-				ForgeMod.ENTITY_GRAVITY.get(),
+				NeoForgeMod.ENTITY_GRAVITY.get(),
 				"89499e2b-8797-4473-89c4-541aa703f17f",
 				-0.01D,
-				AttributeModifier.Operation.ADDITION);*/
+				AttributeModifier.Operation.ADD_VALUE);*/
 	}
 
 	@Override

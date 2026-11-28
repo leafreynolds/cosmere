@@ -15,7 +15,9 @@ import leaf.cosmere.api.helpers.EntityHelper;
 import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.common.config.CosmereConfigs;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.EntityHitResult;
@@ -40,7 +42,7 @@ public class AllomancyBrass extends AllomancyManifestation
 		{
 			if (isActiveTick(data))
 			{
-				boolean isSingleTarget = (AllomancyKeybindings.ALLOMANCY_SOOTHE.isDown() || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) && data.getSelectedManifestation().equals(getManifestation()));
+				boolean isSingleTarget = (PowerKeyMappings.isDown(AllomancyKeybindings.ALLOMANCY_SOOTHE) || (Keybindings.MANIFESTATION_USE_ACTIVE.isDown()) && data.getSelectedManifestation().equals(getManifestation()));
 				int singleTargetEntityId = 0;
 
 				if (isSingleTarget)
@@ -112,7 +114,7 @@ public class AllomancyBrass extends AllomancyManifestation
 						case 2:
 							if (allomanticStrength > 15)
 								mob.addEffect(EffectsHelper.getNewEffect(
-										AllomancyEffects.ALLOMANTIC_BRASS_STUN.getMobEffect(),
+										BuiltInRegistries.MOB_EFFECT.wrapAsHolder(AllomancyEffects.ALLOMANTIC_BRASS_STUN.getMobEffect()),
 										0,      // no amplification system in place
 										20 * 5
 								));

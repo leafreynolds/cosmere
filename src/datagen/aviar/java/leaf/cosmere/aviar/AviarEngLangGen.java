@@ -9,11 +9,11 @@ import leaf.cosmere.api.providers.IEntityTypeProvider;
 import leaf.cosmere.api.text.StringHelper;
 import leaf.cosmere.aviar.common.Aviar;
 import leaf.cosmere.aviar.common.registries.AviarEntityTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static leaf.cosmere.aviar.common.registries.AviarAttributes.HOSTILE_LIFE_SENSE;
 
@@ -49,7 +49,7 @@ public class AviarEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Aviar.MODID))
@@ -83,7 +83,7 @@ public class AviarEngLangGen extends LanguageProvider
 	{
 		//Attribute
 		final String descriptionId = HOSTILE_LIFE_SENSE.getAttribute().getDescriptionId();
-		final String name = HOSTILE_LIFE_SENSE.getName().replace('_',' ');
+		final String name = HOSTILE_LIFE_SENSE.getName().replace('_', ' ');
 		// Attributes are the powers themselves, they need their own names.
 		add(descriptionId, StringHelper.fixCapitalisation(name));
 	}

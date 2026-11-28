@@ -6,6 +6,7 @@ package leaf.cosmere.loottables;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import leaf.cosmere.api.providers.IEntityTypeProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
@@ -20,9 +21,9 @@ public abstract class BaseEntityLootTables extends EntityLootSubProvider
 
 	private final Set<EntityType<?>> knownEntityTypes = new ReferenceOpenHashSet<>();
 
-	protected BaseEntityLootTables()
+	protected BaseEntityLootTables(HolderLookup.Provider provider)
 	{
-		super(FeatureFlags.VANILLA_SET);
+		super(FeatureFlags.VANILLA_SET, provider);
 	}
 
 	@Override

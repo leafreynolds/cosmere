@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sandmastery:block/white_gilded_cut_sandstone"
+    },
+    "facing=east": {
+      "model": "sandmastery:block/white_gilded_cut_sandstone",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "sandmastery:block/white_gilded_cut_sandstone",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sandmastery:block/white_gilded_cut_sandstone",
+      "y": 270
+    }
+  }
+}

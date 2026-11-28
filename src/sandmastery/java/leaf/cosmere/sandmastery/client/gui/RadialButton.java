@@ -1,14 +1,12 @@
 package leaf.cosmere.sandmastery.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import leaf.cosmere.api.Manifestations;
+import com.mojang.blaze3d.vertex.*;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.client.gui.GuiUtils;
-import leaf.cosmere.client.gui.SpiritwebMenu;
+import leaf.cosmere.common.Cosmere;
+import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -33,17 +31,20 @@ public class RadialButton extends Button
 	private final float startAngle;
 	private final float endAngle;
 	private final Manifestation manifestation;
+
 	protected RadialButton(int pX, int pY, int radius, int segmentNr, Manifestation manifestation, Consumer<Manifestation> maniConsumer)
 	{
-		super(pX, pY, 16, 16, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
+		super(pX, pY, 16, 16, CommonComponents.EMPTY, (button) ->
+		{
+		}, DEFAULT_NARRATION);
 		this.manifestation = manifestation;
 		this.radius = radius;
 		this.segmentNr = segmentNr;
 		centerX = pX;
 		centerY = pY;
 
-		float fifthCircle = (float) Math.toRadians(360d/5d);
-		startAngle = (float) (fifthCircle*segmentNr);
+		float fifthCircle = (float) Math.toRadians(360d / 5d);
+		startAngle = (float) (fifthCircle * segmentNr);
 		endAngle = startAngle + fifthCircle;
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -52,7 +53,7 @@ public class RadialButton extends Button
 				.append(manifestation.getManifestationType().getName())
 				.append("/.png");
 
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		manifestationConsumer = maniConsumer;
 
@@ -74,7 +75,8 @@ public class RadialButton extends Button
 
 		double angle = Math.atan2(distanceY, distanceX);
 
-		if (angle < 0) {
+		if (angle < 0)
+		{
 			angle += 2 * Math.PI;
 		}
 
@@ -103,22 +105,31 @@ public class RadialButton extends Button
 	@Override
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
 	{
-		return false;
+		boolean isMouseOver = isMouseOver(pMouseX, pMouseY);
+		if (isMouseOver)
+		{
+			Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, pButton == 0 ? 1 : -1));
+			playDownSound(Minecraft.getInstance().getSoundManager());
+		}
+		return isMouseOver;
 	}
 
 	@Override
-	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
+	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick)
 	{
 		boolean isHovered = isMouseOver(pMouseX, pMouseY);
 		renderRadial(pGuiGraphics, isHovered);
 		renderIcon(pGuiGraphics);
+		renderRibbonsInUse(pGuiGraphics);
 		if (isHovered)
+		{
 			renderInfoBlock(pGuiGraphics);
+		}
 	}
 
 	private void renderRadial(GuiGraphics pGuiGraphics, boolean isHovered)
 	{
-		float r = GuiUtils.BACKGROUND_COLOR.getRed()/255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen()/255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue()/255.f;
+		float r = GuiUtils.BACKGROUND_COLOR.getRed() / 255.f, g = GuiUtils.BACKGROUND_COLOR.getGreen() / 255.f, b = GuiUtils.BACKGROUND_COLOR.getBlue() / 255.f;
 		float a = 1f;
 
 		if (isHovered)
@@ -135,9 +146,7 @@ public class RadialButton extends Button
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
 		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
@@ -145,13 +154,13 @@ public class RadialButton extends Button
 			float py = quad.py();
 			float size = quad.size();
 
-			buf.vertex(pose, px, py, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px, py + size, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px + size, py + size, 0).color(r, g, b, a).endVertex();
-			buf.vertex(pose, px + size, py, 0).color(r, g, b, a).endVertex();
+			buf.addVertex(pose, px, py, 0).setColor(r, g, b, a);
+			buf.addVertex(pose, px, py + size, 0).setColor(r, g, b, a);
+			buf.addVertex(pose, px + size, py + size, 0).setColor(r, g, b, a);
+			buf.addVertex(pose, px + size, py, 0).setColor(r, g, b, a);
 		}
 
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 
@@ -164,14 +173,14 @@ public class RadialButton extends Button
 
 		double midAngle = (startAngle + endAngle) / 2;
 		double midRadius = (radius) / 1.5;
-		int iconSize = width-2;
-		int posX = centerX + (int)(Math.cos(midAngle) * midRadius) - iconSize/2;
-		int posY = centerY + (int)(Math.sin(midAngle) * midRadius) - iconSize/2;
+		int iconSize = width - 2;
+		int posX = centerX + (int) (Math.cos(midAngle) * midRadius) - iconSize / 2;
+		int posY = centerY + (int) (Math.sin(midAngle) * midRadius) - iconSize / 2;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
 		pGuiGraphics.blit(iconLocation,
-				posX+1,
-				posY+1,
+				posX + 1,
+				posY + 1,
 				iconSize,
 				iconSize,
 				0,
@@ -195,6 +204,16 @@ public class RadialButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderRibbonsInUse(GuiGraphics pGuiGraphics)
+	{
+		int ribbons = SpiritwebCapability.get(Minecraft.getInstance().player).map(spiritweb -> spiritweb.getMode(manifestation)).orElse(0);
+		double midAngle = (startAngle + endAngle) / 2;
+		double midRadius = radius / 1.5;
+		int textX = centerX + (int) (Math.cos(midAngle) * midRadius);
+		int textY = centerY + (int) (Math.sin(midAngle) * midRadius) + width / 2 + 2;
+		pGuiGraphics.drawCenteredString(Minecraft.getInstance().font, String.valueOf(ribbons), textX, textY, 0xFFFFFF);
 	}
 
 	private void renderInfoBlock(GuiGraphics pGuiGraphics)
@@ -239,10 +258,16 @@ public class RadialButton extends Button
 				if (distSq <= radiusSq)
 				{
 					float angle = (float) Math.atan2(pixelCenterY, pixelCenterX);
-					if (angle < 0) angle += (float) (Math.PI * 2);
+					if (angle < 0)
+					{
+						angle += (float) (Math.PI * 2);
+					}
 
 					float diff = angle - startAngle;
-					if (diff < 0) diff += (float) (Math.PI * 2);
+					if (diff < 0)
+					{
+						diff += (float) (Math.PI * 2);
+					}
 
 					if (diff < radsPerSegment)
 					{

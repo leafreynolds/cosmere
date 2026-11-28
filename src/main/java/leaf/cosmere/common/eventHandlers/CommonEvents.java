@@ -17,18 +17,18 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraftforge.common.BasicItemListing;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.BasicItemListing;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Cosmere.MODID)
 public class CommonEvents
 {
 	@SubscribeEvent
@@ -79,9 +79,9 @@ public class CommonEvents
 	{
 		for (ItemRegistryObject<Item> item : ItemsRegistry.METAL_NUGGETS.values())
 		{
-			if (item.get().getRarity(ItemStack.EMPTY) == rarity)
+			ItemStack itemStackForSale = new ItemStack(item.get(), 1);
+			if (itemStackForSale.getRarity() == rarity)
 			{
-				ItemStack itemStackForSale = new ItemStack(item.get(), 1);
 				tradesForLevel.add(makeTrade(itemStackForSale));
 			}
 		}
@@ -91,9 +91,9 @@ public class CommonEvents
 	{
 		for (ItemRegistryObject<Item> item : ItemsRegistry.METAL_RAW_BLEND.values())
 		{
-			if (item.get().getRarity(ItemStack.EMPTY) == rarity)
+			ItemStack itemStackForSale = new ItemStack(item.get(), 1);
+			if (itemStackForSale.getRarity() == rarity)
 			{
-				ItemStack itemStackForSale = new ItemStack(item.get(), 1);
 				tradesForLevel.add(makeTrade(itemStackForSale));
 			}
 		}
@@ -103,9 +103,9 @@ public class CommonEvents
 	{
 		for (ItemRegistryObject<Item> item : ItemsRegistry.METAL_RAW_ORE.values())
 		{
-			if (item.get().getRarity(ItemStack.EMPTY) == rarity)
+			ItemStack itemStackForSale = new ItemStack(item.get(), 1);
+			if (itemStackForSale.getRarity() == rarity)
 			{
-				ItemStack itemStackForSale = new ItemStack(item.get(), 1);
 				tradesForLevel.add(makeTrade(itemStackForSale));
 			}
 		}
@@ -115,9 +115,9 @@ public class CommonEvents
 	{
 		for (var oreType : BlocksRegistry.METAL_ORE.values())
 		{
-			if (oreType.stone().getBlock().asItem().getRarity(ItemStack.EMPTY) == rarity)
+			ItemStack itemStackForSale = new ItemStack(oreType.stone().getBlock().asItem(), 1);
+			if (itemStackForSale.getRarity() == rarity)
 			{
-				ItemStack itemStackForSale = new ItemStack(oreType.stone().getBlock().asItem(), 1);
 				tradesForLevel.add(makeTrade(itemStackForSale));
 			}
 		}
@@ -140,7 +140,7 @@ public class CommonEvents
 	private static int getCost(ItemStack item)
 	{
 		int cost = 0;
-		switch (item.getItem().getRarity(item))
+		switch (item.getRarity())
 		{
 			case COMMON:
 				cost = 1;
@@ -162,7 +162,7 @@ public class CommonEvents
 	private static int getCount(ItemStack item)
 	{
 		int count = 0;
-		switch (item.getItem().getRarity(item))
+		switch (item.getRarity())
 		{
 			case COMMON:
 				count = 16;
@@ -184,7 +184,7 @@ public class CommonEvents
 	private static int getMaxTradesPerDay(ItemStack item)
 	{
 		int count = 0;
-		switch (item.getItem().getRarity(item))
+		switch (item.getRarity())
 		{
 			case COMMON:
 				count = 8;
@@ -206,7 +206,7 @@ public class CommonEvents
 	private static int getXpPerTrade(ItemStack item)
 	{
 		int count = 0;
-		switch (item.getItem().getRarity(item))
+		switch (item.getRarity())
 		{
 			case COMMON:
 				count = 2;
@@ -235,7 +235,8 @@ public class CommonEvents
 		s_reloadingRecipes = event.getServerResources().getRecipeManager();
 	}
 
-	@SubscribeEvent
+	// LOW: NeoForge applies data maps (oxidation, waxing) in its own NORMAL priority handler for this event
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onTagsUpdated(TagsUpdatedEvent event)
 	{
 		if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD && s_reloadingRecipes != null)

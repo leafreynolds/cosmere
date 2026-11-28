@@ -6,7 +6,6 @@ package leaf.cosmere.feruchemy.client.render;
 
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
 import leaf.cosmere.feruchemy.client.render.renderer.BraceletRenderer;
-import leaf.cosmere.feruchemy.common.items.BraceletMetalmindItem;
 import leaf.cosmere.feruchemy.common.registries.FeruchemyItems;
 import net.minecraft.world.item.Item;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 30 - 4 - 2025 ~ Leaf
+ * File updated ~ 26 - 11 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.tag;
@@ -23,19 +23,16 @@ import leaf.cosmere.common.resource.ore.OreType;
 import leaf.cosmere.common.util.CosmereEnumUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.GameEventTags;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -100,7 +97,10 @@ public class CosmereTagProvider extends BaseTagProvider
 				getItemBuilder(Tags.Items.NUGGETS).add(metalNuggetTag);
 
 				ItemRegistryObject<Item> nugRegObj = ItemsRegistry.METAL_NUGGETS.get(metalType);
-				if (nugRegObj == null) nugRegObj = ItemsRegistry.GOD_METAL_NUGGETS.get(metalType);
+				if (nugRegObj == null)
+				{
+					nugRegObj = ItemsRegistry.GOD_METAL_NUGGETS.get(metalType);
+				}
 
 				if (nugRegObj != null)
 				{// tell the Nugget that our Nuggets are related
@@ -114,9 +114,9 @@ public class CosmereTagProvider extends BaseTagProvider
 				}
 
 				// Add the metal alloy nugget to the nugget tags
-				if(!metalType.isGodMetal() && metalType.hasAssociatedManifestation())
+				if (!metalType.isGodMetal() && metalType.hasAssociatedManifestation())
 				{
-					for(Metals.MetalType godMetalType : new Metals.MetalType[] { Metals.MetalType.LERASIUM, Metals.MetalType.LERASATIUM})
+					for (Metals.MetalType godMetalType : new Metals.MetalType[]{Metals.MetalType.LERASIUM, Metals.MetalType.LERASATIUM})
 					{
 						final TagKey<Item> godMetalAlloyNuggetTag = godMetalType.getGodMetalAlloyNuggetTag(metalType);
 						getItemBuilder(Tags.Items.NUGGETS).add(godMetalAlloyNuggetTag);
@@ -151,7 +151,11 @@ public class CosmereTagProvider extends BaseTagProvider
 	{
 		addToTag(BlockTags.NEEDS_STONE_TOOL, BlocksRegistry.METALWORKING_TABLE);
 		addToHarvestTag(BlockTags.MINEABLE_WITH_AXE, BlocksRegistry.METALWORKING_TABLE);
-
+		addToHarvestTag(BlockTags.MINEABLE_WITH_PICKAXE,
+				BlocksRegistry.COBBLED_SANDSTONE,
+				BlocksRegistry.BRICKED_SANDSTONE,
+				BlocksRegistry.COBBLED_RED_SANDSTONE,
+				BlocksRegistry.BRICKED_RED_SANDSTONE);
 
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
@@ -177,9 +181,19 @@ public class CosmereTagProvider extends BaseTagProvider
 			final OreBlockType oreBlockType = BlocksRegistry.METAL_ORE.get(oreType);
 
 			final TagKey<Block> oreBlockTag = CosmereTags.Blocks.METAL_ORE_BLOCK_TAGS.get(metalType);
+			final TagKey<Item> oreItemTag = CosmereTags.Items.METAL_ORE_TAGS.get(metalType);
 			final BlockRegistryObject<MetalOreBlock, BlockItem> stone = oreBlockType.stone();
 			final BlockRegistryObject<MetalOreBlock, BlockItem> deepslate = oreBlockType.deepslate();
-			addToTag(oreBlockTag, stone, deepslate);
+			addToTags(oreItemTag, oreBlockTag, stone, deepslate);
+
+			//parent c:ores lists each c:ores/<type> child tag, as NeoForge does
+			getBlockBuilder(Tags.Blocks.ORES).add(oreBlockTag);
+			getItemBuilder(Tags.Items.ORES).add(oreItemTag);
+
+			//createOreDrop yields exactly one raw ore without fortune
+			addToTags(Tags.Items.ORE_RATES_SINGULAR, Tags.Blocks.ORE_RATES_SINGULAR, stone, deepslate);
+			addToTags(Tags.Items.ORES_IN_GROUND_STONE, Tags.Blocks.ORES_IN_GROUND_STONE, stone);
+			addToTags(Tags.Items.ORES_IN_GROUND_DEEPSLATE, Tags.Blocks.ORES_IN_GROUND_DEEPSLATE, deepslate);
 
 			hasHarvestData(stone.getBlock());
 			hasHarvestData(deepslate.getBlock());
@@ -244,8 +258,15 @@ public class CosmereTagProvider extends BaseTagProvider
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
 		{
 			final boolean isAluminum = metalType == Metals.MetalType.ALUMINUM;
-			final IntrinsicCosmereTagBuilder<Item> itemTagBuilder = isAluminum ? aluminumItemTagBuilder : metalItemTagBuilder;
-			final IntrinsicCosmereTagBuilder<Block> blockTagBuilder = isAluminum ? aluminumBlockTagBuilder : metalBlockTagBuilder;
+			final IntrinsicCosmereTagBuilder<Item> itemTagBuilder =
+					isAluminum
+					? aluminumItemTagBuilder
+					: metalItemTagBuilder;
+
+			final IntrinsicCosmereTagBuilder<Block> blockTagBuilder =
+					isAluminum
+					? aluminumBlockTagBuilder
+					: metalBlockTagBuilder;
 
 			//Items
 			final TagKey<Item> metalRawTag = CosmereTags.Items.METAL_RAW_TAGS.get(metalType);
@@ -263,6 +284,7 @@ public class CosmereTagProvider extends BaseTagProvider
 					|| metalType == Metals.MetalType.GOLD)
 			{
 				itemTagBuilder.add(metalRawTag);
+				itemTagBuilder.add(CosmereTags.Items.METAL_ORE_TAGS.get(metalType));
 				blockTagBuilder.add(oreBlockTag);
 			}
 
@@ -280,12 +302,48 @@ public class CosmereTagProvider extends BaseTagProvider
 
 		// copper oxidation/waxing variants are derived at runtime from NeoForge data maps, see DerivedItemTags
 
+		//vanilla metal things with no recipe
+		metalItemTagBuilder
+				.add(Items.CHAINMAIL_HELMET,
+						Items.CHAINMAIL_CHESTPLATE,
+						Items.CHAINMAIL_LEGGINGS,
+						Items.CHAINMAIL_BOOTS,
+						Items.IRON_HORSE_ARMOR,
+						Items.GOLDEN_HORSE_ARMOR,
+						Items.BELL,
+						Items.CHIPPED_ANVIL,
+						Items.DAMAGED_ANVIL,
+						Items.TRIAL_KEY,
+						Items.OMINOUS_TRIAL_KEY,
+						Items.ENCHANTED_GOLDEN_APPLE,
+						Items.GILDED_BLACKSTONE,
+						Items.COMMAND_BLOCK_MINECART,
+						Items.WATER_BUCKET,
+						Items.LAVA_BUCKET,
+						Items.MILK_BUCKET,
+						Items.POWDER_SNOW_BUCKET,
+						Items.AXOLOTL_BUCKET,
+						Items.COD_BUCKET,
+						Items.PUFFERFISH_BUCKET,
+						Items.SALMON_BUCKET,
+						Items.TADPOLE_BUCKET,
+						Items.TROPICAL_FISH_BUCKET);
+
+		metalBlockTagBuilder
+				.add(Blocks.BELL,
+						Blocks.CHIPPED_ANVIL,
+						Blocks.DAMAGED_ANVIL,
+						Blocks.GILDED_BLACKSTONE,
+						Blocks.WATER_CAULDRON,
+						Blocks.LAVA_CAULDRON,
+						Blocks.POWDER_SNOW_CAULDRON);
+
 		//never derived from recipes, even when crafted from metal
 		getItemBuilder(CosmereTags.Items.CONTAINS_METAL_EXCLUSIONS)
 				.add(Items.GRASS_BLOCK, Items.FARMLAND, Items.GLASS, Items.GLASS_PANE, Items.TORCH, Items.SHULKER_BOX,
 						Items.ICE, Items.BLUE_ICE, Items.PACKED_ICE, Items.DIAMOND, Items.EMERALD)
 				.add(ItemTags.BEDS)
-				.addOptional(new ResourceLocation("projecte", "philosophers_stone"));//problem child
+				.addOptional(ResourceLocation.fromNamespaceAndPath("projecte", "philosophers_stone"));//problem child
 
 		// TODO: Decide if duralumin can be pushed/pulled on or not. For now, I assume the answer is that it contains aluminum so it acts like aluminum outside of burning/storing/tapping
 		// getItemBuilder(CosmereTags.Items.CONTAINS_ALUMINUM_EXCLUSIONS)

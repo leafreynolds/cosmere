@@ -6,7 +6,6 @@ package leaf.cosmere.sandmastery.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import leaf.cosmere.sandmastery.common.Sandmastery;
 import net.minecraft.data.PackOutput;
 
 //

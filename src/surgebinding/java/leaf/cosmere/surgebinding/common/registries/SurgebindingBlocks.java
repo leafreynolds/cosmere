@@ -40,22 +40,22 @@ public class SurgebindingBlocks
 									Rarity.UNCOMMON)));
 
 	public static final BlockRegistryObject<Block, BlockItem> BLOCK_OF_SAPPHIRE = BLOCKS.register("block_of_sapphire",
-			() -> new Block(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK).sound(SoundType.AMETHYST)));
+			() -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK).sound(SoundType.AMETHYST)));
 
 	public static final BlockRegistryObject<BuddingSapphireBlock, BlockItem> BUDDING_SAPPHIRE = BLOCKS.register("budding_sapphire",
-			() -> new BuddingSapphireBlock(BlockBehaviour.Properties.copy(Blocks.BUDDING_AMETHYST)));
+			() -> new BuddingSapphireBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BUDDING_AMETHYST)));
 
 	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> SMALL_SAPPHIRE_BUD = BLOCKS.register("small_sapphire_bud",
-			() -> new SapphireClusterBlock(3, 4, BlockBehaviour.Properties.copy(Blocks.SMALL_AMETHYST_BUD)));
+			() -> new SapphireClusterBlock(3, 4, BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_AMETHYST_BUD)));
 
 	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> MEDIUM_SAPPHIRE_BUD = BLOCKS.register("medium_sapphire_bud",
-			() -> new SapphireClusterBlock(4, 3, BlockBehaviour.Properties.copy(Blocks.MEDIUM_AMETHYST_BUD)));
+			() -> new SapphireClusterBlock(4, 3, BlockBehaviour.Properties.ofFullCopy(Blocks.MEDIUM_AMETHYST_BUD)));
 
 	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> LARGE_SAPPHIRE_BUD = BLOCKS.register("large_sapphire_bud",
-			() -> new SapphireClusterBlock(5, 3, BlockBehaviour.Properties.copy(Blocks.LARGE_AMETHYST_BUD)));
+			() -> new SapphireClusterBlock(5, 3, BlockBehaviour.Properties.ofFullCopy(Blocks.LARGE_AMETHYST_BUD)));
 
 	public static final BlockRegistryObject<SapphireClusterBlock, BlockItem> SAPPHIRE_CLUSTER = BLOCKS.register("sapphire_cluster",
-			() -> new SapphireClusterBlock(7, 3, BlockBehaviour.Properties.copy(Blocks.AMETHYST_CLUSTER)));
+			() -> new SapphireClusterBlock(7, 3, BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER)));
 
 	public static final Map<Roshar.Gemstone, BlockRegistryObject<GemOreBlock, BlockItem>> GEM_ORE =
 			Arrays.stream(EnumUtils.GEMSTONE_TYPES_ORE)

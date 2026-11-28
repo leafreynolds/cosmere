@@ -5,26 +5,20 @@
 package leaf.cosmere.hemalurgy.common.capabilities.world;
 
 import com.google.common.collect.ImmutableList;
+import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Optional;
 
 public class HemalurgyWorldCapability implements IHemalurgyWorldCap
 {
-	//Injection
-	public static final Capability<IHemalurgyWorldCap> CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
-	{
-	});
-
 	private final Level level;
 	private CompoundTag m_nbt = null;
 	private final List<CustomSpawner> customSpawners;
@@ -36,16 +30,25 @@ public class HemalurgyWorldCapability implements IHemalurgyWorldCap
 
 	}
 
+	//getData creates and saves an attachment on any level you ask, so gate the dimension here
 	@Nonnull
-	public static LazyOptional<IHemalurgyWorldCap> get(Level level)
+	public static Optional<IHemalurgyWorldCap> get(Level level)
 	{
-		return level != null ? level.getCapability(HemalurgyWorldCapability.CAPABILITY, null)
-		                     : LazyOptional.empty();
+		if (level == null || !isHemalurgyWorld(level))
+		{
+			return Optional.empty();
+		}
+		return Optional.of(level.getData(HemalurgyAttachments.WORLD_CAP.get()));
+	}
+
+	public static boolean isHemalurgyWorld(Level level)
+	{
+		return level != null && level.dimension() == Level.OVERWORLD;
 	}
 
 
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		if (m_nbt == null)
 		{
@@ -56,7 +59,7 @@ public class HemalurgyWorldCapability implements IHemalurgyWorldCap
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 	{
 		m_nbt = nbt;
 	}

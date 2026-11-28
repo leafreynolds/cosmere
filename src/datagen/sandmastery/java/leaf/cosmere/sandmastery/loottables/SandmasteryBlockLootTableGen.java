@@ -6,15 +6,19 @@ package leaf.cosmere.sandmastery.loottables;
 
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.loottables.BaseBlockLootTables;
+import leaf.cosmere.sandmastery.common.blocks.DiemCheckpointBlock;
 import leaf.cosmere.sandmastery.common.blocks.SandJarBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainBlackSandLayerBlock;
+import leaf.cosmere.sandmastery.common.blocks.TaldainGlowingSandBlock;
 import leaf.cosmere.sandmastery.common.blocks.TaldainWhiteSandLayerBlock;
 import leaf.cosmere.sandmastery.common.blocks.TemporarySandBlock;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -27,6 +31,11 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 {
+	public SandmasteryBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{
@@ -45,7 +54,15 @@ public class SandmasteryBlockLootTableGen extends BaseBlockLootTables
 				this.add(SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.getBlock(), (layer) -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(TaldainBlackSandLayerBlock.LAYERS.getPossibleValues(), (layers) -> LootItem.lootTableItem(blackLayer.asItem()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(layer).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TaldainBlackSandLayerBlock.LAYERS, layers))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(layers.intValue())))))));
 				this.add(SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.getBlock(), (layer) -> LootTable.lootTable().withPool(LootPool.lootPool().when(LootItemEntityPropertyCondition.entityPresent(LootContext.EntityTarget.THIS)).add(AlternativesEntry.alternatives(TaldainWhiteSandLayerBlock.LAYERS.getPossibleValues(), (layers) -> LootItem.lootTableItem(whiteLayer.asItem()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(layer).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(TaldainWhiteSandLayerBlock.LAYERS, layers))).apply(SetItemCountFunction.setCount(ConstantValue.exactly(layers.intValue())))))));
 			}
-			else if (block instanceof TemporarySandBlock)
+			else if (block instanceof SlabBlock)
+			{
+				this.add(block, createSlabItemTable(block));
+			}
+			else if (block instanceof TaldainGlowingSandBlock)
+			{
+				this.dropOther(block, SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem());
+			}
+			else if (block instanceof TemporarySandBlock || block instanceof DiemCheckpointBlock)
 			{
 				this.dropOther(block, Items.AIR);
 			}

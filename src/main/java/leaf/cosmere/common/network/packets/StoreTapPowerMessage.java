@@ -1,106 +1,103 @@
+/*
+ * File updated ~ 2026-05-02 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
+ */
+
 package leaf.cosmere.common.network.packets;
 
-import leaf.cosmere.common.charge.IHoldsPowers;
+import io.netty.buffer.ByteBuf;
+import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.charge.IHoldsPowers;
 import leaf.cosmere.common.network.ICosmerePacket;
 import leaf.cosmere.common.util.CosmereAttributeUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Holder;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.network.NetworkEvent;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class StoreTapPowerMessage implements ICosmerePacket
+public record StoreTapPowerMessage(
+		Holder<Attribute> attribute,
+		int attributeStrength,
+		int itemSlot,
+		int attributeSlot,
+		boolean isStore,
+		boolean isCurio) implements ICosmerePacket
 {
-	Attribute attribute;
-	int attributeStrength;
-	int itemSlot;
-    int attributeSlot;
-	boolean isStore;
-    boolean isCurio;
+	public static final CustomPacketPayload.Type<StoreTapPowerMessage> TYPE =
+			new CustomPacketPayload.Type<>(Cosmere.rl("store_tap_power"));
 
-	public StoreTapPowerMessage(Attribute attribute, int attributeStrength, int itemSlot, int attributeSlot, boolean isStore, boolean isCurio)
+	public static final StreamCodec<ByteBuf, StoreTapPowerMessage> STREAM_CODEC =
+			StreamCodec.of(
+					(buf, msg) ->
+					{
+						ByteBufCodecs.STRING_UTF8.encode(buf, msg.attribute.getRegisteredName());
+						ByteBufCodecs.VAR_INT.encode(buf, msg.attributeStrength);
+						ByteBufCodecs.VAR_INT.encode(buf, msg.itemSlot);
+						ByteBufCodecs.VAR_INT.encode(buf, msg.attributeSlot);
+						ByteBufCodecs.BOOL.encode(buf, msg.isStore);
+						ByteBufCodecs.BOOL.encode(buf, msg.isCurio);
+					},
+					buf -> new StoreTapPowerMessage(
+							CosmereAttributeUtils.getAttributeByDescriptionId(ByteBufCodecs.STRING_UTF8.decode(buf)),
+							ByteBufCodecs.VAR_INT.decode(buf),
+							ByteBufCodecs.VAR_INT.decode(buf),
+							ByteBufCodecs.VAR_INT.decode(buf),
+							ByteBufCodecs.BOOL.decode(buf),
+							ByteBufCodecs.BOOL.decode(buf)
+					)
+			);
+
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
-		this.attribute = attribute;
-		this.attributeStrength = attributeStrength;
-        this.itemSlot = itemSlot;
-        this.attributeSlot = attributeSlot;
-		this.isStore = isStore;
-		this.isCurio = isCurio;
+		return TYPE;
 	}
 
 	@Override
-	public void handle(NetworkEvent.Context context)
+	public void handle(IPayloadContext context)
 	{
-		ServerPlayer sender = context.getSender();
-		context.enqueueWork(() ->
+		if (!(context.player() instanceof ServerPlayer sender))
 		{
-			if (sender == null)
-			{
-				return;
-			}
-			SpiritwebCapability.get(sender).ifPresent((cap) ->
-			{
-				// Storing
-				if (isStore)
+			return;
+		}
+		context.enqueueWork(() ->
+				SpiritwebCapability.get(sender).ifPresent((cap) ->
 				{
-                    ItemStack itemStack = CosmereAttributeUtils.getPowerItem(sender, itemSlot, isCurio);
-                    if (itemStack.getItem() instanceof IHoldsPowers item)
-                    {
-                        if(item.trySetAttunedPlayer(itemStack, sender))
-                        {
-                            CosmereAttributeUtils.removeBaseAttribute(sender, attribute);
-                            item.addPower(itemStack, attribute, attributeStrength, attributeSlot);
-                        }
-                    }
-				}
-				// Tapping
-				else
-				{
-                    ItemStack itemStack = CosmereAttributeUtils.getPowerItem(sender, itemSlot, isCurio);
-                    if (itemStack.getItem() instanceof IHoldsPowers item)
-                    {
-                        if(item.getPlayerIsAttuned(itemStack, sender))
-                        {
-                            if (attribute instanceof RangedAttribute rangedAttribute)
-                            {
-                                CosmereAttributeUtils.grantBaseAttribute(sender, rangedAttribute, attributeStrength);
-                                item.removePower(itemStack, attribute);
-                            }
-                        }
-                    }
-				}
-				cap.syncToClients(sender);
-			});
-		});
-		context.setPacketHandled(true);
-	}
-
-
-	@Override
-	public void encode(FriendlyByteBuf buf)
-	{
-		buf.writeUtf(this.attribute.getDescriptionId());
-		buf.writeInt(this.attributeStrength);
-		buf.writeInt(this.itemSlot);
-        buf.writeInt(this.attributeSlot);
-		buf.writeBoolean(this.isStore);
-        buf.writeBoolean(this.isCurio);
-	}
-
-	public static StoreTapPowerMessage decode(FriendlyByteBuf buf)
-	{
-		String attributeId = buf.readUtf();
-		int attributeStrength = buf.readInt();
-		int itemSlot = buf.readInt();
-        int attributeSlot = buf.readInt();
-		boolean isStore = buf.readBoolean();
-        boolean isCurio = buf.readBoolean();
-
-		return new StoreTapPowerMessage(CosmereAttributeUtils.getAttributeByDescriptionId(attributeId), attributeStrength, itemSlot, attributeSlot, isStore, isCurio);
+					// Storing
+					if (isStore)
+					{
+						ItemStack itemStack = CosmereAttributeUtils.getPowerItem(sender, itemSlot, isCurio);
+						if (itemStack.getItem() instanceof IHoldsPowers item)
+						{
+							if (item.trySetAttunedPlayer(itemStack, sender))
+							{
+								CosmereAttributeUtils.removeBaseAttribute(sender, attribute);
+								item.addPower(itemStack, attribute, attributeStrength, attributeSlot);
+							}
+						}
+					}
+					// Tapping
+					else
+					{
+						ItemStack itemStack = CosmereAttributeUtils.getPowerItem(sender, itemSlot, isCurio);
+						if (itemStack.getItem() instanceof IHoldsPowers item)
+						{
+							if (item.getPlayerIsAttuned(itemStack, sender))
+							{
+								if (attribute.value() instanceof RangedAttribute rangedAttribute)
+								{
+									CosmereAttributeUtils.grantBaseAttribute(sender, rangedAttribute, attributeStrength);
+									item.removePower(itemStack, attribute.value());
+								}
+							}
+						}
+					}
+					cap.syncToClients(sender);
+				}));
 	}
 }

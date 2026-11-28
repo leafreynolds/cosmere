@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "sandmastery:sand_jar_block"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "sandmastery:sand_jar"
+  }
+}

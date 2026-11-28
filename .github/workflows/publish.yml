@@ -1,6 +1,6 @@
 name: Publish
 
-# Manually triggered release. Builds every module, writes the changelog from git history,
+# Manually triggered release. Regenerates data, runs the game tests, builds every module, writes the changelog from git history,
 # uploads to CurseForge and Modrinth, then tags the release and advances build_number.
 
 on:
@@ -79,6 +79,33 @@ jobs:
           ./gradlew printVersion -q --console=plain \
             | grep -E '^(version|mod_version|build_number)=' \
             | tee -a "$GITHUB_OUTPUT"
+
+      # Regenerate data so a release can never ship stale or hand-edited generated files
+      - name: Run data generators
+        run: ./gradlew runData --stacktrace
+
+      - name: Check generated data is committed
+        run: |
+          changes="$(git status --porcelain -- src/datagen/generated)"
+          if [ -n "$changes" ]; then
+            echo "$changes"
+            git --no-pager diff --stat -- src/datagen/generated
+            echo "::error::runData changed src/datagen/generated. Run ./gradlew runData locally and commit the result."
+            exit 1
+          fi
+
+      # the game test server exits non zero when any required test fails
+      # runs from compiled classes, so it fails fast before any jars are built
+      - name: Run game tests
+        run: ./gradlew runGameTestServer --stacktrace
+
+      - name: Upload game test logs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gametest-logs
+          path: runGameTests/logs/
+          if-no-files-found: ignore
 
       - name: Build
         run: ./gradlew build --stacktrace

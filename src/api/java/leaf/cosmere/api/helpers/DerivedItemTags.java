@@ -8,16 +8,16 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.WeatheringCopper;
+import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 
 import java.util.*;
 import java.util.function.Function;
@@ -89,12 +89,13 @@ public final class DerivedItemTags
 		List<Conversion> conversions = new ArrayList<>();
 		Map<String, Integer> unreadable = new TreeMap<>();
 
-		for (Recipe<?> recipe : recipeManager.getRecipes())
+		for (RecipeHolder<?> holder : recipeManager.getRecipes())
 		{
 			try
 			{
 				// no isSpecial() skip: Create marks every processing recipe special just to hide it from the recipe book.
 				// Truly dynamic recipes (vanilla/cosmere CustomRecipe) report no result and no ingredients, so they drop out below anyway.
+				final Recipe<?> recipe = holder.value();
 				final ItemStack resultStack = recipe.getResultItem(registryAccess);
 				// we have one confirmed bug report that the result _can_ be null https://github.com/leafreynolds/cosmere/issues/58
 				if (resultStack == null || resultStack.isEmpty())
@@ -109,6 +110,9 @@ public final class DerivedItemTags
 					continue;
 				}
 
+				// a tool only goes into a result that is itself a tool, like a netherite upgrade
+				// otherwise it's held and kept, like create scraping copper with any axe
+				final boolean resultIsTool = resultStack.isDamageableItem();
 				List<Set<Item>> slots = new ArrayList<>();
 				for (Ingredient ingredient : ingredients)
 				{
@@ -116,7 +120,7 @@ public final class DerivedItemTags
 					for (ItemStack option : ingredient.getItems())
 					{
 						// a returned container or crafting tool isn't consumed into the result
-						if (!option.hasCraftingRemainingItem())
+						if (!option.hasCraftingRemainingItem() && (resultIsTool || !option.isDamageableItem()))
 						{
 							options.add(option.getItem());
 						}
@@ -128,13 +132,15 @@ public final class DerivedItemTags
 			catch (Exception e)
 			{
 				// a broken modded recipe or ingredient must not take down world load or /reload
-				CosmereAPI.logger.error("[DerivedTags] Skipping recipe {}, it crashed while reading its ingredients. Please report this to {}.", recipe.getId(), recipe.getId().getNamespace(), e);
+				CosmereAPI.logger.error("[DerivedTags] Skipping recipe {}, it crashed while reading its ingredients. Please report this to {}.", holder.id(), holder.id().getNamespace(), e);
 			}
 		}
 
 		// in-world conversions with no recipe: copper weathers and is scraped back, waxing and unwaxing (the wax is never metal)
-		WeatheringCopper.NEXT_BY_BLOCK.get().forEach((block, next) -> addTwoWay(conversions, block, next));
-		HoneycombItem.WAXABLES.get().forEach((block, waxed) -> addTwoWay(conversions, block, waxed));
+		BuiltInRegistries.BLOCK.getDataMap(NeoForgeDataMaps.OXIDIZABLES).forEach((key, oxidizable) ->
+				addTwoWay(conversions, BuiltInRegistries.BLOCK.get(key), oxidizable.nextOxidationStage()));
+		BuiltInRegistries.BLOCK.getDataMap(NeoForgeDataMaps.WAXABLES).forEach((key, waxable) ->
+				addTwoWay(conversions, BuiltInRegistries.BLOCK.get(key), waxable.waxed()));
 
 		if (!unreadable.isEmpty())
 		{

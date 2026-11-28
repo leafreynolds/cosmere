@@ -9,7 +9,7 @@ import leaf.cosmere.aviar.common.items.PatjisFruitItem;
 import leaf.cosmere.common.properties.PropTypes;
 import leaf.cosmere.common.registration.impl.ItemDeferredRegister;
 import leaf.cosmere.common.registration.impl.ItemRegistryObject;
-import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 public class AviarItems
 {
@@ -20,7 +20,7 @@ public class AviarItems
 
 
 	//Eggs
-	public static final ItemRegistryObject<ForgeSpawnEggItem> AVIAR_BIRD_EGG = ITEMS.registerSpawnEgg(AviarEntityTypes.AVIAR_ENTITY, 0x6c482f, 0x8a1a08);
+	public static final ItemRegistryObject<DeferredSpawnEggItem> AVIAR_BIRD_EGG = ITEMS.registerSpawnEgg(AviarEntityTypes.AVIAR_ENTITY, 0x6c482f, 0x8a1a08);
 
 
 }

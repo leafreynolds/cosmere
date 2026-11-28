@@ -15,7 +15,7 @@ public class TShovelItem extends ShovelItem implements IHasMetalType
 
 	public TShovelItem(Metals.MetalType metalType, float pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties)
 	{
-		super(metalType, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+		super(metalType, pProperties.attributes(ShovelItem.createAttributes(metalType, pAttackDamageModifier, pAttackSpeedModifier)));
 		this.metalType = metalType;
 	}
 

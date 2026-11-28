@@ -6,7 +6,6 @@ package leaf.cosmere.tools.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import leaf.cosmere.tools.common.CosmereTools;
 import net.minecraft.data.PackOutput;
 
 //

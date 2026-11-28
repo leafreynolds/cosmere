@@ -13,7 +13,9 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.utils.MiscHelper;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.core.BlockPos;
+import leaf.cosmere.sandmastery.common.diem.trial.DiemTrials;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -44,14 +46,20 @@ public class MasteryPlatform extends SandmasteryManifestation
 		return false;
 	}
 
-	private void setBlockIfAir(Level level, BlockPos pos, BlockState state)
+	private void setBlockIfAir(LivingEntity living, BlockPos pos, BlockState state)
 	{
+		Level level = living.level();
 		Block block = level.getBlockState(pos).getBlock();
 		if (block != Blocks.AIR && block != SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock())
 		{
 			return;
 		}
 		level.setBlockAndUpdate(pos, state);
+
+		if (living instanceof ServerPlayer player)
+		{
+			DiemTrials.onSandPlaced(player, pos);
+		}
 	}
 
 	protected boolean performEffectServer(ISpiritweb data)
@@ -59,7 +67,6 @@ public class MasteryPlatform extends SandmasteryManifestation
 		SpiritwebCapability playerSpiritweb = (SpiritwebCapability) data;
 		SandmasterySpiritwebSubmodule submodule = (SandmasterySpiritwebSubmodule) playerSpiritweb.getSubmodule(Manifestations.ManifestationTypes.SANDMASTERY);
 		LivingEntity living = data.getLiving();
-		Level level = living.level();
 		BlockPos pos = living.blockPosition().below();
 		BlockState state = SandmasteryBlocks.TEMPORARY_SAND_BLOCK.getBlock().defaultBlockState();
 		int size = getMode(data) / 2;
@@ -70,7 +77,7 @@ public class MasteryPlatform extends SandmasteryManifestation
 			for (int z = -size; z <= size; z++)
 			{
 				pos = pos.offset(0, 0, 1);
-				setBlockIfAir(level, pos, state);
+				setBlockIfAir(living, pos, state);
 			}
 			pos = pos.offset(0, 0, -(size * 2) - 1);
 		}

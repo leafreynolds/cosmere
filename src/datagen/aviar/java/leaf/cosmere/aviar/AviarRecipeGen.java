@@ -6,19 +6,19 @@ package leaf.cosmere.aviar;
 
 import leaf.cosmere.BaseRecipeProvider;
 import leaf.cosmere.aviar.common.Aviar;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class AviarRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public AviarRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
+	public AviarRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
 	{
-		super(output, existingFileHelper, Aviar.MODID);
+		super(output, registries, Aviar.MODID);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class AviarRecipeGen extends BaseRecipeProvider implements IConditionBuil
 	}
 
 	@Override
-	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	protected void addRecipes(RecipeOutput output)
 	{
 	}
 

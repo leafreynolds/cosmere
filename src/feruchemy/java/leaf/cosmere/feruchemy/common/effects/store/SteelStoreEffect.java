@@ -19,11 +19,11 @@ public class SteelStoreEffect extends FeruchemyEffectBase
 		this.addAttributeModifier(
 				Attributes.ATTACK_SPEED,
 				-0.1F,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
 		this.addAttributeModifier(
 				Attributes.MOVEMENT_SPEED,
 				-0.15F,
-				AttributeModifier.Operation.MULTIPLY_TOTAL);
+				AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 	}
 }

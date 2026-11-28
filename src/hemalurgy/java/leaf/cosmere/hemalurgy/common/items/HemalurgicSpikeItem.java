@@ -4,8 +4,6 @@
 
 package leaf.cosmere.hemalurgy.common.items;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.api.Manifestations;
@@ -14,70 +12,58 @@ import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.items.ChargeableMetalCurioItem;
 import leaf.cosmere.hemalurgy.common.Hemalurgy;
-import leaf.cosmere.hemalurgy.common.config.HemalurgyConfigs;
-import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
+import leaf.cosmere.hemalurgy.common.capabilities.HemalurgyItemCapabilities;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import top.theillusivec4.curios.api.CuriosApi;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Predicate;
-
-import static leaf.cosmere.common.registry.CosmereDamageTypesRegistry.SPIKED;
 
 //Other ideas?
 //Spike Guns?
 //https://wob.coppermind.net/events/390-stuttgart-signing/#e12677
 
-@Mod.EventBusSubscriber(modid = Hemalurgy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Hemalurgy.MODID)
 public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHemalurgicInfo
 {
 	/**
 	 * Modifiers applied when the item is in the mainhand of a user. copied from sword item
 	 */
-	private final Multimap<Attribute, AttributeModifier> attributeModifiers;
+	private static final ItemAttributeModifiers SPIKE_ATTRIBUTE_MODIFIERS = ItemAttributeModifiers.builder()
+			//todo decide on damage
+			.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 2f + 1f, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+			.add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.4f, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+			.build();
 
 	public HemalurgicSpikeItem(Metals.MetalType metalType)
 	{
 		super(metalType);
-
-		//todo decide on damage
-		float attackDamage = 2f + 1f;//tier.getAttackDamage();
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION));
-		builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.4f, AttributeModifier.Operation.ADDITION));
-		this.attributeModifiers = builder.build();
 	}
 
 	@Override
 	public boolean canUnequip(SlotContext context, ItemStack stack)
 	{
-		boolean hasBindingCurse = EnchantmentHelper.hasBindingCurse(stack);
-		return (!hasBindingCurse || (context.entity() instanceof Player player && player.isCreative()));
+		return SpikeCurioLogic.canUnequip(context, stack);
 	}
 
 
@@ -85,60 +71,23 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 	 * generate new map of attributes for when used as a curio item.
 	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack)
+	public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation location, ItemStack stack)
 	{
-		Multimap<Attribute, AttributeModifier> attributeModifiers = LinkedHashMultimap.create();
-
-		Metals.MetalType metalType = getMetalType();
-		if (stack.getItem() instanceof IHemalurgicInfo hemalurgicInfo)
-		{
-			//add hemalurgic attributes, if any.
-			hemalurgicInfo.getHemalurgicAttributes(attributeModifiers, stack, metalType);
-
-            // add spiritweb buffs, if any
-            UUID hemalurgicIdentity = getHemalurgicIdentity(stack);
-            if (hemalurgicIdentity != null)
-            {
-                int spiritwebIntegrity = -1;
-                if (slotContext.identifier().equals("linchpin"))
-                {
-                    // linchpin always gives a bonus (+3 default)
-                    spiritwebIntegrity += HemalurgyConfigs.SERVER.LINCHPIN_SPIKE_SPIRITWEB_BONUS.get();
-                    Manifestation aPewter = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", Metals.MetalType.PEWTER.getName()));
-                    if (aPewter != null && attributeModifiers.containsKey(aPewter.getAttribute()))
-                    {
-                        // pewter gives an additional bonus (+3 default)
-                        spiritwebIntegrity += HemalurgyConfigs.SERVER.ALLOMANTIC_PEWTER_SPIRITWEB_BONUS.get();
-                    }
-                    Manifestation fGold = CosmereAPI.manifestationRegistry().getValue((new ResourceLocation("feruchemy", Metals.MetalType.GOLD.getName())));
-                    if (fGold != null && attributeModifiers.containsKey(fGold.getAttribute()))
-                    {
-                        // f-gold gives an extra bonus (+6 default)
-                        spiritwebIntegrity += HemalurgyConfigs.SERVER.FERUCHEMICAL_GOLD_SPIRITWEB_BONUS.get();
-                    }
-                }
-
-                attributeModifiers.put(HemalurgyAttributes.SPIRITWEB_INTEGRITY.getAttribute(),
-                        new AttributeModifier(
-                                hemalurgicIdentity,
-                                "Spiritweb Integrity",
-                                spiritwebIntegrity,
-                                AttributeModifier.Operation.ADDITION
-                        ));
-            }
-		}
-
-
-		return attributeModifiers;
+		return SpikeCurioLogic.getAttributeModifiers(this, slotContext, stack);
 	}
 
 	@Override
 	public float getMaxChargeModifier()
 	{
 		//spikes are only about a quarter as effective at holding charges.
-		//really we should change how much power a spike can steal as well,
-		//todo power stolen is adjusted by attribute stored in metal.
 		return (0.5f / 9f);
+	}
+
+	//stolen powers shrink feruchemical capacity
+	@Override
+	public int getMaxCharge(ItemStack stack)
+	{
+		return scaleMaxChargeByInvestiture(stack, getBaseMaxCharge(stack));
 	}
 
 	@Override
@@ -197,7 +146,7 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 							case STEEL, BRONZE, CADMIUM, ELECTRUM ->
 							{
 								ItemStack allomancySpike = new ItemStack(this);
-								Manifestation allomancyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("allomancy", stealType.getName()));
+								Manifestation allomancyMani = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("allomancy", stealType.getName()));
 								if (allomancyMani != null)
 								{
 									Invest(allomancySpike, allomancyMani, 7, UUID.randomUUID());
@@ -208,7 +157,7 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 							case PEWTER, BRASS, BENDALLOY, GOLD ->
 							{
 								ItemStack feruchemySpike = new ItemStack(this);
-								Manifestation feruchemyMani = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", stealType.getName()));
+								Manifestation feruchemyMani = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("feruchemy", stealType.getName()));
 								if (feruchemyMani != null)
 								{
 									Invest(feruchemySpike, feruchemyMani, 7, UUID.randomUUID());
@@ -279,10 +228,9 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, context, tooltip, flagIn);
 
 		// no extra info if there isn't any
 		if (getHemalurgicIdentity(stack) == null)
@@ -308,29 +256,17 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 			SpiritwebCapability.get(playerEntity).ifPresent(iSpiritweb ->
 			{
 				ItemStack itemstack = playerEntity.getMainHandItem();
-				if (itemstack.getItem() instanceof HemalurgicSpikeItem spikeItem)
+				//any spike-capable item counts, not just spike items
+				IHemalurgicInfo spike = HemalurgyItemCapabilities.getSpike(itemstack);
+				if (spike != null)
 				{
 					//entity was killed by a spike
 					//pass in killed entity for the item to figure out what to do
-					spikeItem.killedEntity(itemstack, playerEntity, event.getEntity());
+					spike.killedEntity(itemstack, playerEntity, event.getEntity());
 				}
 
 			});
 		}
-	}
-
-	public void killedEntity(ItemStack stack, Player playerEntity, LivingEntity entityKilled)
-	{
-		//https://wob.coppermind.net/events/332/#e9569
-
-		// do nothing if an identity exists and doesn't match
-		if (!matchHemalurgicIdentity(stack, entityKilled.getUUID()))
-		{
-			return;
-		}
-
-		// ensure we set the stolen identity
-		stealFromSpiritweb(stack, getMetalType(), playerEntity, entityKilled);
 	}
 
 	@Override
@@ -343,90 +279,22 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 	 * Gets a map of item attribute modifiers, used by damage when used as melee weapon.
 	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack)
+	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		switch (equipmentSlot)
-		{
-			case MAINHAND:
-			case OFFHAND:
-				return this.attributeModifiers;
-			case FEET:
-			case LEGS:
-			case CHEST:
-			case HEAD:
-				break;
-		}
-
-
-		return super.getAttributeModifiers(equipmentSlot, stack);
+		return SPIKE_ATTRIBUTE_MODIFIERS;
 	}
 
 	@Override
 	public boolean canEquip(SlotContext slotContext, ItemStack stack)
 	{
-		//do not allow players to wear two spikes of the same metal empowered by the same killed entity UUID
-		if (slotContext.entity() instanceof Player player)
-		{
-			final UUID stackWeWantToEquipUUID = getHemalurgicIdentity(stack);
-
-			HemalurgicSpikeItem item = (HemalurgicSpikeItem) stack.getItem();
-			Metals.MetalType stackMetal = item.getMetalType();
-
-			if (stackWeWantToEquipUUID != null)
-			{
-				Predicate<ItemStack> spikePredicate = stackToFind ->
-				{
-					final boolean isSpike = stackToFind.getItem() instanceof HemalurgicSpikeItem;
-
-					if (!isSpike)
-					{
-						return false;
-					}
-
-					final HemalurgicSpikeItem foundSpikeItem = (HemalurgicSpikeItem) stackToFind.getItem();
-					final UUID foundSpikeUUID = getHemalurgicIdentity(stackToFind);
-
-					final boolean matchingSpikeIdentity = foundSpikeItem.getMetalType() == getMetalType()
-							&& foundSpikeUUID != null
-							&& foundSpikeUUID.compareTo(stackWeWantToEquipUUID) == 0;
-
-					Metals.MetalType testStackMetal = foundSpikeItem.getMetalType();
-					final boolean onlyOneIronAllowed = stackMetal == Metals.MetalType.IRON && stackMetal == testStackMetal;
-
-					return matchingSpikeIdentity || onlyOneIronAllowed;
-				};
-
-
-				final LazyOptional<ICuriosItemHandler> curiosInventory = CuriosApi.getCuriosInventory(player);
-
-				if (!curiosInventory.isPresent())
-				{
-					return false;
-				}
-
-				ICuriosItemHandler curiosInv = curiosInventory.resolve().get();
-
-				return curiosInv.findFirstCurio(spikePredicate).isEmpty();
-			}
-		}
-		return true;
+		return SpikeCurioLogic.canEquip(this, slotContext, stack);
 	}
 
 
 	@Override
 	public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack)
 	{
-		//todo better logic.
-		boolean isEquipping = prevStack == null || stack.getItem() != prevStack.getItem();
-
-		if (isEquipping)
-		{
-			//then do hemalurgy spike logic
-			//hurt the user
-			//spiritweb attributes are handled in metalmind
-			slotContext.entity().hurt(SPIKED.source(slotContext.entity().level()), 4);
-		}
-
+		SpikeCurioLogic.onEquip(slotContext, prevStack, stack);
 	}
 
 	@Override
@@ -434,11 +302,6 @@ public class HemalurgicSpikeItem extends ChargeableMetalCurioItem implements IHe
 	{
 		super.onUnequip(slotContext, newStack, stack);
 
-		//only damage if removing the spike. We can ignore replacing the spike with another spike.
-		boolean isUnequipping = newStack.isEmpty() || !newStack.is(stack.getItem());
-		if (isUnequipping)
-		{
-			slotContext.entity().hurt(SPIKED.source(slotContext.entity().level()), 4);
-		}
+		SpikeCurioLogic.onUnequip(slotContext, newStack, stack);
 	}
 }

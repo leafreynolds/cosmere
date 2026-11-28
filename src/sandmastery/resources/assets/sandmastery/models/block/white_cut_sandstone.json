@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "sandmastery:block/white_sandstone_top",
+    "side": "sandmastery:block/white_cut_sandstone"
+  }
+}

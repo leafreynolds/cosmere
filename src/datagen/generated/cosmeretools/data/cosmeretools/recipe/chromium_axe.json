@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "axe",
+  "key": {
+    "X": {
+      "tag": "c:ingots/chromium"
+    },
+    "Y": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "XX",
+    "XY",
+    " Y"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmeretools:chromium_axe"
+  }
+}

@@ -1,7 +1,6 @@
 package leaf.cosmere.client.gui;
 
 import leaf.cosmere.api.Manifestations;
-import net.minecraft.client.gui.screens.Screen;
 
 import java.util.HashMap;
 import java.util.function.Supplier;

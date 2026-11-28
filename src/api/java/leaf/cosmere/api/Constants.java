@@ -17,13 +17,15 @@ public class Constants
 	public static class Resources
 	{
 
-		public static final ResourceLocation JEI = new ResourceLocation(CosmereAPI.COSMERE_MODID, "jei");
-		public static final ResourceLocation JEI_FERUCHEMY = new ResourceLocation("feruchemy", "jei");
-		public static final ResourceLocation JEI_HEMALURGY = new ResourceLocation("hemalurgy", "jei");
-		public static final ResourceLocation SPIRITWEB_CAP = new ResourceLocation(CosmereAPI.COSMERE_MODID, "spiritweb");
-		public static final ResourceLocation ROSHAR_CAP = new ResourceLocation("surgebinding", "roshar");
-		public static final ResourceLocation SCADRIAL_CAP = new ResourceLocation("allomancy", "scadrial");
-		public static final ResourceLocation HEMALURGY_WORLD_CAP = new ResourceLocation("hemalurgy", "world_cap");
+		public static final ResourceLocation JEI = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "jei");
+		public static final ResourceLocation JEI_ALLOMANCY = ResourceLocation.fromNamespaceAndPath("allomancy", "jei");
+		public static final ResourceLocation JEI_FERUCHEMY = ResourceLocation.fromNamespaceAndPath("feruchemy", "jei");
+		public static final ResourceLocation JEI_HEMALURGY = ResourceLocation.fromNamespaceAndPath("hemalurgy", "jei");
+		public static final ResourceLocation JEI_SANDMASTERY = ResourceLocation.fromNamespaceAndPath("sandmastery", "jei");
+		public static final ResourceLocation SPIRITWEB_CAP = ResourceLocation.fromNamespaceAndPath(CosmereAPI.COSMERE_MODID, "spiritweb");
+		public static final ResourceLocation ROSHAR_CAP = ResourceLocation.fromNamespaceAndPath("surgebinding", "roshar");
+		public static final ResourceLocation SCADRIAL_CAP = ResourceLocation.fromNamespaceAndPath("allomancy", "scadrial");
+		public static final ResourceLocation HEMALURGY_WORLD_CAP = ResourceLocation.fromNamespaceAndPath("hemalurgy", "world_cap");
 	}
 
 	public static class Suffix
@@ -78,8 +80,8 @@ public class Constants
 
 	public static class Strings
 	{
-		public static final String KEYS_CATEGORY = "keys.cosmere.main";
-		public static final String KEYS_ACTIVATE_CATEGORY = "keys.cosmere.activators";
+		public static final String KEYS_CATEGORY = "category.keys.cosmere.main";
+		public static final String KEYS_ACTIVATE_CATEGORY = "category.keys.cosmere.activators";
 
 		//keybind builder
 		public static final String KEY_ALLOMANCY = "key.cosmere.allomancy.";
@@ -105,6 +107,7 @@ public class Constants
 		public static final String KEY_ALLOMANCY_SOOTHE = "key.cosmere.allomancy.soothe";
 		public static final String KEY_ALLOMANCY_RIOT = "key.cosmere.allomancy.riot";
 
+		public static final String KEYS_SURGEBINDING_CATEGORY = "category.keys.surgebinding.main";
 		public static final String KEY_SHARDBLADE = "key.cosmere.stormlight.shardblade";
 		public static final String KEY_REQUEST_STORMLIGHT = "key.cosmere.stormlight.request_stormlight";
 		public static final String KEY_DISPATCH_STORMLIGHT = "key.cosmere.stormlight.dispatch_stormlight";

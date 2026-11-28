@@ -7,7 +7,7 @@ package leaf.cosmere.surgebinding.client.render;
 import leaf.cosmere.surgebinding.client.render.model.*;
 import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class SurgebindingLayerDefinitions
 {

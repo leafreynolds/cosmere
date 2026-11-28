@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "surgebinding:topaz"
+  },
+  "result": {
+    "count": 1,
+    "id": "surgebinding:cut_topaz_large"
+  }
+}

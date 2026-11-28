@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "X": {
+      "item": "cosmere:steel_ingot"
+    },
+    "Y": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "XX",
+    "YY",
+    "YY"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cosmere:metalworking_table"
+  }
+}

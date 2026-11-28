@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class SandSpreaderScreen extends AbstractContainerScreen<SandSpreaderMenu>
 {
-	final ResourceLocation resourceLocation = new ResourceLocation(Sandmastery.MODID, "textures/gui/sand_spreader.png");
+	final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(Sandmastery.MODID, "textures/gui/sand_spreader.png");
 
 	public SandSpreaderScreen(SandSpreaderMenu pMenu, Inventory pPlayerInventory, Component pTitle)
 	{
@@ -38,7 +38,7 @@ public class SandSpreaderScreen extends AbstractContainerScreen<SandSpreaderMenu
 	@Override
 	public void render(GuiGraphics pPoseStack, int mouseX, int mouseY, float delta)
 	{
-		renderBackground(pPoseStack);
+		renderBackground(pPoseStack, mouseX, mouseY, delta);
 		super.render(pPoseStack, mouseX, mouseY, delta);
 		renderTooltip(pPoseStack, mouseX, mouseY);
 	}

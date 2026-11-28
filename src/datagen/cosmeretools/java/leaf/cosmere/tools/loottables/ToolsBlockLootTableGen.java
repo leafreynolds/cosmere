@@ -7,10 +7,16 @@ package leaf.cosmere.tools.loottables;
 import leaf.cosmere.api.providers.IBlockProvider;
 import leaf.cosmere.loottables.BaseBlockLootTables;
 import leaf.cosmere.tools.common.registries.ToolsBlocks;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 
 public class ToolsBlockLootTableGen extends BaseBlockLootTables
 {
+	public ToolsBlockLootTableGen(HolderLookup.Provider provider)
+	{
+		super(provider);
+	}
+
 	@Override
 	protected void generate()
 	{

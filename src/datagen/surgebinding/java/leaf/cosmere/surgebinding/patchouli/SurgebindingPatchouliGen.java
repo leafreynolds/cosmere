@@ -6,7 +6,6 @@ package leaf.cosmere.surgebinding.patchouli;
 
 import leaf.cosmere.api.CosmereAPI;
 import leaf.cosmere.patchouli.data.PatchouliProvider;
-import leaf.cosmere.surgebinding.common.Surgebinding;
 import net.minecraft.data.PackOutput;
 
 //

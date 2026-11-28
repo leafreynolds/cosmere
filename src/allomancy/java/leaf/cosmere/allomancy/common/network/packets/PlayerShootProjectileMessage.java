@@ -1,54 +1,53 @@
 /*
- * File updated ~ 8 - 10 - 2022 ~ Leaf
+ * File updated ~ 2026-04-25 ~ Leaf (ported 1.20.1 Forge -> 1.21.1 NeoForge)
  */
 
 package leaf.cosmere.allomancy.common.network.packets;
 
+import io.netty.buffer.ByteBuf;
+import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.allomancy.common.registries.AllomancyItems;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.network.ICosmerePacket;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class PlayerShootProjectileMessage implements ICosmerePacket
+public record PlayerShootProjectileMessage() implements ICosmerePacket
 {
-	public PlayerShootProjectileMessage()
+	public static final CustomPacketPayload.Type<PlayerShootProjectileMessage> TYPE =
+			new CustomPacketPayload.Type<>(Allomancy.rl("player_shoot_projectile"));
+
+	public static final StreamCodec<ByteBuf, PlayerShootProjectileMessage> STREAM_CODEC =
+			StreamCodec.unit(new PlayerShootProjectileMessage());
+
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type()
 	{
-		//empty
+		return TYPE;
 	}
 
 	@Override
-	public void encode(FriendlyByteBuf buf)
+	public void handle(IPayloadContext context)
 	{
-		//empty
-	}
-
-	public static PlayerShootProjectileMessage decode(FriendlyByteBuf buf)
-	{
-		return new PlayerShootProjectileMessage();
-	}
-
-	@Override
-	public void handle(NetworkEvent.Context context)
-	{
-		ServerPlayer player = context.getSender();
-		MinecraftServer server = player.getServer();
-		server.submitAsync(() -> SpiritwebCapability.get(player).ifPresent((cap) ->
+		if (!(context.player() instanceof ServerPlayer sender))
 		{
-			for (int i = 0; i < player.getInventory().getContainerSize(); i++)
-			{
-				ItemStack bag = player.getInventory().getItem(i);
-				if (!bag.isEmpty() && bag.is(AllomancyItems.COIN_POUCH.get()))
+			return;
+		}
+		context.enqueueWork(() ->
+				SpiritwebCapability.get(sender).ifPresent((cap) ->
 				{
-					AllomancyItems.COIN_POUCH.get().shoot(player, bag);
-
-					return;
-				}
-			}
-		}));
+					for (int i = 0; i < sender.getInventory().getContainerSize(); i++)
+					{
+						ItemStack bag = sender.getInventory().getItem(i);
+						if (!bag.isEmpty() && bag.is(AllomancyItems.COIN_POUCH.get()))
+						{
+							AllomancyItems.COIN_POUCH.get().shoot(sender, bag);
+							return;
+						}
+					}
+				}));
 	}
-
 }

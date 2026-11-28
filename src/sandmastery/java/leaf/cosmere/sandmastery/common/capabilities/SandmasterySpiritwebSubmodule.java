@@ -13,20 +13,25 @@ import leaf.cosmere.api.helpers.PlayerHelper;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.Keybindings;
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.client.gui.SpiritwebRegistry;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.sandmastery.client.SandmasteryKeybindings;
 import leaf.cosmere.sandmastery.client.gui.SandmasterySpiritwebMenu;
 import leaf.cosmere.sandmastery.common.Sandmastery;
 import leaf.cosmere.sandmastery.common.config.SandmasteryConfigs;
+import leaf.cosmere.sandmastery.common.diem.DiemRank;
 import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
 import leaf.cosmere.sandmastery.common.network.packets.SyncMasteryBindsMessage;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryAttributes;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryEffects;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import leaf.cosmere.sandmastery.common.utils.SandmasteryConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -34,13 +39,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 {
@@ -50,8 +55,15 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private int launchCooldown = 0;
 	private int launchesSinceLeftGround = 0;
 	private int numRibbonsInUse = 0;
+	// charge spent but not yet a whole layer, not saved so a relog forgives under one layer
+	private int chargeDebt = 0;
 
 	private int hotkeyFlags = 0;
+
+	private int diemRank = DiemRank.UNTESTED;
+	private int masteryXp = 0;
+	private long trialCooldownUntil = 0;
+	private boolean preDiemSave = false;
 
 	public static SandmasterySpiritwebSubmodule get(ISpiritweb data)
 	{
@@ -69,22 +81,22 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 					: 0;
 
 			final int elevateFlag =
-					SandmasteryKeybindings.SANDMASTERY_ELEVATE.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_ELEVATE)
 					? SandmasteryConstants.ELEVATE_HOTKEY_FLAG
 					: 0;
 
 			final int launchFlag =
-					SandmasteryKeybindings.SANDMASTERY_LAUNCH.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_LAUNCH)
 					? SandmasteryConstants.LAUNCH_HOTKEY_FLAG
 					: 0;
 
 			final int projectileFlag =
-					SandmasteryKeybindings.SANDMASTERY_PROJECTILE.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_PROJECTILE)
 					? SandmasteryConstants.PROJECTILE_HOTKEY_FLAG
 					: 0;
 
 			final int platformFlag =
-					SandmasteryKeybindings.SANDMASTERY_PLATFORM.isDown()
+					PowerKeyMappings.isDown(SandmasteryKeybindings.SANDMASTERY_PLATFORM)
 					? SandmasteryConstants.PLATFORM_HOTKEY_FLAG
 					: 0;
 
@@ -148,6 +160,10 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		launchesSinceLeftGround = sandmasteryTag.getInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG);
 		hotkeyFlags = sandmasteryTag.getInt(SandmasteryConstants.HOTKEY_TAG);
 		numRibbonsInUse = sandmasteryTag.getInt(SandmasteryConstants.RIBBONS_IN_USE_TAG);
+		preDiemSave = !sandmasteryTag.contains(SandmasteryConstants.DIEM_RANK_TAG);
+		diemRank = preDiemSave ? DiemRank.UNTESTED : sandmasteryTag.getInt(SandmasteryConstants.DIEM_RANK_TAG);
+		masteryXp = sandmasteryTag.getInt(SandmasteryConstants.MASTERY_XP_TAG);
+		trialCooldownUntil = sandmasteryTag.getLong(SandmasteryConstants.TRIAL_COOLDOWN_TAG);
 	}
 
 	@Override
@@ -166,6 +182,9 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		sandmasteryTag.putInt(SandmasteryConstants.LAUNCHES_SINCE_FLOOR_TAG, launchesSinceLeftGround);
 		sandmasteryTag.putInt(SandmasteryConstants.HOTKEY_TAG, hotkeyFlags);
 		sandmasteryTag.putInt(SandmasteryConstants.RIBBONS_IN_USE_TAG, numRibbonsInUse);
+		sandmasteryTag.putInt(SandmasteryConstants.DIEM_RANK_TAG, diemRank);
+		sandmasteryTag.putInt(SandmasteryConstants.MASTERY_XP_TAG, masteryXp);
+		sandmasteryTag.putLong(SandmasteryConstants.TRIAL_COOLDOWN_TAG, trialCooldownUntil);
 
 		//this shouldn't be necessary, as the spiritweb tag should already have the reference
 		//but we are hunting a null ref, so maybe something gets unassigned somewhere
@@ -214,16 +233,105 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	@OnlyIn(Dist.CLIENT)
 	public void registerMenu()
 	{
-		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(spiritweb -> {
+		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent(spiritweb ->
+		{
 			if (spiritweb.hasManifestationOfType(Manifestations.ManifestationTypes.SANDMASTERY))
+			{
 				SpiritwebRegistry.getInstance().register(Manifestations.ManifestationTypes.SANDMASTERY, SandmasterySpiritwebMenu::new);
+			}
 		});
 	}
 
 	@Override
-	public List<Attribute> getPowers()
+	public List<Holder<Attribute>> getPowers()
 	{
-		return List.of(SandmasteryAttributes.RIBBONS.get());
+		return List.of(SandmasteryAttributes.RIBBONS.getHolder());
+	}
+
+	@Nullable
+	public DiemRank getDiemRank()
+	{
+		return DiemRank.byId(diemRank);
+	}
+
+	public void setDiemRank(@Nullable DiemRank rank)
+	{
+		diemRank = rank == null ? DiemRank.UNTESTED : rank.ordinal();
+	}
+
+	public boolean isPreDiemSave()
+	{
+		return preDiemSave;
+	}
+
+	// pre-Diem saves had random ribbons: back to untested with no ribbons, overmastery or ribbons in use
+	public void resetForDiem(ISpiritweb spiritweb)
+	{
+		AttributeInstance ribbons = spiritweb.getLiving().getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
+		if (ribbons != null)
+		{
+			ribbons.setBaseValue(0);
+			ribbons.removeModifier(SandmasteryAttributes.OVERMASTERY_ID);
+			ribbons.removeModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_ID);
+		}
+		for (var power : SandmasteryManifestations.SANDMASTERY_POWERS.values())
+		{
+			spiritweb.setMode(power.get(), 0);
+		}
+		numRibbonsInUse = 0;
+		diemRank = DiemRank.UNTESTED;
+		masteryXp = 0;
+		preDiemSave = false;
+	}
+
+	public int getMasteryXp()
+	{
+		return masteryXp;
+	}
+
+	public void setMasteryXp(int masteryXp)
+	{
+		this.masteryXp = Math.max(0, masteryXp);
+	}
+
+	public long getTrialCooldownUntil()
+	{
+		return trialCooldownUntil;
+	}
+
+	public void setTrialCooldownUntil(long gameTime)
+	{
+		trialCooldownUntil = gameTime;
+	}
+
+	// ribbons that count for Diem ranks: the base plus permanent overmastery gains, but not the temporary overmastered lockout
+	public static int getRankRibbons(LivingEntity living)
+	{
+		AttributeInstance ribbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
+		if (ribbons == null)
+		{
+			return 0;
+		}
+		double total = ribbons.getBaseValue();
+		for (ResourceLocation id : List.of(SandmasteryAttributes.OVERMASTERY_ID, SandmasteryAttributes.OVERMASTERY_SECONDARY_ID))
+		{
+			AttributeModifier modifier = ribbons.getModifier(id);
+			if (modifier != null)
+			{
+				total += modifier.amount();
+			}
+		}
+		return (int) total;
+	}
+
+	public int getChargeDebt()
+	{
+		return chargeDebt;
+	}
+
+	public void setChargeDebt(int chargeDebt)
+	{
+		this.chargeDebt = chargeDebt;
 	}
 
 	public int getHydrationLevel()
@@ -252,7 +360,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	private static void overmaster(ISpiritweb data)
 	{
 		final LivingEntity living = data.getLiving();
-		AttributeInstance availableRibbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getAttribute());
+		AttributeInstance availableRibbons = living.getAttribute(SandmasteryAttributes.RIBBONS.getHolder());
 
 		if (availableRibbons == null)
 		{
@@ -262,7 +370,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 		int ribbons = (int) availableRibbons.getBaseValue();
 		int gainedRibbons;
 
-		if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_UUID) == null)
+		if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_ID) == null)
 		{
 			if (ribbons < 5)
 			{
@@ -281,11 +389,11 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 				gainedRibbons = 6;
 			}
 
-			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_UUID);
+			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_ID);
 
 			availableRibbons.addPermanentModifier(overmasteryAttributeModifier);
 		}
-		else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID) == null)
+		else if (availableRibbons.getModifier(SandmasteryAttributes.OVERMASTERY_SECONDARY_ID) == null)
 		{
 			if (ribbons < 5)
 			{
@@ -304,7 +412,7 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 				gainedRibbons = 4;
 			}
 
-			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_SECONDARY_UUID);
+			final AttributeModifier overmasteryAttributeModifier = getOvermasteryAttributeModifier(gainedRibbons, SandmasteryAttributes.OVERMASTERY_SECONDARY_ID);
 			availableRibbons.addPermanentModifier(overmasteryAttributeModifier);
 		}
 
@@ -315,15 +423,13 @@ public class SandmasterySpiritwebSubmodule implements ISpiritwebSubmodule
 	}
 
 	@NotNull
-	private static AttributeModifier getOvermasteryAttributeModifier(int gainedRibbons, UUID uuid)
+	private static AttributeModifier getOvermasteryAttributeModifier(int gainedRibbons, ResourceLocation id)
 	{
-		final AttributeModifier overmasteryAttributeModifier = new AttributeModifier(
-				uuid,
-				String.format("%s - gained %s ribbons: %s", "Overmastery", gainedRibbons, uuid),
+		return new AttributeModifier(
+				id,
 				gainedRibbons,
-				AttributeModifier.Operation.ADDITION
+				AttributeModifier.Operation.ADD_VALUE
 		);
-		return overmasteryAttributeModifier;
 	}
 
 	public void tickProjectileCooldown()

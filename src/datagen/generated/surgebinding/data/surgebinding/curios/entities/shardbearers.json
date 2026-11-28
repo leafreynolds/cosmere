@@ -1,9 +1,9 @@
 {
   "entities": [
-    "minecraft:armor_stand",
-    "minecraft:pillager",
     "minecraft:player",
+    "minecraft:armor_stand",
     "minecraft:vindicator",
+    "minecraft:pillager",
     "minecraft:villager"
   ],
   "slots": [

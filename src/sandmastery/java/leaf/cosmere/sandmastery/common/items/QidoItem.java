@@ -78,7 +78,7 @@ public class QidoItem extends ChargeableItemBase
 			{
 				SpiritwebCapability data = (SpiritwebCapability) spiritweb;
 
-				if (data.getLiving().getAttribute(SandmasteryAttributes.RIBBONS.get()).getBaseValue() < 1)
+				if (data.getLiving().getAttribute(SandmasteryAttributes.RIBBONS.getHolder()).getBaseValue() < 1)
 				{
 					return;
 				}
@@ -145,7 +145,7 @@ public class QidoItem extends ChargeableItemBase
 	}
 
 	@Override
-	public int getUseDuration(ItemStack pStack)
+	public int getUseDuration(ItemStack pStack, LivingEntity entity)
 	{
 		return 16000;
 	}

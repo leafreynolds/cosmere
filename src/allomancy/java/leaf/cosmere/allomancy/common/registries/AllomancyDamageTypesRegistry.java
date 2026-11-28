@@ -2,7 +2,6 @@ package leaf.cosmere.allomancy.common.registries;
 
 import leaf.cosmere.allomancy.common.Allomancy;
 import leaf.cosmere.api.text.IHasTranslationKey;
-import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.registry.CosmereDamageTypesRegistry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;

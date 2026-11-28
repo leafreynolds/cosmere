@@ -14,11 +14,11 @@ import leaf.cosmere.hemalurgy.common.Hemalurgy;
 import leaf.cosmere.hemalurgy.common.items.HemalurgicSpikeItem;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyAttributes;
 import leaf.cosmere.hemalurgy.common.registries.HemalurgyEntityTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import static leaf.cosmere.api.Constants.Strings.CONTAINED_POWERS_FOUND;
 
@@ -55,7 +55,7 @@ public class HemalurgyEngLangGen extends LanguageProvider
 	private void addItemsAndBlocks()
 	{
 		//Items and Blocks
-		for (Item item : ForgeRegistries.ITEMS.getValues())
+		for (Item item : BuiltInRegistries.ITEM)
 		{
 			final ResourceLocation registryName = RegistryHelper.get(item);
 			if (registryName.getNamespace().contentEquals(Hemalurgy.MODID))
@@ -94,9 +94,9 @@ public class HemalurgyEngLangGen extends LanguageProvider
 
 	private void addAttributes()
 	{
-        final String descriptionId = HemalurgyAttributes.SPIRITWEB_INTEGRITY.getAttribute().getDescriptionId();
-        String translation = descriptionId.split("\\.")[1];
-        add(descriptionId, "Spiritweb Integrity");
+		final String descriptionId = HemalurgyAttributes.SPIRITWEB_INTEGRITY.getAttribute().getDescriptionId();
+		String translation = descriptionId.split("\\.")[1];
+		add(descriptionId, "Spiritweb Integrity");
 	}
 
 	private void addPatchouli()

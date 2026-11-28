@@ -1,14 +1,14 @@
 /*
- * File updated ~ 14 - 1 - 2025 ~ Leaf
- * File updated ~ 12 - 7 - 2025 ~ Soar
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.api;
 
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -171,6 +171,12 @@ public class Roshar
 		}
 
 		@Override
+		public TagKey<Block> getIncorrectBlocksForDrops()
+		{
+			//can't return null here or it breaks the block tag map
+			return BlockTags.INCORRECT_FOR_WOODEN_TOOL;
+		}
+
 		public int getLevel()
 		{
 			return 0;
@@ -316,7 +322,7 @@ public class Roshar
 
 		public boolean hasBlade()
 		{
-			if(this == RadiantOrder.BONDSMITH)
+			if (this == RadiantOrder.BONDSMITH)
 			{
 				return false;
 			}
@@ -357,6 +363,7 @@ public class Roshar
 
 			};
 		}
+
 		public String getSprenOrBondsmith(int spren)
 		{
 			return this.getSprenOrBondsmith(spren, true);
@@ -364,7 +371,7 @@ public class Roshar
 
 		public String getSprenOrBondsmith(int spren, boolean newSpren)
 		{
-			if(this.equals(RadiantOrder.BONDSMITH)  || (spren >= 1 && spren <= 3))
+			if (this.equals(RadiantOrder.BONDSMITH) || (spren >= 1 && spren <= 3))
 			{
 				if (newSpren)
 				{

@@ -1,5 +1,5 @@
 /*
- * File updated ~ 6 - 2 - 2025 ~ Leaf
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.surgebinding.client.render.renderer;
@@ -21,20 +21,22 @@ import net.minecraft.world.item.ItemStack;
 
 public class ShardbladeItemRenderer extends BlockEntityWithoutLevelRenderer
 {
+	private final EntityModelSet entityModels;
 	private ShardbladeModel shardbladeModel;
 
 
 	public ShardbladeItemRenderer(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet)
 	{
 		super(pBlockEntityRenderDispatcher, pEntityModelSet);
-		shardbladeModel = new ShardbladeModel(this.entityModelSet.bakeLayer(SurgebindingLayerDefinitions.SHARDBLADE));
+		this.entityModels = pEntityModelSet;
+		shardbladeModel = new ShardbladeModel(this.entityModels.bakeLayer(SurgebindingLayerDefinitions.SHARDBLADE));
 	}
 
 	@Override
 	public void onResourceManagerReload(ResourceManager pResourceManager)
 	{
 		super.onResourceManagerReload(pResourceManager);
-		shardbladeModel = new ShardbladeModel(this.entityModelSet.bakeLayer(SurgebindingLayerDefinitions.SHARDBLADE));
+		shardbladeModel = new ShardbladeModel(this.entityModels.bakeLayer(SurgebindingLayerDefinitions.SHARDBLADE));
 	}
 
 	public void renderByItem(ItemStack itemStack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int pPackedLight, int pPackedOverlay)
@@ -47,7 +49,7 @@ public class ShardbladeItemRenderer extends BlockEntityWithoutLevelRenderer
 		poseStack.pushPose();
 		poseStack.scale(1.0F, -1.0F, -1.0F);
 		VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect(bufferSource, this.shardbladeModel.renderType(ShardbladeModel.TEXTURE), false, itemStack.hasFoil());
-		this.shardbladeModel.renderToBuffer(poseStack, vertexconsumer1, pPackedLight, pPackedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.shardbladeModel.renderToBuffer(poseStack, vertexconsumer1, pPackedLight, pPackedOverlay, -1);
 		poseStack.popPose();
 
 	}

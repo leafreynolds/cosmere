@@ -1,5 +1,5 @@
 /*
- * File updated ~ 28 - 2 - 2023 ~ Leaf
+ * File updated ~ 22 - 8 - 2026 ~ Leaf
  */
 
 package leaf.cosmere.common.charge;
@@ -12,13 +12,14 @@ import leaf.cosmere.api.helpers.StackNBTHelper;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.config.CosmereConfigs;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +28,11 @@ import java.util.UUID;
 public interface IChargeable
 {
 	default int getMaxCharge(ItemStack itemStack)
+	{
+		return getBaseMaxCharge(itemStack);
+	}
+
+	default int getBaseMaxCharge(ItemStack itemStack)
 	{
 		final int maxCharge = CosmereConfigs.SERVER_CONFIG.CHARGEABLE_MAX_VALUE.get();
 		return Mth.floor(maxCharge * getMaxChargeModifier()) * itemStack.getCount();
@@ -53,22 +59,29 @@ public interface IChargeable
 		}
 	}
 
+	default Metals.MetalType getChargeMetalType(ItemStack itemStack)
+	{
+		return itemStack.getItem() instanceof IHasMetalType hasMetalType ? hasMetalType.getMetalType() : null;
+	}
+
 	default boolean trySetAttunedPlayer(ItemStack itemStack, Player entity)
 	{
-		if (itemStack.getItem() instanceof IHasMetalType metalType)
+		Metals.MetalType metalType = getChargeMetalType(itemStack);
+		if (metalType != null)
 		{
 			UUID attunedPlayerID = getAttunedPlayer(itemStack);
 			UUID playerID = entity.getUUID();
 			boolean noAttunedPlayer = attunedPlayerID == null;
 
 			//only allow unkeyed metalminds if they aren't aluminum
-			if (noAttunedPlayer && metalType.getMetalType() != Metals.MetalType.ALUMINUM)
+			if (noAttunedPlayer && metalType != Metals.MetalType.ALUMINUM)
 			{
 				//No attuned player! Check to see whether they are storing identity
 				boolean isStoringIdentity = false;
 				{
 					Optional<ISpiritweb> data = SpiritwebCapability.get(entity).filter(obj -> true);
-					if (data.isPresent()) {
+					if (data.isPresent())
+					{
 						isStoringIdentity = Manifestations.ManifestationTypes.FERUCHEMY.getManifestation(Metals.MetalType.ALUMINUM.getID()).getMode(data.get()) > 0;
 					}
 				}
@@ -126,7 +139,7 @@ public interface IChargeable
 	default boolean getPlayerIsAttuned(ItemStack itemStack, Player entity)
 	{
 		//todo clean up
-		final MobEffect aluminumStoreEffect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName()));
+		final Holder<MobEffect> aluminumStoreEffect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath("feruchemy", "storing_" + Metals.MetalType.ALUMINUM.getName())).get();
 		assert aluminumStoreEffect != null;
 		MobEffectInstance storingIdentityEffect = entity.getEffect(aluminumStoreEffect);
 		boolean noIdentityPlayer = storingIdentityEffect != null && storingIdentityEffect.getDuration() > 0;

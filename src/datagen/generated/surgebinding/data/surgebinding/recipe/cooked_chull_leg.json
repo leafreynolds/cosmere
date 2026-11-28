@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "surgebinding:raw_chull_leg"
+  },
+  "result": {
+    "count": 1,
+    "id": "surgebinding:cooked_chull_leg"
+  }
+}

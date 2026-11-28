@@ -1,14 +1,17 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
 
 package leaf.cosmere.surgebinding.common.capabilities;
 
 import leaf.cosmere.api.math.MathHelper;
 import leaf.cosmere.surgebinding.client.render.model.DynamicShardplateModel;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
-public class DynamicShardplateData extends RadiantShardData implements ICapabilityProvider, INBTSerializable<CompoundTag>, IShardplateDynamicData
+public class DynamicShardplateData extends RadiantShardData implements INBTSerializable<CompoundTag>, IShardplateDynamicData
 {
 	private String headID;
 	private String faceplateID;
@@ -30,39 +33,59 @@ public class DynamicShardplateData extends RadiantShardData implements ICapabili
 	private boolean colored;
 
 
-
 	public DynamicShardplateData(ItemStack stack)
 	{
 		super(stack);
 
-		this.headID = "head" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_HELMET_IDS);
-		this.faceplateID = "faceplate" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_FACEPLATE_IDS);
-		this.bodyID = "body" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_TORSO_IDS);
-		this.kamaID = "kama" + MathHelper.randomInt(0, DynamicShardplateModel.TOTAL_KAMA_IDS);
-
-		this.rightArmID = "right_armmain" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_ARM_IDS);
-		this.rightPaldronsID = "right_paldron" + MathHelper.randomInt(0, DynamicShardplateModel.TOTAL_PALDRON_IDS);
-		this.rightLegID = "rightleg_top" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_LEG_IDS);
-		this.rightBootOutsideID = "rightboot_outside" + MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_BOOT_IDS);
-		this.rightBootTipID = rightBootOutsideID.replace("outside","tip");
-
-		this.leftArmID = rightArmID.replace("right","left");
-		this.leftPaldronsID = rightPaldronsID.replace("right","left");
-		this.leftLegID = rightLegID.replace("right","left");
-		this.leftBootOutsideID = rightBootOutsideID.replace("right","left");
-		this.leftBootTipID = rightBootTipID.replace("right","left");
+		//set default, so both server/client read the same unseeded plate till it's randomised and set
+		setAppearance(1, 1, 1, 0, 1, 0, 1, 1);
 
 		this.colored = true;
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	protected void randomiseAppearance()
+	{
+		setAppearance(
+				MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_HELMET_IDS),
+				MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_FACEPLATE_IDS),
+				MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_TORSO_IDS),
+				MathHelper.randomInt(0, DynamicShardplateModel.TOTAL_KAMA_IDS),
+				MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_ARM_IDS),
+				MathHelper.randomInt(0, DynamicShardplateModel.TOTAL_PALDRON_IDS),
+				MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_LEG_IDS),
+				MathHelper.randomInt(1, DynamicShardplateModel.TOTAL_BOOT_IDS));
+	}
+
+	//the left side always mirrors the right, so only the right are ever chosen
+	private void setAppearance(int head, int faceplate, int body, int kama, int arm, int paldron, int leg, int boot)
+	{
+		this.headID = "head" + head;
+		this.faceplateID = "faceplate" + faceplate;
+		this.bodyID = "body" + body;
+		this.kamaID = "kama" + kama;
+
+		this.rightArmID = "right_armmain" + arm;
+		this.rightPaldronsID = "right_paldron" + paldron;
+		this.rightLegID = "rightleg_top" + leg;
+		this.rightBootOutsideID = "rightboot_outside" + boot;
+		this.rightBootTipID = rightBootOutsideID.replace("outside", "tip");
+
+		this.leftArmID = rightArmID.replace("right", "left");
+		this.leftPaldronsID = rightPaldronsID.replace("right", "left");
+		this.leftLegID = rightLegID.replace("right", "left");
+		this.leftBootOutsideID = rightBootOutsideID.replace("right", "left");
+		this.leftBootTipID = rightBootTipID.replace("right", "left");
+	}
+
+	@Override
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 
-		super.serializeNBT();
+		super.serializeNBT(provider);
 
 		super.nbt.putString("headID", this.headID);
-		super.nbt.putString("faceplateID" , this.faceplateID);
+		super.nbt.putString("faceplateID", this.faceplateID);
 		super.nbt.putString("bodyID", this.bodyID);
 		super.nbt.putString("kamaID", this.kamaID);
 
@@ -84,9 +107,9 @@ public class DynamicShardplateData extends RadiantShardData implements ICapabili
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag compoundTag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
-		super.deserializeNBT(compoundTag);
+		super.deserializeNBT(provider, compoundTag);
 
 		this.headID = nbt.getString("headID");
 		this.faceplateID = nbt.getString("faceplateID");
@@ -113,10 +136,12 @@ public class DynamicShardplateData extends RadiantShardData implements ICapabili
 	{
 		return headID;
 	}
+
 	public String getFaceplateID()
 	{
 		return faceplateID;
 	}
+
 	public String getBodyID()
 	{
 		return bodyID;

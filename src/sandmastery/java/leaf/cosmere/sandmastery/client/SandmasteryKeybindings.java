@@ -1,17 +1,15 @@
 package leaf.cosmere.sandmastery.client;
 
+import leaf.cosmere.client.PowerKeyMappings;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.glfw.GLFW;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
-import static leaf.cosmere.api.Constants.Strings.KEYS_CATEGORY;
-import static leaf.cosmere.sandmastery.common.utils.SandmasteryConstants.*;
-
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Sandmastery.MODID)
 public class SandmasteryKeybindings
 {
 
@@ -23,9 +21,9 @@ public class SandmasteryKeybindings
 	@SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event)
 	{
-		event.register(SANDMASTERY_LAUNCH = new KeyMapping(KEY_SANDMASTERY_LAUNCH, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-		event.register(SANDMASTERY_ELEVATE = new KeyMapping(KEY_SANDMASTERY_ELEVATE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-		event.register(SANDMASTERY_PROJECTILE = new KeyMapping(KEY_SANDMASTERY_PROJECTILE, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
-		event.register(SANDMASTERY_PLATFORM = new KeyMapping(KEY_SANDMASTERY_PLATFORM, GLFW.GLFW_KEY_UNKNOWN, KEYS_CATEGORY));
+		SANDMASTERY_LAUNCH = PowerKeyMappings.register(event, SandmasteryManifestations.KEY_LAUNCH);
+		SANDMASTERY_ELEVATE = PowerKeyMappings.register(event, SandmasteryManifestations.KEY_ELEVATE);
+		SANDMASTERY_PROJECTILE = PowerKeyMappings.register(event, SandmasteryManifestations.KEY_PROJECTILE);
+		SANDMASTERY_PLATFORM = PowerKeyMappings.register(event, SandmasteryManifestations.KEY_PLATFORM);
 	}
 }

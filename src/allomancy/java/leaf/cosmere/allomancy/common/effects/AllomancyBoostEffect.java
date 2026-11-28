@@ -24,9 +24,9 @@ public class AllomancyBoostEffect extends CosmereEffect
 			if (metalType.hasAssociatedManifestation() && AllomancyAttributes.ALLOMANCY_ATTRIBUTES.containsKey(metalType))
 			{
 				addAttributeModifier(
-						AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).get(),
+						AllomancyAttributes.ALLOMANCY_ATTRIBUTES.get(metalType).getHolder(),
 						0.223,// todo config - Need to figure out an alternative to config boost amount //AllomancyConfigs.SERVER.boostAmount.get(),
-						AttributeModifier.Operation.MULTIPLY_TOTAL);
+						AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 				//todo boost other manifestation types
 
 			}

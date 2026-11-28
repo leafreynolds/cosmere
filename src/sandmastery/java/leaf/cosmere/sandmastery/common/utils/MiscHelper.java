@@ -6,6 +6,7 @@ package leaf.cosmere.sandmastery.common.utils;
 
 import leaf.cosmere.api.Constants;
 import leaf.cosmere.api.CosmereAPI;
+import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.helpers.CompoundNBTHelper;
 import leaf.cosmere.api.helpers.StackNBTHelper;
@@ -19,6 +20,8 @@ import leaf.cosmere.sandmastery.common.registries.SandmasteryBlocks;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryDimensions;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,11 +35,12 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +63,7 @@ public class MiscHelper
 			{
 				boolean concealed = false;
 				final AttributeMap targetAttributes = target.getAttributes();
-				final Attribute cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.get();
+				final Holder<Attribute> cognitiveConcealmentAttr = AttributesRegistry.COGNITIVE_CONCEALMENT.getHolder();
 				if (targetAttributes.hasAttribute(cognitiveConcealmentAttr))
 				{
 					concealed = targetAttributes.getValue(cognitiveConcealmentAttr) > 0;
@@ -79,9 +83,9 @@ public class MiscHelper
 						continue; //sandmastery uses charged sand, and as such won't charge it either
 					}
 
-					boolean test = targetSpiritweb.hasManifestation(manifestation);
-					boolean test2 = manifestation.isActive(targetSpiritweb);
-					Manifestation test3 = manifestation;
+					// boolean test = targetSpiritweb.hasManifestation(manifestation);
+					// boolean test2 = manifestation.isActive(targetSpiritweb);
+					// Manifestation test3 = manifestation;
 
 					//if target is not a player and has any manifestations at all
 					if (!targetIsPlayer && targetSpiritweb.hasManifestation(manifestation) && includeMobs)
@@ -110,7 +114,7 @@ public class MiscHelper
 		int currCharge = StackNBTHelper.getInt(stack, Constants.NBT.CHARGE_LEVEL, 0);
 		if (checkIfNearbyInvestiture((ServerLevel) level, pEntity.blockPosition(), false))
 		{
-			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + 10, 0, maxCharge));
+			StackNBTHelper.setInt(stack, Constants.NBT.CHARGE_LEVEL, Mth.clamp(currCharge + Math.max(1, maxCharge / 10), 0, maxCharge));
 		}
 	}
 
@@ -176,13 +180,13 @@ public class MiscHelper
 			return 0;
 		}
 
-		if (stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem())
+		if (stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.asItem())
 		{
-			return stack.getCount() * 10;
+			return stack.getCount() * SandmasteryConstants.CHARGE_PER_SAND_LAYER;
 		}
-		if (stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem())
+		if (stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND.asItem())
 		{
-			return stack.getCount() * 80;
+			return stack.getCount() * SandmasteryConstants.CHARGE_PER_SAND_LAYER * 8;
 		}
 		if (stack.getItem() == SandmasteryItems.SAND_JAR_ITEM.asItem())
 		{
@@ -192,6 +196,25 @@ public class MiscHelper
 		{
 			return 0;
 		}
+	}
+
+
+	public static boolean isSandBlock(ItemStack stack)
+	{
+		return stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND.asItem()
+				|| stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND.asItem();
+	}
+
+	public static boolean isSandLayer(ItemStack stack)
+	{
+		return stack.getItem() == SandmasteryBlocks.TALDAIN_BLACK_SAND_LAYER.asItem()
+				|| stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.asItem();
+	}
+
+	public static boolean isSandCharged(ItemStack stack)
+	{
+		return stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND.asItem()
+				|| stack.getItem() == SandmasteryBlocks.TALDAIN_WHITE_SAND_LAYER.asItem();
 	}
 
 	public static String intToAbbreviatedStr(int num)
@@ -267,7 +290,7 @@ public class MiscHelper
 
 	public static ArrayList<Vec3> vectorsBetweenPositions(Vec3 pos1, Vec3 pos2, int steps)
 	{
-		ArrayList array = new ArrayList<Vec3>();
+		ArrayList<Vec3> array = new ArrayList<Vec3>();
 		double xDist = pos1.x - pos2.x;
 		double yDist = pos1.y - pos2.y;
 		double zDist = pos1.z - pos2.z;
@@ -284,5 +307,26 @@ public class MiscHelper
 		}
 
 		return array;
+	}
+
+	public static boolean touchesLiquid(BlockGetter pLevel, BlockPos pPos, BlockState state)
+	{
+		boolean touching = false;
+		BlockPos.MutableBlockPos blockpos$mutableblockpos = pPos.mutable();
+		for (Direction direction : EnumUtils.DIRECTIONS)
+		{
+			BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+			if (direction != Direction.DOWN || state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos))
+			{
+				blockpos$mutableblockpos.setWithOffset(pPos, direction);
+				blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
+				if (state.canBeHydrated(pLevel, pPos, blockstate.getFluidState(), blockpos$mutableblockpos) && !blockstate.isFaceSturdy(pLevel, pPos, direction.getOpposite()))
+				{
+					touching = true;
+					break;
+				}
+			}
+		}
+		return touching;
 	}
 }

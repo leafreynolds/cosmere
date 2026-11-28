@@ -51,7 +51,7 @@ public class ManifestationsArgumentType implements ArgumentType<Manifestation>
 	public Manifestation parse(StringReader reader) throws CommandSyntaxException
 	{
 		ResourceLocation location = ResourceLocation.read(reader);
-		Manifestation manifestation = CosmereAPI.manifestationRegistry().getValue(location);
+		Manifestation manifestation = CosmereAPI.manifestationRegistry().getHolder(location).get().value();
 		if (manifestation != null)
 		{
 			return manifestation;

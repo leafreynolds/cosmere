@@ -5,13 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "mixins.cosmere.feruchemy.refmap.json",
   "mixins": [
-    "EntityMixin",
-    "IForgeEntityMixin",
-    "LivingEntityMixin",
-    "PlayerMixin"
+    "EntityMixin"
   ],
   "client": [
-    "EntityRenderDispatcherMixin",
     "GameRendererMixin"
   ],
   "injectors": {

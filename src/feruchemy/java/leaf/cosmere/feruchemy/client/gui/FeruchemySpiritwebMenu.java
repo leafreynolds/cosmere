@@ -15,8 +15,8 @@ import org.lwjgl.opengl.GL11;
 
 public class FeruchemySpiritwebMenu extends CosmereScreen
 {
-	private static final ResourceLocation BORDER_LOCATION = new ResourceLocation(Feruchemy.MODID, "textures/gui/feru_border.png");
-	private static final ResourceLocation SINGLE_BORDER_LOCATION = new ResourceLocation(Feruchemy.MODID, "textures/gui/feru_single_border.png");
+	private static final ResourceLocation BORDER_LOCATION = ResourceLocation.fromNamespaceAndPath(Feruchemy.MODID, "textures/gui/feru_border.png");
+	private static final ResourceLocation SINGLE_BORDER_LOCATION = ResourceLocation.fromNamespaceAndPath(Feruchemy.MODID, "textures/gui/feru_single_border.png");
 	private static final float QUARTER_PI_F = (float) (Math.PI/2.f);
 	private int distance;
 	final LocalPlayer player;

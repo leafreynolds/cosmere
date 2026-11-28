@@ -7,6 +7,7 @@ package leaf.cosmere.sandmastery.common.registries;
 import leaf.cosmere.common.registration.impl.EntityTypeDeferredRegister;
 import leaf.cosmere.common.registration.impl.EntityTypeRegistryObject;
 import leaf.cosmere.sandmastery.common.Sandmastery;
+import leaf.cosmere.sandmastery.common.entities.DiemTargetEntity;
 import leaf.cosmere.sandmastery.common.entities.SandProjectile;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -23,4 +24,12 @@ public class SandmasteryEntityTypes
 							.clientTrackingRange(4)
 							.updateInterval(20));
 
+	public static final EntityTypeRegistryObject<DiemTargetEntity> DIEM_TARGET =
+			ENTITY_TYPES.register(
+					"diem_target",
+					EntityType.Builder.<DiemTargetEntity>of(DiemTargetEntity::new, MobCategory.MISC)
+							.sized(1F, 1F)
+							.noSave()
+							.clientTrackingRange(8)
+							.updateInterval(1));
 }

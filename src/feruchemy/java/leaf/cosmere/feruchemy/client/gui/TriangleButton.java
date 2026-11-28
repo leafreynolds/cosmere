@@ -1,17 +1,14 @@
 package leaf.cosmere.feruchemy.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import leaf.cosmere.api.IHasMetalType;
 import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.client.gui.GuiUtils;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.common.Cosmere;
 import leaf.cosmere.common.network.packets.ChangeManifestationModeMessage;
 import leaf.cosmere.feruchemy.common.manifestation.FeruchemyManifestation;
@@ -23,6 +20,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
@@ -33,6 +31,8 @@ import java.util.function.Consumer;
 
 public class TriangleButton extends Button
 {
+	private static final float MAX_TEXT_WIDTH_RATIO = (2.0f * (float) Math.sqrt(2)) / 3.0f;
+
 	private final ResourceLocation iconLocation;
 	private final List<GuiUtils.CachedQuad> cachedQuads = new ArrayList<>();
 	private final Consumer<Manifestation> manifestationConsumer;
@@ -42,9 +42,16 @@ public class TriangleButton extends Button
 	private final boolean hasManifestation;
 	private final float rotation;
 
+	// Animation
+	private static final float ANIMATION_SPEED = 0.8f;
+	private static final float HOVER_SHIFT_FACTOR = 2.75f;
+	private float animationProgress = 0.f;
+
 	public TriangleButton(int pX, int pY, int distance, float rotation, Metals.MetalType metal, ISpiritweb spiritweb, Consumer<Manifestation> maniConsumer)
 	{
-		super(pX, pY, distance, distance, CommonComponents.EMPTY, (button) -> { }, DEFAULT_NARRATION);
+		super(pX, pY, distance, distance, CommonComponents.EMPTY, (button) ->
+		{
+		}, DEFAULT_NARRATION);
 		this.rotation = rotation;
 		this.spiritweb = spiritweb;
 		this.metal = metal;
@@ -64,7 +71,7 @@ public class TriangleButton extends Button
 		}
 
 		stringBuilder.append(".png");
-		iconLocation = new ResourceLocation(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
+		iconLocation = ResourceLocation.fromNamespaceAndPath(manifestation.getRegistryName().getNamespace(), stringBuilder.toString());
 
 		manifestationConsumer = maniConsumer;
 
@@ -76,7 +83,9 @@ public class TriangleButton extends Button
 	{
 		boolean isHover = isMouseOver(pMouseX, pMouseY);
 		renderTriangle(pGuiGraphics, isHover);
-		renderIcon(pGuiGraphics);
+		renderIcon(pGuiGraphics, isHover, pPartialTick);
+		renderText(pGuiGraphics, isHover);
+		renderInfoText(pGuiGraphics, isHover);
 	}
 
 	@Override
@@ -123,9 +132,13 @@ public class TriangleButton extends Button
 			else
 			{
 				if (pButton == 0)
+				{
 					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, 1));
+				}
 				else
+				{
 					Cosmere.packetHandler().sendToServer(new ChangeManifestationModeMessage(manifestation, -1));
+				}
 			}
 
 			playDownSound(Minecraft.getInstance().getSoundManager());
@@ -152,9 +165,13 @@ public class TriangleButton extends Button
 			int mode = feruchemyManifestation.getMode(spiritweb);
 			float intensity = 0;
 			if (mode < 0)
-				intensity = Math.min(Math.abs(mode) * (1f/16f), 1.0f);
+			{
+				intensity = Math.min(Math.abs(mode) * (1f / 16f), 1.0f);
+			}
 			if (mode > 0)
-				intensity = Math.min(Math.abs(mode) * (1f/5f), 1.0f);
+			{
+				intensity = Math.min(Math.abs(mode) * (1f / 5f), 1.0f);
+			}
 
 			if (mode > 0)
 			{
@@ -174,9 +191,7 @@ public class TriangleButton extends Button
 		Matrix4f pose = pGuiGraphics.pose().last().pose();
 
 		Tesselator tess = Tesselator.getInstance();
-		BufferBuilder buf = tess.getBuilder();
-
-		buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+		BufferBuilder buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
 		for (GuiUtils.CachedQuad quad : cachedQuads)
 		{
@@ -184,20 +199,20 @@ public class TriangleButton extends Button
 			float py = quad.py();
 			float size = quad.size();
 
-			buf.vertex(pose, px, py, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py + size, 0).color(color.getRGB()).endVertex();
-			buf.vertex(pose, px + size, py, 0).color(color.getRGB()).endVertex();
+			buf.addVertex(pose, px, py, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py + size, 0).setColor(color.getRGB());
+			buf.addVertex(pose, px + size, py, 0).setColor(color.getRGB());
 		}
 
-		tess.end();
+		BufferUploader.drawWithShader(buf.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
 
-	private void renderIcon(GuiGraphics pGuiGraphics)
+	private void renderIcon(GuiGraphics pGuiGraphics, boolean isHovered, float partialTick)
 	{
 		Color metalColor = metal.getColor();
-		float r = metalColor.getRed()/255.f, g = metalColor.getGreen()/255.f, b = metalColor.getBlue()/255.f;
+		float r = metalColor.getRed() / 255.f, g = metalColor.getGreen() / 255.f, b = metalColor.getBlue() / 255.f;
 
 		if (!hasManifestation)
 		{
@@ -223,8 +238,33 @@ public class TriangleButton extends Button
 		float cos = (float) Math.cos(rotation);
 		float sin = (float) Math.sin(rotation);
 
-		int posX = (int) (centerX + localCx * cos - localCy * sin) - iconSize / 2;
-		int posY = (int) (centerY + localCx * sin + localCy * cos) - iconSize / 2;
+		float cx = centerX + localCx * cos - localCy * sin;
+		float cy = centerY + localCx * sin + localCy * cos;
+
+		if (hasManifestation)
+		{
+			float screenCx = Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2.0f;
+			float screenCy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2.0f;
+			float dx = cx - screenCx;
+			float dy = cy - screenCy;
+
+			boolean isAtium = metal == Metals.MetalType.ATIUM;
+			if (isAtium)
+			{
+				dx = -dx;
+				dy = -dy;
+			}
+
+			float targetProgress = isHovered ? 1.f : 0.f;
+			animationProgress = Mth.lerp(ANIMATION_SPEED * partialTick, animationProgress, targetProgress);
+
+			float shift = getHoverShift(HOVER_SHIFT_FACTOR - (isAtium ? 0.45f : 0.f), width, dx, dy) * animationProgress;
+			cx += (int) Math.copySign(shift, dx);
+			cy += (int) Math.copySign(shift, dy);
+		}
+
+		int posX = (int) cx - iconSize / 2;
+		int posY = (int) cy - iconSize / 2;
 
 		RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
 		pGuiGraphics.blit(iconLocation,
@@ -253,6 +293,141 @@ public class TriangleButton extends Button
 				height);
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	private void renderText(GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (hasManifestation && isHovered)
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = I18n.get("metal.cosmere." + metal.getName()).toUpperCase();
+
+			float baseScale = (width*0.125f) / font.lineHeight; // 0.125f from font.lineHeight/width
+			float maxAllowedWidth = width * MAX_TEXT_WIDTH_RATIO * baseScale;
+			float scale = Math.min(baseScale, maxAllowedWidth / font.width(text));
+			int textWidth = (int)(font.width(text) * scale);
+			int textHeight = (int)(font.lineHeight * scale);
+
+			float radius = width / 2.0f;
+			float cX = getX() + radius;
+			float cY = getY() + radius;
+
+			float localCx = radius / 3.0f;
+			float localCy = radius / 3.0f;
+			float cos = (float) Math.cos(rotation);
+			float sin = (float) Math.sin(rotation);
+
+			float textX = cX + localCx * cos - localCy * sin;
+			float textY = cY + localCx * sin + localCy * cos;
+
+			float textAngle = rotation - (float) (Math.PI / 4);
+
+			// normalize to 0-2PI
+			textAngle = textAngle % (float) (Math.PI * 2);
+			if (textAngle < 0)
+			{
+				textAngle += (float) (Math.PI * 2);
+			}
+
+			if (textAngle > Math.PI / 2 && textAngle < 3 * Math.PI / 2)
+			{
+				textAngle -= (float) Math.PI;
+			}
+
+			PoseStack pose = pGuiGraphics.pose();
+			pose.pushPose();
+			pose.translate(textX, textY, 0);
+			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			int alpha = (int) (animationProgress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+
+			GuiUtils.drawScaledString(font, pGuiGraphics, text, -textWidth / 2, -textHeight / 2, scale, textColor, false);
+
+			pose.popPose();
+		}
+	}
+
+	private void renderInfoText(GuiGraphics pGuiGraphics, boolean isHovered)
+	{
+		if (hasManifestation && isHovered)
+		{
+			Font font = Minecraft.getInstance().font;
+			String text = "Empty";
+			int seconds = manifestation.getInvestitureRemaining(spiritweb);
+			int hours = seconds / 3600;
+			int minutes = (seconds % 3600) / 60;
+			seconds = seconds % 60;
+
+			if (hours > 0)
+			{
+				text = String.format("%d:%02d:%02d", hours, minutes, seconds);
+			}
+			else if (minutes > 0)
+			{
+				text = String.format("%d:%02d", minutes, seconds);
+			}
+			else if (seconds > 0)
+			{
+				text = String.format("%02d", seconds);
+			}
+
+			int textWidth = font.width(text);
+			int textHeight = font.lineHeight;
+
+			float scale = (width*0.125f) / font.lineHeight; // 0.125f from font.lineHeight/width
+
+			float radius = width / 2.f;
+			float cX = getX() + radius;
+			float cY = getY() + radius;
+
+			float localCx = radius / 3.f;
+			float localCy = radius / 3.f;
+
+			float cos = (float) Math.cos(rotation);
+			float sin = (float) Math.sin(rotation);
+
+			float baseCx = cX + localCx * cos - localCy * sin;
+			float baseCy = cY + localCx * sin + localCy * cos;
+
+			float screenCx = Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2.f;
+			float screenCy = Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2.f;
+			float dx = baseCx - screenCx;
+			float dy = baseCy - screenCy;
+
+			boolean isAtium = metal == Metals.MetalType.ATIUM;
+			if (isAtium)
+			{
+				dx = -dx;
+				dy = -dy;
+			}
+
+			float textShift = getHoverShift(HOVER_SHIFT_FACTOR - (isAtium ? 0.f : 0.45f), width, dx, dy) * animationProgress;
+			float textX = baseCx + Math.copySign(textShift, dx);
+			float textY = baseCy + Math.copySign(textShift, dy);
+
+			float textAngle = (Math.signum(dx) == Math.signum(dy)) ? (float) -Math.PI / 4 : (float) Math.PI / 4;
+
+			PoseStack pose = pGuiGraphics.pose();
+			pose.pushPose();
+			pose.translate(textX, textY, 0);
+			pose.mulPose(Axis.ZP.rotation(textAngle));
+
+			pose.scale(scale, scale, 1f);
+
+			int alpha = (int) (animationProgress * 255.0f);
+			int rgb = 0xFFFFFF;
+			int textColor = (alpha << 24) | rgb;
+			pGuiGraphics.drawString(font, text, -textWidth / 2, -textHeight / 2, textColor, false);
+
+			pose.popPose();
+		}
+	}
+
+	private float getHoverShift(float factor, int width, float dx, float dy)
+	{
+		return (factor * width - (Math.abs(dx) + Math.abs(dy))) / 2.0f;
 	}
 
 	private void calculateVertexes(float posX, float posY, float size, float rotation)

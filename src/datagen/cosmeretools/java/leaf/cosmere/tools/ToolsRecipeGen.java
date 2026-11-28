@@ -10,19 +10,19 @@ import leaf.cosmere.api.EnumUtils;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.tools.common.CosmereTools;
 import leaf.cosmere.tools.common.registries.ToolsItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public class ToolsRecipeGen extends BaseRecipeProvider implements IConditionBuilder
 {
-	public ToolsRecipeGen(PackOutput output, ExistingFileHelper existingFileHelper)
+	public ToolsRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
 	{
-		super(output, existingFileHelper, CosmereTools.MODID);
+		super(output, lookupProvider, CosmereTools.MODID);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class ToolsRecipeGen extends BaseRecipeProvider implements IConditionBuil
 	}
 
 	@Override
-	protected void addRecipes(Consumer<FinishedRecipe> consumer)
+	protected void addRecipes(RecipeOutput output)
 	{
 
 		for (Metals.MetalType metalType : EnumUtils.METAL_TYPES)
@@ -42,14 +42,14 @@ public class ToolsRecipeGen extends BaseRecipeProvider implements IConditionBuil
 				continue;
 			}
 
-			addPickaxeRecipe(consumer, ToolsItems.METAL_PICKAXES.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
-			addShovelRecipe(consumer, ToolsItems.METAL_SHOVEL.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
-			addAxeRecipe(consumer, ToolsItems.METAL_AXES.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
-			addSwordRecipe(consumer, ToolsItems.METAL_SWORDS.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
-			addHoeRecipe(consumer, ToolsItems.METAL_HOE.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
+			addPickaxeRecipe(output, ToolsItems.METAL_PICKAXES.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
+			addShovelRecipe(output, ToolsItems.METAL_SHOVEL.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
+			addAxeRecipe(output, ToolsItems.METAL_AXES.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
+			addSwordRecipe(output, ToolsItems.METAL_SWORDS.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
+			addHoeRecipe(output, ToolsItems.METAL_HOE.get(metalType), CosmereTags.Items.METAL_INGOT_TAGS.get(metalType));
 
 			addArmorRecipes(
-					consumer,
+					output,
 					CosmereTags.Items.METAL_INGOT_TAGS.get(metalType),
 					ToolsItems.METAL_HELMETS.get(metalType),
 					ToolsItems.METAL_CHESTPLATES.get(metalType),

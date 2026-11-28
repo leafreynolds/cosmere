@@ -3,7 +3,7 @@ package leaf.cosmere.common.registration.impl;
 import leaf.cosmere.api.providers.IItemProvider;
 import leaf.cosmere.common.registration.WrappedRegistryObject;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.Collection;
 public class ItemRegistryObject<ITEM extends Item> extends WrappedRegistryObject<ITEM> implements IItemProvider
 {
 
-	public ItemRegistryObject(RegistryObject<ITEM> registryObject)
+	public ItemRegistryObject(DeferredHolder<? super ITEM, ITEM> registryObject)
 	{
 		super(registryObject);
 	}

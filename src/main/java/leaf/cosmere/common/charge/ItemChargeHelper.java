@@ -10,14 +10,13 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
+import leaf.cosmere.common.cap.item.CosmereItemCapabilities;
 import leaf.cosmere.common.compat.curios.CuriosCompat;
 import leaf.cosmere.common.items.CapWrapper;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.wrapper.EmptyHandler;
-import net.minecraftforge.items.wrapper.PlayerInvWrapper;
+import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
@@ -48,11 +47,11 @@ public class ItemChargeHelper
 		}
 
 
-		LazyOptional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(player);
+		Optional<ICuriosItemHandler> curiosItemHandler = CuriosApi.getCuriosInventory(player);
 		Container acc = null;
-		if (curiosItemHandler.resolve().isPresent())
+		if (curiosItemHandler.isPresent())
 		{
-			 acc = new CapWrapper(curiosItemHandler.resolve().get().getEquippedCurios());
+			 acc = new CapWrapper(curiosItemHandler.get().getEquippedCurios());
 		}
 
 		List<ItemStack> toReturn = (acc != null) ? getChargeableItemStacks(acc) : new ArrayList<>();
@@ -68,7 +67,7 @@ public class ItemChargeHelper
 		{
 			ItemStack stackInSlot = acc.getItem(slot);
 
-			if (!stackInSlot.isEmpty() && stackInSlot.getItem() instanceof IChargeable)
+			if (!stackInSlot.isEmpty() && CosmereItemCapabilities.getChargeable(stackInSlot) != null)
 			{
 				toReturn.add(stackInSlot);
 			}
@@ -96,10 +95,11 @@ public class ItemChargeHelper
 			{
 				continue;
 			}
-			IChargeable chargeItem = (IChargeable) stackInSlot.getItem();
+			IChargeable chargeItem = CosmereItemCapabilities.getChargeable(stackInSlot);
 			if (chargeItem.canGiveChargeToItem(stackInSlot, stack) && chargeItem.getCharge(stackInSlot) > 0)
 			{
-				if (stack.getItem() instanceof IChargeable && !((IChargeable) stack.getItem()).canReceiveChargeFromItem(stack, stackInSlot))
+				IChargeable stackChargeable = CosmereItemCapabilities.getChargeable(stack);
+				if (stackChargeable != null && !stackChargeable.canReceiveChargeFromItem(stack, stackInSlot))
 				{
 					continue;
 				}
@@ -151,7 +151,7 @@ public class ItemChargeHelper
 
 		for (ItemStack stackInSlot : Iterables.concat(items, acc))
 		{
-			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+			IChargeable chargeItemSlot = CosmereItemCapabilities.getChargeable(stackInSlot);
 			boolean storing = adjustValue > 0;
 
 			int slotCharge = chargeItemSlot.getCharge(stackInSlot);
@@ -204,10 +204,11 @@ public class ItemChargeHelper
 			{
 				continue;
 			}
-			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+			IChargeable chargeItemSlot = CosmereItemCapabilities.getChargeable(stackInSlot);
 			if (chargeItemSlot.canGiveChargeToItem(stackInSlot, stack) && chargeItemSlot.getCharge(stackInSlot) > chargeToGet)
 			{
-				if (stack.getItem() instanceof IChargeable && !((IChargeable) stack.getItem()).canReceiveChargeFromItem(stack, stackInSlot))
+				IChargeable stackChargeable = CosmereItemCapabilities.getChargeable(stack);
+				if (stackChargeable != null && !stackChargeable.canReceiveChargeFromItem(stack, stackInSlot))
 				{
 					continue;
 				}
@@ -233,7 +234,7 @@ public class ItemChargeHelper
 
 		for (ItemStack stackInSlot : itemStacksIterable)
 		{
-			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+			IChargeable chargeItemSlot = CosmereItemCapabilities.getChargeable(stackInSlot);
 
 			int received;
 			if (chargeItemSlot.getCharge(stackInSlot) + chargeToSend <= chargeItemSlot.getMaxCharge(stackInSlot))
@@ -271,10 +272,11 @@ public class ItemChargeHelper
 			{
 				continue;
 			}
-			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+			IChargeable chargeItemSlot = CosmereItemCapabilities.getChargeable(stackInSlot);
 			if (chargeItemSlot.canReceiveChargeFromItem(stackInSlot, stack))
 			{
-				if (stack.getItem() instanceof IChargeable && !((IChargeable) stack.getItem()).canGiveChargeToItem(stack, stackInSlot))
+				IChargeable stackChargeable = CosmereItemCapabilities.getChargeable(stack);
+				if (stackChargeable != null && !stackChargeable.canGiveChargeToItem(stack, stackInSlot))
 				{
 					continue;
 				}
@@ -317,10 +319,11 @@ public class ItemChargeHelper
 			{
 				continue;
 			}
-			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+			IChargeable chargeItemSlot = CosmereItemCapabilities.getChargeable(stackInSlot);
 			if (chargeItemSlot.getCharge(stackInSlot) + chargeToSend <= chargeItemSlot.getMaxCharge(stackInSlot) && chargeItemSlot.canReceiveChargeFromItem(stackInSlot, stack))
 			{
-				if (stack.getItem() instanceof IChargeable && !((IChargeable) stack.getItem()).canGiveChargeToItem(stack, stackInSlot))
+				IChargeable stackChargeable = CosmereItemCapabilities.getChargeable(stack);
+				if (stackChargeable != null && !stackChargeable.canGiveChargeToItem(stack, stackInSlot))
 				{
 					continue;
 				}
@@ -376,11 +379,12 @@ public class ItemChargeHelper
 			{
 				continue;
 			}
-			IChargeable chargeItemSlot = (IChargeable) stackInSlot.getItem();
+			IChargeable chargeItemSlot = CosmereItemCapabilities.getChargeable(stackInSlot);
 			int availableCharge = chargeItemSlot.getCharge(stackInSlot);
 			if (chargeItemSlot.canGiveChargeToItem(stackInSlot, stack) && availableCharge > cost)
 			{
-				if (stack.getItem() instanceof IChargeable && !((IChargeable) stack.getItem()).canReceiveChargeFromItem(stack, stackInSlot))
+				IChargeable stackChargeable = CosmereItemCapabilities.getChargeable(stack);
+				if (stackChargeable != null && !stackChargeable.canReceiveChargeFromItem(stack, stackInSlot))
 				{
 					continue;
 				}
@@ -408,7 +412,7 @@ public class ItemChargeHelper
 		discount += unbreaking * 0.05F;
 
 		ChargeDiscountEvent event = new ChargeDiscountEvent(player, discount, tool);
-		MinecraftForge.EVENT_BUS.post(event);
+		neoforged.EVENT_BUS.post(event);
 		discount = event.getDiscount();*/
 
 		return discount;

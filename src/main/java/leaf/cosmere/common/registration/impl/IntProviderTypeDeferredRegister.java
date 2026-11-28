@@ -4,7 +4,7 @@
 
 package leaf.cosmere.common.registration.impl;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import leaf.cosmere.common.registration.WrappedDeferredRegister;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -20,7 +20,7 @@ public class IntProviderTypeDeferredRegister extends WrappedDeferredRegister<Int
 		super(modid, Registries.INT_PROVIDER_TYPE);
 	}
 
-	public <PROVIDER extends IntProvider> IntProviderTypeRegistryObject<PROVIDER> register(String name, Codec<PROVIDER> codec)
+	public <PROVIDER extends IntProvider> IntProviderTypeRegistryObject<PROVIDER> register(String name, MapCodec<PROVIDER> codec)
 	{
 		return register(name, () -> () -> codec);
 	}

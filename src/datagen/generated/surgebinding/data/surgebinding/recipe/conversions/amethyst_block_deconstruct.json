@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "surgebinding:amethyst_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:amethyst_shard"
+  }
+}

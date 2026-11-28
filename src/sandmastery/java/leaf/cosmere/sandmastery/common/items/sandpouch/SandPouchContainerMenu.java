@@ -1,6 +1,11 @@
+/*
+ * File updated ~ 23 - 8 - 2026 ~ Leaf
+ */
+
 package leaf.cosmere.sandmastery.common.items.sandpouch;
 
 import leaf.cosmere.sandmastery.common.items.SandPouchItem;
+import leaf.cosmere.sandmastery.common.registries.SandmasteryDataComponents;
 import leaf.cosmere.sandmastery.common.registries.SandmasteryMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
@@ -8,9 +13,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+
 import org.jetbrains.annotations.NotNull;
 
 public class SandPouchContainerMenu extends AbstractContainerMenu
@@ -21,43 +28,88 @@ public class SandPouchContainerMenu extends AbstractContainerMenu
 		return new SandPouchContainerMenu(windowId, inv, inv.player.getItemInHand(hand));
 	}
 
+	public static final int BUTTON_TOGGLE_COLOUR = 0;
+
 	private final ItemStack pouch;
+	private final boolean clientSide;
+
+	// synced to the client so the screen never reads its own (possibly stale) copy of the pouch stack
+	private final DataSlot showingBlack = DataSlot.standalone();
+	private final DataSlot blackLayers = DataSlot.standalone();
+	private final DataSlot whiteLayers = DataSlot.standalone();
 
 	public SandPouchContainerMenu(int windowId, Inventory playerInv, ItemStack pouch)
 	{
 		super(SandmasteryMenuTypes.SAND_POUCH.get(), windowId);
 		this.pouch = pouch;
+		this.clientSide = playerInv.player.level().isClientSide();
+		addDataSlot(showingBlack);
+		addDataSlot(blackLayers);
+		addDataSlot(whiteLayers);
+		// so the first sync on open already carries real values
+		refreshSyncedData();
 
-		IItemHandlerModifiable pouchInv = SandPouchItem.getPouchInv(pouch);
-
-		int invStart = 0;
+		// always the pouch in the main hand as it is now, never the stack object captured at open time
+		IItemHandlerModifiable pouchInv = new SandpouchItemHandler(() ->
+		{
+			ItemStack held = playerInv.player.getMainHandItem();
+			return held.getItem() instanceof SandPouchItem ? held : ItemStack.EMPTY;
+		});
 
 		// Pouch Slots
-		for (int i = 0; i < 1; ++i)
-		{
-			for (int j = 0; j < 3; ++j)
-			{
-				boolean input = i == 0 && j == 0;
+		addSlot(new SandPouchSlot(pouchInv, 0, 43, 18, true, clientSide));
+		addSlot(new SandPouchSlot(pouchInv, 1, 80, 18, false, clientSide));
+		addSlot(new SandPouchSlot(pouchInv, 2, 98, 18, false, clientSide));
 
-				int k = j + i * 9;
-				addSlot(new SandPouchSlot(pouchInv, k, 8 + j * 18, 18 + i * 18, input));
-			}
-		}
+		// Player inventory
+		for (int row = 0; row < 3; row++)
+			for (int col = 0; col < 9; col++)
+				addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 49 + row * 18));
+		// Hotbar
+		for (int col = 0; col < 9; col++)
+			addSlot(new Slot(playerInv, col, 8 + col * 18, 107));
+	}
 
-		// Player Inventory
-		for (int i = 0; i < 3; ++i)
-		{
-			for (int j = 0; j < 9; ++j)
-			{
-				addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 41 + 17 + (i + invStart) * 18));
-			}
-		}
+	@Override
+	public void broadcastChanges()
+	{
+		refreshSyncedData();
+		super.broadcastChanges();
+	}
 
-		// Player Hotbar
-		for (int i = 0; i < 9; ++i)
+	private void refreshSyncedData()
+	{
+		if (!clientSide)
 		{
-			addSlot(new Slot(playerInv, i, 8 + i * 18, 45 + 17 + (3 + invStart) * 18));
+			SandpouchItemHandler handler = new SandpouchItemHandler(pouch);
+			showingBlack.set(handler.getDisplayingBlackSand() ? 1 : 0);
+			whiteLayers.set(handler.getChargedLayers());
+			blackLayers.set(handler.getTotalLayers() - handler.getChargedLayers());
 		}
+	}
+
+	@Override
+	public boolean clickMenuButton(@NotNull Player player, int id)
+	{
+		// the output slots change under the cursor when the colour flips, so wait until it is empty
+		if (id != BUTTON_TOGGLE_COLOUR || !getCarried().isEmpty())
+		{
+			return false;
+		}
+		pouch.set(SandmasteryDataComponents.DISPLAYING_BLACK_SAND.get(), !new SandpouchItemHandler(pouch).getDisplayingBlackSand());
+		return true;
+	}
+
+	public boolean isShowingBlack()
+	{
+		return showingBlack.get() != 0;
+	}
+
+	// the colour the output slots are not showing has sand, the selected one has none
+	public boolean shouldHighlightToggle()
+	{
+		return isShowingBlack() ? blackLayers.get() <= 0 && whiteLayers.get() > 0
+		                        : whiteLayers.get() <= 0 && blackLayers.get() > 0;
 	}
 
 	@Override
@@ -66,7 +118,7 @@ public class SandPouchContainerMenu extends AbstractContainerMenu
 		ItemStack itemStack = ItemStack.EMPTY;
 
 		// TODO: make shift clicking actually work.. right now it duplicates the crap out of the sand. Commented out in repo until fixed
-//        int maxSlots = SandPouchInventory.size;
+//        int maxSlots = SandpouchItemHandler.SIZE;
 //
 //        Slot slot = this.slots.get(pIndex);
 //        if(slot.hasItem()) {

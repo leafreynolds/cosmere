@@ -5,27 +5,30 @@
 package leaf.cosmere.sandmastery.common.config;
 
 import leaf.cosmere.common.config.ICosmereConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class SandmasteryServerConfig implements ICosmereConfig
 {
 
-	private final ForgeConfigSpec configSpec;
+	private final ModConfigSpec configSpec;
 
-	public final ForgeConfigSpec.IntValue PROJECTILE_COOLDOWN;
-	public final ForgeConfigSpec.DoubleValue HYDRATION_COST_MULTIPLIER;
-	public final ForgeConfigSpec.IntValue CHARGE_COST_MULTIPLIER;
-	public final ForgeConfigSpec.IntValue STARTING_HYDRATION;
-	public final ForgeConfigSpec.IntValue MAX_HYDRATION;
-	public final ForgeConfigSpec.IntValue OVERMASTERY_DURATION;
-	public final ForgeConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
-	public final ForgeConfigSpec.BooleanValue GIVE_QIDO_ON_FIRST_LOGIN;
-	public final ForgeConfigSpec.IntValue QIDO_MAX_FILL;
+	public final ModConfigSpec.IntValue PROJECTILE_COOLDOWN;
+	public final ModConfigSpec.DoubleValue HYDRATION_COST_MULTIPLIER;
+	public final ModConfigSpec.IntValue CHARGE_COST_MULTIPLIER;
+	public final ModConfigSpec.IntValue STARTING_HYDRATION;
+	public final ModConfigSpec.IntValue MAX_HYDRATION;
+	public final ModConfigSpec.IntValue OVERMASTERY_DURATION;
+	public final ModConfigSpec.DoubleValue DEHYDRATION_THRESHOLD;
+	public final ModConfigSpec.BooleanValue GIVE_QIDO_ON_FIRST_LOGIN;
+	public final ModConfigSpec.IntValue QIDO_MAX_FILL;
+	public final ModConfigSpec.DoubleValue DETECTION_TWO_RIBBON_CHANCE;
+	public final ModConfigSpec.IntValue RIBBON_XP_PER_RIBBON;
+	public final ModConfigSpec.IntValue TRIAL_FAIL_COOLDOWN;
 
 	SandmasteryServerConfig()
 	{
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.comment("Sandmastery Config. This config is synced between server and client.").push("sandmastery");
 
 		PROJECTILE_COOLDOWN = builder.comment("How many ticks between projectiles at 1 ribbon allocated in ticks. (1 second = 20 ticks)").defineInRange("projectileCooldown", 100, 24, 1000);
@@ -39,11 +42,17 @@ public class SandmasteryServerConfig implements ICosmereConfig
 
 		OVERMASTERY_DURATION = builder.comment("How long overmastery lasts in minutes").defineInRange("overmasteryDuration", 120, 1, 720);
 
-		DEHYDRATION_THRESHOLD = builder.comment("The threshold at which a player will start to become dehydrated (percentage of max)").defineInRange("dehydrationThreshold", 0.01, 0.1, 100.0);
+		DEHYDRATION_THRESHOLD = builder.comment("The threshold at which a player will start to become dehydrated (percentage of max)").defineInRange("dehydrationThreshold", 0.01, 0.0, 100.0);
 
 		GIVE_QIDO_ON_FIRST_LOGIN = builder.comment("Should the player be given a qido on first login?").define("qidoOnFirstLogin", false);
 
 		QIDO_MAX_FILL = builder.comment("How much hydration should a qido restore in a single fill?").defineInRange("qidoMaxFill", 10000, 1, 1000000);
+
+		DETECTION_TWO_RIBBON_CHANCE = builder.comment("Chance (0-1) that Diem talent detection grants 2 ribbons instead of 1").defineInRange("detectionTwoRibbonChance", 0.5, 0.0, 1.0);
+
+		RIBBON_XP_PER_RIBBON = builder.comment("Mastery xp (charge spent) needed per ribbon already held to grow the next ribbon through practice. A layer of sand is 10 charge.").defineInRange("ribbonXpPerRibbon", 2000, 1, 1000000);
+
+		TRIAL_FAIL_COOLDOWN = builder.comment("Ticks a player must wait before attempting another Diem trial after failing one. 24000 is one Minecraft day.").defineInRange("trialFailCooldown", 24000, 0, 1000000);
 
 		builder.pop();
 		configSpec = builder.build();
@@ -56,7 +65,7 @@ public class SandmasteryServerConfig implements ICosmereConfig
 	}
 
 	@Override
-	public ForgeConfigSpec getConfigSpec()
+	public ModConfigSpec getConfigSpec()
 	{
 		return configSpec;
 	}
@@ -77,5 +86,8 @@ public class SandmasteryServerConfig implements ICosmereConfig
 		MAX_HYDRATION.clearCache();
 		OVERMASTERY_DURATION.clearCache();
 		DEHYDRATION_THRESHOLD.clearCache();
+		DETECTION_TWO_RIBBON_CHANCE.clearCache();
+		RIBBON_XP_PER_RIBBON.clearCache();
+		TRIAL_FAIL_COOLDOWN.clearCache();
 	}
 }

@@ -11,21 +11,21 @@ import leaf.cosmere.aviar.common.registries.AviarEntityTypes;
 import leaf.cosmere.common.registry.AttributesRegistry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
 
-@Mod.EventBusSubscriber(modid = Aviar.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Aviar.MODID)
 public class AviarCommonModEvents
 {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onEntityAttributeModificationEvent(EntityAttributeModificationEvent event)
 	{
-		event.add(EntityType.PLAYER, AviarAttributes.HOSTILE_LIFE_SENSE.getAttribute());
+		event.add(EntityType.PLAYER, AviarAttributes.HOSTILE_LIFE_SENSE.getHolder());
 	}
 
 
@@ -33,7 +33,7 @@ public class AviarCommonModEvents
 	public static void entityAttributeEvent(EntityAttributeCreationEvent event)
 	{
 		final AttributeSupplier.Builder attributes = AviarBird.createAttributes();
-		final AttributeSupplier.Builder add = attributes.add(AttributesRegistry.COGNITIVE_CONCEALMENT.get(), 5);
+		final AttributeSupplier.Builder add = attributes.add(AttributesRegistry.COGNITIVE_CONCEALMENT.getHolder(), 5);
 		event.put(AviarEntityTypes.AVIAR_ENTITY.get(), add.build());
 	}
 }

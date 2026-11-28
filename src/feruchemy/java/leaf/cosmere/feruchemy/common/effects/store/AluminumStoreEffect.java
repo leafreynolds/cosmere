@@ -17,8 +17,8 @@ public class AluminumStoreEffect extends FeruchemyEffectBase
 		super(type);
 
 		addAttributeModifier(
-				AttributesRegistry.IDENTITY.getAttribute(),
+				AttributesRegistry.IDENTITY.getHolder(),
 				-1.0D,
-				AttributeModifier.Operation.ADDITION);
+				AttributeModifier.Operation.ADD_VALUE);
 	}
 }

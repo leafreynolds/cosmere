@@ -5,7 +5,6 @@
 package leaf.cosmere.allomancy.common.manifestation;
 
 import leaf.cosmere.allomancy.client.AllomancyKeybindings;
-import leaf.cosmere.allomancy.client.gui.AllomancyInfoBlock;
 import leaf.cosmere.allomancy.common.capabilities.AllomancySpiritwebSubmodule;
 import leaf.cosmere.allomancy.common.config.AllomancyConfigs;
 import leaf.cosmere.allomancy.common.registries.AllomancyStats;
@@ -15,11 +14,9 @@ import leaf.cosmere.api.Manifestations;
 import leaf.cosmere.api.Metals;
 import leaf.cosmere.api.manifestation.Manifestation;
 import leaf.cosmere.api.spiritweb.ISpiritweb;
-import leaf.cosmere.client.gui.GuiUtils;
 import leaf.cosmere.common.cap.entity.SpiritwebCapability;
 import leaf.cosmere.common.charge.MetalmindChargeHelper;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,11 +26,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class AllomancyManifestation extends Manifestation implements IHasMetalType
 {
@@ -93,8 +87,8 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	@Override
 	public int modeMin(ISpiritweb data)
 	{
-		final ResourceLocation feruchemyRL = new ResourceLocation("feruchemy", getRegistryName().getPath());
-		final Manifestation feruchemy = CosmereAPI.manifestationRegistry().getValue(feruchemyRL);
+		final ResourceLocation feruchemyRL = ResourceLocation.fromNamespaceAndPath("feruchemy", getRegistryName().getPath());
+		final Manifestation feruchemy = CosmereAPI.manifestationRegistry().get(feruchemyRL);
 		if (data.hasManifestation(feruchemy))
 		{
 			//compounding
@@ -201,7 +195,7 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	{
 		//if we get to this point, we are in an active burn state.
 		//check for compound.
-		final Manifestation feruchemyManifestation = CosmereAPI.manifestationRegistry().getValue(new ResourceLocation("feruchemy", getRegistryName().getPath()));
+		final Manifestation feruchemyManifestation = CosmereAPI.manifestationRegistry().get(ResourceLocation.fromNamespaceAndPath("feruchemy", getRegistryName().getPath()));
 
 		//player has feruchemy in same metal
 		if (data.hasManifestation(feruchemyManifestation))
@@ -290,57 +284,6 @@ public class AllomancyManifestation extends Manifestation implements IHasMetalTy
 	@OnlyIn(Dist.CLIENT)
 	public AbstractWidget getInfoBlock()
 	{
-		AtomicReference<AllomancyInfoBlock> retVal = new AtomicReference<>(null);
-
-		SpiritwebCapability.get(Minecraft.getInstance().player).ifPresent( spiritweb -> {
-			int x = 0;
-			int y = 0;
-			int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-			int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-			int width = GuiUtils.getInfoBoxWidth(Minecraft.getInstance());
-			int height = GuiUtils.getInfoBoxHeight(Minecraft.getInstance());
-
-			switch (this.metalType)
-			{
-				// top left
-				case IRON:
-				case STEEL:
-				case PEWTER:
-				case TIN:
-					x = 10;
-					y = 10;
-					break;
-				// top right
-				case COPPER:
-				case BRONZE:
-				case ZINC:
-				case BRASS:
-					x = screenWidth - width - 10;
-					y = 10;
-					break;
-				// bottom left
-				case ALUMINUM:
-				case DURALUMIN:
-				case CHROMIUM:
-				case NICROSIL:
-					x = 10;
-					y = screenHeight - height - 10;
-					break;
-				// bottom right
-				case CADMIUM:
-				case BENDALLOY:
-				case GOLD:
-				case ELECTRUM:
-				case ATIUM:
-					x = screenWidth - width - 10;
-					y = screenHeight - height - 10;
-					break;
-				default:
-					break;
-			}
-
-			retVal.set(new AllomancyInfoBlock(x, y, width, height, spiritweb, this));
-		});
-		return retVal.get();
+		return null;
 	}
 }

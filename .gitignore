@@ -10,6 +10,7 @@ out
 Cosmere*.jar
 MDK.zip
 /run
+/runGameTests
 /.gradle
 *.classpath
 *.project
@@ -26,3 +27,5 @@ docs/changelog*.txt
 libs/
 
 **/.DS_Store
+
+**/.cache/

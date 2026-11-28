@@ -1,0 +1,30 @@
+modLoader = "javafml"
+loaderVersion = "${loader_version}"
+issueTrackerURL = "https://github.com/leafreynolds/Cosmere/issues"
+license = "MIT"
+
+[[mods]]
+modId = "sandmastery"
+version = "${version}"
+displayName = "Cosmere: Sand Mastery"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/cosmere"
+authors = "MoonlitJolty"
+credits = '''
+
+Leaf - A small amount of code and the initial cosmere framework that Sandmastery hooks into
+Hawktrav - Various models and textures
+Luke13234 - Who wrote much of the Ars Arcanum guide book entries.
+StarFox - Updated textures
+'''
+logoFile = "logo.png"
+description = '''Sand Mastery module for Cosmere.'''
+
+[[dependencies.sandmastery]]
+modId = "cosmere"
+type = "required"
+versionRange = "[${version}]"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "sandmastery.mixins.json"

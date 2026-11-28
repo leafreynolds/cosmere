@@ -4,16 +4,9 @@
 
 package leaf.cosmere.sandmastery.patchouli;
 
-import leaf.cosmere.sandmastery.common.manifestation.SandmasteryManifestation;
-import leaf.cosmere.sandmastery.common.registries.SandmasteryManifestations;
-import leaf.cosmere.api.Constants;
-import leaf.cosmere.api.Metals;
-import leaf.cosmere.api.text.StringHelper;
-import leaf.cosmere.common.registration.impl.ManifestationRegistryObject;
 import leaf.cosmere.patchouli.data.BookStuff;
 import leaf.cosmere.patchouli.data.PatchouliTextFormat;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 

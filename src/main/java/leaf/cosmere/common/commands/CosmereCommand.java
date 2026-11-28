@@ -10,14 +10,9 @@ package leaf.cosmere.common.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.commands.arguments.AllomancyArgumentType;
-import leaf.cosmere.common.commands.arguments.FeruchemyArgumentType;
-import leaf.cosmere.common.commands.arguments.ManifestationsArgumentType;
 import leaf.cosmere.common.commands.subcommands.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 
 
 public class CosmereCommand

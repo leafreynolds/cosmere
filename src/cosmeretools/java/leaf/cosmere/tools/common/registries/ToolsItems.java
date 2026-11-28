@@ -14,9 +14,11 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class ToolsItems
@@ -24,10 +26,18 @@ public class ToolsItems
 	public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(CosmereTools.MODID);
 	public static final Supplier<Item.Properties> TOOL = () -> new Item.Properties();
 
+	//enum hash codes change every launch, a plain toMap made registration and datagen order random
+	private static <V> Collector<Metals.MetalType, ?, Map<Metals.MetalType, V>> toEnumMap(
+			Function<Metals.MetalType, Metals.MetalType> key,
+			Function<Metals.MetalType, V> value)
+	{
+		return Collectors.toMap(key, value, (a, b) -> a, () -> new EnumMap<>(Metals.MetalType.class));
+	}
+
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_PICKAXES =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_pickaxe",
@@ -42,7 +52,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_AXES =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_axe",
@@ -58,7 +68,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_SHOVEL =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_shovel",
@@ -74,7 +84,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_HOE =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_hoe",
@@ -90,7 +100,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_SWORDS =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_sword",
@@ -106,7 +116,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_HELMETS =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_helmet",
@@ -117,7 +127,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_CHESTPLATES =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_chestplate",
@@ -128,7 +138,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_LEGGINGS =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_leggings",
@@ -139,7 +149,7 @@ public class ToolsItems
 	public static final Map<Metals.MetalType, ItemRegistryObject<Item>> METAL_BOOTS =
 			Arrays.stream(EnumUtils.METAL_TYPES)
 					.filter(Metals.MetalType::hasMaterialItem)
-					.collect(Collectors.toMap(
+					.collect(toEnumMap(
 							Function.identity(),
 							type -> ITEMS.register(
 									type.getName() + "_boots",

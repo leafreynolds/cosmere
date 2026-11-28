@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmere:spawn_ores",
+  "features": [
+    "cosmere:ore_aluminum_small",
+    "cosmere:ore_aluminum_medium",
+    "cosmere:ore_aluminum_buried"
+  ],
+  "step": "underground_ores"
+}

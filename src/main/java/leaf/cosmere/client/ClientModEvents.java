@@ -4,26 +4,16 @@
 
 package leaf.cosmere.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import leaf.cosmere.api.CosmereAPI;
-import leaf.cosmere.client.gui.SpiritwebMenu;
 import leaf.cosmere.client.render.CosmereRenderers;
 import leaf.cosmere.common.Cosmere;
-import leaf.cosmere.common.cap.entity.SpiritwebCapability;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-@Mod.EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Cosmere.MODID, value = Dist.CLIENT)
 public class ClientModEvents
 {
 
@@ -58,32 +48,4 @@ public class ClientModEvents
 //		event.addSprite(Cosmere.rl("icon/on"));
 //		event.addSprite(Cosmere.rl("icon/off"));
 //	}
-
-
-	@SubscribeEvent
-	public static void registerGuiOverlays(RegisterGuiOverlaysEvent event)
-	{
-		event.registerBelow(
-				VanillaGuiOverlay.DEBUG_TEXT.id(),
-				"hud",
-				(gui, guiGraphics, partialTick, width, height) -> renderSpiritwebHUD(guiGraphics)
-		);
-	}
-
-	public static void renderSpiritwebHUD(final GuiGraphics guiGraphics)
-	{
-		final Minecraft mc = Minecraft.getInstance();
-		SpiritwebCapability.get(mc.player).ifPresent(cap ->
-		{
-			//normal hud stuff
-			if (!(mc.screen instanceof SpiritwebMenu))
-			{
-				//cap.renderSelectedHUD(guiGraphics);
-			}
-
-			//actual menu stuff
-			//SpiritwebMenu.instance.postRender(spiritweb);
-		});
-
-	}
 }

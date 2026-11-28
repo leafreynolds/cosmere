@@ -12,16 +12,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FogType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 
 import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Allomancy.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Allomancy.MODID, value = Dist.CLIENT)
 public class AllomancyClientEvents
 {
 	@SubscribeEvent
@@ -37,18 +36,16 @@ public class AllomancyClientEvents
 			return;
 		}
 
-		//check capability
-		// todo - check this only happens to whatever dimension scadrial is attached to. currently overworld.
-		LazyOptional<IScadrial> cap = ScadrialCapability.get(level);
-		final Optional<IScadrial> resolve = cap.resolve();
+		//check capability - get() is dimension-checked, so this is empty off-Scadrial
+		final Optional<IScadrial> cap = ScadrialCapability.get(level);
 
-		if (!cap.isPresent() || resolve.isEmpty())
+		if (cap.isEmpty())
 		{
 			return;
 		}
 
 		//must exist
-		ScadrialCapability scadrial = (ScadrialCapability) resolve.get();
+		ScadrialCapability scadrial = (ScadrialCapability) cap.get();
 
 		scadrial.tickFog(event, player);
 	}
