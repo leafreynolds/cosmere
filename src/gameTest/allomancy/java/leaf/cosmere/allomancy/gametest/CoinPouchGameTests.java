@@ -28,7 +28,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 public class CoinPouchGameTests
 {
-	@GameTest(template = HarnessGameTests.FLOOR)
+	@GameTest(template = HarnessGameTests.FLOOR, templateNamespace = HarnessGameTests.FLOOR_NAMESPACE)
 	public static void pouchMenuAcceptsEmptySlotSync(GameTestHelper helper)
 	{
 		CoinPouchContainerMenu menu = openPouch(helper);
@@ -38,7 +38,7 @@ public class CoinPouchGameTests
 		helper.succeed();
 	}
 
-	@GameTest(template = HarnessGameTests.FLOOR)
+	@GameTest(template = HarnessGameTests.FLOOR, templateNamespace = HarnessGameTests.FLOOR_NAMESPACE)
 	public static void coinsGoInAndComeBackOut(GameTestHelper helper)
 	{
 		Slot pouchSlot = openPouch(helper).getSlot(0);
@@ -55,7 +55,7 @@ public class CoinPouchGameTests
 		helper.succeed();
 	}
 
-	@GameTest(template = HarnessGameTests.FLOOR)
+	@GameTest(template = HarnessGameTests.FLOOR, templateNamespace = HarnessGameTests.FLOOR_NAMESPACE)
 	public static void pouchRefusesNonCoins(GameTestHelper helper)
 	{
 		Slot pouchSlot = openPouch(helper).getSlot(0);

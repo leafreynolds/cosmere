@@ -19,6 +19,8 @@ public class HarnessGameTests
 {
 	//relative y=0 is the structure block, so the floor is at y=1
 	public static final String FLOOR = "floor_7x4x7";
+	//every module's tests share main's copy of the floor
+	public static final String FLOOR_NAMESPACE = "cosmere";
 
 	@GameTest(template = FLOOR)
 	public static void templateLoadsAndBlocksPlace(GameTestHelper helper)

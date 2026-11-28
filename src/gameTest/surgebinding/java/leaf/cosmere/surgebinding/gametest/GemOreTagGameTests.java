@@ -25,7 +25,7 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 @PrefixGameTestTemplate(false)
 public class GemOreTagGameTests
 {
-	@GameTest(template = HarnessGameTests.FLOOR)
+	@GameTest(template = HarnessGameTests.FLOOR, templateNamespace = HarnessGameTests.FLOOR_NAMESPACE)
 	public static void gemOresHaveCommonTags(GameTestHelper helper)
 	{
 		for (Roshar.Gemstone gem : EnumUtils.GEMSTONE_TYPES_ORE)
