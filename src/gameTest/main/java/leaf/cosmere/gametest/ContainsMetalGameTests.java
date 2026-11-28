@@ -30,6 +30,20 @@ import java.util.List;
 public class ContainsMetalGameTests
 {
 	@GameTest(template = HarnessGameTests.FLOOR)
+	public static void keptToolsDontPassOnTheirMetal(GameTestHelper helper)
+	{
+		//modded axes scrape copper without being used up, so copper shouldn't pick up aluminum from them
+		for (Item item : List.of(Items.COPPER_BLOCK, Items.EXPOSED_COPPER, Items.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE))
+		{
+			helper.assertFalse(new ItemStack(item).is(CosmereTags.Items.CONTAINS_ALUMINUM), BuiltInRegistries.ITEM.getKey(item) + " item should not contain aluminum");
+		}
+
+		//a tool upgraded into another tool still carries its metal
+		helper.assertTrue(new ItemStack(Items.NETHERITE_AXE).is(CosmereTags.Items.CONTAINS_METAL), "netherite axe should contain metal");
+		helper.succeed();
+	}
+
+	@GameTest(template = HarnessGameTests.FLOOR)
 	public static void uncraftableMetalItemsContainMetal(GameTestHelper helper)
 	{
 		List<Item> items = List.of(

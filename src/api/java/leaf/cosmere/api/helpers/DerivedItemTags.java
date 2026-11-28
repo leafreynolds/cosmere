@@ -110,6 +110,9 @@ public final class DerivedItemTags
 					continue;
 				}
 
+				// a tool only goes into a result that is itself a tool, like a netherite upgrade
+				// otherwise it's held and kept, like create scraping copper with any axe
+				final boolean resultIsTool = resultStack.isDamageableItem();
 				List<Set<Item>> slots = new ArrayList<>();
 				for (Ingredient ingredient : ingredients)
 				{
@@ -117,7 +120,7 @@ public final class DerivedItemTags
 					for (ItemStack option : ingredient.getItems())
 					{
 						// a returned container or crafting tool isn't consumed into the result
-						if (!option.hasCraftingRemainingItem())
+						if (!option.hasCraftingRemainingItem() && (resultIsTool || !option.isDamageableItem()))
 						{
 							options.add(option.getItem());
 						}
